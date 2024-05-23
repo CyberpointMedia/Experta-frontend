@@ -507,9 +507,9 @@
     },
     {
       "name": "win32",
-      "rootUri": "file:///C:/Users/sanja/AppData/Local/Pub/Cache/hosted/pub.dev/win32-5.5.0",
+      "rootUri": "file:///C:/Users/sanja/AppData/Local/Pub/Cache/hosted/pub.dev/win32-5.5.1",
       "packageUri": "lib/",
-      "languageVersion": "3.3"
+      "languageVersion": "3.4"
     },
     {
       "name": "xdg_directories",
@@ -530,7 +530,7 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2024-05-23T10:37:14.519075Z",
+  "generated": "2024-05-23T11:12:00.167702Z",
   "generator": "pub",
   "generatorVersion": "3.4.1",
   "flutterRoot": "file:///C:/source/flutter",
