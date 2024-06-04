@@ -5,6 +5,17 @@
 import FlutterMacOS
 import Foundation
 
+
+func RegisterGeneratedPlugins(registry: FlutterPluginRegistry) {
+}
+
+//
+//  Generated file. Do not edit.
+//
+
+import FlutterMacOS
+import Foundation
+
 import connectivity_plus
 import device_info_plus
 import file_selector_macos
