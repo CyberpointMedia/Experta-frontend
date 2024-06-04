@@ -158,6 +158,12 @@
       "languageVersion": "3.2"
     },
     {
+      "name": "font_awesome_flutter",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/font_awesome_flutter-10.7.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
+    },
+    {
       "name": "get",
       "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/get-4.6.6",
       "packageUri": "lib/",
@@ -530,7 +536,7 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2024-05-22T07:30:31.721170Z",
+  "generated": "2024-06-04T06:28:36.188018Z",
   "generator": "pub",
   "generatorVersion": "3.3.0"
 }

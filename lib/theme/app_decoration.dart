@@ -234,8 +234,11 @@ class BorderRadiusStyle {
       );
 
   // Custom borders
-  static BorderRadius get customBorderBL20 => BorderRadius.vertical(
+  static BorderRadius get customBorderL20 => BorderRadius.vertical(
         bottom: Radius.circular(20.h),
+      );
+  static BorderRadius get customBorderBL20 => BorderRadius.vertical(
+        top: Radius.circular(20.h),
       );
   static BorderRadius get customBorderBL24 => BorderRadius.vertical(
         bottom: Radius.circular(24.h),

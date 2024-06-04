@@ -19,6 +19,8 @@ class CustomTextFormField extends StatelessWidget {
     this.hintStyle,
     this.prefix,
     this.prefixConstraints,
+    this.initialValue,
+    this.onChanged,
     this.suffix,
     this.suffixConstraints,
     this.contentPadding,
@@ -31,6 +33,10 @@ class CustomTextFormField extends StatelessWidget {
         );
 
   final Alignment? alignment;
+
+  final String? initialValue;
+
+  final void Function(String)? onChanged;
 
   final double? width;
 
@@ -95,6 +101,8 @@ class CustomTextFormField extends StatelessWidget {
           style: textStyle ?? theme.textTheme.titleMedium,
           obscureText: obscureText!,
           textInputAction: textInputAction,
+          initialValue: initialValue,
+          onChanged: onChanged,
           keyboardType: textInputType,
           maxLines: maxLines ?? 1,
           decoration: decoration,
