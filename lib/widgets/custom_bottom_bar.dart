@@ -59,11 +59,11 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
           child: Divider(),
         ),
         Container(
-          height: 66.v,
+          // height: 56.v,
           decoration: const BoxDecoration(),
           child: Obx(
             () => BottomNavigationBar(
-              backgroundColor: Colors.transparent,
+              backgroundColor: Colors.white,
               showSelectedLabels: false,
               showUnselectedLabels: false,
               selectedFontSize: 0,
@@ -81,15 +81,13 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
                       children: [
                         CustomImageView(
                           imagePath: bottomMenuList[index].icon,
-                          height: 28.adaptSize,
-                          width: 28.adaptSize,
                           color: appTheme.blueGray300,
-                          margin: EdgeInsets.only(top: 10.v),
+                          // margin: EdgeInsets.only(top: 10.v),
                         ),
                         Padding(
                           padding: EdgeInsets.only(
-                            top: 6.v,
-                            bottom: 7.v,
+                            top: 2.v,
+                            bottom: 3.v,
                           ),
                           child: Text(
                             bottomMenuList[index].title ?? "",
@@ -110,21 +108,13 @@ class _CustomBottomBarState extends State<CustomBottomBar> {
                       children: [
                         CustomImageView(
                           imagePath: bottomMenuList[index].activeIcon,
-                          height: 28.v,
-                          width: 28.adaptSize,
                           color: appTheme.gray900,
-                          margin: EdgeInsets.only(top: 10.v),
+                          // margin: EdgeInsets.only(top: 10.v),
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(
-                            top: 6.v,
-                            bottom: 7.v,
-                          ),
-                          child: Text(
-                            bottomMenuList[index].title ?? "",
-                            style: CustomTextStyles.labelMediumGray900.copyWith(
-                              color: appTheme.gray900,
-                            ),
+                        Text(
+                          bottomMenuList[index].title ?? "",
+                          style: CustomTextStyles.labelMediumGray900.copyWith(
+                            color: appTheme.gray900,
                           ),
                         ),
                       ],

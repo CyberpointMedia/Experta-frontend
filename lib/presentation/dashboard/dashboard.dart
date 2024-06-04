@@ -3,7 +3,6 @@ import 'package:experta/presentation/home_screen.dart';
 import 'package:experta/presentation/message_screen/message_screen.dart';
 import 'package:experta/presentation/search_screen/search_screen.dart';
 import 'package:experta/presentation/userProfile/user_profile_page.dart';
-import 'package:experta/presentation/user_profile_screen.dart';
 import 'package:experta/widgets/custom_bottom_bar.dart';
 import 'package:flutter/material.dart';
 

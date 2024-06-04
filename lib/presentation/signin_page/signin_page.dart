@@ -214,8 +214,9 @@ class _SigninPageState extends State<SigninPage> {
           buttonTextStyle: controller.isPhoneNumberValid.value
               ? CustomTextStyles.bodySmallffffffff
               : CustomTextStyles.titleMediumGray400,
-          onPressed:
-              controller.isPhoneNumberValid.value ? controller.loginUser : null,
+          onPressed: controller.isPhoneNumberValid.value
+              ? () => controller.loginUser(context)
+              : null,
         ));
   }
 
@@ -356,17 +357,31 @@ class _SigninPageState extends State<SigninPage> {
   }
 
   Widget _buildContinueButton2() {
-    return Obx(() => CustomElevatedButton(
-          text: "Sign Up".tr,
-          buttonStyle: controller.isEmailValid.value
-              ? CustomButtonStyles.yellow900
-              : CustomButtonStyles.fillOnError,
-          buttonTextStyle: controller.isEmailValid.value
-              ? CustomTextStyles.bodySmallffffffff
-              : CustomTextStyles.titleMediumGray400,
-          onPressed:
-              controller.isEmailValid.value ? controller.registerUser : null,
-        ));
+    return Column(
+      children: [
+        Obx(() => CustomElevatedButton(
+              text: "Sign Up".tr,
+              buttonStyle: controller.isEmailValid.value
+                  ? CustomButtonStyles.yellow900
+                  : CustomButtonStyles.fillOnError,
+              buttonTextStyle: controller.isEmailValid.value
+                  ? CustomTextStyles.bodySmallffffffff
+                  : CustomTextStyles.titleMediumGray400,
+              onPressed: controller.isEmailValid.value
+                  ? () => controller.registerUser(context)
+                  : null,
+            )),
+        Obx(() {
+          if (controller.errorMessage.isNotEmpty) {
+            return Text(
+              controller.errorMessage.value,
+              style: const TextStyle(color: Colors.red),
+            );
+          }
+          return Container();
+        }),
+      ],
+    );
   }
 
   Widget _buildFirstName() {

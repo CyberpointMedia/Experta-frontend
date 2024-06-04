@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
 import 'package:experta/widgets/custom_outlined_button.dart';
@@ -40,29 +42,76 @@ class OnboardingScreen extends GetWidget<OnboardingController> {
                     .gradientOnPrimaryContainerToOnPrimaryContainer,
               ),
             ),
-            CustomImageView(
-              imagePath: ImageConstant.imgAccent,
-              height: 252.v,
-              width: 154.h,
-              alignment: Alignment.topRight,
-            ),
-            Opacity(
-              opacity: 0.2,
-              child: CustomImageView(
-                imagePath: ImageConstant.imgAccent178x102,
-                height: 178.v,
-                width: 102.h,
-                alignment: Alignment.topLeft,
+            Positioned(
+              left: 270,
+              top: 50,
+              child: ImageFiltered(
+                imageFilter: ImageFilter.blur(
+                  sigmaX: 60,
+                  sigmaY: 60,
+                ),
+                child: Align(
+                  child: SizedBox(
+                    width: 252,
+                    height: 252,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(126),
+                        color: appTheme.deepOrangeA20.withOpacity(0.6),
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ),
-            Opacity(
-              opacity: 0.4,
-              child: CustomImageView(
-                imagePath: ImageConstant.imgAccent271x144,
-                height: 271.v,
-                width: 144.h,
-                alignment: Alignment.bottomRight,
-                margin: EdgeInsets.only(bottom: 52.v),
+            Positioned(
+              right: 270,
+              top: 50,
+              child: Opacity(
+                opacity: 0.2,
+                child: ImageFiltered(
+                  imageFilter: ImageFilter.blur(
+                    sigmaX: 60,
+                    sigmaY: 60,
+                  ),
+                  child: Align(
+                    child: SizedBox(
+                      width: 252,
+                      height: 252,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(126),
+                          color: appTheme.yellow6001e.withOpacity(0.2),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Positioned(
+              left: 270,
+              top: 350,
+              child: Opacity(
+                opacity: 0.2,
+                child: ImageFiltered(
+                  imageFilter: ImageFilter.blur(
+                    sigmaX: 60,
+                    sigmaY: 60,
+                  ),
+                  child: Align(
+                    child: SizedBox(
+                      width: 252,
+                      height: 252,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(126),
+                          color: appTheme.yellow6001e.withOpacity(0.4),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
               ),
             ),
             Align(

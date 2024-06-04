@@ -5,7 +5,7 @@ class LoginRequestModel {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['phoneNo'] = this.phoneNo;
+    data['phoneNo'] = phoneNo;
     return data;
   }
 }

@@ -21,12 +21,6 @@ class ImageConstant {
 
   static String imgRectangle104 = '$imagePath/img_rectangle_104.png';
 
-  static String imgAccent = '$imagePath/img_accent.png';
-
-  static String imgAccent178x102 = '$imagePath/img_accent_178x102.png';
-
-  static String imgAccent271x144 = '$imagePath/img_accent_271x144.png';
-
   static String imgSmartphone = '$imagePath/img_smartphone.svg';
 
   static String imgGoogle = '$imagePath/img_google.svg';
@@ -42,85 +36,6 @@ class ImageConstant {
   static String imgTelevision = '$imagePath/img_television.svg';
 
   static String imgArrowDown = '$imagePath/img_arrow_down.svg';
-
-  // verifynumber images
-  static String imgAccent252x154 = '$imagePath/img_accent_252x154.png';
-
-  // ForgotPassword images
-  static String imgAccent2 = '$imagePath/img_accent_2.png';
-
-  // CreateNewPassword images
-  static String imgAccent4 = '$imagePath/img_accent_4.png';
-
-  // ForgotPasswordSuccess images
-  static String imgAccent5 = '$imagePath/img_accent_5.png';
-
-  // Registration1 images
-  static String imgAccent6 = '$imagePath/img_accent_6.png';
-
-  // Registration step2 images
-  static String imgAccent7 = '$imagePath/img_accent_7.png';
-
-  // Registration s3 images
-  static String imgAccent8 = '$imagePath/img_accent_8.png';
-
-  static String imgIconGray900 = '$imagePath/img_icon_gray_900.svg';
-
-  // Registration st4 images
-  static String imgAccent9 = '$imagePath/img_accent_9.png';
-
-  // Registration ste5 images
-  static String imgAccent10 = '$imagePath/img_accent_10.png';
-
-  static String imgCheck = '$imagePath/img_check.svg';
-
-  // Registration stepp6 images
-  static String imgAccent11 = '$imagePath/img_accent_11.png';
-
-  // Registration popup images
-  static String imgAccent12 = '$imagePath/img_accent_12.png';
-
-  // Registration done images
-  static String imgAccent13 = '$imagePath/img_accent_13.png';
-
-  static String imgSuccessfulBusinessman160x160 =
-      '$imagePath/img_successful_businessman_160x160.png';
-
-  // Registration stp7 images
-  static String imgAccent14 = '$imagePath/img_accent_14.png';
-
-  // Registration / Step 7 / Active images
-  static String imgAccent15 = '$imagePath/img_accent_15.png';
-
-  // Registration / Step 8 / Active images
-  static String imgAccent16 = '$imagePath/img_accent_16.png';
-
-  // Registration / Complete images
-  static String imgAccent17 = '$imagePath/img_accent_17.png';
-
-  // Location Permission images
-  static String imgAccent18 = '$imagePath/img_accent_18.png';
-
-  static String imgImage32 = '$imagePath/img_image_32.png';
-
-  // Notification images
-  static String imgAccent20 = '$imagePath/img_accent_20.png';
-
-  static String imgEllipse133 = '$imagePath/img_ellipse_133.png';
-
-  static String imgMaskGroup = '$imagePath/img_mask_group.png';
-
-  // Home / Search images
-  static String imgAccent21 = '$imagePath/img_accent_21.png';
-
-  // Category images
-  static String imgAccent22 = '$imagePath/img_accent_22.png';
-
-  static String imgCelebrity1 = '$imagePath/img_celebrity_1.svg';
-
-  // Trending User images
-  static String imgAccent23 = '$imagePath/img_accent_23.png';
-
   static String imgRectangle2232x164 = '$imagePath/img_rectangle_2_232x164.png';
 
   static String imgRectangle2232x163 = '$imagePath/img_rectangle_2_232x163.png';
@@ -134,9 +49,6 @@ class ImageConstant {
   static String imgRectangle3220x164 = '$imagePath/img_rectangle_3_220x164.png';
 
   static String imgRectangle33 = '$imagePath/img_rectangle_3_3.png';
-
-  // Search images
-  static String imgAccent24 = '$imagePath/img_accent_24.png';
 
   // User Profile / Posts images
   static String imgRectangle25244 = '$imagePath/img_rectangle_25244.png';
@@ -157,38 +69,13 @@ class ImageConstant {
 
   // User Profile images
   static String imgPhone = '$imagePath/img_phone.svg';
-
-  // Booking Appointment images
-  static String imgAccent25 = '$imagePath/img_accent_25.png';
-
   static String imgArrowdownBlueGray300 =
       '$imagePath/img_arrowdown_blue_gray_300.svg';
 
-  // Booking Detail images
-  static String imgAccent26 = '$imagePath/img_accent_26.png';
-
   static String imgClose = '$imagePath/img_close.svg';
-
-  // Flash Alert / Successfully images
-  static String imgAccent27 = '$imagePath/img_accent_27.png';
-
-  // Message / Empty images
-  static String imgAccent28 = '$imagePath/img_accent_28.png';
-
-  // Message / Start Message images
-  static String imgAccent29 = '$imagePath/img_accent_29.png';
 
   static String imgCloseOnprimarycontainer =
       '$imagePath/img_close_onprimarycontainer.svg';
-
-  // Message images
-  static String imgAccent30 = '$imagePath/img_accent_30.png';
-
-  // Message / Chat with User / Default images
-  static String imgAccent31 = '$imagePath/img_accent_31.png';
-
-  // Message / Chat with User / Active images
-  static String imgAccent32 = '$imagePath/img_accent_32.png';
 
   // Video Call One images
   static String imgVideoCallOne = '$imagePath/img_video_call_one.png';
@@ -198,9 +85,6 @@ class ImageConstant {
   static String imgFlipCameraIos = '$imagePath/img_flip_camera_ios.svg';
 
   static String imgMoreHorizontal = '$imagePath/img_more_horizontal.svg';
-
-  // Give Rating images
-  static String imgAccent33 = '$imagePath/img_accent_33.png';
 
   // Audio Call One images
   static String imgGroup1038 = '$imagePath/img_group_1038.png';
@@ -215,9 +99,6 @@ class ImageConstant {
   static String imgRectangle3120x120 = '$imagePath/img_rectangle_3_120x120.png';
 
   static String imgImage33120x120 = '$imagePath/img_image_33_120x120.png';
-
-  // My Profile / Posts - Tab Container images
-  static String imgAccent34 = '$imagePath/img_accent_34.png';
 
   static String imgRectangle2126x375 = '$imagePath/img_rectangle_2_126x375.png';
 
@@ -234,12 +115,6 @@ class ImageConstant {
   static String imgRectangle380x80 = '$imagePath/img_rectangle_3_80x80.png';
 
   static String imgImage3380x80 = '$imagePath/img_image_33_80x80.png';
-
-  // Followers images
-  static String imgAccent35 = '$imagePath/img_accent_35.png';
-
-  // Following Two images
-  static String imgAccent36 = '$imagePath/img_accent_36.png';
 
   // New Post / Choose post image images
   static String imgArrowRightOnprimarycontainer =
@@ -282,9 +157,6 @@ class ImageConstant {
 
   static String imgFrowningFaceWith = '$imagePath/img_frowning_face_with.png';
 
-  // Setting images
-  static String imgAccent37 = '$imagePath/img_accent_37.png';
-
   static String imgRectangle248x48 = '$imagePath/img_rectangle_2_48x48.png';
 
   static String imgImage3348x48 = '$imagePath/img_image_33_48x48.png';
@@ -305,56 +177,14 @@ class ImageConstant {
 
   static String imgPower = '$imagePath/img_power.svg';
 
-  // Setting / Edit Profile images
-  static String imgAccent38 = '$imagePath/img_accent_38.png';
-
   static String imgFrame31 = '$imagePath/img_frame_31.png';
-
-  // Setting / Edit Profile / Interests images
-  static String imgAccent39 = '$imagePath/img_accent_39.png';
-
-  // Setting / Edit Profile / Profession images
-  static String imgAccent40 = '$imagePath/img_accent_40.png';
-
-  // Setting / Account Settings images
-  static String imgAccent41 = '$imagePath/img_accent_41.png';
-
-  // Setting / Account Settings / User name images
-  static String imgAccent42 = '$imagePath/img_accent_42.png';
-
-  // Setting / Account Settings / Change Birthday images
-  static String imgAccent43 = '$imagePath/img_accent_43.png';
-
-  // Setting / Account Settings / Change Gender images
-  static String imgAccent44 = '$imagePath/img_accent_44.png';
 
   static String imgIconBlueGray30060x60 =
       '$imagePath/img_icon_blue_gray_300_60x60.svg';
 
-  // Setting / Account Settings / Change Email images
-  static String imgAccent45 = '$imagePath/img_accent_45.png';
-
-  // Setting / Account Settings / Change Phone images
-  static String imgAccent46 = '$imagePath/img_accent_46.png';
-
-  // Setting / Account Settings / Change Password images
-  static String imgAccent47 = '$imagePath/img_accent_47.png';
-
   static String imgCheckBlueGray300 = '$imagePath/img_check_blue_gray_300.svg';
 
-  // Settings / My Booking / Upcoming images
-  static String imgAccent48 = '$imagePath/img_accent_48.png';
-
-  // Settings / My Booking / Past images
-  static String imgAccent49 = '$imagePath/img_accent_49.png';
-
-  // Feeds / Default images
-  static String imgAccent50 = '$imagePath/img_accent_50.png';
-
   static String imgLock = '$imagePath/img_lock.svg';
-
-  // Feeds / Active images
-  static String imgAccent51 = '$imagePath/img_accent_51.png';
 
   static String imgInbox2 = '$imagePath/img_inbox_2.svg';
 
@@ -370,39 +200,12 @@ class ImageConstant {
   static String imgRectangle23250x311 =
       '$imagePath/img_rectangle_23_250x311.png';
 
-  // Settings / Payment images
-  static String imgAccent52 = '$imagePath/img_accent_52.png';
-
-  // Settings / Wallet One images
-  static String imgAccent53 = '$imagePath/img_accent_53.png';
-
-  // Settings / Wallet Two images
-  static String imgAccent54 = '$imagePath/img_accent_54.png';
-
   static String imgArrowUp = '$imagePath/img_arrow_up.svg';
 
   static String imgArrowRightGray90016x16 =
       '$imagePath/img_arrow_right_gray_900_16x16.svg';
 
-  // Settings / Wallet / Top Up images
-  static String imgAccent55 = '$imagePath/img_accent_55.png';
-
   static String imgInbox = '$imagePath/img_inbox.svg';
-
-  // Settings / Wallet / Withdraw / Default images
-  static String imgAccent56 = '$imagePath/img_accent_56.png';
-
-  // Settings / Wallet / Withdraw / Add UPI images
-  static String imgAccent57 = '$imagePath/img_accent_57.png';
-
-  // Settings / Wallet / Withdraw / Add Bank images
-  static String imgAccent58 = '$imagePath/img_accent_58.png';
-
-  // Settings / Wallet / Withdraw / Active One images
-  static String imgAccent59 = '$imagePath/img_accent_59.png';
-
-  // Settings / Wallet / Withdraw / Active images
-  static String imgAccent60 = '$imagePath/img_accent_60.png';
 
   static String imgArrowLeftPrimarycontainer =
       '$imagePath/img_arrow_left_primarycontainer.svg';
@@ -416,68 +219,8 @@ class ImageConstant {
 
   static String imgSettingsGray900 = '$imagePath/img_settings_gray_900.svg';
 
-  // Settings / Verify Account / Default images
-  static String imgAccent61 = '$imagePath/img_accent_61.png';
-
-  // Settings / Verify Account / Pan Verified images
-  static String imgAccent62 = '$imagePath/img_accent_62.png';
-
-  // Settings / Verify Account / Aadhaar Verified images
-  static String imgAccent63 = '$imagePath/img_accent_63.png';
-
-  // Settings / Verify Account / Payment Method / Default images
-  static String imgAccent64 = '$imagePath/img_accent_64.png';
-
-  // Settings / Verify Account / Payment Method / Add UPI images
-  static String imgAccent65 = '$imagePath/img_accent_65.png';
-
-  // Settings / Verify Account / Payment Method / UPI Verified images
-  static String imgAccent66 = '$imagePath/img_accent_66.png';
-
-  // Settings / Verify Account / Payment Method / Add Bank Accou images
-  static String imgAccent67 = '$imagePath/img_accent_67.png';
-
-  // Settings / Verify Account / Payment Method / Bank Verified images
-  static String imgAccent68 = '$imagePath/img_accent_68.png';
-
-  // Settings / Verify Account / All Verified images
-  static String imgAccent69 = '$imagePath/img_accent_69.png';
-
-  // Settings / Verify Account / Pan Details images
-  static String imgAccent70 = '$imagePath/img_accent_70.png';
-
-  // Settings / Verify Account / Aadhaar Details images
-  static String imgAccent71 = '$imagePath/img_accent_71.png';
-
-  // Settings / Verify Account / UPI Details images
-  static String imgAccent72 = '$imagePath/img_accent_72.png';
-
-  // Settings / Verify Account / Bank Account Details images
-  static String imgAccent73 = '$imagePath/img_accent_73.png';
-
-  // Settings / Security & Privacy images
-  static String imgAccent74 = '$imagePath/img_accent_74.png';
-
-  // Settings / Security & Privacy / Blocked images
-  static String imgAccent75 = '$imagePath/img_accent_75.png';
-
-  // Settings / Security & Privacy / Block User images
-  static String imgAccent76 = '$imagePath/img_accent_76.png';
-
-  // Settings / Security & Privacy / Call Controls images
-  static String imgAccent77 = '$imagePath/img_accent_77.png';
-
-  // Settings / Security & Privacy / Call Controls / Set Availab images
-  static String imgAccent78 = '$imagePath/img_accent_78.png';
-
-  // Settings / Security & Privacy / Call Controls / Set Availab One images
-  static String imgAccent79 = '$imagePath/img_accent_79.png';
-
   static String imgClockErrorcontainer =
       '$imagePath/img_clock_errorcontainer.svg';
-
-  // Settings / Security & Privacy / Call Controls / Set Pricing images
-  static String imgAccent80 = '$imagePath/img_accent_80.png';
 
   // Settings / Notifications images
   static String imgGroup273 = '$imagePath/img_group_273.png';
@@ -495,36 +238,12 @@ class ImageConstant {
   static String imgSearchGray90056x56 =
       '$imagePath/img_search_gray_900_56x56.svg';
 
-  // Settings / Notifications One images
-  static String imgAccent81 = '$imagePath/img_accent_81.png';
-
-  // Settings / Appearance images
-  static String imgAccent82 = '$imagePath/img_accent_82.png';
-
   static String imgFrame1171276693 = '$imagePath/img_frame_1171276693.svg';
 
   static String imgFrame1171276692 = '$imagePath/img_frame_1171276692.svg';
 
-  // Settings / Support images
-  static String imgAccent83 = '$imagePath/img_accent_83.png';
-
   static String imgArrowLeftBlueGray300 =
       '$imagePath/img_arrow_left_blue_gray_300.svg';
-
-  // Setting / About Us images
-  static String imgAccent84 = '$imagePath/img_accent_84.png';
-
-  // Setting / About Us / Privacy Policy One images
-  static String imgAccent85 = '$imagePath/img_accent_85.png';
-
-  // Setting / About Us / Terms & Conditions images
-  static String imgAccent86 = '$imagePath/img_accent_86.png';
-
-  // Setting / About Us / Privacy Policy images
-  static String imgAccent87 = '$imagePath/img_accent_87.png';
-
-  // Settings / Recorded Sessions images
-  static String imgAccent88 = '$imagePath/img_accent_88.png';
 
   static String imgWomanWithHeadsetVideoCall =
       '$imagePath/img_woman_with_headset_video_call.png';
@@ -541,9 +260,6 @@ class ImageConstant {
 
   static String imgWomanWithHeadsetVideoCall2 =
       '$imagePath/img_woman_with_headset_video_call_2.png';
-
-  // Settings / Share Profile images
-  static String imgAccent89 = '$imagePath/img_accent_89.png';
 
   static String imgRectangle276x76 = '$imagePath/img_rectangle_2_76x76.png';
 
@@ -572,8 +288,6 @@ class ImageConstant {
       '$imagePath/img_search_blue_gray_300.svg';
 
   static String imgCheckGray900 = '$imagePath/img_check_gray_900.svg';
-
-  static String imgAccent19 = '$imagePath/img_accent_19.png';
 
   static String imgBell02 = '$imagePath/img_bell_02.svg';
 

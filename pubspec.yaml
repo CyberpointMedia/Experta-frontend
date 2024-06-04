@@ -49,6 +49,7 @@ dependencies:
   sms_autofill: ^2.3.1
   http: ^1.2.1
   readmore: ^3.0.0
+  font_awesome_flutter: ^10.7.0
 
 dev_dependencies:
   flutter_test:
@@ -70,6 +71,7 @@ flutter:
   assets: 
     - assets/
     - assets/images/
+    - assets/images/settings/
   fonts: 
     - family: Inter
       fonts: 
