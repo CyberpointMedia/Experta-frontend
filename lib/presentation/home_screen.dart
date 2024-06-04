@@ -562,10 +562,10 @@ class ListactorsOneItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: const EdgeInsets.symmetric(
-        horizontal: 15,
-        vertical: 10,
-      ),
+      // padding: const EdgeInsets.symmetric(
+      //   horizontal: 15,
+      //   vertical: 5,
+      // ),
       decoration: BoxDecoration(
         color: const Color(
           0XFFFFFFFF,
@@ -588,24 +588,26 @@ class ListactorsOneItemWidget extends StatelessWidget {
       width: 80.adaptSize,
       child: Column(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Obx(
             () => SizedBox(
-              height: 30.v,
+              height: 30.adaptSize,
               width: 30.adaptSize,
-              child:
-                  SvgPicture.asset(listactorsOneItemModelObj.actorsone!.value),
+              child: CustomImageView(
+                  imagePath: listactorsOneItemModelObj.actorsone!.value),
             ),
           ),
           SizedBox(
             height: 5.v,
           ),
           Obx(
-            () => Text(
-              listactorsOneItemModelObj.actorstwo!.value,
-              style:
-                  theme.textTheme.headlineLarge?.copyWith(fontSize: 10.fSize),
-            ),
+            () => Text(listactorsOneItemModelObj.actorstwo!.value,
+                style:
+                    theme.textTheme.labelMedium!.copyWith(color: Colors.black)
+                // theme.textTheme.headlineLarge?.copyWith(fontSize: 10.fSize),
+                ),
           )
         ],
       ),
@@ -1691,7 +1693,7 @@ class UserprofileItemWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      height: 220.v,
+      height: 220.adaptSize,
       width: 156.adaptSize,
       child: Stack(
         alignment: Alignment.bottomCenter,
@@ -1701,9 +1703,9 @@ class UserprofileItemWidget extends StatelessWidget {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(24),
               child: Obx(
-                () => Image.asset(
-                  userprofileItemModelObj.onlineStatusIma!.value,
-                  height: 220.v,
+                () => CustomImageView(
+                  imagePath: userprofileItemModelObj.onlineStatusIma!.value,
+                  height: 220.adaptSize,
                   width: 156.adaptSize,
                 ),
               ),
