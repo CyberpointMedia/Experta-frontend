@@ -71,7 +71,7 @@ class SigninController extends GetxController {
           message: 'Otp Sent Sucessfully',
           isSuccess: true,
         );
-        log('hi the otp is ${response.data!.otp}');
+        log('hi the otp is ${response.data.otp}');
         Get.toNamed(
           AppRoutes.verifynumberScreen,
           arguments: phoneNumberController,

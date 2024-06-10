@@ -1,4 +1,4 @@
-//ignore: unused_import    
+//ignore: unused_import
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -15,6 +15,21 @@ class PrefUtils {
   Future<void> init() async {
     _sharedPreferences ??= await SharedPreferences.getInstance();
     print('SharedPreference Initialized');
+  }
+
+  /// Save token to SharedPreferences
+  Future<void> setToken(String token) async {
+    await _sharedPreferences!.setString('token', token);
+  }
+
+  /// Retrieve token from SharedPreferences
+  String? getToken() {
+    return _sharedPreferences!.getString('token');
+  }
+
+  /// Remove token from SharedPreferences
+  Future<void> removeToken() async {
+    await _sharedPreferences!.remove('token');
   }
 
   ///will clear all the data stored in preference
@@ -34,4 +49,3 @@ class PrefUtils {
     }
   }
 }
-    

@@ -13,7 +13,7 @@ class NetworkInfo implements NetworkInfoI {
   Connectivity connectivity;
 
   NetworkInfo(this.connectivity) {
-    connectivity = this.connectivity;
+    connectivity = connectivity;
   }
 
   ///checks internet is connected or not
@@ -21,10 +21,10 @@ class NetworkInfo implements NetworkInfoI {
   ///else it will return [false]
   @override
   Future<bool> isConnected() async {
-      final result = await connectivity.checkConnectivity();
-      if (result != ConnectivityResult.none) {
-        return true;
-      }
+    final result = await connectivity.checkConnectivity();
+    if (result != ConnectivityResult.none) {
+      return true;
+    }
     return false;
   }
 

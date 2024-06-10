@@ -19,6 +19,7 @@ class VerifynumberController extends GetxController with CodeAutoFill {
   Rx<VerifynumberModel> verifynumberModelObj = VerifynumberModel().obs;
   final ApiService _apiService = ApiService();
   Rx<bool> complete = false.obs;
+  PrefUtils prefUtils = PrefUtils();
 
   @override
   void codeUpdated() {
@@ -35,6 +36,7 @@ class VerifynumberController extends GetxController with CodeAutoFill {
       VerifyOtpResponseModel? response =
           await _apiService.verifyOtp(requestModel);
       if (response != null && response.status == "success") {
+        await prefUtils.setToken("${response.token}");
         // Handle success response
         Get.toNamed(AppRoutes.dashboard);
         print("OTP Verified Successfully");
@@ -74,6 +76,7 @@ class VerifynumberController extends GetxController with CodeAutoFill {
   @override
   void onInit() {
     super.onInit();
+    prefUtils.init();
     listenForCode();
     phoneNumberController = Get.arguments as TextEditingController;
   }

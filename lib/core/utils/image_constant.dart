@@ -442,6 +442,9 @@ class ImageConstant {
 
   static String imageNotFound = 'assets/images/image_not_found.png';
 
+  static String uploadcloud = '$imagePath/settings/uploadcloud.svg';
+
+
 
   // ACCOUNT STTING 
   static String user = "$imagePath/settings/User.svg";
