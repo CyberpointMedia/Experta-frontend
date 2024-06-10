@@ -1,4 +1,3 @@
-import 'dart:ffi';
 import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
@@ -8,11 +7,10 @@ import 'package:experta/widgets/custom_elevated_button.dart';
 import 'package:experta/widgets/custom_pin_code_text_field.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'controller/verifynumber_controller.dart';
 
 class VerifynumberScreen extends GetWidget<VerifynumberController> {
-  const VerifynumberScreen({Key? key}) : super(key: key);
+  const VerifynumberScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

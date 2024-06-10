@@ -1,4 +1,4 @@
-//ignore: unused_import    
+//ignore: unused_import
 import 'dart:convert';
 import 'dart:ui';
 import 'package:flutter/scheduler.dart';
@@ -19,6 +19,21 @@ class PrefUtils {
     print('SharedPreference Initialized');
   }
 
+  /// Save token to SharedPreferences
+  Future<void> setToken(String token) async {
+    await _sharedPreferences!.setString('token', token);
+  }
+
+  /// Retrieve token from SharedPreferences
+  String? getToken() {
+    return _sharedPreferences!.getString('token');
+  }
+
+  /// Remove token from SharedPreferences
+  Future<void> removeToken() async {
+    await _sharedPreferences!.remove('token');
+  }
+
   ///will clear all the data stored in preference
   void clearPreferencesData() async {
     _sharedPreferences!.clear();
@@ -36,4 +51,3 @@ class PrefUtils {
     }
   }
 }
-    

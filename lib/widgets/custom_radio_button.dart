@@ -3,7 +3,7 @@ import '../core/app_export.dart';
 
 class CustomRadioButton extends StatelessWidget {
   CustomRadioButton({
-    Key? key,
+    super.key,
     required this.onChange,
     this.decoration,
     this.alignment,
@@ -18,9 +18,7 @@ class CustomRadioButton extends StatelessWidget {
     this.textAlignment,
     this.gradient,
     this.backgroundColor,
-  }) : super(
-          key: key,
-        );
+  });
 
   final BoxDecoration? decoration;
 
@@ -67,13 +65,6 @@ class CustomRadioButton extends StatelessWidget {
           onChange(value!);
         },
         child: Container(
-          decoration: decoration ??
-              BoxDecoration(
-                border: Border.all(
-                  color: appTheme.gray30001,
-                  width: 1.h,
-                ),
-              ),
           width: width,
           padding: padding,
           child: (isRightCheck ?? false)
@@ -84,8 +75,8 @@ class CustomRadioButton extends StatelessWidget {
   Widget get leftSideRadioButton => Row(
         children: [
           Padding(
+            padding: const EdgeInsets.only(right: 8),
             child: radioButtonWidget,
-            padding: EdgeInsets.only(right: 8),
           ),
           textWidget,
         ],
@@ -95,7 +86,7 @@ class CustomRadioButton extends StatelessWidget {
         children: [
           textWidget,
           Padding(
-            padding: EdgeInsets.only(left: 8),
+            padding: const EdgeInsets.only(left: 8),
             child: radioButtonWidget,
           ),
         ],
@@ -109,9 +100,10 @@ class CustomRadioButton extends StatelessWidget {
         height: iconSize ?? 24.h,
         width: iconSize ?? 24.h,
         child: Radio<String>(
-          visualDensity: VisualDensity(
-            vertical: -4,
-            horizontal: -4,
+          activeColor: theme.primaryColor,
+          visualDensity: const VisualDensity(
+            vertical: -2,
+            horizontal: -2,
           ),
           value: value ?? "",
           groupValue: groupValue,

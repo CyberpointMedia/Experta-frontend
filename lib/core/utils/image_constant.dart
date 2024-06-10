@@ -441,4 +441,6 @@ class ImageConstant {
   static String imgShieldGray900 = '$imagePath/img_shield_gray_900.svg';
 
   static String imageNotFound = 'assets/images/image_not_found.png';
+
+  static String uploadcloud = '$imagePath/settings/uploadcloud.svg';
 }
