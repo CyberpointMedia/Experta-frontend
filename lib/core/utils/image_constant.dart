@@ -441,4 +441,23 @@ class ImageConstant {
   static String imgShieldGray900 = '$imagePath/img_shield_gray_900.svg';
 
   static String imageNotFound = 'assets/images/image_not_found.png';
+
+
+  // ACCOUNT STTING 
+  static String user = "$imagePath/settings/User.svg";
+  static String birthday = "$imagePath/settings/Cake.svg";
+  static String gender = "$imagePath/settings/Gender.svg";
+  static String email = "$imagePath/settings/Email.svg";
+  static String phone = "$imagePath/settings/mobile.svg";
+
+
+
+  // PAYMENT
+  static String wallet = "$imagePath/wallet.svg";
+  static String withdraw = "$imagePath/settings/Withdraw.svg";
+  static String transaction= "$imagePath/settings/Transaction.svg";
+  static String uservarification= "$imagePath/settings/User Verify.svg";
+  static String reffer = "$imagePath/Star.svg";
+  static String help = "$imagePath/settings/24-hours.svg";
 }
+

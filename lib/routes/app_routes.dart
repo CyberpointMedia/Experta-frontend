@@ -1,6 +1,13 @@
 import 'package:experta/presentation/Basic_Info/basic_info.dart';
+import 'package:experta/presentation/account_setting/account_setting.dart';
+import 'package:experta/presentation/account_setting/binding/account_setting_binding.dart';
 import 'package:experta/presentation/category/category_controller.dart';
 import 'package:experta/presentation/category/category_screen.dart';
+import 'package:experta/presentation/change_date_of_birth/binding/change_date_of_birth_binding.dart';
+import 'package:experta/presentation/change_date_of_birth/change_date_of_birth.dart';
+import 'package:experta/presentation/change_email/binding/change_email_binding.dart';
+import 'package:experta/presentation/change_user_name/binding/change_user_name_binding.dart';
+import 'package:experta/presentation/change_user_name/change_user_name.dart';
 import 'package:experta/presentation/dashboard/binding/dashboard_binding.dart';
 import 'package:experta/presentation/dashboard/dashboard.dart';
 import 'package:experta/presentation/edit_profile/edit_profile_binding/edit_profile_binding.dart';
@@ -15,6 +22,10 @@ import 'package:experta/presentation/notification/notification_controller.dart';
 import 'package:experta/presentation/notification/notification_screen.dart';
 import 'package:experta/presentation/onboarding_screen/binding/onboarding_binding.dart';
 import 'package:experta/presentation/onboarding_screen/onboarding_screen.dart';
+import 'package:experta/presentation/payment/binding/payment_binding.dart';
+import 'package:experta/presentation/payment/payment.dart';
+import 'package:experta/presentation/phone_number/binding/phone_number_binding.dart';
+import 'package:experta/presentation/phone_number/phone_number.dart';
 import 'package:experta/presentation/professional_info/binding/professional_binding.dart';
 import 'package:experta/presentation/professional_info/professional_info.dart';
 import 'package:experta/presentation/search_screen/binding/search_binding.dart';
@@ -27,7 +38,10 @@ import 'package:experta/presentation/splash_screen/binding/splash_binding.dart';
 import 'package:experta/presentation/splash_screen/splash_screen.dart';
 import 'package:experta/presentation/verifynumber_screen/binding/verifynumber_binding.dart';
 import 'package:experta/presentation/verifynumber_screen/verifynumber_screen.dart';
+import 'package:experta/presentation/wallet/binding/wallet_binding.dart';
+import 'package:experta/presentation/wallet/wallet.dart';
 import 'package:get/get.dart';
+import '../presentation/change_email/change_email.dart';
 
 class AppRoutes {
   static const String onboardingScreen = '/onboarding_screen';
@@ -64,6 +78,25 @@ class AppRoutes {
 
   static const String professionalInfo = '/professional_info';
 
+  static const String accountSetting = "/account_setting";
+
+  static const String changeUserName = "/change_user_name";
+
+  static const String changeDateOfBirth = "/change_date_of_birth";
+
+  static const String changeEmail = "/change_email";
+
+  static const String phoneNumber = "/phone_number";
+
+  static const String payment = "/payment";
+
+ static const String wallet = "/wallet";
+
+
+
+
+
+
   static List<GetPage> pages = [
     GetPage(
       name: onboardingScreen,
@@ -77,6 +110,13 @@ class AppRoutes {
       page: () => SigninPage(),
       bindings: [
         SignInBinding(),
+      ],
+    ),
+     GetPage(
+      name: accountSetting,
+      page: () => const AccountSettings(),
+      bindings: [
+        AccountSettingBinding(),
       ],
     ),
     GetPage(
@@ -98,6 +138,48 @@ class AppRoutes {
       page: () => const SearchScreen(),
       bindings: [
         SearchBinding(),
+      ],
+    ),
+     GetPage(
+      name: wallet,
+      page: () => const Wallet(),
+      bindings: [
+        WalletBinding(),
+      ],
+    ),
+     GetPage(
+      name: changeUserName,
+      page: () => const ChangeUsername(),
+      bindings: [
+        ChangeUserNameBinding(),
+      ],
+    ),
+    GetPage(
+      name: changeEmail,
+      page: () => const ChangeEmail(),
+      bindings: [
+        ChangeEmailBinding(),
+      ],
+    ),
+    GetPage(
+      name: phoneNumber,
+      page: () => const PhoneNumber(),
+      bindings: [
+        PhoneNumberBinding(),
+      ],
+    ),
+    GetPage(
+      name: payment,
+      page: () => const Payment(),
+      bindings: [
+        PaymentBinding(),
+      ],
+    ),
+    GetPage(
+      name: changeDateOfBirth,
+      page: () =>  const ChangeDateOfBirth(),
+      bindings: [
+        ChangeDateOfBirthBinding(),
       ],
     ),
     GetPage(

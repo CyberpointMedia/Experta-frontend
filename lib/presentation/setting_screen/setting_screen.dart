@@ -8,7 +8,9 @@ import 'package:experta/widgets/app_bar/appbar_subtitle_six.dart';
 import 'package:experta/widgets/app_bar/custom_app_bar.dart';
 import 'package:experta/widgets/custom_elevated_button.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'controller/setting_controller.dart';
 
 class SettingScreen extends GetWidget<SettingController> {
@@ -81,41 +83,46 @@ class SettingScreen extends GetWidget<SettingController> {
                           color: Colors.transparent,
                           borderRadius: BorderRadiusStyle.roundedBorder20),
                       child: Column(mainAxisSize: MainAxisSize.min, children: [
-                        Container(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 15.h, vertical: 16.v),
-                            decoration: AppDecoration.fillOnPrimaryContainer
-                                .copyWith(
-                                    borderRadius:
-                                        BorderRadiusStyle.customBorderBL20),
-                            child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  CustomIconButton(
-                                      height: 44.adaptSize,
-                                      width: 44.adaptSize,
-                                      padding: EdgeInsets.all(6.h),
-                                      decoration:
-                                          IconButtonStyleHelper.fillPrimary,
-                                      child: CustomImageView(
-                                          imagePath:
-                                              "assets/images/account.svg")),
-                                  Padding(
-                                      padding: EdgeInsets.only(
-                                          left: 15.h, top: 13.v, bottom: 10.v),
-                                      child: Text("msg_account_settings".tr,
-                                          style: theme.textTheme.titleMedium!
-                                              .copyWith(
-                                                  color: appTheme.gray900))),
-                                  const Spacer(),
-                                  CustomImageView(
-                                      imagePath:
-                                          ImageConstant.imgArrowRightGray900,
-                                      height: 24.adaptSize,
-                                      width: 24.adaptSize,
-                                      margin:
-                                          EdgeInsets.symmetric(vertical: 10.v))
-                                ])),
+                        GestureDetector(
+                          onTap: () {
+                            Get.toNamed(AppRoutes.accountSetting);
+                          },
+                          child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 15.h, vertical: 16.v),
+                              decoration: AppDecoration.fillOnPrimaryContainer
+                                  .copyWith(
+                                      borderRadius:
+                                          BorderRadiusStyle.customBorderBL20),
+                              child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    CustomIconButton(
+                                        height: 44.adaptSize,
+                                        width: 44.adaptSize,
+                                        padding: EdgeInsets.all(6.h),
+                                        decoration:
+                                            IconButtonStyleHelper.fillPrimary,
+                                        child: CustomImageView(
+                                            imagePath:
+                                                "assets/images/account.svg")),
+                                    Padding(
+                                        padding: EdgeInsets.only(
+                                            left: 15.h, top: 13.v, bottom: 10.v),
+                                        child: Text("msg_account_settings".tr,
+                                            style: theme.textTheme.titleMedium!
+                                                .copyWith(
+                                                    color: appTheme.gray900))),
+                                    const Spacer(),
+                                    CustomImageView(
+                                        imagePath:
+                                            ImageConstant.imgArrowRightGray900,
+                                        height: 24.adaptSize,
+                                        width: 24.adaptSize,
+                                        margin:
+                                            EdgeInsets.symmetric(vertical: 10.v))
+                                  ])),
+                        ),
                         Padding(
                           padding: const EdgeInsets.only(top: 3),
                           child: Container(
@@ -154,42 +161,47 @@ class SettingScreen extends GetWidget<SettingController> {
                                             vertical: 10.v))
                                   ])),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 3),
-                          child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 15.h, vertical: 16.v),
-                              decoration: AppDecoration.fillOnPrimaryContainer,
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    CustomIconButton(
-                                        height: 44.adaptSize,
-                                        width: 44.adaptSize,
-                                        padding: EdgeInsets.all(8.h),
-                                        decoration:
-                                            IconButtonStyleHelper.fillGreenTL24,
-                                        child: CustomImageView(
-                                          imagePath: "assets/images/wallet.svg",
-                                        )),
-                                    Padding(
-                                        padding: EdgeInsets.only(
-                                            left: 15.h,
-                                            top: 13.v,
-                                            bottom: 10.v),
-                                        child: Text("lbl_payment".tr,
-                                            style: theme.textTheme.titleMedium!
-                                                .copyWith(
-                                                    color: appTheme.gray900))),
-                                    const Spacer(),
-                                    CustomImageView(
-                                        imagePath:
-                                            ImageConstant.imgArrowRightGray900,
-                                        height: 24.adaptSize,
-                                        width: 24.adaptSize,
-                                        margin: EdgeInsets.symmetric(
-                                            vertical: 10.v))
-                                  ])),
+                        GestureDetector(
+                          onTap: () {
+                            Get.toNamed(AppRoutes.payment);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 3),
+                            child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 15.h, vertical: 16.v),
+                                decoration: AppDecoration.fillOnPrimaryContainer,
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      CustomIconButton(
+                                          height: 44.adaptSize,
+                                          width: 44.adaptSize,
+                                          padding: EdgeInsets.all(8.h),
+                                          decoration:
+                                              IconButtonStyleHelper.fillGreenTL24,
+                                          child: CustomImageView(
+                                            imagePath: ImageConstant.wallet,
+                                          )),
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 15.h,
+                                              top: 13.v,
+                                              bottom: 10.v),
+                                          child: Text("lbl_payment".tr,
+                                              style: theme.textTheme.titleMedium!
+                                                  .copyWith(
+                                                      color: appTheme.gray900))),
+                                      const Spacer(),
+                                      CustomImageView(
+                                          imagePath:
+                                              ImageConstant.imgArrowRightGray900,
+                                          height: 24.adaptSize,
+                                          width: 24.adaptSize,
+                                          margin: EdgeInsets.symmetric(
+                                              vertical: 10.v))
+                                    ])),
+                          ),
                         ),
                         Padding(
                           padding: const EdgeInsets.only(top: 3),

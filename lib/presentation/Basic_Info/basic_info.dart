@@ -144,13 +144,13 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
 
   Widget _getSocialMediaIcon(String link) {
     if (link.contains('facebook.com')) {
-      return const Icon(FontAwesomeIcons.facebookF,
+      return  const Icon(FontAwesomeIcons.facebookF,
           size: 20.0, color: Colors.blue);
     } else if (link.contains('instagram.com')) {
-      return const Icon(FontAwesomeIcons.instagram,
+      return  const Icon(FontAwesomeIcons.instagram,
           size: 20.0, color: Colors.pink);
     } else if (link.contains('twitter.com')) {
-      return const Icon(FontAwesomeIcons.twitter,
+      return  const Icon(FontAwesomeIcons.twitter,
           size: 20.0, color: Colors.lightBlue);
     } else {
       return const SizedBox(); // Or a placeholder icon
