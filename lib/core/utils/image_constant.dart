@@ -227,6 +227,9 @@ class ImageConstant {
 
   static String imgGiftBox1 = '$imagePath/img_gift_box_1.svg';
 
+  static String imgCloseOnprimarycontainer26x17 =
+      '$imagePath/img_close_onprimarycontainer_26x17.svg';
+
   static String imgInfoBlueGray30024x24 =
       '$imagePath/img_info_blue_gray_300_24x24.svg';
 
@@ -439,17 +442,22 @@ class ImageConstant {
 
   static String imageNotFound = 'assets/images/image_not_found.png';
 
-  static String uploadcloud = '$imagePath/settings/uploadcloud.svg';
 
-  // Profile Setting
+  // ACCOUNT STTING 
+  static String user = "$imagePath/settings/User.svg";
+  static String birthday = "$imagePath/settings/Cake.svg";
+  static String gender = "$imagePath/settings/Gender.svg";
+  static String email = "$imagePath/settings/Email.svg";
+  static String phone = "$imagePath/settings/mobile.svg";
 
-  static String cross = '$imagePath/settings/cross.svg';
-  static String plus = '$imagePath/settings/plus.svg';
-  static String info = "assets/images/settings/Information.svg";
-  static String brief = "assets/images/settings/Brief.svg";
-  static String vector = "assets/images/settings/Vector.svg";
-  static String union = "assets/images/settings/Union.svg";
-  static String avail = "assets/images/settings/available.svg";
-  static String price = "assets/images/settings/price.svg";
-  static String clock = "assets/images/settings/clock.svg";
+
+
+  // PAYMENT
+  static String wallet = "$imagePath/wallet.svg";
+  static String withdraw = "$imagePath/settings/Withdraw.svg";
+  static String transaction= "$imagePath/settings/Transaction.svg";
+  static String uservarification= "$imagePath/settings/User Verify.svg";
+  static String reffer = "$imagePath/Star.svg";
+  static String help = "$imagePath/settings/24-hours.svg";
 }
+

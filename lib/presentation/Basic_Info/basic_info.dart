@@ -9,10 +9,8 @@ import 'package:experta/widgets/bio_textformfield.dart';
 import 'package:experta/widgets/custom_elevated_button.dart';
 import 'package:experta/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:photo_view/photo_view.dart';
-import 'package:shimmer/shimmer.dart';
 
 class BasicProfileInfo extends StatefulWidget {
   const BasicProfileInfo({super.key});
@@ -22,59 +20,13 @@ class BasicProfileInfo extends StatefulWidget {
 }
 
 class _BasicProfileInfoState extends State<BasicProfileInfo> {
-  BasicProfileInfoController controller = Get.put(BasicProfileInfoController());
+  BasicProfileInfoController controller = BasicProfileInfoController();
+  final List<String> _socialLinks = [];
 
   void _addSocialLink() {
     setState(() {
-      controller.socialLinks.add('');
+      _socialLinks.add('');
     });
-  }
-
-  void _showImagePickerOptions() {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return SafeArea(
-          child: Wrap(
-            children: <Widget>[
-              ListTile(
-                leading: const Icon(Icons.photo_library),
-                title: const Text('Gallery'),
-                onTap: () {
-                  controller.pickImage(ImageSource.gallery);
-                  Navigator.of(context).pop();
-                },
-              ),
-              ListTile(
-                leading: const Icon(Icons.photo_camera),
-                title: const Text('Camera'),
-                onTap: () {
-                  controller.pickImage(ImageSource.camera);
-                  Navigator.of(context).pop();
-                },
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  void _showFullImage() {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => Scaffold(
-          appBar: AppBar(),
-          body: Obx(() => PhotoView(
-                imageProvider: controller.imageFile.value != null
-                    ? FileImage(controller.imageFile.value!)
-                    : const AssetImage("assets/images/settings/profile.jpeg")
-                        as ImageProvider,
-              )),
-        ),
-      ),
-    );
   }
 
   @override
@@ -105,28 +57,22 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
             ),
           ),
           SafeArea(
-            child: Obx(() {
-              if (controller.isLoading.value) {
-                return _buildShimmerEffect();
-              } else {
-                return SingleChildScrollView(
-                  child: ConstrainedBox(
-                    constraints: BoxConstraints(
-                      minHeight: MediaQuery.of(context).size.height,
-                    ),
-                    child: IntrinsicHeight(
-                      child: Column(
-                        children: [
-                          _buildAppBar(),
-                          _buildBasicPic(),
-                          Expanded(child: _formFields()),
-                        ],
-                      ),
-                    ),
+            child: SingleChildScrollView(
+              child: ConstrainedBox(
+                constraints: BoxConstraints(
+                  minHeight: MediaQuery.of(context).size.height,
+                ),
+                child: IntrinsicHeight(
+                  child: Column(
+                    children: [
+                      _buildAppBar(),
+                      _buildBasicPic(),
+                      Expanded(child: _formFields()),
+                    ],
                   ),
-                );
-              }
-            }),
+                ),
+              ),
+            ),
           ),
         ],
       ),
@@ -153,33 +99,62 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
       children: [
         Padding(
           padding: const EdgeInsets.only(top: 20),
-          child: GestureDetector(
-            onTap: _showFullImage,
-            child: Obx(() {
-              return CircleAvatar(
-                radius: 55,
-                backgroundColor: Colors.white,
-                child: CircleAvatar(
-                  radius: 50,
-                  backgroundColor: Colors.purple,
-                  backgroundImage: controller.imageFile.value != null
-                      ? FileImage(controller.imageFile.value!)
-                      : (controller.profileImageUrl.value.isNotEmpty
-                              ? NetworkImage(controller.profileImageUrl.value)
-                              : const AssetImage(
-                                  "assets/images/settings/profile.jpeg"))
-                          as ImageProvider,
-                ),
-              );
-            }),
+          child: CircleAvatar(
+            radius: 55,
+            backgroundColor: Colors.white,
+            child: CircleAvatar(
+              radius: 50,
+              backgroundColor: Colors.purple,
+              child: CustomImageView(
+                imagePath: "assets/images/settings/profile.jpeg",
+                radius: BorderRadius.circular(50),
+                fit: BoxFit.cover,
+              ),
+            ),
           ),
         ),
-        TextButton(
-          onPressed: _showImagePickerOptions,
-          child: const Text("Change Profile Picture"),
+        const TextButton(
+          onPressed: null,
+          child: Text("Change Profile Picture"),
         ),
       ],
     );
+  }
+
+  Widget _buildSocialLinkFormField(int index) {
+    return Row(
+      children: [
+        _getSocialMediaIcon(_socialLinks[index]), // Get icon based on link
+        Expanded(
+          child: CustomTextFormField(
+            initialValue: _socialLinks[index],
+            onChanged: (value) => setState(() => _socialLinks[index] = value),
+            hintText: "Social Link".tr,
+            hintStyle: CustomTextStyles.titleMediumBluegray300,
+            contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
+            suffix: IconButton(
+              icon: const Icon(Icons.close),
+              onPressed: () => setState(() => _socialLinks.removeAt(index)),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _getSocialMediaIcon(String link) {
+    if (link.contains('facebook.com')) {
+      return  const Icon(FontAwesomeIcons.facebookF,
+          size: 20.0, color: Colors.blue);
+    } else if (link.contains('instagram.com')) {
+      return  const Icon(FontAwesomeIcons.instagram,
+          size: 20.0, color: Colors.pink);
+    } else if (link.contains('twitter.com')) {
+      return  const Icon(FontAwesomeIcons.twitter,
+          size: 20.0, color: Colors.lightBlue);
+    } else {
+      return const SizedBox(); // Or a placeholder icon
+    }
   }
 
   Widget _formFields() {
@@ -242,13 +217,10 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
               textAlign: TextAlign.start,
             ),
           ),
-          Obx(() => Column(
-                children: controller.socialLinks
-                    .asMap()
-                    .entries
-                    .map((entry) => _buildSocialLinkFormField(entry.key))
-                    .toList(),
-              )),
+          ..._socialLinks
+              .asMap()
+              .entries
+              .map((entry) => _buildSocialLinkFormField(entry.key)),
           const SizedBox(
             height: 10,
           ),
@@ -272,82 +244,14 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
           ),
           CustomElevatedButton(
             text: "Save Changes",
-            onPressed: () {
-              controller.saveProfileInfo();
-            },
+            onPressed: () {},
           )
         ],
       ),
     );
   }
 
-  Widget _buildSocialLinkFormField(int index) {
-    return Row(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(right: 10, left: 10),
-          child: _getSocialMediaIcon(controller.socialLinks[index]),
-        ),
-        Expanded(
-          child: CustomTextFormField(
-            initialValue: controller.socialLinks[index],
-            onChanged: (value) =>
-                setState(() => controller.socialLinks[index] = value),
-            hintText: "Social Link".tr,
-            hintStyle: CustomTextStyles.titleMediumBluegray300,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
-            suffix: IconButton(
-              icon: const Icon(Icons.close),
-              onPressed: () =>
-                  setState(() => controller.socialLinks.removeAt(index)),
-            ),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _getSocialMediaIcon(String link) {
-    if (link.contains('facebook.com')) {
-      return const Icon(FontAwesomeIcons.facebookF,
-          size: 20.0, color: Colors.blue);
-    } else if (link.contains('instagram.com')) {
-      return const Icon(FontAwesomeIcons.instagram,
-          size: 20.0, color: Colors.pink);
-    } else if (link.contains('twitter.com')) {
-      return const Icon(FontAwesomeIcons.twitter,
-          size: 20.0, color: Colors.lightBlue);
-    } else if (link.contains('linkedin.com')) {
-      return const Icon(FontAwesomeIcons.linkedin,
-          size: 20.0, color: Colors.blueAccent);
-    } else if (link.contains('youtube.com')) {
-      return const Icon(FontAwesomeIcons.youtube,
-          size: 20.0, color: Colors.red);
-    } else if (link.contains('github.com')) {
-      return const Icon(FontAwesomeIcons.github,
-          size: 20.0, color: Colors.black);
-    } else {
-      return const SizedBox();
-    }
-  }
-
   onTapArrowLeft() {
     Get.back();
-  }
-
-  Widget _buildShimmerEffect() {
-    return IntrinsicHeight(
-      child: Shimmer.fromColors(
-        baseColor: Colors.grey[300]!,
-        highlightColor: Colors.grey[100]!,
-        child: Column(
-          children: [
-            _buildAppBar(),
-            _buildBasicPic(),
-            Expanded(child: _formFields()),
-          ],
-        ),
-      ),
-    );
   }
 }
