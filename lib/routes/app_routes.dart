@@ -112,6 +112,7 @@ import 'package:experta/presentation/work_experience/work_experience.dart';
 
 import 'package:experta/widgets/custom_page_transition.dart';
 import 'package:get/get.dart';
+import '../presentation/change_email/change_email.dart';
 
 class AppRoutes {
   static const String onboardingScreen = '/onboarding_screen';
