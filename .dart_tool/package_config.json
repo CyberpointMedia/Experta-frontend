@@ -1574,6 +1574,30 @@
       "languageVersion": "3.3"
     },
     {
+      "name": "webview_flutter_wkwebview",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/webview_flutter_wkwebview-3.16.3",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
+    },
+    {
+      "name": "win32",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/win32-5.9.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.5"
+    },
+    {
+      "name": "win32_registry",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/win32_registry-1.1.5",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
+    },
+    {
+      "name": "xdg_directories",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/xdg_directories-1.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
       "name": "xml",
       "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/xml-6.5.0",
       "packageUri": "lib/",
