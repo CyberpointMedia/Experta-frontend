@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:experta/data/apiClient/api_service.dart';
 import 'package:experta/data/models/request/login_request_model.dart';
 import 'package:experta/data/models/request/register_request_model.dart';
 import 'package:experta/data/models/response/login_response_model.dart';
@@ -8,6 +9,7 @@ import 'package:experta/widgets/custom_toast_message.dart';
 import '../../../core/app_export.dart';
 import 'package:country_pickers/country.dart';
 import 'package:country_pickers/utils/utils.dart';
+import 'package:flutter/material.dart';
 
 import '../../../core/utils/validation_functions.dart';
 
@@ -18,39 +20,36 @@ class SigninController extends GetxController {
   var passwordController = TextEditingController();
   var isEmailValid = false.obs;
   var isPasswordValid = false.obs;
-  var isTextValid = false.obs;
   var otpController = TextEditingController();
   var isShowPassword = false.obs;
   final FocusNode emailFocusNode = FocusNode();
   final FocusNode nameFocusNode = FocusNode();
   final FocusNode passwordFocusNode = FocusNode();
   final ApiService _apiService = ApiService();
-  PrefUtils prefUtils = PrefUtils();
   var isLoading = false.obs;
   var errorMessage = ''.obs;
-  var isPhoneNumberValid = false.obs;
+  var isPhoneNumberValid =
+      false.obs; // Observable variable to track phone number validity
   Rx<Country> selectedCountry =
       CountryPickerUtils.getCountryByPhoneCode('91').obs;
   @override
   void onInit() {
     super.onInit();
-    nameController.addListener(_validateName);
     emailController.addListener(_validateEmail);
     passwordController.addListener(_validatePassword);
     phoneNumberController.addListener(_validatePhoneNumber);
   }
 
   void _validatePhoneNumber() {
-    isPhoneNumberValid.value =
-        isValidPhone(phoneNumberController.text, isRequired: true);
+    if (phoneNumberController.text.length >= 10) {
+      isPhoneNumberValid.value = true;
+    } else {
+      isPhoneNumberValid.value = false;
+    }
   }
 
   void _validateEmail() {
     isEmailValid.value = isValidEmail(emailController.text, isRequired: true);
-  }
-
-  void _validateName() {
-    isTextValid.value = isText(nameController.text, isRequired: true);
   }
 
   void _validatePassword() {
@@ -58,49 +57,53 @@ class SigninController extends GetxController {
         isValidPassword(passwordController.text, isRequired: true);
   }
 
-  void loginUser(BuildContext context) async {
-    isLoading(true);
-    // Concatenate country code with phone number
-    String fullPhoneNumber = phoneNumberController.text;
-    // '+${selectedCountry.value.phoneCode}${phoneNumberController.text}';
-    log(fullPhoneNumber);
+  void loginUser(context) async {
     LoginRequestModel requestModel = LoginRequestModel(
-      phoneNo: fullPhoneNumber,
+      phoneNo: phoneNumberController.text,
     );
 
     try {
-      LoginResponseModel? response =
-          await _apiService.loginUser(requestModel, context);
+      LoginResponseModel? response = await _apiService.loginUser(requestModel);
       if (response != null && response.status == "success") {
         CustomToast().showToast(
           context: context,
-          message: 'OTP sent successfully to your phone number.',
+          message: 'Otp Sent Sucessfully',
           isSuccess: true,
         );
-        await prefUtils.setEmail(response.data.phoneNo ?? "");
-        Get.toNamed(AppRoutes.verifynumberScreen,
-            arguments: [phoneNumberController]);
-      } else {
-        CustomToast().showToast(
-          context: context,
-          message: "Please check the country code and phone number",
-          isSuccess: false,
+        log('hi the otp is ${response.data.otp}');
+        Get.toNamed(
+          AppRoutes.verifynumberScreen,
+          arguments: phoneNumberController,
         );
+      } else {
         print("Login failed");
       }
     } catch (e) {
-      CustomToast().showToast(
-        context: context,
-        message:
-            "Oops! Something didn't go as planned. Please try again later.",
-        isSuccess: false,
-      );
       print("Exception occurred: $e");
-    } finally {
-      isLoading(false);
     }
   }
 
+  // void registerUser() async {
+  //   RegisterRequestModel requestModel = RegisterRequestModel(
+  //     email: emailController.text,
+  //     firstName: nameController.text,
+  //     lastName: passwordController.text,
+  //     phoneNo: phoneNumberController.text,
+  //   );
+
+  //   try {
+  //     RegisterResponseModel? response =
+  //         await _apiService.registerUser(requestModel);
+
+  //     if (response != null && response.status == "success") {
+  //       Get.toNamed(AppRoutes.verifynumberScreen);
+  //     } else {
+  //       print("Registration failed");
+  //     }
+  //   } catch (e) {
+  //     print("Exception occurred: $e");
+  //   }
+  // }
   void registerUser(context) async {
     isLoading(true);
     try {
@@ -112,10 +115,7 @@ class SigninController extends GetxController {
       );
 
       final response = await _apiService.registerUser(requestModel);
-      log('Response received: ${response.toString()}');
-
       if (response is RegisterResponseSuccess) {
-        log('Registration successful: ${response.data.toString()}');
         CustomToast().showToast(
           context: context,
           message: 'Otp Sent Sucessfully',
@@ -123,27 +123,19 @@ class SigninController extends GetxController {
         );
         Get.toNamed(
           AppRoutes.verifynumberScreen,
-          arguments: [phoneNumberController],
+          arguments: phoneNumberController,
         );
+        log('Registration successful: ${response.data.toString()}');
       } else if (response is RegisterResponseError) {
-        log("Registration failed: ${response.error.errorMessage}");
         CustomToast().showToast(
           context: context,
           message: response.error.errorMessage,
           isSuccess: false,
         );
+        log("Registration failed");
         errorMessage(response.error.errorMessage);
-      } else {
-        log('Unexpected response type: ${response.runtimeType}');
-        CustomToast().showToast(
-          context: context,
-          message: 'Unexpected response from server',
-          isSuccess: false,
-        );
-        errorMessage('Unexpected response from server');
       }
     } catch (e) {
-      log('Failed to register user: $e');
       CustomToast().showToast(
         context: context,
         message: 'Failed to register user: $e',
@@ -157,9 +149,9 @@ class SigninController extends GetxController {
 
   @override
   void onClose() {
-    emailController.clear();
-    passwordController.clear();
-    phoneNumberController.clear();
+    emailController.dispose();
+    passwordController.dispose();
+    phoneNumberController.dispose();
     emailFocusNode.dispose();
     passwordFocusNode.dispose();
     super.onClose();

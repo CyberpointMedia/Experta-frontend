@@ -1,7 +1,11 @@
 import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
+import 'package:experta/widgets/app_bar/appbar_leading_image.dart';
+import 'package:experta/widgets/app_bar/appbar_subtitle_six.dart';
+import 'package:experta/widgets/app_bar/custom_app_bar.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
+import 'package:flutter/material.dart';
 
 class AboutUs extends StatefulWidget {
   const AboutUs({super.key});
@@ -9,11 +13,10 @@ class AboutUs extends StatefulWidget {
   @override
   State<AboutUs> createState() => _AboutUsState();
 }
-
 class _AboutUsState extends State<AboutUs> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return  Scaffold(
       body: Stack(
         children: [
           Positioned(
@@ -21,7 +24,6 @@ class _AboutUsState extends State<AboutUs> {
             top: 50,
             child: ImageFiltered(
               imageFilter: ImageFilter.blur(
-                tileMode: TileMode.decal,
                 sigmaX: 60,
                 sigmaY: 60,
               ),
@@ -48,7 +50,6 @@ class _AboutUsState extends State<AboutUs> {
       ),
     );
   }
-
   PreferredSizeWidget _buildAppBar() {
     return CustomAppBar(
         height: 40.h,
@@ -62,12 +63,11 @@ class _AboutUsState extends State<AboutUs> {
         centerTitle: true,
         title: AppbarSubtitleSix(text: "About Us"));
   }
-
-  Widget _buildVerifyAccount() {
+   Widget _buildVerifyAccount() {
     return Align(
         alignment: Alignment.bottomCenter,
         child: Padding(
-            padding: EdgeInsets.only(right: 16.h, left: 16, top: 15),
+            padding: EdgeInsets.only(right: 16.h, left: 16, top: 50),
             child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,14 +93,14 @@ class _AboutUsState extends State<AboutUs> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     CustomIconButton(
-                                        height: Get.height * 0.03,
+                                        height: 44.adaptSize,
                                         width: 44.adaptSize,
                                         padding: EdgeInsets.all(6.h),
                                         decoration:
                                             IconButtonStyleHelper.fillPrimary,
                                         child: CustomImageView(
-                                            imagePath:
-                                                ImageConstant.condition)),
+                                            imagePath:ImageConstant.condition)),
+                                             
                                     Padding(
                                         padding: EdgeInsets.only(
                                             left: 15.h,
@@ -122,10 +122,10 @@ class _AboutUsState extends State<AboutUs> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            // Get.toNamed(AppRoutes.changeDateOfBirth);
+                            Get.toNamed(AppRoutes.changeDateOfBirth);
                           },
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 1),
+                            padding: const EdgeInsets.only(top: 3),
                             child: Container(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 15.h, vertical: 16.v),
@@ -141,7 +141,8 @@ class _AboutUsState extends State<AboutUs> {
                                           decoration: IconButtonStyleHelper
                                               .fillDeepPurple,
                                           child: CustomImageView(
-                                            imagePath: ImageConstant.term,
+                                            imagePath:ImageConstant.term,
+                                                
                                           )),
                                       Padding(
                                           padding: EdgeInsets.only(
@@ -166,54 +167,61 @@ class _AboutUsState extends State<AboutUs> {
                           ),
                         ),
                         GestureDetector(
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 1),
-                            child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 15.h, vertical: 16.v),
-                                decoration: AppDecoration.fillOnPrimaryContainer
-                                    .copyWith(
-                                        borderRadius:
-                                            BorderRadiusStyle.customBorderL20),
-                                child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      CustomIconButton(
-                                          height: 44.adaptSize,
-                                          width: 44.adaptSize,
-                                          padding: EdgeInsets.all(10.h),
-                                          decoration: IconButtonStyleHelper
-                                              .fillGreenTL24,
-                                          child: CustomImageView(
-                                            imagePath: ImageConstant.cokie,
-                                          )),
-                                      Padding(
-                                          padding: EdgeInsets.only(
-                                              left: 15.h,
-                                              top: 13.v,
-                                              bottom: 10.v),
-                                          child: Text("Cookies Policy",
-                                              style: theme
-                                                  .textTheme.titleMedium!
-                                                  .copyWith(
-                                                      color:
-                                                          appTheme.gray900))),
-                                      const Spacer(),
-                                      CustomImageView(
-                                          imagePath: ImageConstant
-                                              .imgArrowRightGray900,
-                                          height: 24.adaptSize,
-                                          width: 24.adaptSize,
-                                          margin: EdgeInsets.symmetric(
-                                              vertical: 10.v)),
-                                    ])),
-                          ),
+                          onTap: () {
+                            Get.toNamed(AppRoutes.paymentmethod);
+                          },
+                        child:Padding(
+                      
+                          padding: const EdgeInsets.only(top: 3),
+                          child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 15.h, vertical: 16.v),
+                              decoration: AppDecoration.fillOnPrimaryContainer
+                                  .copyWith(
+                                      borderRadius:
+                                          BorderRadiusStyle.customBorderL20),
+                              child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    CustomIconButton(
+                                        height: 44.adaptSize,
+                                        width: 44.adaptSize,
+                                        padding: EdgeInsets.all(10.h),
+                                        decoration:
+                                            IconButtonStyleHelper. fillGreenTL24,
+                                        child: CustomImageView(
+                                          imagePath: ImageConstant.cokie,
+                                         
+                                        )),
+                                    Padding(
+                                        padding: EdgeInsets.only(
+                                            left: 15.h,
+                                            top: 13.v,
+                                            bottom: 10.v),
+                                        child: Text("Cookies Policy",
+                                            style: theme.textTheme.titleMedium!
+                                                .copyWith(
+                                                    color: appTheme.gray900))),
+                                    const Spacer(),
+                                    CustomImageView(
+                                        imagePath:
+                                            ImageConstant.imgArrowRightGray900,
+                                        height: 24.adaptSize,
+                                        width: 24.adaptSize,
+                                        margin: EdgeInsets.symmetric(
+                                            vertical: 10.v)),
+                                  ])),
                         ),
+                      ),
                       ]))
                 ])));
   }
 
+
+
   onTapArrowLeft() {
     Get.back();
   }
+ 
 }
+

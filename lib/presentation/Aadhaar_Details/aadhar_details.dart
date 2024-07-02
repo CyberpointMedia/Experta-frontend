@@ -2,7 +2,13 @@ import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/add_upi/controller/add_upi_controller.dart';
+import 'package:experta/widgets/app_bar/appbar_leading_image.dart';
+import 'package:experta/widgets/app_bar/appbar_subtitle_six.dart';
+import 'package:experta/widgets/app_bar/custom_app_bar.dart';
 import 'package:experta/widgets/custom_text_form_field.dart';
+import 'package:experta/widgets/custom_elevated_button.dart';
+import 'package:experta/widgets/custom_toast_message.dart';
+import 'package:flutter/material.dart';
 
 class AadharDetails extends StatefulWidget {
   const AadharDetails({super.key});
@@ -66,7 +72,6 @@ class _AadharDetailsState extends State<AadharDetails> {
               top: 50,
               child: ImageFiltered(
                 imageFilter: ImageFilter.blur(
-                  tileMode: TileMode.decal,
                   sigmaX: 60,
                   sigmaY: 60,
                 ),
@@ -85,15 +90,12 @@ class _AadharDetailsState extends State<AadharDetails> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 30, left: 16, right: 16),
+              padding: const EdgeInsets.only(top: 30, left: 15, right: 15),
               child: SingleChildScrollView(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text("Full Name"),
-                    const SizedBox(
-                      height: 6,
-                    ),
                     CustomTextFormField(
                       hintText: "Naveen Verma",
                       hintStyle: CustomTextStyles.titleMediumBluegray300,
@@ -104,9 +106,6 @@ class _AadharDetailsState extends State<AadharDetails> {
                     ),
                     const SizedBox(height: 10),
                     const Text("Aadhaar Number"),
-                    const SizedBox(
-                      height: 6,
-                    ),
                     CustomTextFormField(
                       hintText: "4400 2059 9088",
                       hintStyle: CustomTextStyles.titleMediumBluegray300,
@@ -117,9 +116,6 @@ class _AadharDetailsState extends State<AadharDetails> {
                     ),
                     const SizedBox(height: 10),
                     const Text("Date of Birth"),
-                    const SizedBox(
-                      height: 6,
-                    ),
                     CustomTextFormField(
                       hintText: "25/11/1992",
                       hintStyle: CustomTextStyles.titleMediumBluegray300,
@@ -130,12 +126,8 @@ class _AadharDetailsState extends State<AadharDetails> {
                     ),
                     const SizedBox(height: 10),
                     const Text("Address"),
-                    const SizedBox(
-                      height: 6,
-                    ),
                     CustomTextFormField(
-                      hintText:
-                          "Flat no 351, 4th floor, Tower 2, Sector 91, Mohali",
+                      hintText: "Flat no 351, 4th floor, Tower 2, Sector 91, Mohali",
                       hintStyle: CustomTextStyles.titleMediumBluegray300,
                       textInputType: TextInputType.streetAddress,
                       controller: addressController,
@@ -144,9 +136,6 @@ class _AadharDetailsState extends State<AadharDetails> {
                     ),
                     const SizedBox(height: 10),
                     const Text("State"),
-                    const SizedBox(
-                      height: 6,
-                    ),
                     CustomTextFormField(
                       hintText: "Punjab",
                       hintStyle: CustomTextStyles.titleMediumBluegray300,
@@ -157,9 +146,6 @@ class _AadharDetailsState extends State<AadharDetails> {
                     ),
                     const SizedBox(height: 10),
                     const Text("City"),
-                    const SizedBox(
-                      height: 6,
-                    ),
                     CustomTextFormField(
                       hintText: "SAS Nagar (Mohali)",
                       hintStyle: CustomTextStyles.titleMediumBluegray300,
@@ -170,9 +156,6 @@ class _AadharDetailsState extends State<AadharDetails> {
                     ),
                     const SizedBox(height: 10),
                     const Text("Pin Code"),
-                    const SizedBox(
-                      height: 6,
-                    ),
                     CustomTextFormField(
                       hintText: "140308",
                       hintStyle: CustomTextStyles.titleMediumBluegray300,
@@ -182,35 +165,35 @@ class _AadharDetailsState extends State<AadharDetails> {
                       autofocus: false,
                     ),
                     const SizedBox(height: 20), // Add spacing before the button
-                    // CustomElevatedButton(
-                    //   text: "Save",
-                    //   onPressed: () {
-                    //     // Check if all fields are filled
-                    //     if (fullNameController.text.isNotEmpty &&
-                    //         aadhaarNumberController.text.isNotEmpty &&
-                    //         dateOfBirthController.text.isNotEmpty &&
-                    //         addressController.text.isNotEmpty &&
-                    //         stateController.text.isNotEmpty &&
-                    //         cityController.text.isNotEmpty &&
-                    //         pinCodeController.text.isNotEmpty) {
-                    //       // Show success toast
-                    //       CustomToast().showToast(
-                    //         context: context,
-                    //         message: "Aadhaar Details saved successfully",
-                    //         isSuccess: true,
-                    //       );
-                    //       Get.toNamed(AppRoutes.accountSetting);
-                    //     } else {
-                    //       // Show error toast
-                          // CustomToast().showToast(
-                          //   context: context,
-                          //   message: "Please fill in all the fields",
-                          //   isSuccess: false,
-                          // );
-                    //     }
-                    //   },
-                    //   margin: const EdgeInsets.all(10),
-                    // ),
+                    CustomElevatedButton(
+                      text: "Save",
+                      onPressed: () {
+                        // Check if all fields are filled
+                        if (fullNameController.text.isNotEmpty &&
+                            aadhaarNumberController.text.isNotEmpty &&
+                            dateOfBirthController.text.isNotEmpty &&
+                            addressController.text.isNotEmpty &&
+                            stateController.text.isNotEmpty &&
+                            cityController.text.isNotEmpty &&
+                            pinCodeController.text.isNotEmpty) {
+                          // Show success toast
+                          CustomToast().showToast(
+                            context: context,
+                            message: "Aadhaar Details saved successfully",
+                            isSuccess: true,
+                          );
+                          Get.toNamed(AppRoutes.accountSetting);
+                        } else {
+                          // Show error toast
+                          CustomToast().showToast(
+                            context: context,
+                            message: "Please fill in all the fields",
+                            isSuccess: false,
+                          );
+                        }
+                      },
+                      margin: const EdgeInsets.all(10),
+                    ),
                     const SizedBox(height: 20), // Extra space at the bottom
                   ],
                 ),

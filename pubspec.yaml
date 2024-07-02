@@ -1,7 +1,7 @@
 name: experta
 description: "A new Flutter project."
 # The following line prevents the package from being accidentally published to
-# pub.dev using flutter pub publish. This is preferred for private packages.
+# pub.dev using `flutter pub publish`. This is preferred for private packages.
 publish_to: 'none' # Remove this line if you wish to publish to pub.dev
 
 # The following defines the version and build number for your application.
@@ -21,21 +21,22 @@ version: 1.0.0+1
 environment:
   sdk: '>=3.3.0 <4.0.0'
 
-# Dependencies specify other packages that your package needs in order t999o work.
+# Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
-# consider running flutter pub upgrade --major-versions. Alternatively,
+# consider running `flutter pub upgrade --major-versions`. Alternatively,
 # dependencies can be manually updated by changing the version numbers below to
 # the latest version available on pub.dev. To see which dependencies have newer
-# versions available, run flutter pub outdated.
+# versions available, run `flutter pub outdated`.
 dependencies:
   flutter:
     sdk: flutter
+
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
   cupertino_icons: ^1.0.6
   outline_gradient_button: ^2.0.1+1
-  connectivity_plus: ^6.1.0
+  connectivity_plus: ^5.0.2
   get: ^4.6.6
   cached_network_image: ^3.3.1
   flutter_svg: ^2.0.10+1
@@ -48,75 +49,22 @@ dependencies:
   sms_autofill: ^2.3.1
   http: ^1.2.1
   readmore: ^3.0.0
+  font_awesome_flutter: ^10.7.0
   file_picker: ^8.0.3
-  meta: ^1.11.0
-  page_transition: ^2.1.0
-  shimmer: ^3.0.0
+  photo_manager: ^3.2.0
   image_picker: ^1.1.2
-  image_editor_plus: ^1.0.5
-  video_player: ^2.9.1
-  photo_view: ^0.15.0
-  mime: ^2.0.0
-  path: ^1.9.0
-  http_parser: ^4.0.2
-  image_cropper: ^8.0.2
-  photo_manager: ^3.2.1
-  path_provider: ^2.1.3
-  geocoding: ^3.0.0
-  geolocator: ^13.0.2
-  permission_handler: ^11.3.1
-  webview_flutter: ^4.8.0
-  fluttertoast: ^8.2.6
-  dio: ^5.5.0+1
-  stylish_pull_to_refresh: ^1.1.0
-  pull_to_refresh: ^2.0.0
-  lottie: ^3.1.2
-  bloc: ^8.1.4
-  socket_io_client: ^3.0.2
-  qr_flutter: ^4.1.0
-  sqflite: ^2.3.3+1
-  provider: ^6.1.2
-  carousel_slider: ^5.0.0
-  flutter_webrtc: ^0.11.6+hotfix.1
-  peerdart: ^0.5.6
-  razorpay_flutter: ^1.3.7
-  syncfusion_flutter_xlsio: ^27.1.56
-  flutter_local_notifications: ^17.2.4
-  camera: ^0.10.6
-  speech_to_text: ^6.6.0
-  google_mlkit_face_detection: 
-  image: ^4.3.0
-  google_mlkit_commons: any
-  flutter_tts: ^4.0.2
-  share_plus: ^10.0.0
-  screenshot: ^3.0.0
-  firebase_messaging: ^15.1.5  
-  firebase_core: ^3.8.0      
-  firebase_auth: ^5.3.3  
-  device_info_plus: ^11.1.1
-  logger: ^2.5.0
-  font_awesome_flutter: ^10.8.0
-  firebase_analytics: ^11.3.6
-  hive_flutter: ^1.1.0
-  hive: ^2.2.3
-  android_intent_plus: ^5.2.1
-dev_dependencies:
   
+
+dev_dependencies:
   flutter_test:
     sdk: flutter
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
-  # activated in the analysis_options.yaml file located at the root of your
+  # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^5.0.0
-
-dependency_overrides:
-  http: ^1.2.1
-  google_mlkit_commons:
-  hive_generator: ^2.0.1
-  build_runner: ^2.4.9
+  flutter_lints: ^3.0.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -127,49 +75,39 @@ flutter:
   assets: 
     - assets/
     - assets/images/
-    - assets/images/social/
-    - assets/call/
-    - assets/images/wallet/
     - assets/images/settings/
-    - assets/images/bookings/
-    - assets/jsonfiles/
-  
-  fonts:
-    - family: Roboto
-      fonts:
-        - asset: assets/fonts/Roboto-Black.ttf
-          weight: 900
-        - asset: assets/fonts/Roboto-BlackItalic.ttf
-          weight: 900
-          style: italic
-        - asset: assets/fonts/Roboto-Bold.ttf
-          weight: 700
-        - asset: assets/fonts/Roboto-BoldCondensed.ttf
-          weight: 700
-        - asset: assets/fonts/Roboto-BoldCondensedItalic.ttf
-          weight: 700
-          style: italic
-        - asset: assets/fonts/Roboto-BoldItalic.ttf
-          weight: 700
-          style: italic
-        - asset: assets/fonts/Roboto-Condensed.ttf
-        - asset: assets/fonts/Roboto-CondensedItalic.ttf
-          style: italic
-        - asset: assets/fonts/Roboto-Italic.ttf
-          style: italic
-        - asset: assets/fonts/Roboto-Light.ttf
-          weight: 300
-        - asset: assets/fonts/Roboto-LightItalic.ttf
-          weight: 300
-          style: italic
-        - asset: assets/fonts/Roboto-Medium.ttf
+  fonts: 
+    - family: Inter
+      fonts: 
+        - asset: assets/fonts/InterMedium.ttf
           weight: 500
-        - asset: assets/fonts/Roboto-MediumItalic.ttf
+        - asset: assets/fonts/InterRegular.ttf
+          weight: 400
+    - family: SF Pro Display
+      fonts: 
+        - asset: assets/fonts/SFProDisplayRegular.ttf
+          weight: 400
+        - asset: assets/fonts/SFProDisplayMedium.ttf
           weight: 500
-          style: italic
-        - asset: assets/fonts/Roboto-Regular.ttf
-        - asset: assets/fonts/Roboto-Thin.ttf
-          weight: 100
-        - asset: assets/fonts/Roboto-ThinItalic.ttf
-          weight: 100
-          style: italic
+        - asset: assets/fonts/SFProDisplayBold.ttf
+          weight: 700
+        - asset: assets/fonts/SFProDisplaySemibold.ttf
+          weight: 600
+        - asset: assets/fonts/SFProDisplayLight.ttf
+          weight: 300
+    - family: Gilroy
+      fonts: 
+        - asset: assets/fonts/GilroySemiBold.ttf
+          weight: 600
+        - asset: assets/fonts/GilroyMedium.ttf
+          weight: 500
+    - family: SF Pro Text
+      fonts: 
+        - asset: assets/fonts/SFProTextSemibold.ttf
+          weight: 600
+        - asset: assets/fonts/SFProTextMedium.ttf
+          weight: 500
+        - asset: assets/fonts/SFProTextRegular.ttf
+          weight: 400
+        - asset: assets/fonts/SFProTextLight.ttf
+          weight: 300

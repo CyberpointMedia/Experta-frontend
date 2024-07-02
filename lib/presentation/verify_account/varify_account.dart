@@ -1,12 +1,16 @@
 import 'dart:ui';
+
 import 'package:experta/core/app_export.dart';
-import 'package:experta/presentation/pan_detrail/pan_detail.dart';
-import 'package:experta/presentation/payment_method/payment_method.dart';
-import 'package:experta/presentation/verify_account/Models/verify_account_model.dart';
-import 'package:experta/presentation/verify_account/face_live.dart';
+import 'package:experta/widgets/app_bar/appbar_leading_image.dart';
+import 'package:experta/widgets/app_bar/appbar_subtitle_six.dart';
+import 'package:experta/widgets/app_bar/custom_app_bar.dart';
+import 'package:experta/widgets/custom_elevated_button.dart';
+//import 'package:experta/widgets/custom_elevated_button.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
 import 'package:experta/widgets/custom_text_form_field.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+//import 'package:experta/widgets/custom_outlined_button.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class VerifyAccount extends StatefulWidget {
   const VerifyAccount({super.key});
@@ -18,69 +22,41 @@ class VerifyAccount extends StatefulWidget {
 class _VerifyAccountState extends State<VerifyAccount> {
   final formKey = GlobalKey<FormState>();
   final TextEditingController panController = TextEditingController();
-  final TextEditingController aadharCardController = TextEditingController();
-  KYCResponse? kycData;
-  bool isLoading = true;
-  bool isLoading2 = false;
+  final TextEditingController AadharCardController = TextEditingController();
 
-  @override
-  void initState() {
-    super.initState();
-    fetchKYCData();
-  }
-
-  Future<void> fetchKYCData() async {
-    setState(() => isLoading = true);
-
-    try {
-      final response = await ApiService().getKYCStatus();
-      if (response != null) {
-        setState(() => kycData = response);
-      }
-    } catch (e) {
-      print('Error fetching KYC data: $e');
-    } finally {
-      setState(() => isLoading = false);
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Stack(
         children: [
-          _buildBackground(),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [_buildAppBar(), _buildVerifyAccount()],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildBackground() {
-    return Positioned(
-      left: 270,
-      top: 50,
-      child: ImageFiltered(
-        imageFilter: ImageFilter.blur(
-          tileMode: TileMode.decal,
-          sigmaX: 60,
-          sigmaY: 60,
-        ),
-        child: Align(
-          child: SizedBox(
-            width: 252,
-            height: 252,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(126),
-                color: appTheme.deepOrangeA20.withOpacity(0.6),
+          Positioned(
+            left: 270,
+            top: 50,
+            child: ImageFiltered(
+              imageFilter: ImageFilter.blur(
+                sigmaX: 60,
+                sigmaY: 60,
+              ),
+              child: Align(
+                child: SizedBox(
+                  width: 252,
+                  height: 252,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(126),
+                      color: appTheme.deepOrangeA20.withOpacity(0.6),
+                    ),
+                  ),
+                ),
               ),
             ),
           ),
-        ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [_buildAppBar(), _buildVerifyAccount()],
+          )
+        ],
       ),
     );
   }
@@ -92,7 +68,9 @@ class _VerifyAccountState extends State<VerifyAccount> {
       leading: AppbarLeadingImage(
         imagePath: ImageConstant.imgArrowLeftOnerrorcontainer,
         margin: EdgeInsets.only(left: 16.h),
-        onTap: onTapArrowLeft,
+        onTap: () {
+          onTapArrowLeft();
+        },
       ),
       centerTitle: true,
       title: AppbarSubtitleSix(text: "VerifyAccount"),
@@ -100,18 +78,10 @@ class _VerifyAccountState extends State<VerifyAccount> {
   }
 
   Widget _buildVerifyAccount() {
-    if (isLoading) {
-      return const CircularProgressIndicator();
-    }
-
-    return _buildUserDetails();
-  }
-
-  Widget _buildUserDetails() {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.h, vertical: 15),
+        padding: EdgeInsets.only(right: 16.h, left: 16, top: 50),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,521 +95,424 @@ class _VerifyAccountState extends State<VerifyAccount> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  _buildUserDetail(
-                    icon: ImageConstant.phone,
-                    label: "Mobile Number",
-                    value: kycData?.userData.phoneNo ?? '',
-                    isVerified: kycData?.userData.phoneNo.isNotEmpty ?? false,
-                    decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
-                      borderRadius: BorderRadiusStyle.customBorderBL20,
-                    ),
-                  ),
-                  _buildUserDetail(
-                    icon: ImageConstant.email,
-                    label: "Email Address",
-                    value: kycData?.userData.email ?? '',
-                    isVerified: kycData?.userData.email?.isNotEmpty ?? false,
-                  ),
-                  _buildUserDetail(
-                    icon: ImageConstant.panset,
-                    label: "Pan Card",
-                    value:
-                        maskPanNumber(kycData?.panVerification.panNumber ?? ''),
-                    isVerified:
-                        kycData?.kycStatus.steps.panVerification ?? false,
+                  GestureDetector(
                     onTap: () {
-                      if (!(kycData?.kycStatus.steps.panVerification ??
-                          false)) {
-                        _showPANVerificationDialog();
-                      } else {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => PanDetail(
-                              name: kycData
-                                      ?.panVerification.panDetails.fullName ??
-                                  '',
-                              panno: kycData?.panVerification.panNumber ?? '',
-                              dob: '',
-                            ),
+                      Get.toNamed(AppRoutes.changeUserName);
+                    },
+                    child: Container(
+                      padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
+                      decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
+                        borderRadius: BorderRadiusStyle.customBorderBL20,
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CustomIconButton(
+                            height: 44.adaptSize,
+                            width: 44.adaptSize,
+                            padding: EdgeInsets.all(6.h),
+                            decoration: IconButtonStyleHelper.fillPrimary,
+                            child: CustomImageView(imagePath: ImageConstant.user),
                           ),
-                        );
-                      }
-                    },
-                  ),
-                  _buildUserDetail(
-                    icon: ImageConstant.pancard,
-                    label: "Face Liveliness",
-                    isVerified: kycData?.kycStatus.steps.faceLiveness ?? false,
-                    onTap: () {
-                      if (!(kycData?.kycStatus.steps.faceLiveness ?? false)) {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (_) => const FaceDetectorView()),
-                        );
-                      }
-                    },
-                  ),
-                  _buildUserDetail(
-                    icon: ImageConstant.gst,
-                    label: "GST Number",
-                    value: kycData?.gstDetails.gstNumber,
-                    isVerified:
-                        kycData?.gstDetails.gstNumber.isNotEmpty ?? false,
-                    onTap: () {
-                      if (kycData?.gstDetails.gstNumber.isEmpty ?? false) {
-                        gstVerificationDialog();
-                      }
-                    },
-                  ),
-                  _buildUserDetail(
-                    icon: ImageConstant.bank,
-                    label: "Payment Method",
-                    isVerified:
-                        kycData?.kycStatus.steps.bankVerification ?? false,
-                    onTap: () => Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (_) => const PaymentMethod()),
-                    ),
-                    decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
-                      borderRadius: BorderRadiusStyle.customBorderL20,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildUserDetail({
-    required String icon,
-    required String label,
-    String? value,
-    bool isVerified = false,
-    VoidCallback? onTap,
-    Decoration? decoration,
-  }) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Padding(
-        padding: const EdgeInsets.only(top: 1),
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
-          decoration: decoration ?? AppDecoration.fillOnPrimaryContainer,
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CustomIconButton(
-                height: 44.adaptSize,
-                width: 44.adaptSize,
-                padding: EdgeInsets.all(10.h),
-                decoration: IconButtonStyleHelper.fillGray,
-                child: CustomImageView(imagePath: icon),
-              ),
-              Padding(
-                padding: EdgeInsets.only(left: 15.h),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Row(
-                      children: [
-                        Text(
-                          label,
-                          style: isVerified
-                              ? theme.textTheme.titleMedium!.copyWith(
-                                  fontSize: 12,
-                                  color: appTheme.gray400,
-                                )
-                              : theme.textTheme.titleMedium!.copyWith(
-                                  color: appTheme.black900,
-                                ),
-                        ),
-                        if (isVerified)
                           Padding(
-                            padding: const EdgeInsets.only(left: 5),
-                            child: Container(
-                              width: 45,
-                              height: 16,
-                              decoration: BoxDecoration(
-                                color: appTheme.green100.withOpacity(0.5),
-                                borderRadius: BorderRadius.circular(2),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "Verified",
-                                  style: theme.textTheme.titleSmall!.copyWith(
-                                    color: appTheme.green500,
-                                    fontSize: 10,
-                                  ),
-                                ),
+                            padding: EdgeInsets.only(left: 15.h, top: 13.v, bottom: 10.v),
+                            child: Text(
+                              "U9465288001",
+                              style: theme.textTheme.titleMedium!.copyWith(
+                                color: appTheme.gray900,
                               ),
                             ),
                           ),
-                      ],
+                          const Spacer(),
+                          CustomImageView(
+                            imagePath: ImageConstant.imgArrowRightGray900,
+                            height: 24.adaptSize,
+                            width: 24.adaptSize,
+                            margin: EdgeInsets.symmetric(vertical: 10.v),
+                          )
+                        ],
+                      ),
                     ),
-                    if (value != null)
-                      Text(
-                        value,
-                        style: theme.textTheme.titleSmall!.copyWith(
-                          fontSize: 14,
-                          color: appTheme.black900,
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Get.toNamed(AppRoutes.changeDateOfBirth);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 3),
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
+                        decoration: AppDecoration.fillOnPrimaryContainer,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CustomIconButton(
+                              height: 44.adaptSize,
+                              width: 44.adaptSize,
+                              padding: EdgeInsets.all(6.h),
+                              decoration: IconButtonStyleHelper.fillDeepPurple,
+                              child: CustomImageView(imagePath: ImageConstant.birthday),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 15.h, top: 13.v, bottom: 10.v),
+                              child: Text(
+                                "Email Address",
+                                style: theme.textTheme.titleMedium!.copyWith(
+                                  color: appTheme.gray900,
+                                ),
+                              ),
+                            ),
+                            const Spacer(),
+                            CustomImageView(
+                              imagePath: ImageConstant.imgArrowRightGray900,
+                              height: 24.adaptSize,
+                              width: 24.adaptSize,
+                              margin: EdgeInsets.symmetric(vertical: 10.v),
+                            ),
+                          ],
                         ),
                       ),
-                  ],
-                ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      _showPANVerificationDialog();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 3),
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
+                        decoration: AppDecoration.fillOnPrimaryContainer,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CustomIconButton(
+                              height: 44.adaptSize,
+                              width: 44.adaptSize,
+                              padding: EdgeInsets.all(6.h),
+                              decoration: IconButtonStyleHelper.fillGreenTL24,
+                              child: CustomImageView(imagePath: ImageConstant.card),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 15.h, top: 13.v, bottom: 10.v),
+                              child: Text(
+                                "Pan Card",
+                                style: theme.textTheme.titleMedium!.copyWith(
+                                  color: appTheme.gray900,
+                                ),
+                              ),
+                            ),
+                            const Spacer(),
+                            CustomImageView(
+                              imagePath: ImageConstant.imgArrowRightGray900,
+                              height: 24.adaptSize,
+                              width: 24.adaptSize,
+                              margin: EdgeInsets.symmetric(vertical: 10.v),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      //Get.toNamed(AppRoutes.adhardetail);
+                      showAadhaarCardVerificationDialog();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 3),
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
+                        decoration: AppDecoration.fillOnPrimaryContainer,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CustomIconButton(
+                              height: 44.adaptSize,
+                              width: 44.adaptSize,
+                              padding: EdgeInsets.all(10.h),
+                              decoration: IconButtonStyleHelper.fillOrange,
+                              child: CustomImageView(imagePath: ImageConstant.pancard),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 15.h, top: 13.v, bottom: 10.v),
+                              child: Text(
+                                "Aadhaar Card",
+                                style: theme.textTheme.titleMedium!.copyWith(
+                                  color: appTheme.gray900,
+                                ),
+                              ),
+                            ),
+                            const Spacer(),
+                            CustomImageView(
+                              imagePath: ImageConstant.imgArrowRightGray900,
+                              height: 24.adaptSize,
+                              width: 24.adaptSize,
+                              margin: EdgeInsets.symmetric(vertical: 10.v),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      Get.toNamed(AppRoutes.paymentmethod);
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 3),
+                      child: Container(
+                        padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
+                        decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
+                          borderRadius: BorderRadiusStyle.customBorderL20,
+                        ),
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CustomIconButton(
+                              height: 44.adaptSize,
+                              width: 44.adaptSize,
+                              padding: EdgeInsets.all(10.h),
+                              decoration: IconButtonStyleHelper.fillGrayTL22,
+                              child: CustomImageView(imagePath: ImageConstant.bank),
+                            ),
+                            Padding(
+                              padding: EdgeInsets.only(left: 15.h, top: 13.v, bottom: 10.v),
+                              child: Text(
+                                "Payment Method",
+                                style: theme.textTheme.titleMedium!.copyWith(
+                                  color: appTheme.gray900,
+                                ),
+                              ),
+                            ),
+                            const Spacer(),
+                            CustomImageView(
+                              imagePath: ImageConstant.imgArrowRightGray900,
+                              height: 24.adaptSize,
+                              width: 24.adaptSize,
+                              margin: EdgeInsets.symmetric(vertical: 10.v),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
-              const Spacer(),
-              CustomImageView(
-                imagePath: ImageConstant.imgArrowRightGray900,
-                height: 24.adaptSize,
-                width: 24.adaptSize,
-                margin: EdgeInsets.symmetric(vertical: 10.v),
-              ),
-            ],
-          ),
+            )
+          ],
         ),
       ),
     );
   }
+void _showPANVerificationDialog() {
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _panController = TextEditingController();
 
-  void _showPANVerificationDialog() {
-    final formKey = GlobalKey<FormState>();
-    final TextEditingController panController = TextEditingController();
-    final ApiService apiService = ApiService();
-
-    Future<void> verifyPAN() async {
-      final panNumber = panController.text.trim();
-      try {
-        final responseData =
-            await apiService.verifyPAN(panNumber.toUpperCase());
-
-        if (responseData['status'] == 'success') {
-          final clientData = responseData['data']['data'];
-          showDialog(
-            context: context,
-            builder: (BuildContext context) {
-              return AlertDialog(
-                title: const Text("Verification Successful"),
-                content: Text(
-                    "Hello ${clientData['full_name']}, your PAN has been verified successfully."),
-                actions: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.of(context).pop();
-                      Navigator.of(context).pop();
-                    },
-                    child: const Text("OK"),
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start, // Align to the left
+              children: [
+                Center( // Center the CircleAvatar and Icon
+                  child: CircleAvatar(
+                    radius: 30,
+                    backgroundColor: Colors.green.shade100,
+                    child: const Icon(Icons.credit_card, color: Colors.green, size: 30),
                   ),
-                ],
-              );
-            },
-          );
-        } else {
-          showErrorDialog("PAN verification failed. Please try again.");
-        }
-      } catch (e) {
-        showErrorDialog("An error occurred: ${e.toString()}");
-      }
-    }
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Form(
-              key: formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Center(
-                    child: CustomIconButton(
-                      height: 70,
-                      width: 70,
-                      padding: const EdgeInsets.all(10),
-                      decoration: IconButtonStyleHelper.fillGreenTL245,
-                      child: CustomImageView(imagePath: ImageConstant.pan),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  const Center(
-                    child: Text(
-                      "PAN Verification",
-                      style: TextStyle(fontSize: 22, color: Colors.black),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    "As per regulations, it is mandatory to verify your PAN details.",
-                    textAlign: TextAlign.center,
-                    style: TextStyle(color: Colors.grey.shade600),
-                  ),
-                  const SizedBox(height: 16),
-                  Container(
-                    width: 150,
-                    height: 32.0,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      border: Border.all(color: appTheme.panCol, width: 1.0),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.flash_on, color: appTheme.panCol, size: 14),
-                        const SizedBox(width: 5),
-                        Text(
-                          "Takes less than 5 secs",
-                          style: theme.textTheme.titleSmall!.copyWith(
-                            color: appTheme.panCol,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    "Enter PAN number",
-                    style: theme.textTheme.titleSmall!.copyWith(
-                      color: appTheme.blueGray300,
-                      fontSize: 14,
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  CustomTextFormField(
-                    controller: panController,
-                    autofocus: false,
-                    hintText: "Enter Your 10 Digit PAN Number",
-                    hintStyle: theme.textTheme.titleSmall!.copyWith(
-                      color: appTheme.blueGray300,
-                      fontSize: 14,
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your PAN number';
-                      }
-                      if (value.length != 10) {
-                        return 'PAN number must be 10 characters';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  CustomElevatedButton(
-                    onPressed: () {
-                      if (formKey.currentState!.validate()) {
-                        verifyPAN();
-                        setState(() {});
-                      }
-                    },
-                    text: "Verify",
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  void gstVerificationDialog() {
-    final formKey = GlobalKey<FormState>();
-    final TextEditingController gstController = TextEditingController();
-
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Form(
-              key: formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Center(
-                    child: CustomIconButton(
-                      height: 64.adaptSize,
-                      width: 64.adaptSize,
-                      padding: EdgeInsets.all(15.h),
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.primaryContainer
-                            .withOpacity(0.12),
-                        borderRadius: BorderRadius.circular(32.h),
-                      ),
-                      child: CustomImageView(imagePath: ImageConstant.gst),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  const Center(
-                    child: Text(
-                      "GST Verification",
-                      style: TextStyle(
-                        fontSize: 22,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    "As per regulations, it is mandatory to verify your GST details.",
-                    textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                const Center( // Center the PAN Verification text
+                  child: Text(
+                    "PAN Verification",
                     style: TextStyle(
-                      color: Colors.grey.shade500,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
                     ),
                   ),
-                  const SizedBox(height: 16),
-                  Container(
-                    width: 150,
-                    height: 32.0,
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(50),
-                      border: Border.all(color: appTheme.panCol, width: 1.0),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(Icons.flash_on, color: appTheme.panCol, size: 14),
-                        const SizedBox(width: 5),
-                        Text(
-                          "Takes less than 5 secs",
-                          style: theme.textTheme.titleSmall!.copyWith(
-                            color: appTheme.panCol,
-                            fontSize: 12,
-                          ),
-                        ),
-                      ],
-                    ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  "As per regulations, it is mandatory to verify your PAN details.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.grey.shade600,
                   ),
-                  const SizedBox(height: 16),
-                  Text(
-                    "Enter GST number",
-                    style: theme.textTheme.titleSmall!.copyWith(
-                      color: appTheme.blueGray300,
-                      fontSize: 14,
-                    ),
+                ),
+                const SizedBox(height: 16),
+                Container(
+  width: double.infinity, // Adjust width as needed
+  height: 40.0, // Adjust height as needed
+  decoration: BoxDecoration(
+    borderRadius: BorderRadius.circular(50),
+    border: Border.all(color: Colors.amber, width: 1.0),
+  ),
+  child: const Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Icon(Icons.flash_on, color: Colors.amber),
+      SizedBox(width: 5),
+      Text("Takes less than 5 secs"),
+    ],
+  ),
+),
+                const SizedBox(height: 16),
+                const Text(
+                  "Enter PAN number", // Example PAN number
+                  style: TextStyle(
+                    fontSize: 14, // Adjust the font size to match the text style above
+                    
                   ),
-                  const SizedBox(height: 8),
-                  CustomTextFormField(
-                    controller: gstController,
-                    autofocus: false,
-                    hintText: "Enter Your 15 Digit GST Number",
-                    hintStyle: theme.textTheme.titleSmall!.copyWith(
-                      color: appTheme.blueGray300,
-                      fontSize: 14,
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your GST number';
-                      }
-                      if (value.length != 15) {
-                        return 'GST number must be 15 characters';
-                      }
-                      return null;
-                    },
-                  ),
-                  const SizedBox(height: 16),
-                  CustomElevatedButton(
-                    onPressed: () async {
-                      setState(() => isLoading2 = true);
-                      if (formKey.currentState!.validate()) {
-                        try {
-                          final apiService = ApiService();
-                          final response = await apiService
-                              .saveGstNumber(gstController.text);
-
-                          if (response['status'] == 'success') {
-                            setState(() => isLoading2 = false);
-                            Fluttertoast.showToast(
-                              msg: "GST verification successful",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.BOTTOM,
-                              timeInSecForIosWeb: 1,
-                              backgroundColor: Colors.green,
-                              textColor: Colors.white,
-                              fontSize: 16.0,
-                            );
-                          } else {
-                            setState(() => isLoading2 = false);
-                            Fluttertoast.showToast(
-                              msg: "Error verifying GST number",
-                              toastLength: Toast.LENGTH_SHORT,
-                              gravity: ToastGravity.BOTTOM,
-                              timeInSecForIosWeb: 1,
-                              backgroundColor: Colors.red,
-                              textColor: Colors.white,
-                              fontSize: 16.0,
-                            );
-                          }
-                        } catch (e) {
-                          setState(() => isLoading2 = false);
-                          Fluttertoast.showToast(
-                            msg: "Error verifying GST: $e",
-                            toastLength: Toast.LENGTH_SHORT,
-                            gravity: ToastGravity.BOTTOM,
-                            timeInSecForIosWeb: 1,
-                            backgroundColor: Colors.red,
-                            textColor: Colors.white,
-                            fontSize: 16.0,
-                          );
-
-                          print('Error verifying GST: $e');
-                        }
-                      }
-                      setState(() {});
-                      Navigator.pop(context);
-                    },
-                    text: !isLoading2 ? "Verify" : "Verifying .... ",
-                  ),
-                ],
-              ),
+                ),
+                const SizedBox(height: 8), // Add some space between the PAN number and the TextFormField
+                CustomTextFormField(
+                  controller: _panController,
+                  autofocus: false,
+                  hintText: "Enter Your 10 Digit PAN Number",
+                  hintStyle: CustomTextStyles.titleMediumGray400,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your PAN number';
+                    }
+                    if (value.length != 10) {
+                      return 'PAN number must be 10 characters';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+                CustomElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      // Add your verification logic here
+                    }
+                  },
+                 
+                  text:"Verify"
+                ),
+              ],
             ),
           ),
-        );
-      },
-    );
-  }
+        ),
+      );
+    },
+  );
+}
 
-  void showErrorDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Error"),
-          content: Text(message),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text("OK"),
+void showAadhaarCardVerificationDialog() {
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController _aadhaarCardController = TextEditingController();
+
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Center(
+                  child: CircleAvatar(
+                    radius: 30,
+                    backgroundColor: Colors.green.shade100,
+                    child: const Icon(Icons.credit_card, color: Colors.green, size: 30),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                const Center(
+                  child: Text(
+                    "Aadhaar Verification",
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 16),
+                Text(
+                  "As per regulations, it is mandatory to verify your Aadhaar details.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.grey.shade600,
+                  ),
+                ),
+                const SizedBox(height: 16),
+               Container(
+  width: double.infinity, // Adjust width as needed
+  height: 40.0, // Adjust height as needed
+  decoration: BoxDecoration(
+    borderRadius: BorderRadius.circular(50),
+    border: Border.all(color: Colors.amber, width: 1.0),
+  ),
+  child: const Row(
+    mainAxisAlignment: MainAxisAlignment.center,
+    children: [
+      Icon(Icons.flash_on, color: Colors.yellow),
+      SizedBox(width: 5),
+      Text("Takes less than 5 secs"),
+    ],
+  ),
+),
+
+                const SizedBox(height: 16),
+                const Text(
+                  "Enter Aadhaar number",
+                  style: TextStyle(
+                    fontSize: 14,
+                  ),
+                ),
+                const SizedBox(height: 8),
+                CustomTextFormField(
+                  controller: _aadhaarCardController,
+                  autofocus: false,
+                  hintText: "Enter Your 12 Digit Aadhaar Number",
+                  hintStyle: CustomTextStyles.titleMediumGray400,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your PAN number';
+                    }
+                    if (value.length != 12) {
+                      return 'PAN number must be 12characters';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+                 CustomElevatedButton(
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      // Add your verification logic here
+                    }
+                  },
+                 
+                  text:"Verify"
+                ),
+              ],
             ),
-          ],
-        );
-      },
-    );
-  }
+          ),
+        ),
+      );
+    },
+  );
+}
 
-  String maskPanNumber(String? panNumber) {
-    if (panNumber == null || panNumber.isEmpty) {
-      return '';
-    }
-    if (panNumber.length >= 10) {
-      return "XXXXXXXX${panNumber.substring(8)}";
-    }
-    return panNumber;
-  }
+
+
 
   void onTapArrowLeft() {
     Get.back();

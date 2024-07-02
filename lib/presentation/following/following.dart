@@ -1,111 +1,85 @@
-import 'dart:ui';
-import 'package:experta/core/app_export.dart';
-import 'package:experta/presentation/followers/controller/followers_controller.dart';
-import 'package:experta/presentation/followers/models/followers_model.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class FollowingPage extends StatefulWidget {
-  const FollowingPage({super.key});
 
-  @override
-  State<FollowingPage> createState() => _FollowingPageState();
-}
+class Following extends StatelessWidget {
+  final List<Follower> followers = [
+    Follower(
+      name: 'Anjali Arora',
+      profession: 'Social Media Influencer',
+      isOnline: true,
+      imageUrl: 'assets/images/Icon.svg',
+    ),
+    Follower(
+      name: 'Taranvir Kaur',
+      profession: 'Social Media Influencer',
+      isOnline: false,
+      imageUrl: 'assets/images/Icon.svg',
+    ),
+    // Add more followers here
+  ];
 
-class _FollowingPageState extends State<FollowingPage> {
-  final FollowersAndFollowingController controller =
-      Get.put(FollowersAndFollowingController());
+  Following({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Stack(
-        children: [
-          _buildBackgroundBlur(),
-          Column(
-            children: [
-              _buildAppBar(),
-              const SizedBox(height: 15),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: Column(
-                    children: [
-                      const CustomSearchView(
-                        hintText: "Search Following",
-                      ),
-                      Expanded(
-                        child: Obx(() {
-                          if (controller.isLoading.value) {
-                            return const Center(
-                                child: CircularProgressIndicator());
-                          }
-                          return ListView.builder(
-                            itemCount: controller.following.length,
-                            itemBuilder: (context, index) {
-                              return FollowingTile(
-                                  following: controller.following[index]);
-                            },
-                          );
-                        }),
-                      ),
-                    ],
-                  ),
+      appBar:AppBar(
+  leading: IconButton(
+    icon: const Icon(Icons.arrow_back_ios),
+    onPressed: () {
+      Navigator.pop(context);
+    },
+  ),
+  title: const Text('Followers'),
+)
+,
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(
+          children: [
+            TextField(
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.search),
+                hintText: 'Search followers',
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(50.0),
                 ),
               ),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  PreferredSizeWidget _buildAppBar() {
-    return CustomAppBar(
-      height: 40.h,
-      leadingWidth: 40.h,
-      leading: AppbarLeadingImage(
-        imagePath: ImageConstant.imgArrowLeftOnerrorcontainer,
-        margin: EdgeInsets.only(left: 16.h),
-        onTap: onTapArrowLeft,
-      ),
-      centerTitle: true,
-      title: AppbarSubtitleSix(text: "Following"),
-    );
-  }
-
-  void onTapArrowLeft() {
-    Get.back();
-  }
-
-  Widget _buildBackgroundBlur() {
-    return Positioned(
-      left: 270,
-      top: 50,
-      child: ImageFiltered(
-        imageFilter:
-            ImageFilter.blur(tileMode: TileMode.decal, sigmaX: 60, sigmaY: 60),
-        child: Align(
-          child: SizedBox(
-            width: 252,
-            height: 252,
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(126),
-                color: appTheme.deepOrangeA20,
+            ),
+            Expanded(
+              child: ListView.builder(
+                itemCount: followers.length,
+                itemBuilder: (context, index) {
+                  return FollowingTile(following: followers[index]);
+                },
               ),
             ),
-          ),
+          ],
         ),
       ),
     );
   }
 }
 
-class FollowingTile extends StatelessWidget {
-  final Follow following;
+class Follower {
+  final String name;
+  final String profession;
+  final bool isOnline;
+  final String imageUrl;
 
-  FollowingTile({super.key, required this.following});
-  final FollowersAndFollowingController controller = Get.find();
+  Follower({
+    required this.name,
+    required this.profession,
+    required this.isOnline,
+    required this.imageUrl,
+  });
+}
+
+class FollowingTile extends StatelessWidget {
+  final Follower following;
+
+  const FollowingTile({super.key, required this.following});
 
   bool _isSvg(String url) {
     return url.toLowerCase().endsWith('.svg');
@@ -114,43 +88,45 @@ class FollowingTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: ClipOval(
-        child: SizedBox(
-          width: 40.0, // Adjust the size as needed
-          height: 40.0,
-          child: _isSvg(following.profilePic)
-              ? SvgPicture.network(
-                  following.profilePic,
-                  fit: BoxFit.cover,
-                )
-              : Image.network(
-                  following.profilePic,
-                  fit: BoxFit.cover,
-                ),
-        ),
+      leading: Stack(
+        children: [
+          ClipOval(
+            child: SizedBox(
+              width: 40.0, // Adjust the size as needed
+              height: 40.0,
+              child: _isSvg(following.imageUrl)
+                  ? SvgPicture.asset(
+                      following.imageUrl,
+                      fit: BoxFit.cover,
+                    )
+                  : Image.network(
+                      following.imageUrl,
+                      fit: BoxFit.cover,
+                    ),
+            ),
+          ),
+          Positioned(
+            bottom: 0,
+            right: 0,
+            child: CircleAvatar(
+              radius: 6,
+              backgroundColor: following.isOnline ? Colors.green : Colors.red,
+            ),
+          ),
+        ],
       ),
-      title: Text(following.displayName),
-      subtitle: Text("${following.industry} | ${following.occupation}"),
-      trailing: (controller.userProfile == "userProfile")
-          ? ElevatedButton(
-              onPressed: () async {
-                await controller.removeConnection(following.id, "unfollow");
-              },
-              style: ElevatedButton.styleFrom(
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(4.0), // Rectangular shape
-                ),
-                backgroundColor: Colors.white,
-                minimumSize: const Size(100, 50), // Set width and height
-              ),
-              child: const Text(
-                'Unfollow',
-                style: TextStyle(
-                  color: Colors.black, // Text color black
-                ),
-              ),
-            )
-          : const SizedBox.shrink(),
+      title: Text(following.name),
+      subtitle: Text(following.profession),
+      trailing: ElevatedButton(
+        onPressed: () {
+          // Add your remove function here
+        },
+        style: ElevatedButton.styleFrom(
+          shape: const LinearBorder(),
+          backgroundColor: Colors.white,
+        ),
+        child: const Text('Remove'),
+      ),
     );
   }
 }
