@@ -1,3 +1,5 @@
+
+
 import '../../../core/app_export.dart';
 import '../models/splash_model.dart';
 
@@ -14,6 +16,7 @@ class SplashController extends GetxController {
       Get.offNamed(
         AppRoutes.onboardingScreen,
       );
+      // Get.to(const Experiment());
     });
   }
 }

@@ -1,11 +1,23 @@
+import 'package:experta/presentation/Aadhaar_Details/aadhar_details.dart';
+import 'package:experta/presentation/Aadhaar_Details/binding/aadhar_details_binding.dart';
 import 'package:experta/presentation/Basic_Info/basic_info.dart';
+import 'package:experta/presentation/about_us/about_us.dart';
+import 'package:experta/presentation/about_us/binding/about_us_binding.dart';
 import 'package:experta/presentation/account_setting/account_setting.dart';
 import 'package:experta/presentation/account_setting/binding/account_setting_binding.dart';
+import 'package:experta/presentation/add_bank%20_account/add_bank_account.dart';
+import 'package:experta/presentation/add_bank%20_account/binding/add_bank_account_binding.dart';
+import 'package:experta/presentation/add_upi/add_upi.dart';
+import 'package:experta/presentation/add_upi/binding/add_upi_binding.dart';
+import 'package:experta/presentation/blocked/binding/blocked_binding.dart';
+import 'package:experta/presentation/blocked/blocked.dart';
 import 'package:experta/presentation/category/category_controller.dart';
 import 'package:experta/presentation/category/category_screen.dart';
 import 'package:experta/presentation/change_date_of_birth/binding/change_date_of_birth_binding.dart';
 import 'package:experta/presentation/change_date_of_birth/change_date_of_birth.dart';
 import 'package:experta/presentation/change_email/binding/change_email_binding.dart';
+import 'package:experta/presentation/change_gender/binding/change_gender_binding.dart';
+import 'package:experta/presentation/change_gender/change_gender.dart';
 import 'package:experta/presentation/change_user_name/binding/change_user_name_binding.dart';
 import 'package:experta/presentation/change_user_name/change_user_name.dart';
 import 'package:experta/presentation/dashboard/binding/dashboard_binding.dart';
@@ -14,6 +26,9 @@ import 'package:experta/presentation/edit_profile/edit_profile_binding/edit_prof
 import 'package:experta/presentation/edit_profile/edit_profile_setting.dart';
 import 'package:experta/presentation/feeds_active_screen/binding/feeds_active_binding.dart';
 import 'package:experta/presentation/feeds_active_screen/feeds_active_screen.dart';
+import 'package:experta/presentation/followers/binding/followers_binding.dart';
+import 'package:experta/presentation/followers/followers.dart';
+import 'package:experta/presentation/following/following.dart';
 import 'package:experta/presentation/home_controller.dart';
 import 'package:experta/presentation/home_screen.dart';
 import 'package:experta/presentation/message_chat_with_user_default_screen/binding/message_chat_with_user_default_binding.dart';
@@ -22,20 +37,32 @@ import 'package:experta/presentation/notification/notification_controller.dart';
 import 'package:experta/presentation/notification/notification_screen.dart';
 import 'package:experta/presentation/onboarding_screen/binding/onboarding_binding.dart';
 import 'package:experta/presentation/onboarding_screen/onboarding_screen.dart';
+import 'package:experta/presentation/pan_detrail/binding/pan_detail_binding.dart';
+import 'package:experta/presentation/pan_detrail/pan_detail.dart';
 import 'package:experta/presentation/payment/binding/payment_binding.dart';
 import 'package:experta/presentation/payment/payment.dart';
+import 'package:experta/presentation/payment_method/binding/payment_method_binding.dart';
+import 'package:experta/presentation/payment_method/payment_method.dart';
 import 'package:experta/presentation/phone_number/binding/phone_number_binding.dart';
 import 'package:experta/presentation/phone_number/phone_number.dart';
+import 'package:experta/presentation/post/binding/post_binding.dart';
+import 'package:experta/presentation/post/post.dart';
 import 'package:experta/presentation/professional_info/binding/professional_binding.dart';
 import 'package:experta/presentation/professional_info/professional_info.dart';
+import 'package:experta/presentation/recents/binding/recents_binding.dart';
+import 'package:experta/presentation/recents/recent.dart';
 import 'package:experta/presentation/search_screen/binding/search_binding.dart';
 import 'package:experta/presentation/search_screen/search_screen.dart';
+import 'package:experta/presentation/security_privacy/binding/security_privacy_binding.dart';
+import 'package:experta/presentation/security_privacy/security_privacy.dart';
 import 'package:experta/presentation/setting_screen/binding/setting_binding.dart';
 import 'package:experta/presentation/setting_screen/setting_screen.dart';
 import 'package:experta/presentation/signin_page/signin_binding/signin_binding.dart';
 import 'package:experta/presentation/signin_page/signin_page.dart';
 import 'package:experta/presentation/splash_screen/binding/splash_binding.dart';
 import 'package:experta/presentation/splash_screen/splash_screen.dart';
+import 'package:experta/presentation/verify_account/binding/verify_account_binding.dart';
+import 'package:experta/presentation/verify_account/varify_account.dart';
 import 'package:experta/presentation/verifynumber_screen/binding/verifynumber_binding.dart';
 import 'package:experta/presentation/verifynumber_screen/verifynumber_screen.dart';
 import 'package:experta/presentation/wallet/binding/wallet_binding.dart';
@@ -93,6 +120,33 @@ class AppRoutes {
  static const String wallet = "/wallet";
 
 
+static const String bank = "/Verfy_account";
+
+static const String security = "/security_privacy";
+
+static const String  block = "/blocked";
+
+static const String  follower = "/followers";
+
+static const String  following = "/following";
+
+static const String  paymentmethod = "/payment_method";
+
+static const String  addupi = "/add_upi";
+
+static const String  addbankaccount = "/add_bank_account";
+
+static const String  pandetail = "/pan_detail";
+
+static const String  adhardetail = "/Aadhar_DetailS";
+
+static const String  changegender = "/change_gender";
+
+static const String  aboutus = "/about_us";
+
+static const String  post1= "/post";
+
+static const String  recent = "/recents";
 
 
 
@@ -106,10 +160,101 @@ class AppRoutes {
       ],
     ),
     GetPage(
+      name: recent,
+      page: () =>  RecentsPage(),
+      bindings: [
+        RecentsBinding(),
+      ],
+    ),
+    GetPage(
+      name: post1,
+      page: () =>  PostPage(),
+      bindings: [
+        PostBinding(),
+      ],
+    ),
+    GetPage(
+      name: aboutus,
+      page: () => const AboutUs(),
+      bindings: [
+        AboutUsBinding(),
+      ],
+    ),
+    GetPage(
+      name: changegender,
+      page: () => const  ChangeGender(),
+      bindings: [
+        ChangeGenderBinding(),
+      ],
+    ),
+     GetPage(
+      name: addbankaccount,
+      page: () => const AddBankAccount(),
+      bindings: [
+        AddBankAccountBinding(),
+      ],
+    ),
+    GetPage(
+      name: following,
+      page: () =>  Following(),
+      bindings: [
+        FollowersBinding(),
+      ],
+    ),
+    GetPage(
+      name: pandetail,
+      page: () => const PanDetail(),
+      bindings: [
+        PanDetailBinding(),
+      ],
+    ),
+    GetPage(
+      name: paymentmethod,
+      page: () =>  const PaymentMethod(),
+      bindings: [
+        PaymentMethodBinding(),
+      ],
+    ),
+    GetPage(
+      name: addupi,
+      page: () =>  AddUpi(),
+      bindings: [
+        AddUpiBinding(),
+      ],
+    ),
+    GetPage(
+      name: security,
+      page: () => const SecurityPrivacy(),
+      bindings: [
+        SecuritryPrivacyBinding(),
+      ],
+    ),
+    GetPage(
+      name: adhardetail,
+      page: () => const AadharDetails(),
+      bindings: [
+        AadharDetailBinding(),
+      ],
+    ),
+    GetPage(
       name: signinPage,
       page: () => SigninPage(),
       bindings: [
         SignInBinding(),
+      ],
+    ),
+    GetPage(
+      name: follower,
+      page: () => FollowersPage(),
+      bindings: [
+        FollowersBinding(),
+      ],
+    ),
+    GetPage(
+      name: block,
+      page: () => BlockedPage(),
+      bindings: [
+        BlockedBinding(),
       ],
     ),
      GetPage(
@@ -117,6 +262,13 @@ class AppRoutes {
       page: () => const AccountSettings(),
       bindings: [
         AccountSettingBinding(),
+      ],
+    ),
+     GetPage(
+      name: bank,
+      page: () => const VerifyAccount(),
+      bindings: [
+       VerifyAccountBinding(),
       ],
     ),
     GetPage(
@@ -149,7 +301,7 @@ class AppRoutes {
     ),
      GetPage(
       name: changeUserName,
-      page: () => const ChangeUsername(),
+      page: () => const ChangeUserName(),
       bindings: [
         ChangeUserNameBinding(),
       ],
