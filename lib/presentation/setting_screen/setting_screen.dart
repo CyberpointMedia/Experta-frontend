@@ -18,36 +18,35 @@ class SettingScreen extends GetWidget<SettingController> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-            body: SizedBox(
-                width: SizeUtils.width,
-                child: SingleChildScrollView(
-                    child: Padding(
-                        padding: EdgeInsets.only(bottom: 5.v),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(height: 12.v),
-                              _buildAppBar(),
-                              _buildShareProfile(),
-                              SizedBox(height: 16.v),
-                              Padding(
-                                  padding: EdgeInsets.only(left: 16.h),
-                                  child: Text("lbl_basic_settings".tr,
-                                      style: CustomTextStyles
-                                          .titleMediumBluegray30018)),
-                              SizedBox(height: 12.v),
-                              _buildShield1(),
-                              SizedBox(height: 16.v),
-                              Padding(
-                                  padding: EdgeInsets.only(left: 16.h),
-                                  child: Text("lbl_basic_settings".tr,
-                                      style: CustomTextStyles
-                                          .titleMediumBluegray30018)),
-                              SizedBox(height: 12.v),
-                              _buildInfo1()
-                            ]))))));
+    return Scaffold(
+        body: SizedBox(
+            width: SizeUtils.width,
+            child: SingleChildScrollView(
+                child: Padding(
+                    padding: EdgeInsets.only(bottom: 5.v),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 12.v),
+                          _buildAppBar(),
+                          _buildShareProfile(),
+                          SizedBox(height: 16.v),
+                          Padding(
+                              padding: EdgeInsets.only(left: 16.h),
+                              child: Text("lbl_basic_settings".tr,
+                                  style: CustomTextStyles
+                                      .titleMediumBluegray30018)),
+                          SizedBox(height: 12.v),
+                          _buildShield1(),
+                          SizedBox(height: 16.v),
+                          Padding(
+                              padding: EdgeInsets.only(left: 16.h),
+                              child: Text("lbl_basic_settings".tr,
+                                  style: CustomTextStyles
+                                      .titleMediumBluegray30018)),
+                          SizedBox(height: 12.v),
+                          _buildInfo1()
+                        ])))));
   }
 
   /// Section Widget
@@ -70,7 +69,7 @@ class SettingScreen extends GetWidget<SettingController> {
     return Align(
         alignment: Alignment.bottomLeft,
         child: Padding(
-            padding: EdgeInsets.only(right: 16.h),
+            padding: EdgeInsets.only(right: 16.h, top: 10.v),
             child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -330,7 +329,7 @@ class SettingScreen extends GetWidget<SettingController> {
                   margin:
                       EdgeInsets.only(top: 71.v, right: 16.h, bottom: 436.v),
                   padding:
-                      EdgeInsets.symmetric(horizontal: 16.h, vertical: 20.v),
+                      EdgeInsets.symmetric(horizontal: 16.h, vertical: 17.v),
                   decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
                       borderRadius: BorderRadiusStyle.roundedBorder20),
                   child: Row(children: [

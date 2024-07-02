@@ -3,7 +3,13 @@ import 'dart:ui';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/set_availability/edit_set_avail/controller/edit_set_avail_controller.dart';
 import 'package:experta/presentation/set_availability/model/set_availability_model.dart';
+import 'package:experta/widgets/app_bar/appbar_leading_image.dart';
+import 'package:experta/widgets/app_bar/appbar_subtitle_six.dart';
+import 'package:experta/widgets/app_bar/custom_app_bar.dart';
+import 'package:experta/widgets/custom_elevated_button.dart';
 import 'package:experta/widgets/custom_text_form_field.dart';
+import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
 class EditSetAvailability extends StatefulWidget {
   const EditSetAvailability({super.key});
@@ -41,34 +47,7 @@ class _EditSetAvailabilityState extends State<EditSetAvailability> {
       body: Stack(
         children: [
           _buildBackgroundBlur(),
-          isLoading
-              ? _buildShimmerEffect()
-              : Column(
-                  children: [
-                    _buildAppBar(),
-                    Expanded(
-                      child: SingleChildScrollView(
-                        child: _buildBody(),
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                          bottom: 30, left: 16, right: 16),
-                      child: CustomElevatedButton(
-                        text: "Save",
-                        onPressed: () async {
-                          setState(() {
-                            isSaving = true;
-                          });
-                          await controller.saveAvailability(availability);
-                          setState(() {
-                            isSaving = false;
-                          });
-                        },
-                      ),
-                    ),
-                  ],
-                ),
+          isLoading ? _buildShimmerEffect() : _buildContent(),
           if (isSaving) _buildCircularProgressIndicator(),
         ],
       ),
@@ -80,8 +59,7 @@ class _EditSetAvailabilityState extends State<EditSetAvailability> {
       left: 270,
       top: 50,
       child: ImageFiltered(
-        imageFilter:
-            ImageFilter.blur(tileMode: TileMode.decal, sigmaX: 60, sigmaY: 60),
+        imageFilter: ImageFilter.blur(sigmaX: 60, sigmaY: 60),
         child: Align(
           child: SizedBox(
             width: 252,
@@ -113,29 +91,30 @@ class _EditSetAvailabilityState extends State<EditSetAvailability> {
   }
 
   Widget _buildContent() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildAppBar(),
-        Expanded(
-          child: _buildBody(),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 30, left: 16, right: 16),
-          child: CustomElevatedButton(
-            text: "Save",
-            onPressed: () async {
-              setState(() {
-                isSaving = true;
-              });
-              await controller.saveAvailability(availability);
-              setState(() {
-                isSaving = false;
-              });
-            },
+    return Expanded(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildAppBar(),
+          _buildBody(),
+          const Spacer(),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 30, left: 20, right: 20),
+            child: CustomElevatedButton(
+              text: "Save",
+              onPressed: () async {
+                setState(() {
+                  isSaving = true;
+                });
+                await controller.saveAvailability(availability);
+                setState(() {
+                  isSaving = false;
+                });
+              },
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -166,7 +145,7 @@ class _EditSetAvailabilityState extends State<EditSetAvailability> {
 
   Widget _buildBody() {
     return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16, top: 30),
+      padding: const EdgeInsets.only(left: 20, right: 20, top: 30),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,

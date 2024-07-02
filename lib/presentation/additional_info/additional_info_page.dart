@@ -3,7 +3,11 @@ import 'dart:ui';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/additional_info/controller/additional_controller.dart';
 import 'package:experta/presentation/additional_info/edit_languages.dart';
-import 'package:experta/presentation/additional_info/model/interest_model.dart';
+import 'package:experta/widgets/app_bar/appbar_leading_image.dart';
+import 'package:experta/widgets/app_bar/appbar_subtitle_six.dart';
+import 'package:experta/widgets/app_bar/custom_app_bar.dart';
+import 'package:flutter/material.dart';
+import 'package:shimmer/shimmer.dart';
 
 class AdditionalInfoPage extends StatefulWidget {
   const AdditionalInfoPage({super.key});
@@ -44,8 +48,7 @@ class _AdditionalInfoPageState extends State<AdditionalInfoPage> {
       left: 270,
       top: 50,
       child: ImageFiltered(
-        imageFilter:
-            ImageFilter.blur(tileMode: TileMode.decal, sigmaX: 60, sigmaY: 60),
+        imageFilter: ImageFilter.blur(sigmaX: 60, sigmaY: 60),
         child: Align(
           child: SizedBox(
             width: 252,
@@ -77,25 +80,21 @@ class _AdditionalInfoPageState extends State<AdditionalInfoPage> {
   }
 
   Widget _buildLanguageChips() {
-  late List<Language> languages;
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Obx(()=> _buildSectionHeader("Languages I know", controller.languageData.value.data!.languages.isEmpty?false:true,onEdit: () {
-          languages = controller.languageData.value.data?.languages ?? [];
+        _buildSectionHeader("Languages I know", onEdit: () {
+          final languages = controller.languageData.value.data?.languages ?? [];
           Get.to(() => EditLanguagePage(initialSelectedLanguages: languages));
           Get.delete<AdditionalInfoController>();
-        })
-  ),
-
+        }),
         const SizedBox(height: 10),
         Obx(() {
           if (controller.isLoading.value) {
             return _buildShimmerEffect();
           }
 
-           languages = controller.languageData.value.data?.languages ?? [];
-
+          final languages = controller.languageData.value.data?.languages ?? [];
 
           if (languages.isEmpty) {
             return const Center(child: Text('No languages available'));
@@ -104,8 +103,8 @@ class _AdditionalInfoPageState extends State<AdditionalInfoPage> {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: Wrap(
-              spacing: 6.0,
-              runSpacing: 6.0,
+              spacing: 8.0,
+              runSpacing: 4.0,
               children: languages.map((language) {
                 return Chip(
                   label: Text(
@@ -116,17 +115,6 @@ class _AdditionalInfoPageState extends State<AdditionalInfoPage> {
                       fontSize: 16,
                     ),
                   ),
-                  deleteIcon: const Icon(Icons.close),
-                  onDeleted: () {
-                      print("123");
-                     _deleteLanaguge(language,languages);
-
-
-                    setState(() {
-                      controller.languageData.value.data?.languages
-                          .remove(language);
-                    });
-                  },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20.0),
                     side: const BorderSide(color: Colors.transparent),
@@ -144,27 +132,28 @@ class _AdditionalInfoPageState extends State<AdditionalInfoPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Obx(
-          ()=> _buildSectionHeader("Your Interests", controller.interestData.value.interests.isEmpty ?false:true,onEdit: () {
+        _buildSectionHeader("Your Interests", onEdit: () {
           final interests = controller.interestData.value.interests;
           Get.toNamed(AppRoutes.editInterest, arguments: interests);
           Get.delete<AdditionalInfoController>();
-        })
-        ),
-        const SizedBox(height: 5),
+        }),
+        const SizedBox(height: 10),
         Obx(() {
           if (controller.isLoading.value) {
             return _buildShimmerEffect();
           }
+
           final interests = controller.interestData.value.interests;
+
           if (interests.isEmpty) {
             return const Center(child: Text('No interests available'));
           }
+
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: Wrap(
-              spacing: 6.0,
-              runSpacing: 6.0,
+              spacing: 8.0,
+              runSpacing: 4.0,
               children: interests.map((interest) {
                 return Chip(
                   label: Text(
@@ -175,12 +164,6 @@ class _AdditionalInfoPageState extends State<AdditionalInfoPage> {
                       fontSize: 16,
                     ),
                   ),
-                  deleteIcon: const Icon(Icons.close),
-                  onDeleted: () {
-                    setState(() {
-                      controller.interestData.value.interests.remove(interest);
-                    });
-                  },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20.0),
                     side: const BorderSide(color: Colors.transparent),
@@ -193,12 +176,13 @@ class _AdditionalInfoPageState extends State<AdditionalInfoPage> {
       ],
     );
   }
-  Widget _buildSectionHeader(String title, bool isedit,{required VoidCallback onEdit}) {
+
+  Widget _buildSectionHeader(String title, {required VoidCallback onEdit}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 16),
+          padding: const EdgeInsets.only(left: 10),
           child: Text(
             title,
             style: CustomTextStyles.labelMediumBlack900,
@@ -206,13 +190,12 @@ class _AdditionalInfoPageState extends State<AdditionalInfoPage> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(right: 16),
+          padding: const EdgeInsets.only(right: 10),
           child: TextButton(
             onPressed: onEdit,
             child: Text(
-             isedit ? "Edit":"Add",
-              style: theme.textTheme.bodyLarge!
-                  .copyWith(color: Colors.orange[900]),
+              "Edit",
+              style: theme.textTheme.bodyLarge!.copyWith(color: Colors.red),
               textAlign: TextAlign.start,
             ),
           ),
@@ -228,8 +211,8 @@ class _AdditionalInfoPageState extends State<AdditionalInfoPage> {
         baseColor: Colors.grey[300]!,
         highlightColor: Colors.grey[100]!,
         child: Wrap(
-          spacing: 6.0,
-          runSpacing: 6.0,
+          spacing: 8.0,
+          runSpacing: 4.0,
           children: List.generate(5, (index) {
             return Chip(
               label: Container(
@@ -251,11 +234,4 @@ class _AdditionalInfoPageState extends State<AdditionalInfoPage> {
   void onTapArrowLeft() {
     Get.back();
   }
-  
-  void _deleteLanaguge(Language language,List<Language> langlist) {
-      langlist.remove(language);
-      controller.saveSelectedLanguages(langlist);               
-  }
-
-
 }

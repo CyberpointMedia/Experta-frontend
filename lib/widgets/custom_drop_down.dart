@@ -1,8 +1,9 @@
+import 'package:flutter/material.dart';
 import '../core/app_export.dart';
 
 class CustomDropDown extends StatelessWidget {
-  const CustomDropDown({
-    super.key,
+  CustomDropDown({
+    Key? key,
     this.alignment,
     this.width,
     this.focusNode,
@@ -23,7 +24,9 @@ class CustomDropDown extends StatelessWidget {
     this.validator,
     this.onChanged,
     this.value,
-  });
+  }) : super(
+          key: key,
+        );
 
   final Alignment? alignment;
 
@@ -78,10 +81,6 @@ class CustomDropDown extends StatelessWidget {
   Widget get dropDownWidget => SizedBox(
         width: width ?? double.maxFinite,
         child: DropdownButtonFormField<SelectionPopupModel>(
-          hint: Text(
-            "Select",
-            style:theme.textTheme.titleSmall!.copyWith(color: appTheme.black900),
-          ),
           focusNode: focusNode ?? FocusNode(),
           icon: icon,
           autofocus: autofocus!,
@@ -89,30 +88,23 @@ class CustomDropDown extends StatelessWidget {
           items: items?.map((SelectionPopupModel item) {
             return DropdownMenuItem<SelectionPopupModel>(
               value: item,
-              child: Row(
-                textBaseline: TextBaseline.alphabetic,
-                children: [
-                  Text(
-                    item.title,
-                    overflow: TextOverflow.ellipsis,
-                    style: hintStyle ?? CustomTextStyles.titleMediumSemiBold_1,
-                  ),
-                ],
+              child: Text(
+                item.title,
+                overflow: TextOverflow.ellipsis,
+                style: hintStyle ?? CustomTextStyles.titleMediumSemiBold_1,
               ),
             );
           }).toList(),
           decoration: decoration,
           validator: validator,
-          itemHeight: 50,
           onChanged: (value) {
             onChanged!(value!);
           },
           value: value,
         ),
       );
-
   InputDecoration get decoration => InputDecoration(
-        // hintText: hintText ?? "",
+        hintText: hintText ?? "",
         hintStyle: hintStyle ?? CustomTextStyles.titleMediumSemiBold_1,
         prefixIcon: prefix,
         prefixIconConstraints: prefixConstraints,
@@ -121,8 +113,7 @@ class CustomDropDown extends StatelessWidget {
         isDense: true,
         contentPadding: contentPadding ??
             EdgeInsets.only(
-              left: 15.v,
-              right: 15.v,
+              left: 15.h,
               top: 16.v,
               bottom: 16.v,
             ),

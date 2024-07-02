@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import '../core/app_export.dart';
 
 class CustomTextFormField extends StatelessWidget {
@@ -11,7 +12,6 @@ class CustomTextFormField extends StatelessWidget {
     this.autofocus = false,
     this.textStyle,
     this.obscureText = false,
-     this.readOnly = false,
     this.textInputAction = TextInputAction.next,
     this.textInputType = TextInputType.text,
     this.maxLines,
@@ -28,7 +28,6 @@ class CustomTextFormField extends StatelessWidget {
     this.fillColor,
     this.filled = true,
     this.validator,
-    this.onFieldSubmitted, // Add this line
   });
 
   final Alignment? alignment;
@@ -38,8 +37,6 @@ class CustomTextFormField extends StatelessWidget {
   final void Function(String)? onChanged;
 
   final double? width;
-
-  final bool readOnly; 
 
   final TextEditingController? scrollPadding;
 
@@ -81,8 +78,6 @@ class CustomTextFormField extends StatelessWidget {
 
   final FormFieldValidator<String>? validator;
 
-  final void Function(String)? onFieldSubmitted; // Add this line
-
   @override
   Widget build(BuildContext context) {
     return alignment != null
@@ -110,11 +105,8 @@ class CustomTextFormField extends StatelessWidget {
           maxLines: maxLines ?? 1,
           decoration: decoration,
           validator: validator,
-          onFieldSubmitted: onFieldSubmitted, // Add this line
-          readOnly: readOnly,
         ),
       );
-
   InputDecoration get decoration => InputDecoration(
         hintText: hintText ?? "",
         hintStyle:

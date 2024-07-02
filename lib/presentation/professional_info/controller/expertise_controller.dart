@@ -1,6 +1,8 @@
 import 'dart:developer';
 import 'package:experta/core/app_export.dart';
+import 'package:get/get.dart';
 import 'package:experta/presentation/professional_info/model/professional_model.dart';
+import 'package:experta/data/apiClient/api_service.dart';
 
 class ExpertiseController extends GetxController {
   var isLoading = true.obs;
@@ -91,7 +93,7 @@ class ExpertiseController extends GetxController {
       var response = await apiService.saveExpertiseItems(expertiseIds);
       log("Saved IDs from API are: ${response['data']['_id']}");
       String savedId = response['data']['_id'];
-      Get.back();
+      Get.back(result: savedId);
     } catch (e) {
       log("Error saving expertise: $e");
     } finally {

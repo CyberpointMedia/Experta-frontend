@@ -1,6 +1,7 @@
 import 'dart:developer';
 
 import 'package:experta/core/app_export.dart';
+import 'package:experta/data/apiClient/api_service.dart';
 import 'package:experta/presentation/additional_info/model/interest_model.dart';
 
 class InterestController extends GetxController {
@@ -48,14 +49,10 @@ class InterestController extends GetxController {
   void toggleSelection(Interest interest) {
     if (selectedInterests.contains(interest)) {
       selectedInterests.remove(interest);
-       update(); // Notify listeners about the change
     } else if (selectedInterests.length < 5) {
       selectedInterests.add(interest);
-       update(); // Notify listeners about the change
-    }else{
-         Get.snackbar('Error', 'You have already selected 5 interests.',backgroundColor: Colors.red, colorText: Colors.white);
     }
-   
+    update(); // Notify listeners about the change
   }
 
   Future<void> submitSelectedInterests() async {

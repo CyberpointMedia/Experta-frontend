@@ -2,8 +2,13 @@ import 'dart:ui';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/set_availability/controller/set_availability_controller.dart';
 import 'package:experta/presentation/set_availability/model/set_availability_model.dart';
+import 'package:experta/widgets/app_bar/appbar_leading_image.dart';
+import 'package:experta/widgets/app_bar/appbar_subtitle_six.dart';
 import 'package:experta/widgets/app_bar/appbar_trailing_image.dart';
+import 'package:experta/widgets/app_bar/custom_app_bar.dart';
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:shimmer/shimmer.dart';
 
 class SetAvailability extends StatefulWidget {
   const SetAvailability({super.key});
@@ -31,12 +36,10 @@ class _SetAvailabilityState extends State<SetAvailability> {
                   if (controller.isLoading.value) {
                     return _buildShimmerEffect();
                   } else {
-                    if(controller.availabilityList!=null && controller.availabilityList.length>0){
-    return ListView.builder(
+                    return ListView.builder(
                       itemCount: controller.availabilityList.length,
                       itemBuilder: (context, index) {
                         final availability = controller.availabilityList[index];
-                       
                         return GestureDetector(
                           onTap: () {
                             Get.offAndToNamed(AppRoutes.editSetAvail,
@@ -47,28 +50,6 @@ class _SetAvailabilityState extends State<SetAvailability> {
                         );
                       },
                     );
-                
-                    }else{
-                      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CustomImageView(
-              imagePath: ImageConstant.imgNoChat,
-              height: 70.h,
-              width: 70.h,
-            ),
-            SizedBox(height: 20.v),
-            Text(
-              "No data is available on Set Availability!",
-              style: CustomTextStyles.bodyMediumLight,
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 20.v),
-          ],
-        ),
-      );
-                    }
                   }
                 }),
               ),
@@ -106,8 +87,7 @@ class _SetAvailabilityState extends State<SetAvailability> {
       left: 270,
       top: 50,
       child: ImageFiltered(
-        imageFilter:
-            ImageFilter.blur(tileMode: TileMode.decal, sigmaX: 60, sigmaY: 60),
+        imageFilter: ImageFilter.blur(sigmaX: 60, sigmaY: 60),
         child: Align(
           child: SizedBox(
             width: 252,
@@ -167,62 +147,32 @@ class _SetAvailabilityState extends State<SetAvailability> {
         controller.deleteAvailability(availability.id);
       },
       child: Padding(
-        padding: const EdgeInsets.symmetric(
-          vertical: 6.0,
-          horizontal: 16.0,
-        ),
+        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
         child: SizedBox(
           width: double.infinity,
           child: Card(
             elevation: 0,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(10.0),
+              borderRadius: BorderRadius.circular(8.0),
             ),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Slot number with grey color
-                  Text(
-                    'Slot $index',
-                    style: CustomTextStyles.bodyLargeBlack90001.copyWith(
-                      color: Colors.grey, // Change slot text to grey
-                    ),
-                  ),
+                  Text('Slot $index',
+                      style: CustomTextStyles.bodyLargeBlack90001),
                   const SizedBox(height: 8.0),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text(
-                        '${convertTo12HourFormat(availability.startTime)} - ${convertTo12HourFormat(availability.endTime)}',
-                        style: CustomTextStyles.labelBigBlack900.copyWith(
-                          color: Colors
-                              .black, // Change the time text to dark black
-                        ),
-                      ),
-                      GestureDetector(
-                        onTap: () {
-                          Get.toNamed(AppRoutes.editSetAvail,
-                              arguments: availability);
-                        },
-                        child: const Text(
-                          'Edit',
-                          // Optionally: you can add a custom style for Edit text here
-                        ),
-                      ),
-                    ],
+                  Text(
+                    '${convertTo12HourFormat(availability.startTime)} - ${convertTo12HourFormat(availability.endTime)}',
+                    style: CustomTextStyles.labelBigBlack900,
                   ),
-                  const SizedBox(height: 18.0),
-                  // Selected day text with grey color
+                  const SizedBox(height: 10.0),
                   Text(
                     availability.isEveryday
                         ? 'Everyday'
-                        : availability.weeklyRepeat
-                            .join('  '), // Joining the days with spaces
-                    style: CustomTextStyles.bodyLargeBlack90001.copyWith(
-                      color: Colors.grey, // Change day text to grey
-                    ),
+                        : availability.weeklyRepeat.join('  '),
+                    style: CustomTextStyles.bodyLargeBlack90001,
                   ),
                 ],
               ),

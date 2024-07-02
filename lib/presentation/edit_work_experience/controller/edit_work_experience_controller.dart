@@ -1,7 +1,10 @@
 import 'dart:developer';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/edit_work_experience/model/edit_work_experience_model.dart';
+import 'package:experta/data/apiClient/api_service.dart';
 import 'package:experta/presentation/professional_info/model/professional_model.dart';
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class EditWorkExperienceController extends GetxController {
   // Observable model object for work experience
@@ -18,10 +21,7 @@ class EditWorkExperienceController extends GetxController {
   final TextEditingController companyNameController = TextEditingController();
   final TextEditingController startDateController = TextEditingController();
   final TextEditingController endDateController = TextEditingController();
-  final FocusNode jobTitleFocusNode = FocusNode();
-  final FocusNode companyNameFocusNode = FocusNode();
-  final FocusNode startDateFocusNode = FocusNode();
-  final FocusNode endDateFocusNode = FocusNode();
+
   // Observable boolean for current working status
   RxBool isCurrentlyWorking = false.obs;
 
@@ -64,25 +64,10 @@ class EditWorkExperienceController extends GetxController {
         final response =
             await apiService.createOrUpdateWorkExperience(workExperience);
         log("$response");
-        Get.offAndToNamed(AppRoutes.professionalInfo);
+        Get.back(result: response['data']);
       } catch (e) {
         Get.snackbar('Error', 'Failed to save work experience');
       }
     }
-  }
-
-  @override
-  void dispose() {
-    jobTitleController.dispose();
-    companyNameController.dispose();
-    startDateController.dispose();
-    endDateController.dispose();
-
-    jobTitleFocusNode.dispose();
-    companyNameFocusNode.dispose();
-    startDateFocusNode.dispose();
-    endDateFocusNode.dispose();
-
-    super.dispose();
   }
 }

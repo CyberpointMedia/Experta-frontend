@@ -115,7 +115,10 @@ class SigninController extends GetxController {
       );
 
       final response = await _apiService.registerUser(requestModel);
+      log('Response received: ${response.toString()}');
+
       if (response is RegisterResponseSuccess) {
+        log('Registration successful: ${response.data.toString()}');
         CustomToast().showToast(
           context: context,
           message: 'Otp Sent Sucessfully',
@@ -125,17 +128,25 @@ class SigninController extends GetxController {
           AppRoutes.verifynumberScreen,
           arguments: phoneNumberController,
         );
-        log('Registration successful: ${response.data.toString()}');
       } else if (response is RegisterResponseError) {
+        log("Registration failed: ${response.error.errorMessage}");
         CustomToast().showToast(
           context: context,
           message: response.error.errorMessage,
           isSuccess: false,
         );
-        log("Registration failed");
         errorMessage(response.error.errorMessage);
+      } else {
+        log('Unexpected response type: ${response.runtimeType}');
+        CustomToast().showToast(
+          context: context,
+          message: 'Unexpected response from server',
+          isSuccess: false,
+        );
+        errorMessage('Unexpected response from server');
       }
     } catch (e) {
+      log('Failed to register user: $e');
       CustomToast().showToast(
         context: context,
         message: 'Failed to register user: $e',

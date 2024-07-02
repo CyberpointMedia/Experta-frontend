@@ -1,37 +1,38 @@
-// controllers/basic_profile_info_controller.dart
-
-import 'dart:developer';
 import 'dart:io';
-
-import 'package:logger/logger.dart';
 import 'package:experta/core/app_export.dart';
+import 'package:experta/data/apiClient/api_service.dart';
 import 'package:experta/presentation/Basic_Info/models/basic_model.dart';
-import 'package:intl/intl.dart';
+import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:image_cropper/image_cropper.dart';
 
 class BasicProfileInfoController extends GetxController {
   final ApiService apiService = ApiService();
   RxBool isLoading = true.obs;
-  Rx<BasicProfileInfoModel?> userProfile = Rx<BasicProfileInfoModel?>(null);
-
-  TextEditingController fullNameController = TextEditingController();
-
-
-  TextEditingController firstnameController = TextEditingController();
-  TextEditingController lastnameController = TextEditingController();
-
-
-  TextEditingController displayNameController = TextEditingController();
-  TextEditingController bioController = TextEditingController();
-  TextEditingController dateOfBirthController = TextEditingController();
-  TextEditingController genderController = TextEditingController();
+  Rx<BasicProfileInfoModel> basicInfoModelObj = BasicProfileInfoModel(
+    id: '',
+    firstName: '',
+    lastName: '',
+    posts: [],
+    rating: 0,
+    createdAt: '',
+    updatedAt: '',
+    bio: '',
+    displayName: '',
+    facebook: '',
+    instagram: '',
+    linkedin: '',
+    twitter: '',
+    profilePic: '',
+  ).obs;
+  TextEditingController textField1 = TextEditingController();
+  TextEditingController textField2 = TextEditingController();
+  TextEditingController textField3 = TextEditingController();
   FocusNode focus1 = FocusNode();
   FocusNode focus2 = FocusNode();
   FocusNode focus3 = FocusNode();
-  FocusNode lastnamefocus = FocusNode();
 
-  RxList<Map<String, String>> socialLinks = <Map<String, String>>[].obs;
-
-  
+  RxList<String> socialLinks = <String>[].obs;
   Rx<File?> imageFile = Rx<File?>(null);
   RxString profileImageUrl = ''.obs;
 
@@ -44,77 +45,46 @@ class BasicProfileInfoController extends GetxController {
   }
 
   Future<void> fetchBasicInfo() async {
-    isLoading.value = true;
     try {
-      final response = await apiService.fetchBasicInfo();
-      userProfile.value = response;
-      if (userProfile.value != null) {
+      final basicInfoJson = await apiService.fetchBasicInfo();
+      if (basicInfoJson != null) {
+        basicInfoModelObj.value = BasicProfileInfoModel.fromJson(basicInfoJson);
         updateTextFields();
         updateSocialLinks();
-        profileImageUrl.value = userProfile.value?.data?.profilePic ?? '';
+        profileImageUrl.value = basicInfoModelObj.value.profilePic;
+      } else {
+        Get.snackbar('Error', 'Failed to load basic info: Data is null');
       }
     } catch (e) {
-      log("Error fetching basic info: $e");
-      Get.snackbar('Error', 'Failed to load basic info: ${e.toString()}');
+      Get.snackbar('Error', 'Failed to load basic info: $e');
     } finally {
       isLoading.value = false;
     }
   }
 
   void updateTextFields() {
-    try {
-      final data = userProfile.value?.data;
-      if (data != null) {
-        firstnameController.text=data.firstName!;
-        lastnameController.text=data.lastName!;
-       // fullNameController.text = '${data.firstName} ${data.lastName}'.trim();
-        displayNameController.text = data.displayName!;
-        bioController.text = data.bio!;
-        dateOfBirthController.text = data.dateOfBirth != null
-            ? DateFormat('dd/MM/yyyy').format(data.dateOfBirth!)
-            : DateFormat('dd/MM/yyyy').format(DateTime.now());
-        genderController.text = data.gender!;
-      }
-    } catch (e) {
-      log("Error updating text fields: $e");
-    }
+    textField1.text =
+        '${basicInfoModelObj.value.firstName ?? ''} ${basicInfoModelObj.value.lastName ?? ''}'
+            .trim();
+    textField2.text = basicInfoModelObj.value.displayName ?? '';
+    textField3.text = basicInfoModelObj.value.bio ?? '';
   }
 
   void updateSocialLinks() {
-    try {
-      socialLinks.clear();
-      final data = userProfile.value?.data;
-      if (data != null) {
-        socialLinks.addAll(data.socialLinks!.map((link) {
-          String platformName = link.name.toString();
-
-          if (platformName.toLowerCase() == 'twitter') {
-            platformName = 'Twitter (now X)';
-          } else {
-            platformName = platformName
-                .split(' ')
-                .map((word) => word.isEmpty
-                    ? ''
-                    : '${word[0].toUpperCase()}${word.substring(1).toLowerCase()}')
-                .join(' ');
-          }
-
-          return {
-            'platform': platformName,
-            'link': link.link.toString(),
-          };
-        }));
-      }
-    } catch (e) {
-      log("Error updating social links: $e");
+    socialLinks.clear();
+    if (basicInfoModelObj.value.facebook.isNotEmpty) {
+      socialLinks.add(basicInfoModelObj.value.facebook);
+    }
+    if (basicInfoModelObj.value.instagram.isNotEmpty) {
+      socialLinks.add(basicInfoModelObj.value.instagram);
+    }
+    if (basicInfoModelObj.value.linkedin.isNotEmpty) {
+      socialLinks.add(basicInfoModelObj.value.linkedin);
+    }
+    if (basicInfoModelObj.value.twitter.isNotEmpty) {
+      socialLinks.add(basicInfoModelObj.value.twitter);
     }
   }
-
-
-
-
-
-
 
   Future<void> pickImage(ImageSource source) async {
     try {
@@ -130,75 +100,67 @@ class BasicProfileInfoController extends GetxController {
               toolbarTitle: 'Crop Image',
               toolbarColor: theme.primaryColor,
               toolbarWidgetColor: Colors.white,
-              initAspectRatio: CropAspectRatioPreset.square,
-              lockAspectRatio: true,
+              initAspectRatio: CropAspectRatioPreset.original,
+              lockAspectRatio: false,
             ),
             IOSUiSettings(
               title: 'Crop Image',
+              aspectRatioPresets: [
+                CropAspectRatioPreset.original,
+                CropAspectRatioPreset.square,
+              ],
             ),
           ],
         );
-
         if (croppedFile != null) {
           imageFile.value = File(croppedFile.path);
+        } else {
+          Get.snackbar('Error', 'Image cropping was cancelled or failed');
         }
+      } else {
+        Get.snackbar('Error', 'Image picking was cancelled or failed');
       }
     } catch (e) {
-      log("Image picking/cropping error: $e");
-      Get.snackbar('Error', 'Failed to process image: ${e.toString()}');
+      Get.snackbar('Error', 'An error occurred while picking the image: $e');
     }
   }
 
-  final Logger _logger = Logger();
-
   Future<void> saveProfileInfo() async {
     try {
-      final names = fullNameController.text.split(' ');
       final data = {
-     //   "firstName": names.first.trim(),
-     //   "lastName": names.last.trim(),
-          "firstName": firstnameController.text.trim(),
-        "lastName": lastnameController.text.trim(),
-        "displayName": displayNameController.text.trim(),
-        "bio": bioController.text.trim(),
-        "username": displayNameController.text.trim(),
-        "dateOfBirth": DateFormat('yyyy-MM-dd').format(
-            DateFormat('dd/MM/yyyy').parse(dateOfBirthController.text.trim())),
-        "gender": genderController.text.toLowerCase().trim(),
-        "socialLinks": socialLinks
-            .map((link) => {
-                  "name": link['platform']
-                      ?.toLowerCase()
-                      .replaceAll(' (now x)', ''),
-                  "link": link['link'],
-                })
-            .toList(),
+        "firstName": textField1.text.split(' ').first.trim(),
+        "lastName": textField1.text.split(' ').last.trim(),
+        "displayName": textField2.text.trim(),
+        "bio": textField3.text.trim(),
+        "facebook": socialLinks.firstWhere(
+            (link) => link.contains('facebook.com'),
+            orElse: () => ''),
+        "instagram": socialLinks.firstWhere(
+            (link) => link.contains('instagram.com'),
+            orElse: () => ''),
+        "linkedin": socialLinks.firstWhere(
+            (link) => link.contains('linkedin.com'),
+            orElse: () => ''),
+        "twitter": socialLinks.firstWhere(
+            (link) => link.contains('twitter.com'),
+            orElse: () => ''),
       };
 
-      _logger.i('Sending Profile Info: $data');
-
       await apiService.postBasicInfo(data, imageFile.value);
-
-      Get.back();
-      Get.snackbar('Success', 'Profile information saved successfully',backgroundColor: Colors.green, colorText: Colors.white);
-
-    } catch (e, stacktrace) {
-      _logger.e('Exception occurred: $e , $stacktrace');
-      Get.snackbar('Error',
-          'Failed to save profile information: ${e.toString()}, $stacktrace');
+      Get.snackbar('Success', 'Profile information saved successfully');
+    } catch (e) {
+      Get.snackbar('Error', 'Failed to save profile information: $e');
     }
   }
 
   @override
   void dispose() {
-    fullNameController.dispose();
-    firstnameController.dispose();
-    lastnameController.dispose();
-    displayNameController.dispose();
-    bioController.dispose();
-    dateOfBirthController.dispose();
-    genderController.dispose();
-    lastnamefocus.dispose();
+    textField1.dispose();
+    textField2.dispose();
+    textField3.dispose();
+    focus1.dispose();
+    focus2.dispose();
+    focus3.dispose();
     super.dispose();
   }
 }
