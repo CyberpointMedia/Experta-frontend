@@ -5,7 +5,7 @@ import 'package:experta/core/app_export.dart';
 import 'controller/splash_controller.dart';
 
 class SplashScreen extends GetWidget<SplashController> {
-  const SplashScreen({Key? key}) : super(key: key);
+  const SplashScreen({super.key});
 
   @override
   Widget build(BuildContext context) {

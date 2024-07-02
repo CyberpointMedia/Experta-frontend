@@ -452,6 +452,7 @@ class ImageConstant {
   static String gender = "$imagePath/settings/Gender.svg";
   static String email = "$imagePath/settings/Email.svg";
   static String phone = "$imagePath/settings/mobile.svg";
+  static String popup = "$imagePath/settings/popup.svg";
 
 
 
@@ -462,5 +463,29 @@ class ImageConstant {
   static String uservarification= "$imagePath/settings/User Verify.svg";
   static String reffer = "$imagePath/Star.svg";
   static String help = "$imagePath/settings/24-hours.svg";
+  static String bank = "$imagePath/settings/Bank.svg";
+  static String card = "$imagePath/settings/credit-card.svg";
+  static String pancard = "$imagePath/settings/credit-card.svg";
+  static String block = "$imagePath/Block.svg";
+  static String delete= "$imagePath/Delete.svg";
+  static String upi= "$imagePath/settings/UPI.svg";
+
+
+
+
+  //gender
+  static String male = "$imagePath/settings/male.svg";
+  static String maleunselected = "$imagePath/settings/male_unselected.svg";
+  static String female = "$imagePath/settings/female.svg";
+  static String femele = "$imagePath/settings/femle_unselected.svg";
+
+  static String condition = "$imagePath/settings/terms.svg";
+  static String cokie = "$imagePath/settings/Cookie.svg";
+  static String term = "$imagePath/settings/condition.svg";
+
+
+
+
+
 }
 

@@ -1,9 +1,7 @@
 // ignore_for_file: must_be_immutable
 
 import 'package:experta/core/app_export.dart';
-import 'package:experta/widgets/custom_bottom_bar.dart';
 import 'package:experta/widgets/custom_search_view.dart';
-import 'package:experta/widgets/custom_text_form_field.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:experta/presentation/home_controller.dart';

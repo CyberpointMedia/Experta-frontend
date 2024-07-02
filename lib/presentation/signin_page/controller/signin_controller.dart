@@ -4,7 +4,6 @@ import 'package:experta/data/apiClient/api_service.dart';
 import 'package:experta/data/models/request/login_request_model.dart';
 import 'package:experta/data/models/request/register_request_model.dart';
 import 'package:experta/data/models/response/login_response_model.dart';
-import 'package:experta/data/models/response/register_response_model.dart';
 import 'package:experta/widgets/custom_toast_message.dart';
 
 import '../../../core/app_export.dart';
@@ -42,7 +41,7 @@ class SigninController extends GetxController {
   }
 
   void _validatePhoneNumber() {
-    if (phoneNumberController.text.length == 10) {
+    if (phoneNumberController.text.length >= 10) {
       isPhoneNumberValid.value = true;
     } else {
       isPhoneNumberValid.value = false;

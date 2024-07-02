@@ -2,7 +2,7 @@ class LoginResponseModel {
   final String status;
   final UserData data;
 
-  LoginResponseModel({required this.status, required this.data});
+  LoginResponseModel({  required this.status,   required this.data});
 
   factory LoginResponseModel.fromJson(Map<String, dynamic> json) {
     return LoginResponseModel(
@@ -20,38 +20,38 @@ class LoginResponseModel {
 }
 
 class UserData {
-  final String email;
-  final String phoneNo;
-  final int resendCount;
-  final String otp;
-  final DateTime otpExpiry;
-  final bool block;
-  final bool isVerified;
-  final String basicInfo;
-  final DateTime createdAt;
-  final DateTime updatedAt;
-  final String pricing;
-  final String expertise;
-  final List<String> education;
-  final List<String> workExperience;
+  final String? email;
+  final String? phoneNo;
+  final int? resendCount;
+  final String? otp;
+  final DateTime? otpExpiry;
+  final bool? block;
+  final bool? isVerified;
+  final String? basicInfo;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final String? pricing;
+  final String? expertise;
+  final List<String>? education;
+  final List<String>? workExperience;
   final String id;
 
   UserData({
-    required this.email,
-    required this.phoneNo,
-    required this.resendCount,
-    required this.otp,
-    required this.otpExpiry,
-    required this.block,
-    required this.isVerified,
-    required this.basicInfo,
-    required this.createdAt,
-    required this.updatedAt,
-    required this.pricing,
-    required this.expertise,
-    required this.education,
-    required this.workExperience,
-    required this.id,
+      this.email,
+      this.phoneNo,
+      this.resendCount,
+      this.otp,
+      this.otpExpiry,
+      this.block,
+      this.isVerified,
+      this.basicInfo,
+      this.createdAt,
+      this.updatedAt,
+      this.pricing,
+      this.expertise,
+      this.education,
+      this.workExperience,
+     required this.id,
   });
 
   factory UserData.fromJson(Map<String, dynamic> json) {
@@ -80,12 +80,12 @@ class UserData {
       'phoneNo': phoneNo,
       'resendCount': resendCount,
       'otp': otp,
-      'otpExpiry': otpExpiry.toIso8601String(),
+      'otpExpiry': otpExpiry!.toIso8601String(),
       'block': block,
       'isVerified': isVerified,
       'basicInfo': basicInfo,
-      'createdAt': createdAt.toIso8601String(),
-      'updatedAt': updatedAt.toIso8601String(),
+      'createdAt': createdAt!.toIso8601String(),
+      'updatedAt': updatedAt!.toIso8601String(),
       'pricing': pricing,
       'expertise': expertise,
       'education': education,

@@ -240,46 +240,51 @@ class SettingScreen extends GetWidget<SettingController> {
                                             vertical: 10.v))
                                   ])),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 3),
-                          child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 15.h, vertical: 16.v),
-                              decoration: AppDecoration.fillOnPrimaryContainer
-                                  .copyWith(
-                                      borderRadius:
-                                          BorderRadiusStyle.customBorderL20),
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    CustomIconButton(
-                                        height: 44.adaptSize,
-                                        width: 44.adaptSize,
-                                        padding: EdgeInsets.all(6.h),
-                                        decoration:
-                                            IconButtonStyleHelper.fillGrayTL22,
-                                        child: CustomImageView(
+                        GestureDetector(
+                          onTap: () {
+                            Get.toNamed(AppRoutes.bank);
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 3),
+                            child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 15.h, vertical: 16.v),
+                                decoration: AppDecoration.fillOnPrimaryContainer
+                                    .copyWith(
+                                        borderRadius:
+                                            BorderRadiusStyle.customBorderL20),
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      CustomIconButton(
+                                          height: 44.adaptSize,
+                                          width: 44.adaptSize,
+                                          padding: EdgeInsets.all(6.h),
+                                          decoration:
+                                              IconButtonStyleHelper.fillGrayTL22,
+                                          child: CustomImageView(
+                                            imagePath:
+                                                "assets/images/verifyaccount.svg",
+                                          )),
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 15.h,
+                                              top: 13.v,
+                                              bottom: 10.v),
+                                          child: Text("lbl_verify_account".tr,
+                                              style: theme.textTheme.titleMedium!
+                                                  .copyWith(
+                                                      color: appTheme.gray900))),
+                                      const Spacer(),
+                                      CustomImageView(
                                           imagePath:
-                                              "assets/images/verifyaccount.svg",
-                                        )),
-                                    Padding(
-                                        padding: EdgeInsets.only(
-                                            left: 15.h,
-                                            top: 13.v,
-                                            bottom: 10.v),
-                                        child: Text("lbl_verify_account".tr,
-                                            style: theme.textTheme.titleMedium!
-                                                .copyWith(
-                                                    color: appTheme.gray900))),
-                                    const Spacer(),
-                                    CustomImageView(
-                                        imagePath:
-                                            ImageConstant.imgArrowRightGray900,
-                                        height: 24.adaptSize,
-                                        width: 24.adaptSize,
-                                        margin: EdgeInsets.symmetric(
-                                            vertical: 10.v))
-                                  ])),
+                                              ImageConstant.imgArrowRightGray900,
+                                          height: 24.adaptSize,
+                                          width: 24.adaptSize,
+                                          margin: EdgeInsets.symmetric(
+                                              vertical: 10.v))
+                                    ])),
+                          ),
                         ),
                       ]))
                 ])));
@@ -387,35 +392,40 @@ class SettingScreen extends GetWidget<SettingController> {
             decoration: AppDecoration.fillOnPrimaryContainer
                 .copyWith(color: Colors.transparent),
             child: Column(mainAxisSize: MainAxisSize.min, children: [
-              Container(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
-                  decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
-                      borderRadius: BorderRadiusStyle.customBorderBL20),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CustomIconButton(
-                            height: 44.adaptSize,
-                            width: 44.adaptSize,
-                            padding: EdgeInsets.all(6.h),
-                            decoration: IconButtonStyleHelper.fillGreenTL24,
-                            child: CustomImageView(
-                              imagePath: "assets/images/Insurance.svg",
-                            )),
-                        Padding(
-                            padding: EdgeInsets.only(
-                                left: 15.h, top: 13.v, bottom: 10.v),
-                            child: Text("msg_security_privacy".tr,
-                                style: theme.textTheme.titleMedium!
-                                    .copyWith(color: appTheme.gray900))),
-                        const Spacer(),
-                        CustomImageView(
-                            imagePath: ImageConstant.imgArrowRightGray900,
-                            height: 24.adaptSize,
-                            width: 24.adaptSize,
-                            margin: EdgeInsets.symmetric(vertical: 10.v))
-                      ])),
+              GestureDetector(
+                          onTap: () {
+                            Get.toNamed(AppRoutes.security);
+                          },
+                child: Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
+                    decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
+                        borderRadius: BorderRadiusStyle.customBorderBL20),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CustomIconButton(
+                              height: 44.adaptSize,
+                              width: 44.adaptSize,
+                              padding: EdgeInsets.all(6.h),
+                              decoration: IconButtonStyleHelper.fillGreenTL24,
+                              child: CustomImageView(
+                                imagePath: "assets/images/Insurance.svg",
+                              )),
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  left: 15.h, top: 13.v, bottom: 10.v),
+                              child: Text("msg_security_privacy".tr,
+                                  style: theme.textTheme.titleMedium!
+                                      .copyWith(color: appTheme.gray900))),
+                          const Spacer(),
+                          CustomImageView(
+                              imagePath: ImageConstant.imgArrowRightGray900,
+                              height: 24.adaptSize,
+                              width: 24.adaptSize,
+                              margin: EdgeInsets.symmetric(vertical: 10.v))
+                        ])),
+              ),
               Padding(
                 padding: const EdgeInsets.only(top: 3),
                 child: Container(
@@ -493,35 +503,40 @@ class SettingScreen extends GetWidget<SettingController> {
                 color: Colors.transparent,
                 borderRadius: BorderRadiusStyle.roundedBorder20),
             child: Column(mainAxisSize: MainAxisSize.min, children: [
-              Container(
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
-                  decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
-                      borderRadius: BorderRadiusStyle.customBorderBL20),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        CustomIconButton(
-                            height: 44.adaptSize,
-                            width: 44.adaptSize,
-                            padding: EdgeInsets.all(6.h),
-                            decoration: IconButtonStyleHelper.fillDeepPurple,
-                            child: CustomImageView(
-                              imagePath: "assets/images/Info.svg",
-                            )),
-                        Padding(
-                            padding: EdgeInsets.only(
-                                left: 15.h, top: 13.v, bottom: 10.v),
-                            child: Text("lbl_about_us".tr,
-                                style: theme.textTheme.titleMedium!
-                                    .copyWith(color: appTheme.gray900))),
-                        const Spacer(),
-                        CustomImageView(
-                            imagePath: ImageConstant.imgArrowRightGray900,
-                            height: 24.adaptSize,
-                            width: 24.adaptSize,
-                            margin: EdgeInsets.symmetric(vertical: 10.v))
-                      ])),
+              GestureDetector(
+                onTap: () {
+                  Get.toNamed(AppRoutes.aboutus);
+                },
+                child: Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
+                    decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
+                        borderRadius: BorderRadiusStyle.customBorderBL20),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CustomIconButton(
+                              height: 44.adaptSize,
+                              width: 44.adaptSize,
+                              padding: EdgeInsets.all(6.h),
+                              decoration: IconButtonStyleHelper.fillDeepPurple,
+                              child: CustomImageView(
+                                imagePath: "assets/images/Info.svg",
+                              )),
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  left: 15.h, top: 13.v, bottom: 10.v),
+                              child: Text("lbl_about_us".tr,
+                                  style: theme.textTheme.titleMedium!
+                                      .copyWith(color: appTheme.gray900))),
+                          const Spacer(),
+                          CustomImageView(
+                              imagePath: ImageConstant.imgArrowRightGray900,
+                              height: 24.adaptSize,
+                              width: 24.adaptSize,
+                              margin: EdgeInsets.symmetric(vertical: 10.v))
+                        ])),
+              ),
               Padding(
                 padding: const EdgeInsets.only(top: 3),
                 child: Container(

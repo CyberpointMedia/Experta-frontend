@@ -836,16 +836,23 @@ Widget _ratingSection() {
             const Spacer(
               flex: 42,
             ),
-            _buildColumnFourHundredFifty(
-              dynamicText: "450",
-              dynamicText1: "Followers",
+            
+            GestureDetector(
+              onTap: () => Get.toNamed(AppRoutes.follower),
+              child: _buildColumnFourHundredFifty(
+                dynamicText: "450",
+                dynamicText1: "Followers",
+              ),
             ),
             const Spacer(
               flex: 58,
             ),
-            _buildColumnFourHundredFifty(
-              dynamicText: "480",
-              dynamicText1: "Following",
+            GestureDetector(
+               onTap: () => Get.toNamed(AppRoutes.following),
+              child: _buildColumnFourHundredFifty(
+                dynamicText: "480",
+                dynamicText1: "Following",
+              ),
             )
           ],
         ),
@@ -859,7 +866,9 @@ Widget _ratingSection() {
             size: 15,
           ),
           text: "Create Post",
-          onPressed: () {},
+          onPressed: () {
+            Get.toNamed(AppRoutes.post1);
+          },
         )
       ],
     ),

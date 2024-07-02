@@ -83,12 +83,125 @@ class _WalletState extends State<Wallet> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text("Total Wallet Balance",textAlign: TextAlign.left,style: CustomTextStyles.labelLargeGray700,),
-                              Text("3,000",textAlign: TextAlign.left,style: CustomTextStyles.bodyLargeBlack,),
+                              Text("₹ 3,000",textAlign: TextAlign.left,style: CustomTextStyles.bodyLargeBlack,),
+const SizedBox(height: 16),
+const Column(
+  crossAxisAlignment: CrossAxisAlignment.start,
+  children: [
+    Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          "Deposits",
+          style: TextStyle(
+            fontSize: 16,
+             color: Colors.black,
+            fontWeight: FontWeight.normal,
+          ),
+        ),
+        Text(
+      "₹ 1,500",
+      style: TextStyle(
+        fontSize: 16,
+         color: Colors.black,
+        fontWeight: FontWeight.normal,
+      ),
+    ),
+      ],
+    ),
+    SizedBox(height: 4),
+    Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          " Earn",
+          style: TextStyle(
+            fontSize: 16,
+            color: Colors.black,
+            fontWeight: FontWeight.normal,
+          ),
+        ),
+         Text(
+      "₹ 500",
+      style: TextStyle(
+        fontSize: 16,
+         color: Colors.black,
+        fontWeight: FontWeight.normal,
+      ),
+    ),
+      ],
+    ),
+  ],
+), 
+          Padding(
+            padding: const EdgeInsets.only(top: 20),
+            child: Row(
+              
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+               Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Top Up Button
+                  Container(
+                    
+                    height: 50,
+                    width: 140,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.yellow, // Background color
+                        foregroundColor: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      onPressed: () {
+                        // Define your action here
+                        print("Top Up button pressed!");
+                      },
+                      child: Text(
+                        'Top Up',
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 16), // Spacing between buttons
+                  // Withdraw Button
+                  Container(
+                    height: 50,
+                    width: 140,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white, // Background color
+                        foregroundColor: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: BorderSide(color: Colors.grey), // Border color
+                        ),
+                      ),
+                      onPressed: () {
+                        // Define your action here
+                        print("Withdraw button pressed!");
+                      },
+                      child: Text(
+                        'Withdraw',
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              ],
+            ),
+          )
                             ],
                           ),
+                        
+                          
+                       
       ),
     );
-  }
+}
   
    Widget _buildAccountSettings2() {
     return Align(
@@ -149,7 +262,7 @@ class _WalletState extends State<Wallet> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Get.toNamed(AppRoutes.changeDateOfBirth);
+                            Get.toNamed(AppRoutes.bank);
                           },
                           child: Padding(
                             padding: const EdgeInsets.only(top: 3),
@@ -287,7 +400,7 @@ class _WalletState extends State<Wallet> {
                         ),
                       ),
                     
-                      ]))
+                      ])) 
                 ])));
   }
 

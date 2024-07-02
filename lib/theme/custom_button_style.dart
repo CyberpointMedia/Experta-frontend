@@ -1,3 +1,5 @@
+// ignore_for_file: deprecated_member_use
+
 import 'package:flutter/material.dart';
 import '../core/app_export.dart';
 
@@ -83,7 +85,7 @@ class CustomButtonStyles {
           color: appTheme.gray8005b,
           width: 1,
         ),
-        shape: RoundedRectangleBorder(),
+        shape: const RoundedRectangleBorder(),
       );
   static ButtonStyle get outlineGrayTL10 => OutlinedButton.styleFrom(
         backgroundColor: theme.colorScheme.onPrimaryContainer.withOpacity(1),
@@ -96,6 +98,7 @@ class CustomButtonStyles {
         ),
       );
   static ButtonStyle get outlineGrayTL21 => OutlinedButton.styleFrom(
+    
         backgroundColor: Colors.transparent,
         side: BorderSide(
           color: appTheme.gray30001,
@@ -108,11 +111,11 @@ class CustomButtonStyles {
   static ButtonStyle get outlineGrayTL23 => OutlinedButton.styleFrom(
         backgroundColor: theme.colorScheme.onPrimaryContainer.withOpacity(1),
         side: BorderSide(
-          color: appTheme.gray30001,
-          width: 1,
+          color: appTheme.gray600,
+          width: 0.5,
         ),
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(23.h),
+          borderRadius: BorderRadius.circular(26.h),
         ),
       );
   static ButtonStyle get outlineGray1 => OutlinedButton.styleFrom(
@@ -121,7 +124,7 @@ class CustomButtonStyles {
           color: appTheme.gray20002,
           width: 1,
         ),
-        shape: RoundedRectangleBorder(),
+        shape: const RoundedRectangleBorder(),
       );
   static ButtonStyle get outlineLightGreen => OutlinedButton.styleFrom(
         backgroundColor: theme.colorScheme.onPrimaryContainer.withOpacity(1),
