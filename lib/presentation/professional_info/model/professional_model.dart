@@ -62,7 +62,7 @@ class WorkExperience {
   String companyName;
   bool isCurrentlyWorking;
   DateTime startDate;
-  DateTime endDate;
+  DateTime? endDate; // Make endDate nullable
   String id;
 
   WorkExperience({
@@ -70,7 +70,7 @@ class WorkExperience {
     required this.companyName,
     required this.isCurrentlyWorking,
     required this.startDate,
-    required this.endDate,
+    this.endDate, // Make endDate nullable
     required this.id,
   });
 
@@ -79,7 +79,9 @@ class WorkExperience {
         companyName: json["companyName"],
         isCurrentlyWorking: json["isCurrentlyWorking"],
         startDate: DateTime.parse(json["startDate"]),
-        endDate: DateTime.parse(json["endDate"]),
+        endDate: json["endDate"] != null
+            ? DateTime.parse(json["endDate"])
+            : null, // Handle null endDate
         id: json["_id"],
       );
 
@@ -88,21 +90,21 @@ class WorkExperience {
         "companyName": companyName,
         "isCurrentlyWorking": isCurrentlyWorking,
         "startDate": startDate.toIso8601String(),
-        "endDate": endDate.toIso8601String(),
+        "endDate": endDate?.toIso8601String() ?? "", // Handle null endDate
         "_id": id,
       };
 
   int get yearsWorked {
-    return endDate.year -
+    final end =
+        endDate ?? DateTime.now(); // Use current date if endDate is null
+    return end.year -
         startDate.year -
-        ((endDate.month < startDate.month ||
-                (endDate.month == startDate.month &&
-                    endDate.day < startDate.day))
+        ((end.month < startDate.month ||
+                (end.month == startDate.month && end.day < startDate.day))
             ? 1
             : 0);
   }
 }
-
 // Expertise Model
 
 class Expertise {
@@ -159,6 +161,59 @@ class Education {
       schoolCollege: json['schoolCollege'],
       startDate: DateTime.parse(json['startDate']),
       endDate: DateTime.parse(json['endDate']),
+    );
+  }
+}
+
+// Expertise Items
+
+class ExpertiseItem {
+  final String id;
+  final String name;
+
+  ExpertiseItem({required this.id, required this.name});
+
+  factory ExpertiseItem.fromJson(Map<String, dynamic> json) {
+    return ExpertiseItem(
+      id: json['_id'],
+      name: json['name'],
+    );
+  }
+
+  @override
+  String toString() {
+    return 'ExpertiseItem{id: $id, name: $name}';
+  }
+}
+
+// Dropdowns
+
+class Industry {
+  final String id;
+  final String name;
+
+  Industry({required this.id, required this.name});
+
+  factory Industry.fromJson(Map<String, dynamic> json) {
+    return Industry(
+      id: json['_id'],
+      name: json['name'],
+    );
+  }
+}
+
+class Occupation {
+  final String id;
+  final String name;
+  final String industryId;
+
+  Occupation({required this.id, required this.name, required this.industryId});
+
+  factory Occupation.fromJson(Map<String, dynamic> json) {
+    return Occupation(
+      id: json['_id'],
+      name: json['name'],
+      industryId: json['industry'],
     );
   }
 }

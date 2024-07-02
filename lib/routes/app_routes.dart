@@ -1,10 +1,22 @@
 import 'package:experta/presentation/Basic_Info/basic_info.dart';
+import 'package:experta/presentation/additional_info/additional_info_page.dart';
+import 'package:experta/presentation/additional_info/binding/additional_binding.dart';
+import 'package:experta/presentation/additional_info/binding/edit_interest_binding.dart';
+import 'package:experta/presentation/additional_info/edit_interest.dart';
+import 'package:experta/presentation/call_settings/bindings/call_setting_bindings.dart';
+import 'package:experta/presentation/call_settings/call_settings.dart';
 import 'package:experta/presentation/category/category_controller.dart';
 import 'package:experta/presentation/category/category_screen.dart';
 import 'package:experta/presentation/dashboard/binding/dashboard_binding.dart';
 import 'package:experta/presentation/dashboard/dashboard.dart';
+import 'package:experta/presentation/edit_education/binding/edit_education_list_binding.dart';
+import 'package:experta/presentation/edit_education/edit_education.dart';
 import 'package:experta/presentation/edit_profile/edit_profile_binding/edit_profile_binding.dart';
 import 'package:experta/presentation/edit_profile/edit_profile_setting.dart';
+import 'package:experta/presentation/edit_work_experience/binding/edit_work_experience_binding.dart';
+import 'package:experta/presentation/edit_work_experience/edit_work_experience.dart';
+import 'package:experta/presentation/education/binding/education_list_binding.dart';
+import 'package:experta/presentation/education/education_edit.dart';
 import 'package:experta/presentation/feeds_active_screen/binding/feeds_active_binding.dart';
 import 'package:experta/presentation/feeds_active_screen/feeds_active_screen.dart';
 import 'package:experta/presentation/home_controller.dart';
@@ -19,6 +31,12 @@ import 'package:experta/presentation/professional_info/binding/professional_bind
 import 'package:experta/presentation/professional_info/professional_info.dart';
 import 'package:experta/presentation/search_screen/binding/search_binding.dart';
 import 'package:experta/presentation/search_screen/search_screen.dart';
+import 'package:experta/presentation/set_availability/bindings/set_availability_bindings.dart';
+import 'package:experta/presentation/set_availability/edit_set_avail/bindings/edit_set_avail_bindings.dart';
+import 'package:experta/presentation/set_availability/edit_set_avail/edit_set_avail.dart';
+import 'package:experta/presentation/set_availability/set_availability.dart';
+import 'package:experta/presentation/set_pricing/bindings/set_pricing_bindings.dart';
+import 'package:experta/presentation/set_pricing/set_pricing.dart';
 import 'package:experta/presentation/setting_screen/binding/setting_binding.dart';
 import 'package:experta/presentation/setting_screen/setting_screen.dart';
 import 'package:experta/presentation/signin_page/signin_binding/signin_binding.dart';
@@ -27,6 +45,9 @@ import 'package:experta/presentation/splash_screen/binding/splash_binding.dart';
 import 'package:experta/presentation/splash_screen/splash_screen.dart';
 import 'package:experta/presentation/verifynumber_screen/binding/verifynumber_binding.dart';
 import 'package:experta/presentation/verifynumber_screen/verifynumber_screen.dart';
+import 'package:experta/presentation/work_experience/binding/experience_binding.dart';
+import 'package:experta/presentation/work_experience/work_experience.dart';
+import 'package:experta/widgets/custom_page_transition.dart';
 import 'package:get/get.dart';
 
 class AppRoutes {
@@ -63,6 +84,26 @@ class AppRoutes {
   static const String basicProfile = '/basic_info';
 
   static const String professionalInfo = '/professional_info';
+
+  static const String experience = '/work_experience';
+
+  static const String editExperience = '/edit_work_experience';
+
+  static const education = "/education_edit";
+
+  static const editEducation = "/edit_education";
+
+  static const additional = "/additional_info_page";
+
+  static const editInterest = "/edit_interest";
+
+  static const callSettings = "/call_settings";
+
+  static const setAvailability = "/set_availability";
+
+  static const editSetAvail = "/edit_set_avail";
+
+  static const setPricing = "/set_pricing";
 
   static List<GetPage> pages = [
     GetPage(
@@ -138,6 +179,75 @@ class AppRoutes {
         page: () => const EditProfessionalInfo(),
         bindings: [
           EditProfessionalInfoBinding(),
+        ]),
+    GetPage(
+        name: experience,
+        page: () => const WorkExperiencePage(),
+        bindings: [
+          WorkExperienceBinding(),
+        ]),
+    GetPage(
+        name: editExperience,
+        page: () => const EditWorkExperiencePage(),
+        customTransition: CustomPageTransition(),
+        bindings: [
+          EditWorkExperienceBinding(),
+        ]),
+    GetPage(
+        name: education,
+        page: () => const EducationList(),
+        customTransition: CustomPageTransition(),
+        bindings: [
+          EducationBinding(),
+        ]),
+    GetPage(
+        name: editEducation,
+        page: () => const EditEducationPage(),
+        customTransition: CustomPageTransition(),
+        bindings: [
+          EditEducationBinding(),
+        ]),
+    GetPage(
+        name: additional,
+        page: () => const AdditionalInfoPage(),
+        customTransition: CustomPageTransition(),
+        bindings: [
+          AdditionalInfoBinding(),
+        ]),
+    GetPage(
+        name: editInterest,
+        page: () => const EditInterestPage(),
+        customTransition: CustomPageTransition(),
+        bindings: [
+          EditInterestBinding(),
+        ]),
+    GetPage(
+        name: callSettings,
+        page: () => const CallSettings(),
+        customTransition: CustomPageTransition(),
+        bindings: [
+          CallSettingsBindings(),
+        ]),
+    GetPage(
+        name: setAvailability,
+        page: () => const SetAvailability(),
+        customTransition: CustomPageTransition(),
+        bindings: [
+          SetAvailabilityBindings(),
+        ]),
+    GetPage(
+        name: editSetAvail,
+        page: () => const EditSetAvailability(),
+        customTransition: CustomPageTransition(),
+        bindings: [
+          EditSetAvailableBinding(),
+        ]),
+    GetPage(
+        name: setPricing,
+        page: () => const SetPricing(),
+        customTransition: CustomPageTransition(),
+        bindings: [
+          SetPricingBindings(),
         ]),
     GetPage(name: category, page: () => CategoryScreen(), bindings: [
       CategoryBinding(),

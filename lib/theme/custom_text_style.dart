@@ -140,13 +140,19 @@ class CustomTextStyles {
         color: theme.colorScheme.errorContainer,
       );
   static get labelMediumGray900 => theme.textTheme.labelMedium!.copyWith(
-        color: appTheme.gray900,
+        color: appTheme.gray400,
+        fontSize: 14,
       );
   static get labelMediumGreen400 => theme.textTheme.labelMedium!.copyWith(
         color: appTheme.green400,
         fontWeight: FontWeight.w500,
       );
   static get labelMediumBlack900 => theme.textTheme.titleMedium!.copyWith(
+        color: appTheme.black900,
+        fontWeight: FontWeight.bold,
+      );
+  static get labelBigBlack900 => theme.textTheme.titleMedium!.copyWith(
+        fontSize: 21,
         color: appTheme.black900,
         fontWeight: FontWeight.bold,
       );
@@ -237,7 +243,7 @@ class CustomTextStyles {
   static get titleMediumSFProTextBlack90001 =>
       theme.textTheme.titleMedium!.sFProText.copyWith(
         color: appTheme.black90001,
-        fontSize: 17.fSize,
+        fontSize: 16.fSize,
         fontWeight: FontWeight.w600,
       );
   static get titleMediumSemiBold => theme.textTheme.titleMedium!.copyWith(

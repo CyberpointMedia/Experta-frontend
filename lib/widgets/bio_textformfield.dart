@@ -9,7 +9,7 @@ class CustomBioTextFormField extends StatefulWidget {
     this.width,
     this.controller,
     this.focusNode,
-    this.autofocus = true,
+    this.autofocus = false,
     this.textStyle,
     this.obscureText = false,
     this.textInputAction = TextInputAction.next,
