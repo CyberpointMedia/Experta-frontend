@@ -52,6 +52,8 @@ import 'package:experta/presentation/payment_method/binding/payment_method_bindi
 import 'package:experta/presentation/payment_method/payment_method.dart';
 import 'package:experta/presentation/phone_number/binding/phone_number_binding.dart';
 import 'package:experta/presentation/phone_number/phone_number.dart';
+import 'package:experta/presentation/post/binding/post_binding.dart';
+import 'package:experta/presentation/post/post.dart';
 import 'package:experta/presentation/professional_info/binding/professional_binding.dart';
 import 'package:experta/presentation/professional_info/professional_info.dart';
 import 'package:experta/presentation/recents/binding/recents_binding.dart';
@@ -302,6 +304,13 @@ class AppRoutes {
         AccountSettingBinding(),
       ],
     ),
+     GetPage(
+      name: bank,
+      page: () => const VerifyAccount(),
+      bindings: [
+       VerifyAccountBinding(),
+      ],
+    ),
     GetPage(
       name: verifynumberScreen,
       page: () => const VerifynumberScreen(),
@@ -381,7 +390,7 @@ class AppRoutes {
     ),
     GetPage(
       name: changeUserName,
-      page: () => const ChangeUsername(),
+      page: () => const ChangeUserName(),
       bindings: [
         ChangeUserNameBinding(),
       ],
