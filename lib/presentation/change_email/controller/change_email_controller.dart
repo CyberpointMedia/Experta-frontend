@@ -8,4 +8,5 @@ class ChangeEmailController extends GetxController {
 
   TextEditingController textField1 = TextEditingController();
   FocusNode focus1 = FocusNode();
+  
 }
