@@ -8,6 +8,7 @@ class AppbarSubtitleSix extends StatelessWidget {
     required this.text,
     this.margin,
     this.onTap,
+    this.textColor,
   }) : super(
           key: key,
         );
@@ -17,6 +18,8 @@ class AppbarSubtitleSix extends StatelessWidget {
   EdgeInsetsGeometry? margin;
 
   Function? onTap;
+
+  Color? textColor;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +32,7 @@ class AppbarSubtitleSix extends StatelessWidget {
         child: Text(
           text,
           style: theme.textTheme.titleMedium!.copyWith(
-            color: appTheme.gray900,
+            color: textColor ?? appTheme.gray900,
           ),
         ),
       ),

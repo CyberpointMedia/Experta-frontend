@@ -116,6 +116,18 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "dio",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/dio-5.5.0+1",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
+      "name": "dio_web_adapter",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/dio_web_adapter-1.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "extended_image",
       "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/extended_image-8.2.1",
       "packageUri": "lib/",
@@ -320,6 +332,24 @@
       "languageVersion": "2.15"
     },
     {
+      "name": "image_cropper",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/image_cropper-7.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "image_cropper_for_web",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/image_cropper_for_web-5.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "image_cropper_platform_interface",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/image_cropper_platform_interface-6.1.0",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
       "name": "image_editor_plus",
       "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/image_editor_plus-1.0.5",
       "packageUri": "lib/",
@@ -454,6 +484,12 @@
     {
       "name": "outline_gradient_button",
       "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/outline_gradient_button-2.0.1+1",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
+      "name": "page_transition",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/page_transition-2.1.0",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
@@ -650,6 +686,12 @@
       "languageVersion": "2.19"
     },
     {
+      "name": "shimmer",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/shimmer-3.0.0",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "sky_engine",
       "rootUri": "file:///usr/local/Caskroom/flutter/3.19.1/flutter/bin/cache/pkg/sky_engine",
       "packageUri": "lib/",
@@ -830,7 +872,7 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2024-07-15T13:06:44.539744Z",
+  "generated": "2024-07-16T05:35:36.085492Z",
   "generator": "pub",
   "generatorVersion": "3.3.0"
 }

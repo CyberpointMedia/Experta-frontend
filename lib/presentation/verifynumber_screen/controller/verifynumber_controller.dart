@@ -78,6 +78,8 @@ class VerifynumberController extends GetxController with CodeAutoFill {
     super.onInit();
     prefUtils.init();
     listenForCode();
-    phoneNumberController = Get.arguments as TextEditingController;
+    var arguments = Get.arguments as List;
+    phoneNumberController = arguments[0] as TextEditingController;
+    otpController.value.text = arguments[1] as String;
   }
 }
