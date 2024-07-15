@@ -16,14 +16,19 @@ import 'package:experta/presentation/category/category_screen.dart';
 import 'package:experta/presentation/change_date_of_birth/binding/change_date_of_birth_binding.dart';
 import 'package:experta/presentation/change_date_of_birth/change_date_of_birth.dart';
 import 'package:experta/presentation/change_email/binding/change_email_binding.dart';
+import 'package:experta/presentation/change_email/change_email.dart';
 import 'package:experta/presentation/change_gender/binding/change_gender_binding.dart';
 import 'package:experta/presentation/change_gender/change_gender.dart';
 import 'package:experta/presentation/change_user_name/binding/change_user_name_binding.dart';
 import 'package:experta/presentation/change_user_name/change_user_name.dart';
+import 'package:experta/presentation/createPost/binding/create_post_binding.dart';
+import 'package:experta/presentation/createPost/create_post.dart';
 import 'package:experta/presentation/dashboard/binding/dashboard_binding.dart';
 import 'package:experta/presentation/dashboard/dashboard.dart';
 import 'package:experta/presentation/edit_profile/edit_profile_binding/edit_profile_binding.dart';
 import 'package:experta/presentation/edit_profile/edit_profile_setting.dart';
+import 'package:experta/presentation/edit_work_experience/binding/edit_work_experience_binding.dart';
+import 'package:experta/presentation/edit_work_experience/edit_work_experience.dart';
 import 'package:experta/presentation/feeds_active_screen/binding/feeds_active_binding.dart';
 import 'package:experta/presentation/feeds_active_screen/feeds_active_screen.dart';
 import 'package:experta/presentation/followers/binding/followers_binding.dart';
@@ -33,6 +38,8 @@ import 'package:experta/presentation/home_controller.dart';
 import 'package:experta/presentation/home_screen.dart';
 import 'package:experta/presentation/message_chat_with_user_default_screen/binding/message_chat_with_user_default_binding.dart';
 import 'package:experta/presentation/message_chat_with_user_default_screen/message_chat_with_user_default_screen.dart';
+import 'package:experta/presentation/new_post/binding/new_post_bindings.dart';
+import 'package:experta/presentation/new_post/new_post.dart';
 import 'package:experta/presentation/notification/notification_controller.dart';
 import 'package:experta/presentation/notification/notification_screen.dart';
 import 'package:experta/presentation/onboarding_screen/binding/onboarding_binding.dart';
@@ -45,8 +52,6 @@ import 'package:experta/presentation/payment_method/binding/payment_method_bindi
 import 'package:experta/presentation/payment_method/payment_method.dart';
 import 'package:experta/presentation/phone_number/binding/phone_number_binding.dart';
 import 'package:experta/presentation/phone_number/phone_number.dart';
-import 'package:experta/presentation/post/binding/post_binding.dart';
-import 'package:experta/presentation/post/post.dart';
 import 'package:experta/presentation/professional_info/binding/professional_binding.dart';
 import 'package:experta/presentation/professional_info/professional_info.dart';
 import 'package:experta/presentation/recents/binding/recents_binding.dart';
@@ -67,8 +72,10 @@ import 'package:experta/presentation/verifynumber_screen/binding/verifynumber_bi
 import 'package:experta/presentation/verifynumber_screen/verifynumber_screen.dart';
 import 'package:experta/presentation/wallet/binding/wallet_binding.dart';
 import 'package:experta/presentation/wallet/wallet.dart';
+import 'package:experta/presentation/work_experience/binding/experience_binding.dart';
+import 'package:experta/presentation/work_experience/work_experience.dart';
+import 'package:experta/widgets/custom_page_transition.dart';
 import 'package:get/get.dart';
-import '../presentation/change_email/change_email.dart';
 
 class AppRoutes {
   static const String onboardingScreen = '/onboarding_screen';
@@ -109,6 +116,22 @@ class AppRoutes {
 
   static const String changeUserName = "/change_user_name";
 
+  static const String education = "/education_edit";
+
+  static const String editEducation = "/edit_education";
+
+  static const String additional = "/additional_info_page";
+
+  static const String editInterest = "/edit_interest";
+
+  static const String callSettings = "/call_settings";
+
+  static const String setAvailability = "/set_availability";
+
+  static const String editSetAvail = "/edit_set_avail";
+
+  static const String setPricing = "/set_pricing";
+
   static const String changeDateOfBirth = "/change_date_of_birth";
 
   static const String changeEmail = "/change_email";
@@ -117,39 +140,41 @@ class AppRoutes {
 
   static const String payment = "/payment";
 
- static const String wallet = "/wallet";
+  static const String wallet = "/wallet";
 
+  static const String bank = "/Verfy_account";
 
-static const String bank = "/Verfy_account";
+  static const String security = "/security_privacy";
 
-static const String security = "/security_privacy";
+  static const String block = "/blocked";
 
-static const String  block = "/blocked";
+  static const String follower = "/followers";
 
-static const String  follower = "/followers";
+  static const String following = "/following";
 
-static const String  following = "/following";
+  static const String paymentmethod = "/payment_method";
 
-static const String  paymentmethod = "/payment_method";
+  static const String addupi = "/add_upi";
 
-static const String  addupi = "/add_upi";
+  static const String addbankaccount = "/add_bank_account";
 
-static const String  addbankaccount = "/add_bank_account";
+  static const String pandetail = "/pan_detail";
 
-static const String  pandetail = "/pan_detail";
+  static const String adhardetail = "/Aadhar_DetailS";
 
-static const String  adhardetail = "/Aadhar_DetailS";
+  static const String changegender = "/change_gender";
 
-static const String  changegender = "/change_gender";
+  static const String experience = '/work_experience';
 
-static const String  aboutus = "/about_us";
+  static const String editExperience = '/edit_work_experience';
 
-static const String  post1= "/post";
+  static const String aboutus = "/about_us";
 
-static const String  recent = "/recents";
+  static const String createPost = "/create_post";
 
+  static const String recent = "/recents";
 
-
+  static const String newPost = "/";
 
   static List<GetPage> pages = [
     GetPage(
@@ -161,16 +186,9 @@ static const String  recent = "/recents";
     ),
     GetPage(
       name: recent,
-      page: () =>  RecentsPage(),
+      page: () => RecentsPage(),
       bindings: [
         RecentsBinding(),
-      ],
-    ),
-    GetPage(
-      name: post1,
-      page: () =>  PostPage(),
-      bindings: [
-        PostBinding(),
       ],
     ),
     GetPage(
@@ -182,12 +200,12 @@ static const String  recent = "/recents";
     ),
     GetPage(
       name: changegender,
-      page: () => const  ChangeGender(),
+      page: () => const ChangeGender(),
       bindings: [
         ChangeGenderBinding(),
       ],
     ),
-     GetPage(
+    GetPage(
       name: addbankaccount,
       page: () => const AddBankAccount(),
       bindings: [
@@ -196,7 +214,7 @@ static const String  recent = "/recents";
     ),
     GetPage(
       name: following,
-      page: () =>  Following(),
+      page: () => Following(),
       bindings: [
         FollowersBinding(),
       ],
@@ -210,14 +228,14 @@ static const String  recent = "/recents";
     ),
     GetPage(
       name: paymentmethod,
-      page: () =>  const PaymentMethod(),
+      page: () => const PaymentMethod(),
       bindings: [
         PaymentMethodBinding(),
       ],
     ),
     GetPage(
       name: addupi,
-      page: () =>  AddUpi(),
+      page: () => AddUpi(),
       bindings: [
         AddUpiBinding(),
       ],
@@ -257,18 +275,24 @@ static const String  recent = "/recents";
         BlockedBinding(),
       ],
     ),
-     GetPage(
+    GetPage(
+        name: experience,
+        page: () => const WorkExperiencePage(),
+        bindings: [
+          WorkExperienceBinding(),
+        ]),
+    GetPage(
       name: accountSetting,
       page: () => const AccountSettings(),
       bindings: [
         AccountSettingBinding(),
       ],
     ),
-     GetPage(
+    GetPage(
       name: bank,
       page: () => const VerifyAccount(),
       bindings: [
-       VerifyAccountBinding(),
+        VerifyAccountBinding(),
       ],
     ),
     GetPage(
@@ -292,14 +316,21 @@ static const String  recent = "/recents";
         SearchBinding(),
       ],
     ),
-     GetPage(
+    GetPage(
+        name: editExperience,
+        page: () => const EditWorkExperiencePage(),
+        customTransition: CustomPageTransition(),
+        bindings: [
+          EditWorkExperienceBinding(),
+        ]),
+    GetPage(
       name: wallet,
       page: () => const Wallet(),
       bindings: [
         WalletBinding(),
       ],
     ),
-     GetPage(
+    GetPage(
       name: changeUserName,
       page: () => const ChangeUserName(),
       bindings: [
@@ -329,7 +360,7 @@ static const String  recent = "/recents";
     ),
     GetPage(
       name: changeDateOfBirth,
-      page: () =>  const ChangeDateOfBirth(),
+      page: () => const ChangeDateOfBirth(),
       bindings: [
         ChangeDateOfBirthBinding(),
       ],
@@ -383,5 +414,152 @@ static const String  recent = "/recents";
         SplashBinding(),
       ],
     ),
+    GetPage(
+      name: aboutus,
+      page: () => const AboutUs(),
+      bindings: [
+        AboutUsBinding(),
+      ],
+    ),
+    GetPage(
+      name: changegender,
+      page: () => const ChangeGender(),
+      bindings: [
+        ChangeGenderBinding(),
+      ],
+    ),
+    GetPage(
+      name: addbankaccount,
+      page: () => const AddBankAccount(),
+      bindings: [
+        AddBankAccountBinding(),
+      ],
+    ),
+    GetPage(
+      name: following,
+      page: () => Following(),
+      bindings: [
+        FollowersBinding(),
+      ],
+    ),
+    GetPage(
+      name: pandetail,
+      page: () => const PanDetail(),
+      bindings: [
+        PanDetailBinding(),
+      ],
+    ),
+    GetPage(
+      name: paymentmethod,
+      page: () => const PaymentMethod(),
+      bindings: [
+        PaymentMethodBinding(),
+      ],
+    ),
+    GetPage(
+      name: addupi,
+      page: () => const AddUpi(),
+      bindings: [
+        AddUpiBinding(),
+      ],
+    ),
+    GetPage(
+      name: security,
+      page: () => const SecurityPrivacy(),
+      bindings: [
+        SecuritryPrivacyBinding(),
+      ],
+    ),
+    GetPage(
+      name: adhardetail,
+      page: () => const AadharDetails(),
+      bindings: [
+        AadharDetailBinding(),
+      ],
+    ),
+    GetPage(
+      name: follower,
+      page: () => FollowersPage(),
+      bindings: [
+        FollowersBinding(),
+      ],
+    ),
+    GetPage(
+      name: block,
+      page: () => BlockedPage(),
+      bindings: [
+        BlockedBinding(),
+      ],
+    ),
+    GetPage(
+      name: accountSetting,
+      page: () => const AccountSettings(),
+      bindings: [
+        AccountSettingBinding(),
+      ],
+    ),
+    GetPage(
+      name: bank,
+      page: () => const VerifyAccount(),
+      bindings: [
+        VerifyAccountBinding(),
+      ],
+    ),
+    GetPage(
+      name: wallet,
+      page: () => const Wallet(),
+      bindings: [
+        WalletBinding(),
+      ],
+    ),
+    GetPage(
+      name: changeUserName,
+      page: () => const ChangeUserName(),
+      bindings: [
+        ChangeUserNameBinding(),
+      ],
+    ),
+    GetPage(
+      name: changeEmail,
+      page: () => const ChangeEmail(),
+      bindings: [
+        ChangeEmailBinding(),
+      ],
+    ),
+    GetPage(
+      name: phoneNumber,
+      page: () => const PhoneNumber(),
+      bindings: [
+        PhoneNumberBinding(),
+      ],
+    ),
+    GetPage(
+      name: payment,
+      page: () => const Payment(),
+      bindings: [
+        PaymentBinding(),
+      ],
+    ),
+    GetPage(
+      name: changeDateOfBirth,
+      page: () => const ChangeDateOfBirth(),
+      bindings: [
+        ChangeDateOfBirthBinding(),
+      ],
+    ),
+    GetPage(
+        name: createPost,
+        page: () => const CreatePost(),
+        customTransition: CustomPageTransition(),
+        bindings: [
+          CreatePostBindings(),
+        ]),
+    GetPage(
+        name: newPost,
+        page: () => const NewPostPage(),
+        customTransition: CustomPageTransition(),
+        bindings: [
+          NewPostBindings(),
+        ]),
   ];
 }

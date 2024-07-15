@@ -11,10 +11,8 @@ class CustomTextStyles {
   static get bodyLargeBlack90001 => theme.textTheme.bodyLarge!.copyWith(
         color: appTheme.black90001,
       );
-       static get bodyLargeBlack => theme.textTheme.bodyLarge!.copyWith(
-        color: appTheme.black90001,
-        fontSize: 32
-      );
+  static get bodyLargeBlack => theme.textTheme.bodyLarge!
+      .copyWith(color: appTheme.black90001, fontSize: 32);
   static get bodyLargeGray900 => theme.textTheme.bodyLarge!.copyWith(
         color: appTheme.gray900,
       );
@@ -121,7 +119,7 @@ class CustomTextStyles {
   static get labelLargeGray900_1 => theme.textTheme.labelLarge!.copyWith(
         color: appTheme.gray900,
       );
-       static get labelLargeGray700 => theme.textTheme.labelLarge!.copyWith(
+  static get labelLargeGray700 => theme.textTheme.labelLarge!.copyWith(
         color: appTheme.gray700,
       );
   static get labelLargeOnPrimaryContainer =>
@@ -133,6 +131,12 @@ class CustomTextStyles {
       theme.textTheme.labelLarge!.sFProText.copyWith(
         color: appTheme.black90001,
         fontSize: 13.fSize,
+        fontWeight: FontWeight.w500,
+      );
+
+  static get textButton => theme.textTheme.labelLarge!.sFProText.copyWith(
+        color: appTheme.deepOrangeA200,
+        fontSize: 16.fSize,
         fontWeight: FontWeight.w500,
       );
   static get labelLargeff171717 => theme.textTheme.labelLarge!.copyWith(

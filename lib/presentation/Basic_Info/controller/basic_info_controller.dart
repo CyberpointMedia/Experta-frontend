@@ -105,10 +105,10 @@ class BasicProfileInfoController extends GetxController {
             ),
             IOSUiSettings(
               title: 'Crop Image',
-              aspectRatioPresets: [
-                CropAspectRatioPreset.original,
-                CropAspectRatioPreset.square,
-              ],
+              // aspectRatioPresets: [
+              //   CropAspectRatioPreset.original,
+              //   CropAspectRatioPreset.square,
+              // ],
             ),
           ],
         );

@@ -71,10 +71,9 @@ class SigninController extends GetxController {
           isSuccess: true,
         );
         log('hi the otp is ${response.data.otp}');
-        Get.toNamed(
-          AppRoutes.verifynumberScreen,
-          arguments: phoneNumberController,
-        );
+        var otp = response.data.otp;
+        Get.toNamed(AppRoutes.verifynumberScreen,
+            arguments: [phoneNumberController, otp]);
       } else {
         print("Login failed");
       }

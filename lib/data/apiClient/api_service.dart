@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
@@ -457,6 +459,19 @@ class ApiService {
       return json.decode(response.body);
     } else {
       throw Exception('Failed to save pricing');
+    }
+  }
+
+  Future<Map<String, dynamic>> getUserData(String userId) async {
+    final response = await http.get(Uri.parse('$_baseUrl/getUserData/$userId'));
+
+    if (response.statusCode == 200) {
+      var jsonData = json.decode(response.body);
+      Logger.log(jsonData);
+      print("profile response : $jsonData");
+      return jsonData;
+    } else {
+      throw Exception('Failed to load user data');
     }
   }
 
