@@ -3,8 +3,8 @@ import '../core/app_export.dart';
 import 'base_button.dart';
 
 class CustomElevatedButton extends BaseButton {
-  const CustomElevatedButton({super.key, 
-  
+  CustomElevatedButton({
+    super.key,
     this.decoration,
     this.leftIcon,
     this.rightIcon,
@@ -36,8 +36,8 @@ class CustomElevatedButton extends BaseButton {
   }
 
   Widget get buildElevatedButtonWidget => Container(
-        height: height ?? 56.v,
-        width: width ?? double.maxFinite,
+        height: this.height ?? 56.v,
+        width: this.width ?? double.maxFinite,
         margin: margin,
         decoration: decoration,
         child: ElevatedButton(
