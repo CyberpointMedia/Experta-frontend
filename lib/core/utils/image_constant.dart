@@ -227,6 +227,9 @@ class ImageConstant {
 
   static String imgGiftBox1 = '$imagePath/img_gift_box_1.svg';
 
+  static String imgCloseOnprimarycontainer26x17 =
+      '$imagePath/img_close_onprimarycontainer_26x17.svg';
+
   static String imgInfoBlueGray30024x24 =
       '$imagePath/img_info_blue_gray_300_24x24.svg';
 
@@ -491,3 +494,4 @@ class ImageConstant {
 
   // camera.svg
 }
+
