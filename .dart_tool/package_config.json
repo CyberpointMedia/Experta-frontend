@@ -197,7 +197,7 @@
       "name": "flutter",
       "rootUri": "file:///usr/local/Caskroom/flutter/3.19.1/flutter/packages/flutter",
       "packageUri": "lib/",
-      "languageVersion": "3.3"
+      "languageVersion": "3.2"
     },
     {
       "name": "flutter_cache_manager",
@@ -275,7 +275,7 @@
       "name": "flutter_test",
       "rootUri": "file:///usr/local/Caskroom/flutter/3.19.1/flutter/packages/flutter_test",
       "packageUri": "lib/",
-      "languageVersion": "3.3"
+      "languageVersion": "3.2"
     },
     {
       "name": "flutter_web_plugins",
@@ -419,19 +419,19 @@
       "name": "leak_tracker",
       "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/leak_tracker-10.0.0",
       "packageUri": "lib/",
-      "languageVersion": "3.2"
+      "languageVersion": "3.1"
     },
     {
       "name": "leak_tracker_flutter_testing",
       "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/leak_tracker_flutter_testing-2.0.1",
       "packageUri": "lib/",
-      "languageVersion": "3.2"
+      "languageVersion": "3.1"
     },
     {
       "name": "leak_tracker_testing",
       "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/leak_tracker_testing-2.0.1",
       "packageUri": "lib/",
-      "languageVersion": "3.2"
+      "languageVersion": "3.1"
     },
     {
       "name": "lints",
@@ -515,7 +515,7 @@
       "name": "path_provider_android",
       "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/path_provider_android-2.2.4",
       "packageUri": "lib/",
-      "languageVersion": "3.4"
+      "languageVersion": "3.2"
     },
     {
       "name": "path_provider_foundation",
@@ -653,7 +653,7 @@
       "name": "shared_preferences_android",
       "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/shared_preferences_android-2.2.2",
       "packageUri": "lib/",
-      "languageVersion": "3.4"
+      "languageVersion": "3.2"
     },
     {
       "name": "shared_preferences_foundation",
@@ -839,7 +839,7 @@
       "name": "vm_service",
       "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/vm_service-13.0.0",
       "packageUri": "lib/",
-      "languageVersion": "3.3"
+      "languageVersion": "3.0"
     },
     {
       "name": "web",
@@ -851,7 +851,7 @@
       "name": "win32",
       "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/win32-5.5.0",
       "packageUri": "lib/",
-      "languageVersion": "3.4"
+      "languageVersion": "3.3"
     },
     {
       "name": "xdg_directories",
@@ -872,10 +872,7 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2024-07-16T07:22:19.631364Z",
+  "generated": "2024-07-16T08:08:04.772884Z",
   "generator": "pub",
-  "generatorVersion": "3.4.3",
-  "flutterRoot": "file:///C:/source/flutter",
-  "flutterVersion": "3.22.2",
-  "pubCache": "file:///C:/Users/sanja/AppData/Local/Pub/Cache"
+  "generatorVersion": "3.3.0"
 }
