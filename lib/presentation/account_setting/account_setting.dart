@@ -169,7 +169,7 @@ class _AccountSettingsState extends State<AccountSettings> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Get.toNamed(AppRoutes.professionalInfo);
+                            Get.toNamed(AppRoutes.changegender);
                           },
                           child: Padding(
                             padding: const EdgeInsets.only(top: 3),
