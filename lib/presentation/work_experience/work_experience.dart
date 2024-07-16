@@ -70,7 +70,7 @@ class _WorkExperiencePageState extends State<WorkExperiencePage> {
           margin: const EdgeInsets.only(right: 20),
           imagePath: ImageConstant.plus,
           onTap: () {
-            Get.toNamed(AppRoutes.editExperience);
+            // Get.toNamed(AppRoutes.editExperience);
           },
         ),
       ],
@@ -101,7 +101,7 @@ class _WorkExperiencePageState extends State<WorkExperiencePage> {
               const SizedBox(height: 20),
               ElevatedButton(
                 onPressed: () {
-                  Get.toNamed(AppRoutes.editExperience);
+                  // Get.toNamed(AppRoutes.editExperience);
                 },
                 child: const Text('Add Work Experience'),
               ),
@@ -118,12 +118,12 @@ class _WorkExperiencePageState extends State<WorkExperiencePage> {
                 workExperience: workExperience,
                 edit: true,
                 onEdit: () {
-                  var result = Get.toNamed(AppRoutes.editExperience,
-                      arguments: workExperience);
+                  // var result = Get.toNamed(AppRoutes.editExperience,
+                  //     arguments: workExperience);
 
-                  if (result != null) {
-                    controller.fetchData();
-                  }
+                  // if (result != null) {
+                  //   controller.fetchData();
+                  // }
                 },
               );
             },

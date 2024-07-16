@@ -9,14 +9,15 @@ import 'package:experta/widgets/custom_text_form_field.dart';
 import 'package:experta/widgets/custom_toast_message.dart';
 import 'package:flutter/material.dart';
 
-class ChangeUsername extends StatefulWidget {
-  const ChangeUsername({super.key});
 
+class ChangeUserName extends StatefulWidget {
+  const ChangeUserName({super.key});
+  
   @override
-  State<ChangeUsername> createState() => _ChangeUsernameState();
+  State<ChangeUserName> createState() => _ChangeUserNameState();
 }
 
-class _ChangeUsernameState extends State<ChangeUsername> {
+class _ChangeUserNameState extends State<ChangeUserName> {
   ChangeUserNameController controller = Get.put(ChangeUserNameController());
   @override
   Widget build(BuildContext context) {
@@ -48,7 +49,7 @@ class _ChangeUsernameState extends State<ChangeUsername> {
             ),
           ),
             Padding(
-              padding: const EdgeInsets.only(top: 30,left: 15,right: 15),
+              padding: const EdgeInsets.only(top: 30,left: 13,right: 15),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -59,7 +60,7 @@ class _ChangeUsernameState extends State<ChangeUsername> {
                   ),
                   const Text("User name"),
                   CustomTextFormField(
-                    hintText: "Enter user Name",
+                    hintText: "navi_verma88",
                      hintStyle: CustomTextStyles.titleMediumBluegray300,
                 textInputType: TextInputType.name,
                  controller: controller.textField1,
