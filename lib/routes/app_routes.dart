@@ -80,6 +80,8 @@ import 'package:experta/presentation/signin_page/signin_binding/signin_binding.d
 import 'package:experta/presentation/signin_page/signin_page.dart';
 import 'package:experta/presentation/splash_screen/binding/splash_binding.dart';
 import 'package:experta/presentation/splash_screen/splash_screen.dart';
+import 'package:experta/presentation/verify_account/binding/verify_account_binding.dart';
+import 'package:experta/presentation/verify_account/varify_account.dart';
 import 'package:experta/presentation/verifynumber_screen/binding/verifynumber_binding.dart';
 import 'package:experta/presentation/verifynumber_screen/verifynumber_screen.dart';
 import 'package:experta/presentation/wallet/binding/wallet_binding.dart';
