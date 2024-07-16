@@ -17,7 +17,7 @@ class AccountSettings extends StatefulWidget {
 class _AccountSettingsState extends State<AccountSettings> {
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       body: Stack(
         children: [
           Positioned(
@@ -51,6 +51,7 @@ class _AccountSettingsState extends State<AccountSettings> {
       ),
     );
   }
+
   PreferredSizeWidget _buildAppBar() {
     return CustomAppBar(
         height: 40.h,
@@ -64,7 +65,8 @@ class _AccountSettingsState extends State<AccountSettings> {
         centerTitle: true,
         title: AppbarSubtitleSix(text: "Account Settings"));
   }
-   Widget _buildAccountSettings() {
+
+  Widget _buildAccountSettings() {
     return Align(
         alignment: Alignment.bottomCenter,
         child: Padding(
@@ -100,8 +102,7 @@ class _AccountSettingsState extends State<AccountSettings> {
                                         decoration:
                                             IconButtonStyleHelper.fillPrimary,
                                         child: CustomImageView(
-                                            imagePath:ImageConstant.user)),
-                                             
+                                            imagePath: ImageConstant.user)),
                                     Padding(
                                         padding: EdgeInsets.only(
                                             left: 15.h,
@@ -142,8 +143,7 @@ class _AccountSettingsState extends State<AccountSettings> {
                                           decoration: IconButtonStyleHelper
                                               .fillDeepPurple,
                                           child: CustomImageView(
-                                            imagePath:ImageConstant.birthday,
-                                                
+                                            imagePath: ImageConstant.birthday,
                                           )),
                                       Padding(
                                           padding: EdgeInsets.only(
@@ -189,7 +189,6 @@ class _AccountSettingsState extends State<AccountSettings> {
                                               .fillGreenTL24,
                                           child: CustomImageView(
                                             imagePath: ImageConstant.gender,
-                                                
                                           )),
                                       Padding(
                                           padding: EdgeInsets.only(
@@ -214,104 +213,102 @@ class _AccountSettingsState extends State<AccountSettings> {
                           ),
                         ),
                         GestureDetector(
-                        onTap: () {
+                          onTap: () {
                             Get.toNamed(AppRoutes.changeEmail);
                           },
-                        child:Padding(
-                          padding: const EdgeInsets.only(top: 3),
-                          child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 15.h, vertical: 16.v),
-                              decoration: AppDecoration.fillOnPrimaryContainer,
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    CustomIconButton(
-                                        height: 44.adaptSize,
-                                        width: 44.adaptSize,
-                                        padding: EdgeInsets.all(10.h),
-                                        decoration:
-                                            IconButtonStyleHelper.fillOrange,
-                                        child: CustomImageView(
-                                          imagePath:ImageConstant.email,
-                                              
-                                        )),
-                                    Padding(
-                                        padding: EdgeInsets.only(
-                                            left: 15.h,
-                                            top: 13.v,
-                                            bottom: 10.v),
-                                        child: Text("Change Email",
-                                            style: theme.textTheme.titleMedium!
-                                                .copyWith(
-                                                    color: appTheme.gray900))),
-                                    const Spacer(),
-                                    CustomImageView(
-                                        imagePath:
-                                            ImageConstant.imgArrowRightGray900,
-                                        height: 24.adaptSize,
-                                        width: 24.adaptSize,
-                                        margin: EdgeInsets.symmetric(
-                                            vertical: 10.v))
-                                  ])),
-                        ),
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 3),
+                            child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 15.h, vertical: 16.v),
+                                decoration:
+                                    AppDecoration.fillOnPrimaryContainer,
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      CustomIconButton(
+                                          height: 44.adaptSize,
+                                          width: 44.adaptSize,
+                                          padding: EdgeInsets.all(10.h),
+                                          decoration:
+                                              IconButtonStyleHelper.fillOrange,
+                                          child: CustomImageView(
+                                            imagePath: ImageConstant.email,
+                                          )),
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 15.h,
+                                              top: 13.v,
+                                              bottom: 10.v),
+                                          child: Text("Change Email",
+                                              style: theme
+                                                  .textTheme.titleMedium!
+                                                  .copyWith(
+                                                      color:
+                                                          appTheme.gray900))),
+                                      const Spacer(),
+                                      CustomImageView(
+                                          imagePath: ImageConstant
+                                              .imgArrowRightGray900,
+                                          height: 24.adaptSize,
+                                          width: 24.adaptSize,
+                                          margin: EdgeInsets.symmetric(
+                                              vertical: 10.v))
+                                    ])),
+                          ),
                         ),
                         GestureDetector(
                           onTap: () {
                             Get.toNamed(AppRoutes.phoneNumber);
                           },
-                        child:Padding(
-                      
-                          padding: const EdgeInsets.only(top: 3),
-                          child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 15.h, vertical: 16.v),
-                              decoration: AppDecoration.fillOnPrimaryContainer
-                                  .copyWith(
-                                      borderRadius:
-                                          BorderRadiusStyle.customBorderL20),
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    CustomIconButton(
-                                        height: 44.adaptSize,
-                                        width: 44.adaptSize,
-                                        padding: EdgeInsets.all(10.h),
-                                        decoration:
-                                            IconButtonStyleHelper.fillGrayTL22,
-                                        child: CustomImageView(
-                                          imagePath: ImageConstant.phone,
-                                         
-                                        )),
-                                    Padding(
-                                        padding: EdgeInsets.only(
-                                            left: 15.h,
-                                            top: 13.v,
-                                            bottom: 10.v),
-                                        child: Text("Phone Number",
-                                            style: theme.textTheme.titleMedium!
-                                                .copyWith(
-                                                    color: appTheme.gray900))),
-                                    const Spacer(),
-                                    CustomImageView(
-                                        imagePath:
-                                            ImageConstant.imgArrowRightGray900,
-                                        height: 24.adaptSize,
-                                        width: 24.adaptSize,
-                                        margin: EdgeInsets.symmetric(
-                                            vertical: 10.v)),
-                                  ])),
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 3),
+                            child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 15.h, vertical: 16.v),
+                                decoration: AppDecoration.fillOnPrimaryContainer
+                                    .copyWith(
+                                        borderRadius:
+                                            BorderRadiusStyle.customBorderL20),
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      CustomIconButton(
+                                          height: 44.adaptSize,
+                                          width: 44.adaptSize,
+                                          padding: EdgeInsets.all(10.h),
+                                          decoration: IconButtonStyleHelper
+                                              .fillGrayTL22,
+                                          child: CustomImageView(
+                                            imagePath: ImageConstant.phone,
+                                          )),
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 15.h,
+                                              top: 13.v,
+                                              bottom: 10.v),
+                                          child: Text("Phone Number",
+                                              style: theme
+                                                  .textTheme.titleMedium!
+                                                  .copyWith(
+                                                      color:
+                                                          appTheme.gray900))),
+                                      const Spacer(),
+                                      CustomImageView(
+                                          imagePath: ImageConstant
+                                              .imgArrowRightGray900,
+                                          height: 24.adaptSize,
+                                          width: 24.adaptSize,
+                                          margin: EdgeInsets.symmetric(
+                                              vertical: 10.v)),
+                                    ])),
+                          ),
                         ),
-                      ),
                       ]))
                 ])));
   }
 
-
-
   onTapArrowLeft() {
     Get.back();
   }
- 
 }
-
