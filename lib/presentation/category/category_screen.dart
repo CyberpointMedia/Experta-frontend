@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:experta/routes/app_routes.dart';
 import 'package:experta/widgets/app_bar/custom_app_bar.dart';
 import 'package:experta/widgets/custom_bottom_bar.dart';
@@ -39,14 +41,28 @@ class CategoryScreen extends GetWidget<CategoryController> {
           child: Stack(
             alignment: Alignment.topCenter,
             children: [
-              Align(
-                alignment: Alignment.topRight,
-                child: Image.asset(
-                  "assets/images/img_accent.png",
-                  height: 252.v,
-                  width: 154.adaptSize,
+             Positioned(
+            left: 270,
+            top: 50,
+            child: ImageFiltered(
+              imageFilter: ImageFilter.blur(
+                sigmaX: 60,
+                sigmaY: 60,
+              ),
+              child: Align(
+                child: SizedBox(
+                  width: 252,
+                  height: 252,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(126),
+                      color: appTheme.deepOrangeA20.withOpacity(0.6),
+                    ),
+                  ),
                 ),
               ),
+            ),
+          ),
               Align(
                 alignment: Alignment.topCenter,
                 child: Padding(

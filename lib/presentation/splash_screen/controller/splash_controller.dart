@@ -1,5 +1,4 @@
 
-
 import '../../../core/app_export.dart';
 import '../models/splash_model.dart';
 
@@ -15,6 +14,10 @@ class SplashController extends GetxController {
     Future.delayed(const Duration(milliseconds: 3000), () {
       Get.offNamed(
         AppRoutes.onboardingScreen,
+        //AppRoutes.Bookappointment,
+        //AppRoutes.sucessfuly,
+        //AppRoutes.newpost,
+        //AppRoutes.newpost,
       );
       // Get.to(const Experiment());
     });

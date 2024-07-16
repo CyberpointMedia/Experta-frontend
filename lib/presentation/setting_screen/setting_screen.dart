@@ -123,43 +123,48 @@ class SettingScreen extends GetWidget<SettingController> {
                                             EdgeInsets.symmetric(vertical: 10.v))
                                   ])),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 3),
-                          child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 15.h, vertical: 16.v),
-                              decoration: AppDecoration.fillOnPrimaryContainer,
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    CustomIconButton(
-                                        height: 44.adaptSize,
-                                        width: 44.adaptSize,
-                                        padding: EdgeInsets.all(6.h),
-                                        decoration: IconButtonStyleHelper
-                                            .fillDeepPurple,
-                                        child: CustomImageView(
+                        GestureDetector(
+                          onTap: () {
+                            OnTapmybooking();
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 3),
+                            child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 15.h, vertical: 16.v),
+                                decoration: AppDecoration.fillOnPrimaryContainer,
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      CustomIconButton(
+                                          height: 44.adaptSize,
+                                          width: 44.adaptSize,
+                                          padding: EdgeInsets.all(6.h),
+                                          decoration: IconButtonStyleHelper
+                                              .fillDeepPurple,
+                                          child: CustomImageView(
+                                            imagePath:
+                                                "assets/images/Calendar.svg",
+                                          )),
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 15.h,
+                                              top: 13.v,
+                                              bottom: 10.v),
+                                          child: Text("lbl_my_booking".tr,
+                                              style: theme.textTheme.titleMedium!
+                                                  .copyWith(
+                                                      color: appTheme.gray900))),
+                                      const Spacer(),
+                                      CustomImageView(
                                           imagePath:
-                                              "assets/images/Calendar.svg",
-                                        )),
-                                    Padding(
-                                        padding: EdgeInsets.only(
-                                            left: 15.h,
-                                            top: 13.v,
-                                            bottom: 10.v),
-                                        child: Text("lbl_my_booking".tr,
-                                            style: theme.textTheme.titleMedium!
-                                                .copyWith(
-                                                    color: appTheme.gray900))),
-                                    const Spacer(),
-                                    CustomImageView(
-                                        imagePath:
-                                            ImageConstant.imgArrowRightGray900,
-                                        height: 24.adaptSize,
-                                        width: 24.adaptSize,
-                                        margin: EdgeInsets.symmetric(
-                                            vertical: 10.v))
-                                  ])),
+                                              ImageConstant.imgArrowRightGray900,
+                                          height: 24.adaptSize,
+                                          width: 24.adaptSize,
+                                          margin: EdgeInsets.symmetric(
+                                              vertical: 10.v))
+                                    ])),
+                          ),
                         ),
                         GestureDetector(
                           onTap: () {
@@ -600,10 +605,8 @@ class SettingScreen extends GetWidget<SettingController> {
   }
 
   /// Navigates to the settingsMyBookingUpcomingScreen when the action is triggered.
-  onTapCalendar() {
-    // Get.toNamed(
-    //   AppRoutes.settingsMyBookingUpcomingScreen,
-    // );
+  OnTapmybooking() {
+     Get.toNamed(AppRoutes.mybook);
   }
 
   /// Navigates to the settingsVerifyAccountDefaultScreen when the action is triggered.

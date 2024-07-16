@@ -7,6 +7,8 @@ import 'package:experta/data/models/request/verify_otp_request_model.dart';
 import 'package:experta/data/models/response/login_response_model.dart';
 import 'package:experta/data/models/response/resend_otp_response_model.dart';
 import 'package:experta/data/models/response/verify_otp_response_model.dart';
+import 'package:experta/presentation/followers/models/followers_model.dart';
+import 'package:experta/presentation/following/following.dart';
 import 'package:experta/presentation/professional_info/model/professional_model.dart';
 import 'package:http/http.dart' as http;
 
@@ -94,6 +96,38 @@ class ApiService {
     return _processResponse<List<Education>>(response);
   }
 
+  // Future<List<Follower>> fetchFollowers() async {
+  //   final response = await http.get(Uri.parse('$_baseUrl/followers'));
+
+  //   if (response.statusCode == 200) {
+  //     List<dynamic> body = jsonDecode(response.body);
+  //     List<Follower> followers = body.map((dynamic item) => Follower.fromJson(item)).toList().cast<Follower>();
+  //     return followers;
+  //   } else {
+  //     throw Exception('Failed to load followers');
+  //   }
+  // }
+
+   Future<Map<String, dynamic>> getFollowersAndFollowing(String userId) async {
+  final response = await http.get(Uri.parse('$_baseUrl/profile/$userId/followersandfollowing'));
+
+  if (response.statusCode == 200) {
+    var data = json.decode(response.body);
+    List<FollowersAndFollowing> followers = (data['data']['followers'] as List)
+        .map((follower) => FollowersAndFollowing.fromJson(follower))
+        .toList();
+    List<FollowersAndFollowing> following = (data['data']['following'] as List)
+        .map((following) => FollowersAndFollowing.fromJson(following))
+        .toList();
+    return {
+      'followers': followers,
+      'following': following,
+    };
+  } else {
+    throw Exception('Failed to load data');
+  }
+}
+
   T _processResponse<T>(http.Response response) {
     switch (response.statusCode) {
       case 200:
@@ -107,17 +141,14 @@ class ApiService {
         } else if (T == ResendOtpResponseModel) {
           return ResendOtpResponseModel.fromJson(jsonResponse) as T;
         } else if (T == List<WorkExperience>) {
-          // Assuming the response is a list of work experiences
           return (jsonResponse['data'] as List)
               .map((item) => WorkExperience.fromJson(item))
               .toList() as T;
         } else if (T == List<Expertise>) {
-          // Assuming the response is a list of expertise
           return (jsonResponse['data']['expertise'] as List)
               .map((item) => Expertise.fromJson(item))
               .toList() as T;
         } else if (T == List<Education>) {
-          // Assuming the response is a list of education
           return (jsonResponse['data'] as List)
               .map((item) => Education.fromJson(item))
               .toList() as T;
