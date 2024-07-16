@@ -296,6 +296,13 @@ class AppRoutes {
       ],
     ),
     GetPage(
+      name: accountSetting,
+      page: () => const AccountSettings(),
+      bindings: [
+        AccountSettingBinding(),
+      ],
+    ),
+    GetPage(
       name: verifynumberScreen,
       page: () => const VerifynumberScreen(),
       bindings: [
@@ -330,9 +337,51 @@ class AppRoutes {
         WalletBinding(),
       ],
     ),
+    // GetPage(
+    //   name: changeUserName,
+    //   page: () => const ChangeUserName(),
+    //   bindings: [
+    //     ChangeUserNameBinding(),
+    //   ],
+    // ),
+    GetPage(
+      name: changeEmail,
+      page: () => const ChangeEmail(),
+      bindings: [
+        ChangeEmailBinding(),
+      ],
+    ),
+    GetPage(
+      name: phoneNumber,
+      page: () => const PhoneNumber(),
+      bindings: [
+        PhoneNumberBinding(),
+      ],
+    ),
+    GetPage(
+      name: payment,
+      page: () => const Payment(),
+      bindings: [
+        PaymentBinding(),
+      ],
+    ),
+    GetPage(
+      name: changeDateOfBirth,
+      page: () => const ChangeDateOfBirth(),
+      bindings: [
+        ChangeDateOfBirthBinding(),
+      ],
+    ),
+    GetPage(
+      name: wallet,
+      page: () => const Wallet(),
+      bindings: [
+        WalletBinding(),
+      ],
+    ),
     GetPage(
       name: changeUserName,
-      page: () => const ChangeUserName(),
+      page: () => const ChangeUsername(),
       bindings: [
         ChangeUserNameBinding(),
       ],
@@ -512,13 +561,13 @@ class AppRoutes {
         WalletBinding(),
       ],
     ),
-    GetPage(
-      name: changeUserName,
-      page: () => const ChangeUserName(),
-      bindings: [
-        ChangeUserNameBinding(),
-      ],
-    ),
+    // GetPage(
+    //   name: changeUserName,
+    //   page: () => const ChangeUserName(),
+    //   bindings: [
+    //     ChangeUserNameBinding(),
+    //   ],
+    // ),
     GetPage(
       name: changeEmail,
       page: () => const ChangeEmail(),
