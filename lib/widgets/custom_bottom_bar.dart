@@ -1,3 +1,5 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:experta/core/app_export.dart';
 
 class CustomBottomBar extends StatelessWidget {
@@ -48,13 +50,11 @@ class CustomBottomBar extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        // const SizedBox(
-        //   width: double.maxFinite,
-        //   child: Divider(),
-        // ),
-
+        const SizedBox(
+          width: double.maxFinite,
+          child: Divider(),
+        ),
         Container(
-          height: Get.height * 0.097,
           decoration: const BoxDecoration(),
           child: BottomNavigationBar(
             backgroundColor: Colors.white,
@@ -68,7 +68,7 @@ class CustomBottomBar extends StatelessWidget {
               return BottomNavigationBarItem(
                 icon: Container(
                   width: double.infinity,
-                  decoration: AppDecoration.fillOnPrimaryCantainer,
+                  decoration: AppDecoration.fillOnPrimaryContainer,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -94,7 +94,7 @@ class CustomBottomBar extends StatelessWidget {
                 ),
                 activeIcon: Container(
                   width: double.infinity,
-                  decoration: AppDecoration.fillOnPrimaryCantainer,
+                  decoration: AppDecoration.fillOnPrimaryContainer,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -126,15 +126,10 @@ class CustomBottomBar extends StatelessWidget {
 }
 
 enum BottomBarEnum {
-  // ignore: constant_identifier_names
   Home,
-  // ignore: constant_identifier_names
   Search,
-  // ignore: constant_identifier_names
   Message,
-  // ignore: constant_identifier_names
   Feeds,
-  // ignore: constant_identifier_names
   Profile,
 }
 

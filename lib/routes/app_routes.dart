@@ -376,7 +376,7 @@ static const String location1 ="/location";
     GetPage(name: feeds, page: () => const FeedsActiveScreen(), bindings: [
       FeedsActiveBinding(),
     ]),
-    GetPage(name: dashboard, page: () => const DashboardPage(), bindings: [
+    GetPage(name: dashboard, page: () => DashboardPage(), bindings: [
       DashboardBinding(),
     ]),
     GetPage(
