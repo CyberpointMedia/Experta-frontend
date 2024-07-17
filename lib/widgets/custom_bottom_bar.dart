@@ -126,10 +126,15 @@ class CustomBottomBar extends StatelessWidget {
 }
 
 enum BottomBarEnum {
+  // ignore: constant_identifier_names
   Home,
+  // ignore: constant_identifier_names
   Search,
+  // ignore: constant_identifier_names
   Message,
+  // ignore: constant_identifier_names
   Feeds,
+  // ignore: constant_identifier_names
   Profile,
 }
 

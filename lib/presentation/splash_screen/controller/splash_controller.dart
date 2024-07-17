@@ -13,11 +13,12 @@ class SplashController extends GetxController {
   void onReady() {
     Future.delayed(const Duration(milliseconds: 3000), () {
       Get.offNamed(
-        AppRoutes.onboardingScreen,
+        //AppRoutes.onboardingScreen,
         //AppRoutes.Bookappointment,
         //AppRoutes.sucessfuly,
         //AppRoutes.newpost,
         //AppRoutes.newpost,
+        AppRoutes.location1,
       );
       // Get.to(const Experiment());
     });
