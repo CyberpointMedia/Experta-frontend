@@ -442,6 +442,7 @@ static const String location1 ="/location";
       bindings: [
        NewPostBinding(),
       ],
-    )
+    ),
+   
   ];
 }
