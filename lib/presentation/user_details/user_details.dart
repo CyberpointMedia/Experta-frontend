@@ -2,7 +2,8 @@ import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
 import 'package:experta/core/utils/web_view/web_view.dart';
-import 'package:experta/presentation/userProfile/controller/profile_controller.dart';
+import 'package:experta/presentation/Home/model/home_model.dart';
+import 'package:experta/presentation/user_details/controller/details_controller.dart';
 import 'package:experta/widgets/custom_elevated_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
@@ -10,24 +11,184 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:readmore/readmore.dart';
-import 'package:shimmer/shimmer.dart';
 
-class UserProfilePage extends StatefulWidget {
-  const UserProfilePage({super.key});
+class UserDetailsPage extends StatefulWidget {
+  const UserDetailsPage({super.key});
 
   @override
-  State<UserProfilePage> createState() => _UserProfilePageState();
+  State<UserDetailsPage> createState() => _UserDetailsPageState();
 }
 
-class _UserProfilePageState extends State<UserProfilePage>
+class _UserDetailsPageState extends State<UserDetailsPage>
     with SingleTickerProviderStateMixin {
-  ProfileController controller = Get.put(ProfileController());
+  final User id = Get.arguments['user'];
+  DetailsController controller = Get.put(DetailsController());
+
   late TabController _tabController;
 
   @override
   void initState() {
+    controller.fetchUserData(id.id);
     _tabController = TabController(length: 2, vsync: this);
     super.initState();
+  }
+
+  void _showBottomSheet(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor:
+          Colors.transparent, // Set the background color to transparent
+      builder: (context) {
+        return Container(
+          padding: const EdgeInsets.only(top: 20, bottom: 20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20),
+                child: Container(
+                  decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(16))),
+                  child: Column(
+                    children: [
+                      ListTile(
+                        title: const Center(
+                          child: Text(
+                            'Report this user',
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        ),
+                        onTap: () {
+                          // Handle report action
+                          Navigator.pop(context);
+                        },
+                      ),
+                      const Divider(),
+                      ListTile(
+                        title: const Center(
+                          child: Text(
+                            'Block this user',
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 16.0,
+                            ),
+                          ),
+                        ),
+                        onTap: () {
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 10.0),
+              Padding(
+                padding: const EdgeInsets.only(left: 20, right: 20),
+                child: Container(
+                  decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.all(Radius.circular(16))),
+                  child: ListTile(
+                    title: const Center(
+                      child: Text(
+                        'Cancel',
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16.0,
+                        ),
+                      ),
+                    ),
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                ),
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
+
+  void _showBottomSheet2(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.only(left: 20, right: 20),
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: Colors.green.shade100,
+                    child: const Icon(Icons.call, color: Colors.green),
+                  ),
+                  title: const Text('Audio Call'),
+                  subtitle: const Text('Chat me up, share photos.'),
+                  trailing: const Text(
+                    '1800/min',
+                    style: TextStyle(
+                      color: Colors.amber,
+                    ),
+                  ),
+                  onTap: () {
+                    // Handle audio call action
+                    Navigator.pop(context);
+                  },
+                ),
+                const Divider(),
+                ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: Colors.red.shade100,
+                    child: const Icon(Icons.videocam, color: Colors.red),
+                  ),
+                  title: const Text('Video Call'),
+                  subtitle: const Text('Call your doctor directly.'),
+                  trailing: const Text(
+                    '2800/min',
+                    style: TextStyle(
+                      color: Colors.amber,
+                    ),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                const Divider(),
+                ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: Colors.yellow.shade100,
+                    child:
+                        const Icon(Icons.calendar_today, color: Colors.yellow),
+                  ),
+                  title: const Text('Schedule Call'),
+                  subtitle: const Text('Chat me up, share photos.'),
+                  trailing: const Text(
+                    '1800/min',
+                    style: TextStyle(
+                      color: Colors.amber,
+                    ),
+                  ),
+                  onTap: () {
+                    // Handle schedule call action
+                    Navigator.pop(context);
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -65,8 +226,8 @@ class _UserProfilePageState extends State<UserProfilePage>
                   return [
                     SliverAppBar(
                       pinned: true,
-                      automaticallyImplyLeading: false,
-                      expandedHeight: 450.0,
+                      automaticallyImplyLeading: true,
+                      expandedHeight: 350.0,
                       backgroundColor: Colors.transparent,
                       primary: true,
                       title: Obx(() {
@@ -81,13 +242,31 @@ class _UserProfilePageState extends State<UserProfilePage>
                         );
                       }),
                       actions: [
-                        CustomImageView(
-                          margin: const EdgeInsets.all(8),
-                          imagePath: "assets/images/settings.svg",
-                          onTap: () {
-                            Get.toNamed(AppRoutes.settingScreen);
+                        Padding(
+                          padding: const EdgeInsets.only(right: 0),
+                          child: CustomElevatedButton(
+                            buttonStyle: CustomButtonStyles.fillOnError2,
+                            buttonTextStyle: CustomTextStyles.bodySmallffffffff,
+                            height: 36,
+                            width: 70,
+                            text: controller.userData.value.data?.isFollowing ==
+                                    false
+                                ? "Follow"
+                                : "unfollow",
+                            onPressed: () {
+                              controller.userData.value.data?.isFollowing ==
+                                      false
+                                  ? controller.followUser(id.id)
+                                  : null;
+                            },
+                          ),
+                        ),
+                        IconButton(
+                          icon: const Icon(Icons.more_vert),
+                          onPressed: () {
+                            _showBottomSheet(context);
                           },
-                        )
+                        ),
                       ],
                       flexibleSpace: FlexibleSpaceBar(
                         background: Column(
@@ -131,7 +310,37 @@ class _UserProfilePageState extends State<UserProfilePage>
                   ],
                 ),
               );
-            })
+            }),
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                color: appTheme.whiteA700,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      bottom: 15, right: 10, left: 10, top: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CustomElevatedButton(
+                        width: MediaQuery.of(context).size.width * 0.75,
+                        text: "Make a call",
+                        onPressed: () {
+                          _showBottomSheet2(context);
+                        },
+                      ),
+                      const SizedBox(
+                        width: 10,
+                      ),
+                      CustomImageView(
+                        height: 50,
+                        width: 50,
+                        imagePath: ImageConstant.msg,
+                      )
+                    ],
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       ),
@@ -181,6 +390,9 @@ class _UserProfilePageState extends State<UserProfilePage>
                 ),
               ),
             ),
+          ),
+          const SizedBox(
+            height: 100,
           )
         ],
       ),
@@ -201,39 +413,28 @@ class _UserProfilePageState extends State<UserProfilePage>
           ),
         );
       } else {
-        return GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3,
-            crossAxisSpacing: 4.0,
-            mainAxisSpacing: 4.0,
-          ),
-          itemCount: posts.length,
-          itemBuilder: (context, index) {
-            return GestureDetector(
-              onLongPress: () {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return Dialog(
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: CustomImageView(
-                          imagePath: posts[index].image ?? '',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    );
-                  },
-                );
-              },
-              child: CustomImageView(
-                imagePath: posts[index].image ?? '',
-                fit: BoxFit.cover,
+        return Column(
+          children: [
+            Expanded(
+              child: GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 3,
+                  crossAxisSpacing: 4.0,
+                  mainAxisSpacing: 4.0,
+                ),
+                itemCount: posts.length,
+                itemBuilder: (context, index) {
+                  return CustomImageView(
+                    imagePath: posts[index].image ?? '',
+                    fit: BoxFit.cover,
+                  );
+                },
               ),
-            );
-          },
+            ),
+            const SizedBox(
+              height: 100,
+            )
+          ],
         );
       }
     });
@@ -319,15 +520,12 @@ class _UserProfilePageState extends State<UserProfilePage>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: controller.userData.value.data?.workExperience
                     ?.map((experience) {
-                  // Format the dates
                   String formattedStartDate = experience.startDate != null
                       ? DateFormat('MMM yyyy').format(experience.startDate!)
                       : '';
                   String formattedEndDate = experience.endDate != null
                       ? DateFormat('MMM yyyy').format(experience.endDate!)
                       : 'Present';
-
-                  // Calculate the total duration
                   String totalDuration = '';
                   if (experience.startDate != null &&
                       experience.endDate != null) {
@@ -575,134 +773,132 @@ class _UserProfilePageState extends State<UserProfilePage>
     );
   }
 
-  Widget _buildColumnreviews() {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              "Reviews",
-              style:
-                  theme.textTheme.headlineLarge?.copyWith(fontSize: 16.fSize),
+Widget _buildColumnreviews() {
+  return Column(
+    children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "Reviews",
+            style: theme.textTheme.headlineLarge?.copyWith(fontSize: 16.fSize),
+          ),
+          GestureDetector(
+            onTap: () {
+              // Navigate to the Reviews page
+              // Get.to(() => ReviewsPage()); // Assuming you are using GetX for navigation
+            },
+            child: Text(
+              "See all",
+              style: theme.textTheme.titleMedium
+                  ?.copyWith(color: appTheme.deepOrangeA200),
             ),
-            GestureDetector(
-              onTap: () {
-                // Navigate to the Reviews page
-                // Get.to(() => ReviewsPage()); // Assuming you are using GetX for navigation
-              },
-              child: Text(
-                "See all",
-                style: theme.textTheme.titleMedium
-                    ?.copyWith(color: appTheme.deepOrangeA200),
-              ),
-            ),
-          ],
-        ),
-        SizedBox(
-          height: 19.v,
-        ),
-        Obx(() {
-          var reviews = controller.userData.value.data?.basicInfo?.reviews;
-          if (reviews == null || reviews.isEmpty) {
-            return Text(
-              "No reviews yet",
-              style:
-                  theme.textTheme.bodyMedium?.copyWith(color: appTheme.gray900),
-            );
-          } else {
-            // Limit the number of reviews to 5
-            var limitedReviews = reviews.take(5).toList();
-            return Column(
-              children: limitedReviews.map((review) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    color: appTheme.gray100,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            CustomImageView(
-                              imagePath: review.profilePic,
-                              height: 50,
-                              width: 50,
-                              radius: BorderRadius.circular(50),
-                            ),
-                            const SizedBox(width: 10),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  review.reviewer.toString(),
-                                  style: theme.textTheme.headlineLarge
-                                      ?.copyWith(fontSize: 14.fSize),
-                                ),
-                                SizedBox(height: 1.v),
-                                Text(
-                                  review.formattedDate.toString(),
-                                  style: theme.textTheme.titleSmall!,
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                        SizedBox(height: 9.v),
-                        Row(
-                          children: [
-                            RatingBar.builder(
-                              initialRating: review.rating!.toDouble(),
-                              minRating: 0,
-                              direction: Axis.horizontal,
-                              allowHalfRating: false,
-                              itemSize: 22,
-                              itemCount: 5,
-                              updateOnDrag: true,
-                              onRatingUpdate: (rating) {},
-                              itemBuilder: (context, _) {
-                                return const Icon(
-                                  Icons.star,
-                                );
-                              },
-                            ),
-                            const SizedBox(
-                                width: 6), // Added SizedBox for spacing
-                            Text(
-                              review.rating.toString(),
-                              style: theme.textTheme.headlineLarge
-                                  ?.copyWith(fontSize: 16.fSize),
-                            )
-                          ],
-                        ),
-                        SizedBox(height: 8.v),
-                        Container(
-                          width: 304.adaptSize,
-                          margin: const EdgeInsets.only(right: 31),
-                          child: Text(
-                            review.review.toString(),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: theme.textTheme.bodyMedium
-                                ?.copyWith(color: appTheme.gray900),
+          ),
+        ],
+      ),
+      SizedBox(
+        height: 19.v,
+      ),
+      Obx(() {
+        var reviews = controller.userData.value.data?.basicInfo?.reviews;
+        if (reviews == null || reviews.isEmpty) {
+          return Text(
+            "No reviews yet",
+            style: theme.textTheme.bodyMedium?.copyWith(color: appTheme.gray900),
+          );
+        } else {
+          // Limit the number of reviews to 5
+          var limitedReviews = reviews.take(5).toList();
+          return Column(
+            children: limitedReviews.map((review) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  color: appTheme.gray100,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          CustomImageView(
+                            imagePath: review.profilePic,
+                            height: 50,
+                            width: 50,
+                            radius: BorderRadius.circular(50),
                           ),
+                          const SizedBox(width: 10),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                review.reviewer.toString(),
+                                style: theme.textTheme.headlineLarge
+                                    ?.copyWith(fontSize: 14.fSize),
+                              ),
+                              SizedBox(height: 1.v),
+                              Text(
+                                review.formattedDate.toString(),
+                                style: theme.textTheme.titleSmall!,
+                              )
+                            ],
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 9.v),
+                      Row(
+                        children: [
+                          RatingBar.builder(
+                            initialRating: review.rating!.toDouble(),
+                            minRating: 0,
+                            direction: Axis.horizontal,
+                            allowHalfRating: false,
+                            itemSize: 22,
+                            itemCount: 5,
+                            updateOnDrag: true,
+                            onRatingUpdate: (rating) {},
+                            itemBuilder: (context, _) {
+                              return const Icon(
+                                Icons.star,
+                              );
+                            },
+                          ),
+                          const SizedBox(
+                              width: 6), // Added SizedBox for spacing
+                          Text(
+                            review.rating.toString(),
+                            style: theme.textTheme.headlineLarge
+                                ?.copyWith(fontSize: 16.fSize),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 8.v),
+                      Container(
+                        width: 304.adaptSize,
+                        margin: const EdgeInsets.only(right: 31),
+                        child: Text(
+                          review.review.toString(),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.bodyMedium
+                              ?.copyWith(color: appTheme.gray900),
                         ),
-                        SizedBox(height: 8.v), // Added SizedBox for spacing
-                      ],
-                    ),
+                      ),
+                      SizedBox(height: 8.v), // Added SizedBox for spacing
+                    ],
                   ),
-                );
-              }).toList(),
-            );
-          }
-        }),
-        SizedBox(
-          height: 19.v,
-        )
-      ],
-    );
-  }
+                ),
+              );
+            }).toList(),
+          );
+        }
+      }),
+      SizedBox(
+        height: 19.v,
+      )
+    ],
+  );
+}
 
   Widget _buildRowaboutme({required String aboutMeText}) {
     return Row(
@@ -804,20 +1000,6 @@ class _UserProfilePageState extends State<UserProfilePage>
               )
             ],
           ),
-          SizedBox(
-            height: 16.v,
-          ),
-          CustomElevatedButton(
-            leftIcon: const Icon(
-              Icons.add,
-              color: Colors.black,
-              size: 15,
-            ),
-            text: "Create Post",
-            onPressed: () {
-              Get.toNamed(AppRoutes.newPost);
-            },
-          )
         ],
       ),
     );

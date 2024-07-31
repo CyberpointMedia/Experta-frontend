@@ -9,6 +9,8 @@
 import 'package:connectivity_plus/src/connectivity_plus_web.dart';
 import 'package:file_picker/_internal/file_picker_web.dart';
 import 'package:flutter_image_compress_web/flutter_image_compress_web.dart';
+import 'package:fluttertoast/fluttertoast_web.dart';
+import 'package:geolocator_web/geolocator_web.dart';
 import 'package:image_cropper_for_web/image_cropper_for_web.dart';
 import 'package:image_picker_for_web/image_picker_for_web.dart';
 import 'package:permission_handler_html/permission_handler_html.dart';
@@ -21,6 +23,8 @@ void registerPlugins([final Registrar? pluginRegistrar]) {
   ConnectivityPlusWebPlugin.registerWith(registrar);
   FilePickerWeb.registerWith(registrar);
   FlutterImageCompressWeb.registerWith(registrar);
+  FluttertoastWebPlugin.registerWith(registrar);
+  GeolocatorPlugin.registerWith(registrar);
   ImageCropperPlugin.registerWith(registrar);
   ImagePickerPlugin.registerWith(registrar);
   WebPermissionHandler.registerWith(registrar);

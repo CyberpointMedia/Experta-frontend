@@ -462,16 +462,50 @@ class ApiService {
     }
   }
 
-  Future<Map<String, dynamic>> getUserData(String userId) async {
-    final response = await http.get(Uri.parse('$_baseUrl/getUserData/$userId'));
+  Future<Map<String, dynamic>> getUserData(
+      String userId, String ownUserId) async {
+    final body = {
+      'userId': userId,
+      'ownUserId': ownUserId,
+    };
+
+    final response = await http.post(
+      Uri.parse('$_baseUrl/getUserData'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: json.encode(body),
+    );
 
     if (response.statusCode == 200) {
       var jsonData = json.decode(response.body);
-      Logger.log(jsonData);
       print("profile response : $jsonData");
       return jsonData;
     } else {
       throw Exception('Failed to load user data');
+    }
+  }
+
+  Future<bool> followUser(String followedByUserId) async {
+    final url = Uri.parse('$_baseUrl/profile/follow');
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+    final body = jsonEncode({"followedByUserId": followedByUserId});
+
+    try {
+      final response = await http.post(url, headers: headers, body: body);
+
+      if (response.statusCode == 200) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      print('Error: $e');
+      return false;
     }
   }
 

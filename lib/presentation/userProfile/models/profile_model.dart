@@ -44,11 +44,14 @@ class Data {
   final List<UserEducation>? education;
   final List<UserWorkExperience>? workExperience;
   final UserLanguage? language;
-  final UserInterest?
-      interest; // Changed from List<UserInterest> to UserInterest
+  final UserInterest? interest;
   final List<String>? availability;
   final bool? online;
   final String? id;
+  final int? noOfBooking;
+  final List<String>? blockedUsers;
+  final bool? isFollowing;
+  final bool? isBlocked;
 
   Data({
     this.email,
@@ -67,10 +70,14 @@ class Data {
     this.education,
     this.workExperience,
     this.language,
-    this.interest, // Changed from List<UserInterest> to UserInterest
+    this.interest,
     this.availability,
     this.online,
     this.id,
+    this.noOfBooking,
+    this.blockedUsers,
+    this.isFollowing,
+    this.isBlocked,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
@@ -112,12 +119,18 @@ class Data {
             : null,
         interest: json["intereset"] != null
             ? UserInterest.fromJson(json["intereset"])
-            : null, // Changed from List<UserInterest> to UserInterest
+            : null,
         availability: json["availability"] != null
             ? List<String>.from(json["availability"].map((x) => x))
             : null,
         online: json["online"],
         id: json["_id"],
+        noOfBooking: json['noOfBooking'],
+        blockedUsers: json['blockedUsers'] != null
+            ? List<String>.from(json['blockedUsers'])
+            : null,
+        isFollowing: json['isFollowing'],
+        isBlocked: json['isBlocked'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -141,13 +154,17 @@ class Data {
             ? List<dynamic>.from(workExperience!.map((x) => x.toJson()))
             : null,
         "language": language?.toJson(),
-        "interest": interest
-            ?.toJson(), // Changed from List<UserInterest> to UserInterest
+        "intereset": interest?.toJson(),
         "availability": availability != null
             ? List<dynamic>.from(availability!.map((x) => x))
             : null,
         "online": online,
         "_id": id,
+        'noOfBooking': noOfBooking,
+        'blockedUsers':
+            blockedUsers != null ? List<dynamic>.from(blockedUsers!) : null,
+        'isFollowing': isFollowing,
+        'isBlocked': isBlocked,
       };
 }
 
@@ -168,7 +185,7 @@ class UserBasicInfo {
   final String? instagram;
   final String? linkedin;
   final String? twitter;
-  final List<dynamic>? reviews;
+  final List<Review>? reviews;
   final String? profilePic;
 
   UserBasicInfo({
@@ -219,8 +236,8 @@ class UserBasicInfo {
         instagram: json["instagram"],
         linkedin: json["linkedin"],
         twitter: json["twitter"],
-        reviews: json["reviews"] != null
-            ? List<dynamic>.from(json["reviews"].map((x) => x))
+        reviews: json['reviews'] != null
+            ? List<Review>.from(json['reviews'].map((x) => Review.fromJson(x)))
             : null,
         profilePic: json["profilePic"],
       );
@@ -248,8 +265,9 @@ class UserBasicInfo {
         "instagram": instagram,
         "linkedin": linkedin,
         "twitter": twitter,
-        "reviews":
-            reviews != null ? List<dynamic>.from(reviews!.map((x) => x)) : null,
+        'reviews': reviews != null
+            ? List<dynamic>.from(reviews!.map((x) => x.toJson()))
+            : null,
         "profilePic": profilePic,
       };
 
@@ -269,24 +287,28 @@ class UserBasicInfo {
       socialMediaLinks.add({
         'icon': FontAwesomeIcons.facebook,
         'link': facebook!,
+        'name': "facebook"
       });
     }
     if (instagram != null && instagram!.isNotEmpty) {
       socialMediaLinks.add({
         'icon': FontAwesomeIcons.instagram,
         'link': instagram!,
+        'name': "instagram",
       });
     }
     if (linkedin != null && linkedin!.isNotEmpty) {
       socialMediaLinks.add({
         'icon': FontAwesomeIcons.linkedin,
         'link': linkedin!,
+        'name': "linkedin"
       });
     }
     if (twitter != null && twitter!.isNotEmpty) {
       socialMediaLinks.add({
         'icon': FontAwesomeIcons.twitter,
         'link': twitter!,
+        'name': "twitter",
       });
     }
 
@@ -496,9 +518,8 @@ class UserInterest {
   final String? id;
   final int? v;
   final DateTime? createdAt;
-  final List<UserInterest>? interest;
+  final List<Interest>? interest;
   final DateTime? updatedAt;
-  final String? name;
 
   UserInterest({
     this.id,
@@ -506,7 +527,6 @@ class UserInterest {
     this.createdAt,
     this.interest,
     this.updatedAt,
-    this.name,
   });
 
   factory UserInterest.fromJson(Map<String, dynamic> json) => UserInterest(
@@ -516,24 +536,58 @@ class UserInterest {
             ? DateTime.parse(json["createdAt"])
             : null,
         interest: json["intereset"] != null
-            ? List<UserInterest>.from(
-                json["intereset"].map((x) => UserInterest.fromJson(x)))
+            ? List<Interest>.from(
+                json["intereset"].map((x) => Interest.fromJson(x)))
             : null,
         updatedAt: json["updatedAt"] != null
             ? DateTime.parse(json["updatedAt"])
             : null,
-        name: json["name"],
       );
 
   Map<String, dynamic> toJson() => {
         "_id": id,
         "__v": v,
         "createdAt": createdAt?.toIso8601String(),
-        "interest": interest != null
+        "intereset": interest != null
             ? List<dynamic>.from(interest!.map((x) => x.toJson()))
             : null,
         "updatedAt": updatedAt?.toIso8601String(),
+      };
+}
+
+class Interest {
+  final String? id;
+  final String? name;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final int? v;
+
+  Interest({
+    this.id,
+    this.name,
+    this.createdAt,
+    this.updatedAt,
+    this.v,
+  });
+
+  factory Interest.fromJson(Map<String, dynamic> json) => Interest(
+        id: json["_id"],
+        name: json["name"],
+        createdAt: json["createdAt"] != null
+            ? DateTime.parse(json["createdAt"])
+            : null,
+        updatedAt: json["updatedAt"] != null
+            ? DateTime.parse(json["updatedAt"])
+            : null,
+        v: json["__v"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "_id": id,
         "name": name,
+        "createdAt": createdAt?.toIso8601String(),
+        "updatedAt": updatedAt?.toIso8601String(),
+        "__v": v,
       };
 }
 
@@ -768,6 +822,58 @@ class UserWorkExperience {
         "endDate": endDate?.toIso8601String(),
         "createdAt": createdAt?.toIso8601String(),
         "updatedAt": updatedAt?.toIso8601String(),
+        "__v": v,
+      };
+}
+
+class Review {
+  final String? id;
+  final String? review;
+  final String? reviewer;
+  final String? profilePic;
+  final int? rating;
+  final DateTime? createdAt;
+  final DateTime? updatedAt;
+  final String? formattedDate;
+  final int? v;
+
+  Review({
+    this.id,
+    this.review,
+    this.reviewer,
+    this.profilePic,
+    this.rating,
+    this.createdAt,
+    this.updatedAt,
+    this.formattedDate,
+    this.v,
+  });
+
+  factory Review.fromJson(Map<String, dynamic> json) => Review(
+        id: json["_id"],
+        review: json["review"],
+        reviewer: json["reviewerName"],
+        profilePic: json["profilePic"],
+        rating: json["rating"],
+        createdAt: json["createdAt"] != null
+            ? DateTime.parse(json["createdAt"])
+            : null,
+        updatedAt: json["updatedAt"] != null
+            ? DateTime.parse(json["updatedAt"])
+            : null,
+        formattedDate: json['formattedDate'],
+        v: json["__v"],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "_id": id,
+        "review": review,
+        "reviewerName": reviewer,
+        "profilePic": profilePic,
+        "rating": rating,
+        "createdAt": createdAt?.toIso8601String(),
+        "updatedAt": updatedAt?.toIso8601String(),
+        "formattedDate": formattedDate,
         "__v": v,
       };
 }

@@ -1,5 +1,5 @@
 import 'package:experta/presentation/feeds_active_screen/feeds_active_screen.dart';
-import 'package:experta/presentation/home_screen.dart';
+import 'package:experta/presentation/Home/home_screen.dart';
 import 'package:experta/presentation/message_screen/message_screen.dart';
 import 'package:experta/presentation/search_screen/search_screen.dart';
 import 'package:experta/presentation/userProfile/user_profile_page.dart';
@@ -25,7 +25,7 @@ class _DashboardPageState extends State<DashboardPage> {
         onPageChanged: (index) {
           setState(() {});
         },
-        children: const [
+        children: [
           HomeScreen(),
           SearchScreen(),
           MessageScreen(),

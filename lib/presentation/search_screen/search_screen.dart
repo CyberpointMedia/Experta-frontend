@@ -1,7 +1,7 @@
 import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
-import 'package:experta/presentation/home_screen.dart';
+import 'package:experta/presentation/Home/home_screen.dart';
 import 'package:experta/widgets/app_bar/appbar_subtitle_four.dart';
 import 'package:experta/widgets/app_bar/appbar_title_searchview.dart';
 import 'package:experta/widgets/app_bar/custom_app_bar.dart';

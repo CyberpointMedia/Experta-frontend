@@ -16,7 +16,6 @@ class SplashController extends GetxController {
       Get.offNamed(
         AppRoutes.onboardingScreen,
       );
-      // Get.to(const Experiment());
     });
   }
 }
