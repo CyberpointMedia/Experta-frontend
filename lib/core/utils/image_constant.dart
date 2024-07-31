@@ -490,5 +490,9 @@ class ImageConstant {
   static String multiSelect = "$imagePath/settings/multiselect.svg";
 
   // camera.svg
-}
 
+  // dashboard
+
+  static String dashboard = "$imagePath/img_group_9.svg";
+  static String msg = "$imagePath/settings/msg.svg";
+}

@@ -42,8 +42,8 @@ import 'package:experta/presentation/feeds_active_screen/feeds_active_screen.dar
 import 'package:experta/presentation/followers/binding/followers_binding.dart';
 import 'package:experta/presentation/followers/followers.dart';
 import 'package:experta/presentation/following/following.dart';
-import 'package:experta/presentation/home_controller.dart';
-import 'package:experta/presentation/home_screen.dart';
+import 'package:experta/presentation/Home/controller/home_controller.dart';
+import 'package:experta/presentation/Home/home_screen.dart';
 import 'package:experta/presentation/message_chat_with_user_default_screen/binding/message_chat_with_user_default_binding.dart';
 import 'package:experta/presentation/message_chat_with_user_default_screen/message_chat_with_user_default_screen.dart';
 import 'package:experta/presentation/new_post/binding/new_post_bindings.dart';
@@ -80,6 +80,8 @@ import 'package:experta/presentation/signin_page/signin_binding/signin_binding.d
 import 'package:experta/presentation/signin_page/signin_page.dart';
 import 'package:experta/presentation/splash_screen/binding/splash_binding.dart';
 import 'package:experta/presentation/splash_screen/splash_screen.dart';
+import 'package:experta/presentation/user_details/binding/details_binding.dart';
+import 'package:experta/presentation/user_details/user_details.dart';
 import 'package:experta/presentation/verify_account/binding/verify_account_binding.dart';
 import 'package:experta/presentation/verify_account/varify_account.dart';
 import 'package:experta/presentation/verifynumber_screen/binding/verifynumber_binding.dart';
@@ -187,7 +189,9 @@ class AppRoutes {
 
   static const String payment = "/payment";
 
-  static const String newPost = "/";
+  static const String newPost = "/new_post";
+
+  static const String detailsPage = "/user_details";
 
   static List<GetPage> pages = [
     GetPage(
@@ -315,13 +319,13 @@ class AppRoutes {
         VerifynumberBinding(),
       ],
     ),
-    GetPage(
-      name: homePage,
-      page: () => const HomeScreen(),
-      bindings: [
-        HomeBinding(),
-      ],
-    ),
+    // GetPage(
+    //   name: homePage,
+    //   page: () => HomeScreen(),
+    //   bindings: [
+    //     HomeBinding(),
+    //   ],
+    // ),
     GetPage(
       name: searchPage,
       page: () => const SearchScreen(),
@@ -593,6 +597,14 @@ class AppRoutes {
         customTransition: CustomPageTransition(),
         bindings: [
           NewPostBindings(),
+        ]),
+
+    GetPage(
+        name: detailsPage,
+        page: () => const UserDetailsPage(),
+        customTransition: CustomPageTransition(),
+        bindings: [
+          DetailsBinding(),
         ]),
   ];
 }

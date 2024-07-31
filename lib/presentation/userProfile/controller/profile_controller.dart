@@ -9,13 +9,13 @@ class ProfileController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchUserData('664ef83426880cc7d7f204f8');
+    fetchUserData('664ef83426880cc7d7f204f8', '664ef83426880cc7d7f204f8');
   }
 
-  void fetchUserData(String userId) async {
+  void fetchUserData(String userId, String ownUserId) async {
     try {
       isLoading(true);
-      var data = await ApiService().getUserData(userId);
+      var data = await ApiService().getUserData(userId, ownUserId);
       userData.value = ProfileModel.fromJson(data);
     } catch (e) {
       // Handle error

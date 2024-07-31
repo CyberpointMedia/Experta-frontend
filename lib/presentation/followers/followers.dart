@@ -1,20 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-
 class FollowersPage extends StatelessWidget {
   final List<Follower> followers = [
     Follower(
       name: 'Anjali Arora',
       profession: 'Social Media Influencer',
       isOnline: true,
-      imageUrl: 'assets/images/Icon.svg',
+      imageUrl: '',
     ),
     Follower(
       name: 'Taranvir Kaur',
       profession: 'Social Media Influencer',
       isOnline: false,
-      imageUrl: 'assets/images/Icon.svg',
+      imageUrl: '',
     ),
     // Add more followers here
   ];
@@ -24,16 +23,15 @@ class FollowersPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:AppBar(
-  leading: IconButton(
-    icon: const Icon(Icons.arrow_back_ios),
-    onPressed: () {
-      Navigator.pop(context);
-    },
-  ),
-  title: const Text('Followers'),
-)
-,
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: const Text('Followers'),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(

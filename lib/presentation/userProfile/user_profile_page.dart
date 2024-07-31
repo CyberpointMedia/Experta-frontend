@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
+import 'package:experta/core/utils/web_view/web_view.dart';
 import 'package:experta/presentation/userProfile/controller/profile_controller.dart';
 import 'package:experta/widgets/custom_elevated_button.dart';
 import 'package:flutter/material.dart';
@@ -58,76 +59,79 @@ class _UserProfilePageState extends State<UserProfilePage>
                 ),
               ),
             ),
-            NestedScrollView(
-              headerSliverBuilder: (context, innerBoxIsScrolled) {
-                return [
-                  SliverAppBar(
-                    pinned: true,
-                    automaticallyImplyLeading: false,
-                    expandedHeight: 450.0,
-                    backgroundColor: Colors.transparent,
-                    primary: true,
-                    title: Obx(() {
-                      return Text(
-                        controller
-                                .userData.value.data?.basicInfo?.displayName ??
-                            '',
-                        style: theme.textTheme.titleMedium!.copyWith(
-                          color: appTheme.gray900,
-                        ),
-                      );
-                    }),
-                    actions: [
-                      CustomImageView(
-                        margin: const EdgeInsets.all(8),
-                        imagePath: "assets/images/settings.svg",
-                        onTap: () {
-                          Get.toNamed(AppRoutes.settingScreen);
-                        },
-                      )
-                    ],
-                    flexibleSpace: FlexibleSpaceBar(
-                      background: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.only(top: 50),
-                            child: _profilepicBody(),
-                          ),
-                          _ratingSection(),
-                        ],
-                      ),
-                    ),
-                    bottom: PreferredSize(
-                      preferredSize: const Size.fromHeight(10),
-                      child: Material(
-                        color: Colors.white,
-                        child: TabBar(
-                          controller: _tabController,
-                          labelColor: Colors.black,
-                          dividerColor: Colors.black,
-                          unselectedLabelColor: Colors.grey,
-                          indicatorSize: TabBarIndicatorSize.tab,
-                          physics: const BouncingScrollPhysics(),
-                          tabs: const [
-                            Tab(text: 'About Me'),
-                            Tab(text: 'Posts'),
+            Obx(() {
+              return NestedScrollView(
+                headerSliverBuilder: (context, innerBoxIsScrolled) {
+                  return [
+                    SliverAppBar(
+                      pinned: true,
+                      automaticallyImplyLeading: false,
+                      expandedHeight: 450.0,
+                      backgroundColor: Colors.transparent,
+                      primary: true,
+                      title: Obx(() {
+                        return Text(
+                          controller.userData.value.data?.basicInfo
+                                  ?.displayName ??
+                              '',
+                          style: theme.textTheme.titleMedium!.copyWith(
+                              color: appTheme.gray900,
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
+                        );
+                      }),
+                      actions: [
+                        CustomImageView(
+                          margin: const EdgeInsets.all(8),
+                          imagePath: "assets/images/settings.svg",
+                          onTap: () {
+                            Get.toNamed(AppRoutes.settingScreen);
+                          },
+                        )
+                      ],
+                      flexibleSpace: FlexibleSpaceBar(
+                        background: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.only(top: 50),
+                              child: _profilepicBody(),
+                            ),
+                            _ratingSection(),
                           ],
                         ),
                       ),
+                      bottom: PreferredSize(
+                        preferredSize: const Size.fromHeight(10),
+                        child: Material(
+                          color: Colors.white,
+                          child: TabBar(
+                            controller: _tabController,
+                            labelColor: Colors.black,
+                            dividerColor: Colors.black,
+                            unselectedLabelColor: Colors.grey,
+                            indicatorSize: TabBarIndicatorSize.tab,
+                            physics: const BouncingScrollPhysics(),
+                            tabs: const [
+                              Tab(text: 'About Me'),
+                              Tab(text: 'Posts'),
+                            ],
+                          ),
+                        ),
+                      ),
                     ),
-                  ),
-                ];
-              },
-              body: TabBarView(
-                controller: _tabController,
-                children: [
-                  _buildAboutMe(),
-                  _buildPosts(),
-                ],
-              ),
-            ),
+                  ];
+                },
+                body: TabBarView(
+                  controller: _tabController,
+                  children: [
+                    _buildAboutMe(),
+                    _buildPosts(),
+                  ],
+                ),
+              );
+            })
           ],
         ),
       ),
@@ -274,6 +278,15 @@ class _UserProfilePageState extends State<UserProfilePage>
             children: socialMediaLinks.map((socialMedia) {
               return GestureDetector(
                 onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ExpertaBrowser(
+                        url: socialMedia['link'],
+                        title: socialMedia['name'],
+                      ),
+                    ),
+                  );
                   print('Opening link: ${socialMedia['link']}');
                 },
                 child: Padding(
@@ -528,6 +541,8 @@ class _UserProfilePageState extends State<UserProfilePage>
     final interestList = interest?.interest ?? [];
 
     return Column(
+      crossAxisAlignment:
+          CrossAxisAlignment.start, // Added for better alignment
       children: [
         _buildRowaboutme(aboutMeText: "Interests"),
         Padding(
@@ -538,7 +553,7 @@ class _UserProfilePageState extends State<UserProfilePage>
             children: interestList.map((interest) {
               return Chip(
                 label: Text(
-                  interest.name.toString(),
+                  interest.name ?? '', // Ensure interest name is not null
                   style: theme.textTheme.bodyMedium!.copyWith(
                     color: Colors.black,
                     fontWeight: FontWeight.w500,
@@ -571,11 +586,17 @@ class _UserProfilePageState extends State<UserProfilePage>
               style:
                   theme.textTheme.headlineLarge?.copyWith(fontSize: 16.fSize),
             ),
-            Text(
-              "See all",
-              style: theme.textTheme.titleMedium
-                  ?.copyWith(color: appTheme.deepOrangeA200),
-            )
+            GestureDetector(
+              onTap: () {
+                // Navigate to the Reviews page
+                // Get.to(() => ReviewsPage()); // Assuming you are using GetX for navigation
+              },
+              child: Text(
+                "See all",
+                style: theme.textTheme.titleMedium
+                    ?.copyWith(color: appTheme.deepOrangeA200),
+              ),
+            ),
           ],
         ),
         SizedBox(
@@ -590,91 +611,86 @@ class _UserProfilePageState extends State<UserProfilePage>
                   theme.textTheme.bodyMedium?.copyWith(color: appTheme.gray900),
             );
           } else {
+            // Limit the number of reviews to 5
+            var limitedReviews = reviews.take(5).toList();
             return Column(
-              children: reviews.map((review) {
-                return Card(
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 2.v,
-                      ),
-                      Row(
-                        children: [
-                          Image.asset(
-                            "assets/images/img_rectangle_2.png",
-                            height: 34.v,
-                            width: 36.adaptSize,
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 10),
-                            child: Column(
+              children: limitedReviews.map((review) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    color: appTheme.gray100,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            CustomImageView(
+                              imagePath: review.profilePic,
+                              height: 50,
+                              width: 50,
+                              radius: BorderRadius.circular(50),
+                            ),
+                            const SizedBox(width: 10),
+                            Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  review.reviewerName ?? '',
+                                  review.reviewer.toString(),
                                   style: theme.textTheme.headlineLarge
                                       ?.copyWith(fontSize: 14.fSize),
                                 ),
-                                SizedBox(
-                                  height: 1.v,
-                                ),
+                                SizedBox(height: 1.v),
                                 Text(
-                                  review.date ?? '',
+                                  review.formattedDate.toString(),
                                   style: theme.textTheme.titleSmall!,
                                 )
                               ],
+                            )
+                          ],
+                        ),
+                        SizedBox(height: 9.v),
+                        Row(
+                          children: [
+                            RatingBar.builder(
+                              initialRating: review.rating!.toDouble(),
+                              minRating: 0,
+                              direction: Axis.horizontal,
+                              allowHalfRating: false,
+                              itemSize: 22,
+                              itemCount: 5,
+                              updateOnDrag: true,
+                              onRatingUpdate: (rating) {},
+                              itemBuilder: (context, _) {
+                                return const Icon(
+                                  Icons.star,
+                                );
+                              },
                             ),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: 9.v,
-                      ),
-                      Row(
-                        children: [
-                          RatingBar.builder(
-                            initialRating: review.rating?.toDouble() ?? 0,
-                            minRating: 0,
-                            direction: Axis.horizontal,
-                            allowHalfRating: false,
-                            itemSize: 22,
-                            itemCount: 5,
-                            updateOnDrag: true,
-                            onRatingUpdate: (rating) {},
-                            itemBuilder: (context, _) {
-                              return const Icon(
-                                Icons.star,
-                              );
-                            },
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(left: 6),
-                            child: Text(
-                              review.rating?.toString() ?? '',
+                            const SizedBox(
+                                width: 6), // Added SizedBox for spacing
+                            Text(
+                              review.rating.toString(),
                               style: theme.textTheme.headlineLarge
                                   ?.copyWith(fontSize: 16.fSize),
-                            ),
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: 8.v,
-                      ),
-                      Container(
-                        width: 304.adaptSize,
-                        margin: const EdgeInsets.only(right: 31),
-                        child: Text(
-                          review.comment ?? '',
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: theme.textTheme.bodyMedium
-                              ?.copyWith(color: appTheme.gray900),
+                            )
+                          ],
                         ),
-                      )
-                    ],
+                        SizedBox(height: 8.v),
+                        Container(
+                          width: 304.adaptSize,
+                          margin: const EdgeInsets.only(right: 31),
+                          child: Text(
+                            review.review.toString(),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: theme.textTheme.bodyMedium
+                                ?.copyWith(color: appTheme.gray900),
+                          ),
+                        ),
+                        SizedBox(height: 8.v), // Added SizedBox for spacing
+                      ],
+                    ),
                   ),
                 );
               }).toList(),
