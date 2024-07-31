@@ -3,10 +3,14 @@
 import 'dart:developer';
 import 'dart:typed_data';
 import 'dart:io';
-
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/dashboard/dashboard.dart';
-// import 'package:experta/presentation/new_posting/new_posting.dart';
+import 'package:experta/presentation/new_posting/new_posting.dart';
+import 'package:experta/widgets/app_bar/appbar_leading_image.dart';
+import 'package:experta/widgets/app_bar/appbar_subtitle_six.dart';
+import 'package:experta/widgets/app_bar/custom_app_bar.dart';
+import 'package:experta/widgets/custom_elevated_button.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
 import 'package:image_editor_plus/image_editor_plus.dart';
 import 'package:path_provider/path_provider.dart';
@@ -142,11 +146,15 @@ class _NewPostPageState extends State<NewPostPage> {
 
   Widget _buildSelectedMedia() {
     if (_isMultiSelectMode && _selectedFiles.isNotEmpty) {
-      return ListView.builder(
-        scrollDirection: Axis.horizontal,
-        itemCount: _selectedFiles.length,
-        itemBuilder: (context, index) {
-          final asset = _selectedFiles[index];
+      return CarouselSlider(
+        options: CarouselOptions(
+          height: MediaQuery.of(context).size.height * 0.4,
+          aspectRatio: 16 / 9,
+          viewportFraction: 0.8,
+          enableInfiniteScroll: false,
+          enlargeCenterPage: true,
+        ),
+        items: _selectedFiles.map((asset) {
           return FutureBuilder<Uint8List?>(
             future:
                 asset.thumbnailDataWithSize(const ThumbnailSize(1000, 1000)),
@@ -161,7 +169,7 @@ class _NewPostPageState extends State<NewPostPage> {
               }
             },
           );
-        },
+        }).toList(),
       );
     } else if (_selectedFile == null) {
       return const Center(child: Text('No media selected'));
@@ -256,40 +264,47 @@ class _NewPostPageState extends State<NewPostPage> {
       actions: [
         TextButton(
           onPressed: () async {
-            print('Next button pressed');
-            print('Is video selected: $_isVideoSelected');
-            print('Selected files: $_selectedFiles');
-            print('Selected file: $_selectedFile');
-
             if (_isVideoSelected) {
-              print('Navigating to PostingPage');
-              // Navigator.push(
-              //   context,
-              //   MaterialPageRoute(
-              //     builder: (context) =>
-              //         PostingPage(videoFile: _selectedFile!.file),
-              //   ),
-              // );
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      PostingPage(videoFile: _selectedFile!.file),
+                ),
+              );
+            } else if (_isMultiSelectMode && _selectedFiles.isNotEmpty) {
+              // Navigate directly to PostingPage with selected images
+              List<Uint8List> selectedImagesData = [];
+              for (var asset in _selectedFiles) {
+                var file = await asset.originFile;
+                if (file != null) {
+                  var data = await file.readAsBytes();
+                  selectedImagesData.add(data);
+                }
+              }
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) =>
+                      PostingPage(imageDataList: selectedImagesData),
+                ),
+              );
             } else if (_selectedFiles.isNotEmpty || _selectedFile != null) {
               loadAsset();
               if (imageData != null) {
-                print('Navigating to ImageEditor');
                 var editedImage = await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => ImageEditor(
-                      image: imageData!,
-                    ),
+                    builder: (context) => ImageEditor(image: imageData!),
                   ),
                 );
                 if (editedImage != null) {
-                  print('Navigating to PostingPage with edited image');
-                  // Navigator.push(
-                  //   context,
-                  //   MaterialPageRoute(
-                  //     builder: (context) => PostingPage(imageData: editedImage),
-                  //   ),
-                  // );
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => PostingPage(imageData: editedImage),
+                    ),
+                  );
                 }
               }
             }

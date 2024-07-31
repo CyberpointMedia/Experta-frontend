@@ -121,8 +121,8 @@ class FollowerTile extends StatelessWidget {
                 ),
         ),
       ),
-      title: Text(follower.profileName),
-      subtitle: Text(follower.industryName),
+      title: Text(follower.displayName),
+      subtitle: Text(follower.industry),
       trailing: ElevatedButton(
         onPressed: () async {
           await controller.removeConnection(follower.id,"unfollow");

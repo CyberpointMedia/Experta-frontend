@@ -47,8 +47,6 @@ import 'package:experta/presentation/followers/followers.dart';
 import 'package:experta/presentation/following/following.dart';
 import 'package:experta/presentation/give_rating/binding/give_rating_binding.dart';
 import 'package:experta/presentation/give_rating/give_rating.dart';
-import 'package:experta/presentation/home_controller.dart';
-import 'package:experta/presentation/home_screen.dart';
 import 'package:experta/presentation/message_chat_with_user_default_screen/binding/message_chat_with_user_default_binding.dart';
 import 'package:experta/presentation/message_chat_with_user_default_screen/message_chat_with_user_default_screen.dart';
 import 'package:experta/presentation/my_booking/binding/my_booking_binding.dart';
@@ -89,6 +87,8 @@ import 'package:experta/presentation/splash_screen/binding/splash_binding.dart';
 import 'package:experta/presentation/splash_screen/splash_screen.dart';
 import 'package:experta/presentation/userProfile/binding/profile_binding.dart';
 import 'package:experta/presentation/userProfile/user_profile_page.dart';
+import 'package:experta/presentation/user_details/binding/details_binding.dart';
+import 'package:experta/presentation/user_details/user_details.dart';
 import 'package:experta/presentation/verifynumber_screen/binding/verifynumber_binding.dart';
 import 'package:experta/presentation/verifynumber_screen/verifynumber_screen.dart';
 import 'package:experta/presentation/wallet/binding/wallet_binding.dart';
@@ -199,6 +199,8 @@ class AppRoutes {
   static const String payment = "/payment";
 
   static const String newPost = "/new_post";
+
+  static const String detailsPage = "/user_details";
 
   // ignore: constant_identifier_names
   static const String Bookindeetail = "/booking_detail";
@@ -327,13 +329,13 @@ static const String mybook = "/my_booking";
         VerifynumberBinding(),
       ],
     ),
-    GetPage(
-      name: homePage,
-      page: () => const HomeScreen(),
-      bindings: [
-        HomeBinding(),
-      ],
-    ),
+    // GetPage(
+    //   name: homePage,
+    //   page: () => HomeScreen(),
+    //   bindings: [
+    //     HomeBinding(),
+    //   ],
+    // ),
     GetPage(
       name: searchPage,
       page: () => const SearchScreen(),
@@ -605,6 +607,14 @@ static const String mybook = "/my_booking";
         customTransition: CustomPageTransition(),
         bindings: [
           NewPostBindings(),
+        ]),
+
+    GetPage(
+        name: detailsPage,
+        page: () => const UserDetailsPage(),
+        customTransition: CustomPageTransition(),
+        bindings: [
+          DetailsBinding(),
         ]),
          GetPage(
         name: Bookindeetail,

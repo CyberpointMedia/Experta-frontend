@@ -1,3 +1,4 @@
+import 'package:experta/presentation/Home/model/home_model.dart';
 import 'package:get/get.dart';
 
 /// This class defines the variables used in the [category_screen],
@@ -10,6 +11,14 @@ class CategoryModel {}
 /// current categoryModelObj
 class CategoryController extends GetxController {
   Rx<CategoryModel> categoryModelObj = CategoryModel().obs;
+  var industries = <Industry>[].obs;
+
+  @override
+  void onInit() {
+    super.onInit();
+    // Retrieve the industries from arguments
+    industries.value = Get.arguments['industries'] ?? [];
+  }
 }
 
 /// A binding class for the CategoryScreen.

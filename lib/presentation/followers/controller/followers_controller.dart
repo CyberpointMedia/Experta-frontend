@@ -8,10 +8,12 @@ class FollowersAndFollowingController extends GetxController {
   final String? address = PrefUtils().getaddress();
   final ApiService apiService = ApiService();
 
+  String id = "" ;
+
   @override
   void onInit() {
     super.onInit();
-    fetchFollowersAndFollowing(address.toString()); // Replace with dynamic userId
+    fetchFollowersAndFollowing(id); 
   }
 
   void fetchFollowersAndFollowing(String userId) async {

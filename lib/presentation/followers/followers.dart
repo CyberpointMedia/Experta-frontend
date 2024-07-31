@@ -5,11 +5,26 @@ import 'package:experta/presentation/followers/controller/followers_controller.d
 import 'package:experta/presentation/followers/models/followers_model.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-class FollowersPage extends StatelessWidget {
+class FollowersPage extends StatefulWidget {
+
+  FollowersPage({super.key});
+
+  @override
+  State<FollowersPage> createState() => _FollowersPageState();
+}
+
+class _FollowersPageState extends State<FollowersPage> {
+  final String id = Get.arguments['id'];
+
   final FollowersAndFollowingController controller =
       Get.put(FollowersAndFollowingController());
 
-  FollowersPage({super.key});
+
+@override
+  void initState() {
+    super.initState();
+    controller.id = id;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -123,8 +138,8 @@ class FollowerTile extends StatelessWidget {
                 ),
         ),
       ),
-      title: Text(follower.profileName),
-      subtitle: Text(follower.industryName),
+      title: Text(follower.displayName),
+      subtitle: Text("${follower.industry} | ${follower.occupation}"),
       trailing: ElevatedButton(
         onPressed: () async {
           await controller.removeConnection(follower.id, "removeFollower");

@@ -28,18 +28,15 @@ class FollowersAndFollowing {
 }
 
 class Data {
-  final String id;
   final List<Follow> followers;
   final List<Follow> following;
 
   Data({
-    required this.id,
     required this.followers,
     required this.following,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
-        id: json["_id"] ?? '',
         followers: json["followers"] != null
             ? List<Follow>.from(
                 json["followers"].map((x) => Follow.fromJson(x)))
@@ -51,36 +48,47 @@ class Data {
       );
 
   Map<String, dynamic> toJson() => {
-        "_id": id,
         "followers": List<dynamic>.from(followers.map((x) => x.toJson())),
         "following": List<dynamic>.from(following.map((x) => x.toJson())),
       };
 }
 
 class Follow {
-  final String profileName;
-  final String profilePic;
-  final String industryName;
   final String id;
+  final bool online;
+  final int rating;
+  final String profilePic;
+  final String displayName;
+  final String industry;
+  final String occupation;
 
   Follow({
-    required this.profileName,
+    required this.id,
+    required this.online,
+    required this.rating,
     required this.profilePic,
-    required this.industryName,
-     required this.id,
+    required this.displayName,
+    required this.industry,
+    required this.occupation,
   });
 
   factory Follow.fromJson(Map<String, dynamic> json) => Follow(
-        profileName: json["basicInfo"]?["firstName"] ?? '',
-        profilePic: json["basicInfo"]?["profilePic"] ?? '',
-        industryName: json["industryOccupation"]?["industry"]?["name"] ?? '',
-        id:json["id"] ?? ''
+        id: json["id"] ?? '',
+        online: json["online"] ?? false,
+        rating: json["rating"] ?? 0,
+        profilePic: json["profilePic"] ?? '',
+        displayName: json["displayName"] ?? '',
+        industry: json["industry"] ?? '',
+        occupation: json["occupation"] ?? '',
       );
 
   Map<String, dynamic> toJson() => {
-        "profileName": profileName,
+        "id": id,
+        "online": online,
+        "rating": rating,
         "profilePic": profilePic,
-        "industryName": industryName,
-        "id":id
+        "displayName": displayName,
+        "industry": industry,
+        "occupation": occupation,
       };
 }

@@ -326,8 +326,13 @@ class SettingScreen extends GetWidget<SettingController> {
                   decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
                       borderRadius: BorderRadiusStyle.roundedBorder20),
                   child: Row(children: [
-                     CustomImageView(
+                    (controller.imagePath == "")? CustomImageView(
                               imagePath: controller.imagePath,
+                              height: 48.adaptSize,
+                              width: 48.adaptSize,
+                              radius: BorderRadius.circular(24.h),
+                              alignment: Alignment.center):CustomImageView(
+                              imagePath: 'assets/images/image_not_found.png',
                               height: 48.adaptSize,
                               width: 48.adaptSize,
                               radius: BorderRadius.circular(24.h),

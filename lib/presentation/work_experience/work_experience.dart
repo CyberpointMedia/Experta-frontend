@@ -66,7 +66,7 @@ class _WorkExperiencePageState extends State<WorkExperiencePage> {
           margin: const EdgeInsets.only(right: 20),
           imagePath: ImageConstant.plus,
           onTap: () {
-            // Get.toNamed(AppRoutes.editExperience);
+            Get.toNamed(AppRoutes.editExperience);
           },
         ),
       ],

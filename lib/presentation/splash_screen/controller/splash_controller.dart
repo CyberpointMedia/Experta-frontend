@@ -19,7 +19,6 @@ class SplashController extends GetxController {
         //AppRoutes.newpost,
         //AppRoutes.rating,
       );
-      // Get.to(const Experiment());
     });
   }
 }

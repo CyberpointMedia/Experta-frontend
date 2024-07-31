@@ -47,6 +47,14 @@ class CustomButtonStyles {
           borderRadius: BorderRadius.circular(28.h),
         ),
       );
+
+  static ButtonStyle get fillOnError2 => ElevatedButton.styleFrom(
+        backgroundColor: appTheme.gray600,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(10.h),
+        ),
+      );
+
   static ButtonStyle get fillOnPrimaryContainer => ElevatedButton.styleFrom(
         backgroundColor: theme.colorScheme.onPrimaryContainer.withOpacity(1),
         shape: RoundedRectangleBorder(
@@ -105,7 +113,6 @@ class CustomButtonStyles {
         ),
       );
   static ButtonStyle get outlineGrayTL21 => OutlinedButton.styleFrom(
-    
         backgroundColor: Colors.transparent,
         side: BorderSide(
           color: appTheme.gray30001,
