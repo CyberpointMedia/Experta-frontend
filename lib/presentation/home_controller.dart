@@ -508,11 +508,6 @@ class HomeController extends GetxController {
 
   Rx<HomeModel> homeModelObj = HomeModel().obs;
 
-  @override
-  void onClose() {
-    super.onClose();
-    searchController.dispose();
-  }
 }
 
 /// A binding class for the HomeScreen.

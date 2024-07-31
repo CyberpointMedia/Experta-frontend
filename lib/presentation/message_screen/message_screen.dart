@@ -3,14 +3,11 @@ import 'dart:ui';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/widgets/app_bar/appbar_subtitle.dart';
 import 'package:experta/widgets/app_bar/appbar_trailing_iconbutton.dart';
-import 'package:experta/widgets/app_bar/custom_app_bar.dart';
-import 'package:experta/widgets/custom_search_view.dart';
 
 import 'widgets/anjaliarora_item_widget.dart';
 import 'models/anjaliarora_item_model.dart';
 import 'widgets/anjaliarora1_item_widget.dart';
 import 'models/anjaliarora1_item_model.dart';
-import 'package:flutter/material.dart';
 import 'controller/message_controller.dart';
 
 class MessageScreen extends StatefulWidget {
@@ -159,7 +156,7 @@ class _MessageScreenState extends State<MessageScreen> {
                               width: 16.adaptSize,
                               margin: EdgeInsets.only(
                                   left: 2.h, top: 2.v, bottom: 2.v)),
-                          Spacer(),
+                          const Spacer(),
                           Text("lbl_yesterday".tr,
                               textAlign: TextAlign.right,
                               style: CustomTextStyles.bodyMediumLight)

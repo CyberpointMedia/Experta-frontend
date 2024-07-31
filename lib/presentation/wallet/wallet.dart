@@ -1,11 +1,7 @@
 import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
-import 'package:experta/widgets/app_bar/appbar_leading_image.dart';
-import 'package:experta/widgets/app_bar/appbar_subtitle_six.dart';
-import 'package:experta/widgets/app_bar/custom_app_bar.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
-import 'package:flutter/material.dart';
 
 class Wallet extends StatefulWidget {
   const Wallet({super.key});
@@ -143,7 +139,7 @@ const Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   // Top Up Button
-                  Container(
+                  SizedBox(
                     
                     height: 50,
                     width: 140,
@@ -159,15 +155,15 @@ const Column(
                         // Define your action here
                         print("Top Up button pressed!");
                       },
-                      child: Text(
+                      child: const Text(
                         'Top Up',
                         style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                     ),
                   ),
-                  SizedBox(width: 16), // Spacing between buttons
+                  const SizedBox(width: 16), // Spacing between buttons
                   // Withdraw Button
-                  Container(
+                  SizedBox(
                     height: 50,
                     width: 140,
                     child: ElevatedButton(
@@ -176,14 +172,14 @@ const Column(
                         foregroundColor: Colors.black,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
-                          side: BorderSide(color: Colors.grey), // Border color
+                          side: const BorderSide(color: Colors.grey), // Border color
                         ),
                       ),
                       onPressed: () {
                         // Define your action here
                         print("Withdraw button pressed!");
                       },
-                      child: Text(
+                      child: const Text(
                         'Withdraw',
                         style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                       ),

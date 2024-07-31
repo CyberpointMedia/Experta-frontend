@@ -7,13 +7,15 @@ import 'controller/recents_controller.dart';
 class RecentsPage extends StatelessWidget {
   final RecentsController controller = Get.put(RecentsController());
 
+   RecentsPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Recent Images & Videos'),
+        title: const Text('Recent Images & Videos'),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Get.back();
           },
@@ -24,7 +26,7 @@ class RecentsPage extends StatelessWidget {
           Expanded(
             child: Obx(() {
               if (controller.galleryImages.isEmpty) {
-                return Center(
+                return const Center(
                   child: CircularProgressIndicator(),
                 );
               } else {
@@ -56,9 +58,9 @@ class RecentsPage extends StatelessWidget {
 
 class AssetThumbnail extends StatelessWidget {
   const AssetThumbnail({
-    Key? key,
+    super.key,
     required this.asset,
-  }) : super(key: key);
+  });
 
   final AssetEntity asset;
 

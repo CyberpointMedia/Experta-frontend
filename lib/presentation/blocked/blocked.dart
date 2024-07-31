@@ -1,6 +1,4 @@
 import 'package:experta/core/app_export.dart';
-import 'package:experta/widgets/custom_search_view.dart';
-import 'package:flutter/material.dart';
 
 class BlockedPage extends StatelessWidget {
   // Sample list of users
@@ -14,7 +12,7 @@ class BlockedPage extends StatelessWidget {
     {'name': 'Aachal Sharma', 'subtitle': 'Social Media Influencer', 'image': 'assets/aachal_sharma.png'},
   ];
 
-   BlockedPage({super.key});
+  BlockedPage({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -24,33 +22,16 @@ class BlockedPage extends StatelessWidget {
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
           onPressed: () {
-            // Handle back button action
+            Get.back(); // Navigate back to the settings page
           },
         ),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.add),
-            onPressed: () {
-              // Handle add action
-            },
-          ),
-        ],
       ),
       body: Column(
         children: [
           const Padding(
             padding: EdgeInsets.all(16.0),
             child: CustomSearchView(
-              // decoration: InputDecoration(
-                hintText: 'Search user',
-              //   prefixIcon: const Icon(Icons.search),
-              //   border: OutlineInputBorder(
-              //     borderRadius: BorderRadius.circular(25.0),
-              //     borderSide: BorderSide.none,
-              //   ),
-              //   filled: true,
-              //   fillColor: Colors.grey[200],
-              // ),
+              hintText: 'Search user',
             ),
           ),
           Expanded(
@@ -77,7 +58,8 @@ class UserTile extends StatelessWidget {
   final String subtitle;
   final String image;
 
-  const UserTile({super.key, 
+  const UserTile({
+    super.key, 
     required this.name,
     required this.subtitle,
     required this.image,
@@ -108,14 +90,10 @@ class UserTile extends StatelessWidget {
             borderRadius: BorderRadius.circular(5.0),
             side: const BorderSide(color: Colors.black),
           ),
-           fixedSize: const Size(100, 36),// Fixed width and height
+          fixedSize: const Size(100, 36), // Fixed width and height
         ),
         child: const Text('Unblock'),
-        
       ),
     );
-  }
-  onTapArrowLeft() {
-    Get.back();
   }
 }

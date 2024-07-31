@@ -1,3 +1,5 @@
+
+
 class VerifyOtpResponseModel {
   String? status;
   String? token;
@@ -20,13 +22,15 @@ class UserData {
   String? email;
   String? phoneNo;
   bool? isVerified;
+  String? id;
 
   UserData(
       {this.firstName,
       this.lastName,
       this.email,
       this.phoneNo,
-      this.isVerified});
+      this.isVerified,
+      this.id});
 
   factory UserData.fromJson(Map<String, dynamic> json) {
     return UserData(
@@ -35,6 +39,7 @@ class UserData {
       email: json['email'],
       phoneNo: json['phoneNo'],
       isVerified: json['isVerified'],
+      id:json['id'],
     );
   }
 }

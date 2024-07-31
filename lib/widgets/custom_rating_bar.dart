@@ -1,10 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import '../core/app_export.dart';
 
 class CustomRatingBar extends StatelessWidget {
-  CustomRatingBar({
-    Key? key,
+  const CustomRatingBar({
+    super.key,
     this.alignment,
     this.ignoreGestures,
     this.initialRating,
@@ -13,9 +12,7 @@ class CustomRatingBar extends StatelessWidget {
     this.color,
     this.unselectedColor,
     this.onRatingUpdate,
-  }) : super(
-          key: key,
-        );
+  });
 
   final Alignment? alignment;
 
@@ -31,7 +28,7 @@ class CustomRatingBar extends StatelessWidget {
 
   final Color? unselectedColor;
 
-  Function(double)? onRatingUpdate;
+  final Function(double)? onRatingUpdate;
 
   @override
   Widget build(BuildContext context) {

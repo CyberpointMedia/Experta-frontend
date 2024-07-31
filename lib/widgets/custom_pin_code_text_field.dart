@@ -1,11 +1,10 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:pin_code_fields/pin_code_fields.dart';
 import '../core/app_export.dart';
 
 class CustomPinCodeTextField extends StatelessWidget {
-  CustomPinCodeTextField({
-    Key? key,
+  const CustomPinCodeTextField({
+    super.key,
     required this.context,
     required this.onChanged,
     this.alignment,
@@ -13,9 +12,7 @@ class CustomPinCodeTextField extends StatelessWidget {
     this.textStyle,
     this.hintStyle,
     this.validator,
-  }) : super(
-          key: key,
-        );
+  });
 
   final Alignment? alignment;
 
@@ -27,7 +24,7 @@ class CustomPinCodeTextField extends StatelessWidget {
 
   final TextStyle? hintStyle;
 
-  Function(String) onChanged;
+  final Function(String) onChanged;
 
   final FormFieldValidator<String>? validator;
 

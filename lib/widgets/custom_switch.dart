@@ -1,23 +1,20 @@
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import '../core/app_export.dart';
 
 class CustomSwitch extends StatelessWidget {
-  CustomSwitch({
-    Key? key,
+  const CustomSwitch({
+    super.key,
     required this.onChange,
     this.alignment,
     this.value,
     this.width,
     this.height,
     this.margin,
-  }) : super(
-          key: key,
-        );
+  });
 
   final Alignment? alignment;
 
-  bool? value;
+  final bool? value;
 
   final Function(bool) onChange;
 

@@ -1,16 +1,13 @@
-import 'package:flutter/material.dart';
 import 'package:experta/core/app_export.dart';
 
 // ignore: must_be_immutable
 class AppbarTrailingImage extends StatelessWidget {
   AppbarTrailingImage({
-    Key? key,
+    super.key,
     this.imagePath,
     this.margin,
     this.onTap,
-  }) : super(
-          key: key,
-        );
+  });
 
   String? imagePath;
 

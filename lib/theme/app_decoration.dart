@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:experta/core/app_export.dart';
 
 class AppDecoration {
@@ -64,8 +63,8 @@ class AppDecoration {
   // Gradient decorations
   static BoxDecoration get gradientBlackToBlack => BoxDecoration(
         gradient: LinearGradient(
-          begin: Alignment(0.5, 0),
-          end: Alignment(0.5, 0.79),
+          begin: const Alignment(0.5, 0),
+          end: const Alignment(0.5, 0.79),
           colors: [
             appTheme.black90001.withOpacity(0),
             appTheme.black90001.withOpacity(0.6),
@@ -74,8 +73,8 @@ class AppDecoration {
       );
   static BoxDecoration get gradientBlackToBlack90001 => BoxDecoration(
         gradient: LinearGradient(
-          begin: Alignment(0.5, 0),
-          end: Alignment(0.5, 1),
+          begin: const Alignment(0.5, 0),
+          end: const Alignment(0.5, 1),
           colors: [
             appTheme.black90001.withOpacity(0),
             appTheme.black90001,
@@ -84,8 +83,8 @@ class AppDecoration {
       );
   static BoxDecoration get gradientGrayToGray => BoxDecoration(
         gradient: LinearGradient(
-          begin: Alignment(0.5, 0),
-          end: Alignment(0.5, 1),
+          begin: const Alignment(0.5, 0),
+          end: const Alignment(0.5, 1),
           colors: [
             appTheme.gray20002.withOpacity(0),
             appTheme.gray20002,
@@ -94,8 +93,8 @@ class AppDecoration {
       );
   static BoxDecoration get gradientGrayToGray20002 => BoxDecoration(
         gradient: LinearGradient(
-          begin: Alignment(0.5, 0.12),
-          end: Alignment(0.5, 0.61),
+          begin: const Alignment(0.5, 0.12),
+          end: const Alignment(0.5, 0.61),
           colors: [
             appTheme.gray20002.withOpacity(0),
             appTheme.gray20002,
@@ -105,8 +104,8 @@ class AppDecoration {
   static BoxDecoration get gradientOnPrimaryContainerToOnPrimaryContainer =>
       BoxDecoration(
         gradient: LinearGradient(
-          begin: Alignment(0.17, 0.29),
-          end: Alignment(0.17, 0.01),
+          begin: const Alignment(0.17, 0.29),
+          end: const Alignment(0.17, 0.01),
           colors: [
             theme.colorScheme.onPrimaryContainer.withOpacity(1),
             theme.colorScheme.onPrimaryContainer.withOpacity(0),
@@ -122,7 +121,7 @@ class AppDecoration {
             color: appTheme.black90001.withOpacity(0.05),
             spreadRadius: 2.h,
             blurRadius: 2.h,
-            offset: Offset(
+            offset: const Offset(
               0,
               30,
             ),
@@ -136,7 +135,7 @@ class AppDecoration {
             color: appTheme.black90001.withOpacity(0.5),
             spreadRadius: 2.h,
             blurRadius: 2.h,
-            offset: Offset(
+            offset: const Offset(
               0,
               2,
             ),
@@ -181,7 +180,7 @@ class AppDecoration {
             color: appTheme.black9001e,
             spreadRadius: 2.h,
             blurRadius: 2.h,
-            offset: Offset(
+            offset: const Offset(
               0,
               4,
             ),

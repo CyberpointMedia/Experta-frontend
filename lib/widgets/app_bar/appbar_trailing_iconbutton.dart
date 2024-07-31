@@ -1,6 +1,5 @@
 import 'package:experta/widgets/custom_icon_button.dart';
 import 'package:outline_gradient_button/outline_gradient_button.dart';
-import 'package:flutter/material.dart';
 import 'package:experta/core/app_export.dart';
 
 // ignore: must_be_immutable

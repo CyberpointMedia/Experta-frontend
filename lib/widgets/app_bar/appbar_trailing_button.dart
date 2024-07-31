@@ -1,17 +1,14 @@
 import 'package:experta/widgets/custom_outlined_button.dart';
 import 'package:outline_gradient_button/outline_gradient_button.dart';
-import 'package:flutter/material.dart';
 import 'package:experta/core/app_export.dart';
 
 // ignore: must_be_immutable
 class AppbarTrailingButton extends StatelessWidget {
   AppbarTrailingButton({
-    Key? key,
+    super.key,
     this.margin,
     this.onTap,
-  }) : super(
-          key: key,
-        );
+  });
 
   EdgeInsetsGeometry? margin;
 
@@ -34,15 +31,15 @@ class AppbarTrailingButton extends StatelessWidget {
           ),
           strokeWidth: 1.h,
           gradient: LinearGradient(
-            begin: Alignment(0.09, -0.08),
-            end: Alignment(0.75, 1.1),
+            begin: const Alignment(0.09, -0.08),
+            end: const Alignment(0.75, 1.1),
             colors: [
               theme.colorScheme.onPrimaryContainer.withOpacity(1),
               theme.colorScheme.onPrimaryContainer.withOpacity(0),
               theme.colorScheme.onPrimaryContainer.withOpacity(1),
             ],
           ),
-          corners: Corners(
+          corners: const Corners(
             topLeft: Radius.circular(20),
             topRight: Radius.circular(20),
             bottomLeft: Radius.circular(20),

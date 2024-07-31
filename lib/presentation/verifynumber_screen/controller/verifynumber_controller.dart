@@ -1,4 +1,5 @@
-import 'package:experta/data/apiClient/api_service.dart';
+import 'dart:developer';
+
 import 'package:experta/data/models/request/resend_otp_request_model.dart';
 import 'package:experta/data/models/request/verify_otp_request_model.dart';
 import 'package:experta/data/models/response/resend_otp_response_model.dart';
@@ -7,7 +8,6 @@ import 'package:experta/data/models/response/verify_otp_response_model.dart';
 import '../../../core/app_export.dart';
 import '../models/verifynumber_model.dart';
 import 'package:sms_autofill/sms_autofill.dart';
-import 'package:flutter/material.dart';
 
 /// A controller class for the VerifynumberScreen.
 ///
@@ -36,6 +36,8 @@ class VerifynumberController extends GetxController with CodeAutoFill {
       VerifyOtpResponseModel? response =
           await _apiService.verifyOtp(requestModel);
       if (response != null && response.status == "success") {
+        await prefUtils.setaddress("${response.data!.id}");
+        log("hey this is your id ${response.data!.id}");
         await prefUtils.setToken("${response.token}");
         // Handle success response
         Get.toNamed(AppRoutes.dashboard);
@@ -59,7 +61,7 @@ class VerifynumberController extends GetxController with CodeAutoFill {
         print("Response JSON: $responseData");
         ResendOtpResponseModel? response =
             ResendOtpResponseModel.fromJson(responseData);
-        if (response != null && response.status == "success") {
+        if (response.status == "success") {
           // Update UI based on response
           print("OTP Resent Successfully: ${response.data?.otp}");
         } else {
@@ -78,6 +80,8 @@ class VerifynumberController extends GetxController with CodeAutoFill {
     super.onInit();
     prefUtils.init();
     listenForCode();
-    phoneNumberController = Get.arguments as TextEditingController;
+    var arguments = Get.arguments as List;
+    phoneNumberController = arguments[0] as TextEditingController;
+    otpController.value.text = arguments[1] as String;
   }
 }

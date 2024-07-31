@@ -2,11 +2,6 @@ import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/change_gender/controller/change_gender_controller.dart';
-import 'package:experta/widgets/app_bar/appbar_leading_image.dart';
-import 'package:experta/widgets/app_bar/custom_app_bar.dart';
-import 'package:experta/widgets/custom_elevated_button.dart';
-import 'package:experta/widgets/custom_image_view.dart';
-import 'package:flutter/material.dart';
 
 class ChangeGender extends StatefulWidget {
   const ChangeGender({super.key});

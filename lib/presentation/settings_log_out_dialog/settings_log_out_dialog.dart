@@ -1,6 +1,4 @@
 import 'package:experta/core/app_export.dart';
-import 'package:experta/widgets/custom_elevated_button.dart';
-import 'package:flutter/material.dart';
 import 'controller/settings_log_out_controller.dart';
 
 // ignore_for_file: must_be_immutable

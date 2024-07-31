@@ -3,14 +3,7 @@ import 'dart:ui';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/settings_log_out_dialog/controller/settings_log_out_controller.dart';
 import 'package:experta/presentation/settings_log_out_dialog/settings_log_out_dialog.dart';
-import 'package:experta/widgets/app_bar/appbar_leading_image.dart';
-import 'package:experta/widgets/app_bar/appbar_subtitle_six.dart';
-import 'package:experta/widgets/app_bar/custom_app_bar.dart';
-import 'package:experta/widgets/custom_elevated_button.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'controller/setting_controller.dart';
 
 class SettingScreen extends GetWidget<SettingController> {
@@ -18,36 +11,35 @@ class SettingScreen extends GetWidget<SettingController> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-        child: Scaffold(
-            body: SizedBox(
-                width: SizeUtils.width,
-                child: SingleChildScrollView(
-                    child: Padding(
-                        padding: EdgeInsets.only(bottom: 5.v),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(height: 12.v),
-                              _buildAppBar(),
-                              _buildShareProfile(),
-                              SizedBox(height: 16.v),
-                              Padding(
-                                  padding: EdgeInsets.only(left: 16.h),
-                                  child: Text("lbl_basic_settings".tr,
-                                      style: CustomTextStyles
-                                          .titleMediumBluegray30018)),
-                              SizedBox(height: 12.v),
-                              _buildShield1(),
-                              SizedBox(height: 16.v),
-                              Padding(
-                                  padding: EdgeInsets.only(left: 16.h),
-                                  child: Text("lbl_basic_settings".tr,
-                                      style: CustomTextStyles
-                                          .titleMediumBluegray30018)),
-                              SizedBox(height: 12.v),
-                              _buildInfo1()
-                            ]))))));
+    return Scaffold(
+        body: SizedBox(
+            width: SizeUtils.width,
+            child: SingleChildScrollView(
+                child: Padding(
+                    padding: EdgeInsets.only(bottom: 5.v),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 12.v),
+                          _buildAppBar(),
+                          _buildShareProfile(),
+                          SizedBox(height: 16.v),
+                          Padding(
+                              padding: EdgeInsets.only(left: 16.h),
+                              child: Text("lbl_basic_settings".tr,
+                                  style: CustomTextStyles
+                                      .titleMediumBluegray30018)),
+                          SizedBox(height: 12.v),
+                          _buildShield1(),
+                          SizedBox(height: 16.v),
+                          Padding(
+                              padding: EdgeInsets.only(left: 16.h),
+                              child: Text("lbl_basic_settings".tr,
+                                  style: CustomTextStyles
+                                      .titleMediumBluegray30018)),
+                          SizedBox(height: 12.v),
+                          _buildInfo1()
+                        ])))));
   }
 
   /// Section Widget
@@ -70,7 +62,7 @@ class SettingScreen extends GetWidget<SettingController> {
     return Align(
         alignment: Alignment.bottomLeft,
         child: Padding(
-            padding: EdgeInsets.only(right: 16.h),
+            padding: EdgeInsets.only(right: 16.h, top: 10.v),
             child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,7 +117,7 @@ class SettingScreen extends GetWidget<SettingController> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            OnTapmybooking();
+                            onTapmybooking();
                           },
                           child: Padding(
                             padding: const EdgeInsets.only(top: 3),
@@ -330,33 +322,22 @@ class SettingScreen extends GetWidget<SettingController> {
                   margin:
                       EdgeInsets.only(top: 71.v, right: 16.h, bottom: 436.v),
                   padding:
-                      EdgeInsets.symmetric(horizontal: 16.h, vertical: 20.v),
+                      EdgeInsets.symmetric(horizontal: 16.h, vertical: 17.v),
                   decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
                       borderRadius: BorderRadiusStyle.roundedBorder20),
                   child: Row(children: [
-                    SizedBox(
-                        height: 48.adaptSize,
-                        width: 48.adaptSize,
-                        child: Stack(alignment: Alignment.center, children: [
-                          CustomImageView(
-                              imagePath: ImageConstant.imgRectangle248x48,
+                     CustomImageView(
+                              imagePath: controller.imagePath,
                               height: 48.adaptSize,
                               width: 48.adaptSize,
                               radius: BorderRadius.circular(24.h),
                               alignment: Alignment.center),
-                          CustomImageView(
-                              imagePath: ImageConstant.imgImage3348x48,
-                              height: 48.adaptSize,
-                              width: 48.adaptSize,
-                              radius: BorderRadius.circular(24.h),
-                              alignment: Alignment.center)
-                        ])),
                     Padding(
                         padding: EdgeInsets.only(left: 15.h),
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("lbl_naveen_verma2".tr,
+                              Text(controller.name.toString(),
                                   style: CustomTextStyles.titleMediumSemiBold),
                               SizedBox(height: 4.v),
                               GestureDetector(
@@ -375,7 +356,7 @@ class SettingScreen extends GetWidget<SettingController> {
                                         margin: EdgeInsets.only(left: 3.h))
                                   ]))
                             ])),
-                    Spacer(),
+                    const Spacer(),
                     CustomElevatedButton(
                         height: 34.v,
                         width: 84.h,
@@ -397,6 +378,7 @@ class SettingScreen extends GetWidget<SettingController> {
             decoration: AppDecoration.fillOnPrimaryContainer
                 .copyWith(color: Colors.transparent),
             child: Column(mainAxisSize: MainAxisSize.min, children: [
+           
               GestureDetector(
                           onTap: () {
                             Get.toNamed(AppRoutes.security);
@@ -508,6 +490,7 @@ class SettingScreen extends GetWidget<SettingController> {
                 color: Colors.transparent,
                 borderRadius: BorderRadiusStyle.roundedBorder20),
             child: Column(mainAxisSize: MainAxisSize.min, children: [
+             
               GestureDetector(
                 onTap: () {
                   Get.toNamed(AppRoutes.aboutus);
@@ -605,15 +588,15 @@ class SettingScreen extends GetWidget<SettingController> {
   }
 
   /// Navigates to the settingsMyBookingUpcomingScreen when the action is triggered.
-  OnTapmybooking() {
+  onTapmybooking() {
      Get.toNamed(AppRoutes.mybook);
   }
 
   /// Navigates to the settingsVerifyAccountDefaultScreen when the action is triggered.
   onTapVerifiedUserTwo() {
-    // Get.toNamed(
-    //   AppRoutes.settingsVerifyAccountDefaultScreen,
-    // );
+     Get.toNamed(
+      AppRoutes.bank,
+    );
   }
 
   /// Navigates to the settingsNotificationsOneScreen when the action is triggered.

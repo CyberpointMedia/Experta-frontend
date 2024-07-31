@@ -1,6 +1,5 @@
 import 'dart:ui';
 
-import 'package:flutter/material.dart';
 import 'package:experta/core/app_export.dart';
 import 'controller/splash_controller.dart';
 

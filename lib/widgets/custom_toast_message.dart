@@ -36,7 +36,7 @@ class CustomToast {
     );
 
     final overlay = Overlay.of(context);
-    overlay?.insert(_overlayEntry!);
+    overlay.insert(_overlayEntry!);
 
     SchedulerBinding.instance.addPostFrameCallback((_) {
       Future.delayed(duration, () {
@@ -52,10 +52,9 @@ class _ToastWidget extends StatelessWidget {
   final bool isSuccess;
 
   const _ToastWidget({
-    Key? key,
     required this.message,
     required this.isSuccess,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

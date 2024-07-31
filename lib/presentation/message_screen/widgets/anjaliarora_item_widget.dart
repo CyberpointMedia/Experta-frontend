@@ -2,7 +2,6 @@ import 'package:experta/core/app_export.dart';
 
 import '../models/anjaliarora_item_model.dart';
 import '../controller/message_controller.dart';
-import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class AnjaliaroraItemWidget extends StatelessWidget {

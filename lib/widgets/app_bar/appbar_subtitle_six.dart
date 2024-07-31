@@ -1,22 +1,22 @@
-import 'package:flutter/material.dart';
 import 'package:experta/core/app_export.dart';
 
 // ignore: must_be_immutable
 class AppbarSubtitleSix extends StatelessWidget {
   AppbarSubtitleSix({
-    Key? key,
+    super.key,
     required this.text,
     this.margin,
     this.onTap,
-  }) : super(
-          key: key,
-        );
+    this.textColor,
+  });
 
   String text;
 
   EdgeInsetsGeometry? margin;
 
   Function? onTap;
+
+  Color? textColor;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +29,7 @@ class AppbarSubtitleSix extends StatelessWidget {
         child: Text(
           text,
           style: theme.textTheme.titleMedium!.copyWith(
-            color: appTheme.gray900,
+            color: textColor ?? appTheme.gray900,
           ),
         ),
       ),

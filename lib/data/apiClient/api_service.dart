@@ -1,4 +1,8 @@
+// ignore_for_file: avoid_print
+
 import 'dart:convert';
+import 'dart:developer';
+import 'dart:io';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/data/models/request/login_request_model.dart';
 import 'package:experta/data/models/request/register_request_model.dart';
@@ -7,12 +11,19 @@ import 'package:experta/data/models/request/verify_otp_request_model.dart';
 import 'package:experta/data/models/response/login_response_model.dart';
 import 'package:experta/data/models/response/resend_otp_response_model.dart';
 import 'package:experta/data/models/response/verify_otp_response_model.dart';
-import 'package:experta/presentation/followers/models/followers_model.dart';
-import 'package:experta/presentation/following/following.dart';
+import 'package:experta/presentation/additional_info/model/additional_model.dart';
+import 'package:experta/presentation/additional_info/model/interest_model.dart';
+
+
 import 'package:experta/presentation/professional_info/model/professional_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:dio/dio.dart';
+import 'package:path/path.dart';
+import 'package:mime/mime.dart';
+import 'package:http_parser/http_parser.dart';
 
 class ApiService {
+  final Dio _dio = Dio();
   final String _baseUrl = 'http://3.110.252.174:8080/api';
   final String? token = PrefUtils().getToken();
 
@@ -26,7 +37,10 @@ class ApiService {
       body: jsonEncode(model.toJson()),
     );
 
-    return _processResponse(response);
+    log('API call made to $url with body: ${jsonEncode(model.toJson())}');
+    log('API response status: ${response.statusCode}, body: ${response.body}');
+
+    return _processResponse2(response);
   }
 
   Future<ResendOtpResponseModel?> resendOtp(
@@ -108,25 +122,408 @@ class ApiService {
   //   }
   // }
 
-   Future<Map<String, dynamic>> getFollowersAndFollowing(String userId) async {
-  final response = await http.get(Uri.parse('$_baseUrl/profile/$userId/followersandfollowing'));
+ Future<Map<String, dynamic>> getFollowersAndFollowing(String userId) async {
+    final response = await http.get(Uri.parse('$_baseUrl/profile/$userId/followersandfollowing'));
 
-  if (response.statusCode == 200) {
-    var data = json.decode(response.body);
-    List<FollowersAndFollowing> followers = (data['data']['followers'] as List)
-        .map((follower) => FollowersAndFollowing.fromJson(follower))
-        .toList();
-    List<FollowersAndFollowing> following = (data['data']['following'] as List)
-        .map((following) => FollowersAndFollowing.fromJson(following))
-        .toList();
-    return {
-      'followers': followers,
-      'following': following,
-    };
-  } else {
-    throw Exception('Failed to load data');
+    if (response.statusCode == 200) {
+      log("the response for followers is ${response.body}");
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load data');
+    }
   }
-}
+  
+
+  Future<List<ExpertiseItem>> fetchExpertiseItems() async {
+    final response = await http.get(
+      Uri.parse('$_baseUrl/expertise-items'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      var jsonResponse = json.decode(response.body);
+      var data = jsonResponse['data'] as List;
+      return data.map((item) => ExpertiseItem.fromJson(item)).toList();
+    } else {
+      throw Exception('Failed to load expertise items');
+    }
+  }
+
+  Future<Map<String, dynamic>> saveExpertiseItems(
+      List<String> expertiseIds) async {
+    final url = Uri.parse('$_baseUrl/create-expertise');
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode({"expertise": expertiseIds.toSet().toList()}),
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to save expertise items');
+    }
+  }
+
+  Future<List<dynamic>> fetchIndustries() async {
+    final response = await _dio.get('$_baseUrl/industry');
+    return response.data['data'];
+  }
+
+  Future<List<dynamic>> fetchOccupations(String industryId) async {
+    final response = await _dio.get('$_baseUrl/occupation/$industryId');
+    return response.data['data'];
+  }
+
+  Future<Map<String, dynamic>> createOrUpdateWorkExperience(
+      Map<String, dynamic> data) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/create-work-experience'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: json.encode(data),
+    );
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to save work experience');
+    }
+  }
+
+  Future<void> createIndustryInfo(Map<String, dynamic> data) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/create-industry-info'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: json.encode(data),
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to create industry info');
+    }
+  }
+
+  Future<void> saveEducation(Education education) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/create-education'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: json.encode({
+        '_id': education.id.isEmpty ? null : education.id,
+        'degree': education.degree,
+        'schoolCollege': education.schoolCollege,
+        'startDate': education.startDate.toIso8601String(),
+        'endDate': education.endDate.toIso8601String(),
+      }),
+    );
+
+    print('Request Body: ${json.encode({
+          '_id': education.id.isEmpty ? null : education.id,
+          'degree': education.degree,
+          'schoolCollege': education.schoolCollege,
+          'startDate': education.startDate.toIso8601String(),
+          'endDate': education.endDate.toIso8601String(),
+        })}');
+    print('Response Status Code: ${response.statusCode}');
+    print('Response Body: ${response.body}');
+
+    if (response.statusCode != 200) {
+      throw Exception('Failed to save education: ${response.body}');
+    }
+  }
+
+  Future<Map<String, dynamic>> fetchBasicInfo() async {
+    final url = '$_baseUrl/basic-info';
+    log("Fetching basic info from: $url");
+
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    log("Response status: ${response.statusCode}");
+    log("Response body: ${response.body}");
+
+    if (response.statusCode == 200) {
+      final data = json.decode(response.body)['data'];
+      log("Parsed data: $data");
+      return data;
+    } else {
+      log("Failed to load basic info: ${response.body}");
+      throw Exception('Failed to load basic info');
+    }
+  }
+
+  Future<void> postBasicInfo(Map<String, dynamic> data, File? imageFile) async {
+    var request =
+        http.MultipartRequest('POST', Uri.parse('$_baseUrl/create-basic-info'));
+
+    // Add headers
+    request.headers.addAll({
+      'Content-Type': 'multipart/form-data',
+      'Authorization': 'Bearer $token',
+    });
+
+    // Add text fields
+    data.forEach((key, value) {
+      request.fields[key] = value.toString();
+    });
+
+    // Add image file if it exists
+    if (imageFile != null) {
+      print('Uploading file: ${imageFile.path}');
+      String mimeType =
+          lookupMimeType(imageFile.path) ?? 'application/octet-stream';
+      request.files.add(await http.MultipartFile.fromPath(
+        'file', // The field name for the image file
+        imageFile.path,
+        filename: basename(imageFile.path),
+        contentType: MediaType.parse(mimeType),
+      ));
+    }
+
+    try {
+      var response = await request.send();
+      if (response.statusCode == 200) {
+        print('Uploaded successfully');
+      } else {
+        print(
+            'Failed to upload: ${response.statusCode} - ${await response.stream.bytesToString()}');
+      }
+    } catch (e) {
+      print('Failed to post basic info: $e');
+    }
+  }
+
+  Future<LanguageResponseModel> fetchLanguages() async {
+    final url = Uri.parse('$_baseUrl/language');
+    final response = await http.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+    log('API call made to $url');
+    log('API response status: ${response.statusCode}, body: ${response.body}');
+    return LanguageResponseModel.fromJson(jsonDecode(response.body));
+  }
+
+  Future<InterestResponseModel> fetchInterests() async {
+    final url = Uri.parse('$_baseUrl/interest');
+    final response = await http.get(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+    log('API call made to $url');
+    log('API response status: ${response.statusCode}, body: ${response.body}');
+    return InterestResponseModel.fromJson(jsonDecode(response.body));
+  }
+
+  Future<List<Interest>> fetchAllInterests() async {
+    final response = await http.get(
+      Uri.parse('$_baseUrl/interest-items'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> responseData = json.decode(response.body);
+      final List<dynamic> data = responseData['data'];
+      return data.map((json) => Interest.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to load interests list');
+    }
+  }
+
+  Future<Map<String, dynamic>> fetchAllLanguages() async {
+    final response = await http.get(
+      Uri.parse('$_baseUrl/all-languages-list'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load languages');
+    }
+  }
+
+  Future<Map<String, dynamic>> submitUserInterests(
+      List<String> interestIds) async {
+    final url = Uri.parse('$_baseUrl/create-user-interest');
+    final body = jsonEncode({'interests': interestIds});
+
+    try {
+      final response = await http.post(url,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+          body: body);
+      if (response.statusCode == 200) {
+        final jsonResponse = jsonDecode(response.body);
+        return jsonResponse;
+      } else {
+        throw Exception('Failed to submit interests: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error submitting interests: $e');
+    }
+  }
+
+  Future<Map<String, dynamic>> postSelectedLanguages(
+      List<String> languageIds) async {
+    final url = Uri.parse('$_baseUrl/create-user-language');
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode({'language': languageIds}),
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to post selected languages');
+    }
+  }
+
+  Future<Map<String, dynamic>> fetchAvailability() async {
+    final response = await http.get(
+      Uri.parse('$_baseUrl/user-availability'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load availability data');
+    }
+  }
+
+  Future<Map<String, dynamic>> deleteAvailability(String id) async {
+    final response = await http.delete(
+      Uri.parse('$_baseUrl/availability/$id'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to delete availability slot');
+    }
+  }
+
+  Future<Map<String, dynamic>> createUserAvailability(
+      Map<String, dynamic> body) async {
+    final url = Uri.parse('$_baseUrl/create-user-availability');
+
+    try {
+      final response = await http.post(url,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+          body: json.encode(body));
+
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      } else {
+        throw Exception(
+            'Failed to create/update user availability: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Exception: $e');
+    }
+  }
+
+  Future<Map<String, dynamic>> createUserPricing(
+      Map<String, dynamic> body) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/create-user-pricing'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: json.encode(body),
+    );
+
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to save pricing');
+    }
+  }
+
+  Future<Map<String, dynamic>> getUserData(String userId) async {
+    final response = await http.get(Uri.parse('$_baseUrl/getUserData/$userId'));
+
+    if (response.statusCode == 200) {
+      var jsonData = json.decode(response.body);
+      Logger.log(jsonData);
+      print("profile response : $jsonData");
+      return jsonData;
+    } else {
+      throw Exception('Failed to load user data');
+    }
+  }
+
+  // remove connection 
+  Future<Map<String, dynamic>> removeConnection(
+      Map<String, dynamic> body) async {
+    final url = Uri.parse('$_baseUrl/removeConnection');
+
+    try {
+      final response = await http.post(url,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+          body: json.encode(body));
+
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      } else {
+        throw Exception(
+            'Failed to  unfollow user: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Exception: $e');
+    }
+  }
 
   T _processResponse<T>(http.Response response) {
     switch (response.statusCode) {
@@ -167,6 +564,29 @@ class ApiService {
             'Error occurred while communicating with server with status code: ${response.statusCode}');
     }
   }
+
+  dynamic _processResponse2(http.Response response) {
+    final jsonResponse = json.decode(response.body);
+    log('Response JSON: $jsonResponse'); // Log the response
+
+    switch (response.statusCode) {
+      case 200:
+        if (jsonResponse['status'] == 'success') {
+          return RegisterResponseSuccess.fromJson(jsonResponse);
+        } else {
+          return RegisterResponseError.fromJson(jsonResponse);
+        }
+      case 400:
+        throw BadRequestException(response.body.toString());
+      case 401:
+      case 403:
+        throw UnauthorisedException(response.body.toString());
+      case 500:
+      default:
+        throw FetchDataException(
+            'Error occurred while communicating with server with status code: ${response.statusCode}');
+    }
+  }
 }
 
 class BadRequestException implements Exception {
@@ -183,3 +603,5 @@ class FetchDataException implements Exception {
   final String message;
   FetchDataException(this.message);
 }
+
+

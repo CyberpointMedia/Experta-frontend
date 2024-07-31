@@ -7,4 +7,9 @@ import '../models/setting_model.dart';
 /// current settingModelObj
 class SettingController extends GetxController {
   Rx<SettingModel> settingModelObj = SettingModel().obs;
+
+  String? imagePath = PrefUtils().getProfileImage();
+  String? name = PrefUtils().getProfileName();
+  
+  
 }

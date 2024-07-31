@@ -227,9 +227,6 @@ class ImageConstant {
 
   static String imgGiftBox1 = '$imagePath/img_gift_box_1.svg';
 
-  static String imgCloseOnprimarycontainer26x17 =
-      '$imagePath/img_close_onprimarycontainer_26x17.svg';
-
   static String imgInfoBlueGray30024x24 =
       '$imagePath/img_info_blue_gray_300_24x24.svg';
 
@@ -442,11 +439,7 @@ class ImageConstant {
 
   static String imageNotFound = 'assets/images/image_not_found.png';
 
-  static String uploadcloud = '$imagePath/settings/uploadcloud.svg';
-
-
-
-  // ACCOUNT STTING 
+  // ACCOUNT STTING
   static String user = "$imagePath/settings/User.svg";
   static String birthday = "$imagePath/settings/Cake.svg";
   static String gender = "$imagePath/settings/Gender.svg";
@@ -454,24 +447,19 @@ class ImageConstant {
   static String phone = "$imagePath/settings/mobile.svg";
   static String popup = "$imagePath/settings/popup.svg";
 
-
-
   // PAYMENT
   static String wallet = "$imagePath/wallet.svg";
   static String withdraw = "$imagePath/settings/Withdraw.svg";
-  static String transaction= "$imagePath/settings/Transaction.svg";
-  static String uservarification= "$imagePath/settings/User Verify.svg";
+  static String transaction = "$imagePath/settings/Transaction.svg";
+  static String uservarification = "$imagePath/settings/User Verify.svg";
   static String reffer = "$imagePath/Star.svg";
   static String help = "$imagePath/settings/24-hours.svg";
   static String bank = "$imagePath/settings/Bank.svg";
   static String card = "$imagePath/settings/credit-card.svg";
   static String pancard = "$imagePath/settings/credit-card.svg";
   static String block = "$imagePath/Block.svg";
-  static String delete= "$imagePath/Delete.svg";
-  static String upi= "$imagePath/settings/UPI.svg";
-
-
-
+  static String delete = "$imagePath/Delete.svg";
+  static String upi = "$imagePath/settings/UPI.svg";
 
   //gender
   static String male = "$imagePath/settings/male.svg";
@@ -483,9 +471,24 @@ class ImageConstant {
   static String cokie = "$imagePath/settings/Cookie.svg";
   static String term = "$imagePath/settings/condition.svg";
 
+  static String cross = '$imagePath/settings/cross.svg';
+  static String plus = '$imagePath/settings/plus.svg';
+  static String info = "assets/images/settings/Information.svg";
+  static String brief = "assets/images/settings/Brief.svg";
+  static String vector = "assets/images/settings/Vector.svg";
+  static String union = "assets/images/settings/Union.svg";
+  static String avail = "assets/images/settings/available.svg";
+  static String price = "assets/images/settings/price.svg";
+  static String clock = "assets/images/settings/clock.svg";
+  static String uploadcloud = '$imagePath/settings/uploadcloud.svg';
 
+  // albums
 
+  static String recents = "$imagePath/settings/history.png";
+  static String videos = "$imagePath/settings/videos.png";
+  static String camera = "$imagePath/settings/camera.svg";
+  static String multiSelect = "$imagePath/settings/multiselect.svg";
 
-
+  // camera.svg
 }
 

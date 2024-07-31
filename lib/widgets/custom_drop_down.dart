@@ -1,9 +1,8 @@
-import 'package:flutter/material.dart';
 import '../core/app_export.dart';
 
 class CustomDropDown extends StatelessWidget {
-  CustomDropDown({
-    Key? key,
+  const CustomDropDown({
+    super.key,
     this.alignment,
     this.width,
     this.focusNode,
@@ -23,9 +22,8 @@ class CustomDropDown extends StatelessWidget {
     this.filled = true,
     this.validator,
     this.onChanged,
-  }) : super(
-          key: key,
-        );
+    this.value,
+  });
 
   final Alignment? alignment;
 
@@ -65,6 +63,8 @@ class CustomDropDown extends StatelessWidget {
 
   final Function(SelectionPopupModel)? onChanged;
 
+  final SelectionPopupModel? value;
+
   @override
   Widget build(BuildContext context) {
     return alignment != null
@@ -85,15 +85,10 @@ class CustomDropDown extends StatelessWidget {
           items: items?.map((SelectionPopupModel item) {
             return DropdownMenuItem<SelectionPopupModel>(
               value: item,
-              child: Row(
-                textBaseline: TextBaseline.alphabetic,
-                children: [
-                  Text(
-                    item.title,
-                    overflow: TextOverflow.ellipsis,
-                    style: hintStyle ?? CustomTextStyles.titleMediumSemiBold_1,
-                  ),
-                ],
+              child: Text(
+                item.title,
+                overflow: TextOverflow.ellipsis,
+                style: hintStyle ?? CustomTextStyles.titleMediumSemiBold_1,
               ),
             );
           }).toList(),
@@ -102,9 +97,9 @@ class CustomDropDown extends StatelessWidget {
           onChanged: (value) {
             onChanged!(value!);
           },
+          value: value,
         ),
       );
-
   InputDecoration get decoration => InputDecoration(
         hintText: hintText ?? "",
         hintStyle: hintStyle ?? CustomTextStyles.titleMediumSemiBold_1,
@@ -116,7 +111,7 @@ class CustomDropDown extends StatelessWidget {
         contentPadding: contentPadding ??
             EdgeInsets.only(
               left: 15.h,
-              top: 8.v, // Adjust top padding for better alignment
+              top: 16.v,
               bottom: 16.v,
             ),
         fillColor:

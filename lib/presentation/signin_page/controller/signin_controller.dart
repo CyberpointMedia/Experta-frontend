@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:experta/data/apiClient/api_service.dart';
 import 'package:experta/data/models/request/login_request_model.dart';
 import 'package:experta/data/models/request/register_request_model.dart';
 import 'package:experta/data/models/response/login_response_model.dart';
@@ -9,7 +8,6 @@ import 'package:experta/widgets/custom_toast_message.dart';
 import '../../../core/app_export.dart';
 import 'package:country_pickers/country.dart';
 import 'package:country_pickers/utils/utils.dart';
-import 'package:flutter/material.dart';
 
 import '../../../core/utils/validation_functions.dart';
 
@@ -71,10 +69,9 @@ class SigninController extends GetxController {
           isSuccess: true,
         );
         log('hi the otp is ${response.data.otp}');
-        Get.toNamed(
-          AppRoutes.verifynumberScreen,
-          arguments: phoneNumberController,
-        );
+        var otp = response.data.otp;
+        Get.toNamed(AppRoutes.verifynumberScreen,
+            arguments: [phoneNumberController, otp]);
       } else {
         print("Login failed");
       }
@@ -115,7 +112,10 @@ class SigninController extends GetxController {
       );
 
       final response = await _apiService.registerUser(requestModel);
+      log('Response received: ${response.toString()}');
+
       if (response is RegisterResponseSuccess) {
+        log('Registration successful: ${response.data.toString()}');
         CustomToast().showToast(
           context: context,
           message: 'Otp Sent Sucessfully',
@@ -125,17 +125,25 @@ class SigninController extends GetxController {
           AppRoutes.verifynumberScreen,
           arguments: phoneNumberController,
         );
-        log('Registration successful: ${response.data.toString()}');
       } else if (response is RegisterResponseError) {
+        log("Registration failed: ${response.error.errorMessage}");
         CustomToast().showToast(
           context: context,
           message: response.error.errorMessage,
           isSuccess: false,
         );
-        log("Registration failed");
         errorMessage(response.error.errorMessage);
+      } else {
+        log('Unexpected response type: ${response.runtimeType}');
+        CustomToast().showToast(
+          context: context,
+          message: 'Unexpected response from server',
+          isSuccess: false,
+        );
+        errorMessage('Unexpected response from server');
       }
     } catch (e) {
+      log('Failed to register user: $e');
       CustomToast().showToast(
         context: context,
         message: 'Failed to register user: $e',

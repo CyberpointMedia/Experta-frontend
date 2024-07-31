@@ -2,7 +2,6 @@ import 'package:experta/core/app_export.dart';
 
 import '../models/feedsactive_item_model.dart';
 import '../controller/feeds_active_controller.dart';
-import 'package:flutter/material.dart';
 
 // ignore: must_be_immutable
 class FeedsactiveItemWidget extends StatelessWidget {

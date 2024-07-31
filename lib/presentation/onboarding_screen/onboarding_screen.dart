@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
 import 'package:staggered_grid_view_flutter/widgets/staggered_tile.dart';
 import 'package:experta/widgets/custom_outlined_button.dart';
-import 'package:flutter/material.dart';
 import 'package:experta/core/app_export.dart';
 import 'controller/onboarding_controller.dart';
 

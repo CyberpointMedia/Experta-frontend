@@ -1,16 +1,10 @@
 import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
-import 'package:experta/widgets/app_bar/appbar_leading_image.dart';
-import 'package:experta/widgets/app_bar/appbar_subtitle_six.dart';
-import 'package:experta/widgets/app_bar/custom_app_bar.dart';
-import 'package:experta/widgets/custom_elevated_button.dart';
 //import 'package:experta/widgets/custom_elevated_button.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
 import 'package:experta/widgets/custom_text_form_field.dart';
 //import 'package:experta/widgets/custom_outlined_button.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class VerifyAccount extends StatefulWidget {
   const VerifyAccount({super.key});
@@ -22,6 +16,7 @@ class VerifyAccount extends StatefulWidget {
 class _VerifyAccountState extends State<VerifyAccount> {
   final formKey = GlobalKey<FormState>();
   final TextEditingController panController = TextEditingController();
+  // ignore: non_constant_identifier_names
   final TextEditingController AadharCardController = TextEditingController();
 
 
@@ -306,8 +301,8 @@ class _VerifyAccountState extends State<VerifyAccount> {
     );
   }
 void _showPANVerificationDialog() {
-  final _formKey = GlobalKey<FormState>();
-  final TextEditingController _panController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+  final TextEditingController panController = TextEditingController();
 
   showDialog(
     context: context,
@@ -317,7 +312,7 @@ void _showPANVerificationDialog() {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Form(
-            key: _formKey,
+            key: formKey,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start, // Align to the left
@@ -375,7 +370,7 @@ void _showPANVerificationDialog() {
                 ),
                 const SizedBox(height: 8), // Add some space between the PAN number and the TextFormField
                 CustomTextFormField(
-                  controller: _panController,
+                  controller: panController,
                   autofocus: false,
                   hintText: "Enter Your 10 Digit PAN Number",
                   hintStyle: CustomTextStyles.titleMediumGray400,
@@ -392,7 +387,7 @@ void _showPANVerificationDialog() {
                 const SizedBox(height: 16),
                 CustomElevatedButton(
                   onPressed: () {
-                    if (_formKey.currentState!.validate()) {
+                    if (formKey.currentState!.validate()) {
                       // Add your verification logic here
                     }
                   },
@@ -409,8 +404,8 @@ void _showPANVerificationDialog() {
 }
 
 void showAadhaarCardVerificationDialog() {
-  final _formKey = GlobalKey<FormState>();
-  final TextEditingController _aadhaarCardController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+  final TextEditingController aadhaarCardController = TextEditingController();
 
   showDialog(
     context: context,
@@ -420,7 +415,7 @@ void showAadhaarCardVerificationDialog() {
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Form(
-            key: _formKey,
+            key: formKey,
             child: Column(
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -478,7 +473,7 @@ void showAadhaarCardVerificationDialog() {
                 ),
                 const SizedBox(height: 8),
                 CustomTextFormField(
-                  controller: _aadhaarCardController,
+                  controller: aadhaarCardController,
                   autofocus: false,
                   hintText: "Enter Your 12 Digit Aadhaar Number",
                   hintStyle: CustomTextStyles.titleMediumGray400,
@@ -495,7 +490,7 @@ void showAadhaarCardVerificationDialog() {
                 const SizedBox(height: 16),
                  CustomElevatedButton(
                   onPressed: () {
-                    if (_formKey.currentState!.validate()) {
+                    if (formKey.currentState!.validate()) {
                       // Add your verification logic here
                     }
                   },

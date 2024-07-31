@@ -1,7 +1,7 @@
+import 'package:experta/presentation/search_screen/controller/search_controller.dart';
+
 import '../../../core/app_export.dart';
 import '../models/search_item_model.dart';
-import '../controller/search_controller.dart';
-import 'package:flutter/material.dart' hide SearchController;
 
 // ignore: must_be_immutable
 class SearchItemWidget extends StatelessWidget {
@@ -12,7 +12,7 @@ class SearchItemWidget extends StatelessWidget {
 
   SearchItemModel searchItemModelObj;
 
-  var controller = Get.find<SearchController>();
+  var controller = Get.find<SearchPageController>();
 
   @override
   Widget build(BuildContext context) {

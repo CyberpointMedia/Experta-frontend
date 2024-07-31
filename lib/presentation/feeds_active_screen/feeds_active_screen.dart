@@ -4,7 +4,6 @@ import 'package:experta/widgets/custom_icon_button.dart';
 import 'widgets/feedsactive_item_widget.dart';
 import 'models/feedsactive_item_model.dart';
 import 'package:outline_gradient_button/outline_gradient_button.dart';
-import 'package:flutter/material.dart';
 import 'controller/feeds_active_controller.dart';
 
 class FeedsActiveScreen extends StatefulWidget {
@@ -26,7 +25,7 @@ class _FeedsActiveScreenState extends State<FeedsActiveScreen> {
         title: Text("lbl_feeds".tr, style: theme.textTheme.titleLarge),
         leading: CustomImageView(
             imagePath: ImageConstant.imgArrowLeftOnerrorcontainer,
-            margin: EdgeInsets.all(15),
+            margin: const EdgeInsets.all(15),
             onTap: () {
               onTapImgArrowLeft();
             }),

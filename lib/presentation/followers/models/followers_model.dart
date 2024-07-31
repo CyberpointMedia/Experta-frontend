@@ -1,79 +1,86 @@
-// followers_and_following.dart
+import 'dart:convert';
+
+FollowersAndFollowing followersAndFollowingFromJson(String str) =>
+    FollowersAndFollowing.fromJson(json.decode(str));
+
+String followersAndFollowingToJson(FollowersAndFollowing data) =>
+    json.encode(data.toJson());
+
 class FollowersAndFollowing {
-  String? id;
-  String? email;
-  String? phoneNo;
-  bool? block;
-  bool? isVerified;
-  BasicInfo? basicInfo;
-  List<dynamic>? education;
-  List<dynamic>? workExperience;
-  bool online;
+  final String status;
+  final Data data;
 
   FollowersAndFollowing({
-    required this.id,
-    required this.email,
-    required this.phoneNo,
-    required this.block,
-    required this.isVerified,
-    required this.basicInfo,
-    required this.education,
-    required this.workExperience,
-    required this.online,
+    required this.status,
+    required this.data,
   });
 
-  factory FollowersAndFollowing.fromJson(Map<String, dynamic> json) {
-    return FollowersAndFollowing(
-      id: json['id'] as String?,
-      email: json['email'] as String?,
-      phoneNo: json['phoneNo'] as String?,
-      block: json['block'] as bool?,
-      isVerified: json['isVerified'] as bool?,
-      basicInfo: json['basicInfo'] != null ? BasicInfo.fromJson(json['basicInfo'] as Map<String, dynamic>) : null,
-      education: json['education'] as List<dynamic>?,
-      workExperience: json['workExperience'] as List<dynamic>?,
-      online: json['online'] as bool? ?? false,
-    );
-  }
+  factory FollowersAndFollowing.fromJson(Map<String, dynamic> json) =>
+      FollowersAndFollowing(
+        status: json["status"] ?? '',
+        data: Data.fromJson(json["data"] ?? {}),
+      );
+
+  Map<String, dynamic> toJson() => {
+        "status": status,
+        "data": data.toJson(),
+      };
 }
 
-class BasicInfo {
-  String? id;
-  String? firstName;
-  String? lastName;
-  String? displayName;
-  String? bio;
-  String? profilePic;
-  String? facebook;
-  String? instagram;
-  String? linkedin;
-  String? twitter;
+class Data {
+  final String id;
+  final List<Follow> followers;
+  final List<Follow> following;
 
-  BasicInfo({
+  Data({
     required this.id,
-    required this.firstName,
-    required this.lastName,
-    required this.displayName,
-    required this.bio,
-    required this.profilePic,
-    required this.facebook,
-    required this.instagram,
-    required this.linkedin,
-    required this.twitter,
+    required this.followers,
+    required this.following,
   });
 
-  factory BasicInfo.fromJson(Map<String, dynamic> json) {
-    return BasicInfo(
-      id: json['_id'] as String?,
-      firstName: json['firstName'] as String?,
-      lastName: json['lastName'] as String?,
-      displayName: json['displayName'] as String?,
-      bio: json['bio'] as String?,
-      profilePic: json['profilePic'] as String?,
-      facebook: json['facebook'] as String?,
-      instagram: json['instagram'] as String?,
-      linkedin: json['linkedin'] as String?,
-      twitter: json['twitter'] as String?,
-    );
-  }
+  factory Data.fromJson(Map<String, dynamic> json) => Data(
+        id: json["_id"] ?? '',
+        followers: json["followers"] != null
+            ? List<Follow>.from(
+                json["followers"].map((x) => Follow.fromJson(x)))
+            : [],
+        following: json["following"] != null
+            ? List<Follow>.from(
+                json["following"].map((x) => Follow.fromJson(x)))
+            : [],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "_id": id,
+        "followers": List<dynamic>.from(followers.map((x) => x.toJson())),
+        "following": List<dynamic>.from(following.map((x) => x.toJson())),
+      };
+}
+
+class Follow {
+  final String profileName;
+  final String profilePic;
+  final String industryName;
+  final String id;
+
+  Follow({
+    required this.profileName,
+    required this.profilePic,
+    required this.industryName,
+     required this.id,
+  });
+
+  factory Follow.fromJson(Map<String, dynamic> json) => Follow(
+        profileName: json["basicInfo"]?["firstName"] ?? '',
+        profilePic: json["basicInfo"]?["profilePic"] ?? '',
+        industryName: json["industryOccupation"]?["industry"]?["name"] ?? '',
+        id:json["id"] ?? ''
+      );
+
+  Map<String, dynamic> toJson() => {
+        "profileName": profileName,
+        "profilePic": profilePic,
+        "industryName": industryName,
+        "id":id
+      };
 }

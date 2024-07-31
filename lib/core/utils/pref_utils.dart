@@ -1,9 +1,9 @@
-//ignore: unused_import
-import 'dart:convert';
+import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 class PrefUtils {
   static SharedPreferences? _sharedPreferences;
+  final ImagePicker pickerp = ImagePicker();
 
   PrefUtils() {
     // init();
@@ -32,9 +32,9 @@ class PrefUtils {
     await _sharedPreferences!.remove('token');
   }
 
-  ///will clear all the data stored in preference
-  void clearPreferencesData() async {
-    _sharedPreferences!.clear();
+  /// Clear all data stored in SharedPreferences
+  Future<void> clearPreferencesData() async {
+    await _sharedPreferences!.clear();
   }
 
   Future<void> setThemeData(String value) {
@@ -48,4 +48,47 @@ class PrefUtils {
       return 'primary';
     }
   }
+
+/// Save image to SharedPreferences
+  Future<void> setProfileImage(String imagePath) async {
+    await _sharedPreferences!.setString('img', imagePath);
+  }
+    /// Retrieve image from SharedPreferences
+  String? getProfileImage() {
+    return _sharedPreferences!.getString('img');
+  }
+
+  /// Remove image from SharedPreferences
+  Future<void> removeProfileImage() async {
+    await _sharedPreferences!.remove('img');
+  }
+
+ /// Save name to SharedPreferences
+  Future<void> setProfileName(String name) async {
+    await _sharedPreferences!.setString('name', name);
+  }
+    /// Retrieve name from SharedPreferences
+  String? getProfileName() {
+    return _sharedPreferences!.getString('name');
+  }
+
+  /// Remove name from SharedPreferences
+  Future<void> removeProfileName() async {
+    await _sharedPreferences!.remove('name');
+  }
+
+ /// Save address to SharedPreferences
+  Future<void> setaddress(String address) async {
+    await _sharedPreferences!.setString('address', address);
+  }
+    /// Retrieve address from SharedPreferences
+  String? getaddress() {
+    return _sharedPreferences!.getString('address');
+  }
+
+  /// Remove address from SharedPreferences
+  Future<void> removeaddress() async {
+    await _sharedPreferences!.remove('address');
+  }
+
 }

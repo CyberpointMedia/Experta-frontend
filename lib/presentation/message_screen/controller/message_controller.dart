@@ -1,4 +1,4 @@
-import '../../../core/app_export.dart';import '../models/message_model.dart';import 'package:flutter/material.dart';/// A controller class for the MessageScreen.
+import '../../../core/app_export.dart';import '../models/message_model.dart';/// A controller class for the MessageScreen.
 ///
 /// This class manages the state of the MessageScreen, including the
 /// current messageModelObj

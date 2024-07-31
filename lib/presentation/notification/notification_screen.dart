@@ -1,7 +1,5 @@
 import 'dart:ui';
 
-import 'package:experta/routes/app_routes.dart';
-import 'package:experta/widgets/custom_bottom_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';

@@ -1,8 +1,7 @@
-import 'package:flutter/material.dart';
 import '../core/app_export.dart';
 
 class CustomRadioButton extends StatelessWidget {
-  CustomRadioButton({
+  const CustomRadioButton({
     super.key,
     required this.onChange,
     this.decoration,
@@ -28,7 +27,7 @@ class CustomRadioButton extends StatelessWidget {
 
   final double? iconSize;
 
-  String? value;
+  final String? value;
 
   final String? groupValue;
 

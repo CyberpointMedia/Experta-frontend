@@ -9,6 +9,8 @@ import 'package:experta/presentation/post/controller/post_controller.dart';
 class PostPage extends StatelessWidget {
   final PostController controller = Get.put(PostController());
 
+   PostPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -184,9 +186,9 @@ class PostPage extends StatelessWidget {
 
 class AssetThumbnail extends StatelessWidget {
   const AssetThumbnail({
-    Key? key,
+    super.key,
     required this.asset,
-  }) : super(key: key);
+  });
 
   final AssetEntity asset;
 
