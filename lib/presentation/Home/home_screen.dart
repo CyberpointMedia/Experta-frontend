@@ -4,6 +4,8 @@ import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/Home/model/home_model.dart';
 import 'package:experta/presentation/Trending%20Section/trending_section.dart';
 import 'package:experta/presentation/categoryDetails/category_details_screen.dart';
+import 'package:experta/presentation/dashboard/controller/dashboard_controller.dart';
+import 'package:experta/widgets/animated_hint_searchview.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:experta/presentation/Home/controller/home_controller.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
@@ -17,6 +19,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   HomeController controller = Get.put(HomeController());
+    final DashboardController dashboardController =
+        Get.find<DashboardController>();
 
   @override
   Widget build(BuildContext context) {
@@ -114,6 +118,14 @@ class _HomeScreenState extends State<HomeScreen> {
     );
   }
 
+  final List<String> hintTexts = [
+    "msg_search_your_interest".tr,
+    "Search Users",
+    "Find Friends",
+    "Find Cunsultants",
+    "Search Categories",
+    "Search Interested Positions"
+  ];
   Widget _buildStackaccentone() {
     return SizedBox(
       height: 200.v,
@@ -124,11 +136,20 @@ class _HomeScreenState extends State<HomeScreen> {
             alignment: Alignment.topCenter,
             child: Padding(
               padding: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-              child: CustomSearchView(
+              child: CustomAnimatedSearchView(
                 width: double.infinity,
                 controller: controller.searchController,
-                hintText: "msg_search_your_interest".tr,
+                hintTextDuration: const Duration(seconds: 2),
+                hintTexts: hintTexts,
+                onChanged: (value) {
+                  controller.fetchUsersBySearch(value);
+                },
               ),
+              // child: CustomSearchView(
+              //   width: double.infinity,
+              //   controller: controller.searchController,
+              //   hintText: "msg_search_your_interest".tr,
+              // ),
             ),
           ),
           _buildColumnedit(),
@@ -146,62 +167,88 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       child: Column(
         children: [
-          ListView.builder(
-            shrinkWrap: true,
-            itemCount: controller.searchResults.length > 5
-                ? 5
-                : controller.searchResults.length,
-            itemBuilder: (context, index) {
-              SearchResult user = controller.searchResults[index];
-              return Container(
-                padding: const EdgeInsets.all(5),
-                height: 65,
-                child: Row(
-                  children: [
-                    Stack(
-                      children: [
-                        CustomImageView(
-                          radius: BorderRadius.circular(29), // 58 / 2
-                          imagePath: (user.profilePic.isEmpty)
-                              ? ImageConstant.imgImage3380x80
-                              : user.profilePic,
-                        ),
-                        Positioned(
-                          bottom: 3,
-                          right: 1,
-                          child: CircleAvatar(
-                            radius: 8,
-                            backgroundColor: Colors.white,
-                            child: CircleAvatar(
-                              radius: 6,
-                              backgroundColor:
-                                  user.online ? Colors.green : Colors.red,
+          Obx(() {
+            if (controller.searchResults == null) {
+              return const Center(child: CircularProgressIndicator());
+            }
+            return Expanded(
+              child: ListView.builder(
+                shrinkWrap: true,
+                itemCount: controller.searchResults.length > 5
+                    ? 5
+                    : controller.searchResults.length,
+                itemBuilder: (context, index) {
+                  SearchResult user = controller.searchResults[index];
+                  return GestureDetector(
+                    onTap: () {
+                      Get.toNamed(AppRoutes.detailsPage,
+                          arguments: {"user": user});
+                    },
+                    child: Container(
+                      padding: const EdgeInsets.all(5),
+                      height: 65,
+                      child: Row(
+                        children: [
+                          Stack(
+                            children: [
+                              CustomImageView(
+                                radius: BorderRadius.circular(29), // 58 / 2
+                                imagePath: (user.profilePic.isEmpty)
+                                    ? ImageConstant.imgImage3380x80
+                                    : user.profilePic,
+                              ),
+                              Positioned(
+                                bottom: 3,
+                                right: 1,
+                                child: CircleAvatar(
+                                  radius: 8,
+                                  backgroundColor: Colors.white,
+                                  child: CircleAvatar(
+                                    radius: 6,
+                                    backgroundColor:
+                                        user.online ? Colors.green : Colors.red,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text("${user.firstName} ${user.lastName}"),
+                                Text("${user.industry} | ${user.occupation}"),
+                              ],
                             ),
                           ),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 10),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text("${user.firstName} ${user.lastName}"),
-                          Text("${user.industry} | ${user.occupation}"),
                         ],
                       ),
                     ),
-                  ],
-                ),
-              );
-            },
-          ),
+                  );
+                },
+              ),
+            );
+          }),
           if (controller.searchResults.length > 5)
             TextButton(
               onPressed: () {
+                final searchResults = controller.searchResults
+                    .map((result) => result.toMap())
+                    .toList();
+                final searchQuery = controller.searchController.text;
+                print('Search Results: $searchResults');
+                print('Search Query: $searchQuery');
+
                 controller.searchController.clear();
-                Get.toNamed(AppRoutes.dashboard);
+                dashboardController.navigateToPage(
+                  1,
+                  {
+                    'searchResults': searchResults,
+                    'searchQuery': searchQuery,
+                  },
+                );
               },
               child: const Text("View More"),
             ),
@@ -211,80 +258,97 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildColumnedit() {
-    return Container(
-      margin: const EdgeInsets.fromLTRB(10, 20, 10, 0),
-      padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 14),
-      decoration: BoxDecoration(
-        color: const Color(0XFFFFFFFF),
-        borderRadius: BorderRadius.circular(10),
-        border: Border.all(color: appTheme.gray30001, width: 1.adaptSize),
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 1),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text("Complete your Profile",
-                        style: theme.textTheme.titleMedium!),
-                    SizedBox(height: 2.v),
-                    Text("Fill in all required fields",
-                        style: theme.textTheme.bodyLarge
-                            ?.copyWith(fontSize: 12.fSize)),
-                  ],
-                ),
-                Container(
-                  width: MediaQuery.of(Get.context!).size.width * 0.3,
-                  height: 36.v,
-                  margin: const EdgeInsets.only(bottom: 2),
-                  child: ElevatedButton(
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0XFFFEDC33),
-                      shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18)),
-                      visualDensity:
-                          const VisualDensity(vertical: -4, horizontal: -4),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 20, vertical: 9),
+    return Obx(() {
+      if (controller.profileCompletion.value == null ||
+          controller.profileCompletion.value!.totalCompletionPercentage ==
+              100) {
+        return const SizedBox.shrink();
+      }
+
+      return Container(
+        margin: const EdgeInsets.fromLTRB(10, 20, 10, 0),
+        padding: const EdgeInsets.symmetric(horizontal: 13, vertical: 14),
+        decoration: BoxDecoration(
+          color: const Color(0XFFFFFFFF),
+          borderRadius: BorderRadius.circular(10),
+          border: Border.all(color: appTheme.gray30001, width: 1.adaptSize),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 1),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text("Complete your Profile",
+                          style: theme.textTheme.titleMedium!),
+                      SizedBox(height: 2.v),
+                      Text("Fill in all required fields",
+                          style: theme.textTheme.bodyLarge
+                              ?.copyWith(fontSize: 12.fSize)),
+                    ],
+                  ),
+                  Container(
+                    width: MediaQuery.of(Get.context!).size.width * 0.3,
+                    height: 36.v,
+                    margin: const EdgeInsets.only(bottom: 2),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: const Color(0XFFFEDC33),
+                        shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(18)),
+                        visualDensity:
+                            const VisualDensity(vertical: -4, horizontal: -4),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 9),
+                      ),
+                      onPressed: () {
+                        // if (controller.profileCompletion.value!
+                        //         .totalCompletionPercentage <
+                        //     100) {
+                        Get.toNamed(AppRoutes.editProfileSetting,
+                            arguments: controller.profileCompletion.value);
+                        // }
+                      },
+                      child: Text("Edit Profile",
+                          style: theme.textTheme.displaySmall
+                              ?.copyWith(fontSize: 14.fSize)),
                     ),
-                    onPressed: () {},
-                    child: Text("Edit Profile",
-                        style: theme.textTheme.displaySmall
-                            ?.copyWith(fontSize: 14.fSize)),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: 12.v),
+            Padding(
+              padding: const EdgeInsets.only(left: 1),
+              child: Container(
+                height: 8.v,
+                width: 313.adaptSize,
+                decoration: BoxDecoration(
+                  color: appTheme.gray20002,
+                  borderRadius: BorderRadius.circular(4),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(4),
+                  child: LinearProgressIndicator(
+                    value: controller.profileCompletion.value!
+                            .totalCompletionPercentage /
+                        100,
+                    backgroundColor: appTheme.gray20002,
+                    valueColor:
+                        AlwaysStoppedAnimation<Color>(appTheme.deepOrangeA200),
                   ),
                 ),
-              ],
-            ),
-          ),
-          SizedBox(height: 12.v),
-          Padding(
-            padding: const EdgeInsets.only(left: 1),
-            child: Container(
-              height: 8.v,
-              width: 313.adaptSize,
-              decoration: BoxDecoration(
-                color: appTheme.gray20002,
-                borderRadius: BorderRadius.circular(4),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(4),
-                child: LinearProgressIndicator(
-                  value: 0.03,
-                  backgroundColor: appTheme.gray20002,
-                  valueColor:
-                      AlwaysStoppedAnimation<Color>(appTheme.deepOrangeA200),
-                ),
               ),
             ),
-          ),
-        ],
-      ),
-    );
+          ],
+        ),
+      );
+    });
   }
 
   Widget _buildColumncategory() {

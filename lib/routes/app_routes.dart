@@ -73,6 +73,8 @@ import 'package:experta/presentation/search_screen/binding/search_binding.dart';
 import 'package:experta/presentation/search_screen/search_screen.dart';
 import 'package:experta/presentation/security_privacy/binding/security_privacy_binding.dart';
 import 'package:experta/presentation/security_privacy/security_privacy.dart';
+import 'package:experta/presentation/see_all_review/bindings/bindings.dart';
+import 'package:experta/presentation/see_all_review/see_all_review.dart';
 import 'package:experta/presentation/set_availability/bindings/set_availability_bindings.dart';
 import 'package:experta/presentation/set_availability/edit_set_avail/bindings/edit_set_avail_bindings.dart';
 import 'package:experta/presentation/set_availability/edit_set_avail/edit_set_avail.dart';
@@ -202,12 +204,15 @@ class AppRoutes {
 
   static const String detailsPage = "/user_details";
 
-  // ignore: constant_identifier_names
   static const String Bookindeetail = "/booking_detail";
 
-static const String rating= "/give_rating";
+  static const String rating = "/give_rating";
 
-static const String mybook = "/my_booking";
+  static const String mybook = "/my_booking";
+
+  static const String searchScreen = "/search_screen";
+
+  static const String allReviews = "/";
 
   static List<GetPage> pages = [
     GetPage(
@@ -219,7 +224,7 @@ static const String mybook = "/my_booking";
     ),
     GetPage(
       name: recent,
-      page: () =>  RecentsPage(),
+      page: () => RecentsPage(),
       bindings: [
         RecentsBinding(),
       ],
@@ -245,7 +250,6 @@ static const String mybook = "/my_booking";
         AddBankAccountBinding(),
       ],
     ),
-    
     GetPage(
       name: pandetail,
       page: () => const PanDetail(),
@@ -315,13 +319,6 @@ static const String mybook = "/my_booking";
         AccountSettingBinding(),
       ],
     ),
-    // GetPage(
-    //   name: bank,
-    //   page: () => const VerifyAccount(),
-    //   bindings: [
-    //     VerifyAccountBinding(),
-    //   ],
-    // ),
     GetPage(
       name: verifynumberScreen,
       page: () => const VerifynumberScreen(),
@@ -329,27 +326,6 @@ static const String mybook = "/my_booking";
         VerifynumberBinding(),
       ],
     ),
-    // GetPage(
-    //   name: homePage,
-    //   page: () => HomeScreen(),
-    //   bindings: [
-    //     HomeBinding(),
-    //   ],
-    // ),
-    GetPage(
-      name: searchPage,
-      page: () => const SearchScreen(),
-      bindings: [
-        SearchBinding(),
-      ],
-    ),
-    // GetPage(
-    //     name: editExperience,
-    //     page: () => const EditWorkExperiencePage(),
-    //     customTransition: CustomPageTransition(),
-    //     bindings: [
-    //       EditWorkExperienceBinding(),
-    //     ]),
     GetPage(
       name: wallet,
       page: () => const Wallet(),
@@ -392,13 +368,13 @@ static const String mybook = "/my_booking";
         WalletBinding(),
       ],
     ),
-     GetPage(
+    GetPage(
       name: changeUserName,
-      page: () =>  const ChangeUserName(),
-    bindings: [
+      page: () => const ChangeUserName(),
+      bindings: [
         ChangeUserNameBinding(),
-       ],
-     ),
+      ],
+    ),
     GetPage(
         name: notification,
         page: () => const NotificationScreen(),
@@ -608,7 +584,6 @@ static const String mybook = "/my_booking";
         bindings: [
           NewPostBindings(),
         ]),
-
     GetPage(
         name: detailsPage,
         page: () => const UserDetailsPage(),
@@ -616,32 +591,43 @@ static const String mybook = "/my_booking";
         bindings: [
           DetailsBinding(),
         ]),
-         GetPage(
+    GetPage(
         name: Bookindeetail,
         page: () => const BookingDetailPage(),
         customTransition: CustomPageTransition(),
         bindings: [
           BookingDetailBinding(),
         ]),
-         GetPage(
+    GetPage(
         name: mybook,
         page: () => MyBookingPage(),
         customTransition: CustomPageTransition(),
         bindings: [
           MyBookingBinding(),
         ]),
-        GetPage(
+    GetPage(
         name: profile,
         page: () => const UserProfilePage(),
         customTransition: CustomPageTransition(),
         bindings: [
           ProfileBinding(),
         ]),
-        GetPage(
-        name: rating,
-        page: () => RatingPage(),
+    GetPage(name: rating, page: () => RatingPage(), bindings: [
+      RatingPageBinding(),
+    ]),
+    GetPage(
+        name: searchScreen,
+        page: () => const SearchScreen(),
+        customTransition: CustomPageTransition(),
         bindings: [
-          RatingPageBinding(),
+          SearchBinding(),
+        ]),
+    GetPage(
+        name: allReviews,
+        page: () => const AllReviews(),
+        customTransition: CustomPageTransition(),
+        bindings: [
+          AllReviewsBindings(),
         ]),
   ];
 }

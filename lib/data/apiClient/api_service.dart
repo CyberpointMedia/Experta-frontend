@@ -14,7 +14,6 @@ import 'package:experta/data/models/response/verify_otp_response_model.dart';
 import 'package:experta/presentation/additional_info/model/additional_model.dart';
 import 'package:experta/presentation/additional_info/model/interest_model.dart';
 
-
 import 'package:experta/presentation/professional_info/model/professional_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
@@ -110,20 +109,9 @@ class ApiService {
     return _processResponse<List<Education>>(response);
   }
 
-  // Future<List<Follower>> fetchFollowers() async {
-  //   final response = await http.get(Uri.parse('$_baseUrl/followers'));
-
-  //   if (response.statusCode == 200) {
-  //     List<dynamic> body = jsonDecode(response.body);
-  //     List<Follower> followers = body.map((dynamic item) => Follower.fromJson(item)).toList().cast<Follower>();
-  //     return followers;
-  //   } else {
-  //     throw Exception('Failed to load followers');
-  //   }
-  // }
-
- Future<Map<String, dynamic>> getFollowersAndFollowing(String userId) async {
-    final response = await http.get(Uri.parse('$_baseUrl/profile/$userId/followersandfollowing'));
+  Future<Map<String, dynamic>> getFollowersAndFollowing(String userId) async {
+    final response = await http
+        .get(Uri.parse('$_baseUrl/profile/$userId/followersandfollowing'));
 
     if (response.statusCode == 200) {
       log("the response for followers is ${response.body}");
@@ -132,7 +120,6 @@ class ApiService {
       throw Exception('Failed to load data');
     }
   }
-  
 
   Future<List<ExpertiseItem>> fetchExpertiseItems() async {
     final response = await http.get(
@@ -535,7 +522,7 @@ class ApiService {
     }
   }
 
-  // remove connection 
+  // remove connection
   Future<Map<String, dynamic>> removeConnection(
       Map<String, dynamic> body) async {
     final url = Uri.parse('$_baseUrl/removeConnection');
@@ -551,12 +538,64 @@ class ApiService {
       if (response.statusCode == 200) {
         return json.decode(response.body);
       } else {
-        throw Exception(
-            'Failed to  unfollow user: ${response.statusCode}');
+        throw Exception('Failed to  unfollow user: ${response.statusCode}');
       }
     } catch (e) {
       throw Exception('Exception: $e');
     }
+  }
+
+  bool isJson(String str) {
+    try {
+      json.decode(str);
+    } catch (e) {
+      return false;
+    }
+    return true;
+  }
+
+  Future<Map<String, dynamic>> fetchFeeds(String userId, String type) async {
+    final response = await http.post(
+      Uri.parse("$_baseUrl/posts"),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode({
+        'userId': userId,
+        'type': type,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to load posts');
+    }
+  }
+
+  Future<Map<String, dynamic>> likeUnlikePost(String postId) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/post/likeUnlike/$postId'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+    return json.decode(response.body);
+  }
+
+  Future<Map<String, dynamic>> postComment(
+      String postId, String comment) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/post/comment/$postId'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: json.encode({'comment': comment}),
+    );
+    return json.decode(response.body);
   }
 
   T _processResponse<T>(http.Response response) {
@@ -637,5 +676,3 @@ class FetchDataException implements Exception {
   final String message;
   FetchDataException(this.message);
 }
-
-

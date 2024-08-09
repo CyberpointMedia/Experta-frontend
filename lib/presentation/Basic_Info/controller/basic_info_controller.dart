@@ -48,7 +48,7 @@ class BasicProfileInfoController extends GetxController {
       updateTextFields();
       updateSocialLinks();
       profileImageUrl.value = basicInfoModelObj.value.profilePic;
-        } catch (e) {
+    } catch (e) {
       log("the error log is $e");
       Get.snackbar('Error', 'Failed to load basic info: $e');
     } finally {
@@ -80,13 +80,13 @@ class BasicProfileInfoController extends GetxController {
     }
   }
 
-Future<void> pickImage(ImageSource source) async {
+  Future<void> pickImage(ImageSource source) async {
     try {
       final pickedFile = await _picker.pickImage(source: source);
       if (pickedFile != null) {
         // Log the picked file path
         log("Picked file path: ${pickedFile.path}");
-        
+
         CroppedFile? croppedFile = await ImageCropper().cropImage(
           sourcePath: pickedFile.path,
           aspectRatio: const CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
@@ -108,7 +108,7 @@ Future<void> pickImage(ImageSource source) async {
         if (croppedFile != null) {
           // Log the cropped file path
           log("Cropped file path: ${croppedFile.path}");
-          
+
           imageFile.value = File(croppedFile.path);
         } else {
           Get.snackbar('Error', 'Image cropping was cancelled or failed');
@@ -144,8 +144,10 @@ Future<void> pickImage(ImageSource source) async {
       };
 
       await apiService.postBasicInfo(data, imageFile.value);
+      Get.back();
       Get.snackbar('Success', 'Profile information saved successfully');
-      Get.offAllNamed(AppRoutes.dashboard);
+
+      // Get.back();
     } catch (e) {
       Get.snackbar('Error', 'Failed to save profile information: $e');
     }

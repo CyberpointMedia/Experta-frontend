@@ -127,4 +127,90 @@ class SearchResult {
       occupation: json['occupation'],
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      '_id': id,
+      'online': online,
+      'isVerified': isVerified,
+      'noOfBooking': noOfBooking,
+      'rating': rating,
+      'profilePic': profilePic,
+      'displayName': displayName,
+      'lastName': lastName,
+      'firstName': firstName,
+      'industry': industry,
+      'occupation': occupation,
+    };
+  }
+
+  factory SearchResult.fromMap(Map<String, dynamic> map) {
+    return SearchResult(
+      id: map['_id'],
+      online: map['online'],
+      isVerified: map['isVerified'],
+      noOfBooking: map['noOfBooking'],
+      rating: map['rating'],
+      profilePic: map['profilePic'],
+      displayName: map['displayName'],
+      lastName: map['lastName'],
+      firstName: map['firstName'],
+      industry: map['industry'],
+      occupation: map['occupation'],
+    );
+  }
+}
+
+
+// profile_completion_model.dart
+class ProfileCompletion {
+  final int totalCompletionPercentage;
+  final SectionCompletions sectionCompletions;
+
+  ProfileCompletion({required this.totalCompletionPercentage, required this.sectionCompletions});
+
+  factory ProfileCompletion.fromJson(Map<String, dynamic> json) {
+    return ProfileCompletion(
+      totalCompletionPercentage: json['totalCompletionPercentage'],
+      sectionCompletions: SectionCompletions.fromJson(json['sectionCompletions']),
+    );
+  }
+}
+
+class SectionCompletions {
+  final int basicInfo;
+  final int education;
+  final int industryOccupation;
+  final int workExperience;
+  final int interest;
+  final int language;
+  final int expertise;
+  final int pricing;
+  final int availability;
+
+  SectionCompletions({
+    required this.basicInfo,
+    required this.education,
+    required this.industryOccupation,
+    required this.workExperience,
+    required this.interest,
+    required this.language,
+    required this.expertise,
+    required this.pricing,
+    required this.availability,
+  });
+
+  factory SectionCompletions.fromJson(Map<String, dynamic> json) {
+    return SectionCompletions(
+      basicInfo: json['basicInfo'],
+      education: json['education'],
+      industryOccupation: json['industryOccupation'],
+      workExperience: json['workExperience'],
+      interest: json['interest'],
+      language: json['language'],
+      expertise: json['expertise'],
+      pricing: json['pricing'],
+      availability: json['availability'],
+    );
+  }
 }

@@ -250,7 +250,7 @@ class _NewPostPageState extends State<NewPostPage> {
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-              builder: (context) =>  DashboardPage(),
+              builder: (context) => DashboardPage(),
             ),
             (Route<dynamic> route) => false,
           );

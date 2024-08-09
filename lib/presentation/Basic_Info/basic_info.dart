@@ -1,10 +1,5 @@
 import 'dart:ui';
-import 'dart:io';
-
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:photo_view/photo_view.dart';
-import 'package:photo_view/photo_view_gallery.dart';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/Basic_Info/controller/basic_info_controller.dart';
 import 'package:experta/widgets/bio_textformfield.dart';
@@ -70,8 +65,9 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
               imageProvider: controller.imageFile.value != null
                   ? FileImage(controller.imageFile.value!)
                   : (controller.profileImageUrl.value.isNotEmpty
-                      ? NetworkImage(controller.profileImageUrl.value)
-                      : const AssetImage("assets/images/settings/profile.jpeg"))
+                          ? NetworkImage(controller.profileImageUrl.value)
+                          : const AssetImage(
+                              "assets/images/settings/profile.jpeg"))
                       as ImageProvider,
               minScale: PhotoViewComputedScale.contained,
               maxScale: PhotoViewComputedScale.covered * 2,
@@ -170,8 +166,9 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
                   backgroundImage: controller.imageFile.value != null
                       ? FileImage(controller.imageFile.value!)
                       : (controller.profileImageUrl.value.isNotEmpty
-                          ? NetworkImage(controller.profileImageUrl.value)
-                          : const AssetImage("assets/images/settings/profile.jpeg"))
+                              ? NetworkImage(controller.profileImageUrl.value)
+                              : const AssetImage(
+                                  "assets/images/settings/profile.jpeg"))
                           as ImageProvider,
                 ),
               );
@@ -262,9 +259,9 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
             buttonTextStyle:
                 theme.textTheme.titleMedium!.copyWith(color: Colors.red),
             buttonStyle: ButtonStyle(
-              backgroundColor: WidgetStateProperty.all<Color>(Colors.white),
-              foregroundColor: WidgetStateProperty.all<Color>(Colors.white),
-              shape: WidgetStateProperty.all<RoundedRectangleBorder>(
+              backgroundColor: MaterialStateProperty.all<Color>(Colors.white),
+              foregroundColor: MaterialStateProperty.all<Color>(Colors.white),
+              shape: MaterialStateProperty.all<RoundedRectangleBorder>(
                 RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10.0),
                 ),

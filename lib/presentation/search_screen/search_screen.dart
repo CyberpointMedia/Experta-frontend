@@ -1,11 +1,11 @@
 import 'dart:ui';
+
 import 'package:experta/core/app_export.dart';
-import 'package:experta/presentation/Home/home_screen.dart';
-import 'package:experta/widgets/app_bar/appbar_subtitle_four.dart';
-import 'package:experta/widgets/app_bar/appbar_title_searchview.dart';
-import 'widgets/search_item_widget.dart';
-import 'models/search_item_model.dart';
-import 'controller/search_controller.dart';
+import 'package:experta/presentation/dashboard/controller/dashboard_controller.dart';
+import 'package:experta/presentation/search_screen/controller/search_controller.dart';
+import 'package:experta/presentation/search_screen/models/search_model.dart';
+import 'package:experta/presentation/search_screen/widgets/search_item_widget.dart';
+import 'package:experta/widgets/animated_hint_searchview.dart';
 
 class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
@@ -15,7 +15,36 @@ class SearchScreen extends StatefulWidget {
 }
 
 class _SearchScreenState extends State<SearchScreen> {
-  final SearchPageController controller = Get.put(SearchPageController());
+  SearchPageController controller = Get.put(SearchPageController());
+  final DashboardController dashController = Get.find<DashboardController>();
+  final List<String> hintTexts = [
+    "lbl_influencer".tr,
+    "Search Users",
+    "Find Friends",
+    "Find Cunsultants",
+    "Search Categories",
+    "Search Interested Positions"
+  ];
+
+  @override
+  void initState() {
+    final dynamic arguments = dashController.pageArguments;
+    print('Arguments: $arguments');
+    if (arguments != "") {
+      if (arguments['searchResults'] != null &&
+          arguments['searchQuery'] != null) {
+        controller.searchResults.value = List<SearchResult>.from(
+          arguments['searchResults'].map((item) => SearchResult.fromJson(item)),
+        );
+        controller.searchPageController.text = arguments['searchQuery'];
+      } else {
+        print('Arguments are missing searchResults or searchQuery');
+      }
+    } else {
+      print('Arguments are null');
+    }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,17 +80,20 @@ class _SearchScreenState extends State<SearchScreen> {
                   padding: const EdgeInsets.only(left: 10, top: 25),
                   child: Row(
                     children: [
-                      CustomSearchView(
+                      CustomAnimatedSearchView(
                         width: 279.h,
-                        controller: controller.searchPageControllers,
-                        hintText: "lbl_influencer".tr,
+                        controller: controller.searchPageController,
+                        hintTextDuration: Duration(seconds: 2),
+                        hintTexts: hintTexts,
+                        onChanged: (value) {
+                          controller.fetchUsersBySearch(value);
+                        },
                       ),
                       Padding(
                         padding: EdgeInsets.only(left: 16.h),
-                        child: GestureDetector(
-                          onTap: () {
-                            controller.searchPageControllers.clear();
-                          },
+                        child: TextButton(
+                          onPressed: () =>
+                              controller.searchPageController.clear(),
                           child: Text(
                             "lbl_cancel".tr,
                             style: theme.textTheme.titleMedium!.copyWith(
@@ -78,11 +110,13 @@ class _SearchScreenState extends State<SearchScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Padding(
-                        padding: EdgeInsets.only(left: 16.h, top: 29.v),
-                        child: Text("lbl_recommended".tr,
-                            style: CustomTextStyles.titleMediumBold),
-                      ),
+                      // Padding(
+                      //   padding: EdgeInsets.only(left: 16.h, top: 29.v),
+                      //   child: Text(
+                      //     "lbl_recommended".tr,
+                      //     style: CustomTextStyles.titleMediumBold,
+                      //   ),
+                      // ),
                       _buildSearch(),
                     ],
                   ),
@@ -95,25 +129,32 @@ class _SearchScreenState extends State<SearchScreen> {
     );
   }
 
-
-
-  /// Section Widget
   Widget _buildSearch() {
-    return Align(
-      alignment: Alignment.topCenter,
-      child: Padding(
-        padding: EdgeInsets.only(left: 16.h),
-        child: Obx(
-          () => ListView.separated(
-            physics: const BouncingScrollPhysics(),
-            shrinkWrap: true,
-            separatorBuilder: (context, index) {
-              return SizedBox(height: 1.v);
-            },
-            itemCount: controller.searchModelObj.value.searchItemList.value.length,
-            itemBuilder: (context, index) {
-              SearchItemModel model = controller.searchModelObj.value.searchItemList.value[index];
-              return SearchItemWidget(model);
+    return Expanded(
+      child: Align(
+        alignment: Alignment.topCenter,
+        child: Padding(
+          padding: EdgeInsets.only(left: 16.h),
+          child: Obx(
+            () {
+              if (controller.isLoading.value) {
+                return Center(child: CircularProgressIndicator());
+              }
+              if (controller.searchResults.value.isEmpty) {
+                return Center(child: Text("No results found"));
+              }
+              return ListView.separated(
+                physics: const BouncingScrollPhysics(),
+                shrinkWrap: true,
+                separatorBuilder: (context, index) {
+                  return SizedBox(height: 1.v);
+                },
+                itemCount: controller.searchResults.value.length,
+                itemBuilder: (context, index) {
+                  SearchResult model = controller.searchResults.value[index];
+                  return SearchItemWidget(model);
+                },
+              );
             },
           ),
         ),

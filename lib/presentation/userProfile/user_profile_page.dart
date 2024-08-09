@@ -586,7 +586,9 @@ class _UserProfilePageState extends State<UserProfilePage>
             GestureDetector(
               onTap: () {
                 // Navigate to the Reviews page
-                // Get.to(() => ReviewsPage()); // Assuming you are using GetX for navigation
+                Get.toNamed(AppRoutes.allReviews,
+                    arguments:
+                        controller.userData.value.data?.basicInfo?.reviews);
               },
               child: Text(
                 "See all",
@@ -741,89 +743,93 @@ class _UserProfilePageState extends State<UserProfilePage>
       padding: const EdgeInsets.only(left: 13, right: 30, top: 30),
       child: Column(
         children: [
-          Obx((){return Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+          Obx(() {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            top: 1,
+                            bottom: 2,
+                          ),
+                          child: SizedBox(
+                            height: 18.v,
+                            width: 18.adaptSize,
+                            child:
+                                SvgPicture.asset("assets/images/img_star.svg"),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 2),
+                          child: Text(
+                            "${controller.userData.value.data?.basicInfo?.rating ?? "N/A"}",
+                            style: theme.textTheme.headlineLarge
+                                ?.copyWith(fontSize: 18.fSize),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 6.v,
+                    ),
+                    Text(
+                      "Overall Ratings",
+                      style: theme.textTheme.bodyMedium!,
+                    )
+                  ],
+                ),
+                const Spacer(
+                  flex: 42,
+                ),
+                GestureDetector(
+                  onTap: () => Get.toNamed(AppRoutes.follower,
+                      arguments: {"id": controller.userData.value.data?.id}),
+                  child: Column(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 1,
-                          bottom: 2,
-                        ),
-                        child: SizedBox(
-                          height: 18.v,
-                          width: 18.adaptSize,
-                          child: SvgPicture.asset("assets/images/img_star.svg"),
-                        ),
+                      Text(
+                        "$totalFollowers",
+                        style: theme.textTheme.headlineLarge
+                            ?.copyWith(fontSize: 18.fSize),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 2),
-                        child: Text(
-                          "${controller.userData.value.data?.basicInfo?.rating ?? "N/A"}",
-                          style: theme.textTheme.headlineLarge
-                              ?.copyWith(fontSize: 18.fSize),
-                        ),
+                      SizedBox(
+                        height: 6.v,
+                      ),
+                      Text(
+                        "Followers",
+                        style: theme.textTheme.bodyMedium!,
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 6.v,
+                ),
+                const Spacer(
+                  flex: 58,
+                ),
+                GestureDetector(
+                  onTap: () => Get.toNamed(AppRoutes.following),
+                  child: Column(
+                    children: [
+                      Text(
+                        "$totalFollowing",
+                        style: theme.textTheme.headlineLarge
+                            ?.copyWith(fontSize: 18.fSize),
+                      ),
+                      SizedBox(
+                        height: 6.v,
+                      ),
+                      Text(
+                        "Following",
+                        style: theme.textTheme.bodyMedium!,
+                      ),
+                    ],
                   ),
-                  Text(
-                    "Overall Ratings",
-                    style: theme.textTheme.bodyMedium!,
-                  )
-                ],
-              ),
-              const Spacer(
-                flex: 42,
-              ),
-              GestureDetector(
-                onTap: () => Get.toNamed(AppRoutes.follower, arguments: {"id":controller.userData.value.data?.id}),
-                child: Column(
-                      children: [
-                        Text(
-                          "$totalFollowers",
-                          style: theme.textTheme.headlineLarge?.copyWith(fontSize: 18.fSize),
-                        ),
-                        SizedBox(
-                          height: 6.v,
-                        ),
-                        Text(
-                          "Followers",
-                          style: theme.textTheme.bodyMedium!,
-                        ),
-                      ],
-                    ),
-              ),
-              
-              const Spacer(
-                flex: 58,
-              ),
-              GestureDetector(
-                onTap: () => Get.toNamed(AppRoutes.following),
-                child: Column(
-                      children: [
-                        Text(
-                          "$totalFollowing",
-                          style: theme.textTheme.headlineLarge?.copyWith(fontSize: 18.fSize),
-                        ),
-                        SizedBox(
-                          height: 6.v,
-                        ),
-                        Text(
-                          "Following",
-                          style: theme.textTheme.bodyMedium!,
-                        ),
-                      ],
-                    ),
-              ),
-            ],
-          );
+                ),
+              ],
+            );
           }),
           SizedBox(
             height: 16.v,
@@ -847,7 +853,7 @@ class _UserProfilePageState extends State<UserProfilePage>
 //  Widget _buildColumnFourHundredFifty({
 //   required String dynamicText,
 //   required String dynamicText1,
-//   required VoidCallback onTap, 
+//   required VoidCallback onTap,
 // }) {
 //   return GestureDetector(
 //     onTap: onTap,
@@ -868,7 +874,6 @@ class _UserProfilePageState extends State<UserProfilePage>
 //     ),
 //   );
 // }
-
 
   Widget _profilepicBody() {
     return Obx(() {
