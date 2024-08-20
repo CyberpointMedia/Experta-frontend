@@ -52,7 +52,7 @@ class MessageChatWithUserDefaultScreen
                   onTapPhone();
                 })
           ],
-          styleType: Style.bgFill_3),
+          styleType: Styled.bgFill_3),
       body: SizedBox(
           width: double.maxFinite,
           child: Column(children: [

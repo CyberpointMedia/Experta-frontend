@@ -152,3 +152,48 @@ class PostedBy {
         "occupation": occupation,
       };
 }
+
+
+class Reason {
+  final String id;
+  final String reason;
+
+  Reason({required this.id, required this.reason});
+
+  factory Reason.fromJson(Map<String, dynamic> json) {
+    return Reason(
+      id: json['_id'],
+      reason: json['reason'],
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      '_id': id,
+      'reason': reason,
+    };
+  }
+}
+
+class Report {
+  final String reportedItem;
+  final String itemType;
+  final String reason;
+  final String comment;
+
+  Report({
+    required this.reportedItem,
+    required this.itemType,
+    required this.reason,
+    required this.comment,
+  });
+
+  Map<String, dynamic> toJson() {
+    return {
+      'reportedItem': reportedItem,
+      'itemType': itemType,
+      'reason': reason,
+      'comment': comment,
+    };
+  }
+}

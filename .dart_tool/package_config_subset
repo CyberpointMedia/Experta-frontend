@@ -446,6 +446,10 @@ plugin_platform_interface
 3.0
 file:///Users/apple/.pub-cache/hosted/pub.dev/plugin_platform_interface-2.1.8/
 file:///Users/apple/.pub-cache/hosted/pub.dev/plugin_platform_interface-2.1.8/lib/
+pull_to_refresh
+2.12
+file:///Users/apple/.pub-cache/hosted/pub.dev/pull_to_refresh-2.0.0/
+file:///Users/apple/.pub-cache/hosted/pub.dev/pull_to_refresh-2.0.0/lib/
 readmore
 3.0
 file:///Users/apple/.pub-cache/hosted/pub.dev/readmore-3.0.0/
@@ -530,6 +534,10 @@ string_scanner
 2.18
 file:///Users/apple/.pub-cache/hosted/pub.dev/string_scanner-1.2.0/
 file:///Users/apple/.pub-cache/hosted/pub.dev/string_scanner-1.2.0/lib/
+stylish_pull_to_refresh
+3.3
+file:///Users/apple/.pub-cache/hosted/pub.dev/stylish_pull_to_refresh-1.1.0/
+file:///Users/apple/.pub-cache/hosted/pub.dev/stylish_pull_to_refresh-1.1.0/lib/
 synchronized
 3.0
 file:///Users/apple/.pub-cache/hosted/pub.dev/synchronized-3.1.0+1/

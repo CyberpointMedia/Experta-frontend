@@ -71,6 +71,8 @@ dependencies:
   webview_flutter: ^4.8.0
   fluttertoast: ^8.2.6
   dio: ^5.5.0+1
+  stylish_pull_to_refresh: ^1.1.0
+  pull_to_refresh: ^2.0.0
 
   
 dev_dependencies:
