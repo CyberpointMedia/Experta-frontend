@@ -6,18 +6,6 @@
 
 #include "generated_plugin_registrant.h"
 
-
-void fl_register_plugins(FlPluginRegistry* registry) {
-}
-
-//
-//  Generated file. Do not edit.
-//
-
-// clang-format off
-
-#include "generated_plugin_registrant.h"
-
 #include <file_selector_linux/file_selector_plugin.h>
 #include <flutter_webrtc/flutter_web_r_t_c_plugin.h>
 #include <url_launcher_linux/url_launcher_plugin.h>
