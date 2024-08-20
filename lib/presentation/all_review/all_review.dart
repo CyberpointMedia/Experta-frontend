@@ -12,23 +12,21 @@ class AllReviewsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.grey.shade50,
-        appBar: _buildAppBar(),
+        backgroundColor: Colors.white,
         body: Stack(
           children: [
             Positioned(
-              left: 270.adaptSize,
-              top: 50.adaptSize,
+              left: 270,
+              top: 50,
               child: ImageFiltered(
                 imageFilter: ImageFilter.blur(
-                  tileMode: TileMode.decal,
-                  sigmaX: 60.adaptSize,
-                  sigmaY: 60.adaptSize,
+                  sigmaX: 60,
+                  sigmaY: 60,
                 ),
                 child: Align(
                   child: SizedBox(
-                    width: 252.adaptSize,
-                    height: 252.adaptSize,
+                    width: 252,
+                    height: 252,
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(126),
@@ -41,27 +39,46 @@ class AllReviewsPage extends StatelessWidget {
             ),
             Column(
               children: [
+                AppBar(
+                  leading: IconButton(
+                    icon: const Icon(Icons.arrow_back),
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                  ),
+                  title: const Text('All Reviews'),
+                  centerTitle: true,
+                  elevation: 0,
+                  backgroundColor: Colors.transparent,
+                  foregroundColor: Colors.black,
+                ),
                 Expanded(
                   child: reviews.isEmpty
                       ? Center(
                           child: Text(
                             "No reviews yet",
-                            style: theme.textTheme.bodyMedium
-                                ?.copyWith(color: appTheme.gray900),
+                            style: theme.textTheme.bodyMedium?.copyWith(color: appTheme.gray900),
                           ),
                         )
                       : ListView.builder(
-                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
+                          padding: const EdgeInsets.all(16.0),
                           itemCount: reviews.length,
                           itemBuilder: (context, index) {
                             var review = reviews[index];
                             return Padding(
-                              padding: const EdgeInsets.only(bottom: 10.0),
+                              padding: const EdgeInsets.only(bottom: 16.0),
                               child: Container(
                                 padding: const EdgeInsets.all(16.0),
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(12.0),
+                                  boxShadow: [
+                                    BoxShadow(
+                                      color: Colors.black.withOpacity(0.1),
+                                      blurRadius: 10.0,
+                                      offset: const Offset(0, 5),
+                                    ),
+                                  ],
                                 ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -70,28 +87,24 @@ class AllReviewsPage extends StatelessWidget {
                                       children: [
                                         CustomImageView(
                                           imagePath: review.profilePic,
-                                          height: 50.adaptSize,
-                                          width: 50.adaptSize,
+                                          height: 50,
+                                          width: 50,
                                           radius: BorderRadius.circular(50),
                                         ),
                                         const SizedBox(width: 10),
                                         Column(
-                                          crossAxisAlignment:
-                                              CrossAxisAlignment.start,
+                                          crossAxisAlignment: CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               review.reviewer.toString(),
-                                              style: theme
-                                                  .textTheme.headlineLarge
-                                                  ?.copyWith(
-                                                      fontSize: 14.fSize,fontWeight: FontWeight.w600),
+                                              style: theme.textTheme.headlineLarge
+                                                  ?.copyWith(fontSize: 14.fSize),
                                             ),
                                             SizedBox(height: 1.v),
                                             Text(
                                               review.formattedDate.toString(),
-                                              style:
-                                                  theme.textTheme.titleSmall!,
-                                            ),
+                                              style: theme.textTheme.titleSmall!,
+                                            )
                                           ],
                                         )
                                       ],
@@ -100,17 +113,16 @@ class AllReviewsPage extends StatelessWidget {
                                     Row(
                                       children: [
                                         RatingBar.builder(
-                                          initialRating:
-                                              review.rating!.toDouble(),
+                                          initialRating: review.rating!.toDouble(),
                                           minRating: 0,
                                           direction: Axis.horizontal,
                                           allowHalfRating: false,
                                           itemSize: 22,
+                                          updateOnDrag: true,
                                           onRatingUpdate: (rating) {},
                                           itemBuilder: (context, _) {
-                                            return Icon(
+                                            return const Icon(
                                               Icons.star,
-                                              color: appTheme.deepYello,
                                             );
                                           },
                                         ),
@@ -118,8 +130,8 @@ class AllReviewsPage extends StatelessWidget {
                                         Text(
                                           review.rating.toString(),
                                           style: theme.textTheme.headlineLarge
-                                              ?.copyWith(fontSize: 16.fSize,fontWeight: FontWeight.w600),
-                                        ),
+                                              ?.copyWith(fontSize: 16.fSize),
+                                        )
                                       ],
                                     ),
                                     SizedBox(height: 8.v),
@@ -131,7 +143,7 @@ class AllReviewsPage extends StatelessWidget {
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                         style: theme.textTheme.bodyMedium
-                                            ?.copyWith(color: appTheme.gray900, fontWeight: FontWeight.w500, fontSize: 14.fSize),
+                                            ?.copyWith(color: appTheme.gray900),
                                       ),
                                     ),
                                     SizedBox(height: 8.v),
@@ -148,25 +160,5 @@ class AllReviewsPage extends StatelessWidget {
         ),
       ),
     );
-  }
-
-  PreferredSizeWidget _buildAppBar() {
-    return CustomAppBar(
-      height: 70.h,
-      leadingWidth: 40.h,
-      leading: AppbarLeadingImage(
-        imagePath: ImageConstant.imgArrowLeftOnerrorcontainer,
-        margin: EdgeInsets.only(left: 16.h),
-        onTap: () {
-          onTapArrowLeft();
-        },
-      ),
-      centerTitle: true,
-      title: AppbarSubtitleSix(text: "All Reviews"),
-    );
-  }
-
-  void onTapArrowLeft() {
-    Get.back();
   }
 }

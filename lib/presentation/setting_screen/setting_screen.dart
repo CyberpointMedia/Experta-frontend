@@ -3,14 +3,7 @@ import 'dart:ui';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/settings_log_out_dialog/controller/settings_log_out_controller.dart';
 import 'package:experta/presentation/settings_log_out_dialog/settings_log_out_dialog.dart';
-import 'package:experta/widgets/app_bar/appbar_leading_image.dart';
-import 'package:experta/widgets/app_bar/appbar_subtitle_six.dart';
-import 'package:experta/widgets/app_bar/custom_app_bar.dart';
-import 'package:experta/widgets/custom_elevated_button.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'controller/setting_controller.dart';
 
 class SettingScreen extends GetWidget<SettingController> {
@@ -122,43 +115,48 @@ class SettingScreen extends GetWidget<SettingController> {
                                             EdgeInsets.symmetric(vertical: 10.v))
                                   ])),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 3),
-                          child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 15.h, vertical: 16.v),
-                              decoration: AppDecoration.fillOnPrimaryContainer,
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    CustomIconButton(
-                                        height: 44.adaptSize,
-                                        width: 44.adaptSize,
-                                        padding: EdgeInsets.all(6.h),
-                                        decoration: IconButtonStyleHelper
-                                            .fillDeepPurple,
-                                        child: CustomImageView(
+                        GestureDetector(
+                          onTap: () {
+                            onTapmybooking();
+                          },
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 3),
+                            child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 15.h, vertical: 16.v),
+                                decoration: AppDecoration.fillOnPrimaryContainer,
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      CustomIconButton(
+                                          height: 44.adaptSize,
+                                          width: 44.adaptSize,
+                                          padding: EdgeInsets.all(6.h),
+                                          decoration: IconButtonStyleHelper
+                                              .fillDeepPurple,
+                                          child: CustomImageView(
+                                            imagePath:
+                                                "assets/images/Calendar.svg",
+                                          )),
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 15.h,
+                                              top: 13.v,
+                                              bottom: 10.v),
+                                          child: Text("lbl_my_booking".tr,
+                                              style: theme.textTheme.titleMedium!
+                                                  .copyWith(
+                                                      color: appTheme.gray900))),
+                                      const Spacer(),
+                                      CustomImageView(
                                           imagePath:
-                                              "assets/images/Calendar.svg",
-                                        )),
-                                    Padding(
-                                        padding: EdgeInsets.only(
-                                            left: 15.h,
-                                            top: 13.v,
-                                            bottom: 10.v),
-                                        child: Text("lbl_my_booking".tr,
-                                            style: theme.textTheme.titleMedium!
-                                                .copyWith(
-                                                    color: appTheme.gray900))),
-                                    const Spacer(),
-                                    CustomImageView(
-                                        imagePath:
-                                            ImageConstant.imgArrowRightGray900,
-                                        height: 24.adaptSize,
-                                        width: 24.adaptSize,
-                                        margin: EdgeInsets.symmetric(
-                                            vertical: 10.v))
-                                  ])),
+                                              ImageConstant.imgArrowRightGray900,
+                                          height: 24.adaptSize,
+                                          width: 24.adaptSize,
+                                          margin: EdgeInsets.symmetric(
+                                              vertical: 10.v))
+                                    ])),
+                          ),
                         ),
                         GestureDetector(
                           onTap: () {
@@ -328,29 +326,23 @@ class SettingScreen extends GetWidget<SettingController> {
                   decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
                       borderRadius: BorderRadiusStyle.roundedBorder20),
                   child: Row(children: [
-                    SizedBox(
-                        height: 48.adaptSize,
-                        width: 48.adaptSize,
-                        child: Stack(alignment: Alignment.center, children: [
-                          CustomImageView(
-                              imagePath: ImageConstant.imgRectangle248x48,
+                    (controller.imagePath != "")? CustomImageView(
+                              imagePath: controller.imagePath,
+                              height: 48.adaptSize,
+                              width: 48.adaptSize,
+                              radius: BorderRadius.circular(24.h),
+                              alignment: Alignment.center):CustomImageView(
+                              imagePath: 'assets/images/image_not_found.png',
                               height: 48.adaptSize,
                               width: 48.adaptSize,
                               radius: BorderRadius.circular(24.h),
                               alignment: Alignment.center),
-                          CustomImageView(
-                              imagePath: ImageConstant.imgImage3348x48,
-                              height: 48.adaptSize,
-                              width: 48.adaptSize,
-                              radius: BorderRadius.circular(24.h),
-                              alignment: Alignment.center)
-                        ])),
                     Padding(
                         padding: EdgeInsets.only(left: 15.h),
                         child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text("lbl_naveen_verma2".tr,
+                              Text(controller.name.toString(),
                                   style: CustomTextStyles.titleMediumSemiBold),
                               SizedBox(height: 4.v),
                               GestureDetector(
@@ -369,7 +361,7 @@ class SettingScreen extends GetWidget<SettingController> {
                                         margin: EdgeInsets.only(left: 3.h))
                                   ]))
                             ])),
-                    Spacer(),
+                    const Spacer(),
                     CustomElevatedButton(
                         height: 34.v,
                         width: 84.h,
@@ -391,6 +383,7 @@ class SettingScreen extends GetWidget<SettingController> {
             decoration: AppDecoration.fillOnPrimaryContainer
                 .copyWith(color: Colors.transparent),
             child: Column(mainAxisSize: MainAxisSize.min, children: [
+           
               GestureDetector(
                           onTap: () {
                             Get.toNamed(AppRoutes.security);
@@ -502,6 +495,7 @@ class SettingScreen extends GetWidget<SettingController> {
                 color: Colors.transparent,
                 borderRadius: BorderRadiusStyle.roundedBorder20),
             child: Column(mainAxisSize: MainAxisSize.min, children: [
+             
               GestureDetector(
                 onTap: () {
                   Get.toNamed(AppRoutes.aboutus);
@@ -599,17 +593,15 @@ class SettingScreen extends GetWidget<SettingController> {
   }
 
   /// Navigates to the settingsMyBookingUpcomingScreen when the action is triggered.
-  onTapCalendar() {
-    // Get.toNamed(
-    //   AppRoutes.settingsMyBookingUpcomingScreen,
-    // );
+  onTapmybooking() {
+     Get.toNamed(AppRoutes.mybook);
   }
 
   /// Navigates to the settingsVerifyAccountDefaultScreen when the action is triggered.
   onTapVerifiedUserTwo() {
-    // Get.toNamed(
-    //   AppRoutes.settingsVerifyAccountDefaultScreen,
-    // );
+     Get.toNamed(
+      AppRoutes.bank,
+    );
   }
 
   /// Navigates to the settingsNotificationsOneScreen when the action is triggered.

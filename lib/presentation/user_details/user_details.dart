@@ -1,15 +1,18 @@
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
 import 'package:experta/core/utils/web_view/web_view.dart';
 import 'package:experta/presentation/Home/model/home_model.dart';
+import 'package:experta/presentation/all_review/all_review.dart';
 import 'package:experta/presentation/user_details/controller/details_controller.dart';
-import 'package:experta/widgets/custom_elevated_button.dart';
-import 'package:flutter/material.dart';
+import 'package:experta/widgets/custom_icon_button.dart';
+import 'package:experta/widgets/custom_outlined_button.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:readmore/readmore.dart';
 
 class UserDetailsPage extends StatefulWidget {
@@ -33,88 +36,182 @@ class _UserDetailsPageState extends State<UserDetailsPage>
     super.initState();
   }
 
-  void _showBottomSheet(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      backgroundColor:
-          Colors.transparent, // Set the background color to transparent
-      builder: (context) {
-        return Container(
-          padding: const EdgeInsets.only(top: 20, bottom: 20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                child: Container(
-                  decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(16))),
-                  child: Column(
-                    children: [
-                      ListTile(
-                        title: const Center(
-                          child: Text(
-                            'Report this user',
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontSize: 16.0,
-                            ),
+ void _showBottomSheet(BuildContext context) {
+  showModalBottomSheet(
+    context: context,
+    backgroundColor: Colors.transparent, // Set the background color to transparent
+    builder: (context) {
+      return Container(
+        padding: const EdgeInsets.only(top: 20, bottom: 20),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: <Widget>[
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(16))),
+                child: Column(
+                  children: [
+                    ListTile(
+                      title: const Center(
+                        child: Text(
+                          'Report this user',
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 16.0,
                           ),
                         ),
-                        onTap: () {
-                          // Handle report action
-                          Navigator.pop(context);
-                        },
                       ),
-                      const Divider(),
-                      ListTile(
-                        title: const Center(
-                          child: Text(
-                            'Block this user',
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontSize: 16.0,
-                            ),
+                      onTap: () {
+                        // Handle report action
+                        Navigator.pop(context);
+                      },
+                    ),
+                    const Divider(),
+                    ListTile(
+                      title: const Center(
+                        child: Text(
+                          'Block this user',
+                          style: TextStyle(
+                            color: Colors.red,
+                            fontSize: 16.0,
                           ),
                         ),
-                        onTap: () {
-                          Navigator.pop(context);
-                        },
                       ),
-                    ],
-                  ),
+                      onTap: () {
+                        Navigator.pop(context);
+                        _showBlockUserDialog(context,id.id,controller); // Show the block user confirmation dialog
+                      },
+                    ),
+                  ],
                 ),
               ),
-              const SizedBox(height: 10.0),
-              Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20),
-                child: Container(
-                  decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.all(Radius.circular(16))),
-                  child: ListTile(
-                    title: const Center(
-                      child: Text(
-                        'Cancel',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16.0,
-                        ),
+            ),
+            const SizedBox(height: 10.0),
+            Padding(
+              padding: const EdgeInsets.only(left: 20, right: 20),
+              child: Container(
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.all(Radius.circular(16))),
+                child: ListTile(
+                  title: const Center(
+                    child: Text(
+                      'Cancel',
+                      style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 16.0,
                       ),
                     ),
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
                   ),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
                 ),
               ),
-            ],
-          ),
-        );
-      },
-    );
-  }
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
+
+void _showBlockUserDialog(BuildContext context, String userToBlockId, DetailsController controller) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return Dialog(
+        backgroundColor: Colors.transparent, // Make the dialog background transparent
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20.0),
+        ),
+        child: Obx(() {
+          if (controller.isSucess.value) {
+            // If success, show success animation and dismiss after 3 seconds
+            Future.delayed(const Duration(seconds: 2), () {
+              Navigator.of(context).pop();
+            });
+
+            return SizedBox(
+              height: 200,
+              width:200,
+              child: Center(
+                child: Lottie.asset("assets/jsonfiles/tick.json"),
+              ),
+            );
+          } else if (controller.isBlocking.value) {
+            // If loading, show loading animation
+            return Center(
+              child: Lottie.asset("assets/jsonfiles/Loader.json"),
+            );
+          } else {
+            // Default dialog content
+            return Container(
+              color: Colors.white,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    CustomIconButton(
+                      height: 88.adaptSize,
+                      width: 88.adaptSize,
+                      padding: EdgeInsets.all(20.h),
+                      decoration: IconButtonStyleHelper.fillGreenTL245,
+                      child: CustomImageView(
+                        imagePath: ImageConstant.popup,
+                      ),
+                    ),
+                    const SizedBox(height: 20.0),
+                    Text(
+                      "Block this user",
+                      style: Theme.of(context).textTheme.headlineSmall!.copyWith(
+                        color: Colors.black,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 10.0),
+                      child: Text(
+                        'Are you sure you want to block this user? This action can be undone later.',
+                        style: CustomTextStyles.bodyMediumLight,
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                    const SizedBox(height: 24.0),
+                    CustomElevatedButton(
+                      onPressed: () async {
+                        controller.isBlocking.value = true;
+                        controller.blockUser(userToBlockId, context);
+                      },
+                      text: "Block",
+                    ),
+                    const SizedBox(height: 12.0),
+                    CustomOutlinedButton(
+                      height: 56.v,
+                      buttonStyle: CustomButtonStyles.outlineGrayTL23,
+                      onPressed: () {
+                        Navigator.of(context).pop();
+                      },
+                      text: "Cancel",
+                    ),
+                    const SizedBox(height: 16.0),
+                  ],
+                ),
+              ),
+            );
+          }
+        }),
+      );
+    },
+  );
+}
+
+
 
   void _showBottomSheet2(BuildContext context) {
     showModalBottomSheet(
@@ -242,25 +339,35 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                         );
                       }),
                       actions: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 0),
-                          child: CustomElevatedButton(
-                            buttonStyle: CustomButtonStyles.fillOnError2,
-                            buttonTextStyle: CustomTextStyles.bodySmallffffffff,
-                            height: 36,
-                            width: 70,
-                            text: controller.userData.value.data?.isFollowing ==
-                                    false
-                                ? "Follow"
-                                : "unfollow",
-                            onPressed: () {
-                              controller.userData.value.data?.isFollowing ==
-                                      false
-                                  ? controller.followUser(id.id)
-                                  : null;
-                            },
-                          ),
-                        ),
+                  Padding(
+  padding: const EdgeInsets.only(right: 0),
+  child: Obx(() => CustomElevatedButton(
+        buttonStyle: CustomButtonStyles.fillOnError2,
+        buttonTextStyle: CustomTextStyles.bodySmallffffffff,
+        height: 36,
+        width: 70,
+        text: controller.isFollowing.value == false ? "Follow" : "Unfollow",
+        onPressed: () {
+          if (controller.isFollowing.value == false) {
+            controller.followUser(controller.userData.value.data?.id ?? '');
+            controller.fetchUserData(controller.userData.value.data?.id ?? '');
+            setState(() {
+              controller.isFollowing.value = true;
+            });
+            log("now the new value of is following is ==== ${controller.isFollowing.value}");
+          } else {
+            // Handle unfollow logic here if needed
+            // controller.unfollowUser(controller.userData.value.data?.id ?? '');
+            controller.fetchUserData(controller.userData.value.data?.id ?? '');
+            setState(() {
+              controller.isFollowing.value = false;
+            });
+          }
+        },
+      )),
+),
+
+
                         IconButton(
                           icon: const Icon(Icons.more_vert),
                           onPressed: () {
@@ -785,8 +892,10 @@ Widget _buildColumnreviews() {
           ),
           GestureDetector(
             onTap: () {
-              // Navigate to the Reviews page
-              // Get.to(() => ReviewsPage()); // Assuming you are using GetX for navigation
+              var reviews = controller.userData.value.data?.basicInfo?.reviews;
+              if (reviews != null && reviews.isNotEmpty) {
+                Get.to(() => AllReviewsPage(reviews: reviews));
+              }
             },
             child: Text(
               "See all",
@@ -807,8 +916,8 @@ Widget _buildColumnreviews() {
             style: theme.textTheme.bodyMedium?.copyWith(color: appTheme.gray900),
           );
         } else {
-          // Limit the number of reviews to 5
-          var limitedReviews = reviews.take(5).toList();
+          // Limit the number of reviews to 3
+          var limitedReviews = reviews.take(3).toList();
           return Column(
             children: limitedReviews.map((review) {
               return Padding(
@@ -854,7 +963,6 @@ Widget _buildColumnreviews() {
                             direction: Axis.horizontal,
                             allowHalfRating: false,
                             itemSize: 22,
-                            itemCount: 5,
                             updateOnDrag: true,
                             onRatingUpdate: (rating) {},
                             itemBuilder: (context, _) {
@@ -863,8 +971,7 @@ Widget _buildColumnreviews() {
                               );
                             },
                           ),
-                          const SizedBox(
-                              width: 6), // Added SizedBox for spacing
+                          const SizedBox(width: 6), // Added SizedBox for spacing
                           Text(
                             review.rating.toString(),
                             style: theme.textTheme.headlineLarge
@@ -900,7 +1007,9 @@ Widget _buildColumnreviews() {
   );
 }
 
-  Widget _buildRowaboutme({required String aboutMeText}) {
+
+
+ Widget _buildRowaboutme({required String aboutMeText}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -982,7 +1091,10 @@ Widget _buildColumnreviews() {
                 flex: 42,
               ),
               GestureDetector(
-                onTap: () => Get.toNamed(AppRoutes.follower),
+                onTap: () {
+                  Get.toNamed(AppRoutes.follower, arguments: {"id":id.id, "userProfile":"userDetails"})!.then((value){
+                   Get.find<DetailsController>().fetchUserData(id.id);
+                });},
                 child: _buildColumnFourHundredFifty(
                   dynamicText: "$totalFollowers",
                   dynamicText1: "Followers",
@@ -992,7 +1104,11 @@ Widget _buildColumnreviews() {
                 flex: 58,
               ),
               GestureDetector(
-                onTap: () => Get.toNamed(AppRoutes.following),
+                 onTap: () {
+  Get.toNamed(AppRoutes.following, arguments: {"id":id.id, "userProfile":"userProfile"})!.then((value) {
+    Get.find<DetailsController>().fetchUserData(id.id);
+  });
+},
                 child: _buildColumnFourHundredFifty(
                   dynamicText: "$totalFollowing",
                   dynamicText1: "Following",

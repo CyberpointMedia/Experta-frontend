@@ -13,6 +13,8 @@ import 'package:experta/data/models/response/resend_otp_response_model.dart';
 import 'package:experta/data/models/response/verify_otp_response_model.dart';
 import 'package:experta/presentation/additional_info/model/additional_model.dart';
 import 'package:experta/presentation/additional_info/model/interest_model.dart';
+
+
 import 'package:experta/presentation/professional_info/model/professional_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
@@ -106,6 +108,29 @@ class ApiService {
     );
     Logger();
     return _processResponse<List<Education>>(response);
+  }
+
+  // Future<List<Follower>> fetchFollowers() async {
+  //   final response = await http.get(Uri.parse('$_baseUrl/followers'));
+
+  //   if (response.statusCode == 200) {
+  //     List<dynamic> body = jsonDecode(response.body);
+  //     List<Follower> followers = body.map((dynamic item) => Follower.fromJson(item)).toList().cast<Follower>();
+  //     return followers;
+  //   } else {
+  //     throw Exception('Failed to load followers');
+  //   }
+  // }
+
+ Future<Map<String, dynamic>> getFollowersAndFollowing(String userId) async {
+    final response = await http.get(Uri.parse('$_baseUrl/profile/$userId/followersandfollowing'));
+
+    if (response.statusCode == 200) {
+      log("the response for followers is ${response.body}");
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load data');
+    }
   }
 
   Future<List<ExpertiseItem>> fetchExpertiseItems() async {
@@ -509,6 +534,100 @@ class ApiService {
     }
   }
 
+  // remove connection 
+  Future<Map<String, dynamic>> removeConnection(
+      Map<String, dynamic> body) async {
+    final url = Uri.parse('$_baseUrl/removeConnection');
+
+    try {
+      final response = await http.post(url,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+          body: json.encode(body));
+
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      } else {
+        throw Exception(
+            'Failed to  unfollow user: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Exception: $e');
+    }
+  }
+
+    Future<Map<String, dynamic>> getAllBlockedUsers() async {
+    final response = await http.get(Uri.parse('$_baseUrl/getAllBlockedUsers'),  headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },);
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load blocked users');
+    }
+  }
+
+  Future<Map<String, dynamic>> unblockUser(String userId) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/unblockUser'),
+       headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+      body: json.encode({'userToUnblockId': userId}),
+    );
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to unblock user');
+    }
+  }
+   Future<void> updateAccountSettings(Map<String, dynamic> data) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/account-setting'),
+      body: data,
+    );
+
+    if (response.statusCode == 200) {
+      // Handle success
+      print('Account settings updated successfully');
+    } else {
+      // Handle failure
+      print('Failed to update account settings');
+    }
+  }
+
+  Future<bool> blockUser(String userToBlockId) async {
+    final url = Uri.parse('$_baseUrl/blockUser');
+    final response = await http.post(
+      url,
+      headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+      body: jsonEncode({
+        'userToBlockId': userToBlockId,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final responseData = jsonDecode(response.body);
+      if (responseData['status'] == 'success') {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+
+  
+  
+}
+
   T _processResponse<T>(http.Response response) {
     switch (response.statusCode) {
       case 200:
@@ -522,17 +641,14 @@ class ApiService {
         } else if (T == ResendOtpResponseModel) {
           return ResendOtpResponseModel.fromJson(jsonResponse) as T;
         } else if (T == List<WorkExperience>) {
-          // Assuming the response is a list of work experiences
           return (jsonResponse['data'] as List)
               .map((item) => WorkExperience.fromJson(item))
               .toList() as T;
         } else if (T == List<Expertise>) {
-          // Assuming the response is a list of expertise
           return (jsonResponse['data']['expertise'] as List)
               .map((item) => Expertise.fromJson(item))
               .toList() as T;
         } else if (T == List<Education>) {
-          // Assuming the response is a list of education
           return (jsonResponse['data'] as List)
               .map((item) => Education.fromJson(item))
               .toList() as T;
@@ -574,7 +690,7 @@ class ApiService {
             'Error occurred while communicating with server with status code: ${response.statusCode}');
     }
   }
-}
+
 
 class BadRequestException implements Exception {
   final String message;
@@ -590,3 +706,5 @@ class FetchDataException implements Exception {
   final String message;
   FetchDataException(this.message);
 }
+
+

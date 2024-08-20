@@ -1,4 +1,5 @@
 
+// import 'package:experta/testinf.dart';
 
 import '../../../core/app_export.dart';
 import '../models/splash_model.dart';
@@ -13,8 +14,14 @@ class SplashController extends GetxController {
   @override
   void onReady() {
     Future.delayed(const Duration(milliseconds: 3000), () {
+      // Get.to(const Lottieiles());
       Get.offNamed(
+       
         AppRoutes.onboardingScreen,
+        //AppRoutes.Bookappointment,
+        //AppRoutes.sucessfuly,
+        //AppRoutes.newpost,
+        //AppRoutes.rating,
       );
     });
   }
