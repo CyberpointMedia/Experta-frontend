@@ -1,17 +1,20 @@
 import 'dart:ui';
 import 'package:experta/core/app_export.dart';
-import 'package:experta/presentation/change_date_of_birth/controller/change_date_of_birth_controller.dart';
-import 'package:experta/presentation/change_email/controller/change_email_controller.dart';
-import 'package:experta/presentation/change_gender/controller/change_gender_controller.dart';
-import 'package:experta/presentation/change_user_name/controller/change_user_name_controller.dart';
-import 'package:experta/presentation/phone_number/controller/phone_number_controller.dart';
+import 'package:experta/presentation/account_details_settings/controller/account_detail_controller.dart';
 import 'package:experta/widgets/custom_text_form_field.dart';
 import 'package:experta/widgets/custom_toast_message.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-class DynamicSettingsPage extends StatelessWidget {
+class DynamicSettingsPage extends StatefulWidget {
+  const DynamicSettingsPage({super.key});
+
+  @override
+  State<DynamicSettingsPage> createState() => _DynamicSettingsPageState();
+}
+
+class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
   final String settingType = Get.arguments['keyword'] as String;
-
-  DynamicSettingsPage({super.key});
+  final controller = Get.put(AccountDetailsController());
 
   @override
   Widget build(BuildContext context) {
@@ -78,16 +81,16 @@ class DynamicSettingsPage extends StatelessWidget {
   }
 
   List<Widget> _buildChangeUserNameUI(BuildContext context) {
-    final controller = Get.put(ChangeUserNameController());
     return [
       _buildTitle("Change User Name"),
-      _buildSubtitle("Enter your user name."),
+      _buildSubtitle("Enter your email or phone number to reset the password."),
       const Text("User name"),
       CustomTextFormField(
         hintText: "navi_verma88",
         hintStyle: CustomTextStyles.titleMediumBluegray300,
         textInputType: TextInputType.name,
         controller: controller.textField1,
+        focusNode: controller.focus1,
       ),
       const Spacer(),
       _buildSaveButton(context, controller.textField1.text.isNotEmpty, "User Name changed Successfully", "Please Fill the user name"),
@@ -95,39 +98,41 @@ class DynamicSettingsPage extends StatelessWidget {
   }
 
   List<Widget> _buildChangeGenderUI(BuildContext context) {
-    // Initialize the controller if not already present
-    final controller = Get.find<ChangeGenderController>();
+    RxBool isMaleSelected = false.obs;
+    RxBool isFemaleSelected = false.obs;
 
     return [
       _buildTitle("Change Gender"),
-      _buildSubtitle("This helps us find more relevant content. We won’t show it on your profile."),
+      _buildSubtitle("This helps us find your more relevant content. We won’t show it on your profile."),
       Center(
-        child: Obx(() {
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildGenderSelection(
-                "Male",
-                ImageConstant.male,
-                ImageConstant.maleunselected,
-                controller.selectedGender.value == "Male",
-                () {
-                  controller.selectedGender("Male");
-                },
-              ),
-              const SizedBox(width: 16.0),
-              _buildGenderSelection(
-                "Female",
-                ImageConstant.female,
-                ImageConstant.femele,
-                controller.selectedGender.value == "Female",
-                () {
-                  controller.selectedGender("Female");
-                },
-              ),
-            ],
-          );
-        }),
+        child: Obx(() => Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            _buildGenderSelection(
+              "Male", 
+              ImageConstant.male, 
+              ImageConstant.maleunselected, 
+              isMaleSelected.value, 
+              () {
+                isMaleSelected.value = true;
+                isFemaleSelected.value = false;
+                controller.setGender("male");
+              }
+            ),
+            const SizedBox(width: 16.0),
+            _buildGenderSelection(
+              "Female", 
+              ImageConstant.female, 
+              ImageConstant.femele, 
+              isFemaleSelected.value, 
+              () {
+                isFemaleSelected.value = true;
+                isMaleSelected.value = false;
+                controller.setGender("female");
+              }
+            ),
+          ],
+        )),
       ),
       const Spacer(),
       _buildSaveButton(context, true, "Gender changed Successfully", ""),
@@ -135,64 +140,78 @@ class DynamicSettingsPage extends StatelessWidget {
   }
 
   List<Widget> _buildChangeDateOfBirthUI(BuildContext context) {
-    final controller = Get.put(ChangeDateOfBirthController());
-
     return [
-      _buildTitle("Change Date of Birth"),
-      _buildSubtitle("Enter your date of birth."),
+      _buildTitle("Change Date of birth"),
+      _buildSubtitle("Enter your email or phone number to reset the password."),
       const Text("Date of birth (DD/MM/YYYY)"),
       Row(
         children: [
           Expanded(
             child: CustomTextFormField(
+              
               hintText: "01/01/2024",
               hintStyle: CustomTextStyles.titleMediumBluegray300,
               textInputType: TextInputType.datetime,
-              controller: controller.textField1,
+              controller: controller.textField2,
+              focusNode: controller.focus2,
+              suffix:   IconButton(
+            icon: const Icon(Icons.calendar_today),
+            onPressed: () => _selectDate(context),
+          ),
             ),
           ),
-          IconButton(
-            icon: const Icon(Icons.calendar_today),
-            onPressed: () => _selectDate(context, controller),
-          ),
+        
         ],
       ),
       const Spacer(),
-      _buildSaveButton(context, controller.textField1.text.isNotEmpty, "Date of Birth changed Successfully", "Please Fill the Date of Birth"),
+      _buildSaveButton(context, controller.textField2.text.isNotEmpty, "Date of birth changed Successfully", "Please Fill the Date of birth"),
     ];
   }
 
   List<Widget> _buildChangeEmailUI(BuildContext context) {
-    final controller = Get.put(ChangeEmailController());
     return [
       _buildTitle("Change Email"),
-      _buildSubtitle("Enter your new email address."),
-      const Text("Email"),
+      _buildSubtitle("Enter your email or phone number to reset the password."),
+      const Text("Current Email"),
       CustomTextFormField(
         hintText: "john.doe@example.com",
         hintStyle: CustomTextStyles.titleMediumBluegray300,
         textInputType: TextInputType.emailAddress,
-        controller: controller.textField1,
+        controller: controller.textField3,
+        focusNode: controller.focus3,
+      ),
+      const Text("New Email"),
+      CustomTextFormField(
+        hintText: "john.doe@example.com",
+        hintStyle: CustomTextStyles.titleMediumBluegray300,
+        textInputType: TextInputType.emailAddress,
+        controller: controller.textField4,
+        focusNode: controller.focus4,
       ),
       const Spacer(),
-      _buildSaveButton(context, controller.textField1.text.isNotEmpty, "Email changed Successfully", "Please Fill the email"),
+      _buildSaveButton(
+        context,
+        controller.textField3.text.isNotEmpty || controller.textField4.text.isNotEmpty, 
+        "Email changed Successfully", 
+        "Please Fill the email"
+      ),
     ];
   }
 
   List<Widget> _buildChangePhoneNumberUI(BuildContext context) {
-    final controller = Get.put(PhoneNumberController());
     return [
       _buildTitle("Change Phone Number"),
-      _buildSubtitle("Enter your phone number."),
+      _buildSubtitle("Enter your phone number to update it."),
       const Text("Phone Number"),
       CustomTextFormField(
         hintText: "+1 123 456 7890",
         hintStyle: CustomTextStyles.titleMediumBluegray300,
         textInputType: TextInputType.phone,
-        controller: controller.textField1,
+        controller: controller.textField5,
+        focusNode: controller.focus5,
       ),
       const Spacer(),
-      _buildSaveButton(context, controller.textField1.text.isNotEmpty, "Phone Number changed Successfully", "Please Fill the phone number"),
+      _buildSaveButton(context, controller.textField5.text.isNotEmpty, "Phone Number changed Successfully", "Please Fill the phone number"),
     ];
   }
 
@@ -213,8 +232,35 @@ class DynamicSettingsPage extends StatelessWidget {
   Widget _buildSaveButton(BuildContext context, bool isValid, String successMessage, String errorMessage) {
     return CustomElevatedButton(
       text: "Save",
-      onPressed: () {
+      onPressed: () async {
         if (isValid) {
+          // Prepare data based on the current setting
+          Map<String, dynamic> data;
+          switch (settingType) {
+            case 'Username':
+              data = {'username': controller.textField1.text};
+              break;
+            case 'Gender':
+              data = {'gender': controller.selectedGender.value};
+              break;
+            case 'Birthday':
+              data = {'dateOfBirth': controller.textField2.text};
+              break;
+            case 'Change Email':
+              data = {'email': controller.textField3.text};
+              break;
+            case 'Phone Number':
+              data = {'phone': controller.textField5.text};
+              break;
+            default:
+              data = {};
+          }
+
+          // Call the API to update account settings
+          await controller.updateAccountSettings(data);
+
+          // Show success toast
+          // ignore: use_build_context_synchronously
           CustomToast().showToast(context: context, message: successMessage, isSuccess: true);
           Get.toNamed(AppRoutes.accountSetting);
         } else {
@@ -226,65 +272,57 @@ class DynamicSettingsPage extends StatelessWidget {
   }
 
   Widget _buildGenderSelection(
-    String label,
-    String selectedImagePath,
-    String unselectedImagePath,
-    bool isSelected,
-    VoidCallback onTap,
+    String label, String selectedIcon, String unselectedIcon, bool isSelected, VoidCallback onPressed
   ) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 144.0,
-        height: 144.0,
-        padding: const EdgeInsets.symmetric(vertical: 28.0, horizontal: 24.0),
-        decoration: BoxDecoration(
-          color: isSelected ? Colors.yellow : Colors.white,
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        child: Column(
-          children: [
-            CustomImageView(
-              imagePath: isSelected ? selectedImagePath : unselectedImagePath,
-              width: 50.0,
-              height: 50.0,
+    return InkWell(
+      onTap: onPressed,
+      child: Column(
+        children: [
+          SvgPicture.asset(
+            isSelected ? selectedIcon : unselectedIcon,
+            height: 120,
+          ),
+          Text(
+            label,
+            style: theme.textTheme.titleMedium!.copyWith(
+              color: isSelected ? appTheme.yellow6001e : appTheme.blueGray100,
+              fontWeight: FontWeight.w500,
             ),
-            const SizedBox(width: 8.0),
-            Text(
-              label,
-              style: TextStyle(color: Colors.black, fontWeight: isSelected ? FontWeight.bold : FontWeight.normal),
-            ),
-          ],
-        ),
+          ),
+        ],
       ),
     );
   }
 
-  Future<void> _selectDate(BuildContext context, ChangeDateOfBirthController controller) async {
-    final DateTime? picked = await showDatePicker(
+  void _selectDate(BuildContext context) async {
+    DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(1900),
-      lastDate: DateTime(2100),
+      lastDate: DateTime.now(),
     );
-    if (picked != null) {
-      controller.textField1.text = "${picked.day}/${picked.month}/${picked.year}";
+
+    if (pickedDate != null) {
+      setState(() {
+        controller.textField2.text = "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
+      });
     }
   }
 
-  PreferredSizeWidget _buildAppBar() {
+  Widget _buildAppBar() {
     return CustomAppBar(
-      height: 40.h,
-      leadingWidth: 40.h,
-      leading: AppbarLeadingImage(
-        imagePath: ImageConstant.imgArrowLeftOnerrorcontainer,
-        margin: EdgeInsets.only(left: 16.h),
-        onTap: () => Get.back(),
+      height: 65,
+      leadingWidth: 45,
+      leading: IconButton(
+        onPressed: () {
+          Get.back();
+        },
+        icon: const Icon(Icons.arrow_back, color: Colors.black),
       ),
-      centerTitle: true,
-      title: AppbarSubtitleSix(
-        text: settingType,
-      ),
+      // title: Text(
+      //   settingType,
+      //   style: theme.textTheme.titleLarge!.copyWith(color: Colors.black),
+      // ),
     );
   }
 }

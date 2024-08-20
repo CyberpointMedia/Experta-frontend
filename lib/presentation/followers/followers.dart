@@ -1,13 +1,13 @@
-import 'dart:ui';
+// followers_page.dart
 
+import 'dart:ui';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/followers/controller/followers_controller.dart';
 import 'package:experta/presentation/followers/models/followers_model.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class FollowersPage extends StatefulWidget {
-
-  FollowersPage({super.key});
+  const FollowersPage({super.key});
 
   @override
   State<FollowersPage> createState() => _FollowersPageState();
@@ -15,16 +15,11 @@ class FollowersPage extends StatefulWidget {
 
 class _FollowersPageState extends State<FollowersPage> {
   final String id = Get.arguments['id'];
-
+  final String userProfile = Get.arguments["userProfile"];
   final FollowersAndFollowingController controller =
       Get.put(FollowersAndFollowingController());
 
 
-@override
-  void initState() {
-    super.initState();
-    controller.id = id;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -140,7 +135,7 @@ class FollowerTile extends StatelessWidget {
       ),
       title: Text(follower.displayName),
       subtitle: Text("${follower.industry} | ${follower.occupation}"),
-      trailing: ElevatedButton(
+      trailing: (controller.userProfile=="userProfile")?ElevatedButton(
         onPressed: () async {
           await controller.removeConnection(follower.id, "removeFollower");
         },
@@ -157,7 +152,7 @@ class FollowerTile extends StatelessWidget {
             color: Colors.black, // Text color black
           ),
         ),
-      ),
+      ):const SizedBox.shrink(),
     );
   }
 }

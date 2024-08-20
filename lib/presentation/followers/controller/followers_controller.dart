@@ -1,19 +1,27 @@
-import 'package:experta/core/app_export.dart';
+import 'package:get/get.dart';
 import 'package:experta/presentation/followers/models/followers_model.dart';
+import 'package:experta/data/apiClient/api_service.dart';
 
 class FollowersAndFollowingController extends GetxController {
   var followers = <Follow>[].obs;
   var following = <Follow>[].obs;
   var isLoading = true.obs;
-  final String? address = PrefUtils().getaddress();
   final ApiService apiService = ApiService();
 
-  String id = "" ;
+  late String userId;
+  late String userProfile;
 
   @override
   void onInit() {
     super.onInit();
-    fetchFollowersAndFollowing(id); 
+    print( "${Get.arguments['id']}");
+    if (Get.arguments != null && Get.arguments['id'] != null) {
+      userId = Get.arguments['id'];
+      userProfile = Get.arguments["userProfile"];
+      fetchFollowersAndFollowing(userId);
+    } else {
+      print('Error: User ID is not provided in arguments');
+    }
   }
 
   void fetchFollowersAndFollowing(String userId) async {
@@ -26,7 +34,6 @@ class FollowersAndFollowingController extends GetxController {
       following.value = data.data.following;
     } catch (e) {
       print(e);
-      // Handle the error accordingly
     } finally {
       isLoading(false);
     }
@@ -39,16 +46,14 @@ class FollowersAndFollowingController extends GetxController {
 
       if (type == "unfollow") {
         following.removeWhere((follower) => follower.id == targetUserId);
-      } else {
+      } else if (type == "removeFollower") {
         followers.removeWhere((follower) => follower.id == targetUserId);
       }
 
-      // Show a success message once
-      String message = type == "unfollow" ? 'User unfollowed successfully' : 'User removed successfully';
-      Get.snackbar('Success', message);
+      Get.snackbar('Success', 'User removed successfully');
     } catch (e) {
       print(e);
-      Get.snackbar('Error', 'Failed to unfollow user: $e');
+      Get.snackbar('Error', 'Failed to remove user: $e');
     }
   }
 }

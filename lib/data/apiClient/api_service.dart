@@ -132,7 +132,6 @@ class ApiService {
       throw Exception('Failed to load data');
     }
   }
-  
 
   Future<List<ExpertiseItem>> fetchExpertiseItems() async {
     final response = await http.get(
@@ -559,6 +558,76 @@ class ApiService {
     }
   }
 
+    Future<Map<String, dynamic>> getAllBlockedUsers() async {
+    final response = await http.get(Uri.parse('$_baseUrl/getAllBlockedUsers'),  headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },);
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load blocked users');
+    }
+  }
+
+  Future<Map<String, dynamic>> unblockUser(String userId) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/unblockUser'),
+       headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+      body: json.encode({'userToUnblockId': userId}),
+    );
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to unblock user');
+    }
+  }
+   Future<void> updateAccountSettings(Map<String, dynamic> data) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/account-setting'),
+      body: data,
+    );
+
+    if (response.statusCode == 200) {
+      // Handle success
+      print('Account settings updated successfully');
+    } else {
+      // Handle failure
+      print('Failed to update account settings');
+    }
+  }
+
+  Future<bool> blockUser(String userToBlockId) async {
+    final url = Uri.parse('$_baseUrl/blockUser');
+    final response = await http.post(
+      url,
+      headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+      body: jsonEncode({
+        'userToBlockId': userToBlockId,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final responseData = jsonDecode(response.body);
+      if (responseData['status'] == 'success') {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+
+  
+  
+}
+
   T _processResponse<T>(http.Response response) {
     switch (response.statusCode) {
       case 200:
@@ -621,7 +690,7 @@ class ApiService {
             'Error occurred while communicating with server with status code: ${response.statusCode}');
     }
   }
-}
+
 
 class BadRequestException implements Exception {
   final String message;

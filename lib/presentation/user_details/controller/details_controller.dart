@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/Home/model/home_model.dart';
 import 'package:experta/presentation/userProfile/models/profile_model.dart';
@@ -7,15 +9,71 @@ class DetailsController extends GetxController {
   var userData = ProfileModel().obs;
   var usersByIndustry = <String, List<User>>{}.obs;
   var isLoading = true.obs;
-  
+  var isFollowing = false.obs;
   final String? address = PrefUtils().getaddress();
+  var isBlocking = false.obs;
+  var isSucess = false.obs;
+  var blockedUsers = <String>[].obs; // List to hold blocked users' IDs
+
+  void blockUser(String userToBlockId, BuildContext context) async {
+    try {
+      isBlocking(true);
+      bool success = await ApiService().blockUser(userToBlockId);
+      isBlocking(false);
+      if (success) {
+        isSucess.value = true;
+        // blockedUsers.add(userToBlockId); 
+
+        // Show success Lottie animation
+        // await showDialog(
+        //   context: context,
+        //   builder: (BuildContext context) {
+            // return Center(
+            //   child: Lottie.asset("assets/jsonfiles/tick.json"),
+            // );
+        //   },
+        // );
+
+        // Wait for 3 seconds
+        //await Future.delayed(const Duration(seconds: 3));
+
+        // Close the dialog before navigating
+       // Navigator.of(context).pop();
+
+        // Navigate back to the home page
+        //Get.offAllNamed(AppRoutes.aboutus);
+      } else {
+        Fluttertoast.showToast(
+          msg: "Failed to block user",
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.BOTTOM,
+          timeInSecForIosWeb: 1,
+          backgroundColor: Colors.red,
+          textColor: Colors.white,
+          fontSize: 16.0,
+        );
+      }
+    } catch (e) {
+      isBlocking(false);
+      Fluttertoast.showToast(
+        msg: "Error: $e",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        timeInSecForIosWeb: 1,
+        backgroundColor: const Color.fromARGB(255, 54, 244, 187),
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+    }
+  }
 
   void fetchUserData(String userId) async {
     try {
       isLoading(true);
-      var data =
-          await ApiService().getUserData(userId, address.toString());
+      var data = await ApiService().getUserData(userId, address.toString());
       userData.value = ProfileModel.fromJson(data);
+      log("the following value is === ${userData.value.data?.isFollowing}");
+      isFollowing.value = userData.value.data?.isFollowing ?? false;
     } catch (e) {
       // Handle error
       print("Error fetching user data: $e");
@@ -28,6 +86,7 @@ class DetailsController extends GetxController {
     try {
       bool success = await ApiService().followUser(followedByUserId);
       if (success) {
+        isFollowing.value = true;
         Fluttertoast.showToast(
           msg: "User followed successfully",
           toastLength: Toast.LENGTH_SHORT,
@@ -59,5 +118,15 @@ class DetailsController extends GetxController {
         fontSize: 16.0,
       );
     }
+  }
+
+  // Method to check if a user is blocked
+  bool isUserBlocked(String userId) {
+    return blockedUsers.contains(userId);
+  }
+
+  // Filtering home users
+  List<User> getFilteredUsers(List<User> allUsers) {
+    return allUsers.where((user) => !isUserBlocked(user.id)).toList();
   }
 }

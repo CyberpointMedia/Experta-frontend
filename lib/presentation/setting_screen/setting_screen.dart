@@ -326,7 +326,7 @@ class SettingScreen extends GetWidget<SettingController> {
                   decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
                       borderRadius: BorderRadiusStyle.roundedBorder20),
                   child: Row(children: [
-                    (controller.imagePath == "")? CustomImageView(
+                    (controller.imagePath != "")? CustomImageView(
                               imagePath: controller.imagePath,
                               height: 48.adaptSize,
                               width: 48.adaptSize,

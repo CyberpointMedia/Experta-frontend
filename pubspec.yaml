@@ -71,6 +71,7 @@ dependencies:
   webview_flutter: ^4.8.0
   fluttertoast: ^8.2.6
   dio: ^5.5.0+1
+  lottie: ^3.1.2
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -95,6 +96,7 @@ flutter:
     - assets/
     - assets/images/
     - assets/images/settings/
+    - assets/jsonfiles/
   fonts: 
     - family: Inter
       fonts: 
