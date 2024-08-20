@@ -23,7 +23,7 @@ class _ReportReasonSheetState extends State<ReportReasonSheet> {
   @override
   void initState() {
     super.initState();
-    log("itemId: ${widget.itemId}, itemType: ${widget.itemType}, selectedReasonId: $selectedReasonId,");
+    log("itemId: ${widget.itemId}, itemType: ${widget.itemType}, selectedReasonId: ${selectedReasonId},");
     fetchReasons();
   }
 
@@ -42,7 +42,7 @@ class _ReportReasonSheetState extends State<ReportReasonSheet> {
   }
 
   void navigateToDetails() {
-    log("itemId: ${widget.itemId}, itemType: ${widget.itemType}, selectedReasonId: $selectedReasonId,");
+    log("itemId: ${widget.itemId}, itemType: ${widget.itemType}, selectedReasonId: ${selectedReasonId},");
 
     Navigator.pop(context);
     Get.bottomSheet(
@@ -113,7 +113,7 @@ class _ReportReasonSheetState extends State<ReportReasonSheet> {
                         Divider(color: Colors.grey[300]),
                       ],
                     );
-                  }),
+                  }).toList(),
                 ],
               ),
             ),

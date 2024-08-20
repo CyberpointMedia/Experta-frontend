@@ -13,6 +13,7 @@ import 'package:experta/data/models/response/resend_otp_response_model.dart';
 import 'package:experta/data/models/response/verify_otp_response_model.dart';
 import 'package:experta/presentation/additional_info/model/additional_model.dart';
 import 'package:experta/presentation/additional_info/model/interest_model.dart';
+import 'package:experta/presentation/feeds_active_screen/models/feeds_active_model.dart';
 
 import 'package:experta/presentation/professional_info/model/professional_model.dart';
 import 'package:http/http.dart' as http;
@@ -596,6 +597,55 @@ class ApiService {
       body: json.encode({'comment': comment}),
     );
     return json.decode(response.body);
+  }
+
+  Future<List<Reason>> fetchReasons() async {
+    final response = await http.get(
+      Uri.parse('$_baseUrl/reasons'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+    if (response.statusCode == 200) {
+      List<dynamic> data = json.decode(response.body)['data'];
+
+      return data.map((json) => Reason.fromJson(json)).toList();
+    } else {
+      throw Exception('Failed to load reasons');
+    }
+  }
+
+  Future<void> submitReport(Report report) async {
+    try {
+      final url = Uri.parse('$_baseUrl/report');
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
+      final body = json.encode(report.toJson());
+
+      log('Submitting report to $url');
+      log('Headers: $headers');
+      log('Body: $body');
+
+      final response = await http.post(
+        url,
+        headers: headers,
+        body: body,
+      );
+
+      if (response.statusCode == 200) {
+        print(response.body.toString());
+        log('Report submitted successfully');
+      } else {
+        log('Failed to submit report: ${response.statusCode} - ${response.body}');
+        throw Exception('Failed to submit report');
+      }
+    } catch (e) {
+      log('Error submitting report: $e');
+      throw Exception('Error submitting report');
+    }
   }
 
   T _processResponse<T>(http.Response response) {
