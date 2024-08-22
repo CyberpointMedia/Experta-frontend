@@ -1,17 +1,18 @@
 // home_controller.dart
+import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/Home/model/home_model.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
 class HomeController extends GetxController {
+  var profileCompletion = Rxn<ProfileCompletion>();
   var industries = <Industry>[].obs;
   var usersByIndustry = <String, List<User>>{}.obs;
   var trendingPeople = <User>[].obs;
   var isLoading = false.obs;
-  var searchResults = <SearchResult>[].obs; // Update this line
+  var searchResults = <SearchResult>[].obs;
   TextEditingController searchController = TextEditingController();
+  final String? address = PrefUtils().getaddress();
 
   @override
   void onInit() {
@@ -19,6 +20,7 @@ class HomeController extends GetxController {
     fetchIndustries();
     fetchTrendingPeople();
     searchController.addListener(_onSearchChanged);
+    fetchProfileCompletion(address.toString());
   }
 
   void _onSearchChanged() {
@@ -103,6 +105,24 @@ class HomeController extends GetxController {
         trendingPeople.value = data.map((json) => User.fromJson(json)).toList();
       } else {
         print('Failed to load trending people: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  void fetchProfileCompletion(String userId) async {
+    isLoading.value = true;
+    try {
+      final response = await http.get(Uri.parse(
+          'http://3.110.252.174:8080/api/profile-completion/$userId'));
+      if (response.statusCode == 200) {
+        var data = json.decode(response.body)['data'];
+        profileCompletion.value = ProfileCompletion.fromJson(data);
+      } else {
+        print('Failed to load profile completion data: ${response.statusCode}');
       }
     } catch (e) {
       print('Error: $e');

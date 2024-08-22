@@ -5,7 +5,7 @@ class BookAppointmentPage extends StatefulWidget {
   const BookAppointmentPage({super.key});
 
   @override
-  _BookAppointmentPageState createState() => _BookAppointmentPageState();
+  State<BookAppointmentPage> createState() => _BookAppointmentPageState();
 }
 
 class _BookAppointmentPageState extends State<BookAppointmentPage> {
@@ -236,7 +236,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                Get.toNamed(AppRoutes.Bookindeetail, arguments: {
+                Get.toNamed(AppRoutes.bookindeetail, arguments: {
                   'selectedDate': selectedDate,
                   'selectedDuration': selectedDuration,
                   'selectedSlot': selectedSlot,

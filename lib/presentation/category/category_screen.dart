@@ -3,14 +3,8 @@ import 'dart:ui';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/Home/model/home_model.dart';
 import 'package:experta/presentation/categoryDetails/category_details_screen.dart';
-import 'package:experta/widgets/app_bar/appbar_subtitle_six.dart';
-import 'package:experta/widgets/app_bar/custom_app_bar.dart';
-import 'package:flutter/material.dart';
 import 'package:experta/presentation/category/category_controller.dart';
-import 'package:experta/widgets/app_bar/appbar_leading_image.dart';
-import 'package:experta/widgets/app_bar/appbar_title.dart';
 import 'package:experta/widgets/app_bar/appbar_trailing_iconbutton.dart';
-import 'package:flutter/widgets.dart';
 
 class CategoryScreen extends GetWidget<CategoryController> {
   const CategoryScreen({super.key});

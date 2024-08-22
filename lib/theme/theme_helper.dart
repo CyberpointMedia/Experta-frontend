@@ -8,12 +8,12 @@ class ThemeHelper {
   // The current app theme
   final _appTheme = PrefUtils().getThemeData();
 
-// A map of custom color themes supported by the app
+  // A map of custom color themes supported by the app
   final Map<String, PrimaryColors> _supportedCustomColor = {
     'primary': PrimaryColors()
   };
 
-// A map of color schemes supported by the app
+  // A map of color schemes supported by the app
   final Map<String, ColorScheme> _supportedColorScheme = {
     'primary': ColorSchemes.primaryColorScheme
   };
@@ -83,8 +83,8 @@ class ThemeHelper {
         ),
       ),
       radioTheme: RadioThemeData(
-        fillColor: WidgetStateColor.resolveWith((states) {
-          if (states.contains(WidgetState.selected)) {
+        fillColor: MaterialStateProperty.resolveWith((states) {
+          if (states.contains(MaterialState.selected)) {
             return colorScheme.onPrimaryContainer.withOpacity(1);
           }
           return colorScheme.onSurface;

@@ -16,7 +16,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   final double? height;
 
-  final Style? styleType;
+  final Styled? styleType;
 
   final double? leadingWidth;
 
@@ -54,7 +54,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       );
   _getStyle() {
     switch (styleType) {
-      case Style.bgGradientnameblack90001opacity0nameblack90001opacity06:
+      case Styled.bgGradientnameblack90001opacity0nameblack90001opacity06:
         return Container(
           height: 126.v,
           width: double.maxFinite,
@@ -69,7 +69,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
         );
-      case Style.bgFill_1:
+      case Styled.bgFill_1:
         return Stack(
           children: [
             Container(
@@ -93,7 +93,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ],
         );
-      case Style.bgFill_2:
+      case Styled.bgFill_2:
         return Stack(
           children: [
             Container(
@@ -114,7 +114,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ],
         );
-      case Style.bgFill_3:
+      case Styled.bgFill_3:
         return Container(
           height: 56.v,
           width: double.maxFinite,
@@ -122,7 +122,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             color: theme.colorScheme.onPrimaryContainer.withOpacity(1),
           ),
         );
-      case Style.bgFill:
+      case Styled.bgFill:
         return Container(
           height: 3.v,
           width: double.maxFinite,
@@ -137,7 +137,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 }
 
-enum Style {
+enum Styled {
   bgGradientnameblack90001opacity0nameblack90001opacity06,
   bgFill_1,
   bgFill_2,
