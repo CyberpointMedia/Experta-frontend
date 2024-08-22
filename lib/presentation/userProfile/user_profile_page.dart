@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
 import 'package:experta/core/utils/web_view/web_view.dart';
+import 'package:experta/presentation/dashboard/controller/dashboard_controller.dart';
 import 'package:experta/presentation/userProfile/controller/profile_controller.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -199,6 +200,7 @@ class _UserProfilePageState extends State<UserProfilePage>
         );
       } else {
         return GridView.builder(
+          reverse: false,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3,
             crossAxisSpacing: 4.0,
@@ -206,6 +208,8 @@ class _UserProfilePageState extends State<UserProfilePage>
           ),
           itemCount: posts.length,
           itemBuilder: (context, index) {
+            // Reverse the index to access the items from the end of the list
+            int reverseIndex = posts.length - 1 - index;
             return GestureDetector(
               onLongPress: () {
                 showDialog(
@@ -217,7 +221,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                           Navigator.of(context).pop();
                         },
                         child: CustomImageView(
-                          imagePath: posts[index].image ?? '',
+                          imagePath: posts[reverseIndex].image ?? '',
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -226,7 +230,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                 );
               },
               child: CustomImageView(
-                imagePath: posts[index].image ?? '',
+                imagePath: posts[reverseIndex].image ?? '',
                 fit: BoxFit.cover,
               ),
             );
@@ -849,31 +853,6 @@ class _UserProfilePageState extends State<UserProfilePage>
       ),
     );
   }
-
-//  Widget _buildColumnFourHundredFifty({
-//   required String dynamicText,
-//   required String dynamicText1,
-//   required VoidCallback onTap,
-// }) {
-//   return GestureDetector(
-//     onTap: onTap,
-//     child: Column(
-//       children: [
-//         Text(
-//           dynamicText,
-//           style: theme.textTheme.headlineLarge?.copyWith(fontSize: 18.fSize),
-//         ),
-//         SizedBox(
-//           height: 6.v,
-//         ),
-//         Text(
-//           dynamicText1,
-//           style: theme.textTheme.bodyMedium!,
-//         ),
-//       ],
-//     ),
-//   );
-// }
 
   Widget _profilepicBody() {
     return Obx(() {

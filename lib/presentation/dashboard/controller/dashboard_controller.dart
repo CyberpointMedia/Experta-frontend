@@ -1,42 +1,3 @@
-// import 'package:experta/core/app_export.dart';
-// import 'package:experta/presentation/dashboard/models/dashboard_model.dart';
-
-// class DashboardController extends GetxController {
-//   final PageController pageController = PageController();
-//   Rx<DashboardModel> dashboardModelObj = DashboardModel().obs;
-//   RxInt selectedIndex = 0.obs;
-//   RxMap<String, dynamic> pageArguments = <String, dynamic>{}.obs;
-//   void onPageChanged(int index) {
-//     selectedIndex.value = index;
-//   }
-
-//   void onBottomNavTapped(int index) {
-//     pageController.animateToPage(
-//       index,
-//       duration: const Duration(milliseconds: 300),
-//       curve: Curves.ease,
-//     );
-//     selectedIndex.value = index;
-//   }
-
-//   void navigateToPage(int index, dynamic arguments) {
-//     pageArguments.value = arguments;
-//     pageController.jumpToPage(index);
-//     selectedIndex.value = index;
-//   }
-
-//   void navigateToPage2(int index) {
-//     pageController.jumpToPage(index);
-//     selectedIndex.value = index;
-//   }
-
-//   @override
-//   void onClose() {
-//     super.onClose();
-//     pageController.dispose();
-//   }
-// }
-
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/Home/controller/home_controller.dart';
 import 'package:experta/presentation/dashboard/models/dashboard_model.dart';
@@ -93,7 +54,11 @@ class DashboardController extends GetxController {
   }
 
   void navigateToPage2(int index) {
-    pageController.jumpToPage(index);
+    pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.ease,
+    );
     selectedIndex.value = index;
   }
 

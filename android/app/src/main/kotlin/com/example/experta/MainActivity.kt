@@ -1,4 +1,4 @@
-package com.example.experta
+package com.example.expert
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -1,4 +1,5 @@
 import 'package:experta/core/app_export.dart';
+import 'package:experta/presentation/dashboard/dashboard.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:image/image.dart' as img;
@@ -6,6 +7,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:io';
 import 'package:mime/mime.dart';
+import 'package:path/path.dart';
 
 class NewPostController extends GetxController {
   final String? token = PrefUtils().getToken();
@@ -18,6 +20,7 @@ class NewPostController extends GetxController {
     required String caption,
     required String location,
     required String basicInfoId,
+    required context,
   }) async {
     isLoading.value = true; // Set loading state to true
     try {
@@ -72,7 +75,8 @@ class NewPostController extends GetxController {
       if (response.statusCode == 200) {
         var responseData = await response.stream.bytesToString();
         var jsonResponse = json.decode(responseData);
-        Get.offAndToNamed(AppRoutes.dashboard);
+        Navigator.pop(context);
+        // Get.toNamed(AppRoutes.dashboard);
         print('Post created successfully: $jsonResponse');
       } else {
         var responseData = await response.stream.bytesToString();
