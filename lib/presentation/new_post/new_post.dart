@@ -7,10 +7,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/dashboard/dashboard.dart';
 import 'package:experta/presentation/new_posting/new_posting.dart';
-import 'package:experta/widgets/app_bar/appbar_leading_image.dart';
-import 'package:experta/widgets/app_bar/appbar_subtitle_six.dart';
-import 'package:experta/widgets/app_bar/custom_app_bar.dart';
-import 'package:experta/widgets/custom_elevated_button.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
 import 'package:image_editor_plus/image_editor_plus.dart';
 import 'package:path_provider/path_provider.dart';
@@ -44,6 +40,7 @@ class _NewPostPageState extends State<NewPostPage> {
 
   void _requestPermissions() async {
     final PermissionState ps = await PhotoManager.requestPermissionExtend();
+
     if (ps.isAuth) {
       _loadMediaFiles();
     } else {
@@ -181,7 +178,9 @@ class _NewPostPageState extends State<NewPostPage> {
           if (snapshot.connectionState == ConnectionState.done &&
               snapshot.data != null) {
             return _selectedFile!.type == AssetType.video
-                ? _buildVideoPlayer(_selectedFile!)
+                ? Container(
+                    width: MediaQuery.of(context).size.width * 0.5,
+                    child: _buildVideoPlayer(_selectedFile!))
                 : _buildImage(_selectedFile!, snapshot.data!);
           } else {
             return const Center(child: CircularProgressIndicator());
@@ -247,13 +246,14 @@ class _NewPostPageState extends State<NewPostPage> {
         imgColor: appTheme.whiteA700,
         margin: EdgeInsets.only(left: 16.h),
         onTap: () {
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-              builder: (context) => DashboardPage(),
-            ),
-            (Route<dynamic> route) => false,
-          );
+          Navigator.pop(context);
+          // Navigator.pushAndRemoveUntil(
+          //   context,
+          //   MaterialPageRoute(
+          //     builder: (context) => DashboardPage(),
+          //   ),
+          //   (Route<dynamic> route) => false,
+          // );
         },
       ),
       centerTitle: true,
@@ -290,7 +290,14 @@ class _NewPostPageState extends State<NewPostPage> {
                 ),
               );
             } else if (_selectedFiles.isNotEmpty || _selectedFile != null) {
-              loadAsset();
+              // loadAsset();
+              var file = await (_isMultiSelectMode
+                  ? _selectedFiles.first.originFile
+                  : _selectedFile!.originFile);
+              if (file != null) {
+                var data = await file.readAsBytes();
+                setState(() => imageData = data);
+              }
               if (imageData != null) {
                 var editedImage = await Navigator.push(
                   context,
@@ -299,7 +306,7 @@ class _NewPostPageState extends State<NewPostPage> {
                   ),
                 );
                 if (editedImage != null) {
-                  Navigator.push(
+                  Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                       builder: (context) => PostingPage(imageData: editedImage),

@@ -91,4 +91,18 @@ class PrefUtils {
     await _sharedPreferences!.remove('address');
   }
 
+   /// Save address to SharedPreferences
+  Future<void> setbasic(String basicInfo) async {
+    await _sharedPreferences!.setString('basicInfo', basicInfo);
+  }
+    /// Retrieve address from SharedPreferences
+  String? getbasic() {
+    return _sharedPreferences!.getString('basicInfo');
+  }
+
+  /// Remove address from SharedPreferences
+  Future<void> removebasic() async {
+    await _sharedPreferences!.remove('basicInfo');
+  }
+
 }

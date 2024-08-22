@@ -4,11 +4,6 @@ import 'dart:developer';
 import 'dart:ui';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/new_post/controller/new_post_controller.dart';
-import 'package:experta/theme/custom_text_style.dart';
-import 'package:experta/widgets/app_bar/appbar_leading_image.dart';
-import 'package:experta/widgets/app_bar/appbar_subtitle_six.dart';
-import 'package:experta/widgets/app_bar/custom_app_bar.dart';
-import 'package:flutter/material.dart';
 import 'dart:typed_data';
 import 'dart:io';
 import 'package:geolocator/geolocator.dart';
@@ -35,7 +30,7 @@ class _PostingPageState extends State<PostingPage> {
   List<String> selectedLocations = [];
   VideoPlayerController? _videoController;
   String? _currentVideoFile;
-
+  final String? basic = PrefUtils().getbasic();
   @override
   Widget build(BuildContext context) {
     return Obx(() {
@@ -288,7 +283,7 @@ class _PostingPageState extends State<PostingPage> {
     final caption = _captionController.text;
     final location =
         selectedLocations.isNotEmpty ? selectedLocations.first : '';
-    const basicInfoId = '664ef83426880cc7d7f204f6';
+    String basicInfoId = basic.toString();
 
     File? videoFile;
     if (widget.videoFile != null) {
@@ -302,6 +297,7 @@ class _PostingPageState extends State<PostingPage> {
       caption: caption,
       location: location,
       basicInfoId: basicInfoId,
+      context: context,
     );
   }
 }

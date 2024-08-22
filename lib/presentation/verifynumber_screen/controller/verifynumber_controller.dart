@@ -39,6 +39,8 @@ class VerifynumberController extends GetxController with CodeAutoFill {
         await prefUtils.setaddress("${response.data!.id}");
         log("hey this is your id ${response.data!.id}");
         await prefUtils.setToken("${response.token}");
+        await prefUtils.setbasic("${response.data!.basicInfo}");
+        log("hey this is your id ${response.data!.basicInfo}");
         // Handle success response
         Get.toNamed(AppRoutes.dashboard);
         print("OTP Verified Successfully");
