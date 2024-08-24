@@ -288,7 +288,7 @@ Widget _buildBottomSheetContent(BuildContext context, Comment? comment) {
           ),
         ),
         if (comment != null && comment.user.id == userAddress ||
-             feed != null && feed.postedBy.id == userAddress)
+            feed!.postedBy.id == userAddress)
           _buildBottomSheetOption(
             context,
             icon: Icons.delete,
@@ -374,7 +374,7 @@ class FeedItem extends StatelessWidget {
             ),
             Padding(
                 padding: EdgeInsets.only(left: 10.h, top: 15.v, bottom: 10.v),
-                child: Text(feed.postedBy.displayName.toString(),
+                child: Text(feed.postedBy.displayName,
                     style: CustomTextStyles.titleMediumSemiBold)),
             Padding(
                 padding: EdgeInsets.only(left: 2.h, top: 19.v, bottom: 13.v),
@@ -382,7 +382,7 @@ class FeedItem extends StatelessWidget {
                     style: CustomTextStyles.bodySmallBluegray300)),
             Padding(
                 padding: EdgeInsets.only(left: 2.h, top: 19.v, bottom: 13.v),
-                child: Text(feed.formattedDate.toString(),
+                child: Text(feed.formattedDate,
                     style: CustomTextStyles.bodySmallBluegray300)),
             const Spacer(),
             CustomImageView(
@@ -437,7 +437,7 @@ class FeedItem extends StatelessWidget {
                 Padding(
                   padding: EdgeInsets.only(
                       left: 10.v, top: 20.v, bottom: 10.v, right: 10),
-                  child: Text(feed.caption.toString(),
+                  child: Text(feed.caption,
                       maxLines: 3,
                       overflow: TextOverflow.ellipsis,
                       style: theme.textTheme.titleMedium),
@@ -470,7 +470,7 @@ class FeedItem extends StatelessWidget {
                             height: 24.adaptSize,
                             width: 24.adaptSize,
                             onTap: () async {
-                              await controller.likeUnlikePost(feed.id.toString());
+                              await controller.likeUnlikePost(feed.id);
                             },
                           ),
                           Padding(
@@ -531,7 +531,7 @@ class FeedItem extends StatelessWidget {
                                           Row(
                                             children: [
                                               Text(
-                                                comment.user.displayName.toString(),
+                                                comment.user.displayName,
                                                 style: theme
                                                     .textTheme.bodyMedium!
                                                     .copyWith(
@@ -552,7 +552,7 @@ class FeedItem extends StatelessWidget {
                                                   top: 4.v,
                                                 ),
                                                 child: Text(
-                                                  comment.formattedDate.toString(),
+                                                  comment.formattedDate,
                                                   style: CustomTextStyles
                                                       .bodySmallBluegray300,
                                                 ),
@@ -590,7 +590,7 @@ class FeedItem extends StatelessWidget {
                                             ],
                                           ),
                                           Text(
-                                            comment.comment.toString(),
+                                            comment.comment,
                                             style: theme.textTheme.titleMedium!
                                                 .copyWith(
                                                     color: appTheme.black90001,
@@ -603,7 +603,7 @@ class FeedItem extends StatelessWidget {
                                   ],
                                 ),
                               );
-                            }),
+                            }).toList(),
                             if (feed.comments.length > 2)
                               TextButton(
                                 onPressed: () {

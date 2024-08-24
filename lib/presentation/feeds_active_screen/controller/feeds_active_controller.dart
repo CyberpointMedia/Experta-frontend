@@ -9,6 +9,7 @@ class FeedsActiveController extends GetxController {
   var isComment = false.obs;
   ApiService apiServices = ApiService();
   final String? address = PrefUtils().getaddress();
+
   @override
   void onInit() {
     super.onInit();
@@ -18,7 +19,7 @@ class FeedsActiveController extends GetxController {
   Future<void> fetchFeeds() async {
     try {
       isLoading(true);
-      var response = await apiServices.fetchFeeds(address.toString(), 'feed');
+      var response = await apiServices.fetchFeeds('post');
       var feedsActiveModel = FeedsActiveModel.fromJson(response);
       feeds.value = feedsActiveModel.data;
       // Populate commen list with comments from feeds

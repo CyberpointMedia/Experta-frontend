@@ -110,13 +110,6 @@ class _SearchScreenState extends State<SearchScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Padding(
-                      //   padding: EdgeInsets.only(left: 16.h, top: 29.v),
-                      //   child: Text(
-                      //     "lbl_recommended".tr,
-                      //     style: CustomTextStyles.titleMediumBold,
-                      //   ),
-                      // ),
                       _buildSearch(),
                     ],
                   ),

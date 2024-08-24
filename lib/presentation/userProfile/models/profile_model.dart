@@ -174,7 +174,7 @@ class UserBasicInfo {
   final String? lastName;
   final List<dynamic>? followers;
   final List<dynamic>? following;
-  final List<Post>? posts; // Changed from List<String> to List<Post>
+  late final List<Post>? posts; // Changed from List<String> to List<Post>
   final int? rating;
   final DateTime? createdAt;
   final DateTime? updatedAt;
