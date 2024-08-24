@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
@@ -13,6 +14,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
+import 'package:lottie/lottie.dart';
 import 'package:readmore/readmore.dart';
 
 class UserDetailsPage extends StatefulWidget {
@@ -24,7 +26,7 @@ class UserDetailsPage extends StatefulWidget {
 
 class _UserDetailsPageState extends State<UserDetailsPage>
     with SingleTickerProviderStateMixin {
-  final dynamic id = Get.arguments['user'];
+  final User id = Get.arguments['user'];
   DetailsController controller = Get.put(DetailsController());
 
   late TabController _tabController;
@@ -84,6 +86,8 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                         ),
                         onTap: () {
                           Navigator.pop(context);
+                          _showBlockUserDialog(context, id.id,
+                              controller); // Show the block user confirmation dialog
                         },
                       ),
                     ],
@@ -115,6 +119,101 @@ class _UserDetailsPageState extends State<UserDetailsPage>
               ),
             ],
           ),
+        );
+      },
+    );
+  }
+
+  void _showBlockUserDialog(BuildContext context, String userToBlockId,
+      DetailsController controller) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          backgroundColor:
+              Colors.transparent, // Make the dialog background transparent
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          child: Obx(() {
+            if (controller.isSucess.value) {
+              // If success, show success animation and dismiss after 3 seconds
+              Future.delayed(const Duration(seconds: 2), () {
+                Navigator.of(context).pop();
+              });
+
+              return SizedBox(
+                height: 200,
+                width: 200,
+                child: Center(
+                  child: Lottie.asset("assets/jsonfiles/tick.json"),
+                ),
+              );
+            } else if (controller.isBlocking.value) {
+              // If loading, show loading animation
+              return Center(
+                child: Lottie.asset("assets/jsonfiles/Loader.json"),
+              );
+            } else {
+              // Default dialog content
+              return Container(
+                color: Colors.white,
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      CustomIconButton(
+                        height: 88.adaptSize,
+                        width: 88.adaptSize,
+                        padding: EdgeInsets.all(20.h),
+                        decoration: IconButtonStyleHelper.fillGreenTL245,
+                        child: CustomImageView(
+                          imagePath: ImageConstant.popup,
+                        ),
+                      ),
+                      const SizedBox(height: 20.0),
+                      Text(
+                        "Block this user",
+                        style:
+                            Theme.of(context).textTheme.headlineSmall!.copyWith(
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 10.0),
+                        child: Text(
+                          'Are you sure you want to block this user? This action can be undone later.',
+                          style: CustomTextStyles.bodyMediumLight,
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                      const SizedBox(height: 24.0),
+                      CustomElevatedButton(
+                        onPressed: () async {
+                          controller.isBlocking.value = true;
+                          controller.blockUser(userToBlockId, context);
+                        },
+                        text: "Block",
+                      ),
+                      const SizedBox(height: 12.0),
+                      CustomOutlinedButton(
+                        height: 56.v,
+                        buttonStyle: CustomButtonStyles.outlineGrayTL23,
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        text: "Cancel",
+                      ),
+                      const SizedBox(height: 16.0),
+                    ],
+                  ),
+                ),
+              );
+            }
+          }),
         );
       },
     );
@@ -258,22 +357,39 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                       actions: [
                         Padding(
                           padding: const EdgeInsets.only(right: 0),
-                          child: CustomElevatedButton(
-                            buttonStyle: CustomButtonStyles.fillOnError2,
-                            buttonTextStyle: CustomTextStyles.bodySmallffffffff,
-                            height: 36,
-                            width: 70,
-                            text: controller.userData.value.data?.isFollowing ==
-                                    false
-                                ? "Follow"
-                                : "unfollow",
-                            onPressed: () {
-                              controller.userData.value.data?.isFollowing ==
-                                      false
-                                  ? controller.followUser(id.id)
-                                  : null;
-                            },
-                          ),
+                          child: Obx(() => CustomElevatedButton(
+                                buttonStyle: CustomButtonStyles.fillOnError2,
+                                buttonTextStyle:
+                                    CustomTextStyles.bodySmallffffffff,
+                                height: 36,
+                                width: 70,
+                                text: controller.isFollowing.value == false
+                                    ? "Follow"
+                                    : "Unfollow",
+                                onPressed: () {
+                                  if (controller.isFollowing.value == false) {
+                                    controller.followUser(
+                                        controller.userData.value.data?.id ??
+                                            '');
+                                    controller.fetchUserData(
+                                        controller.userData.value.data?.id ??
+                                            '');
+                                    setState(() {
+                                      controller.isFollowing.value = true;
+                                    });
+                                    log("now the new value of is following is ==== ${controller.isFollowing.value}");
+                                  } else {
+                                    // Handle unfollow logic here if needed
+                                    // controller.unfollowUser(controller.userData.value.data?.id ?? '');
+                                    controller.fetchUserData(
+                                        controller.userData.value.data?.id ??
+                                            '');
+                                    setState(() {
+                                      controller.isFollowing.value = false;
+                                    });
+                                  }
+                                },
+                              )),
                         ),
                         IconButton(
                           icon: const Icon(Icons.more_vert),
@@ -450,7 +566,8 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                         context,
                         MaterialPageRoute(
                           builder: (context) => PostDetailsPage(
-                            initialIndex: reverseIndex, userId: id.id,
+                            initialIndex: reverseIndex,
+                            userId: id.id,
                           ),
                         ),
                       );
@@ -819,8 +936,11 @@ class _UserDetailsPageState extends State<UserDetailsPage>
             ),
             GestureDetector(
               onTap: () {
-                // Navigate to the Reviews page
-                // Get.to(() => ReviewsPage()); // Assuming you are using GetX for navigation
+                var reviews =
+                    controller.userData.value.data?.basicInfo?.reviews;
+                if (reviews != null && reviews.isNotEmpty) {
+                  Get.to(() => AllReviewsPage(reviews: reviews));
+                }
               },
               child: Text(
                 "See all",
@@ -842,8 +962,8 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                   theme.textTheme.bodyMedium?.copyWith(color: appTheme.gray900),
             );
           } else {
-            // Limit the number of reviews to 5
-            var limitedReviews = reviews.take(5).toList();
+            // Limit the number of reviews to 3
+            var limitedReviews = reviews.take(3).toList();
             return Column(
               children: limitedReviews.map((review) {
                 return Padding(
@@ -889,7 +1009,6 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                               direction: Axis.horizontal,
                               allowHalfRating: false,
                               itemSize: 22,
-                              itemCount: 5,
                               updateOnDrag: true,
                               onRatingUpdate: (rating) {},
                               itemBuilder: (context, _) {
@@ -1017,8 +1136,15 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                 flex: 42,
               ),
               GestureDetector(
-                onTap: () =>
-                    Get.toNamed(AppRoutes.follower, arguments: {"id": id.id}),
+                onTap: () {
+                  Get.toNamed(AppRoutes.follower, arguments: {
+                    "id": id.id,
+                    "userProfile": "userDetails"
+                  })!
+                      .then((value) {
+                    Get.find<DetailsController>().fetchUserData(id.id);
+                  });
+                },
                 child: _buildColumnFourHundredFifty(
                   dynamicText: "$totalFollowers",
                   dynamicText1: "Followers",
@@ -1028,7 +1154,15 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                 flex: 58,
               ),
               GestureDetector(
-                onTap: () => Get.toNamed(AppRoutes.following),
+                onTap: () {
+                  Get.toNamed(AppRoutes.following, arguments: {
+                    "id": id.id,
+                    "userProfile": "userProfile"
+                  })!
+                      .then((value) {
+                    Get.find<DetailsController>().fetchUserData(id.id);
+                  });
+                },
                 child: _buildColumnFourHundredFifty(
                   dynamicText: "$totalFollowing",
                   dynamicText1: "Following",
