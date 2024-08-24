@@ -2,7 +2,7 @@ import 'dart:developer';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/feeds_active_screen/models/feeds_active_model.dart';
 
-class FeedsActiveController extends GetxController {
+class PostDetailsPageController extends GetxController {
   var feeds = <Datum>[].obs;
   var commen = <Comment>[].obs;
   var isLoading = true.obs;
@@ -13,13 +13,14 @@ class FeedsActiveController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchFeeds();
+    // fetchFeeds();
   }
 
-  Future<void> fetchFeeds() async {
+  Future<void> fetchFeeds(String userId) async {
     try {
       isLoading(true);
-      var response = await apiServices.fetchFeeds('post');
+      var response =
+          await apiServices.fetchPostByUser(userId, 'post');
       var feedsActiveModel = FeedsActiveModel.fromJson(response);
       feeds.value = feedsActiveModel.data;
       // Populate commen list with comments from feeds

@@ -1,5 +1,6 @@
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/Home/model/home_model.dart';
+import 'package:experta/presentation/feeds_active_screen/models/feeds_active_model.dart';
 import 'package:experta/presentation/userProfile/models/profile_model.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
@@ -7,14 +8,26 @@ class DetailsController extends GetxController {
   var userData = ProfileModel().obs;
   var usersByIndustry = <String, List<User>>{}.obs;
   var isLoading = true.obs;
-  
+  var feeds = <Datum>[].obs;
   final String? address = PrefUtils().getaddress();
+
+  Future<void> fetchFeeds(String userId) async {
+    try {
+      isLoading(true);
+      var response = await ApiService().fetchPostByUser(userId, 'post');
+      var feedsActiveModel = FeedsActiveModel.fromJson(response);
+      feeds.value = feedsActiveModel.data;
+    } catch (e) {
+      print("Error fetching feeds: $e");
+    } finally {
+      isLoading(false);
+    }
+  }
 
   void fetchUserData(String userId) async {
     try {
       isLoading(true);
-      var data =
-          await ApiService().getUserData(userId, address.toString());
+      var data = await ApiService().getUserData(userId, address.toString());
       userData.value = ProfileModel.fromJson(data);
     } catch (e) {
       // Handle error

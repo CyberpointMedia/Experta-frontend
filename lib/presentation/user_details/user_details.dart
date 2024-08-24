@@ -2,7 +2,9 @@ import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
 import 'package:experta/core/utils/web_view/web_view.dart';
+import 'package:experta/presentation/userProfile/post_details/post_details.dart';
 import 'package:experta/presentation/user_details/controller/details_controller.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -26,6 +28,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
   @override
   void initState() {
     controller.fetchUserData(id.id);
+    controller.fetchFeeds(id.id);
     _tabController = TabController(length: 2, vsync: this);
     super.initState();
   }
@@ -190,9 +193,11 @@ class _UserDetailsPageState extends State<UserDetailsPage>
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
+    return PopScope(
+      canPop: false,
       child: Scaffold(
         backgroundColor: Colors.white,
+        // appBar: ,
         body: Stack(
           children: [
             Positioned(
@@ -223,10 +228,18 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                   return [
                     SliverAppBar(
                       pinned: true,
-                      automaticallyImplyLeading: true,
+                      automaticallyImplyLeading: false,
                       expandedHeight: MediaQuery.of(context).size.height * 0.45,
                       backgroundColor: Colors.transparent,
                       primary: true,
+                      leading: AppbarLeadingImage(
+                        imagePath: ImageConstant.imgArrowLeftOnerrorcontainer,
+                        margin: EdgeInsets.only(
+                            left: 16.h, top: 10, bottom: 10, right: 16),
+                        onTap: () {
+                          onTapArrowLeft();
+                        },
+                      ),
                       title: Obx(() {
                         return Text(
                           controller.userData.value.data?.basicInfo
@@ -271,7 +284,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(top: 50),
+                              padding: const EdgeInsets.only(top: 80),
                               child: _profilepicBody(),
                             ),
                             _ratingSection(),
@@ -398,8 +411,12 @@ class _UserDetailsPageState extends State<UserDetailsPage>
 
   Widget _buildPosts() {
     return Obx(() {
-      var posts = controller.userData.value.data?.basicInfo?.posts;
-      if (posts == null || posts.isEmpty) {
+      var posts = controller.feeds;
+      if (controller.isLoading.value) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      } else if (posts.isEmpty) {
         return const Center(
           child: Text(
             'No posts available',
@@ -414,6 +431,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
           children: [
             Expanded(
               child: GridView.builder(
+                reverse: false,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
                   crossAxisSpacing: 4.0,
@@ -421,16 +439,30 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                 ),
                 itemCount: posts.length,
                 itemBuilder: (context, index) {
-                  return CustomImageView(
-                    imagePath: posts[index].image ?? '',
-                    fit: BoxFit.cover,
+                  int reverseIndex = posts.length - 1 - index;
+                  return GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PostDetailsPage(
+                            initialIndex: reverseIndex, userId: id.id,
+                          ),
+                        ),
+                      );
+                    },
+                    child: CustomImageView(
+                      imagePath: posts[reverseIndex].image ?? '',
+                      fit: BoxFit.cover,
+                    ),
                   );
                 },
               ),
             ),
             const SizedBox(
               height: 100,
-            )
+              width: double.infinity,
+            ),
           ],
         );
       }
