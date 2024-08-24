@@ -14,7 +14,6 @@ import 'package:experta/data/models/response/verify_otp_response_model.dart';
 import 'package:experta/presentation/additional_info/model/additional_model.dart';
 import 'package:experta/presentation/additional_info/model/interest_model.dart';
 import 'package:experta/presentation/feeds_active_screen/models/feeds_active_model.dart';
-
 import 'package:experta/presentation/professional_info/model/professional_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
@@ -556,17 +555,13 @@ class ApiService {
     return true;
   }
 
-  Future<Map<String, dynamic>> fetchFeeds(String userId, String type) async {
-    final response = await http.post(
-      Uri.parse("$_baseUrl/posts"),
+  Future<Map<String, dynamic>> fetchFeeds(String type) async {
+    final response = await http.get(
+      Uri.parse("$_baseUrl/posts/random/$type"),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
       },
-      body: jsonEncode({
-        'userId': userId,
-        'type': type,
-      }),
     );
 
     if (response.statusCode == 200) {
@@ -716,6 +711,27 @@ class ApiService {
   }
 
 
+
+  Future<Map<String, dynamic>> fetchPostByUser(
+      String userId, String type) async {
+    final response = await http.post(
+      Uri.parse("$_baseUrl/posts"),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode({
+        'userId': userId,
+        'type': type,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to load posts');
+    }
+  }
 
   T _processResponse<T>(http.Response response) {
     switch (response.statusCode) {

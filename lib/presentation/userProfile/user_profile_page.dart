@@ -4,6 +4,8 @@ import 'package:experta/core/app_export.dart';
 import 'package:experta/core/utils/web_view/web_view.dart';
 import 'package:experta/presentation/all_review/all_review.dart';
 import 'package:experta/presentation/userProfile/controller/profile_controller.dart';
+import 'package:experta/presentation/userProfile/post_details/controller/post_details_controller.dart';
+import 'package:experta/presentation/userProfile/post_details/post_details.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -187,8 +189,12 @@ class _UserProfilePageState extends State<UserProfilePage>
 
   Widget _buildPosts() {
     return Obx(() {
-      var posts = controller.userData.value.data?.basicInfo?.posts;
-      if (posts == null || posts.isEmpty) {
+      var posts = controller.feeds;
+      if (controller.isLoading.value) {
+        return const Center(
+          child: CircularProgressIndicator(),
+        );
+      } else if (posts.isEmpty) {
         return const Center(
           child: Text(
             'No posts available',
@@ -208,25 +214,17 @@ class _UserProfilePageState extends State<UserProfilePage>
           ),
           itemCount: posts.length,
           itemBuilder: (context, index) {
-            // Reverse the index to access the items from the end of the list
             int reverseIndex = posts.length - 1 - index;
             return GestureDetector(
-              onLongPress: () {
-                showDialog(
-                  context: context,
-                  builder: (context) {
-                    return Dialog(
-                      child: GestureDetector(
-                        onTap: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: CustomImageView(
-                          imagePath: posts[reverseIndex].image ?? '',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    );
-                  },
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => PostDetailsPage(
+                      initialIndex: reverseIndex,
+                      userId: controller.address.toString(),
+                    ),
+                  ),
                 );
               },
               child: CustomImageView(

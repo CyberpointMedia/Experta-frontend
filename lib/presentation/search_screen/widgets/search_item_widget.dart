@@ -7,13 +7,14 @@ class SearchItemWidget extends StatelessWidget {
 
   SearchItemWidget(this.searchResult, {super.key});
 
-  final controller = Get.find<SearchPageController>();
+  SearchPageController controller = Get.put(SearchPageController());
 
   @override
   Widget build(BuildContext context) {
     SearchResult user = searchResult;
     return GestureDetector(
       onTap: () {
+        controller.searchPageController.clear();
         Get.toNamed(AppRoutes.detailsPage, arguments: {"user": user});
       },
       child: Align(
