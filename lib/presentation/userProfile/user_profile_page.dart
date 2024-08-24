@@ -200,6 +200,7 @@ class _UserProfilePageState extends State<UserProfilePage>
         );
       } else {
         return GridView.builder(
+          reverse: false,
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3,
             crossAxisSpacing: 4.0,
@@ -207,6 +208,8 @@ class _UserProfilePageState extends State<UserProfilePage>
           ),
           itemCount: posts.length,
           itemBuilder: (context, index) {
+            // Reverse the index to access the items from the end of the list
+            int reverseIndex = posts.length - 1 - index;
             return GestureDetector(
               onLongPress: () {
                 showDialog(
@@ -218,7 +221,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                           Navigator.of(context).pop();
                         },
                         child: CustomImageView(
-                          imagePath: posts[index].image ?? '',
+                          imagePath: posts[reverseIndex].image ?? '',
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -227,7 +230,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                 );
               },
               child: CustomImageView(
-                imagePath: posts[index].image ?? '',
+                imagePath: posts[reverseIndex].image ?? '',
                 fit: BoxFit.cover,
               ),
             );
@@ -967,7 +970,7 @@ Widget _buildRowaboutme({required String aboutMeText}) {
                   width: 10.v,
                 ),
                 Text(
-                  "570",
+                  "570", 
                   textAlign: TextAlign.left,
                   style: CustomTextStyles.titleMediumBold,
                 ),

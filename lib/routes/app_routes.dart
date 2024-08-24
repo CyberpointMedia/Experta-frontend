@@ -534,20 +534,12 @@ static const String lottie = "/";
         BlockedBinding(),
       ],
     ),
-    GetPage(
-        name: createPost,
-        page: () => const CreatePost(),
-        customTransition: CustomPageTransition(),
-        bindings: [
-          CreatePostBindings(),
-        ]),
-    GetPage(
-        name: newPost,
-        page: () => const NewPostPage(),
-        customTransition: CustomPageTransition(),
-        bindings: [
-          NewPostBindings(),
-        ]),
+    GetPage(name: createPost, page: () => const CreatePost(), bindings: [
+      CreatePostBindings(),
+    ]),
+    GetPage(name: newPost, page: () => const NewPostPage(), bindings: [
+      NewPostBindings(),
+    ]),
     GetPage(
         name: detailsPage,
         page: () => const UserDetailsPage(),
