@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
 import 'package:experta/core/utils/web_view/web_view.dart';
-import 'package:experta/presentation/Home/model/home_model.dart';
 import 'package:experta/presentation/all_review/all_review.dart';
 import 'package:experta/presentation/userProfile/post_details/post_details.dart';
 import 'package:experta/presentation/user_details/controller/details_controller.dart';
@@ -26,7 +25,7 @@ class UserDetailsPage extends StatefulWidget {
 
 class _UserDetailsPageState extends State<UserDetailsPage>
     with SingleTickerProviderStateMixin {
-  final User id = Get.arguments['user'];
+  final dynamic id = Get.arguments['user'];
   DetailsController controller = Get.put(DetailsController());
 
   late TabController _tabController;
@@ -357,39 +356,36 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                       actions: [
                         Padding(
                           padding: const EdgeInsets.only(right: 0),
-                          child: Obx(() => CustomElevatedButton(
-                                buttonStyle: CustomButtonStyles.fillOnError2,
-                                buttonTextStyle:
-                                    CustomTextStyles.bodySmallffffffff,
-                                height: 36,
-                                width: 70,
-                                text: controller.isFollowing.value == false
-                                    ? "Follow"
-                                    : "Unfollow",
-                                onPressed: () {
-                                  if (controller.isFollowing.value == false) {
-                                    controller.followUser(
-                                        controller.userData.value.data?.id ??
-                                            '');
-                                    controller.fetchUserData(
-                                        controller.userData.value.data?.id ??
-                                            '');
-                                    setState(() {
-                                      controller.isFollowing.value = true;
-                                    });
-                                    log("now the new value of is following is ==== ${controller.isFollowing.value}");
-                                  } else {
-                                    // Handle unfollow logic here if needed
-                                    // controller.unfollowUser(controller.userData.value.data?.id ?? '');
-                                    controller.fetchUserData(
-                                        controller.userData.value.data?.id ??
-                                            '');
-                                    setState(() {
-                                      controller.isFollowing.value = false;
-                                    });
-                                  }
-                                },
-                              )),
+                          child: CustomElevatedButton(
+                            buttonStyle: CustomButtonStyles.fillOnError2,
+                            buttonTextStyle: CustomTextStyles.bodySmallffffffff,
+                            height: 36,
+                            width: 70,
+                            text: controller.userData.value.data?.isFollowing ==
+                                    false
+                                ? "Follow"
+                                : "unfollow",
+                            onPressed: () {
+                              if (controller.isFollowing.value == false) {
+                                controller.followUser(
+                                    controller.userData.value.data?.id ?? '');
+                                controller.fetchUserData(
+                                    controller.userData.value.data?.id ?? '');
+                                setState(() {
+                                  controller.isFollowing.value = true;
+                                });
+                                log("now the new value of is following is ==== ${controller.isFollowing.value}");
+                              } else {
+                                // Handle unfollow logic here if needed
+                                // controller.unfollowUser(controller.userData.value.data?.id ?? '');
+                                controller.fetchUserData(
+                                    controller.userData.value.data?.id ?? '');
+                                setState(() {
+                                  controller.isFollowing.value = false;
+                                });
+                              }
+                            },
+                          ),
                         ),
                         IconButton(
                           icon: const Icon(Icons.more_vert),
@@ -962,8 +958,8 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                   theme.textTheme.bodyMedium?.copyWith(color: appTheme.gray900),
             );
           } else {
-            // Limit the number of reviews to 3
-            var limitedReviews = reviews.take(3).toList();
+            // Limit the number of reviews to 5
+            var limitedReviews = reviews.take(5).toList();
             return Column(
               children: limitedReviews.map((review) {
                 return Padding(
@@ -1009,6 +1005,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                               direction: Axis.horizontal,
                               allowHalfRating: false,
                               itemSize: 22,
+                              itemCount: 5,
                               updateOnDrag: true,
                               onRatingUpdate: (rating) {},
                               itemBuilder: (context, _) {
@@ -1136,15 +1133,8 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                 flex: 42,
               ),
               GestureDetector(
-                onTap: () {
-                  Get.toNamed(AppRoutes.follower, arguments: {
-                    "id": id.id,
-                    "userProfile": "userDetails"
-                  })!
-                      .then((value) {
-                    Get.find<DetailsController>().fetchUserData(id.id);
-                  });
-                },
+                onTap: () =>
+                    Get.toNamed(AppRoutes.follower, arguments: {"id": id.id}),
                 child: _buildColumnFourHundredFifty(
                   dynamicText: "$totalFollowers",
                   dynamicText1: "Followers",
@@ -1154,15 +1144,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                 flex: 58,
               ),
               GestureDetector(
-                onTap: () {
-                  Get.toNamed(AppRoutes.following, arguments: {
-                    "id": id.id,
-                    "userProfile": "userProfile"
-                  })!
-                      .then((value) {
-                    Get.find<DetailsController>().fetchUserData(id.id);
-                  });
-                },
+                onTap: () => Get.toNamed(AppRoutes.following),
                 child: _buildColumnFourHundredFifty(
                   dynamicText: "$totalFollowing",
                   dynamicText1: "Following",
