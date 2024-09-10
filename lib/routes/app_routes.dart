@@ -94,7 +94,6 @@ import 'package:experta/presentation/work_experience/work_experience.dart';
 import 'package:experta/widgets/custom_page_transition.dart';
 import 'package:get/get.dart';
 
-
 class AppRoutes {
   static const String onboardingScreen = '/onboarding_screen';
 
@@ -117,7 +116,7 @@ class AppRoutes {
 
   static const String dashboard = '/dashboard';
 
-  static const String messageChatWithUserDefaultScreen =
+  static const String chattingScreen =
       '/message_chat_with_user_default_screen';
 
   static const String feeds = '/feeds_active_screen';
@@ -199,15 +198,13 @@ class AppRoutes {
 
   static const String bookindeetail = "/booking_detail";
 
-static const String rating= "/give_rating";
+  static const String rating = "/give_rating";
 
-static const String reviewall= "/all_review";
+  static const String reviewall = "/all_review";
 
+  static const String mybook = "/my_booking";
 
-static const String mybook = "/my_booking";
-
-
-static const String lottie = "/";
+  static const String lottie = "/";
 
   static List<GetPage> pages = [
     GetPage(
@@ -231,7 +228,6 @@ static const String lottie = "/";
         AboutUsBinding(),
       ],
     ),
-    
     GetPage(
       name: addbankaccount,
       page: () => const AddBankAccount(),
@@ -308,12 +304,12 @@ static const String lottie = "/";
         AccountSettingBinding(),
       ],
     ),
-     GetPage(
+    GetPage(
       name: bank,
       page: () => const VerifyAccount(),
       bindings: [
-         VerifyAccountBinding(),
-     ],
+        VerifyAccountBinding(),
+      ],
     ),
     GetPage(
       name: verifynumberScreen,
@@ -336,7 +332,6 @@ static const String lottie = "/";
         PaymentBinding(),
       ],
     ),
-    
     GetPage(
       name: wallet,
       page: () => const Wallet(),
@@ -344,7 +339,6 @@ static const String lottie = "/";
         WalletBinding(),
       ],
     ),
-     
     GetPage(
         name: notification,
         page: () => const NotificationScreen(),
@@ -373,8 +367,8 @@ static const String lottie = "/";
       DashboardBinding(),
     ]),
     GetPage(
-        name: messageChatWithUserDefaultScreen,
-        page: () => const MessageChatWithUserDefaultScreen(),
+        name: chattingScreen,
+        page: () => const ChattingPage(),
         bindings: [
           MessageChatWithUserDefaultBinding(),
         ]),
@@ -470,7 +464,6 @@ static const String lottie = "/";
         AboutUsBinding(),
       ],
     ),
-    
     GetPage(
       name: addbankaccount,
       page: () => const AddBankAccount(),
@@ -585,6 +578,5 @@ static const String lottie = "/";
         bindings: [
           AllReviewsBindings(),
         ]),
-        
   ];
 }

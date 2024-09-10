@@ -496,4 +496,5 @@ class ImageConstant {
   static String dashboard = "$imagePath/img_group_9.svg";
   static String msg = "$imagePath/settings/msg.svg";
   static String complete = "$imagePath/settings/complete.svg";
+  static String singletick = "$imagePath/settings/singletick.svg";
 }

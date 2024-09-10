@@ -74,6 +74,12 @@ dependencies:
   stylish_pull_to_refresh: ^1.1.0
   pull_to_refresh: ^2.0.0
   lottie: ^3.1.2
+  equatable: ^2.0.5
+  web_socket_channel: ^3.0.1
+  bloc: ^8.1.4
+  flutter_bloc: ^8.1.6
+  socket_io_client: ^2.0.3+1
+  emoji_picker_flutter: ^2.1.1
 dev_dependencies:
   flutter_test:
     sdk: flutter

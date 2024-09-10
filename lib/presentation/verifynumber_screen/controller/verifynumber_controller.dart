@@ -54,6 +54,7 @@ class VerifynumberController extends GetxController with CodeAutoFill {
 
   void resendOtp() async {
     final phoneNumber = phoneNumberController.text;
+    log(phoneNumber);
     if (phoneNumber.isNotEmpty) {
       ResendOtpRequestModel requestModel = ResendOtpRequestModel(
         phoneNo: phoneNumber,
@@ -63,6 +64,7 @@ class VerifynumberController extends GetxController with CodeAutoFill {
         print("Response JSON: $responseData");
         ResendOtpResponseModel? response =
             ResendOtpResponseModel.fromJson(responseData);
+        log("this is resend response ${response}");
         if (response.status == "success") {
           // Update UI based on response
           print("OTP Resent Successfully: ${response.data?.otp}");

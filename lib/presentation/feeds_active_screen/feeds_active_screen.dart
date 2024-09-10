@@ -267,7 +267,7 @@ Widget _buildBottomSheetContent(BuildContext context, Comment? comment) {
           ),
         ),
         if (comment != null && comment.user.id == userAddress ||
-            feed!.postedBy.id == userAddress)
+            (feed != null && feed.postedBy.id == userAddress))
           _buildBottomSheetOption(
             context,
             icon: Icons.delete,

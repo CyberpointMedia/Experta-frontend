@@ -106,8 +106,8 @@ class Comment {
 
   Map<String, dynamic> toJson() => {
         "comment": comment,
-        "formattedDate": formattedDate,
-        "_id": id,
+        "formattedDate": formattedDate,         
+        "_id": id,                                  
         "createdAt": createdAt.toIso8601String(),
         "user": user.toJson(),
       };
@@ -152,7 +152,6 @@ class PostedBy {
         "occupation": occupation,
       };
 }
-
 
 class Reason {
   final String id;
