@@ -14,6 +14,6 @@ class MessageChatWithUserDefaultController extends GetxController {
   @override
   void onClose() {
     super.onClose();
-    messageController.clear();
+    messageController.dispose();
   }
 }

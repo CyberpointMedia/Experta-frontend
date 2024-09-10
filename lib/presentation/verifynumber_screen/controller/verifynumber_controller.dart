@@ -1,7 +1,8 @@
 import 'dart:developer';
 
-
+import 'package:experta/data/models/request/resend_otp_request_model.dart';
 import 'package:experta/data/models/request/verify_otp_request_model.dart';
+import 'package:experta/data/models/response/resend_otp_response_model.dart';
 import 'package:experta/data/models/response/verify_otp_response_model.dart';
 
 import '../../../core/app_export.dart';
@@ -51,36 +52,32 @@ class VerifynumberController extends GetxController with CodeAutoFill {
     }
   }
 
-void resendOtp(String phoneNumber) async {
-  if (phoneNumber.isNotEmpty) {
-    try {
-      // Make the API call directly with phoneNumber as a string
-      dynamic responseData = await _apiService.resendOtp(phoneNumber);
-      print("Response JSON: $responseData");
-
-      if (responseData is Map<String, dynamic>) {
-        // Directly access the data from response
-        String status = responseData['status'];
-        var data = responseData['data'];
-        if (status == "success") {
+  void resendOtp() async {
+    final phoneNumber = phoneNumberController.text;
+    log(phoneNumber);
+    if (phoneNumber.isNotEmpty) {
+      ResendOtpRequestModel requestModel = ResendOtpRequestModel(
+        phoneNo: phoneNumber,
+      );
+      try {
+        dynamic responseData = await _apiService.resendOtp(requestModel);
+        print("Response JSON: $responseData");
+        ResendOtpResponseModel? response =
+            ResendOtpResponseModel.fromJson(responseData);
+        log("this is resend response ${response}");
+        if (response.status == "success") {
           // Update UI based on response
-          String otp = data['otp'];
-          print("OTP Resent Successfully: $otp");
+          print("OTP Resent Successfully: ${response.data?.otp}");
         } else {
           print("OTP Resend failed");
         }
-      } else {
-        print("Invalid response format");
+      } catch (e) {
+        print("Exception occurred: $e");
       }
-    } catch (e) {
-      print("Exception occurred: $e");
+    } else {
+      print("Phone number is empty");
     }
-  } else {
-    print("Phone number is empty");
   }
-}
-
-
 
   @override
   void onInit() {

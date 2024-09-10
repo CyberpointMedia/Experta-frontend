@@ -1,4 +1,3 @@
-
 // ignore_for_file: avoid_print
 
 import 'dart:convert';
@@ -7,7 +6,7 @@ import 'dart:io';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/data/models/request/login_request_model.dart';
 import 'package:experta/data/models/request/register_request_model.dart';
-
+import 'package:experta/data/models/request/resend_otp_request_model.dart';
 import 'package:experta/data/models/request/verify_otp_request_model.dart';
 import 'package:experta/data/models/response/login_response_model.dart';
 import 'package:experta/data/models/response/resend_otp_response_model.dart';
@@ -43,16 +42,15 @@ class ApiService {
     return _processResponse2(response);
   }
 
-Future<ResendOtpResponseModel?> resendOtp(String phoneNumber) async {
-  final response = await http.post(
-    Uri.parse('$_baseUrl/resend-otp'),
-    headers: {'Content-Type': 'application/json'},
-    body: jsonEncode({'phoneNo': phoneNumber}),
-  );
+  Future<ResendOtpResponseModel?> resendOtp(
+      ResendOtpRequestModel requestModel) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/resend-otp'),
+      body: jsonEncode(requestModel.toJson()),
+    );
 
-  return _processResponse<ResendOtpResponseModel>(response);
-}
-
+    return _processResponse<ResendOtpResponseModel>(response);
+  }
 
   Future<VerifyOtpResponseModel?> verifyOtp(
       VerifyOtpRequestModel requestModel) async {
@@ -645,6 +643,75 @@ Future<ResendOtpResponseModel?> resendOtp(String phoneNumber) async {
     }
   }
 
+  Future<Map<String, dynamic>> getAllBlockedUsers() async {
+    final response = await http.get(
+      Uri.parse('$_baseUrl/getAllBlockedUsers'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to load blocked users');
+    }
+  }
+
+  Future<Map<String, dynamic>> unblockUser(String userId) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/unblockUser'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: json.encode({'userToUnblockId': userId}),
+    );
+    if (response.statusCode == 200) {
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to unblock user');
+    }
+  }
+
+  Future<void> updateAccountSettings(Map<String, dynamic> data) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/account-setting'),
+      body: data,
+    );
+
+    if (response.statusCode == 200) {
+      // Handle success
+      print('Account settings updated successfully');
+    } else {
+      // Handle failure
+      print('Failed to update account settings');
+    }
+  }
+
+  Future<bool> blockUser(String userToBlockId) async {
+    final url = Uri.parse('$_baseUrl/blockUser');
+    final response = await http.post(
+      url,
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode({
+        'userToBlockId': userToBlockId,
+      }),
+    );
+
+    if (response.statusCode == 200) {
+      final responseData = jsonDecode(response.body);
+      if (responseData['status'] == 'success') {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
   Future<Map<String, dynamic>> fetchPostByUser(
       String userId, String type) async {
     final response = await http.post(
@@ -663,6 +730,113 @@ Future<ResendOtpResponseModel?> resendOtp(String phoneNumber) async {
       return jsonDecode(response.body);
     } else {
       throw Exception('Failed to load posts');
+    }
+  }
+
+  Future<List<Map<String, dynamic>>> fetchChats() async {
+    String url = '$_baseUrl/chat';
+    final headers = {
+      'Authorization': 'Bearer $token',
+      'Content-Type': 'application/json',
+    };
+
+    int retryCount = 0;
+    const maxRetries = 3;
+    const retryDelay = Duration(seconds: 2);
+
+    while (retryCount < maxRetries) {
+      try {
+        print('Making request to $url with headers $headers');
+
+        final response = await http
+            .get(Uri.parse(url), headers: headers)
+            .timeout(Duration(seconds: 30)); // Increase timeout duration
+
+        print('Response status: ${response.statusCode}');
+        print('Response body: ${response.body}');
+        if (response.statusCode == 200) {
+          return List<Map<String, dynamic>>.from(json.decode(response.body));
+        } else {
+          // Handle non-200 status codes
+          print('Error: ${response.statusCode} - ${response.reasonPhrase}');
+          throw Exception('Failed to load chats');
+        }
+      } catch (error) {
+        print('Error fetching chats: $error');
+        if (retryCount < maxRetries - 1) {
+          retryCount++;
+          print('Retrying... ($retryCount/$maxRetries)');
+          await Future.delayed(retryDelay);
+        } else {
+          throw Exception('Failed to load chats after $maxRetries attempts');
+        }
+      }
+    }
+    throw Exception('Failed to load chats');
+  }
+
+  Future<List<Map<String, dynamic>>> fetchMessages(String chatId) async {
+    final response = await http.get(
+      Uri.parse('$_baseUrl/message/$chatId'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json'
+      },
+    );
+    print('Response body: ${response.body}');
+    if (response.statusCode == 200) {
+      final List<dynamic> data = json.decode(response.body);
+      return List<Map<String, dynamic>>.from(data);
+    } else {
+      throw Exception('Failed to load messages');
+    }
+  }
+
+  Future<void> markMessagesAsRead(String chatId) async {
+    final url = '$_baseUrl/message/read/$chatId';
+    print('Marking messages as read with URL: $url');
+
+    final response = await http.get(
+      Uri.parse(url),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json'
+      },
+    );
+
+    print('Response status: ${response.statusCode}');
+    print('Response body: ${response.body}');
+
+    if (response.statusCode != 200) {
+      print(
+          'Failed to mark messages as read. Status code: ${response.statusCode}');
+      print('Response body: ${response.body}');
+      throw Exception('Failed to mark messages as read');
+    } else {
+      print('Messages marked as read successfully');
+    }
+  }
+
+  Future<Map<String, dynamic>> sendMessage(
+      String content, String chatId) async {
+    log("the sent message $content and chat id $chatId");
+    final response = await http.post(
+      Uri.parse('$_baseUrl/message'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+      body: json.encode({
+        'content': content,
+        'chatId': chatId,
+      }),
+    );
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      log("Response body: ${response.body}");
+      return json.decode(response.body);
+    } else {
+      throw Exception('Failed to send message');
     }
   }
 

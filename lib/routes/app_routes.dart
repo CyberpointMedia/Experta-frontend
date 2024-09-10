@@ -60,8 +60,6 @@ import 'package:experta/presentation/professional_info/binding/professional_bind
 import 'package:experta/presentation/professional_info/professional_info.dart';
 import 'package:experta/presentation/recents/binding/recents_binding.dart';
 import 'package:experta/presentation/recents/recent.dart';
-import 'package:experta/presentation/recorded_session/binding/recorded_session_binding.dart';
-import 'package:experta/presentation/recorded_session/recorded_session.dart';
 import 'package:experta/presentation/search_screen/binding/search_binding.dart';
 import 'package:experta/presentation/search_screen/search_screen.dart';
 import 'package:experta/presentation/security_privacy/binding/security_privacy_binding.dart';
@@ -80,9 +78,6 @@ import 'package:experta/presentation/signin_page/signin_binding/signin_binding.d
 import 'package:experta/presentation/signin_page/signin_page.dart';
 import 'package:experta/presentation/splash_screen/binding/splash_binding.dart';
 import 'package:experta/presentation/splash_screen/splash_screen.dart';
-import 'package:experta/presentation/support/bindings/support_binding.dart';
-import 'package:experta/presentation/support/support.dart';
-import 'package:experta/presentation/transaction/transection.dart';
 import 'package:experta/presentation/userProfile/binding/profile_binding.dart';
 import 'package:experta/presentation/userProfile/user_profile_page.dart';
 import 'package:experta/presentation/user_details/binding/details_binding.dart';
@@ -98,7 +93,6 @@ import 'package:experta/presentation/work_experience/work_experience.dart';
 
 import 'package:experta/widgets/custom_page_transition.dart';
 import 'package:get/get.dart';
-
 
 class AppRoutes {
   static const String onboardingScreen = '/onboarding_screen';
@@ -122,7 +116,7 @@ class AppRoutes {
 
   static const String dashboard = '/dashboard';
 
-  static const String messageChatWithUserDefaultScreen =
+  static const String chattingScreen =
       '/message_chat_with_user_default_screen';
 
   static const String feeds = '/feeds_active_screen';
@@ -204,25 +198,13 @@ class AppRoutes {
 
   static const String bookindeetail = "/booking_detail";
 
-static const String rating= "/give_rating";
+  static const String rating = "/give_rating";
 
-static const String reviewall= "/all_review";
+  static const String reviewall = "/all_review";
 
+  static const String mybook = "/my_booking";
 
-static const String mybook = "/my_booking";
-
-// ignore: constant_identifier_names
-static const String Transaction= "/transection";
-
-// ignore: constant_identifier_names
-static const String RaiseTicket = "/support";
-
-static const String recordedsession= "/recorded_session";
-
-
-
-
-static const String lottie = "/";
+  static const String lottie = "/";
 
   static List<GetPage> pages = [
     GetPage(
@@ -246,7 +228,6 @@ static const String lottie = "/";
         AboutUsBinding(),
       ],
     ),
-    
     GetPage(
       name: addbankaccount,
       page: () => const AddBankAccount(),
@@ -323,12 +304,12 @@ static const String lottie = "/";
         AccountSettingBinding(),
       ],
     ),
-     GetPage(
+    GetPage(
       name: bank,
       page: () => const VerifyAccount(),
       bindings: [
-         VerifyAccountBinding(),
-     ],
+        VerifyAccountBinding(),
+      ],
     ),
     GetPage(
       name: verifynumberScreen,
@@ -351,7 +332,6 @@ static const String lottie = "/";
         PaymentBinding(),
       ],
     ),
-    
     GetPage(
       name: wallet,
       page: () => const Wallet(),
@@ -359,7 +339,6 @@ static const String lottie = "/";
         WalletBinding(),
       ],
     ),
-     
     GetPage(
         name: notification,
         page: () => const NotificationScreen(),
@@ -388,8 +367,8 @@ static const String lottie = "/";
       DashboardBinding(),
     ]),
     GetPage(
-        name: messageChatWithUserDefaultScreen,
-        page: () => const MessageChatWithUserDefaultScreen(),
+        name: chattingScreen,
+        page: () => const ChattingPage(),
         bindings: [
           MessageChatWithUserDefaultBinding(),
         ]),
@@ -485,7 +464,6 @@ static const String lottie = "/";
         AboutUsBinding(),
       ],
     ),
-    
     GetPage(
       name: addbankaccount,
       page: () => const AddBankAccount(),
@@ -599,28 +577,6 @@ static const String lottie = "/";
         customTransition: CustomPageTransition(),
         bindings: [
           AllReviewsBindings(),
-        ]),
-         GetPage(
-        name: Transaction,
-        page: () => const TransactionHistoryPage(),
-        customTransition: CustomPageTransition(),
-        bindings: [
-          AllReviewsBindings(),
-        ]),
-
-         GetPage(
-        name: RaiseTicket,
-        page: () => const RaiseTicketPage(),
-        customTransition: CustomPageTransition(),
-        bindings: [
-          SupportBinding(),
-        ]),
-         GetPage(
-        name: recordedsession,
-        page: () =>  const RecordedSessionsPage(),
-        customTransition: CustomPageTransition(),
-        bindings: [
-          RecordedSessionBinding(),
         ]),
   ];
 }
