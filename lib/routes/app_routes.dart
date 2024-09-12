@@ -60,6 +60,8 @@ import 'package:experta/presentation/professional_info/binding/professional_bind
 import 'package:experta/presentation/professional_info/professional_info.dart';
 import 'package:experta/presentation/recents/binding/recents_binding.dart';
 import 'package:experta/presentation/recents/recent.dart';
+import 'package:experta/presentation/recorded_session/binding/recorded_session_binding.dart';
+import 'package:experta/presentation/recorded_session/recorded_session.dart';
 import 'package:experta/presentation/search_screen/binding/search_binding.dart';
 import 'package:experta/presentation/search_screen/search_screen.dart';
 import 'package:experta/presentation/security_privacy/binding/security_privacy_binding.dart';
@@ -78,6 +80,9 @@ import 'package:experta/presentation/signin_page/signin_binding/signin_binding.d
 import 'package:experta/presentation/signin_page/signin_page.dart';
 import 'package:experta/presentation/splash_screen/binding/splash_binding.dart';
 import 'package:experta/presentation/splash_screen/splash_screen.dart';
+import 'package:experta/presentation/support/bindings/support_binding.dart';
+import 'package:experta/presentation/support/support.dart';
+import 'package:experta/presentation/transaction/transection.dart';
 import 'package:experta/presentation/userProfile/binding/profile_binding.dart';
 import 'package:experta/presentation/userProfile/user_profile_page.dart';
 import 'package:experta/presentation/user_details/binding/details_binding.dart';
@@ -202,7 +207,18 @@ class AppRoutes {
 
   static const String reviewall = "/all_review";
 
-  static const String mybook = "/my_booking";
+static const String mybook = "/my_booking";
+
+// ignore: constant_identifier_names
+static const String Transaction= "/transection";
+
+// ignore: constant_identifier_names
+static const String RaiseTicket = "/support";
+
+static const String recordedsession= "/recorded_session";
+
+
+
 
   static const String lottie = "/";
 
@@ -577,6 +593,28 @@ class AppRoutes {
         customTransition: CustomPageTransition(),
         bindings: [
           AllReviewsBindings(),
+        ]),
+         GetPage(
+        name: Transaction,
+        page: () => const TransactionHistoryPage(),
+        customTransition: CustomPageTransition(),
+        bindings: [
+          AllReviewsBindings(),
+        ]),
+
+         GetPage(
+        name: RaiseTicket,
+        page: () => const RaiseTicketPage(),
+        customTransition: CustomPageTransition(),
+        bindings: [
+          SupportBinding(),
+        ]),
+         GetPage(
+        name: recordedsession,
+        page: () =>  const RecordedSessionsPage(),
+        customTransition: CustomPageTransition(),
+        bindings: [
+          RecordedSessionBinding(),
         ]),
   ];
 }
