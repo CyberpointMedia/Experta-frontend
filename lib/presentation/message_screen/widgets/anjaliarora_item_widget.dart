@@ -28,9 +28,11 @@ class ChatItemWidget extends StatelessWidget {
                   children: [
                     CircleAvatar(
                       radius: 29.h,
+                      backgroundColor: appTheme.whiteA700,
                       backgroundImage: profilePic.isNotEmpty
                           ? NetworkImage(profilePic) as ImageProvider
-                          : const AssetImage('assets/placeholder.png'),
+                          : const AssetImage(
+                              'assets/images/image_not_found.png'),
                     ),
                     Align(
                       alignment: Alignment.bottomRight,
