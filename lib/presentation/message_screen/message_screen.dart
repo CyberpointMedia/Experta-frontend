@@ -5,7 +5,6 @@ import 'package:experta/presentation/message_screen/widgets/anjaliarora_item_wid
 import 'package:experta/widgets/app_bar/appbar_subtitle.dart';
 import 'package:experta/widgets/app_bar/appbar_trailing_iconbutton.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-import '../message_chat_with_user_default_screen/message_chat_with_user_default_screen.dart';
 import 'controller/message_controller.dart';
 
 class MessageScreen extends StatefulWidget {
@@ -39,6 +38,7 @@ class _MessageScreenState extends State<MessageScreen> {
     controller.searchController.addListener(_filterChats);
   }
 
+  // Initialize socket connection and listen for events
   void initSocket() {
     final currentUserId = PrefUtils().getaddress();
 
@@ -55,7 +55,27 @@ class _MessageScreenState extends State<MessageScreen> {
     // Listen for chat updates
     socket.on('chatUpdate', (data) {
       log('Chat update received: $data');
-      fetchChats(); // Refetch the chat data or update the UI accordingly
+      fetchChats();
+    });
+
+    // Listen for user status updates (online/offline)
+    socket.on('userStatus', (data) {
+      final userId = data['userId'];
+      final isOnline = data['isOnline'];
+      log('User status update received: $userId is ${isOnline ? "online" : "offline"}');
+
+      // Update the user's status in the chat list
+      setState(() {
+        for (var chat in chats) {
+          final otherUser = chat['users']?.firstWhere(
+            (u) => u['_id'] == userId,
+            orElse: () => null,
+          );
+          if (otherUser != null) {
+            otherUser['online'] = isOnline;
+          }
+        }
+      });
     });
 
     // Handle connection errors
@@ -108,6 +128,19 @@ class _MessageScreenState extends State<MessageScreen> {
         return displayName.contains(query);
       }).toList();
     });
+  }
+
+  int handleUnreadCount(Map<String, dynamic> chat, String currentUserId) {
+    final unreadCount = chat['unreadCounts']?.firstWhere(
+      (uc) => uc['user'] == currentUserId,
+      orElse: () => {'count': 0},
+    )['count'];
+
+    int unreadCountInt = (unreadCount is int)
+        ? unreadCount
+        : int.tryParse(unreadCount.toString()) ?? 0;
+
+    return unreadCountInt;
   }
 
   @override
@@ -247,14 +280,7 @@ class _MessageScreenState extends State<MessageScreen> {
           return const SizedBox.shrink();
         }
 
-        final unreadCount = chat['unreadCounts']?.firstWhere(
-          (uc) => uc['user'] == currentUserId,
-          orElse: () => {'count': 0},
-        )['count'];
-
-        int unreadCountInt = (unreadCount is int)
-            ? unreadCount
-            : int.tryParse(unreadCount.toString()) ?? 0;
+        final unreadCountInt = handleUnreadCount(chat, currentUserId);
         final basicInfo = otherUser['basicInfo'];
         final profilePic = basicInfo?['profilePic'];
         final online = otherUser['online'];
@@ -279,9 +305,10 @@ class _MessageScreenState extends State<MessageScreen> {
                 children: [
                   CircleAvatar(
                     radius: 29.h,
+                    backgroundColor: appTheme.whiteA700,
                     backgroundImage: profilePic != null
                         ? NetworkImage(profilePic) as ImageProvider
-                        : const AssetImage('assets/placeholder.png'),
+                        : const AssetImage('assets/images/image_not_found.png'),
                   ),
                   Align(
                     alignment: Alignment.bottomRight,
@@ -303,44 +330,53 @@ class _MessageScreenState extends State<MessageScreen> {
                   ),
                 ],
               ),
+              SizedBox(width: 12.h),
               Expanded(
-                  child: Padding(
-                      padding:
-                          EdgeInsets.only(left: 15.h, top: 4.v, bottom: 7.v),
-                      child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            SizedBox(
-                                width: 270.h,
-                                child: Row(children: [
-                                  Text(displayName,
-                                      style:
-                                          CustomTextStyles.titleMediumSemiBold),
-                                  if (basicInfo?['isVerified'] == true)
-                                    CustomImageView(
-                                        imagePath: ImageConstant.imgVerified,
-                                        height: 16.adaptSize,
-                                        width: 16.adaptSize,
-                                        margin: EdgeInsets.only(
-                                            left: 2.h, top: 2.v, bottom: 2.v)),
-                                  const Spacer(),
-                                  Text(lastMessageTime,
-                                      textAlign: TextAlign.right,
-                                      style: CustomTextStyles.bodyMediumLight)
-                                ])),
-                            SizedBox(height: 6.v),
-                            Text(lastMessage,
-                                style: theme.textTheme.bodyLarge!
-                                    .copyWith(overflow: TextOverflow.ellipsis)),
-                            if (unreadCountInt > 0)
-                              CircleAvatar(
-                                radius: 12,
-                                child: Text(
-                                  '$unreadCountInt',
-                                  style: const TextStyle(fontSize: 12),
-                                ),
+                  child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                    SizedBox(
+                        width: 270.h,
+                        child: Row(children: [
+                          Text(displayName,
+                              style: CustomTextStyles.titleMediumSemiBold),
+                          if (basicInfo?['isVerified'] == true)
+                            CustomImageView(
+                                imagePath: ImageConstant.imgVerified,
+                                height: 16.adaptSize,
+                                width: 16.adaptSize,
+                                margin: EdgeInsets.only(
+                                    left: 2.h, top: 2.v, bottom: 2.v)),
+                          const Spacer(),
+                          Text(lastMessageTime,
+                              textAlign: TextAlign.right,
+                              style: CustomTextStyles.bodyMediumLight)
+                        ])),
+                    SizedBox(height: 6.v),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: Text(lastMessage,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: theme.textTheme.bodyLarge),
+                        ),
+                        if (unreadCountInt > 0)
+                          CircleAvatar(
+                            backgroundColor: appTheme.deepOrangeA20,
+                            radius: 12,
+                            child: Text(
+                              '$unreadCountInt',
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 12,
+                                fontWeight: FontWeight.bold,
                               ),
-                          ]))),
+                            ),
+                          )
+                      ],
+                    ),
+                  ])),
             ]),
           ),
         );
@@ -348,21 +384,7 @@ class _MessageScreenState extends State<MessageScreen> {
     );
   }
 
-  onTapArrowLeft() {
-    Get.back();
-  }
-
-  /// Navigates to the notificationScreen when the action is triggered.
-  onTapBellTwo() {
-    Get.toNamed(
-      AppRoutes.notification,
-    );
-  }
-
-  /// Navigates to the messageChatWithUserDefaultScreen when the action is triggered.
-  onTapFrame() {
-    Get.toNamed(
-      AppRoutes.chattingScreen,
-    );
+  void onTapBellTwo() {
+    Get.toNamed(AppRoutes.notification);
   }
 }

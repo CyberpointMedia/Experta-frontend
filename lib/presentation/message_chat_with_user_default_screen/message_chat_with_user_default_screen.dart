@@ -1,5 +1,6 @@
+import 'dart:async';
+import 'dart:convert';
 import 'dart:developer';
-import 'dart:io';
 import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
@@ -9,9 +10,10 @@ import 'package:experta/widgets/app_bar/appbar_trailing_button_one.dart';
 import 'package:experta/widgets/app_bar/appbar_trailing_image.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
 import 'package:experta/widgets/custom_text_form_field.dart';
-import 'package:http/http.dart' as http;
 import 'package:intl/intl.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:shimmer/shimmer.dart';
+import 'models/database_helper/database_helper.dart';
 
 class ChattingPage extends StatefulWidget {
   const ChattingPage({super.key});
@@ -21,13 +23,19 @@ class ChattingPage extends StatefulWidget {
 }
 
 class _ChattingPageState extends State<ChattingPage> {
-  TextEditingController controller = TextEditingController();
+  final TextEditingController controller = TextEditingController();
   final Map<String, dynamic> arguments = Get.arguments;
   late final Map<String, dynamic> chat;
   late final IO.Socket socket;
-  late ApiService apiServices;
-  List<Map<String, dynamic>> messages = [];
-  final currentUserId = PrefUtils().getaddress();
+  late final ApiService apiServices;
+  final List<Map<String, dynamic>> messages = [];
+  final List<Map<String, dynamic>> unsentMessages = [];
+  final String? currentUserId = PrefUtils().getaddress();
+  final Set<String> onlineUsers = {};
+  final Set<String> typingUsers = {};
+  bool isConnected = true;
+  late final StreamSubscription<ConnectivityResult> connectivitySubscription;
+  final Map<String, bool> messageStatus = {}; // Track message status
 
   @override
   void initState() {
@@ -40,65 +48,115 @@ class _ChattingPageState extends State<ChattingPage> {
     apiServices = ApiService();
     fetchMessages();
     initializeSocket();
+    monitorConnectivity();
+
+    controller.addListener(() {
+      if (controller.text.isNotEmpty) {
+        onTyping();
+      } else {
+        onStopTyping();
+      }
+    });
+  }
+
+  void monitorConnectivity() {
+    connectivitySubscription = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      if (mounted) {
+        setState(() {
+          isConnected = result != ConnectivityResult.none;
+        });
+        if (isConnected) {
+          fetchMessages(); // Fetch messages when connection is restored
+          resendUnsentMessages();
+        }
+      }
+    });
   }
 
   void initializeSocket() {
     log('Initializing socket...');
     socket.connect();
+    log("Socket connected");
+
+    socket.emit("init_user", currentUserId);
 
     socket.on('connect', (_) {
       log('Connected to socket server');
       socket.emit('join', {'chatId': chat['_id'], 'userId': currentUserId});
-      fetchMessages(); // Fetch messages after joining the chat room
+      fetchMessages();
+      resendUnsentMessages();
     });
 
-    socket.on('connect_error', (error) {
-      log('Socket connection error: $error');
-      reconnectSocket();
-    });
-
-    socket.on('disconnect', (_) {
-      log('Disconnected from socket server');
-      reconnectSocket();
-    });
-
-    socket.on('reconnect_attempt', (_) {
-      log('Attempting to reconnect to socket server...');
-    });
-
-    socket.on('reconnect_failed', (_) {
-      log('Failed to reconnect to socket server');
-    });
-
-    socket.on('reconnect', (_) {
-      log('Reconnected to socket server');
-    });
+    socket.on(
+        'connect_error', (error) => log('Socket connection error: $error'));
+    socket.on('disconnect', (_) => reconnectSocket());
+    socket.on('reconnect_attempt',
+        (_) => log('Attempting to reconnect to socket server...'));
+    socket.on(
+        'reconnect_failed', (_) => log('Failed to reconnect to socket server'));
+    socket.on('reconnect', (_) => resendUnsentMessages());
 
     socket.on('messages', (data) {
       log('Messages received: $data');
-      setState(() {
-        messages = List<Map<String, dynamic>>.from(data);
-      });
-      _markMessagesAsReadIfNecessary();
+      if (mounted) {
+        setState(() {
+          messages.clear();
+          messages.addAll(List<Map<String, dynamic>>.from(data));
+        });
+      }
     });
 
     socket.on('new_msg_received', (data) async {
       log('New message received: $data');
-      setState(() {
-        messages.insert(0, Map<String, dynamic>.from(data));
-      });
+      if (mounted) {
+        setState(() {
+          messages.insert(0, Map<String, dynamic>.from(data));
+        });
+      }
       _markMessageAsReadIfNecessary(data);
     });
-  }
 
-  void _markMessagesAsReadIfNecessary() {
-    List<String> messageIds = messages
-        .where((msg) => msg['sender']['_id'] != currentUserId)
-        .map<String>((msg) => msg['_id'])
-        .toList();
-    if (messageIds.isNotEmpty) {
-      markMessagesAsRead(messageIds);
-    }
+    socket.on('update_unread_count',
+        (data) => updateUnreadCount(data['chatId'], data['unreadCount']));
+    socket.on('messages_marked_read', (data) {
+      if (data['userId'] != currentUserId) {
+        updateMessageReadStatus(data['chatId']);
+      }
+    });
+
+    socket.on('getUserOnline', (userId) {
+      if (mounted) {
+        setState(() {
+          onlineUsers.add(userId);
+        });
+      }
+    });
+
+    socket.on('getUserOffline', (userId) {
+      if (mounted) {
+        setState(() {
+          onlineUsers.remove(userId);
+        });
+      }
+    });
+
+    socket.on('user_typing', (data) {
+      if (mounted) {
+        setState(() {
+          typingUsers.add(data['userId']);
+        });
+      }
+    });
+
+    socket.on('user_stopped_typing', (data) {
+      if (mounted) {
+        setState(() {
+          typingUsers.remove(data['userId']);
+        });
+      }
+    });
   }
 
   void _markMessageAsReadIfNecessary(Map<String, dynamic> message) {
@@ -108,7 +166,7 @@ class _ChattingPageState extends State<ChattingPage> {
   }
 
   void reconnectSocket() {
-    Future.delayed(Duration(seconds: 5), () {
+    Future.delayed(const Duration(seconds: 5), () {
       if (!socket.connected) {
         log('Attempting to reconnect to socket server...');
         socket.connect();
@@ -120,18 +178,25 @@ class _ChattingPageState extends State<ChattingPage> {
     try {
       final fetchedMessages = await apiServices.fetchMessages("${chat['_id']}");
       log("API response is $fetchedMessages");
-      setState(() {
-        messages = fetchedMessages;
-      });
-      List<String> messageIds = fetchedMessages
-          .where((msg) => msg['sender']['_id'] != currentUserId)
-          .map<String>((msg) => msg['_id'])
-          .toList();
-      if (messageIds.isNotEmpty) {
-        await markMessagesAsRead(messageIds);
+      if (mounted) {
+        setState(() {
+          messages.clear();
+          messages.addAll(fetchedMessages);
+        });
+      }
+      for (var message in fetchedMessages) {
+        await DatabaseHelper().insertMessage(message);
       }
     } catch (error) {
       log('Error fetching messages: $error');
+      final localMessages =
+          await DatabaseHelper().fetchMessages("${chat['_id']}");
+      if (mounted) {
+        setState(() {
+          messages.clear();
+          messages.addAll(localMessages);
+        });
+      }
     }
   }
 
@@ -141,6 +206,8 @@ class _ChattingPageState extends State<ChattingPage> {
         await apiServices.markMessagesAsRead(messageId);
         socket.emit('mark_messages_read',
             {'chatId': messageId, 'userId': currentUserId});
+        await DatabaseHelper()
+            .updateMessageReadStatus(messageId, currentUserId!);
       }
     } catch (error) {
       log('Error marking messages as read: $error');
@@ -151,59 +218,145 @@ class _ChattingPageState extends State<ChattingPage> {
     if (controller.text.trim().isEmpty) return;
     final content = controller.text.trim();
     final newMsg = {
+      'id': DateTime.now().millisecondsSinceEpoch.toString(), // Unique ID
       'content': content,
       'createdAt': DateTime.now().toUtc().toString(),
       'sender': {'_id': currentUserId},
-      'readBy': []
+      'readBy': [],
+      'status': 'pending'
     };
 
-    setState(() {
-      messages.insert(0, newMsg);
-      controller.clear();
-    });
-
-    try {
-      final sentMsg = await apiServices.sendMessage(content, "${chat['_id']}");
-      sentMsg['status'] = 'sent';
+    if (mounted) {
       setState(() {
-        int index = messages
-            .indexWhere((msg) => msg['createdAt'] == newMsg['createdAt']);
-        if (index != -1) {
-          messages[index] = sentMsg;
-        }
+        messages.insert(0, newMsg);
+        controller.clear();
       });
-      socket.emit('new_msg_sent', sentMsg);
-    } catch (error) {
-      log('Error sending message: $error');
+    }
+
+    if (isConnected) {
+      try {
+        final sentMsg =
+            await apiServices.sendMessage(content, "${chat['_id']}");
+        sentMsg['status'] = 'sent';
+        if (mounted) {
+          setState(() {
+            int index = messages.indexWhere((msg) => msg['id'] == newMsg['id']);
+            if (index != -1) {
+              messages[index] = sentMsg;
+            } else {
+              messages.insert(0, sentMsg);
+            }
+          });
+        }
+        socket.emit('new_msg_sent', sentMsg);
+        await DatabaseHelper().insertMessage(sentMsg);
+      } catch (error) {
+        log('Error sending message: $error');
+        unsentMessages.add(newMsg);
+        await DatabaseHelper().insertMessage(newMsg);
+      }
+    } else {
+      unsentMessages.add(newMsg);
+      await DatabaseHelper().insertMessage(newMsg);
+    }
+  }
+
+  Future<void> resendUnsentMessages() async {
+    if (unsentMessages.isEmpty) return;
+
+    final successfullySentMessages = <Map<String, dynamic>>[];
+
+    for (var unsentMsg in unsentMessages) {
+      try {
+        final sentMsg = await apiServices.sendMessage(
+            unsentMsg['content'], "${chat['_id']}");
+        sentMsg['status'] = 'sent';
+        if (mounted) {
+          setState(() {
+            int index =
+                messages.indexWhere((msg) => msg['id'] == unsentMsg['id']);
+            if (index != -1) {
+              messages[index] = sentMsg;
+            } else {
+              messages.insert(0, sentMsg);
+            }
+          });
+        }
+        socket.emit('new_msg_sent', sentMsg);
+        await DatabaseHelper().insertMessage(sentMsg);
+        successfullySentMessages.add(unsentMsg);
+      } catch (error) {
+        log('Error resending message: $error');
+      }
+    }
+
+    unsentMessages.removeWhere((msg) =>
+        successfullySentMessages.any((sentMsg) => sentMsg['id'] == msg['id']));
+
+    log('Current messages: $messages');
+    log('Unsent messages: $unsentMessages');
+
+    if (mounted) {
+      setState(() {});
+    }
+  }
+
+  void updateUnreadCount(String chatId, int count) {
+    // Implement the logic to update the unread count for the chat
+  }
+
+  void updateMessageReadStatus(String chatId) {
+    if (mounted) {
+      setState(() {
+        messages.forEach((msg) {
+          if (msg['chat'] == chatId && !msg['readBy'].contains(currentUserId)) {
+            msg['readBy'].add(currentUserId);
+          }
+        });
+      });
     }
   }
 
   String convertToIST(String utcTime) {
-    DateTime utcDateTime = DateTime.parse(utcTime).toUtc();
-    DateTime istDateTime =
-        utcDateTime.add(const Duration(hours: 5, minutes: 30));
+    final utcDateTime = DateTime.parse(utcTime).toUtc();
+    final istDateTime = utcDateTime.add(const Duration(hours: 5, minutes: 30));
     return DateFormat('d MMMM yyyy').format(istDateTime);
   }
 
   String convertToISTs(String utcTime) {
-    DateTime utcDateTime = DateTime.parse(utcTime).toUtc();
-    DateTime istDateTime =
-        utcDateTime.add(const Duration(hours: 5, minutes: 30));
+    final utcDateTime = DateTime.parse(utcTime).toUtc();
+    final istDateTime = utcDateTime.add(const Duration(hours: 5, minutes: 30));
     return DateFormat('hh:mm a').format(istDateTime);
+  }
+
+  void onTyping() {
+    socket.emit('typing', {'chatId': chat['_id'], 'userId': currentUserId});
+  }
+
+  void onStopTyping() {
+    socket
+        .emit('stop_typing', {'chatId': chat['_id'], 'userId': currentUserId});
+  }
+
+  @override
+  void dispose() {
+    connectivitySubscription.cancel();
+    socket.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    final otherUser = chat['users']?.firstWhere(
-      (u) => u['_id'] != currentUserId,
-      orElse: () => null,
-    );
+    final otherUser = chat['users']
+        ?.firstWhere((u) => u['_id'] != currentUserId, orElse: () => null);
     final basicInfo = otherUser?['basicInfo'];
     final displayName = basicInfo?['firstName'] ?? 'Unknown';
+    final isOnline = onlineUsers.contains(otherUser['_id']);
+    final isTyping = typingUsers.contains(otherUser['_id']);
 
-    Map<String, List<Map<String, dynamic>>> groupedMessages = {};
+    final groupedMessages = <String, List<Map<String, dynamic>>>{};
     for (var message in messages) {
-      String date = convertToIST(message['createdAt']);
+      final date = convertToIST(message['createdAt']);
       groupedMessages.putIfAbsent(date, () => []).add(message);
     }
 
@@ -220,13 +373,29 @@ class _ChattingPageState extends State<ChattingPage> {
           ),
           title: Padding(
             padding: EdgeInsets.only(left: 10.h),
-            child: Row(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                AppbarSubtitleOne(text: displayName),
-                AppbarTitleImage(
-                  imagePath: ImageConstant.imgVerified,
-                  margin: EdgeInsets.only(left: 2.h, top: 3.v, bottom: 2.v),
+                Row(
+                  children: [
+                    AppbarSubtitleOne(text: displayName),
+                    if (isOnline)
+                      Padding(
+                        padding: EdgeInsets.only(left: 8.h),
+                        child: const Icon(Icons.circle,
+                            color: Colors.green, size: 12),
+                      ),
+                    AppbarTitleImage(
+                      imagePath: ImageConstant.imgVerified,
+                      margin: EdgeInsets.only(left: 2.h, top: 3.v, bottom: 2.v),
+                    ),
+                  ],
                 ),
+                if (isTyping)
+                  Text(
+                    "$displayName is typing...",
+                    style: const TextStyle(color: Colors.grey, fontSize: 12),
+                  ),
               ],
             ),
           ),
@@ -273,13 +442,213 @@ class _ChattingPageState extends State<ChattingPage> {
               children: [
                 Expanded(
                   child: messages.isEmpty
-                      ? const Center(child: CircularProgressIndicator())
+                      ? Shimmer.fromColors(
+                          baseColor: Colors.grey[300]!,
+                          highlightColor: Colors.grey[100]!,
+                          child: ListView.builder(
+                            itemCount: 2,
+                            itemBuilder: (context, index) {
+                              return Column(
+                                children: [
+                                  CustomElevatedButton(
+                                      height: 24.v,
+                                      width: 137.h,
+                                      text: "msg_wednesday_jan_17th".tr,
+                                      margin: EdgeInsets.only(top: 20.v),
+                                      buttonStyle: CustomButtonStyles
+                                          .fillOnPrimaryContainer,
+                                      buttonTextStyle:
+                                          CustomTextStyles.bodySmallBluegray300,
+                                      alignment: Alignment.topCenter),
+                                  Padding(
+                                      padding: EdgeInsets.only(
+                                          left: 188.h,
+                                          right: 20.h,
+                                          bottom: 10.v,
+                                          top: 14.v),
+                                      child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 15.h,
+                                                    vertical: 14.v),
+                                                decoration: AppDecoration
+                                                    .fillPrimary
+                                                    .copyWith(
+                                                        borderRadius:
+                                                            BorderRadiusStyle
+                                                                .customBorderTL201),
+                                                child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      SizedBox(height: 2.v),
+                                                      Text(
+                                                          "msg_hey_how_s_it_going"
+                                                              .tr,
+                                                          style: CustomTextStyles
+                                                              .bodyLargeGray900)
+                                                    ])),
+                                            SizedBox(height: 5.v),
+                                            Padding(
+                                                padding:
+                                                    EdgeInsets.only(left: 14.h),
+                                                child: _buildFrame(
+                                                    time: "lbl_09_32_pm".tr,
+                                                    readBy: []))
+                                          ])),
+                                  Padding(
+                                      padding: EdgeInsets.only(
+                                          left: 16.h, right: 142.h),
+                                      child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Container(
+                                                padding: EdgeInsets.symmetric(
+                                                    horizontal: 15.h,
+                                                    vertical: 14.v),
+                                                decoration: AppDecoration
+                                                    .fillOnPrimaryContainer
+                                                    .copyWith(
+                                                        borderRadius:
+                                                            BorderRadiusStyle
+                                                                .customBorderTL20),
+                                                child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.min,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment
+                                                            .center,
+                                                    children: [
+                                                      SizedBox(height: 2.v),
+                                                      Text(
+                                                          "msg_not_much_just_chilling"
+                                                              .tr,
+                                                          style: CustomTextStyles
+                                                              .bodyLargeGray900)
+                                                    ])),
+                                            SizedBox(height: 5.v),
+                                            Padding(
+                                                padding:
+                                                    EdgeInsets.only(left: 14.h),
+                                                child: _buildFrame(
+                                                    time: "lbl_09_32_pm".tr,
+                                                    readBy: []))
+                                          ])),
+                                  Container(
+                                      margin: EdgeInsets.only(left: 116.h),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 15.h, vertical: 13.v),
+                                      decoration: AppDecoration.fillPrimary
+                                          .copyWith(
+                                              borderRadius: BorderRadiusStyle
+                                                  .customBorderTL201),
+                                      child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            SizedBox(height: 2.v),
+                                            SizedBox(
+                                                width: 193.h,
+                                                child: Text(
+                                                    "msg_same_here_anything".tr,
+                                                    maxLines: 2,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: CustomTextStyles
+                                                        .bodyLargeGray900))
+                                          ])),
+                                  SizedBox(height: 5.v),
+                                  Padding(
+                                      padding: EdgeInsets.only(left: 130.h),
+                                      child: _buildFrame(
+                                          time: "lbl_09_32_pm".tr, readBy: [])),
+                                  SizedBox(height: 14.v),
+                                  Container(
+                                      width: 253.h,
+                                      margin: EdgeInsets.only(right: 90.h),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 15.h, vertical: 13.v),
+                                      decoration: AppDecoration
+                                          .fillOnPrimaryContainer
+                                          .copyWith(
+                                              borderRadius: BorderRadiusStyle
+                                                  .customBorderTL20),
+                                      child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            SizedBox(height: 2.v),
+                                            Container(
+                                                width: 195.h,
+                                                margin: EdgeInsets.only(
+                                                    right: 27.h),
+                                                child: Text(
+                                                    "msg_nah_just_the_usual".tr,
+                                                    maxLines: 2,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: CustomTextStyles
+                                                        .bodyLargeGray900))
+                                          ])),
+                                  SizedBox(height: 5.v),
+                                  Padding(
+                                      padding: EdgeInsets.only(left: 14.h),
+                                      child: _buildFrame(
+                                          time: "lbl_09_32_pm".tr, readBy: [])),
+                                  Container(
+                                      margin: EdgeInsets.only(left: 87.h),
+                                      padding: EdgeInsets.symmetric(
+                                          horizontal: 15.h, vertical: 13.v),
+                                      decoration: AppDecoration.fillPrimary
+                                          .copyWith(
+                                              borderRadius: BorderRadiusStyle
+                                                  .customBorderTL201),
+                                      child: Column(
+                                          mainAxisSize: MainAxisSize.min,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            SizedBox(height: 2.v),
+                                            SizedBox(
+                                                width: 224.h,
+                                                child: Text(
+                                                    "msg_haha_i_feel_that".tr,
+                                                    maxLines: 2,
+                                                    overflow:
+                                                        TextOverflow.ellipsis,
+                                                    style: CustomTextStyles
+                                                        .bodyLargeGray900))
+                                          ])),
+                                  SizedBox(height: 5.v),
+                                  Padding(
+                                      padding: EdgeInsets.only(left: 101.h),
+                                      child: _buildFrame(
+                                          time: "lbl_09_32_pm".tr, readBy: [])),
+                                  SizedBox(height: 5.v),
+                                ],
+                              );
+                            },
+                          ),
+                        )
                       : ListView.builder(
                           reverse: true,
                           itemCount: groupedMessages.keys.length,
                           itemBuilder: (context, index) {
-                            String date = groupedMessages.keys.elementAt(index);
-                            List<Map<String, dynamic>> dateMessages =
+                            final date = groupedMessages.keys.elementAt(index);
+                            final dateMessages =
                                 groupedMessages[date]!.reversed.toList();
                             return Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
@@ -416,18 +785,21 @@ class _ChattingPageState extends State<ChattingPage> {
                                                     ),
                                                   ),
                                                   SizedBox(height: 5.v),
-                                                  Padding(
-                                                    padding: EdgeInsets.only(
-                                                        left: 14.h),
-                                                    child: Text(
-                                                      convertToISTs(
-                                                          msg['createdAt']),
-                                                      style: CustomTextStyles
-                                                          .bodySmallBluegray300
-                                                          .copyWith(
-                                                              color: appTheme
-                                                                  .blueGray300),
-                                                    ),
+                                                  Row(
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.end,
+                                                    children: [
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsets.only(
+                                                                right: 14.h),
+                                                        child: _buildFrame(
+                                                          time: convertToISTs(
+                                                              msg['createdAt']),
+                                                          readBy: msg['readBy'],
+                                                        ),
+                                                      ),
+                                                    ],
                                                   ),
                                                 ],
                                               ),
@@ -440,7 +812,50 @@ class _ChattingPageState extends State<ChattingPage> {
                           },
                         ),
                 ),
-                _buildNinetyNine(),
+                Padding(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 16.h, vertical: 8.v),
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: CustomTextFormField(
+                          controller: controller,
+                          hintText: "Write a message...",
+                          hintStyle: CustomTextStyles.titleMediumBluegray300,
+                          textInputAction: TextInputAction.done,
+                          prefix: Container(
+                            margin: EdgeInsets.fromLTRB(15.h, 14.v, 10.h, 14.v),
+                            child: CustomImageView(
+                              imagePath: ImageConstant.imgSmile,
+                              color: Colors.transparent,
+                              height: 12.adaptSize,
+                              width: 12.adaptSize,
+                            ),
+                          ),
+                          prefixConstraints: BoxConstraints(maxHeight: 52.v),
+                          contentPadding: EdgeInsets.only(
+                              top: 16.v, right: 30.h, bottom: 16.v),
+                          borderDecoration:
+                              TextFormFieldStyleHelper.outlineGrayTL26,
+                          fillColor: appTheme.gray20002,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 6.h),
+                        child: CustomIconButton(
+                          height: 52.adaptSize,
+                          width: 52.adaptSize,
+                          padding: EdgeInsets.all(14.h),
+                          decoration: IconButtonStyleHelper.fillPrimaryTL24,
+                          onTap: sendMessage,
+                          child: CustomImageView(
+                            imagePath: ImageConstant.imgIconSolidPaperAirplane,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               ],
             ),
           ],
@@ -449,78 +864,36 @@ class _ChattingPageState extends State<ChattingPage> {
     );
   }
 
-  Widget _buildNinetyNine() {
-    return Container(
-      margin: EdgeInsets.only(bottom: 5.v),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          const Divider(),
-          Padding(
-            padding: EdgeInsets.only(left: 16.h, top: 6.v, right: 16.h),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Expanded(
-                  child: CustomTextFormField(
-                    controller: controller,
-                    hintText: "msg_write_a_message".tr,
-                    hintStyle: CustomTextStyles.titleMediumBluegray300,
-                    textInputAction: TextInputAction.done,
-                    prefix: Container(
-                      margin: EdgeInsets.fromLTRB(15.h, 14.v, 10.h, 14.v),
-                      child: CustomImageView(
-                        imagePath: ImageConstant.imgSmile,
-                        color: Colors.transparent,
-                        height: 12.adaptSize,
-                        width: 12.adaptSize,
-                      ),
-                    ),
-                    prefixConstraints: BoxConstraints(maxHeight: 52.v),
-                    contentPadding:
-                        EdgeInsets.only(top: 16.v, right: 30.h, bottom: 16.v),
-                    borderDecoration: TextFormFieldStyleHelper.outlineGrayTL26,
-                    fillColor: appTheme.gray20002,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(left: 6.h),
-                  child: CustomIconButton(
-                    height: 52.adaptSize,
-                    width: 52.adaptSize,
-                    padding: EdgeInsets.all(14.h),
-                    decoration: IconButtonStyleHelper.fillPrimaryTL24,
-                    onTap: sendMessage,
-                    child: CustomImageView(
-                      imagePath: ImageConstant.imgIconSolidPaperAirplane,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildFrame({required String time, required List<dynamic> readBy}) {
-    bool isReadByCurrentUser = readBy.contains(currentUserId);
+    final otherUserId = chat['users']?.firstWhere(
+        (u) => u['_id'] != currentUserId,
+        orElse: () => null)?['_id'];
+
+    bool isReadByBoth =
+        readBy.contains(currentUserId) && readBy.contains(otherUserId);
 
     return Row(
       children: [
         Text(
           time,
-          style: CustomTextStyles.bodySmallBluegray300
-              .copyWith(color: appTheme.blueGray300),
+          style: CustomTextStyles.bodySmallBluegray300,
         ),
-        if (isReadByCurrentUser)
+        if (isReadByBoth)
           Padding(
             padding: EdgeInsets.only(left: 4.h),
             child: Icon(
               Icons.done_all,
               size: 16.adaptSize,
-              color: appTheme.blueGray300,
+              color: Colors.blue,
+            ),
+          )
+        else if (readBy.contains(currentUserId))
+          Padding(
+            padding: EdgeInsets.only(left: 4.h),
+            child: Icon(
+              Icons.done,
+              size: 16.adaptSize,
+              color: Colors.grey,
             ),
           ),
       ],
@@ -532,14 +905,14 @@ class _ChattingPageState extends State<ChattingPage> {
   }
 
   void onTapThreeThousand() {
-    // Handle the action for the trailing button
+    // Implement the logic for the trailing button action
   }
 
   void onTapVideo() {
-    // Handle the action for the video button
+    // Implement the logic for the video call action
   }
 
   void onTapPhone() {
-    // Handle the action for the phone button
+    // Implement the logic for the phone call action
   }
 }
