@@ -67,7 +67,6 @@ class VerifynumberScreen extends GetWidget<VerifynumberController> {
   /// Section Widget
   Widget _buildOtpView() {
     return SizedBox(
-        // height: 252.v,
         width: double.infinity,
         child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
@@ -80,17 +79,48 @@ class VerifynumberScreen extends GetWidget<VerifynumberController> {
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 25, bottom: 20),
-                child: Text("msg_enter_the_security".tr,
-                    style: theme.textTheme.titleSmall),
+                child: Builder(
+                  builder: (context) {
+                    // Extract the phone number from the controller
+                    String phoneNumber = controller.phoneNumberController.text;
+
+                    // Define the country code
+                    String countryCode = "+91"; // You can dynamically get this if needed
+
+                    // Define the masked number
+                    String maskedNumber = phoneNumber.length > 3
+                        ? "$countryCode ${"*" * (phoneNumber.length - 3)} ${phoneNumber.substring(phoneNumber.length - 3)}"
+                        : phoneNumber; // If phoneNumber is less than 3 digits, show it as is
+
+                    return RichText(
+                      text: TextSpan(
+                        style: theme.textTheme.titleSmall,
+                        children: [
+                          TextSpan(
+                            text: "${"msg_enter_the_security".tr} ", // Main text
+                          ),
+                          TextSpan(
+                            text: maskedNumber, // Masked phone number
+                            style: const TextStyle(
+                              fontWeight: FontWeight.bold, // Bold the number
+                              color: Colors.black, // Optional: change color
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 15),
                 child: Obx(() => CustomPinCodeTextField(
-                    context: Get.context!,
-                    controller: controller.otpController.value,
-                    onChanged: (value) {
-                      controller.complete.value = value.length == 6;
-                    })),
+                      context: Get.context!,
+                      controller: controller.otpController.value,
+                      onChanged: (value) {
+                        controller.complete.value = value.length == 6;
+                      },
+                    )),
               ),
               Center(
                 child: RichText(
@@ -101,14 +131,19 @@ class VerifynumberScreen extends GetWidget<VerifynumberController> {
                         style: CustomTextStyles.titleSmallGilroyff95a4b7,
                       ),
                       const TextSpan(text: " "),
-                      // Wrap this TextSpan with GestureDetector
                       TextSpan(
                         text: "lbl_resend_code".tr,
                         style: CustomTextStyles.titleSmallGilroyff171717,
-                        // Define onTap callback to call resendOtp() function
                         recognizer: TapGestureRecognizer()
-                          ..onTap = () {
-                            controller.resendOtp();
+                          ..onTap = () async {
+                            controller.resendOtp(controller.phoneNumberController.text); 
+
+                            // Optionally, show feedback to the user
+                            Get.snackbar(
+                              'OTP Resent',
+                              'A new security code has been sent to your phone number.',
+                              snackPosition: SnackPosition.BOTTOM,
+                            );
                           },
                       ),
                     ],
@@ -128,7 +163,6 @@ class VerifynumberScreen extends GetWidget<VerifynumberController> {
           buttonTextStyle: CustomTextStyles.bodySmallffffffff,
           onPressed: () {
             controller.verifyOtp();
-            // Get.toNamed(AppRoutes.homePage);
           },
         ));
   }

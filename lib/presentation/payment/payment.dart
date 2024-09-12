@@ -167,7 +167,7 @@ class _PaymentState extends State<Payment> {
                         
                         GestureDetector(
                           onTap: () {
-                            Get.toNamed(AppRoutes.phoneNumber);
+                            Get.toNamed(AppRoutes.Transaction);
                           },
                         child:Padding(
                       
