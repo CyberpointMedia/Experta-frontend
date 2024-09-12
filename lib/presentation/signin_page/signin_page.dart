@@ -342,7 +342,7 @@ class _SigninPageState extends State<SigninPage> {
         SizedBox(height: 6.v),
         Obx(
           () => CustomPhoneNumber(
-            country: controller.selectedCountry.value,
+            country: controller.selectedCountry.value,           
             controller: controller.phoneNumberController,
             onTap: (Country value) {
               controller.selectedCountry.value = value;

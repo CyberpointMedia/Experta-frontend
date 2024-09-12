@@ -1,3 +1,4 @@
+
 // ignore_for_file: avoid_print
 
 import 'dart:convert';
@@ -6,7 +7,7 @@ import 'dart:io';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/data/models/request/login_request_model.dart';
 import 'package:experta/data/models/request/register_request_model.dart';
-import 'package:experta/data/models/request/resend_otp_request_model.dart';
+
 import 'package:experta/data/models/request/verify_otp_request_model.dart';
 import 'package:experta/data/models/response/login_response_model.dart';
 import 'package:experta/data/models/response/resend_otp_response_model.dart';
@@ -42,15 +43,16 @@ class ApiService {
     return _processResponse2(response);
   }
 
-  Future<ResendOtpResponseModel?> resendOtp(
-      ResendOtpRequestModel requestModel) async {
-    final response = await http.post(
-      Uri.parse('$_baseUrl/resend-otp'),
-      body: jsonEncode(requestModel.toJson()),
-    );
+Future<ResendOtpResponseModel?> resendOtp(String phoneNumber) async {
+  final response = await http.post(
+    Uri.parse('$_baseUrl/resend-otp'),
+    headers: {'Content-Type': 'application/json'},
+    body: jsonEncode({'phoneNo': phoneNumber}),
+  );
 
-    return _processResponse<ResendOtpResponseModel>(response);
-  }
+  return _processResponse<ResendOtpResponseModel>(response);
+}
+
 
   Future<VerifyOtpResponseModel?> verifyOtp(
       VerifyOtpRequestModel requestModel) async {

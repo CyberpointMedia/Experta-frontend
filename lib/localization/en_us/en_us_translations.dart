@@ -16,7 +16,7 @@ final Map<String, String> enUs = {
   "lbl_resend_code": "Resend code",
   "msg_didn_t_receive_the": "Didn’t receive the code? Resend code",
   "msg_didn_t_receive_the2": "Didn’t receive the code?",
-  "msg_enter_the_security": "Enter the security code we sent to +91*******001",
+  "msg_enter_the_security": "Enter the security code we sent to ",
   "msg_we_just_sent_you": "We just sent you an SMS",
 
   // Signinemail Screen

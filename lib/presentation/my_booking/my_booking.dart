@@ -93,7 +93,6 @@ class MyBookingPage extends StatelessWidget {
                   Tab(text: 'Upcoming'),
                   Tab(text: 'Past'),
                 ],
-                // Remove underline by setting the indicator to BoxDecoration with no border
                 indicatorPadding: EdgeInsets.zero, // Remove padding if needed
                 indicatorColor: Colors.transparent, // Remove the default underline
                 unselectedLabelStyle: const TextStyle(color: Colors.black), // Color for unselected tabs

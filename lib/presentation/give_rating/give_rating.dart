@@ -52,7 +52,7 @@ class _RatingPageState extends State<RatingPage> {
             Flexible(
               child: Stack(
                 children: [
-                  Container(
+                  SizedBox(
                     height: _textFieldHeight,
                     child: TextField(
                       maxLines: null,

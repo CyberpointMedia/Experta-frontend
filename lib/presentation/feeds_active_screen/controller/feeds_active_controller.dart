@@ -3,48 +3,44 @@ import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/feeds_active_screen/models/feeds_active_model.dart';
 
 class FeedsActiveController extends GetxController {
-  var feeds = <Datum>[].obs;
-  var commen = <Comment>[].obs;
-  var isLoading = true.obs;
-  var isComment = false.obs;
+  var feeds = <Datum>[].obs; // Observable list of Datum
+  var isLoading = true.obs; // Observable boolean for loading state
+  var isComment = false.obs; // Observable boolean for comment state
   ApiService apiServices = ApiService();
-  final String? address = PrefUtils().getaddress();
+  final String? address = PrefUtils().getaddress(); // Fetching address
 
   @override
   void onInit() {
     super.onInit();
-    fetchFeeds();
+    fetchFeeds(); // Fetching feeds when controller is initialized
   }
 
   Future<void> fetchFeeds() async {
     try {
       isLoading(true);
-      var response = await apiServices.fetchFeeds('post');
-      var feedsActiveModel = FeedsActiveModel.fromJson(response);
-      feeds.value = feedsActiveModel.data;
-      // Populate commen list with comments from feeds
-      commen.value =
-          feedsActiveModel.data.expand((datum) => datum.comments).toList();
+      var response = await apiServices.fetchFeeds('post'); // Fetching feeds from API
+      var feedsActiveModel = FeedsActiveModel.fromJson(response); // Parsing response into model
+      feeds.value = feedsActiveModel.data; // Assigning parsed data to observable list
     } catch (e) {
-      print("Error fetching feeds: $e");
+      log("Error fetching feeds: $e"); // Logging error
     } finally {
-      isLoading(false);
+      isLoading(false); // Setting loading state to false after fetch
     }
   }
 
   Future<void> likeUnlikePost(String postId) async {
     try {
       log("Attempting to like/unlike post with ID: $postId");
-      var response = await apiServices.likeUnlikePost(postId);
+      var response = await apiServices.likeUnlikePost(postId); // Sending like/unlike request
       log("API response for like/unlike: $response");
+
       if (response['status'] == 'success') {
-        // Find the index of the feed item
-        int index = feeds.indexWhere((feed) => feed.id == postId);
+        int index = feeds.indexWhere((feed) => feed.id == postId); // Finding post index
         log("Index of the feed item: $index");
+
         if (index != -1) {
-          // Update the specific feed item
-          feeds[index].totalLikes = response['data']['likes'].length;
-          feeds.refresh(); // Notify listeners
+          feeds[index].totalLikes = response['data']['likes'].length; // Updating totalLikes
+          feeds.refresh(); // Refreshing observable list
           log("Updated likes for post ID $postId: ${feeds[index].totalLikes}");
         } else {
           log("Feed item not found for post ID: $postId");
@@ -60,27 +56,19 @@ class FeedsActiveController extends GetxController {
   Future<void> postComment(String postId, String comment) async {
     try {
       log("Attempting to post comment on post with ID: $postId");
-      var response = await apiServices.postComment(postId, comment);
+      var response = await apiServices.postComment(postId, comment); // Sending comment request
       log("API response for post comment: $response");
+
       if (response['status'] == 'success') {
-        // Find the index of the feed item
-        int index = feeds.indexWhere((feed) => feed.id == postId);
+        int index = feeds.indexWhere((feed) => feed.id == postId); // Finding post index
         log("Index of the feed item: $index");
+
         if (index != -1) {
-          // Update the specific feed item
-          var comments = response['data'];
-          feeds[index].totalComments = comments.length;
-          // Assuming you want to update the latest comment
-          if (comments.isNotEmpty) {
-            var latestComment = comments.last;
-            // Ensure commen list has enough elements
-            if (commen.length > index) {
-              commen[index].comment = latestComment['comment'] ?? '';
-            } else {
-              commen.add(Comment.fromJson(latestComment));
-            }
-          }
-          feeds.refresh(); // Notify listeners
+          var comments = response['data'] as List<dynamic>; // Fetching comments list from response
+          feeds[index].comments = comments.map((c) => Comment.fromJson(c)).toList(); // Updating comments
+          feeds[index].totalComments = comments.length; // Updating totalComments
+
+          feeds.refresh(); // Refreshing observable list
           log("Updated comments for post ID $postId: ${feeds[index].totalComments}");
         } else {
           log("Feed item not found for post ID: $postId");
