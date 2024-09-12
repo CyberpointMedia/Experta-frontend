@@ -169,9 +169,7 @@ class _AboutUsState extends State<AboutUs> {
                           ),
                         ),
                         GestureDetector(
-                          onTap: () {
-                            Get.toNamed(AppRoutes.paymentmethod);
-                          },
+                        
                           child: Padding(
                             padding: const EdgeInsets.only(top: 3),
                             child: Container(

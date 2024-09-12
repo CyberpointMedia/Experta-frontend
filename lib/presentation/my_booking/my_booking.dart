@@ -49,12 +49,13 @@ class MyBookingPage extends StatelessWidget {
     ),
   ];
 
-   MyBookingPage({super.key});
+  MyBookingPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 2, // Number of tabs
+      initialIndex: 0, // Set the default tab index to 0 (Upcoming)
       child: Scaffold(
         appBar: AppBar(
           title: const Text('My Booking'),
@@ -92,6 +93,9 @@ class MyBookingPage extends StatelessWidget {
                   Tab(text: 'Upcoming'),
                   Tab(text: 'Past'),
                 ],
+                indicatorPadding: EdgeInsets.zero, // Remove padding if needed
+                indicatorColor: Colors.transparent, // Remove the default underline
+                unselectedLabelStyle: const TextStyle(color: Colors.black), // Color for unselected tabs
               ),
             ),
           ),
@@ -106,10 +110,8 @@ class MyBookingPage extends StatelessWidget {
                 color: Colors.grey[200],
               ),
               child: BookingList(
-                bookings: bookings.where((booking) {
-                  // Filter for upcoming bookings
-                  return booking.appointmentDate.isAfter(DateTime.now());
-                }).toList(),
+                bookings: bookings, // Show all bookings in Upcoming tab
+                isUpcomingTab: true, // Indicate that this is the Upcoming tab
               ),
             ),
             // Past bookings tab
@@ -124,6 +126,7 @@ class MyBookingPage extends StatelessWidget {
                   // Filter for past bookings
                   return booking.appointmentDate.isBefore(DateTime.now());
                 }).toList(),
+                isUpcomingTab: false, // Indicate that this is the Past tab
               ),
             ),
           ],
@@ -136,16 +139,22 @@ class MyBookingPage extends StatelessWidget {
 // Widget to display a list of bookings
 class BookingList extends StatelessWidget {
   final List<Booking> bookings;
+  final bool isUpcomingTab;
 
-  const BookingList({super.key, required this.bookings});
+  const BookingList({super.key, required this.bookings, required this.isUpcomingTab});
 
   @override
   Widget build(BuildContext context) {
+    if (bookings.isEmpty) {
+      return const Center(
+        child: Text('No bookings available'),
+      );
+    }
     return ListView.builder(
       itemCount: bookings.length,
       itemBuilder: (context, index) {
         final booking = bookings[index];
-        return BookingCard(booking: booking);
+        return BookingCard(booking: booking, isUpcomingTab: isUpcomingTab);
       },
     );
   }
@@ -154,8 +163,9 @@ class BookingList extends StatelessWidget {
 // Widget to display individual booking cards
 class BookingCard extends StatelessWidget {
   final Booking booking;
+  final bool isUpcomingTab;
 
-  const BookingCard({super.key, required this.booking});
+  const BookingCard({super.key, required this.booking, required this.isUpcomingTab});
 
   @override
   Widget build(BuildContext context) {
@@ -280,36 +290,37 @@ class BookingCard extends StatelessWidget {
             ),
             const SizedBox(height: 16.0),
             // Accept and Reject buttons with equal size
-            Row(
-              children: [
-                if (!booking.isAccepted)
-                  Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {
-                        // Handle Accept
-                      },
-                      style: ElevatedButton.styleFrom(
-                        fixedSize: const Size.fromHeight(50), // Increased button size, fixed height
-                        backgroundColor: Colors.yellow,
+            if (isUpcomingTab) // Show buttons only if in Upcoming tab
+              Row(
+                children: [
+                  if (!booking.isAccepted)
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Handle Accept
+                        },
+                        style: ElevatedButton.styleFrom(
+                          fixedSize: const Size.fromHeight(50), // Increased button size, fixed height
+                          backgroundColor: Colors.yellow,
+                        ),
+                        child: const Text('Accept', style: TextStyle(color: Colors.black)), // Darker black color
                       ),
-                      child: const Text('Accept', style: TextStyle(color: Colors.black)), // Darker black color
                     ),
-                  ),
-                const SizedBox(width: 16.0), // Add spacing between the buttons
-                if (!booking.isAccepted)
-                  Expanded(
-                    child: OutlinedButton(
-                      onPressed: () {
-                        // Handle Reject
-                      },
-                      style: OutlinedButton.styleFrom(
-                        fixedSize: const Size.fromHeight(50), // Increased button size, fixed height
+                  const SizedBox(width: 16.0), // Add spacing between the buttons
+                  if (!booking.isAccepted)
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () {
+                          // Handle Reject
+                        },
+                        style: OutlinedButton.styleFrom(
+                          fixedSize: const Size.fromHeight(50), // Increased button size, fixed height
+                        ),
+                        child: const Text('Reject', style: TextStyle(color: Colors.black)), // Darker black color
                       ),
-                      child: const Text('Reject', style: TextStyle(color: Colors.black)), // Darker black color
                     ),
-                  ),
-              ],
-            ),
+                ],
+              ),
           ],
         ),
       ),

@@ -95,7 +95,7 @@ Widget _buildShimmerEffect() {
     child: ListView.builder(
       itemCount: 10,
       itemBuilder: (context, index) {
-        return Container(
+        return SizedBox(
           width: MediaQuery.of(context).size.width,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -267,7 +267,7 @@ Widget _buildBottomSheetContent(BuildContext context, Comment? comment) {
           ),
         ),
         if (comment != null && comment.user.id == userAddress ||
-            feed!.postedBy.id == userAddress)
+            comment != null && feed!.postedBy.id == userAddress)
           _buildBottomSheetOption(
             context,
             icon: Icons.delete,
@@ -337,6 +337,7 @@ class FeedItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<FeedsActiveController>();
+    // ignore: collection_methods_unrelated_type
     final isLiked = feed.likes.contains(address);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -448,7 +449,7 @@ class FeedItem extends StatelessWidget {
                             height: 24.adaptSize,
                             width: 24.adaptSize,
                             onTap: () async {
-                              await controller.likeUnlikePost(feed.id);
+                              await controller.likeUnlikePost(feed.id.toString());
                             },
                           ),
                           Padding(
@@ -509,7 +510,7 @@ class FeedItem extends StatelessWidget {
                                           Row(
                                             children: [
                                               Text(
-                                                comment.user.displayName,
+                                                comment.user.displayName.toString(),
                                                 style: theme
                                                     .textTheme.bodyMedium!
                                                     .copyWith(
@@ -530,7 +531,7 @@ class FeedItem extends StatelessWidget {
                                                   top: 4.v,
                                                 ),
                                                 child: Text(
-                                                  comment.formattedDate,
+                                                  comment.formattedDate.toString(),
                                                   style: CustomTextStyles
                                                       .bodySmallBluegray300,
                                                 ),
@@ -568,7 +569,7 @@ class FeedItem extends StatelessWidget {
                                             ],
                                           ),
                                           Text(
-                                            comment.comment,
+                                            comment.comment.toString(),
                                             style: theme.textTheme.titleMedium!
                                                 .copyWith(
                                                     color: appTheme.black90001,
@@ -581,7 +582,7 @@ class FeedItem extends StatelessWidget {
                                   ],
                                 ),
                               );
-                            }).toList(),
+                            }),
                             if (feed.comments.length > 2)
                               TextButton(
                                 onPressed: () {
@@ -664,7 +665,7 @@ class CommentsPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CircleAvatar(
-                    backgroundImage: NetworkImage(comment.user.profilePic),
+                    backgroundImage: NetworkImage(comment.user.profilePic.toString()),
                     radius: 15,
                   ),
                   const SizedBox(width: 10),
@@ -673,12 +674,12 @@ class CommentsPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          comment.user.displayName,
+                          comment.user.displayName.toString(),
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        Text(comment.comment),
+                        Text(comment.comment.toString()),
                         Text(
-                          comment.formattedDate,
+                          comment.formattedDate.toString(),
                           style:
                               const TextStyle(color: Colors.grey, fontSize: 12),
                         ),
@@ -833,8 +834,9 @@ class _CommentInputFieldState extends State<CommentInputField> {
                   onPressed: isEnabled
                       ? () async {
                           await _controller.postComment(
-                              widget.feed.id, _commentController.text);
+                              widget.feed.id.toString(), _commentController.text);
                           _commentController.clear();
+                          // ignore: use_build_context_synchronously
                           Navigator.pop(context); // Close the bottom sheet
                         }
                       : null,

@@ -17,8 +17,10 @@ class FeedsActiveModel {
 
   factory FeedsActiveModel.fromJson(Map<String, dynamic> json) =>
       FeedsActiveModel(
-        status: json["status"],
-        data: List<Datum>.from(json["data"].map((x) => Datum.fromJson(x))),
+        status: json["status"] ?? '',
+        data: json["data"] != null
+            ? List<Datum>.from(json["data"].map((x) => Datum.fromJson(x)))
+            : [],
       );
 
   Map<String, dynamic> toJson() => {
@@ -53,18 +55,22 @@ class Datum {
   });
 
   factory Datum.fromJson(Map<String, dynamic> json) => Datum(
-        type: json["type"],
-        id: json["id"],
-        formattedDate: json["formattedDate"],
-        image: json["image"],
-        caption: json["caption"],
-        postedBy: PostedBy.fromJson(json["postedBy"]),
-        likes:
-            List<PostedBy>.from(json["likes"].map((x) => PostedBy.fromJson(x))),
-        comments: List<Comment>.from(
-            json["comments"].map((x) => Comment.fromJson(x))),
-        totalLikes: json["totalLikes"],
-        totalComments: json["totalComments"],
+        type: json["type"] ?? '',
+        id: json["id"] ?? '',
+        formattedDate: json["formattedDate"] ?? '',
+        image: json["image"] ?? '',
+        caption: json["caption"] ?? '',
+        postedBy: json["postedBy"] != null
+            ? PostedBy.fromJson(json["postedBy"])
+            : PostedBy.empty(),
+        likes: json["likes"] != null
+            ? List<PostedBy>.from(json["likes"].map((x) => PostedBy.fromJson(x)))
+            : [],
+        comments: json["comments"] != null
+            ? List<Comment>.from(json["comments"].map((x) => Comment.fromJson(x)))
+            : [],
+        totalLikes: json["totalLikes"] ?? 0,
+        totalComments: json["totalComments"] ?? 0,
       );
 
   Map<String, dynamic> toJson() => {
@@ -97,11 +103,15 @@ class Comment {
   });
 
   factory Comment.fromJson(Map<String, dynamic> json) => Comment(
-        comment: json["comment"],
-        formattedDate: json["formattedDate"],
-        id: json["_id"],
-        createdAt: DateTime.parse(json["createdAt"]),
-        user: PostedBy.fromJson(json["user"]),
+        comment: json["comment"] ?? '',
+        formattedDate: json["formattedDate"] ?? '',
+        id: json["_id"] ?? '',
+        createdAt: json["createdAt"] !=null
+            ? DateTime.parse(json["createdAt"])
+            : DateTime.now(),
+        user: json["user"] != null
+            ? PostedBy.fromJson(json["user"])
+            : PostedBy.empty(),
       );
 
   Map<String, dynamic> toJson() => {
@@ -133,13 +143,23 @@ class PostedBy {
   });
 
   factory PostedBy.fromJson(Map<String, dynamic> json) => PostedBy(
-        id: json["id"],
-        online: json["online"],
-        rating: json["rating"],
-        profilePic: json["profilePic"],
-        displayName: json["displayName"],
-        industry: json["industry"],
-        occupation: json["occupation"],
+        id: json["id"] ?? '',
+        online: json["online"] ?? false,
+        rating: json["rating"] ?? 0,
+        profilePic: json["profilePic"] ?? '',
+        displayName: json["displayName"] ?? '',
+        industry: json["industry"] ?? '',
+        occupation: json["occupation"] ?? '',
+      );
+
+  factory PostedBy.empty() => PostedBy(
+        id: '',
+        online: false,
+        rating: 0,
+        profilePic: '',
+        displayName: '',
+        industry: '',
+        occupation: '',
       );
 
   Map<String, dynamic> toJson() => {
@@ -153,7 +173,6 @@ class PostedBy {
       };
 }
 
-
 class Reason {
   final String id;
   final String reason;
@@ -162,8 +181,8 @@ class Reason {
 
   factory Reason.fromJson(Map<String, dynamic> json) {
     return Reason(
-      id: json['_id'],
-      reason: json['reason'],
+      id: json['_id'] ?? '',
+      reason: json['reason'] ?? '',
     );
   }
 

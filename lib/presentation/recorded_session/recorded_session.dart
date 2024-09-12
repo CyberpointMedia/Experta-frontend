@@ -1,22 +1,49 @@
-import 'dart:io';
 import 'dart:ui';
-import 'package:experta/core/app_export.dart';
-import 'package:video_player/video_player.dart';
-import 'package:flutter/services.dart';
+import 'package:experta/theme/theme_helper.dart';
+import 'package:flutter/material.dart';
 
 class RecordedSessionsPage extends StatefulWidget {
   const RecordedSessionsPage({super.key});
 
   @override
-  State<RecordedSessionsPage> createState() => _RecordedSessionsPageState();
+  // ignore: library_private_types_in_public_api
+  _RecordedSessionsPageState createState() => _RecordedSessionsPageState();
 }
 
 class _RecordedSessionsPageState extends State<RecordedSessionsPage> {
-  List<Map<String, dynamic>> sessions = [];
+  // Sessions list (state)
+  List<Map<String, dynamic>> sessions = [
+    {
+      'imageUrl': 'https://via.placeholder.com/80',
+      'name': 'Anjali Arora',
+      'title': 'Social Media Influencer',
+      'date': 'Tue, 2 Jan 2024',
+      'time': '10:30',
+      'hasPlayButton': true,
+    },
+    {
+      'imageUrl': 'https://via.placeholder.com/80',
+      'name': 'Taranvir Kaur',
+      'title': 'Social Media Influencer',
+      'date': 'Tue, 2 Jan 2024',
+      'time': '10:30',
+      'hasPlayButton': true,
+    },
+    {
+      'imageUrl': 'https://via.placeholder.com/80',
+      'name': 'Dinesh Verma',
+      'title': 'Social Media Influencer',
+      'date': 'Tue, 2 Jan 2024',
+      'time': '10:30',
+      'hasPlayButton': true,
+    },
+  ];
 
-  @override
-  void initState() {
-    super.initState();
+  // Function to handle session deletion
+  void _deleteSession(int index) {
+    setState(() {
+      sessions.removeAt(index); // Remove session from the list
+    });
   }
 
   @override
@@ -29,7 +56,6 @@ class _RecordedSessionsPageState extends State<RecordedSessionsPage> {
             top: 50,
             child: ImageFiltered(
               imageFilter: ImageFilter.blur(
-                tileMode: TileMode.decal,
                 sigmaX: 60,
                 sigmaY: 60,
               ),
@@ -40,7 +66,7 @@ class _RecordedSessionsPageState extends State<RecordedSessionsPage> {
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(126),
-                      color: const Color(0xFFFF7514).withOpacity(0.6),
+                      color: appTheme.deepOrangeA20.withOpacity(0.6),
                     ),
                   ),
                 ),
@@ -50,7 +76,7 @@ class _RecordedSessionsPageState extends State<RecordedSessionsPage> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              _buildAppBar(),
+              _buildAppBar(context),
               Expanded(child: _buildRecordedSessionsList()),
             ],
           ),
@@ -59,31 +85,34 @@ class _RecordedSessionsPageState extends State<RecordedSessionsPage> {
     );
   }
 
-  PreferredSizeWidget _buildAppBar() {
+  Widget _buildAppBar(BuildContext context) {
     return AppBar(
+      title: const Text("Recorded Sessions"),
       leading: IconButton(
         icon: const Icon(Icons.arrow_back),
         onPressed: () {
           Navigator.pop(context);
         },
       ),
-      centerTitle: true,
-      title: const Text("Recorded Sessions"),
     );
   }
 
+  // Modified ListView builder with delete option in the PopupMenu
   Widget _buildRecordedSessionsList() {
     return ListView.builder(
       itemCount: sessions.length,
-      padding: const EdgeInsets.only(
-        left: 16.0,
-        top: 16,
-      ),
+      padding: const EdgeInsets.all(16.0),
       itemBuilder: (context, index) {
         return Padding(
           padding: const EdgeInsets.only(bottom: 16.0),
           child: RecordedSessionTile(
-            session: sessions[index],
+            imageUrl: sessions[index]['imageUrl'],
+            name: sessions[index]['name'],
+            title: sessions[index]['title'],
+            date: sessions[index]['date'],
+            time: sessions[index]['time'],
+            hasPlayButton: sessions[index]['hasPlayButton'],
+            onDelete: () => _deleteSession(index), // Pass delete function
           ),
         );
       },
@@ -92,10 +121,22 @@ class _RecordedSessionsPageState extends State<RecordedSessionsPage> {
 }
 
 class RecordedSessionTile extends StatelessWidget {
-  final Map<String, dynamic> session;
+  final String imageUrl;
+  final String name;
+  final String title;
+  final String date;
+  final String time;
+  final bool hasPlayButton;
+  final VoidCallback onDelete;
 
   const RecordedSessionTile({
-    required this.session,
+    required this.imageUrl,
+    required this.name,
+    required this.title,
+    required this.date,
+    required this.time,
+    required this.hasPlayButton,
+    required this.onDelete, // New delete callback
     super.key,
   });
 
@@ -103,40 +144,18 @@ class RecordedSessionTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        GestureDetector(
-          onTap: () {
-            if (session['path'] != null) {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => VideoPlayerScreen(
-                    videoPath: session['path'],
-                  ),
-                ),
-              );
-            } else {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('Video path is not available')),
-              );
-            }
-          },
-          child: Stack(
-            children: [
-              Container(
-                color: Colors.grey[300],
-                width: 150,
-                height: 100,
-                child: ClipRRect(
-                  borderRadius: BorderRadius.circular(10.0),
-                  child: CustomImageView(
-                    imagePath: ImageConstant.imageNotFound,
-                    width: 50,
-                    height: 50,
-                    color: Colors.grey[500],
-                    fit: BoxFit.cover,
-                  ),
-                ),
+        Stack(
+          children: [
+            ClipRRect(
+              borderRadius: BorderRadius.circular(10.0),
+              child: Image.network(
+                imageUrl,
+                width: 80.0,
+                height: 80.0,
+                fit: BoxFit.cover,
               ),
+            ),
+            if (hasPlayButton)
               Positioned.fill(
                 child: Align(
                   alignment: Alignment.center,
@@ -147,76 +166,37 @@ class RecordedSessionTile extends StatelessWidget {
                   ),
                 ),
               ),
-            ],
-          ),
+          ],
         ),
         const SizedBox(width: 16.0),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Row(
-                children: [
-                  Expanded(
-                    child: Text(
-                      session['name'] ?? 'Unknown Name',
-                      style: const TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 16.0,
-                        color: Colors.black, // Set the color to black
-                      ),
-                    ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.all(5.0),
-                    child: PopupMenuButton<String>(
-                      onSelected: (value) {
-                        if (value == 'Delete') {}
-                      },
-                      itemBuilder: (context) => [
-                        PopupMenuItem<String>(
-                          value: 'Delete',
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 4.0),
-                            height: 30,
-                            child: const Text(
-                              'Delete',
-                              style: TextStyle(fontSize: 14.0),
-                            ),
-                          ),
-                        ),
-                      ],
-                      icon: const Icon(Icons.more_vert, color: Colors.grey),
-                      padding: const EdgeInsets.all(4),
-                      offset: const Offset(0, 30),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      elevation: 2.0,
-                    ),
-                  ),
-                ],
+              Text(
+                name,
+                style: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 16.0,
+                ),
               ),
               Text(
-                session['title'] ?? 'Unknown Title',
+                title,
                 style: const TextStyle(
                   color: Colors.grey,
                   fontSize: 14.0,
                 ),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
               ),
               const SizedBox(height: 4.0),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
+              Row(
                 children: [
                   Text(
-                    session['date'] ?? 'Unknown Date',
+                    date,
                     style: const TextStyle(color: Colors.grey),
                   ),
-                  const SizedBox(height: 4.0),
+                  const SizedBox(width: 8.0),
                   Text(
-                    session['time'] ?? 'Unknown Time',
+                    time,
                     style: const TextStyle(color: Colors.grey),
                   ),
                 ],
@@ -224,84 +204,42 @@ class RecordedSessionTile extends StatelessWidget {
             ],
           ),
         ),
+        PopupMenuButton<String>(
+          onSelected: (value) {
+            if (value == 'Delete') {
+              onDelete(); // Call delete function when "Delete" is selected
+            }
+          },
+          itemBuilder: (context) => [
+            PopupMenuItem<String>(
+              value: 'Delete',
+              child: Container(
+                padding: const EdgeInsets.symmetric(vertical: 4.0), // Reduce vertical padding
+                height: 30, // Reduce the overall height of the popup item
+                child: const Text(
+                  'Delete',
+                  style: TextStyle(
+                    fontSize: 14.0, // Adjust font size for better visibility
+                  ),
+                ),
+              ),
+            ),
+          ],
+          icon: const Icon(Icons.more_vert),
+          padding: const EdgeInsets.all(4), // Removes any default padding
+          offset: const Offset(0, 30), // Adjusts the popup position relative to the icon
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8.0), // Rounded corners for the popup menu
+          ),
+          elevation: 2.0, // Adds elevation for a better visual effect
+        ),
       ],
     );
   }
 }
 
-class VideoPlayerScreen extends StatefulWidget {
-  final String videoPath;
-
-  const VideoPlayerScreen({Key? key, required this.videoPath})
-      : super(key: key);
-
-  @override
-  _VideoPlayerScreenState createState() => _VideoPlayerScreenState();
-}
-
-class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
-  late VideoPlayerController _controller;
-  bool _isFullScreen = false; // Track full-screen state
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = VideoPlayerController.file(File(widget.videoPath))
-      ..initialize().then((_) {
-        setState(() {}); // Update the state once initialization is complete
-        _enterFullScreen(); // Enter full-screen when the video is ready
-      });
-  }
-
-  @override
-  void dispose() {
-    _exitFullScreen(); // Exit full-screen on dispose
-    _controller.dispose();
-    super.dispose();
-  }
-
-  // Function to enter full-screen mode
-  void _enterFullScreen() {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.landscapeLeft,
-      DeviceOrientation.landscapeRight,
-    ]).then((_) {
-      setState(() {
-        _isFullScreen = true;
-      });
-    });
-  }
-
-  // Function to exit full-screen mode
-  void _exitFullScreen() {
-    SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
-    SystemChrome.setPreferredOrientations([
-      DeviceOrientation.portraitUp,
-    ]).then((_) {
-      setState(() {
-        _isFullScreen = false;
-      });
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: GestureDetector(
-        onTap: () {
-          // Toggle full-screen mode on tap
-          _isFullScreen ? _exitFullScreen() : _enterFullScreen();
-        },
-        child: Center(
-          child: _controller.value.isInitialized
-              ? AspectRatio(
-                  aspectRatio: _controller.value.aspectRatio,
-                  child: VideoPlayer(_controller),
-                )
-              : const CircularProgressIndicator(),
-        ),
-      ),
-    );
-  }
+void main() {
+  runApp(const MaterialApp(
+    home: RecordedSessionsPage(),
+  ));
 }
