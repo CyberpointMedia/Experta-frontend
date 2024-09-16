@@ -2,9 +2,11 @@ import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
 import 'package:experta/core/utils/web_view/web_view.dart';
+import 'package:experta/presentation/all_review/all_review.dart';
 import 'package:experta/presentation/userProfile/controller/profile_controller.dart';
 import 'package:experta/presentation/userProfile/post_details/controller/post_details_controller.dart';
 import 'package:experta/presentation/userProfile/post_details/post_details.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -504,27 +506,31 @@ class _UserProfilePageState extends State<UserProfilePage>
             children: controller
                     .userData.value.data?.industryOccupation?.achievements
                     ?.map((achievement) {
-                  return Row(
-                    children: [
-                      SizedBox(
-                        height: 24.v,
-                        width: 25.adaptSize,
-                        child: SvgPicture.asset("assets/images/img_link_1.svg"),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          left: 10,
-                          top: 4,
+                  return Padding(
+                    padding:
+                        const EdgeInsets.only(bottom: 8.0, left: 10, right: 10),
+                    child: Row(
+                      children: [
+                        SizedBox(
+                          height: 24.v,
+                          width: 25.adaptSize,
+                          child:
+                              SvgPicture.asset("assets/images/img_link_1.svg"),
                         ),
-                        child: Text(
-                          achievement,
-                          style: theme.textTheme.bodyLarge?.copyWith(
-                            color: appTheme.gray900,
-                            decoration: TextDecoration.underline,
+                        SizedBox(width: 10),
+                        Expanded(
+                          child: Text(
+                            achievement,
+                            overflow: TextOverflow.ellipsis,
+                            maxLines: 1,
+                            style: theme.textTheme.bodyLarge?.copyWith(
+                              color: appTheme.gray900,
+                              decoration: TextDecoration.underline,
+                            ),
                           ),
-                        ),
-                      )
-                    ],
+                        )
+                      ],
+                    ),
                   );
                 }).toList() ??
                 [],
@@ -586,10 +592,10 @@ class _UserProfilePageState extends State<UserProfilePage>
             ),
             GestureDetector(
               onTap: () {
-                // Navigate to the Reviews page
-                Get.toNamed(AppRoutes.allReviews,
-                    arguments:
-                        controller.userData.value.data?.basicInfo?.reviews);
+                var reviews =
+                    controller.userData.value.data?.basicInfo?.reviews;
+                // Navigate to the AllReviewsPage even if there are no reviews
+                Get.to(() => AllReviewsPage(reviews: reviews ?? []));
               },
               child: Text(
                 "See all",
@@ -611,8 +617,8 @@ class _UserProfilePageState extends State<UserProfilePage>
                   theme.textTheme.bodyMedium?.copyWith(color: appTheme.gray900),
             );
           } else {
-            // Limit the number of reviews to 5
-            var limitedReviews = reviews.take(5).toList();
+            // Limit the number of reviews to 3
+            var limitedReviews = reviews.take(3).toList();
             return Column(
               children: limitedReviews.map((review) {
                 return Padding(
@@ -658,7 +664,6 @@ class _UserProfilePageState extends State<UserProfilePage>
                               direction: Axis.horizontal,
                               allowHalfRating: false,
                               itemSize: 22,
-                              itemCount: 5,
                               updateOnDrag: true,
                               onRatingUpdate: (rating) {},
                               itemBuilder: (context, _) {
@@ -788,8 +793,17 @@ class _UserProfilePageState extends State<UserProfilePage>
                   flex: 42,
                 ),
                 GestureDetector(
-                  onTap: () => Get.toNamed(AppRoutes.follower,
-                      arguments: {"id": controller.userData.value.data?.id}),
+                  onTap: () {
+                    Get.toNamed(AppRoutes.follower, arguments: {
+                      "id": controller.userData.value.data?.id,
+                      "userProfile": "userProfile"
+                    })!
+                        .then((value) {
+                      Get.find<ProfileController>().fetchUserData(
+                          controller.address.toString(),
+                          controller.address.toString());
+                    });
+                  },
                   child: Column(
                     children: [
                       Text(
@@ -811,7 +825,17 @@ class _UserProfilePageState extends State<UserProfilePage>
                   flex: 58,
                 ),
                 GestureDetector(
-                  onTap: () => Get.toNamed(AppRoutes.following),
+                  onTap: () {
+                    Get.toNamed(AppRoutes.following, arguments: {
+                      "id": controller.userData.value.data?.id,
+                      "userProfile": "userProfile"
+                    })!
+                        .then((value) {
+                      Get.find<ProfileController>().fetchUserData(
+                          controller.address.toString(),
+                          controller.address.toString());
+                    });
+                  },
                   child: Column(
                     children: [
                       Text(
@@ -942,10 +966,16 @@ class _UserProfilePageState extends State<UserProfilePage>
                 SizedBox(
                   width: 10.v,
                 ),
-                Text(
-                  "Reg no: ${controller.userData.value.data?.industryOccupation?.registrationNumber ?? " 22354678"}",
-                  textAlign: TextAlign.left,
-                  style: CustomTextStyles.bodyLargeBlack90001,
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  child: Text(
+                    "Reg no: ${controller.userData.value.data?.industryOccupation?.registrationNumber ?? " 22354678"}",
+                    textAlign: TextAlign.left,
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
+                    style: theme.textTheme.bodyLarge!
+                        .copyWith(color: appTheme.black90001),
+                  ),
                 ),
                 Container(
                   width: 1.0,
