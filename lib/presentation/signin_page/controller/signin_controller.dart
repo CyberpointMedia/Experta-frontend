@@ -115,15 +115,18 @@ class SigninController extends GetxController {
       log('Response received: ${response.toString()}');
 
       if (response is RegisterResponseSuccess) {
+        
         log('Registration successful: ${response.data.toString()}');
         CustomToast().showToast(
           context: context,
           message: 'Otp Sent Sucessfully',
           isSuccess: true,
         );
+         log('hi the otp is ${response.data.otp}');
+        var otp = response.data.otp;
         Get.toNamed(
           AppRoutes.verifynumberScreen,
-          arguments: phoneNumberController,
+           arguments: [phoneNumberController, otp],
         );
       } else if (response is RegisterResponseError) {
         log("Registration failed: ${response.error.errorMessage}");
