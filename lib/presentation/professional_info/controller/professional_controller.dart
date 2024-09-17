@@ -51,7 +51,7 @@ class EditProfessionalInfoController extends GetxController {
   @override
   void dispose() {
     for (var controller in _linkControllers) {
-      controller.dispose();
+      controller.clear();
     }
     super.dispose();
   }

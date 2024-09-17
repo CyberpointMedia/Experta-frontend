@@ -160,9 +160,9 @@ class SigninController extends GetxController {
 
   @override
   void onClose() {
-    emailController.dispose();
-    passwordController.dispose();
-    phoneNumberController.dispose();
+    emailController.clear();
+    passwordController.clear();
+    phoneNumberController.clear();
     emailFocusNode.dispose();
     passwordFocusNode.dispose();
     super.onClose();

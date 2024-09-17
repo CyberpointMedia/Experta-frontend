@@ -14,9 +14,11 @@ class AddBankAccount extends StatefulWidget {
 class _AddBankAccountState extends State<AddBankAccount> {
   // Controllers for each field
   final TextEditingController accountNumberController = TextEditingController();
-  final TextEditingController reEnterAccountNumberController = TextEditingController();
+  final TextEditingController reEnterAccountNumberController =
+      TextEditingController();
   final TextEditingController ifscCodeController = TextEditingController();
-  final TextEditingController accountHolderNameController = TextEditingController();
+  final TextEditingController accountHolderNameController =
+      TextEditingController();
 
   // Focus nodes for each field
   final FocusNode accountNumberFocusNode = FocusNode();
@@ -26,11 +28,11 @@ class _AddBankAccountState extends State<AddBankAccount> {
 
   @override
   void dispose() {
-    // Dispose controllers and focus nodes to free up resources
-    accountNumberController.dispose();
-    reEnterAccountNumberController.dispose();
-    ifscCodeController.dispose();
-    accountHolderNameController.dispose();
+    // clear controllers and focus nodes to free up resources
+    accountNumberController.clear();
+    reEnterAccountNumberController.clear();
+    ifscCodeController.clear();
+    accountHolderNameController.clear();
 
     accountNumberFocusNode.dispose();
     reEnterAccountNumberFocusNode.dispose();
@@ -74,8 +76,7 @@ class _AddBankAccountState extends State<AddBankAccount> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const  Text("Account Number"),
-                  
+                  const Text("Account Number"),
                   CustomTextFormField(
                     hintText: "Bank account number",
                     hintStyle: CustomTextStyles.titleMediumBluegray300,
@@ -85,7 +86,7 @@ class _AddBankAccountState extends State<AddBankAccount> {
                     autofocus: false,
                   ),
                   const SizedBox(height: 10),
-                  const  Text("Re-enter Account Number"),
+                  const Text("Re-enter Account Number"),
                   CustomTextFormField(
                     hintText: "Re-enter bank account number",
                     hintStyle: CustomTextStyles.titleMediumBluegray300,
@@ -95,7 +96,7 @@ class _AddBankAccountState extends State<AddBankAccount> {
                     autofocus: false,
                   ),
                   const SizedBox(height: 10),
-                  const  Text("IFSC Code"),
+                  const Text("IFSC Code"),
                   CustomTextFormField(
                     hintText: "Enter IFSC code",
                     hintStyle: CustomTextStyles.titleMediumBluegray300,
@@ -104,7 +105,7 @@ class _AddBankAccountState extends State<AddBankAccount> {
                     focusNode: ifscCodeFocusNode,
                     autofocus: false,
                   ),
-                   const SizedBox(height: 10),
+                  const SizedBox(height: 10),
                   const Text("Account Holder Name"),
                   CustomTextFormField(
                     hintText: "Account holder’s name",
