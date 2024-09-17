@@ -1,5 +1,6 @@
 import 'package:experta/core/app_export.dart';
 import 'controller/settings_log_out_controller.dart';
+import 'package:flutter/services.dart'; // Import for SystemNavigator
 
 // ignore_for_file: must_be_immutable
 class SettingsLogOutDialog extends StatelessWidget {
@@ -27,31 +28,32 @@ class SettingsLogOutDialog extends StatelessWidget {
                       .copyWith(height: 1.67))),
           SizedBox(height: 21.v),
           Divider(color: appTheme.gray300),
-          Container(
-              decoration: AppDecoration.fillGray300,
-              child:
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                CustomElevatedButton(
-                    height: 40.v,
-                    width: 134.h,
-                    text: "lbl_cancel".tr,
-                    buttonStyle: CustomButtonStyles.fillOnPrimaryContainer1,
-                    buttonTextStyle:
-                        CustomTextStyles.bodyLargeSFProTextLightblueA700,
-                    onPressed: () {
-                      onTapCancel();
-                    }),
-                CustomElevatedButton(
-                    height: 40.v,
-                    width: 134.h,
-                    text: "lbl_logout2".tr,
-                    buttonStyle: CustomButtonStyles.fillOnPrimaryContainer1,
-                    buttonTextStyle:
-                        CustomTextStyles.bodyLargeSFProTextLightblueA700,
-                    onPressed: () {
-                      onTapLogout();
-                    })
-              ]))
+          Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                          CustomElevatedButton(
+            height: 40.v,
+            width: 134.h,
+            text: "lbl_cancel".tr,
+            buttonStyle: CustomButtonStyles.fillOnPrimaryContainer1, // Use the updated style
+            buttonTextStyle:
+                CustomTextStyles.bodyLargeSFProTextLightblueA700,
+            onPressed: () {
+              onTapCancel();
+            }),
+            Container(
+              width: 5,
+              color: Colors.black,
+            ),
+                          CustomElevatedButton(
+            height: 40.v,
+            width: 134.h,
+            text: "lbl_logout2".tr,
+            buttonStyle: CustomButtonStyles.fillOnPrimaryContainer1, // Use the updated style
+            buttonTextStyle:
+                CustomTextStyles.bodyLargeSFProTextLightblueA700,
+            onPressed: () {
+              onTapLogout(context); // Pass context to the method
+            })
+                        ])
         ]));
   }
 
@@ -62,10 +64,12 @@ class SettingsLogOutDialog extends StatelessWidget {
     );
   }
 
-  /// Navigates to the onboardingScreen when the action is triggered.
-  onTapLogout() {
-    Get.toNamed(
-      AppRoutes.onboardingScreen,
-    );
+  /// Logs out the user and exits the app.
+  onTapLogout(BuildContext context) async {
+    // Perform logout operations here, such as clearing user data or tokens
+    await controller.logoutUser(); // Assuming you have a logout method in your controller
+
+    // Exit the app
+    SystemNavigator.pop();
   }
 }

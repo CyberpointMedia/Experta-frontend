@@ -574,7 +574,7 @@ class _UserProfilePageState extends State<UserProfilePage>
     );
   }
 
- Widget _buildColumnreviews() {
+Widget _buildColumnreviews() {
   return Column(
     children: [
       Row(
@@ -616,7 +616,10 @@ class _UserProfilePageState extends State<UserProfilePage>
               return Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: Container(
-                  color: appTheme.gray100,
+                  decoration: BoxDecoration(
+                    color: appTheme.gray100,
+                    borderRadius: BorderRadius.circular(8), // Add radius of 8 here
+                  ),
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -699,7 +702,6 @@ class _UserProfilePageState extends State<UserProfilePage>
     ],
   );
 }
-
 Widget _buildRowaboutme({required String aboutMeText}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,

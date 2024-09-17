@@ -51,26 +51,20 @@ class VerifynumberController extends GetxController with CodeAutoFill {
     }
   }
 
-void resendOtp(String phoneNumber) async {
+void resendOtp() async {
+  final phoneNumber = phoneNumberController.text;
+  log(phoneNumber);
   if (phoneNumber.isNotEmpty) {
     try {
-      // Make the API call directly with phoneNumber as a string
       dynamic responseData = await _apiService.resendOtp(phoneNumber);
       print("Response JSON: $responseData");
 
-      if (responseData is Map<String, dynamic>) {
-        // Directly access the data from response
-        String status = responseData['status'];
-        var data = responseData['data'];
-        if (status == "success") {
-          // Update UI based on response
-          String otp = data['otp'];
-          print("OTP Resent Successfully: $otp");
-        } else {
-          print("OTP Resend failed");
-        }
+      if (responseData != null && responseData['status'] == "success") {
+        // Update UI based on response
+        String otp = responseData['otp'];
+        print("OTP Resent Successfully: $otp");
       } else {
-        print("Invalid response format");
+        print("OTP Resend failed");
       }
     } catch (e) {
       print("Exception occurred: $e");
@@ -79,6 +73,8 @@ void resendOtp(String phoneNumber) async {
     print("Phone number is empty");
   }
 }
+
+
 
 
 

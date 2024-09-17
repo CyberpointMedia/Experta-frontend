@@ -383,6 +383,7 @@ class SettingScreen extends GetWidget<SettingController> {
                     CustomElevatedButton(
                         height: 34.v,
                         width: 84.h,
+                        
                         text: "lbl_share_profile".tr,
                         margin: EdgeInsets.symmetric(vertical: 7.v),
                         buttonStyle: CustomButtonStyles.fillGreen,

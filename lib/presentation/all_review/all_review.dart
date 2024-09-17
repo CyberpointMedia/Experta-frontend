@@ -48,8 +48,7 @@ class AllReviewsPage extends StatelessWidget {
                   ),
                   title: const Text('All Reviews'),
                   centerTitle: true,
-                  elevation: 0,
-                  backgroundColor: Colors.transparent,
+                  backgroundColor: Colors.transparent, // No elevation
                   foregroundColor: Colors.black,
                 ),
                 Expanded(
@@ -57,28 +56,23 @@ class AllReviewsPage extends StatelessWidget {
                       ? Center(
                           child: Text(
                             "No reviews yet",
-                            style: theme.textTheme.bodyMedium?.copyWith(color: appTheme.gray900),
+                            style: theme.textTheme.bodyMedium
+                                ?.copyWith(color: appTheme.gray900),
                           ),
                         )
                       : ListView.builder(
-                          padding: const EdgeInsets.all(16.0),
+                          padding: const EdgeInsets.symmetric(horizontal: 16.0),
                           itemCount: reviews.length,
                           itemBuilder: (context, index) {
                             var review = reviews[index];
                             return Padding(
-                              padding: const EdgeInsets.only(bottom: 16.0),
+                              padding: const EdgeInsets.only(bottom: 10.0), // Reduced gap
                               child: Container(
                                 padding: const EdgeInsets.all(16.0),
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(12.0),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: Colors.black.withOpacity(0.1),
-                                      blurRadius: 10.0,
-                                      offset: const Offset(0, 5),
-                                    ),
-                                  ],
+                                  // Removed the boxShadow to eliminate elevation
                                 ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -93,7 +87,8 @@ class AllReviewsPage extends StatelessWidget {
                                         ),
                                         const SizedBox(width: 10),
                                         Column(
-                                          crossAxisAlignment: CrossAxisAlignment.start,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
                                           children: [
                                             Text(
                                               review.reviewer.toString(),
@@ -113,7 +108,8 @@ class AllReviewsPage extends StatelessWidget {
                                     Row(
                                       children: [
                                         RatingBar.builder(
-                                          initialRating: review.rating!.toDouble(),
+                                          initialRating:
+                                              review.rating!.toDouble(),
                                           minRating: 0,
                                           direction: Axis.horizontal,
                                           allowHalfRating: false,
@@ -121,8 +117,9 @@ class AllReviewsPage extends StatelessWidget {
                                           updateOnDrag: true,
                                           onRatingUpdate: (rating) {},
                                           itemBuilder: (context, _) {
-                                            return const Icon(
+                                            return Icon(
                                               Icons.star,
+                                              color: appTheme.deepYello, // Changed star color to primary color
                                             );
                                           },
                                         ),

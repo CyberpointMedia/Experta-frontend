@@ -136,7 +136,7 @@ class VerifynumberScreen extends GetWidget<VerifynumberController> {
                         style: CustomTextStyles.titleSmallGilroyff171717,
                         recognizer: TapGestureRecognizer()
                           ..onTap = () async {
-                            controller.resendOtp(controller.phoneNumberController.text); 
+                            controller.resendOtp(); 
 
                             // Optionally, show feedback to the user
                             Get.snackbar(

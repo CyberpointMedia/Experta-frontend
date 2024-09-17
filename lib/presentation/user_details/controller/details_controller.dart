@@ -128,7 +128,7 @@ class DetailsController extends GetxController {
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.red,  
         textColor: Colors.white,
         fontSize: 16.0,
       );

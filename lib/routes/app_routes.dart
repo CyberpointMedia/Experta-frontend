@@ -76,6 +76,8 @@ import 'package:experta/presentation/set_pricing/bindings/set_pricing_bindings.d
 import 'package:experta/presentation/set_pricing/set_pricing.dart';
 import 'package:experta/presentation/setting_screen/binding/setting_binding.dart';
 import 'package:experta/presentation/setting_screen/setting_screen.dart';
+import 'package:experta/presentation/share_profile/binding/share_profile_binding.dart';
+import 'package:experta/presentation/share_profile/shareprofile%20.dart';
 import 'package:experta/presentation/signin_page/signin_binding/signin_binding.dart';
 import 'package:experta/presentation/signin_page/signin_page.dart';
 import 'package:experta/presentation/splash_screen/binding/splash_binding.dart';
@@ -99,7 +101,6 @@ import 'package:experta/presentation/work_experience/work_experience.dart';
 import 'package:experta/widgets/custom_page_transition.dart';
 import 'package:get/get.dart';
 
-
 class AppRoutes {
   static const String onboardingScreen = '/onboarding_screen';
 
@@ -122,7 +123,7 @@ class AppRoutes {
 
   static const String dashboard = '/dashboard';
 
-  static const String messageChatWithUserDefaultScreen =
+  static const String chattingScreen =
       '/message_chat_with_user_default_screen';
 
   static const String feeds = '/feeds_active_screen';
@@ -204,10 +205,9 @@ class AppRoutes {
 
   static const String bookindeetail = "/booking_detail";
 
-static const String rating= "/give_rating";
+  static const String rating = "/give_rating";
 
-static const String reviewall= "/all_review";
-
+  static const String reviewall = "/all_review";
 
 static const String mybook = "/my_booking";
 
@@ -219,10 +219,12 @@ static const String RaiseTicket = "/support";
 
 static const String recordedsession= "/recorded_session";
 
+static const String qr = "/share_profile";
 
 
 
-static const String lottie = "/";
+
+  static const String lottie = "/";
 
   static List<GetPage> pages = [
     GetPage(
@@ -246,7 +248,6 @@ static const String lottie = "/";
         AboutUsBinding(),
       ],
     ),
-    
     GetPage(
       name: addbankaccount,
       page: () => const AddBankAccount(),
@@ -323,12 +324,12 @@ static const String lottie = "/";
         AccountSettingBinding(),
       ],
     ),
-     GetPage(
+    GetPage(
       name: bank,
       page: () => const VerifyAccount(),
       bindings: [
-         VerifyAccountBinding(),
-     ],
+        VerifyAccountBinding(),
+      ],
     ),
     GetPage(
       name: verifynumberScreen,
@@ -351,7 +352,6 @@ static const String lottie = "/";
         PaymentBinding(),
       ],
     ),
-    
     GetPage(
       name: wallet,
       page: () => const Wallet(),
@@ -359,7 +359,6 @@ static const String lottie = "/";
         WalletBinding(),
       ],
     ),
-     
     GetPage(
         name: notification,
         page: () => const NotificationScreen(),
@@ -388,8 +387,8 @@ static const String lottie = "/";
       DashboardBinding(),
     ]),
     GetPage(
-        name: messageChatWithUserDefaultScreen,
-        page: () => const MessageChatWithUserDefaultScreen(),
+        name: chattingScreen,
+        page: () => const ChattingPage(),
         bindings: [
           MessageChatWithUserDefaultBinding(),
         ]),
@@ -485,7 +484,6 @@ static const String lottie = "/";
         AboutUsBinding(),
       ],
     ),
-    
     GetPage(
       name: addbankaccount,
       page: () => const AddBankAccount(),
@@ -621,6 +619,13 @@ static const String lottie = "/";
         customTransition: CustomPageTransition(),
         bindings: [
           RecordedSessionBinding(),
+        ]),
+         GetPage(
+        name: qr,
+        page: () =>   ShareProfilePage(),
+        customTransition: CustomPageTransition(),
+        bindings: [
+          ShareProfileBinding(),
         ]),
   ];
 }

@@ -17,7 +17,8 @@ class SplashController extends GetxController {
       // Get.to(const Lottieiles());
       Get.offNamed(
        
-        AppRoutes.onboardingScreen,
+        // AppRoutes.qr,
+         AppRoutes.onboardingScreen,
         //AppRoutes.Bookappointment,
         //AppRoutes.sucessfuly,
         //AppRoutes.newpost,
