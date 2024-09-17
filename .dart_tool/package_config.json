@@ -140,6 +140,12 @@
       "languageVersion": "3.3"
     },
     {
+      "name": "emoji_picker_flutter",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/emoji_picker_flutter-2.1.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.17"
+    },
+    {
       "name": "equatable",
       "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/equatable-2.0.5",
       "packageUri": "lib/",
@@ -740,18 +746,6 @@
       "languageVersion": "2.12"
     },
     {
-      "name": "qr",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/qr-3.0.1",
-      "packageUri": "lib/",
-      "languageVersion": "2.16"
-    },
-    {
-      "name": "qr_flutter",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/qr_flutter-4.1.0",
-      "packageUri": "lib/",
-      "languageVersion": "2.19"
-    },
-    {
       "name": "readmore",
       "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/readmore-3.0.0",
       "packageUri": "lib/",
@@ -1058,7 +1052,7 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2024-09-17T05:41:31.059792Z",
+  "generated": "2024-09-17T06:55:17.708838Z",
   "generator": "pub",
   "generatorVersion": "3.3.0"
 }
