@@ -793,7 +793,7 @@ class _CommentInputFieldState extends State<CommentInputField> {
   @override
   void dispose() {
     _commentController.removeListener(_onTextChanged);
-    _commentController.dispose();
+    _commentController.clear();
     _isButtonEnabled.dispose();
     super.dispose();
   }

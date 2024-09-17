@@ -76,7 +76,7 @@ class NewPostController extends GetxController {
         var responseData = await response.stream.bytesToString();
         var jsonResponse = json.decode(responseData);
         Navigator.pop(context);
-        // Get.toNamed(AppRoutes.dashboard);
+        Get.toNamed(AppRoutes.dashboard);
         print('Post created successfully: $jsonResponse');
       } else {
         var responseData = await response.stream.bytesToString();

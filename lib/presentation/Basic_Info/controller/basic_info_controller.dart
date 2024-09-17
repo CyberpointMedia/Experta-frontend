@@ -155,9 +155,9 @@ class BasicProfileInfoController extends GetxController {
 
   @override
   void dispose() {
-    textField1.dispose();
-    textField2.dispose();
-    textField3.dispose();
+    textField1.clear();
+    textField2.clear();
+    textField3.clear();
     focus1.dispose();
     focus2.dispose();
     focus3.dispose();
