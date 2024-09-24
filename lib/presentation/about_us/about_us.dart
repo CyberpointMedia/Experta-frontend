@@ -66,7 +66,7 @@ class _AboutUsState extends State<AboutUs> {
     return Align(
         alignment: Alignment.bottomCenter,
         child: Padding(
-            padding: EdgeInsets.only(right: 16.h, left: 16, top: 50),
+            padding: EdgeInsets.only(right: 16.h, left: 16, top: 15),
             child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,7 +124,7 @@ class _AboutUsState extends State<AboutUs> {
                             Get.toNamed(AppRoutes.changeDateOfBirth);
                           },
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 3),
+                            padding: const EdgeInsets.only(top: 1),
                             child: Container(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 15.h, vertical: 16.v),
@@ -167,7 +167,7 @@ class _AboutUsState extends State<AboutUs> {
                         GestureDetector(
                         
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 3),
+                            padding: const EdgeInsets.only(top: 1),
                             child: Container(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 15.h, vertical: 16.v),

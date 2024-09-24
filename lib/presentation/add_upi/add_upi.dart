@@ -44,13 +44,14 @@ class _AddUpiState extends State<AddUpi> {
             ),
           ),
             Padding(
-              padding: const EdgeInsets.only(top: 30,left: 15,right: 15),
+              padding: const EdgeInsets.only(top: 15,left: 16,right: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
 
                 children: [
                   //Text("Change User Name",style: theme.textTheme.headlineSmall!.copyWith(color: Colors.black,fontWeight: FontWeight.bold),),
                   const Text("UPI ID"),
+                  SizedBox(height: 6,),
                   CustomTextFormField(
                     hintText: "Enter your UPI ID",
                      hintStyle: CustomTextStyles.titleMediumBluegray300,
@@ -60,7 +61,7 @@ class _AddUpiState extends State<AddUpi> {
                     autofocus: false,
                   ),
                    const Padding(
-                  padding: EdgeInsets.only(top: 5,bottom: 15),
+                  padding: EdgeInsets.only(top: 6,bottom: 15),
                   child: Text("Example: username@bankname",maxLines: 1),
                   ),
                   const Spacer(),

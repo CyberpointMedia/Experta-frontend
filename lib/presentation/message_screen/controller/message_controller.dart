@@ -13,6 +13,6 @@ class MessageController extends GetxController {
   @override
   void onClose() {
     super.onClose();
-    searchController.dispose();
+    searchController.clear();
   }
 }

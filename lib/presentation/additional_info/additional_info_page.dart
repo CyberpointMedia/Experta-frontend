@@ -20,18 +20,21 @@ class _AdditionalInfoPageState extends State<AdditionalInfoPage> {
       body: Stack(
         children: [
           _buildBackgroundBlur(),
-          CustomScrollView(
-            slivers: [
-              SliverToBoxAdapter(child: _buildAppBar()),
-              SliverToBoxAdapter(child: _buildInterestChips()),
-              const SliverToBoxAdapter(
-                child: Padding(
-                  padding: EdgeInsets.only(top: 20, bottom: 20),
-                  child: Divider(),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0), // Add padding here
+            child: CustomScrollView(
+              slivers: [
+                SliverToBoxAdapter(child: _buildAppBar()),
+                SliverToBoxAdapter(child: _buildInterestChips()),
+                const SliverToBoxAdapter(
+                  child: Padding(
+                    padding: EdgeInsets.only(top: 20, bottom: 20),
+                    child: Divider(),
+                  ),
                 ),
-              ),
-              SliverToBoxAdapter(child: _buildLanguageChips()),
-            ],
+                SliverToBoxAdapter(child: _buildLanguageChips()),
+              ],
+            ),
           ),
         ],
       ),
@@ -98,8 +101,8 @@ class _AdditionalInfoPageState extends State<AdditionalInfoPage> {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: Wrap(
-              spacing: 8.0,
-              runSpacing: 4.0,
+              spacing: 6.0,
+              runSpacing: 6.0,
               children: languages.map((language) {
                 return Chip(
                   label: Text(
@@ -110,6 +113,12 @@ class _AdditionalInfoPageState extends State<AdditionalInfoPage> {
                       fontSize: 16,
                     ),
                   ),
+                  deleteIcon: const Icon(Icons.close),
+                  onDeleted: () {
+                    setState(() {
+                      controller.languageData.value.data?.languages.remove(language);
+                    });
+                  },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20.0),
                     side: const BorderSide(color: Colors.transparent),
@@ -132,7 +141,7 @@ class _AdditionalInfoPageState extends State<AdditionalInfoPage> {
           Get.toNamed(AppRoutes.editInterest, arguments: interests);
           Get.delete<AdditionalInfoController>();
         }),
-        const SizedBox(height: 10),
+        const SizedBox(height: 5),
         Obx(() {
           if (controller.isLoading.value) {
             return _buildShimmerEffect();
@@ -147,8 +156,8 @@ class _AdditionalInfoPageState extends State<AdditionalInfoPage> {
           return Padding(
             padding: const EdgeInsets.all(8.0),
             child: Wrap(
-              spacing: 8.0,
-              runSpacing: 4.0,
+              spacing: 6.0,
+              runSpacing: 6.0,
               children: interests.map((interest) {
                 return Chip(
                   label: Text(
@@ -159,6 +168,12 @@ class _AdditionalInfoPageState extends State<AdditionalInfoPage> {
                       fontSize: 16,
                     ),
                   ),
+                  deleteIcon: const Icon(Icons.close),
+                  onDeleted: () {
+                    setState(() {
+                      controller.interestData.value.interests.remove(interest);
+                    });
+                  },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(20.0),
                     side: const BorderSide(color: Colors.transparent),
@@ -177,7 +192,7 @@ class _AdditionalInfoPageState extends State<AdditionalInfoPage> {
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Padding(
-          padding: const EdgeInsets.only(left: 10),
+          padding: const EdgeInsets.only(left: 16),
           child: Text(
             title,
             style: CustomTextStyles.labelMediumBlack900,
@@ -185,12 +200,12 @@ class _AdditionalInfoPageState extends State<AdditionalInfoPage> {
           ),
         ),
         Padding(
-          padding: const EdgeInsets.only(right: 10),
+          padding: const EdgeInsets.only(right: 16),
           child: TextButton(
             onPressed: onEdit,
             child: Text(
               "Edit",
-              style: theme.textTheme.bodyLarge!.copyWith(color: Colors.red),
+              style: theme.textTheme.bodyLarge!.copyWith(color: Colors.orange[900]),
               textAlign: TextAlign.start,
             ),
           ),
@@ -206,8 +221,8 @@ class _AdditionalInfoPageState extends State<AdditionalInfoPage> {
         baseColor: Colors.grey[300]!,
         highlightColor: Colors.grey[100]!,
         child: Wrap(
-          spacing: 8.0,
-          runSpacing: 4.0,
+          spacing: 6.0,
+          runSpacing: 6.0,
           children: List.generate(5, (index) {
             return Chip(
               label: Container(

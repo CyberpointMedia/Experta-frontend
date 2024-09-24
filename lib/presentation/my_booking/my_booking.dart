@@ -1,4 +1,6 @@
-import 'package:flutter/material.dart';
+import 'dart:ui';
+
+import 'package:experta/core/app_export.dart';
 import 'package:intl/intl.dart';
 
 // Define the Booking class
@@ -25,7 +27,15 @@ class Booking {
 }
 
 // Main booking page widget
-class MyBookingPage extends StatelessWidget {
+class MyBookingPage extends StatefulWidget {
+
+  const MyBookingPage({super.key});
+
+  @override
+  State<MyBookingPage> createState() => _MyBookingPageState();
+}
+
+class _MyBookingPageState extends State<MyBookingPage> {
   final List<Booking> bookings = [
     Booking(
       name: 'Naveen Verma',
@@ -49,93 +59,158 @@ class MyBookingPage extends StatelessWidget {
     ),
   ];
 
-  MyBookingPage({super.key});
+  // @override
+  bool isPhoneSelected = true;
 
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2, // Number of tabs
-      initialIndex: 0, // Set the default tab index to 0 (Upcoming)
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text('My Booking'),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          actions: [
-            IconButton(
-              icon: const Icon(Icons.notifications),
-              onPressed: () {
-                // Handle notification action
-              },
+  return Scaffold(
+    resizeToAvoidBottomInset: true,
+    body: Stack(
+      children: [
+        Positioned(
+          left: 270,
+          top: 50,
+          child: ImageFiltered(
+            imageFilter: ImageFilter.blur(
+              sigmaX: 60,
+              sigmaY: 60,
             ),
-          ],
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(48.0),
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 16.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(40.0), // Circular tabs
-                color: Colors.grey[200],
-              ),
-              child: TabBar(
-                indicator: BoxDecoration(
-                  borderRadius: BorderRadius.circular(40.0), // Circular indicator
-                  color: Colors.black,
+            child: Align(
+              child: SizedBox(
+                width: 252,
+                height: 252,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(126),
+                    color: appTheme.deepOrangeA20.withOpacity(0.35),
+                  ),
                 ),
-                indicatorSize: TabBarIndicatorSize.tab,
-                labelColor: Colors.white,
-                unselectedLabelColor: Colors.black,
-                tabs: const [
-                  Tab(text: 'Upcoming'),
-                  Tab(text: 'Past'),
-                ],
-                indicatorPadding: EdgeInsets.zero, // Remove padding if needed
-                indicatorColor: Colors.transparent, // Remove the default underline
-                unselectedLabelStyle: const TextStyle(color: Colors.black), // Color for unselected tabs
               ),
             ),
           ),
         ),
-        body: TabBarView(
-          children: [
-            // Upcoming bookings tab
-            Container(
-              padding: const EdgeInsets.all(8.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8.0),
-                color: Colors.grey[200],
-              ),
-              child: BookingList(
-                bookings: bookings, // Show all bookings in Upcoming tab
-                isUpcomingTab: true, // Indicate that this is the Upcoming tab
-              ),
-            ),
-            // Past bookings tab
-            Container(
-              padding: const EdgeInsets.all(8.0),
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8.0),
-                color: Colors.grey[200],
-              ),
-              child: BookingList(
-                bookings: bookings.where((booking) {
-                  // Filter for past bookings
-                  return booking.appointmentDate.isBefore(DateTime.now());
-                }).toList(),
-                isUpcomingTab: false, // Indicate that this is the Past tab
-              ),
-            ),
-          ],
-        ),
+        SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              CustomAppBar(
+      height: 40.h,
+      leadingWidth: 40.h,
+      leading: AppbarLeadingImage(
+        imagePath: ImageConstant.imgArrowLeftOnerrorcontainer,
+        margin: EdgeInsets.only(left: 16.h),
+        onTap: () {
+          onTapArrowLeft();
+        },
       ),
-    );
-  }
+      centerTitle: true,
+      title: AppbarSubtitleSix(text: "My Bookings"),
+    ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 10, 16, 25),
+                child: Container(
+                  // width: 138.h,
+                  height: 48.v,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: const Color(0xffe4e4e4)),
+                    color: const Color(0xffffffff),
+                    borderRadius: BorderRadius.circular(30),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              isPhoneSelected = true;
+                            });
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: isPhoneSelected
+                                  ? const Color(0xff171717)
+                                  : Colors.transparent,
+                              borderRadius: BorderRadius.circular(30),
+                            ),
+                            child: Center(
+                              child: Text(
+                                'Upcomming',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  height: 1.5,
+                                  color: isPhoneSelected
+                                      ? const Color(0xffffffff)
+                                      : const Color(0xff000000), // Dark black color
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              isPhoneSelected = false;
+                            });
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: !isPhoneSelected
+                                  ? const Color(0xff171717)
+                                  : Colors.transparent,
+                              borderRadius: BorderRadius.circular(100),
+                            ),
+                            child: Center(
+                              child: Text(
+                                'Past',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  height: 1.5,
+                                  color: !isPhoneSelected
+                                      ? const Color(0xffffffff)
+                                      : const Color(0xff000000), // Dark black color
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Visibility(
+                visible: isPhoneSelected,
+                child: Container(
+                  color: Colors.transparent,
+                ),
+              ),
+              Visibility(
+                visible: !isPhoneSelected,
+                child: Container(
+                  color: Colors.transparent,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    ),
+  );
+}
 }
 
+ void onTapArrowLeft() {
+    Get.back();
+  }
 // Widget to display a list of bookings
 class BookingList extends StatelessWidget {
   final List<Booking> bookings;
@@ -328,8 +403,3 @@ class BookingCard extends StatelessWidget {
   }
 }
 
-void main() {
-  runApp(MaterialApp(
-    home: MyBookingPage(),
-  ));
-}

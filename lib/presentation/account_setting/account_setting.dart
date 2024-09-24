@@ -12,7 +12,7 @@ class AccountSettings extends StatefulWidget {
 
 class _AccountSettingsState extends State<AccountSettings> {
   void navigateToSettingsDetail(String keyword) {
-    Get.to(()=>DynamicSettingsPage(), arguments: {'keyword': keyword});
+    Get.to(() => DynamicSettingsPage(), arguments: {'keyword': keyword});
   }
 
   @override
@@ -57,7 +57,7 @@ class _AccountSettingsState extends State<AccountSettings> {
       leadingWidth: 40.h,
       leading: AppbarLeadingImage(
         imagePath: ImageConstant.imgArrowLeftOnerrorcontainer,
-        margin: EdgeInsets.only(left: 16.h),
+        margin: EdgeInsets.only(left: 16.h,),
         onTap: () {
           onTapArrowLeft();
         },
@@ -71,7 +71,7 @@ class _AccountSettingsState extends State<AccountSettings> {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Padding(
-        padding: EdgeInsets.only(right: 16.h, left: 16, top: 50),
+        padding: EdgeInsets.only(right: 16.h, left: 16, top: 7), // Adjusted top padding to 7
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -124,7 +124,7 @@ class _AccountSettingsState extends State<AccountSettings> {
                     navigateToSettingsDetail('Birthday');
                   },
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 3),
+                    padding: const EdgeInsets.only(top: 1),
                     child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
                       decoration: AppDecoration.fillOnPrimaryContainer,
@@ -158,10 +158,10 @@ class _AccountSettingsState extends State<AccountSettings> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    navigateToSettingsDetail('Gender');
-                  },
+                  Get.toNamed(AppRoutes.genderchange); // Navigate to raise ticket
+                },
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 3),
+                    padding: const EdgeInsets.only(top: 1),
                     child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
                       decoration: AppDecoration.fillOnPrimaryContainer,
@@ -198,7 +198,7 @@ class _AccountSettingsState extends State<AccountSettings> {
                     navigateToSettingsDetail('Change Email');
                   },
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 3),
+                    padding: const EdgeInsets.only(top: 1),
                     child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
                       decoration: AppDecoration.fillOnPrimaryContainer,
@@ -235,7 +235,7 @@ class _AccountSettingsState extends State<AccountSettings> {
                     navigateToSettingsDetail('Phone Number');
                   },
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 3),
+                    padding: const EdgeInsets.only(top: 1),
                     child: Container(
                       padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
                       decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
@@ -281,4 +281,3 @@ class _AccountSettingsState extends State<AccountSettings> {
     Get.back();
   }
 }
-

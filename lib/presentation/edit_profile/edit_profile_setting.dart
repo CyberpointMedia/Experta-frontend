@@ -71,7 +71,7 @@ class _EditProfileSettingsState extends State<EditProfileSettings> {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Padding(
-        padding: EdgeInsets.symmetric(horizontal: 16.h, vertical: 50),
+         padding: EdgeInsets.only(right: 16.h, left: 16, top: 7),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -147,7 +147,7 @@ class _EditProfileSettingsState extends State<EditProfileSettings> {
     return GestureDetector(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.only(top: 3),
+        padding: const EdgeInsets.only(top: 1),
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
           decoration: decoration,

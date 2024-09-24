@@ -580,6 +580,7 @@ final Map<String, String> enUs = {
   "lbl_comedians": "Comedians",
   "lbl_congratulations": "Congratulations",
   "lbl_continue": "Continue to Sign In",
+  "lblcontinue": "Continue",
   "lbl_creators": "Creators",
   "lbl_cricket": "🏏 Cricket",
   "lbl_date_of_birth": "Date of Birth",

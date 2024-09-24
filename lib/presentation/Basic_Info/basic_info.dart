@@ -177,7 +177,13 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
         ),
         TextButton(
           onPressed: _showImagePickerOptions,
-          child: const Text("Change Profile Picture"),
+          child:  const Text(
+                    "Change Profile Picture",
+                    style: TextStyle(
+                      fontSize: 14,
+                      color: Colors.grey,
+                    ),
+                  ),
         ),
       ],
     );

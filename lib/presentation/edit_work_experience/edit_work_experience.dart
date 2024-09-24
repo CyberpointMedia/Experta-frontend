@@ -75,7 +75,7 @@ class _EditWorkExperiencePageState extends State<EditWorkExperiencePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 10, bottom: 5),
+              padding: const EdgeInsets.only(top: 10, bottom: 6),
               child: RichText(
                 text: TextSpan(
                   children: [
@@ -103,7 +103,7 @@ class _EditWorkExperiencePageState extends State<EditWorkExperiencePage> {
               },
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 15, bottom: 5),
+              padding: const EdgeInsets.only(top: 15, bottom: 6),
               child: RichText(
                 text: TextSpan(
                   children: [
@@ -131,7 +131,7 @@ class _EditWorkExperiencePageState extends State<EditWorkExperiencePage> {
               },
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 15, bottom: 5),
+              padding: const EdgeInsets.only(top: 15, bottom: 6),
               child: RichText(
                 text: TextSpan(
                   children: [
@@ -192,7 +192,7 @@ class _EditWorkExperiencePageState extends State<EditWorkExperiencePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(top: 15, bottom: 5),
+                      padding: const EdgeInsets.only(top: 15, bottom: 6),
                       child: RichText(
                         text: TextSpan(
                           children: [

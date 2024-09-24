@@ -65,7 +65,7 @@ class _PaymentState extends State<Payment> {
     return Align(
         alignment: Alignment.bottomCenter,
         child: Padding(
-            padding: EdgeInsets.only(right: 16.h, left: 16, top: 50),
+            padding: EdgeInsets.only(right: 16.h, left: 16, top: 7),
             child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -123,7 +123,7 @@ class _PaymentState extends State<Payment> {
                             Get.toNamed(AppRoutes.changeDateOfBirth);
                           },
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 3),
+                            padding: const EdgeInsets.only(top: 1),
                             child: Container(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 15.h, vertical: 16.v),
@@ -171,7 +171,7 @@ class _PaymentState extends State<Payment> {
                           },
                         child:Padding(
                       
-                          padding: const EdgeInsets.only(top: 3),
+                          padding: const EdgeInsets.only(top: 1),
                           child: Container(
                               padding: EdgeInsets.symmetric(
                                   horizontal: 15.h, vertical: 16.v),

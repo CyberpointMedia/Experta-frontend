@@ -28,9 +28,9 @@ class _PanDetailState extends State<PanDetail> {
   @override
   void dispose() {
     // Dispose controllers and focus nodes when the widget is disposed
-    fullNameController.dispose();
-    panNumberController.dispose();
-    dateOfBirthController.dispose();
+    fullNameController.clear();
+    panNumberController.clear();
+    dateOfBirthController.clear();
     fullNameFocusNode.dispose();
     panNumberFocusNode.dispose();
     dateOfBirthFocusNode.dispose();

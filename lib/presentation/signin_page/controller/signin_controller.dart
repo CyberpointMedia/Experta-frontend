@@ -18,6 +18,7 @@ class SigninController extends GetxController {
   var passwordController = TextEditingController();
   var isEmailValid = false.obs;
   var isPasswordValid = false.obs;
+  var isTextValid = false.obs;
   var otpController = TextEditingController();
   var isShowPassword = false.obs;
   final FocusNode emailFocusNode = FocusNode();
@@ -33,13 +34,14 @@ class SigninController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    nameController.addListener(_validateName);
     emailController.addListener(_validateEmail);
     passwordController.addListener(_validatePassword);
     phoneNumberController.addListener(_validatePhoneNumber);
   }
 
   void _validatePhoneNumber() {
-    if (phoneNumberController.text.length >= 10) {
+    if (phoneNumberController.text.length == 10) {
       isPhoneNumberValid.value = true;
     } else {
       isPhoneNumberValid.value = false;
@@ -50,12 +52,17 @@ class SigninController extends GetxController {
     isEmailValid.value = isValidEmail(emailController.text, isRequired: true);
   }
 
+
+ void _validateName() {
+  isTextValid.value = isText(nameController.text, isRequired: true);
+}
   void _validatePassword() {
     isPasswordValid.value =
         isValidPassword(passwordController.text, isRequired: true);
   }
 
   void loginUser(context) async {
+    isLoading(true); // Start loading
     LoginRequestModel requestModel = LoginRequestModel(
       phoneNo: phoneNumberController.text,
     );
@@ -77,30 +84,11 @@ class SigninController extends GetxController {
       }
     } catch (e) {
       print("Exception occurred: $e");
+    } finally {
+      isLoading(false); // Stop loading
     }
   }
 
-  // void registerUser() async {
-  //   RegisterRequestModel requestModel = RegisterRequestModel(
-  //     email: emailController.text,
-  //     firstName: nameController.text,
-  //     lastName: passwordController.text,
-  //     phoneNo: phoneNumberController.text,
-  //   );
-
-  //   try {
-  //     RegisterResponseModel? response =
-  //         await _apiService.registerUser(requestModel);
-
-  //     if (response != null && response.status == "success") {
-  //       Get.toNamed(AppRoutes.verifynumberScreen);
-  //     } else {
-  //       print("Registration failed");
-  //     }
-  //   } catch (e) {
-  //     print("Exception occurred: $e");
-  //   }
-  // }
   void registerUser(context) async {
     isLoading(true);
     try {
@@ -115,15 +103,18 @@ class SigninController extends GetxController {
       log('Response received: ${response.toString()}');
 
       if (response is RegisterResponseSuccess) {
+        
         log('Registration successful: ${response.data.toString()}');
         CustomToast().showToast(
           context: context,
           message: 'Otp Sent Sucessfully',
           isSuccess: true,
         );
+         log('hi the otp is ${response.data.otp}');
+        var otp = response.data.otp;
         Get.toNamed(
           AppRoutes.verifynumberScreen,
-          arguments: phoneNumberController,
+           arguments: [phoneNumberController, otp],
         );
       } else if (response is RegisterResponseError) {
         log("Registration failed: ${response.error.errorMessage}");
@@ -157,9 +148,9 @@ class SigninController extends GetxController {
 
   @override
   void onClose() {
-    emailController.dispose();
-    passwordController.dispose();
-    phoneNumberController.dispose();
+    emailController.clear();
+    passwordController.clear();
+    phoneNumberController.clear();
     emailFocusNode.dispose();
     passwordFocusNode.dispose();
     super.onClose();

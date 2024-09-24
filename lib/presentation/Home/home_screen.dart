@@ -19,8 +19,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   HomeController controller = Get.put(HomeController());
-    final DashboardController dashboardController =
-        Get.find<DashboardController>();
+  final DashboardController dashboardController =
+      Get.find<DashboardController>();
 
   @override
   Widget build(BuildContext context) {
@@ -753,8 +753,9 @@ class UserProfileItemWidget extends StatelessWidget {
                         SizedBox(
                             height: 14.v,
                             width: 14.adaptSize,
-                            child: SvgPicture.asset(
-                                "assets/images/img_layer_1.svg")),
+                            child: CustomImageView(imagePath: ImageConstant.imgLayer1,),
+                           
+                                ),
                         Padding(
                           padding: const EdgeInsets.only(left: 4),
                           child: RichText(

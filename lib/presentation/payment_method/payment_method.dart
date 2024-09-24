@@ -65,7 +65,7 @@ class _PaymentMethodState extends State<PaymentMethod> {
     return Align(
         alignment: Alignment.bottomCenter,
         child: Padding(
-            padding: EdgeInsets.only(right: 16.h, left: 16, top: 50),
+            padding: EdgeInsets.only(right: 16, left: 16, top: 15),
             child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,

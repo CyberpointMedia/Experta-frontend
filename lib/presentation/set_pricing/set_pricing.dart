@@ -26,7 +26,7 @@ class _SetPricingState extends State<SetPricing> {
               _buildFormData(),
               const Spacer(),
               Padding(
-                padding: const EdgeInsets.only(bottom: 20, left: 15, right: 15),
+                padding: const EdgeInsets.only(bottom: 20, left: 16, right: 16),
                 child: CustomElevatedButton(
                   text: "Save",
                   onPressed: () {
@@ -104,12 +104,14 @@ class _SetPricingState extends State<SetPricing> {
                   children: <TextSpan>[
                     TextSpan(
                       text: 'Audio Call ',
-                      style: CustomTextStyles.bodySmallSFProTextGray900,
+                      style: CustomTextStyles.bodySmallSFProTextGray900
+                          .copyWith(fontWeight: FontWeight.bold, color:Colors.grey),
                     ),
                     TextSpan(
                       text: '(For 10 minute) ',
                       style: CustomTextStyles.bodySmallSFProTextGray900
-                          .copyWith(fontWeight: FontWeight.bold),
+                          .copyWith(fontWeight: FontWeight.bold, color:Colors.grey),
+                          
                     ),
                     TextSpan(
                       text: '*',
@@ -120,15 +122,16 @@ class _SetPricingState extends State<SetPricing> {
                 ),
               )),
           CustomTextFormField(
+            prefix: const Icon(Icons.currency_rupee),
             width: MediaQuery.of(context).size.width,
             controller: controller.textField1,
             focusNode: controller.focus1,
-            hintText: "₹ Enter your price".tr,
+            hintText: "Enter your price".tr,
             hintStyle: CustomTextStyles.titleMediumBluegray300,
             textInputType: TextInputType.number,
           ),
           Padding(
-              padding: const EdgeInsets.only(top: 15, bottom: 5),
+              padding: const EdgeInsets.only(top: 15, bottom: 6),
               child: RichText(
                 textAlign: TextAlign.start,
                 text: TextSpan(
@@ -136,26 +139,28 @@ class _SetPricingState extends State<SetPricing> {
                   children: <TextSpan>[
                     TextSpan(
                       text: 'Video Call ',
-                      style: CustomTextStyles.bodySmallSFProTextGray900,
+                      style: CustomTextStyles.bodySmallSFProTextGray900
+                          .copyWith(fontWeight: FontWeight.bold, color:Colors.grey),
                     ),
                     TextSpan(
                       text: '(For 10 minute) ',
                       style: CustomTextStyles.bodySmallSFProTextGray900
-                          .copyWith(fontWeight: FontWeight.bold),
+                          .copyWith(fontWeight: FontWeight.bold, color:Colors.grey),
                     ),
                     TextSpan(
                       text: '*',
                       style: CustomTextStyles.labelMediumGray900
                           .copyWith(color: Colors.red),
-                    ),
+                    ),   
                   ],
                 ),
               )),
           CustomTextFormField(
+            prefix: const Icon(Icons.currency_rupee),
             width: MediaQuery.of(context).size.width,
             controller: controller.textField2,
             focusNode: controller.focus2,
-            hintText: "₹ Enter your price".tr,
+            hintText: " Enter your price".tr,
             hintStyle: CustomTextStyles.titleMediumBluegray300,
             textInputType: TextInputType.number,
           ),
@@ -201,7 +206,7 @@ class _SetPricingState extends State<SetPricing> {
                             width: MediaQuery.of(context).size.width,
                             controller: textController,
                             focusNode: controller.focus3,
-                            hintText: "₹ Enter your price".tr,
+                            hintText: " Enter your price".tr,
                             hintStyle: CustomTextStyles.titleMediumBluegray300,
                             textInputType: TextInputType.number,
                           ),

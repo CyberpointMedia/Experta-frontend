@@ -82,7 +82,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
               color: Colors.white, // Background color remains white
               borderRadius: BorderRadius.circular(30),
               border: Border.all(
-                color: isSelected ? Colors.amber : Colors.grey, // Golden border if selected
+                color: isSelected ? Colors.amber : Colors.grey.shade300, // Light grey border
                 width: isSelected ? 2 : 1, // Thicker border if selected
               ),
             ),
@@ -186,6 +186,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
               ),
             ),
             const SizedBox(height: 20),
+            const SizedBox(height: 20), // Adding space between Call Duration and Available Slot
             const Align(
               alignment: Alignment.centerLeft,
               child: Text(
@@ -216,16 +217,18 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
                         color: Colors.white, // Always white background
                         borderRadius: BorderRadius.circular(10),
                         border: Border.all(
-                          color: isSelected ? Colors.amber : Colors.grey, // Golden border if selected
+                          color: isSelected ? Colors.yellow : Colors.grey.shade300, // Button color if selected
                           width: isSelected ? 2 : 1, // Thicker border if selected
                         ),
                       ),
                       padding: const EdgeInsets.all(16),
-                      child: Text(
-                        slot,
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: isSelected ? Colors.black : Colors.grey,
+                      child: Center( // Center the timing text
+                        child: Text(
+                          slot,
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: isSelected ? Colors.black : Colors.grey,
+                          ),
                         ),
                       ),
                     ),
@@ -234,24 +237,35 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
               ),
             ),
             const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
+  //           ElevatedButton(
+  //             onPressed: () {
+  //               Get.toNamed(AppRoutes.bookindeetail, arguments: {
+  //                 'selectedDate': selectedDate,
+  //                 'selectedDuration': selectedDuration,
+  //                 'selectedSlot': selectedSlot,
+  //               });
+  //             },
+              
+  // style: ElevatedButton.styleFrom(
+  //   foregroundColor: Colors.black,
+  //   backgroundColor: Colors.yellow,
+  //   padding: const EdgeInsets.symmetric(horizontal: 140, vertical: 35),
+  //   shape: RoundedRectangleBorder(
+  //     borderRadius: BorderRadius.circular(40),
+  //   ),
+  // ),
+  
+  
+  // child: const Text('Continue'),
+// ),
+CustomElevatedButton(text: "lblcontinue".tr, onPressed: () {
                 Get.toNamed(AppRoutes.bookindeetail, arguments: {
                   'selectedDate': selectedDate,
                   'selectedDuration': selectedDuration,
                   'selectedSlot': selectedSlot,
                 });
-              },
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.black,
-                backgroundColor: Colors.yellow,
-                padding: const EdgeInsets.symmetric(horizontal: 140, vertical: 35),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(40),
-                ),
-              ),
-              child: const Text('Continue'),
-            ),
+              },)
+
           ],
         ),
       ),

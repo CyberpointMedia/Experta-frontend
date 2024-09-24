@@ -25,9 +25,11 @@ class BasicProfileInfoController extends GetxController {
   TextEditingController textField1 = TextEditingController();
   TextEditingController textField2 = TextEditingController();
   TextEditingController textField3 = TextEditingController();
+  TextEditingController textField4 = TextEditingController();
   FocusNode focus1 = FocusNode();
   FocusNode focus2 = FocusNode();
   FocusNode focus3 = FocusNode();
+   FocusNode focus4 = FocusNode();
 
   RxList<String> socialLinks = <String>[].obs;
   Rx<File?> imageFile = Rx<File?>(null);
@@ -127,8 +129,9 @@ class BasicProfileInfoController extends GetxController {
       final data = {
         "firstName": textField1.text.split(' ').first.trim(),
         "lastName": textField1.text.split(' ').last.trim(),
-        "displayName": textField2.text.trim(),
+        "displayName": textField4.text.trim(),
         "bio": textField3.text.trim(),
+        "Social Links": textField2.text.trim(),
         "facebook": socialLinks.firstWhere(
             (link) => link.contains('facebook.com'),
             orElse: () => ''),
@@ -155,12 +158,14 @@ class BasicProfileInfoController extends GetxController {
 
   @override
   void dispose() {
-    textField1.dispose();
-    textField2.dispose();
-    textField3.dispose();
+    textField1.clear();
+    textField2.clear();
+    textField3.clear();
+    textField4.clear();
     focus1.dispose();
     focus2.dispose();
     focus3.dispose();
+     focus4.dispose();
     super.dispose();
   }
 }

@@ -38,7 +38,7 @@ class CustomButtonStyles {
         backgroundColor: appTheme.yellow900,
         shape: RoundedRectangleBorder(
           //yellow900
-          borderRadius: BorderRadius.circular(17.h),
+          borderRadius: BorderRadius.circular(28.h),
         ),
       );
   static ButtonStyle get fillOnError => ElevatedButton.styleFrom(

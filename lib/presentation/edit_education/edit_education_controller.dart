@@ -59,10 +59,11 @@ class EditEducationController extends GetxController {
 
   @override
   void dispose() {
-    degreeController.dispose();
-    schoolCollegeController.dispose();
-    startDateController.dispose();
-    endDateController.dispose();
+    degreeController.clear();
+    schoolCollegeController.clear();
+    //  schoolCollegeController2.clear();
+    startDateController.clear();
+    endDateController.clear();
     super.dispose();
   }
 }

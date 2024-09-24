@@ -218,80 +218,109 @@ class _UserDetailsPageState extends State<UserDetailsPage>
     );
   }
 
-  void _showBottomSheet2(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20),
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: Colors.green.shade100,
-                    child: const Icon(Icons.call, color: Colors.green),
-                  ),
-                  title: const Text('Audio Call'),
-                  subtitle: const Text('Chat me up, share photos.'),
-                  trailing: const Text(
-                    '1800/min',
-                    style: TextStyle(
-                      color: Colors.amber,
-                    ),
-                  ),
-                  onTap: () {
-                    // Handle audio call action
-                    Navigator.pop(context);
-                  },
+void _showBottomSheet2(BuildContext context) {
+  showModalBottomSheet(
+    context: context,
+    builder: (context) {
+      return Padding(
+        padding: const EdgeInsets.only(left: 20, right: 20),
+        child: Container(
+          padding: const EdgeInsets.symmetric(vertical: 16.0),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: <Widget>[
+              ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: Colors.green.shade100,
+                  child: const Icon(Icons.call, color: Colors.green),
                 ),
-                const Divider(),
-                ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: Colors.red.shade100,
-                    child: const Icon(Icons.videocam, color: Colors.red),
-                  ),
-                  title: const Text('Video Call'),
-                  subtitle: const Text('Call your doctor directly.'),
-                  trailing: const Text(
-                    '2800/min',
-                    style: TextStyle(
-                      color: Colors.amber,
+                title: const Text('Audio Call'),
+                subtitle: const Text('Chat me up, share photos.'),
+                
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      height: 14.0,
+                      width: 14.0,
+                      child: CustomImageView(imagePath: ImageConstant.imgLayer1),
                     ),
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
+                    const SizedBox(width: 8.0), // Add some spacing between the image and text
+                    const Text(
+                      '1800/min',
+                      style: TextStyle(
+                        color: Colors.black,
+                      ),
+                    ),
+                  ],
                 ),
-                const Divider(),
-                ListTile(
+                onTap: () {
+                  // Handle audio call action
+                  Navigator.pop(context);
+                },
+              ),
+              const Divider(),
+              ListTile(
+                leading: CircleAvatar(
+                  backgroundColor: Colors.red.shade100,
+                  child: const Icon(Icons.videocam, color: Colors.red),
+                ),
+                title: const Text('Video Call'),
+                subtitle: const Text('Call your doctor directly.'),
+                trailing: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    SizedBox(
+                      height: 14.0,
+                      width: 14.0,
+                      child: CustomImageView(imagePath: ImageConstant.imgLayer1),
+                    ),
+                    const SizedBox(width: 8.0), 
+                     Padding(
+                          padding: const EdgeInsets.only(left: 4),
+                          child: RichText(
+                            text: TextSpan(
+                              children: [
+                                TextSpan(
+                                    text: "${controller.userData.value.data?.pricing?.videoCallPrice ?? 0.0}",
+                                    style: theme.textTheme.labelLarge!),
+                                TextSpan(
+                                    text: "/min",
+                                    style: theme.textTheme.labelLarge?.copyWith(
+                                        fontWeight: FontWeight.w400)),
+                              ],
+                            ),
+                            textAlign: TextAlign.left,
+                          ),
+                        ),
+                  ],
+                ),
+                onTap: () {
+                  Navigator.pop(context);
+                },
+              ),
+              const Divider(),
+              GestureDetector(
+                onTap: () {
+                  Get.toNamed(AppRoutes.Bookappointment);
+                },
+                child: ListTile(
                   leading: CircleAvatar(
                     backgroundColor: Colors.yellow.shade100,
-                    child:
-                        const Icon(Icons.calendar_today, color: Colors.yellow),
+                    child: const Icon(Icons.calendar_today, color: Colors.yellow),
                   ),
                   title: const Text('Schedule Call'),
                   subtitle: const Text('Chat me up, share photos.'),
-                  trailing: const Text(
-                    '1800/min',
-                    style: TextStyle(
-                      color: Colors.amber,
-                    ),
-                  ),
-                  onTap: () {
-                    // Handle schedule call action
-                    Navigator.pop(context);
-                  },
+                 
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        );
-      },
-    );
-  }
+        ),
+      );
+    },
+  );
+}
 
   @override
   Widget build(BuildContext context) {

@@ -86,7 +86,7 @@ class _EditInterestPageState extends State<EditInterestPage> {
 
   Widget _bodyWidget(BuildContext context, InterestController controller) {
     return Padding(
-      padding: const EdgeInsets.only(left: 20, top: 20, right: 20),
+      padding: const EdgeInsets.only(left: 16, top: 20, right: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -100,8 +100,10 @@ class _EditInterestPageState extends State<EditInterestPage> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              "Pick your favorite interests to find groups and events related to them",
+                            "Pick your favorite interests to find groups and events related to them",
               style: CustomTextStyles.bodyMediumLight,
+              // "Pick your favorite interests to find groups and events related to them",
+              // style: CustomTextStyles.bodyMediumLight,
             ),
           ),
           CustomSearchView(

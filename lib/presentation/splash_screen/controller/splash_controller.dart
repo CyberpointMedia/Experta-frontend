@@ -18,11 +18,13 @@ class SplashController extends GetxController {
       Get.offNamed(
        
         // AppRoutes.qr,
-         AppRoutes.onboardingScreen,
-        //AppRoutes.Bookappointment,
-        //AppRoutes.sucessfuly,
+           AppRoutes.onboardingScreen,
+        // AppRoutes.Bookappointment,
+        // AppRoutes.sUcessfuly,
         //AppRoutes.newpost,
         //AppRoutes.rating,
+        //  AppRoutes.genderchange,
+        // AppRoutes.bbb,
       );
     });
   }

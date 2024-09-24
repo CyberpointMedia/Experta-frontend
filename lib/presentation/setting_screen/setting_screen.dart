@@ -12,34 +12,122 @@ class SettingScreen extends GetWidget<SettingController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SizedBox(
-            width: SizeUtils.width,
-            child: SingleChildScrollView(
-                child: Padding(
-                    padding: EdgeInsets.only(bottom: 5.v),
-                    child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          SizedBox(height: 12.v),
-                          _buildAppBar(),
-                          _buildShareProfile(),
-                          SizedBox(height: 16.v),
-                          Padding(
-                              padding: EdgeInsets.only(left: 16.h),
-                              child: Text("lbl_basic_settings".tr,
-                                  style: CustomTextStyles
-                                      .titleMediumBluegray30018)),
-                          SizedBox(height: 12.v),
-                          _buildShield1(),
-                          SizedBox(height: 16.v),
-                          Padding(
-                              padding: EdgeInsets.only(left: 16.h),
-                              child: Text("lbl_basic_settings".tr,
-                                  style: CustomTextStyles
-                                      .titleMediumBluegray30018)),
-                          SizedBox(height: 12.v),
-                          _buildInfo1()
-                        ])))));
+        body: Stack(
+          children: [
+              Positioned(
+            left: 270,
+            top: 50,
+            child: ImageFiltered(
+              imageFilter: ImageFilter.blur(
+                sigmaX: 60,
+                sigmaY: 60,
+              ),
+              child: Align(
+                child: SizedBox(
+                  width: 252,
+                  height: 252,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(126),
+                      color: appTheme.deepOrangeA20.withOpacity(0.6),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+            SizedBox(
+                width: SizeUtils.width,
+                child: SingleChildScrollView(
+                    child: Padding(
+                        padding: EdgeInsets.only(bottom: 5.v),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: 12.v),
+                              _buildAppBar(),
+                               Padding(
+                                 padding:EdgeInsets.only(left: 10),
+                                 child: Container(
+                                               margin:
+                                                   EdgeInsets.only(top: 7.v, right: 16.h, bottom: 16.v),
+                                               padding:
+                                                   EdgeInsets.symmetric(horizontal: 16.h, vertical: 17.v),
+                                               decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
+                                                   borderRadius: BorderRadiusStyle.roundedBorder20),
+                                               child: Row(children: [
+                                                 (controller.imagePath != "")? CustomImageView(
+                                                           imagePath: controller.imagePath,
+                                                           height: 48.adaptSize,
+                                                           width: 48.adaptSize,
+                                                           radius: BorderRadius.circular(24.h),
+                                                           alignment: Alignment.center):CustomImageView(
+                                                           imagePath: 'assets/images/image_not_found.png',
+                                                           height: 48.adaptSize,
+                                                           width: 48.adaptSize,
+                                                           radius: BorderRadius.circular(24.h),
+                                                           alignment: Alignment.center),
+                                                 Padding(
+                                                     padding: EdgeInsets.only(left: 15.h),
+                                                     child: Column(
+                                                         crossAxisAlignment: CrossAxisAlignment.start,
+                                                         children: [
+                                                           Text(controller.name.toString(),
+                                                               style: CustomTextStyles.titleMediumSemiBold),
+                                                           SizedBox(height: 4.v),
+                                                           GestureDetector(
+                                                               onTap: () {
+                                  // onTapEditProfile();
+                                  Get.toNamed(
+                                    AppRoutes.editProfileSetting,
+                                  );
+                                                               },
+                                                               child: Row(children: [
+                                  Padding(
+                                      padding: EdgeInsets.only(bottom: 1.v),
+                                      child: Text("lbl_edit_profile".tr,
+                                          style: theme.textTheme.bodyMedium)),
+                                  CustomImageView(
+                                      imagePath: ImageConstant.imgArrowRight,
+                                      height: 18.adaptSize,
+                                      width: 18.adaptSize,
+                                      margin: EdgeInsets.only(left: 3.h))
+                                                               ]))
+                                                         ])),
+                                                 const Spacer(),
+                                                 CustomElevatedButton(
+                                                     height: 34.v,
+                                                     width: 84.h,
+                                                     
+                                                     text: "lbl_share_profile".tr,
+                                                     margin: EdgeInsets.symmetric(vertical: 7.v),
+                                                     buttonStyle: CustomButtonStyles.fillGreen,
+                                                     buttonTextStyle: CustomTextStyles.labelLargeGray900)
+                                               ])),
+                               ),
+          Padding(
+           padding:EdgeInsets.only(left: 10),
+            child: _buildBasicSettings(),
+          ),
+                              SizedBox(height: 16.v),
+                              Padding(
+                                   padding:EdgeInsets.only(left: 10),
+                                  child: Text("lbl_basic_settings".tr,
+                                      style: CustomTextStyles
+                                          .titleMediumBluegray30018)),
+                              SizedBox(height: 12.v),
+                              _buildShield1(),
+                              SizedBox(height: 16.v),
+                              Padding(
+                                  padding: EdgeInsets.only(left: 16.h),
+                                  child: Text("lbl_basic_settings".tr,
+                                      style: CustomTextStyles
+                                          .titleMediumBluegray30018)),
+                              SizedBox(height: 12.v),
+                              _buildInfo1()
+                            ])))),
+          ],
+        ));
   }
 
   /// Section Widget
@@ -302,96 +390,73 @@ class SettingScreen extends GetWidget<SettingController> {
                 ])));
   }
 
-  /// Section Widget
-  Widget _buildShareProfile() {
-    return Container(
-        height: 595.v,
-        width: 359.h,
-        margin: EdgeInsets.only(left: 16.h),
-        child: Stack(alignment: Alignment.topLeft, children: [
-          Positioned(
-            left: 270,
-            top: 50,
-            child: ImageFiltered(
-              imageFilter: ImageFilter.blur(
-                sigmaX: 60,
-                sigmaY: 60,
-              ),
-              child: Align(
-                child: SizedBox(
-                  width: 252,
-                  height: 252,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(126),
-                      color: appTheme.deepOrangeA20.withOpacity(0.6),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Align(
-              alignment: Alignment.topLeft,
-              child: Container(
-                  margin:
-                      EdgeInsets.only(top: 71.v, right: 16.h, bottom: 436.v),
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 16.h, vertical: 17.v),
-                  decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
-                      borderRadius: BorderRadiusStyle.roundedBorder20),
-                  child: Row(children: [
-                    (controller.imagePath != "")? CustomImageView(
-                              imagePath: controller.imagePath,
-                              height: 48.adaptSize,
-                              width: 48.adaptSize,
-                              radius: BorderRadius.circular(24.h),
-                              alignment: Alignment.center):CustomImageView(
-                              imagePath: 'assets/images/image_not_found.png',
-                              height: 48.adaptSize,
-                              width: 48.adaptSize,
-                              radius: BorderRadius.circular(24.h),
-                              alignment: Alignment.center),
-                    Padding(
-                        padding: EdgeInsets.only(left: 15.h),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(controller.name.toString(),
-                                  style: CustomTextStyles.titleMediumSemiBold),
-                              SizedBox(height: 4.v),
-                              GestureDetector(
-                                  onTap: () {
-                                    // onTapEditProfile();
-                                    Get.toNamed(
-                                      AppRoutes.editProfileSetting,
-                                    );
-                                  },
-                                  child: Row(children: [
-                                    Padding(
-                                        padding: EdgeInsets.only(bottom: 1.v),
-                                        child: Text("lbl_edit_profile".tr,
-                                            style: theme.textTheme.bodyMedium)),
-                                    CustomImageView(
-                                        imagePath: ImageConstant.imgArrowRight,
-                                        height: 18.adaptSize,
-                                        width: 18.adaptSize,
-                                        margin: EdgeInsets.only(left: 3.h))
-                                  ]))
-                            ])),
-                    const Spacer(),
-                    CustomElevatedButton(
-                        height: 34.v,
-                        width: 84.h,
-                        
-                        text: "lbl_share_profile".tr,
-                        margin: EdgeInsets.symmetric(vertical: 7.v),
-                        buttonStyle: CustomButtonStyles.fillGreen,
-                        buttonTextStyle: CustomTextStyles.labelLargeGray900)
-                  ]))),
-          _buildBasicSettings()
-        ]));
-  }
+  // /// Section Widget
+  // Widget _buildShareProfile() {
+  //   return Container(
+  //       height: 595.v,
+  //       width: 359.h,
+  //       margin: EdgeInsets.only(left: 16.h),
+  //       child: Stack(alignment: Alignment.topLeft, children: [
+        
+  //         Container(
+  //             margin:
+  //                 EdgeInsets.only(top: 50.v, right: 16.h, bottom: 456.v),
+  //             padding:
+  //                 EdgeInsets.symmetric(horizontal: 16.h, vertical: 17.v),
+  //             decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
+  //                 borderRadius: BorderRadiusStyle.roundedBorder20),
+  //             child: Row(children: [
+  //               (controller.imagePath != "")? CustomImageView(
+  //                         imagePath: controller.imagePath,
+  //                         height: 48.adaptSize,
+  //                         width: 48.adaptSize,
+  //                         radius: BorderRadius.circular(24.h),
+  //                         alignment: Alignment.center):CustomImageView(
+  //                         imagePath: 'assets/images/image_not_found.png',
+  //                         height: 48.adaptSize,
+  //                         width: 48.adaptSize,
+  //                         radius: BorderRadius.circular(24.h),
+  //                         alignment: Alignment.center),
+  //               Padding(
+  //                   padding: EdgeInsets.only(left: 15.h),
+  //                   child: Column(
+  //                       crossAxisAlignment: CrossAxisAlignment.start,
+  //                       children: [
+  //                         Text(controller.name.toString(),
+  //                             style: CustomTextStyles.titleMediumSemiBold),
+  //                         SizedBox(height: 4.v),
+  //                         GestureDetector(
+  //                             onTap: () {
+  //                               // onTapEditProfile();
+  //                               Get.toNamed(
+  //                                 AppRoutes.editProfileSetting,
+  //                               );
+  //                             },
+  //                             child: Row(children: [
+  //                               Padding(
+  //                                   padding: EdgeInsets.only(bottom: 1.v),
+  //                                   child: Text("lbl_edit_profile".tr,
+  //                                       style: theme.textTheme.bodyMedium)),
+  //                               CustomImageView(
+  //                                   imagePath: ImageConstant.imgArrowRight,
+  //                                   height: 18.adaptSize,
+  //                                   width: 18.adaptSize,
+  //                                   margin: EdgeInsets.only(left: 3.h))
+  //                             ]))
+  //                       ])),
+  //               const Spacer(),
+  //               CustomElevatedButton(
+  //                   height: 34.v,
+  //                   width: 84.h,
+                    
+  //                   text: "lbl_share_profile".tr,
+  //                   margin: EdgeInsets.symmetric(vertical: 7.v),
+  //                   buttonStyle: CustomButtonStyles.fillGreen,
+  //                   buttonTextStyle: CustomTextStyles.labelLargeGray900)
+  //             ])),
+  //         _buildBasicSettings()
+  //       ]));
+  // }
 
   /// Section Widget
   Widget _buildShield1() {

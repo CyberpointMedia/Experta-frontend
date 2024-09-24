@@ -93,7 +93,7 @@ class _EditSetAvailabilityState extends State<EditSetAvailability> {
           _buildBody(),
           const Spacer(),
           Padding(
-            padding: const EdgeInsets.only(bottom: 30, left: 20, right: 20),
+            padding: const EdgeInsets.only(bottom: 30, left: 16, right: 16),
             child: CustomElevatedButton(
               text: "Save",
               onPressed: () async {
@@ -139,7 +139,7 @@ class _EditSetAvailabilityState extends State<EditSetAvailability> {
 
   Widget _buildBody() {
     return Padding(
-      padding: const EdgeInsets.only(left: 20, right: 20, top: 30),
+      padding: const EdgeInsets.only(left: 16, right: 16, top: 30),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,

@@ -76,7 +76,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Padding(
-        padding: EdgeInsets.only(right: 16.h, left: 16, top: 50),
+        padding: EdgeInsets.only(right: 16.h, left: 16, top: 15),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -134,7 +134,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
                       Get.toNamed(AppRoutes.changeDateOfBirth);
                     },
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 3),
+                      padding: const EdgeInsets.only(top: 1),
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
                         decoration: AppDecoration.fillOnPrimaryContainer,
@@ -174,7 +174,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
                       _showPANVerificationDialog();
                     },
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 3),
+                      padding: const EdgeInsets.only(top: 1),
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
                         decoration: AppDecoration.fillOnPrimaryContainer,
@@ -215,7 +215,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
                       showAadhaarCardVerificationDialog();
                     },
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 3),
+                      padding: const EdgeInsets.only(top: 1),
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
                         decoration: AppDecoration.fillOnPrimaryContainer,
@@ -255,7 +255,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
                       Get.toNamed(AppRoutes.paymentmethod);
                     },
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 3),
+                      padding: const EdgeInsets.only(top: 1),
                       child: Container(
                         padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
                         decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
@@ -329,8 +329,8 @@ void _showPANVerificationDialog() {
                   child: Text(
                     "PAN Verification",
                     style: TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 22,
+                      
                       color: Colors.black,
                     ),
                   ),
@@ -432,7 +432,7 @@ void showAadhaarCardVerificationDialog() {
                   child: Text(
                     "Aadhaar Verification",
                     style: TextStyle(
-                      fontSize: 20,
+                      fontSize: 22,
                       fontWeight: FontWeight.bold,
                       color: Colors.black,
                     ),
@@ -443,7 +443,7 @@ void showAadhaarCardVerificationDialog() {
                   "As per regulations, it is mandatory to verify your Aadhaar details.",
                   textAlign: TextAlign.center,
                   style: TextStyle(
-                    color: Colors.grey.shade600,
+                    color: Colors.grey.shade500,
                   ),
                 ),
                 const SizedBox(height: 16),
@@ -452,13 +452,13 @@ void showAadhaarCardVerificationDialog() {
   height: 40.0, // Adjust height as needed
   decoration: BoxDecoration(
     borderRadius: BorderRadius.circular(50),
-    border: Border.all(color: Colors.amber, width: 1.0),
+    border: Border.all(color: Colors.amber, width: 1.0,),
   ),
   child: const Row(
     mainAxisAlignment: MainAxisAlignment.center,
     children: [
       Icon(Icons.flash_on, color: Colors.yellow),
-      SizedBox(width: 5),
+      SizedBox(width: 5,),
       Text("Takes less than 5 secs"),
     ],
   ),

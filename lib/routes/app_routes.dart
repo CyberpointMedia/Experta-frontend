@@ -15,12 +15,16 @@ import 'package:experta/presentation/additional_info/binding/edit_interest_bindi
 import 'package:experta/presentation/additional_info/edit_interest.dart';
 import 'package:experta/presentation/blocked/binding/blocked_binding.dart';
 import 'package:experta/presentation/blocked/blocked.dart';
+import 'package:experta/presentation/book_appointment/binding/book_appointment_binding.dart';
+import 'package:experta/presentation/book_appointment/book_appointment.dart';
 import 'package:experta/presentation/booking_detail/binding/booking_detail_binding.dart';
 import 'package:experta/presentation/booking_detail/booking_detail.dart';
 import 'package:experta/presentation/call_settings/bindings/call_setting_bindings.dart';
 import 'package:experta/presentation/call_settings/call_settings.dart';
 import 'package:experta/presentation/category/category_controller.dart';
 import 'package:experta/presentation/category/category_screen.dart';
+import 'package:experta/presentation/change_gender/binding/change_gender_binding.dart';
+import 'package:experta/presentation/change_gender/change_gender.dart';
 import 'package:experta/presentation/createPost/binding/create_post_binding.dart';
 import 'package:experta/presentation/createPost/create_post.dart';
 import 'package:experta/presentation/dashboard/binding/dashboard_binding.dart';
@@ -62,6 +66,8 @@ import 'package:experta/presentation/recents/binding/recents_binding.dart';
 import 'package:experta/presentation/recents/recent.dart';
 import 'package:experta/presentation/recorded_session/binding/recorded_session_binding.dart';
 import 'package:experta/presentation/recorded_session/recorded_session.dart';
+import 'package:experta/presentation/recorded_session/binding/recorded_session_binding.dart';
+import 'package:experta/presentation/recorded_session/recorded_session.dart';
 import 'package:experta/presentation/search_screen/binding/search_binding.dart';
 import 'package:experta/presentation/search_screen/search_screen.dart';
 import 'package:experta/presentation/security_privacy/binding/security_privacy_binding.dart';
@@ -82,6 +88,11 @@ import 'package:experta/presentation/signin_page/signin_binding/signin_binding.d
 import 'package:experta/presentation/signin_page/signin_page.dart';
 import 'package:experta/presentation/splash_screen/binding/splash_binding.dart';
 import 'package:experta/presentation/splash_screen/splash_screen.dart';
+import 'package:experta/presentation/sucessfully/bindings/sucessfully_bindings.dart';
+import 'package:experta/presentation/sucessfully/sucessfully.dart';
+import 'package:experta/presentation/support/bindings/support_binding.dart';
+import 'package:experta/presentation/support/support.dart';
+import 'package:experta/presentation/transaction/transection.dart';
 import 'package:experta/presentation/support/bindings/support_binding.dart';
 import 'package:experta/presentation/support/support.dart';
 import 'package:experta/presentation/transaction/transection.dart';
@@ -179,7 +190,7 @@ class AppRoutes {
 
   static const String pandetail = "/pan_detail";
 
-  static const String adhardetail = "/Aadhar_DetailS";
+  // static const String adhardetail = "/Aadhar_DetailS";
 
   static const String changegender = "/change_gender";
 
@@ -218,6 +229,13 @@ static const String Transaction= "/transection";
 static const String RaiseTicket = "/support";
 
 static const String recordedsession= "/recorded_session";
+
+// ignore: constant_identifier_names
+static const String Bookappointment= "/book_appointment";
+
+static const String sUcessfuly= "/sucessfuly";
+
+static const String genderchange= "/change_gender";
 
 static const String qr = "/share_profile";
 
@@ -283,13 +301,13 @@ static const String qr = "/share_profile";
         SecuritryPrivacyBinding(),
       ],
     ),
-    GetPage(
-      name: adhardetail,
-      page: () => const AadharDetails(),
-      bindings: [
-        AadharDetailBinding(),
-      ],
-    ),
+    // GetPage(
+    //   name: adhardetail,
+    //   page: () => const AadharDetails(),
+    //   bindings: [
+    //     AadharDetailBinding(),
+    //   ],
+    // ),
     GetPage(
       name: signinPage,
       page: () => const SigninPage(),
@@ -326,7 +344,7 @@ static const String qr = "/share_profile";
     ),
     GetPage(
       name: bank,
-      page: () => const VerifyAccount(),
+      page: () =>  const VerifyAccount(),
       bindings: [
         VerifyAccountBinding(),
       ],
@@ -526,13 +544,13 @@ static const String qr = "/share_profile";
         SecuritryPrivacyBinding(),
       ],
     ),
-    GetPage(
-      name: adhardetail,
-      page: () => const AadharDetails(),
-      bindings: [
-        AadharDetailBinding(),
-      ],
-    ),
+    // GetPage(
+    //   name: adhardetail,
+    //   page: () => const AadharDetails(),
+    //   bindings: [
+    //     AadharDetailBinding(),
+    //   ],
+    // ),
     GetPage(
       name: follower,
       page: () => const FollowersPage(),
@@ -542,7 +560,7 @@ static const String qr = "/share_profile";
     ),
     GetPage(
       name: block,
-      page: () => BlockedPage(),
+      page: () => const BlockedPage(),
       bindings: [
         BlockedBinding(),
       ],
@@ -626,6 +644,27 @@ static const String qr = "/share_profile";
         customTransition: CustomPageTransition(),
         bindings: [
           ShareProfileBinding(),
+        ]),
+          GetPage(
+        name: Bookappointment,
+        page: () =>   const BookAppointmentPage(),
+        customTransition: CustomPageTransition(),
+        bindings: [
+          BookAppointmentBinding(),
+        ]),
+         GetPage(
+        name: sUcessfuly,
+        page: () =>   const BookingConfirmationPage(),
+        customTransition: CustomPageTransition(),
+        bindings: [
+          BookingConfirmationPageBindings(),
+        ]),
+        GetPage(
+        name: genderchange,
+        page: () =>   const ChangeGender(),
+        customTransition: CustomPageTransition(),
+        bindings: [
+          ChangeGenderBinding(),
         ]),
   ];
 }

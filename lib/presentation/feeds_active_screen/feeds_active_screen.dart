@@ -277,7 +277,7 @@ Widget _buildBottomSheetContent(BuildContext context, Comment? comment) {
             ? _buildBottomSheetOption(
                 context,
                 icon: Icons.flag_outlined,
-                label: 'Report this post',
+                label: 'Report this comment',
                 onTap: () {
                   showModalBottomSheet(
                     context: context,
@@ -793,7 +793,7 @@ class _CommentInputFieldState extends State<CommentInputField> {
   @override
   void dispose() {
     _commentController.removeListener(_onTextChanged);
-    _commentController.dispose();
+    _commentController.clear();
     _isButtonEnabled.dispose();
     super.dispose();
   }

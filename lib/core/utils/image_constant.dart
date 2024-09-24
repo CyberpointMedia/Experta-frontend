@@ -274,7 +274,7 @@ class ImageConstant {
    static String imgArrowLeftOnerrorcontainer =
   '$imagePath/img_arrow_left_onerrorcontainer.svg';
 
-  // static String imgCalendar = '$imagePath/img_calendar.svg';
+  static String imgCalendar = '$imagePath/settings/calendar.svg';
 
   // static String imgIconBlueGray300 = '$imagePath/img_icon_blue_gray_300.svg';
 
@@ -431,10 +431,10 @@ class ImageConstant {
 
   // static String imgVerifiedUser2 = '$imagePath/img_verified_user_2.svg';
 
+  static String imgCalendarGray900 = '$imagePath/img_calendar_gray_900.svg';
 
   // static String imgPlayGreen500 = '$imagePath/img_play_green_500.png';
 
-  static String imgCalendarGray900 = '$imagePath/img_calendar_gray_900.svg';
 
   // static String imgNavFeedsGray900 = '$imagePath/img_nav_feeds_gray_900.svg';
 
@@ -457,15 +457,15 @@ class ImageConstant {
   // PAYMENT
   static String wallet = "$imagePath/wallet.svg";
   static String withdraw = "$imagePath/settings/Withdraw.svg";
-  static String transaction = "$imagePath/settings/Transaction.svg";
+  static String transaction = "$imagePath/settings/Transaction.svg";                                               
   static String uservarification = "$imagePath/settings/User Verify.svg";
   static String reffer = "$imagePath/Star.svg";
   static String help = "$imagePath/settings/24-hours.svg";
   static String bank = "$imagePath/settings/Bank.svg";
   static String card = "$imagePath/settings/credit-card.svg";
   static String pancard = "$imagePath/settings/credit-card.svg";
-  static String block = "$imagePath/Block.svg";
-  static String delete = "$imagePath/Delete.svg";
+  static String block = "$imagePath/settings/block.svg";
+  static String delete = "$imagePath/settings/Delete.svg";
   static String upi = "$imagePath/settings/UPI.svg";
 
   //gender
@@ -504,4 +504,8 @@ class ImageConstant {
   static String msg = "$imagePath/settings/msg.svg";
   static String complete = "$imagePath/settings/complete.svg";
   static String singletick = "$imagePath/settings/singletick.svg";
+
+  // sucess 
+
+  static String success = "$imagePath/settings/checkSucess.svg";
 }

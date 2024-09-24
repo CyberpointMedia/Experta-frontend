@@ -30,9 +30,10 @@ class _FollowersPageState extends State<FollowersPage> {
           Column(
             children: [
               _buildAppBar(),
+              const SizedBox(height: 15),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Column(
                     children: [
                       const CustomSearchView(
