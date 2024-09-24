@@ -1,10 +1,10 @@
-import 'dart:developer';
 import 'dart:ui';
+import 'package:experta/widgets/socket_service.dart';
+import 'package:provider/provider.dart';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/message_screen/widgets/anjaliarora_item_widget.dart';
 import 'package:experta/widgets/app_bar/appbar_subtitle.dart';
 import 'package:experta/widgets/app_bar/appbar_trailing_iconbutton.dart';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'controller/message_controller.dart';
 
 class MessageScreen extends StatefulWidget {
@@ -16,104 +16,26 @@ class MessageScreen extends StatefulWidget {
 
 class _MessageScreenState extends State<MessageScreen> {
   final MessageController controller = Get.put(MessageController());
-  late IO.Socket socket;
-  late ApiService apiServices;
-  List<Map<String, dynamic>> chats = [];
-  List<Map<String, dynamic>> filteredChats = [];
-  bool isFetchingChats = false;
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      try {
-        apiServices = ApiService();
-        fetchChats();
-        initSocket();
-      } catch (error) {
-        log('Error in initState: $error');
-      }
-    });
-
+    final socketService = Provider.of<SocketService>(context, listen: false);
+    socketService.initializeSocket();
     controller.searchController.addListener(_filterChats);
   }
 
-  // Initialize socket connection and listen for events
-  void initSocket() {
-    final currentUserId = PrefUtils().getaddress();
-
-    // Initialize the socket connection
-    socket = IO.io('http://3.110.252.174:8080', <String, dynamic>{
-      'transports': ['websocket'],
-      'autoConnect': false,
-      'extraHeaders': {'Authorization': 'Bearer $currentUserId'},
-    });
-
-    // Connect to the socket server
-    socket.connect();
-
-    // Listen for chat updates
-    socket.on('chatUpdate', (data) {
-      log('Chat update received: $data');
-      fetchChats();
-    });
-
-    // Listen for user status updates (online/offline)
-    socket.on('userStatus', (data) {
-      final userId = data['userId'];
-      final isOnline = data['isOnline'];
-      log('User status update received: $userId is ${isOnline ? "online" : "offline"}');
-
-      // Update the user's status in the chat list
-      setState(() {
-        for (var chat in chats) {
-          final otherUser = chat['users']?.firstWhere(
-            (u) => u['_id'] == userId,
-            orElse: () => null,
-          );
-          if (otherUser != null) {
-            otherUser['online'] = isOnline;
-          }
-        }
-      });
-    });
-
-    // Handle connection errors
-    socket.on('connect_error', (data) {
-      log('Socket connection error: $data');
-    });
-
-    // Handle disconnection
-    socket.on('disconnect', (_) {
-      log('Socket disconnected');
-    });
-  }
-
-  Future<void> fetchChats() async {
-    if (isFetchingChats) return;
-    setState(() {
-      isFetchingChats = true;
-    });
-
-    try {
-      final fetchedChats = await apiServices.fetchChats();
-      setState(() {
-        chats = List<Map<String, dynamic>>.from(fetchedChats);
-        filteredChats = chats;
-      });
-    } catch (error) {
-      log('Error fetching chats: $error');
-    } finally {
-      setState(() {
-        isFetchingChats = false;
-      });
-    }
+  @override
+  void dispose() {
+    controller.searchController.clear();
+    super.dispose();
   }
 
   void _filterChats() {
+    final socketService = Provider.of<SocketService>(context, listen: false);
     final query = controller.searchController.text.toLowerCase();
     setState(() {
-      filteredChats = chats.where((chat) {
+      socketService.filteredChats = socketService.chats.where((chat) {
         final otherUser = chat['users']?.firstWhere(
           (u) => u['_id'] != PrefUtils().getaddress(),
           orElse: () => null,
@@ -131,27 +53,26 @@ class _MessageScreenState extends State<MessageScreen> {
   }
 
   int handleUnreadCount(Map<String, dynamic> chat, String currentUserId) {
-    final unreadCount = chat['unreadCounts']?.firstWhere(
-      (uc) => uc['user'] == currentUserId,
-      orElse: () => {'count': 0},
-    )['count'];
+    final unreadCounts = chat['unreadCounts'];
 
-    int unreadCountInt = (unreadCount is int)
-        ? unreadCount
-        : int.tryParse(unreadCount.toString()) ?? 0;
+    if (unreadCounts is List) {
+      final unreadCount = unreadCounts.firstWhere(
+        (uc) => uc['user'] == currentUserId,
+        orElse: () => {'count': 0},
+      )['count'];
 
-    return unreadCountInt;
-  }
-
-  @override
-  void dispose() {
-    controller.searchController.dispose();
-    socket.dispose(); // Disconnect the socket when the widget is disposed
-    super.dispose();
+      return unreadCount is int
+          ? unreadCount
+          : int.tryParse(unreadCount.toString()) ?? 0;
+    } else {
+      // If unreadCounts is not a list, return 0 or handle accordingly
+      return 0;
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    final socketService = Provider.of<SocketService>(context);
     final currentUserId = PrefUtils().getaddress();
 
     return SafeArea(
@@ -214,9 +135,9 @@ class _MessageScreenState extends State<MessageScreen> {
                         separatorBuilder: (context, index) {
                           return SizedBox(width: 20.h);
                         },
-                        itemCount: filteredChats.length,
+                        itemCount: socketService.filteredChats.length,
                         itemBuilder: (context, index) {
-                          final chat = filteredChats[index];
+                          final chat = socketService.filteredChats[index];
                           final otherUser = chat['users']?.firstWhere(
                             (u) => u['_id'] != currentUserId,
                             orElse: () => null,
@@ -265,12 +186,13 @@ class _MessageScreenState extends State<MessageScreen> {
   }
 
   Widget _buildChatList(String currentUserId) {
+    final socketService = Provider.of<SocketService>(context);
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: filteredChats.length,
+      itemCount: socketService.filteredChats.length,
       itemBuilder: (context, index) {
-        final chat = filteredChats[index];
+        final chat = socketService.filteredChats[index];
         final otherUser = chat['users']?.firstWhere(
           (u) => u['_id'] != currentUserId,
           orElse: () => null,
@@ -292,9 +214,10 @@ class _MessageScreenState extends State<MessageScreen> {
 
         return GestureDetector(
           onTap: () {
+            socketService.handleChatTap(chat['_id']);
             Get.toNamed(
               AppRoutes.chattingScreen,
-              arguments: {'chat': chat, 'socket': socket},
+              arguments: {'chat': chat, 'socket': socketService.socket},
             );
           },
           child: Padding(
@@ -303,12 +226,11 @@ class _MessageScreenState extends State<MessageScreen> {
               Stack(
                 alignment: Alignment.bottomRight,
                 children: [
-                  CircleAvatar(
-                    radius: 29.h,
-                    backgroundColor: appTheme.whiteA700,
-                    backgroundImage: profilePic != null
-                        ? NetworkImage(profilePic) as ImageProvider
-                        : const AssetImage('assets/images/image_not_found.png'),
+                  CustomImageView(
+                    height: 60.v,
+                    width: 60.h,
+                    imagePath: profilePic ?? ImageConstant.imageNotFound,
+                    radius: BorderRadius.circular(50.h),
                   ),
                   Align(
                     alignment: Alignment.bottomRight,
@@ -321,8 +243,7 @@ class _MessageScreenState extends State<MessageScreen> {
                             : appTheme.red500,
                         borderRadius: BorderRadius.circular(8.h),
                         border: Border.all(
-                          color: theme.colorScheme.onPrimaryContainer
-                              .withOpacity(1),
+                          color: appTheme.whiteA700,
                           width: 2.h,
                         ),
                       ),
@@ -332,27 +253,31 @@ class _MessageScreenState extends State<MessageScreen> {
               ),
               SizedBox(width: 12.h),
               Expanded(
-                  child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                    SizedBox(
-                        width: 270.h,
-                        child: Row(children: [
-                          Text(displayName,
-                              style: CustomTextStyles.titleMediumSemiBold),
-                          if (basicInfo?['isVerified'] == true)
-                            CustomImageView(
-                                imagePath: ImageConstant.imgVerified,
-                                height: 16.adaptSize,
-                                width: 16.adaptSize,
-                                margin: EdgeInsets.only(
-                                    left: 2.h, top: 2.v, bottom: 2.v)),
-                          const Spacer(),
-                          Text(lastMessageTime,
-                              textAlign: TextAlign.right,
-                              style: CustomTextStyles.bodyMediumLight)
-                        ])),
-                    SizedBox(height: 6.v),
+                        Text(
+                          displayName,
+                          style: CustomTextStyles.titleMediumSemiBold,
+                          overflow: TextOverflow.ellipsis,
+                        ),
+                        if (basicInfo?['isVerified'] == true)
+                          CustomImageView(
+                              imagePath: ImageConstant.imgVerified,
+                              height: 16.adaptSize,
+                              width: 16.adaptSize,
+                              margin: EdgeInsets.only(
+                                  left: 2.h, top: 2.v, bottom: 2.v)),
+                        Text(
+                          lastMessageTime,
+                          style: CustomTextStyles.bodyMediumLight,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 5.v),
                     Row(
                       children: [
                         Expanded(
@@ -373,18 +298,20 @@ class _MessageScreenState extends State<MessageScreen> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                          )
+                          ),
                       ],
                     ),
-                  ])),
+                  ],
+                ),
+              ),
             ]),
           ),
         );
       },
     );
   }
+}
 
-  void onTapBellTwo() {
-    Get.toNamed(AppRoutes.notification);
-  }
+void onTapBellTwo() {
+  Get.toNamed(AppRoutes.notification);
 }
