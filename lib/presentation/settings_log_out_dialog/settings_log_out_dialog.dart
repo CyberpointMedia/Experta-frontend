@@ -51,7 +51,7 @@ class SettingsLogOutDialog extends StatelessWidget {
             buttonTextStyle:
                 CustomTextStyles.bodyLargeSFProTextLightblueA700,
             onPressed: () {
-              onTapLogout(context); // Pass context to the method
+              onTapLogout(); // Pass context to the method
             })
                         ])
         ]));
@@ -64,12 +64,12 @@ class SettingsLogOutDialog extends StatelessWidget {
     );
   }
 
-  /// Logs out the user and exits the app.
-  onTapLogout(BuildContext context) async {
-    // Perform logout operations here, such as clearing user data or tokens
-    await controller.logoutUser(); // Assuming you have a logout method in your controller
+  /// Navigates to the onboardingScreen when the action is triggered.
+  onTapLogout() async {
+    // Clear all data from SharedPreferences
+    await PrefUtils().clearPreferencesData();
 
-    // Exit the app
-    SystemNavigator.pop();
+    // Navigate to the onboarding screen
+    Get.offAllNamed(AppRoutes.onboardingScreen);
   }
 }

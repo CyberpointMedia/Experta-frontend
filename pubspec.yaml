@@ -80,7 +80,8 @@ dependencies:
   flutter_bloc: ^8.1.6
   socket_io_client: ^2.0.3+1
   qr_flutter: ^4.1.0
-  
+  sqflite: ^2.3.3+1
+  provider: ^6.1.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

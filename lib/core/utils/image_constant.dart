@@ -35,7 +35,7 @@ class ImageConstant {
   // SignIn images
   // static String imgTelevision = '$imagePath/img_television.svg';
 
- static String imgArrowDown = '$imagePath/img_arrow_down.svg';
+  static String imgArrowDown = '$imagePath/img_arrow_down.svg';
   // static String imgRectangle2232x164 = '$imagePath/img_rectangle_2_232x164.png';
 
   // static String imgRectangle2232x163 = '$imagePath/img_rectangle_2_232x163.png';
@@ -62,7 +62,7 @@ class ImageConstant {
   // static String imgRectangle25247 = '$imagePath/img_rectangle_25247.png';
 
   // static String imgRectangle25249 = '$imagePath/img_rectangle_25249.png';
-// 
+//
   // static String imgFaceBlowingAKiss = '$imagePath/img_face_blowing_a_kiss.png';
 
   // static String imgGrinningFaceWith = '$imagePath/img_grinning_face_with.png';
@@ -157,12 +157,11 @@ class ImageConstant {
 
   // static String imgFrowningFaceWith = '$imagePath/img_frowning_face_with.png';
 
-
   // static String imgRectangle248x48 = '$imagePath/img_rectangle_2_48x48.png';
 
   // static String imgImage3348x48 = '$imagePath/img_image_33_48x48.png';
 
-  static  String imgArrowRight = '$imagePath/img_arrow_right.svg';
+  static String imgArrowRight = '$imagePath/img_arrow_right.svg';
 
   // static String imgShield = '$imagePath/img_shield.svg';
 
@@ -192,7 +191,7 @@ class ImageConstant {
   // static String imgPlay38x38 = '$imagePath/img_play_38x38.png';
 
   static String imgMoreHorizontalBlueGray300 =
-       '$imagePath/img_more_horizontal_blue_gray_300.svg';
+      '$imagePath/img_more_horizontal_blue_gray_300.svg';
 
   // static String imgRectangle238x38 = '$imagePath/img_rectangle_2_38x38.png';
 
@@ -264,15 +263,15 @@ class ImageConstant {
   // static String imgImage3376x76 = '$imagePath/img_image_33_76x76.png';
 
   // Common images
-   static String imgIcon = '$imagePath/img_icon.svg';
+  static String imgIcon = '$imagePath/img_icon.svg';
 
   // static String imgEyeoff = '$imagePath/img_eyeoff.svg';
 
   // static String imgIconOnprimarycontainer =
   //     '$imagePath/img_icon_onprimarycontainer.svg';
 
-   static String imgArrowLeftOnerrorcontainer =
-  '$imagePath/img_arrow_left_onerrorcontainer.svg';
+  static String imgArrowLeftOnerrorcontainer =
+      '$imagePath/img_arrow_left_onerrorcontainer.svg';
 
   static String imgCalendar = '$imagePath/settings/calendar.svg';
 
@@ -289,18 +288,15 @@ class ImageConstant {
 
   static String imgBell02 = '$imagePath/img_bell_02.svg';
 
-
   // static String imgThumbsUp = '$imagePath/img_thumbs_up.svg';
 
   // static String imgRunningShoe = '$imagePath/img_running_shoe.svg';
 
   // static String imgTheater3 = '$imagePath/img_theater_3.svg';
 
-
   // static String imgGuitar = '$imagePath/img_guitar.svg';
 
   // static String imgMovie = '$imagePath/img_movie.svg';
-  
 
   // static String imgMenu = '$imagePath/img_menu.svg';
 
@@ -425,9 +421,7 @@ class ImageConstant {
 
   // static String imgCreditCard = '$imagePath/img_credit_card.svg';
 
-
   // static String imgVideoYellow900 = '$imagePath/img_video_yellow_900.svg';
-
 
   // static String imgVerifiedUser2 = '$imagePath/img_verified_user_2.svg';
 
@@ -444,11 +438,11 @@ class ImageConstant {
 
   // static String imgShieldGray900 = '$imagePath/img_shield_gray_900.svg';
 
-  // static String imageNotFound = 'assets/images/image_not_found.png';
+  static String imageNotFound = 'assets/images/image_not_found.png';
 
   // ACCOUNT STTING
-   static String user = "$imagePath/settings/User.svg";
-   static String birthday = "$imagePath/settings/Cake.svg";
+  static String user = "$imagePath/settings/User.svg";
+  static String birthday = "$imagePath/settings/Cake.svg";
   static String gender = "$imagePath/settings/Gender.svg";
   static String email = "$imagePath/settings/Email.svg";
   static String phone = "$imagePath/settings/mobile.svg";
@@ -474,14 +468,14 @@ class ImageConstant {
   static String female = "$imagePath/settings/female.svg";
   static String femele = "$imagePath/settings/femle_unselected.svg";
 
-   static String condition = "$imagePath/settings/terms.svg";
+  static String condition = "$imagePath/settings/terms.svg";
   static String cokie = "$imagePath/settings/Cookie.svg";
   static String term = "$imagePath/settings/condition.svg";
 
   static String cross = '$imagePath/settings/cross.svg';
   static String plus = '$imagePath/settings/plus.svg';
   static String info = "assets/images/settings/Information.svg";
-   static String brief = "assets/images/settings/Brief.svg";
+  static String brief = "assets/images/settings/Brief.svg";
   static String vector = "assets/images/settings/Vector.svg";
   static String union = "assets/images/settings/Union.svg";
   static String avail = "assets/images/settings/available.svg";
