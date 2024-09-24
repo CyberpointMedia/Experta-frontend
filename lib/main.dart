@@ -1,6 +1,7 @@
+import 'package:experta/widgets/socket_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-
+import 'package:provider/provider.dart';
 import 'core/app_export.dart';
 
 Future<void> main() async {
@@ -18,20 +19,24 @@ Future<void> main() async {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return Sizer(builder: (context, orientation, deviceType) {
-      return GetMaterialApp(
-        debugShowCheckedModeBanner: false,
-        theme: theme,
-        translations: AppLocalization(),
-        locale: Get.deviceLocale,
-        fallbackLocale: const Locale('en', 'US'),
-        title: 'experta',
-        initialBinding: InitialBindings(),
-        initialRoute: AppRoutes.initialRoute,
-        getPages: AppRoutes.pages,
+      return MultiProvider(
+        providers: [
+          ChangeNotifierProvider(create: (_) => SocketService()),
+        ],
+        child: GetMaterialApp(
+          debugShowCheckedModeBanner: false,
+          theme: theme,
+          translations: AppLocalization(),
+          locale: Get.deviceLocale,
+          fallbackLocale: const Locale('en', 'US'),
+          title: 'experta',
+          initialBinding: InitialBindings(),
+          initialRoute: AppRoutes.initialRoute,
+          getPages: AppRoutes.pages,
+        ),
       );
     });
   }

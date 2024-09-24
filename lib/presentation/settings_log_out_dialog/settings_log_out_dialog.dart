@@ -63,9 +63,11 @@ class SettingsLogOutDialog extends StatelessWidget {
   }
 
   /// Navigates to the onboardingScreen when the action is triggered.
-  onTapLogout() {
-    Get.toNamed(
-      AppRoutes.onboardingScreen,
-    );
+  onTapLogout() async {
+    // Clear all data from SharedPreferences
+    await PrefUtils().clearPreferencesData();
+
+    // Navigate to the onboarding screen
+    Get.offAllNamed(AppRoutes.onboardingScreen);
   }
 }
