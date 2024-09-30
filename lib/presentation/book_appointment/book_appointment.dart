@@ -1,17 +1,15 @@
+import 'dart:ui';
+
 import 'package:experta/core/app_export.dart';
-import 'package:experta/routes/app_routes.dart';
-import 'package:experta/widgets/app_bar/appbar_leading_image.dart';
-import 'package:experta/widgets/app_bar/appbar_subtitle_six.dart';
-import 'package:experta/widgets/app_bar/custom_app_bar.dart';
-import 'package:flutter/material.dart';
+import 'package:experta/widgets/app_bar/appbar_trailing_button_one.dart';
+import 'package:experta/widgets/custom_drop_down.dart';
 import 'package:intl/intl.dart';
-import 'package:get/get.dart';
 
 class BookAppointmentPage extends StatefulWidget {
-  const BookAppointmentPage({Key? key}) : super(key: key);
+  const BookAppointmentPage({super.key});
 
   @override
-  _BookAppointmentPageState createState() => _BookAppointmentPageState();
+  State<BookAppointmentPage> createState() => _BookAppointmentPageState();
 }
 
 class _BookAppointmentPageState extends State<BookAppointmentPage> {
@@ -28,7 +26,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
     '11:20 am - 11:50 am',
   ];
 
-  ScrollController _scrollController = ScrollController();
+  final ScrollController _scrollController = ScrollController();
 
   String getFormattedDate(DateTime date) {
     return DateFormat.yMMMMd().format(date); // Format to "January 1, 2024"
@@ -88,7 +86,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
               color: Colors.white, // Background color remains white
               borderRadius: BorderRadius.circular(30),
               border: Border.all(
-                color: isSelected ? Colors.amber : Colors.grey, // Golden border if selected
+                color: isSelected ? Colors.amber : Colors.grey.shade300, // Light grey border
                 width: isSelected ? 2 : 1, // Thicker border if selected
               ),
             ),
@@ -126,147 +124,175 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            GestureDetector(
-              onTap: () {
-                _selectDate(context);
-              },
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    DateFormat.yMMMM().format(selectedDate), // Format to "January, 2024"
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black, // Set color to dark black
+      // appBar: _buildAppBar(),
+      body: Stack(
+        children: [
+           Positioned(
+              left: 270,
+              top: 50,
+              child: ImageFiltered(
+                imageFilter: ImageFilter.blur(sigmaX: 60, sigmaY: 60),
+                child: Align(
+                  child: SizedBox(
+                    width: 252,
+                    height: 252,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(126),
+                        color: appTheme.deepOrangeA20.withOpacity(0.6),
+                      ),
                     ),
                   ),
-                  const Icon(Icons.arrow_drop_down, color: Colors.black),
-                ],
-              ),
-            ),
-            const SizedBox(height: 10), // Adding space between heading and date selector
-            SizedBox(
-              height: 80,
-              child: ListView(
-                controller: _scrollController,
-                scrollDirection: Axis.horizontal,
-                children: _buildDateWidgets(selectedDate),
-              ),
-            ),
-            const SizedBox(height: 20),
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Call Duration',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black, // Set color to dark black
                 ),
               ),
             ),
-            const SizedBox(height: 10), // Adding some space between the heading and dropdown
-            DropdownButtonFormField<String>(
-              value: selectedDuration,
-              items: durations.map((String value) {
-                return DropdownMenuItem<String>(
-                  value: value,
-                  child: Text(value),
-                );
-              }).toList(),
-              onChanged: (newValue) {
-                setState(() {
-                  selectedDuration = newValue!;
-                });
-              },
-              decoration: InputDecoration(
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(10),
-                ),
-              ),
-            ),
-            const SizedBox(height: 20),
-            const Align(
-              alignment: Alignment.centerLeft,
-              child: Text(
-                'Available Slot',
-                style: TextStyle(
-                  fontSize: 16,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black, // Set color to dark black
-                ),
-              ),
-            ),
-            const SizedBox(height: 10), // Adding some space between the heading and slots
-            Expanded(
-              child: ListView.builder(
-                itemCount: timeSlots.length,
-                itemBuilder: (context, index) {
-                  String slot = timeSlots[index];
-                  bool isSelected = slot == selectedSlot;
-                  return GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        selectedSlot = slot;
-                      });
-                    },
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(vertical: 8),
-                      decoration: BoxDecoration(
-                        color: Colors.white, // Always white background
-                        borderRadius: BorderRadius.circular(10),
-                        border: Border.all(
-                          color: isSelected ? Colors.amber : Colors.grey, // Golden border if selected
-                          width: isSelected ? 2 : 1, // Thicker border if selected
+          Column(
+            children: [
+                _buildAppBar(),
+              Flexible(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    children: [
+                      GestureDetector(
+                        onTap: () {
+                          _selectDate(context);
+                        },
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            Text(
+                              DateFormat.yMMMM().format(selectedDate), // Format to "January, 2024"
+                              style: const TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.black, // Set color to dark black
+                              ),
+                            ),
+                            const Icon(Icons.arrow_drop_down, color: Colors.black),
+                          ],
                         ),
                       ),
-                      padding: const EdgeInsets.all(16),
-                      child: Text(
-                        slot,
-                        style: TextStyle(
-                          fontSize: 16,
-                          color: isSelected ? Colors.black : Colors.grey,
+                      const SizedBox(height: 10), // Adding space between heading and date selector
+                      SizedBox(
+                        height: 80,
+                        child: ListView(
+                          controller: _scrollController,
+                          scrollDirection: Axis.horizontal,
+                          children: _buildDateWidgets(selectedDate),
                         ),
                       ),
-                    ),
-                  );
-                },
-              ),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton(
-              onPressed: () {
-                Get.toNamed(AppRoutes.Bookindeetail, arguments: {
-                  'selectedDate': selectedDate,
-                  'selectedDuration': selectedDuration,
-                  'selectedSlot': selectedSlot,
-                });
-              },
-              style: ElevatedButton.styleFrom(
-                foregroundColor: Colors.black,
-                backgroundColor: Colors.yellow,
-                padding: const EdgeInsets.symmetric(horizontal: 140, vertical: 35),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(40),
+                      const SizedBox(height: 20),
+                      const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Call Duration',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black, // Set color to dark black
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10),
+                       // Adding some space between the heading and dropdown
+                       const CustomDropDown(
+                        icon: Icon(Icons.keyboard_arrow_down),
+                        
+                       ),
+                      DropdownButtonFormField<String>(
+                        value: selectedDuration,
+                        items: durations.map((String value) {
+                          return DropdownMenuItem<String>(
+                            value: value,
+                            child: Text(value),
+                          );
+                        }).toList(),
+                        onChanged: (newValue) {
+                          setState(() {
+                            selectedDuration = newValue!;
+                          });
+                        },
+                        decoration: InputDecoration(
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                      const SizedBox(height: 20), // Adding space between Call Duration and Available Slot
+                      const Align(
+                        alignment: Alignment.centerLeft,
+                        child: Text(
+                          'Available Slot',
+                          style: TextStyle(
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black, // Set color to dark black
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 10), // Adding some space between the heading and slots
+                      Expanded(
+                        child: ListView.builder(
+                          itemCount: timeSlots.length,
+                          itemBuilder: (context, index) {
+                            String slot = timeSlots[index];
+                            bool isSelected = slot == selectedSlot;
+                            return GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  selectedSlot = slot;
+                                });
+                              },
+                              child: Container(
+                                margin: const EdgeInsets.symmetric(vertical: 8),
+                                decoration: BoxDecoration(
+                                  color: Colors.white, // Always white background
+                                  borderRadius: BorderRadius.circular(10),
+                                  border: Border.all(
+                                    color: isSelected ? Colors.yellow : Colors.grey.shade300, // Button color if selected
+                                    width: isSelected ? 2 : 1, // Thicker border if selected
+                                  ),
+                                ),
+                                padding: const EdgeInsets.all(16),
+                                child: Center( // Center the timing text
+                                  child: Text(
+                                    slot,
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: isSelected ? Colors.black : Colors.grey,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+                CustomElevatedButton(text: "lblcontinue".tr, onPressed: () {
+                          Get.toNamed(AppRoutes.bookindeetail, arguments: {
+                            'selectedDate': selectedDate,
+                            'selectedDuration': selectedDuration,
+                            'selectedSlot': selectedSlot,
+                          });
+                        },)
+                
+                    ],
+                  ),
                 ),
               ),
-              child: const Text('Continue'),
-            ),
-          ],
-        ),
+            ],
+          ),
+        ],
       ),
     );
   }
 
   PreferredSizeWidget _buildAppBar() {
     return CustomAppBar(
-      height: 40.h,
+      height: 56.v,
       leadingWidth: 40.h,
       leading: AppbarLeadingImage(
         imagePath: ImageConstant.imgArrowLeftOnerrorcontainer,
@@ -277,10 +303,19 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
       ),
       centerTitle: true,
       title: AppbarSubtitleSix(text: "Book Appointment"),
+      actions: [
+        AppbarTrailingButtonOne(
+          margin: EdgeInsets.only(right: 12.h, top: 8.v),
+          onTap: onTapThreeThousand,
+        ),
+      ],
     );
   }
 
   void onTapArrowLeft() {
     Get.back();
+  }
+  void onTapThreeThousand() {
+    // Handle custom button tap
   }
 }

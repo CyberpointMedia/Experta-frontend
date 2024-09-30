@@ -342,54 +342,65 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
     );
   }
 
-  Widget _buildExpertiseSection() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildSectionHeader("Your Expertise", controller.editExpertise),
-        const SizedBox(height: 10),
-        Obx(() {
-          if (controller.isLoading.value) {
-            return const Center(child: ShimmerLoadingEffect());
-          } else {
-            return Wrap(
-              spacing: 8.0,
-              runSpacing: 4.0,
-              children: controller.expertiseList.map((expertise) {
-                return Chip(
-                  label: Text(
-                    expertise.name,
-                    style: theme.textTheme.bodyMedium!.copyWith(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16,
+Widget _buildExpertiseSection() {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      _buildSectionHeader("Your Expertise", controller.editExpertise),
+      const SizedBox(height: 10),
+      Obx(() {
+        if (controller.isLoading.value) {
+          return const Center(child: ShimmerLoadingEffect());
+        } else {
+          return Wrap(
+            spacing: 8.0,
+            runSpacing: 4.0,
+            children: controller.expertiseList.map((expertise) {
+              return Chip(
+                label: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text(
+                      expertise.name,
+                      style: theme.textTheme.bodyMedium!.copyWith(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
+                      ),
                     ),
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                    side: const BorderSide(color: Colors.transparent),
-                  ),
-                );
-              }).toList(),
-            );
-          }
-        }),
-        const SizedBox(height: 10),
-        SizedBox(
-          height: 40,
-          width: 150,
-          child: ElevatedButton(
-            onPressed: () => controller.editExpertise(context),
-            child: Text(
-              '+ Add Expertise',
-              style: theme.textTheme.bodyMedium!
-                  .copyWith(color: Colors.black, fontWeight: FontWeight.bold),
-            ),
+                    IconButton(
+                      icon: const Icon(Icons.close, size: 18),
+                      onPressed: () {
+                        controller.expertiseList.remove(expertise);
+                      },
+                    ),
+                  ],
+                ),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(49.0),
+                  side: const BorderSide(color: Colors.transparent),
+                ),
+              );
+            }).toList(),
+          );
+        }
+      }),
+      const SizedBox(height: 10),
+      SizedBox(
+        height: 40,
+        width: 150,
+        child: ElevatedButton(
+          onPressed: () => controller.editExpertise(context),
+          child: Text(
+            '+ Add Expertise',
+            style: theme.textTheme.bodyMedium!
+                .copyWith(color: Colors.black, fontWeight: FontWeight.bold),
           ),
         ),
-      ],
-    );
-  }
+      ),
+    ],
+  );
+}
 
   Widget _buildSectionHeader(String title, Function(BuildContext) onEdit) {
     return Row(

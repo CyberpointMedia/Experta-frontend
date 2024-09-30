@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/account_details_settings/controller/account_detail_controller.dart';
+import 'package:experta/widgets/custom_icon_button.dart';
 import 'package:experta/widgets/custom_text_form_field.dart';
 import 'package:experta/widgets/custom_toast_message.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -27,7 +28,7 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
               _buildAppBar(),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 30, left: 15, right: 15),
+                  padding: const EdgeInsets.only(top: 10, left: 16, right: 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: _buildSettingUI(context),
@@ -67,8 +68,8 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
     switch (settingType) {
       case 'Username':
         return _buildChangeUserNameUI(context);
-      case 'Gender':
-        return _buildChangeGenderUI(context);
+      // case 'Gender':
+      //   return _buildChangeGenderUI(context);
       case 'Birthday':
         return _buildChangeDateOfBirthUI(context);
       case 'Change Email':
@@ -84,7 +85,9 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
     return [
       _buildTitle("Change User Name"),
       _buildSubtitle("Enter your email or phone number to reset the password."),
+      const SizedBox(height: 12,),
       const Text("User name"),
+      const SizedBox(height: 6,),
       CustomTextFormField(
         hintText: "navi_verma88",
         hintStyle: CustomTextStyles.titleMediumBluegray300,
@@ -97,74 +100,82 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
     ];
   }
 
-  List<Widget> _buildChangeGenderUI(BuildContext context) {
-    RxBool isMaleSelected = false.obs;
-    RxBool isFemaleSelected = false.obs;
+  // List<Widget> _buildChangeGenderUI(BuildContext context) {
+  //   RxBool isMaleSelected = false.obs;
+  //   RxBool isFemaleSelected = false.obs;
 
-    return [
-      _buildTitle("Change Gender"),
-      _buildSubtitle("This helps us find your more relevant content. We won’t show it on your profile."),
-      Center(
-        child: Obx(() => Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            _buildGenderSelection(
-              "Male", 
-              ImageConstant.male, 
-              ImageConstant.maleunselected, 
-              isMaleSelected.value, 
-              () {
-                isMaleSelected.value = true;
-                isFemaleSelected.value = false;
-                controller.setGender("male");
-              }
-            ),
-            const SizedBox(width: 16.0),
-            _buildGenderSelection(
-              "Female", 
-              ImageConstant.female, 
-              ImageConstant.femele, 
-              isFemaleSelected.value, 
-              () {
-                isFemaleSelected.value = true;
-                isMaleSelected.value = false;
-                controller.setGender("female");
-              }
-            ),
-          ],
-        )),
-      ),
-      const Spacer(),
-      _buildSaveButton(context, true, "Gender changed Successfully", ""),
-    ];
-  }
+  //   return [
+  //     _buildTitle("Change Gender"),
+  //     _buildSubtitle("This help us find your more relevant content. We won’t show it on your profile.max 2 line "),
+  //     Center(
+  //       child: Obx(() => Row(
+  //         mainAxisAlignment: MainAxisAlignment.center,
+  //         children: [
+  //           _buildGenderSelection(
+  //             "Male", 
+  //             ImageConstant.male, 
+  //             ImageConstant.maleunselected, 
+  //             isMaleSelected.value, 
+  //             () {
+  //               isMaleSelected.value = true;
+  //               isFemaleSelected.value = false;
+  //               controller.setGender("male");
+  //             }
+  //           ),
+  //           const SizedBox(width: 16.0),
+  //           _buildGenderSelection(
+  //             "Female", 
+  //             ImageConstant.female, 
+  //             ImageConstant.femele, 
+  //             isFemaleSelected.value, 
+  //             () {
+  //               isFemaleSelected.value = true;
+  //               isMaleSelected.value = false;
+  //               controller.setGender("female");
+  //             }
+  //           ),
+  //         ],
+  //       )),
+  //     ),
+  //     const Spacer(),
+  //     _buildSaveButton(context, true, "Gender changed Successfully", ""),
+  //   ];
+  // }
 
   List<Widget> _buildChangeDateOfBirthUI(BuildContext context) {
     return [
       _buildTitle("Change Date of birth"),
       _buildSubtitle("Enter your email or phone number to reset the password."),
+      const SizedBox(height: 12,),
       const Text("Date of birth (DD/MM/YYYY)"),
+      const SizedBox(height: 6,),
       Row(
         children: [
           Expanded(
             child: CustomTextFormField(
-              
               hintText: "01/01/2024",
               hintStyle: CustomTextStyles.titleMediumBluegray300,
               textInputType: TextInputType.datetime,
-              controller: controller.textField2,
-              focusNode: controller.focus2,
-              suffix:   IconButton(
-            icon: const Icon(Icons.calendar_today),
-            onPressed: () => _selectDate(context),
-          ),
+ controller: controller.textField2,
+              focusNode: FocusNode(),
+              suffix: CustomIconButton(
+                decoration:const BoxDecoration(color: Colors.transparent),
+                                          
+                height: 24.0, // Adjust the size as needed
+                  width: 24.0,
+                child: CustomImageView(
+                                            imagePath:
+                                                ImageConstant.imgCalendar, color: appTheme.blueGray300,onTap: () => _selectDate(context),)
+              
+                    // Adjust the size as needed
+                ),
+              ),
             ),
-          ),
-        
+          
         ],
       ),
       const Spacer(),
-      _buildSaveButton(context, controller.textField2.text.isNotEmpty, "Date of birth changed Successfully", "Please Fill the Date of birth"),
+      _buildSaveButton(context, controller.textField5.text.isNotEmpty, "Phone Number changed Successfully", "Please Fill the phone number"),
     ];
   }
 
@@ -172,7 +183,9 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
     return [
       _buildTitle("Change Email"),
       _buildSubtitle("Enter your email or phone number to reset the password."),
+      const SizedBox(height: 12,),
       const Text("Current Email"),
+      SizedBox(height: 6,),
       CustomTextFormField(
         hintText: "john.doe@example.com",
         hintStyle: CustomTextStyles.titleMediumBluegray300,
@@ -180,7 +193,9 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
         controller: controller.textField3,
         focusNode: controller.focus3,
       ),
+      const SizedBox(height: 12,),
       const Text("New Email"),
+      const SizedBox(height: 6,),
       CustomTextFormField(
         hintText: "john.doe@example.com",
         hintStyle: CustomTextStyles.titleMediumBluegray300,
@@ -202,7 +217,9 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
     return [
       _buildTitle("Change Phone Number"),
       _buildSubtitle("Enter your phone number to update it."),
+      const SizedBox(height: 12,),
       const Text("Phone Number"),
+      SizedBox(height: 6,),
       CustomTextFormField(
         hintText: "+1 123 456 7890",
         hintStyle: CustomTextStyles.titleMediumBluegray300,
@@ -210,8 +227,8 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
         controller: controller.textField5,
         focusNode: controller.focus5,
       ),
-      const Spacer(),
-      _buildSaveButton(context, controller.textField5.text.isNotEmpty, "Phone Number changed Successfully", "Please Fill the phone number"),
+      // const Spacer(),
+      // _buildSaveButton(context, controller.textField5.text.isNotEmpty, "Phone Number changed Successfully", "Please Fill the phone number"),
     ];
   }
 

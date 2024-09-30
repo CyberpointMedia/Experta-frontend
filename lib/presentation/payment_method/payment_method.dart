@@ -128,7 +128,7 @@ class _PaymentMethodState extends State<PaymentMethod> {
                           },
                         child:Padding(
                       
-                          padding: const EdgeInsets.only(top: 3),
+                          padding: const EdgeInsets.only(top: 1),
                           child: Container(
                               padding: EdgeInsets.symmetric(
                                   horizontal: 15.h, vertical: 16.v),

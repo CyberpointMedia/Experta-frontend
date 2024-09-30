@@ -186,7 +186,7 @@ class _ChattingPageState extends State<ChattingPage> {
               children: [
                 Expanded(
                   child: _socketService.messages.isEmpty
-                      ? Center(child: CircularProgressIndicator())
+                      ? const Center(child: CircularProgressIndicator())
                       : MessageList(
                           groupedMessages: groupedMessages,
                           convertToISTs: convertToISTs,

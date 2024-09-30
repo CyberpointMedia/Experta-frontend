@@ -1,5 +1,8 @@
 import 'dart:ui';
+import 'package:experta/core/app_export.dart';
+import 'package:experta/presentation/categoryDetails/category_details_screen.dart';
 import 'package:experta/theme/theme_helper.dart';
+import 'package:experta/widgets/app_bar/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 
 class RecordedSessionsPage extends StatefulWidget {
@@ -76,7 +79,7 @@ class _RecordedSessionsPageState extends State<RecordedSessionsPage> {
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              _buildAppBar(context),
+              _buildAppBar(),
               Expanded(child: _buildRecordedSessionsList()),
             ],
           ),
@@ -85,15 +88,19 @@ class _RecordedSessionsPageState extends State<RecordedSessionsPage> {
     );
   }
 
-  Widget _buildAppBar(BuildContext context) {
-    return AppBar(
-      title: const Text("Recorded Sessions"),
-      leading: IconButton(
-        icon: const Icon(Icons.arrow_back),
-        onPressed: () {
-          Navigator.pop(context);
+  PreferredSizeWidget _buildAppBar() {
+    return CustomAppBar(
+      height: 40.h,
+      leadingWidth: 40.h,
+      leading: AppbarLeadingImage(
+        imagePath: ImageConstant.imgArrowLeftOnerrorcontainer,
+        margin: EdgeInsets.only(left: 16.h),
+        onTap: () {
+          onTapArrowLeft();
         },
       ),
+      centerTitle: true,
+      title: AppbarSubtitleSix(text: "Recorded Sessions"),
     );
   }
 
@@ -101,10 +108,10 @@ class _RecordedSessionsPageState extends State<RecordedSessionsPage> {
   Widget _buildRecordedSessionsList() {
     return ListView.builder(
       itemCount: sessions.length,
-      padding: const EdgeInsets.all(16.0),
+      padding: const EdgeInsets.only(left: 16.0, top: 16,),
       itemBuilder: (context, index) {
         return Padding(
-          padding: const EdgeInsets.only(bottom: 16.0),
+          padding: EdgeInsets.only(bottom: 16.h),
           child: RecordedSessionTile(
             imageUrl: sessions[index]['imageUrl'],
             name: sessions[index]['name'],
@@ -150,8 +157,8 @@ class RecordedSessionTile extends StatelessWidget {
               borderRadius: BorderRadius.circular(10.0),
               child: Image.network(
                 imageUrl,
-                width: 80.0,
-                height: 80.0,
+                width: 164.h, // Set the width to 164 pixels
+                height: 94.v, // Set the height to 94 pixels
                 fit: BoxFit.cover,
               ),
             ),
@@ -173,12 +180,51 @@ class RecordedSessionTile extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                name,
-                style: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 16.0,
-                ),
+              Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      name,
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 16.0,
+                        color: Colors.black, // Set the color to black
+                      ),
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(5.0), // Add padding around the icon
+                    child: PopupMenuButton<String>(
+                      onSelected: (value) {
+                        if (value == 'Delete') {
+                          onDelete(); // Call delete function when "Delete" is selected
+                        }
+                      },
+                      itemBuilder: (context) => [
+                        PopupMenuItem<String>(
+                          value: 'Delete',
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(vertical: 4.0), // Reduce vertical padding
+                            height: 30, // Reduce the overall height of the popup item
+                            child: const Text(
+                              'Delete',
+                              style: TextStyle(
+                                fontSize: 14.0, // Adjust font size for better visibility
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                      icon: const Icon(Icons.more_vert, color: Colors.grey), // Set the color to grey
+                      padding: const EdgeInsets.all(4), // Removes any default padding
+                      offset: const Offset(0, 30), // Adjusts the popup position relative to the icon
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(8.0), // Rounded corners for the popup menu
+                      ),
+                      elevation: 2.0, // Adds elevation for a better visual effect
+                    ),
+                  ),
+                ],
               ),
               Text(
                 title,
@@ -186,15 +232,18 @@ class RecordedSessionTile extends StatelessWidget {
                   color: Colors.grey,
                   fontSize: 14.0,
                 ),
+                maxLines: 1, // Ensure the text is displayed in a single line
+                overflow: TextOverflow.ellipsis, // Show ellipsis if the text is too long
               ),
               const SizedBox(height: 4.0),
-              Row(
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
                     date,
                     style: const TextStyle(color: Colors.grey),
                   ),
-                  const SizedBox(width: 8.0),
+                  const SizedBox(height: 4.0), // Add some space between date and time
                   Text(
                     time,
                     style: const TextStyle(color: Colors.grey),
@@ -204,42 +253,7 @@ class RecordedSessionTile extends StatelessWidget {
             ],
           ),
         ),
-        PopupMenuButton<String>(
-          onSelected: (value) {
-            if (value == 'Delete') {
-              onDelete(); // Call delete function when "Delete" is selected
-            }
-          },
-          itemBuilder: (context) => [
-            PopupMenuItem<String>(
-              value: 'Delete',
-              child: Container(
-                padding: const EdgeInsets.symmetric(vertical: 4.0), // Reduce vertical padding
-                height: 30, // Reduce the overall height of the popup item
-                child: const Text(
-                  'Delete',
-                  style: TextStyle(
-                    fontSize: 14.0, // Adjust font size for better visibility
-                  ),
-                ),
-              ),
-            ),
-          ],
-          icon: const Icon(Icons.more_vert),
-          padding: const EdgeInsets.all(4), // Removes any default padding
-          offset: const Offset(0, 30), // Adjusts the popup position relative to the icon
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8.0), // Rounded corners for the popup menu
-          ),
-          elevation: 2.0, // Adds elevation for a better visual effect
-        ),
       ],
     );
   }
-}
-
-void main() {
-  runApp(const MaterialApp(
-    home: RecordedSessionsPage(),
-  ));
 }

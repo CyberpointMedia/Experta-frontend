@@ -19,9 +19,7 @@ class CategoryDetailScreen extends StatelessWidget {
     controller.fetchUsersByIndustry(industry.id);
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(categoryName),
-      ),
+      appBar:_buildAppBar(categoryName),
       body: Obx(() {
         if (controller.isLoading.value) {
           return GridView.builder(
@@ -167,6 +165,26 @@ Widget _buildEmptyContainer() {
     ),
   );
 }
+
+  PreferredSizeWidget _buildAppBar(String text) {
+    return CustomAppBar(
+      height: 40.h,
+      leadingWidth: 40.h,
+      leading: AppbarLeadingImage(
+        imagePath: ImageConstant.imgArrowLeftOnerrorcontainer,
+        margin: EdgeInsets.only(left: 16.h),
+        onTap: () {
+          onTapArrowLeft();
+        },
+      ),
+      centerTitle: true,
+      title: AppbarSubtitleSix(text: text),
+    );
+  }
+
+  void onTapArrowLeft() {
+    Get.back();
+  }
 
 class UserProfileItemWidget extends StatelessWidget {
   final User user;

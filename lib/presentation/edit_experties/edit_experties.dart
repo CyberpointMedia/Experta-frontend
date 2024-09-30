@@ -1,191 +1,128 @@
-import 'package:experta/core/app_export.dart';
-import 'package:experta/presentation/professional_info/expertise.dart';
-import 'package:experta/presentation/professional_info/model/professional_model.dart';
-import 'package:page_transition/page_transition.dart';
+import 'package:flutter/material.dart';
 
 class EditExpertisePage extends StatefulWidget {
-  final List<ExpertiseItem> selectedItems;
-  const EditExpertisePage({super.key, required this.selectedItems});
-
   @override
-  State<EditExpertisePage> createState() => _EditExpertisePageState();
+  _EditExpertisePageState createState() => _EditExpertisePageState();
 }
 
 class _EditExpertisePageState extends State<EditExpertisePage> {
-  late List<ExpertiseItem> expertise;
+  // List of expertise
+  List<String> expertise = [
+    'Visual design',
+    'web design',
+    'Information architecture',
+    'user research',
+    'Interaction design',
+    'mobile app design',
+  ];
 
-  final ApiService apiService = ApiService();
-  bool isLoading = false;
-
-  @override
-  void initState() {
-    super.initState();
-    expertise = List.from(widget.selectedItems);
-  }
-
-  void _deleteExpertise(ExpertiseItem item) {
+  // Method to delete expertise
+  void _deleteExpertise(String item) {
     setState(() {
       expertise.remove(item);
     });
   }
 
+  // Method to add new expertise
   void _addExpertise() {
-    Navigator.pushReplacement(
-      context,
-      PageTransition(
-        child: ExpertiseView(selectedItems: expertise),
-        type: PageTransitionType.leftToRight,
-        duration: const Duration(milliseconds: 300),
-        reverseDuration: const Duration(milliseconds: 300),
-      ),
-    );
-  }
-
-  Future<void> _saveExpertise() async {
-    try {
-      setState(() {
-        isLoading = true;
-      });
-
-      List<ExpertiseItem> allExpertiseItems =
-          await apiService.fetchExpertiseItems();
-
-      List<String> expertiseIds = [];
-      for (var selectedItem in expertise) {
-        var matchingItem = allExpertiseItems.firstWhere(
-          (item) => item.name.toLowerCase() == selectedItem.name.toLowerCase(),
-          orElse: () =>
-              throw Exception('Expertise "${selectedItem.name}" not found'),
-        );
-        expertiseIds.add(matchingItem.id);
-      }
-
-      await apiService.saveExpertiseItems(expertiseIds);
-
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Expertise saved successfully')),
-      );
-
-      Get.back();
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Failed to save expertise: ${e.toString()}')),
-      );
-    } finally {
-      setState(() {
-        isLoading = false;
-      });
-    }
+    // Logic for adding a new expertise item
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(),
+      appBar: AppBar(
+        title: const Text('Edit Expertise'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context); // Navigate back
+          },
+        ),
+        elevation: 0,
+        backgroundColor: Colors.white,
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text('Expertise',
-                style: theme.textTheme.titleMedium!
-                    .copyWith(fontWeight: FontWeight.w600, fontSize: 16)),
+            const Text(
+              'Expertise',
+              style: TextStyle(
+                fontSize: 18,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
             const SizedBox(height: 8),
-            Text(
+            const Text(
               "Show your top expertise - add up to 5 skills you want to be known for. They'll also appear in your expertise section.",
-              style: theme.textTheme.titleMedium,
+              style: TextStyle(fontSize: 14, color: Colors.grey),
             ),
             const SizedBox(height: 16),
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.55,
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Wrap(
-                      children: expertise.map((item) {
-                        return Chip(
-                          label: Text(
-                            item.name,
-                            style: theme.textTheme.titleMedium!.copyWith(
-                                fontWeight: FontWeight.w500, fontSize: 16),
-                          ),
-                          deleteIcon: const Icon(Icons.close),
-                          onDeleted: () {
-                            _deleteExpertise(item);
-                          },
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(20.0),
-                            side: const BorderSide(color: Colors.transparent),
-                          ),
-                        );
-                      }).toList(),
+            Wrap(
+              spacing: 8.0, // Gap between chips
+              runSpacing: 8.0, // Gap between rows
+              children: expertise.map((skill) {
+                return Chip(
+                  label: Text(skill),
+                  deleteIcon: Icon(Icons.close),
+                  onDeleted: () {
+                    _deleteExpertise(skill); // Delete skill
+                  },
+                  backgroundColor: Colors.grey[200],
+                );
+              }).toList(),
+            ),
+            const SizedBox(height: 16),
+            GestureDetector(
+              onTap: _addExpertise,
+              child: Row(
+                children: [
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(
+                      color: Colors.yellow[700],
+                      borderRadius: BorderRadius.circular(24),
                     ),
-                    const SizedBox(height: 16),
-                    GestureDetector(
-                      onTap: _addExpertise,
-                      child: Row(
-                        children: [
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                                horizontal: 16, vertical: 8),
-                            decoration: BoxDecoration(
-                              color: theme.primaryColor,
-                              borderRadius: BorderRadius.circular(24),
-                            ),
-                            child: const Row(
-                              children: [
-                                SizedBox(width: 8),
-                                Text(
-                                  '+ Add Expertise',
-                                  style: TextStyle(color: Colors.white),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
+                    child: const Row(
+                      children: [
+                        Icon(Icons.add, color: Colors.white),
+                        SizedBox(width: 8),
+                        Text(
+                          '+ Add Expertise',
+                          style: TextStyle(color: Colors.white),
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 16),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
             const Spacer(),
             Align(
               alignment: Alignment.bottomCenter,
-              child: (isLoading)
-                  ? const Center(
-                      child: CircularProgressIndicator(),
-                    )
-                  : CustomElevatedButton(
-                      onPressed: _saveExpertise,
-                      text: 'Save',
-                    ),
+              child: ElevatedButton(
+                onPressed: () {
+                  // Save button logic
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.yellow[700], // Set button color
+                  padding: const EdgeInsets.symmetric(vertical: 14, horizontal: 50),
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(24),
+                  ),
+                ),
+                child: const Text(
+                  'Save',
+                  style: TextStyle(fontSize: 16, color: Colors.white),
+                ),
+              ),
             ),
             const SizedBox(height: 16),
           ],
         ),
       ),
     );
-  }
-
-  PreferredSizeWidget _buildAppBar() {
-    return CustomAppBar(
-      height: 60.h,
-      leadingWidth: 40.h,
-      leading: AppbarLeadingImage(
-        imagePath: ImageConstant.imgArrowLeftOnerrorcontainer,
-        margin: EdgeInsets.only(left: 16.h),
-        onTap: () {
-          onTapArrowLeft();
-        },
-      ),
-      centerTitle: true,
-      title: AppbarSubtitleSix(text: "Edit Expertise"),
-    );
-  }
-
-  void onTapArrowLeft() {
-    Get.back();
   }
 }

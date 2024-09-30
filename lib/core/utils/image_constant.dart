@@ -431,7 +431,7 @@ class ImageConstant {
 
   // static String imgNavFeedsGray900 = '$imagePath/img_nav_feeds_gray_900.svg';
 
-  // static String imgInfoBlueGray300 = '$imagePath/img_info_blue_gray_300.svg';
+  static String imgInfoBlueGray300 = '$imagePath/settings/inform.svg';
 
   // static String imgFlash2 = '$imagePath/img_flash_2.svg';
 

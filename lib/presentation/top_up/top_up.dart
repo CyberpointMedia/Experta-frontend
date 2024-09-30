@@ -1,155 +1,29 @@
-// ignore_for_file: use_build_context_synchronously
-
-import 'dart:developer';
 import 'dart:ui';
-import 'package:experta/core/utils/text_constants.dart';
-import 'package:experta/widgets/custom_toast_message.dart';
-import 'package:lottie/lottie.dart';
-import 'package:razorpay_flutter/razorpay_flutter.dart';
+
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/categoryDetails/category_details_screen.dart';
+import 'package:experta/widgets/app_bar/custom_app_bar.dart';
+import 'package:flutter/material.dart';
 
 class TopUpPage extends StatefulWidget {
-  const TopUpPage({super.key});
-
   @override
-  State<TopUpPage> createState() => _TopUpPageState();
+  _TopUpPageState createState() => _TopUpPageState();
 }
 
 class _TopUpPageState extends State<TopUpPage> {
-  double enteredAmount = 0;
+  double enteredAmount = 1000.0;
   TextEditingController amountController = TextEditingController();
-  late Razorpay _razorpay;
-  ApiService apiServices = ApiService();
-  String transactionid = '';
+
   @override
   void initState() {
     super.initState();
-    _razorpay = Razorpay();
-    // Attach event listeners for Razorpay
-    _razorpay.on(Razorpay.EVENT_PAYMENT_SUCCESS, _handlePaymentSuccess);
-    _razorpay.on(Razorpay.EVENT_PAYMENT_ERROR, _handlePaymentError);
-    _razorpay.on(Razorpay.EVENT_EXTERNAL_WALLET, _handleExternalWallet);
+    amountController = TextEditingController();
   }
 
   @override
   void dispose() {
-    _razorpay.clear();
     amountController.dispose();
     super.dispose();
-  }
-
-  Future<void> _openRazorpayCheckout() async {
-    try {
-      final orderResponse = await apiServices.createOrder(enteredAmount);
-      final orderId = orderResponse['data']['order']['id'];
-      transactionid = orderResponse['data']['transactionId'];
-
-      var options = {
-        'key': TextConstants.key,
-        'amount': (enteredAmount).toInt(),
-        'name': TextConstants.name,
-        'order_id': orderId,
-        'image':
-            "https://expertabackend.s3.ap-south-1.amazonaws.com/1727252402847",
-        'description': 'Top-up for ₹$enteredAmount',
-        'prefill': {
-          'contact': TextConstants.contact,
-          'email': TextConstants.email
-        },
-        'theme': {'color': TextConstants.color}
-      };
-
-      _razorpay.open(options);
-    } catch (e) {
-      log('Error opening Razorpay checkout: $e');
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Error: Unable to initiate payment"),
-      ));
-    }
-  }
-
-  void _handlePaymentSuccess(PaymentSuccessResponse response) async {
-    log("Payment Success: ${response.paymentId}");
-    _showLoadingScreen();
-
-    try {
-      final verificationResponse = await apiServices.verifyPayment(
-        response.orderId!,
-        response.paymentId!,
-        response.signature!,
-        transactionid,
-      );
-
-      Navigator.pop(context);
-
-      if (verificationResponse['status'] == 'success') {
-        CustomToast().showToast(
-          context: context,
-          message: "Payment Verified: ${response.paymentId}",
-          isSuccess: true,
-        );
-      } else {
-        CustomToast().showToast(
-          context: context,
-          message:
-              "Payment Verification Failed ${verificationResponse['error']['errorMessage']}",
-          isSuccess: false,
-        );
-      }
-    } catch (e) {
-      Navigator.pop(context);
-      log('Error verifying payment: $e');
-      CustomToast().showToast(
-        context: context,
-        message: "Error: Payment verification failed $e",
-        isSuccess: false,
-      );
-    }
-  }
-
-  void _showLoadingScreen() {
-    showDialog(
-      context: context,
-      barrierDismissible: true,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          backgroundColor: Colors.transparent,
-          content: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Lottie.asset("assets/jsonfiles/Loader.json"),
-              const SizedBox(width: 20),
-              Text(
-                "Please wait while we verify your payment...",
-                textAlign: TextAlign.center,
-                style: theme.textTheme.titleSmall!
-                    .copyWith(color: appTheme.whiteA700),
-              ),
-            ],
-          ),
-        );
-      },
-    );
-  }
-
-  void _handlePaymentError(PaymentFailureResponse response) {
-    log("the error data is ${response.code}");
-    log("the payment error is ${response.error}");
-    log("the payment error message is ${response.message}");
-    // Handle payment failure
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text("Payment Failed: ${response.code} - ${response.message}"),
-    ));
-  }
-
-  void _handleExternalWallet(ExternalWalletResponse response) {
-    log("the payment data is ${response.walletName}");
-    // Handle external wallet (e.g. PayTM)
-    ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text("External Wallet: ${response.walletName}"),
-    ));
   }
 
   @override
@@ -164,7 +38,6 @@ class _TopUpPageState extends State<TopUpPage> {
             top: 50,
             child: ImageFiltered(
               imageFilter: ImageFilter.blur(
-                tileMode: TileMode.decal,
                 sigmaX: 60,
                 sigmaY: 60,
               ),
@@ -187,19 +60,19 @@ class _TopUpPageState extends State<TopUpPage> {
               _buildAppBar(),
               Expanded(
                 child: Padding(
-                  padding:
-                      const EdgeInsets.only(left: 16.0, right: 16, top: 20),
+                 padding: const EdgeInsets.only(left: 16.0,right: 16,top: 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
+                      
                       _buildEnterAmountSection(),
                       _buildQuickSelectButtons(),
                       const Spacer(),
-                      // _buildDisclaimerText(),
-                      // const SizedBox(height: 10),
-                      // const Divider(),
-                      // const SizedBox(height: 10),
-                      // _buildDetailsSection(),
+                      _buildDisclaimerText(),
+                      const SizedBox(height: 10),
+                      const Divider(),
+                      const SizedBox(height: 10),
+                      _buildDetailsSection(),
                       _buildTopUpButton(),
                     ],
                   ),
@@ -231,25 +104,22 @@ class _TopUpPageState extends State<TopUpPage> {
   Widget _buildEnterAmountSection() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.center,
       children: [
-        Text("Enter amount", style: CustomTextStyles.labelMediumGray900),
+        const Text(
+          "Enter amount",
+          style: TextStyle(fontSize: 16, color: Colors.grey),
+        ),
         const SizedBox(height: 10),
         Row(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(
+            const Text(
               "₹",
-              style: CustomTextStyles.labelLargeBluegray3000,
+              style: TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: Colors.grey),
             ),
             Expanded(
               child: TextFormField(
                 controller: amountController,
-                style: const TextStyle(
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.black),
+                style: const TextStyle(fontSize: 36, fontWeight: FontWeight.bold, color: Colors.black),
                 keyboardType: TextInputType.number,
                 onChanged: (value) {
                   setState(() {
@@ -284,7 +154,7 @@ class _TopUpPageState extends State<TopUpPage> {
 
   Widget _buildQuickSelectButtons() {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 16),
+      padding:  const EdgeInsets.symmetric(vertical: 16),
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: [
@@ -316,17 +186,12 @@ class _TopUpPageState extends State<TopUpPage> {
             borderRadius: BorderRadius.circular(20),
           ),
           side: BorderSide(
-            color: isSelected
-                ? appTheme.deepYello
-                : appTheme.gray200, // Set border color to orange if selected
+            color: isSelected ? appTheme.deepYello : appTheme.gray200, // Set border color to orange if selected
             width: 1, // Set the border width
           ),
           elevation: 0, // Remove shadow
         ),
-        child: Text(
-          text,
-          style: const TextStyle(fontSize: 16),
-        ),
+        child: Text(text, style: const TextStyle(fontSize: 16),),
       ),
     );
   }
@@ -352,8 +217,7 @@ class _TopUpPageState extends State<TopUpPage> {
   Widget _buildDetailsSection() {
     return Column(
       children: [
-        _buildDetailRow("Add to current balance", "₹150.00",
-            isBold: true, color: Colors.black),
+        _buildDetailRow("Add to current balance", "₹150.00", isBold: true, color: Colors.black),
         // Divider(),
         _buildDetailRow("Deposit amount (excl. Govt. Tax)", "₹117.18"),
         _buildDetailRow("Govt. Tax (28% GST)", "₹32.82"),
@@ -361,14 +225,12 @@ class _TopUpPageState extends State<TopUpPage> {
         const SizedBox(height: 10),
         const Divider(),
         const SizedBox(height: 10),
-        _buildDetailRow("Total Amount", "₹112.18",
-            isBold: true, color: Colors.black),
+        _buildDetailRow("Total Amount", "₹112.18", isBold: true, color: Colors.black),
       ],
     );
   }
 
-  Widget _buildDetailRow(String label, String value,
-      {bool isBold = false, Color color = Colors.grey}) {
+  Widget _buildDetailRow(String label, String value, {bool isBold = false, Color color = Colors.grey}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 4.0),
       child: Row(
@@ -397,13 +259,14 @@ class _TopUpPageState extends State<TopUpPage> {
 
   Widget _buildTopUpButton() {
     return Padding(
-      padding: const EdgeInsets.only(top: 50, bottom: 20),
+      padding: const EdgeInsets.only(top: 50,bottom: 20),
       child: CustomElevatedButton(
-          onPressed: () {
-            _openRazorpayCheckout();
-            print("Top Up ₹$enteredAmount");
-          },
-          text: 'Top ₹ $enteredAmount'),
+        onPressed: () {
+          // Add top-up action here
+          print("Top Up ₹$enteredAmount");
+        },
+        text: 'Top ₹150'
+      ),
     );
   }
 }

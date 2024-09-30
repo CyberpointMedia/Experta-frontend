@@ -1,6 +1,6 @@
 import 'dart:ui';
-import 'package:experta/theme/theme_helper.dart';
-import 'package:flutter/material.dart';
+import 'package:experta/core/app_export.dart';
+import 'package:experta/presentation/categoryDetails/category_details_screen.dart';
 import 'package:intl/intl.dart'; // Add this for date formatting
 
 class CustomTextField extends StatelessWidget {
@@ -12,7 +12,7 @@ class CustomTextField extends StatelessWidget {
     Key? key,
     required this.hintText,
     required this.controller,
-    required this.onTap,
+    required this.onTap,w
   }) : super(key: key);
 
   @override
@@ -87,26 +87,9 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
     }
   }
 
-  @override
+   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-        title: const Text('Transaction History'),
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.download),
-            onPressed: () {
-              // Add download action
-            },
-          ),
-        ],
-      ),
       body: Stack(
         children: [
           Positioned(
@@ -131,44 +114,52 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
               ),
             ),
           ),
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                _buildSearchBar(context),
-                const SizedBox(height: 16),
-                Expanded(
-                  child: ListView.builder(
-                    itemCount: transactions.length,
-                    itemBuilder: (context, index) {
-                      final transaction = transactions[index];
-                      return _buildTransactionTile(
-                        transaction['type'],
-                        transaction['amount'],
-                        transaction['time'],
-                        transaction['status'],
-                      );
-                    },
-                  ),
-                ),
-              ],
-            ),
-          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [_buildAppBar(),
+                        
+                       
+                       _buildSearchBar(), 
+                       _buildTransactionTile('Receive', 45, '',""),],
+          )
         ],
       ),
     );
   }
 
-  Widget _buildSearchBar(BuildContext context) {
-    return Row(
+ PreferredSizeWidget _buildAppBar() {
+    return CustomAppBar(
+      height: 40.h,
+      leadingWidth: 40.h,
+      leading: AppbarLeadingImage(
+        imagePath: ImageConstant.imgArrowLeftOnerrorcontainer,
+        margin: EdgeInsets.only(left: 16.h),
+        onTap: () {
+          onTapArrowLeft();
+        },
+      ),
+      centerTitle: true,
+      title: AppbarSubtitleSix(text: "Transaction History"),
+    );
+
+}
+
+  // ignore: dead_code
+  Widget _buildSearchBar() {
+  return Padding(
+    padding: const EdgeInsets.symmetric(horizontal: 16.0), // Adds left and right padding of 16
+    child: Row(
       children: [
         Expanded(
           child: TextField(
             decoration: InputDecoration(
               prefixIcon: const Icon(Icons.search),
               hintText: 'Search transaction',
+              fillColor: Colors.white, // Set the background color to white
+              filled: true, // Make sure the fillColor is applied
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(50.0),
+                borderSide: BorderSide.none, // Removes the default border
               ),
             ),
           ),
@@ -203,8 +194,10 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
           ),
         ),
       ],
-    );
-  }
+    ),
+  );
+}
+
 
   Widget _buildTransactionTile(String type, int amount, String time, String status) {
     return ListTile(
@@ -246,7 +239,11 @@ Widget _buildFilterSheet(ScrollController scrollController) {
             children: [
               const Text(
                 'Filter Payments',
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.black),
+                style: TextStyle(
+                  fontSize: 24,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black,
+                ),
               ),
               const Spacer(),
               IconButton(
@@ -258,7 +255,17 @@ Widget _buildFilterSheet(ScrollController scrollController) {
             ],
           ),
           const SizedBox(height: 16),
-          const Text('Status', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black)),
+
+          // Status Section
+          const Text(
+            'Status',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: Colors.black,
+            ),
+          ),
+          const SizedBox(height: 10),
           Wrap(
             spacing: 8.0,
             children: ['Successful', 'Pending', 'Failed'].map((status) {
@@ -269,12 +276,23 @@ Widget _buildFilterSheet(ScrollController scrollController) {
                 },
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50),
+                  side: const BorderSide(color: Colors.grey), // Set border color to grey
                 ),
               );
             }).toList(),
           ),
           const SizedBox(height: 16),
-          const Text('Payment Type', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black)),
+
+          // Payment Type Section
+          const Text(
+            'Payment Type',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: Colors.black,
+            ),
+          ),
+          const SizedBox(height: 10),
           Wrap(
             spacing: 8.0,
             children: ['Deposit', 'Received', 'Withdrawals'].map((type) {
@@ -285,12 +303,23 @@ Widget _buildFilterSheet(ScrollController scrollController) {
                 },
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50),
+                  side: const BorderSide(color: Colors.grey), // Set border color to grey
                 ),
               );
             }).toList(),
           ),
           const SizedBox(height: 16),
-          const Text('Months', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black)),
+
+          // Months Section
+          const Text(
+            'Months',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: Colors.black,
+            ),
+          ),
+          const SizedBox(height: 10),
           Wrap(
             spacing: 8.0,
             children: [
@@ -300,7 +329,12 @@ Widget _buildFilterSheet(ScrollController scrollController) {
               'April\' 24',
               'May\' 24',
               'June\' 24',
-              'July\' 24'
+              'July\' 24',
+              'August\' 24',
+              'September\' 24',
+              'October\' 24',
+              'November\' 24',
+              'December\' 24',
             ].map((month) {
               return FilterChip(
                 label: Text(month, style: const TextStyle(color: Colors.black)),
@@ -309,37 +343,87 @@ Widget _buildFilterSheet(ScrollController scrollController) {
                 },
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(50),
+                  side: const BorderSide(color: Colors.grey), // Set border color to grey
                 ),
               );
             }).toList(),
           ),
-          const SizedBox(height: 16),
-          const Text('Filter by Date Range', style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Colors.black)),
+          const SizedBox(height: 25),
+
+          // Filter by Date Range Section
+          const Text(
+            'Filter by Date Range',
+            style: TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: Colors.black,
+            ),
+          ),
+          const SizedBox(height: 20),
           Row(
             children: [
               Expanded(
-                child: CustomTextField(
-                  hintText: 'From',
-                  controller: TextEditingController(
-                    text: _selectedFromDate != null ? DateFormat.yMMMd().format(_selectedFromDate!) : '',
+                child: GestureDetector(
+                  onTap: () => _selectDate(context, false),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey), // Set border color to grey
+                      borderRadius: BorderRadius.circular(13),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 12.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          _selectedFromDate != null
+                              ? DateFormat.yMMMd().format(_selectedFromDate!)
+                              : 'From',
+                          style: const TextStyle(color: Colors.black),
+                        ),
+                        CustomImageView(
+                          imagePath: ImageConstant.imgCalendar,
+                          color: appTheme.blueGray300,
+                          onTap: () => _selectDate(context, false),
+                        ),
+                      ],
+                    ),
                   ),
-                  onTap: () => _selectDate(context, true),
                 ),
               ),
-              const SizedBox(width: 8),
+              const SizedBox(width: 25),
               Expanded(
-                child: CustomTextField(
-                  hintText: 'To',
-                  controller: TextEditingController(
-                    text: _selectedToDate != null ? DateFormat.yMMMd().format(_selectedToDate!) : '',
+                child: GestureDetector(
+                  onTap: () => _selectDate(context, true),
+                  child: Container(
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey), // Set border color to grey
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 20.0, horizontal: 12.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          _selectedToDate != null
+                              ? DateFormat.yMMMd().format(_selectedToDate!)
+                              : 'To',
+                          style: const TextStyle(color: Colors.black),
+                        ),
+                        CustomImageView(
+                          imagePath: ImageConstant.imgCalendar,
+                          color: appTheme.blueGray300,
+                          onTap: () => _selectDate(context, true),
+                        ),
+                      ],
+                    ),
                   ),
-                  onTap: () => _selectDate(context, false),
                 ),
               ),
             ],
           ),
-          // Adding the SizedBox for padding before the buttons
-          const SizedBox(height: 32),  // Add this line for spacing
+          const SizedBox(height: 60),
+
+          // Buttons
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -348,12 +432,13 @@ Widget _buildFilterSheet(ScrollController scrollController) {
                   // Handle clear all action
                 },
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.grey.shade300,
-                  foregroundColor: Colors.black, // Changed text color to black
+                  backgroundColor: Colors.white, // Set background color to white
+                  foregroundColor: Colors.black,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(50),
+                    side: const BorderSide(color: Colors.grey), // Set border color to grey
                   ),
-                  minimumSize: const Size(164, 56), // Set minimum size
+                  minimumSize: const Size(200, 85),
                 ),
                 child: const Text('Clear All'),
               ),
@@ -367,7 +452,7 @@ Widget _buildFilterSheet(ScrollController scrollController) {
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(50),
                   ),
-                  minimumSize: const Size(164, 56), // Set minimum size
+                  minimumSize: const Size(200, 85),
                 ),
                 child: const Text('Apply'),
               ),
@@ -379,10 +464,10 @@ Widget _buildFilterSheet(ScrollController scrollController) {
   );
 }
 
+
+
+
+
+
 }
 
-void main() {
-  runApp(const MaterialApp(
-    home: TransactionHistoryPage(),
-  ));
-}
