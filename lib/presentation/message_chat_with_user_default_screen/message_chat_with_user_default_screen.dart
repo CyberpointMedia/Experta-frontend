@@ -18,7 +18,7 @@ class ChattingPage extends StatefulWidget {
 
 class _ChattingPageState extends State<ChattingPage> {
   late final Map<String, dynamic> chat;
-  late final SocketService _socketService;
+  late final ChatRoomSocketService _socketService;
   late final ApiService apiServices;
   final TextEditingController _messageController = TextEditingController();
   final ScrollController _scrollController = ScrollController();
@@ -29,8 +29,12 @@ class _ChattingPageState extends State<ChattingPage> {
     super.initState();
     chat = Get.arguments['chat'] ?? {};
     apiServices = ApiService();
-    _socketService = Provider.of<SocketService>(context, listen: false);
-    _socketService.addListener(_onSocketDataChanged);
+
+    // Initializing the socket service and setting up listeners
+    _socketService = Provider.of<ChatRoomSocketService>(context, listen: false);
+    _socketService.initUser(chat['_id']);
+    _socketService.onNewMessageReceived(_onNewMessageReceived);
+    _socketService.onMessagesMarkedRead(_onMessagesMarkedRead);
 
     // Fetch initial messages
     if (chat.isNotEmpty) {
@@ -39,27 +43,12 @@ class _ChattingPageState extends State<ChattingPage> {
   }
 
   @override
-  void didChangeDependencies() {
-    if (chat.isNotEmpty) {
-      fetchMessages();
-    }
-    super.didChangeDependencies();
-  }
-
-  @override
   void dispose() {
-    _socketService.removeListener(_onSocketDataChanged);
+    // Remove listeners to prevent memory leaks
+    _socketService.offChatRoomListeners();
     _messageController.dispose();
     _scrollController.dispose();
     super.dispose();
-  }
-
-  void _onSocketDataChanged() {
-    // Debounce state updates to avoid frequent rebuilds
-    if (mounted && !isFetching) {
-      setState(() {});
-      _scrollToBottom();
-    }
   }
 
   Future<void> fetchMessages() async {
@@ -118,6 +107,24 @@ class _ChattingPageState extends State<ChattingPage> {
 
       // Scroll to the bottom after sending
       _scrollToBottom();
+    }
+  }
+
+  // Handle incoming new messages
+  void _onNewMessageReceived(data) {
+    if (mounted) {
+      setState(() {
+        _socketService.messages.add(data);
+      });
+      _scrollToBottom();
+    }
+  }
+
+  // Handle messages marked as read
+  void _onMessagesMarkedRead(data) {
+    log("Messages marked as read: $data");
+    if (mounted) {
+      setState(() {});
     }
   }
 

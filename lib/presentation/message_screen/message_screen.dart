@@ -16,26 +16,39 @@ class MessageScreen extends StatefulWidget {
 
 class _MessageScreenState extends State<MessageScreen> {
   final MessageController controller = Get.put(MessageController());
+  List<dynamic> filteredChats = [];
 
   @override
   void initState() {
     super.initState();
-    final socketService = Provider.of<SocketService>(context, listen: false);
-    socketService.initializeSocket();
+    final socketService =
+        Provider.of<InboxSocketService>(context, listen: false);
+    final currentUserId = PrefUtils().getaddress();
+    socketService.initUser(currentUserId!);
     controller.searchController.addListener(_filterChats);
+
+    // Fetch initial chats
+    socketService.fetchChats(currentUserId);
+    socketService.onChatsFetched((data) {
+      setState(() {
+        filteredChats = data;
+      });
+    });
   }
 
   @override
   void dispose() {
+    controller.searchController.removeListener(_filterChats);
     controller.searchController.clear();
     super.dispose();
   }
 
   void _filterChats() {
-    final socketService = Provider.of<SocketService>(context, listen: false);
+    final socketService =
+        Provider.of<InboxSocketService>(context, listen: false);
     final query = controller.searchController.text.toLowerCase();
     setState(() {
-      socketService.filteredChats = socketService.chats.where((chat) {
+      filteredChats = socketService.chats.where((chat) {
         final otherUser = chat['users']?.firstWhere(
           (u) => u['_id'] != PrefUtils().getaddress(),
           orElse: () => null,
@@ -72,7 +85,7 @@ class _MessageScreenState extends State<MessageScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final socketService = Provider.of<SocketService>(context);
+    final socketService = Provider.of<InboxSocketService>(context);
     final currentUserId = PrefUtils().getaddress();
 
     return SafeArea(
@@ -135,9 +148,9 @@ class _MessageScreenState extends State<MessageScreen> {
                         separatorBuilder: (context, index) {
                           return SizedBox(width: 20.h);
                         },
-                        itemCount: socketService.filteredChats.length,
+                        itemCount: filteredChats.length,
                         itemBuilder: (context, index) {
-                          final chat = socketService.filteredChats[index];
+                          final chat = filteredChats[index];
                           final otherUser = chat['users']?.firstWhere(
                             (u) => u['_id'] != currentUserId,
                             orElse: () => null,
@@ -186,13 +199,12 @@ class _MessageScreenState extends State<MessageScreen> {
   }
 
   Widget _buildChatList(String currentUserId) {
-    final socketService = Provider.of<SocketService>(context);
     return ListView.builder(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
-      itemCount: socketService.filteredChats.length,
+      itemCount: filteredChats.length,
       itemBuilder: (context, index) {
-        final chat = socketService.filteredChats[index];
+        final chat = filteredChats[index];
         final otherUser = chat['users']?.firstWhere(
           (u) => u['_id'] != currentUserId,
           orElse: () => null,
@@ -214,10 +226,9 @@ class _MessageScreenState extends State<MessageScreen> {
 
         return GestureDetector(
           onTap: () {
-            socketService.handleChatTap(chat['_id']);
             Get.toNamed(
               AppRoutes.chattingScreen,
-              arguments: {'chat': chat, 'socket': socketService.socket},
+              arguments: {'chat': chat},
             );
           },
           child: Padding(
