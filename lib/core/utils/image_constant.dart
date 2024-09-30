@@ -273,7 +273,7 @@ class ImageConstant {
   static String imgArrowLeftOnerrorcontainer =
       '$imagePath/img_arrow_left_onerrorcontainer.svg';
 
-  // static String imgCalendar = '$imagePath/img_calendar.svg';
+  static String imgCalendar = '$imagePath/settings/calendar.svg';
 
   // static String imgIconBlueGray300 = '$imagePath/img_icon_blue_gray_300.svg';
 
@@ -425,13 +425,13 @@ class ImageConstant {
 
   // static String imgVerifiedUser2 = '$imagePath/img_verified_user_2.svg';
 
-  // static String imgPlayGreen500 = '$imagePath/img_play_green_500.png';
-
   static String imgCalendarGray900 = '$imagePath/img_calendar_gray_900.svg';
+
+  // static String imgPlayGreen500 = '$imagePath/img_play_green_500.png';
 
   // static String imgNavFeedsGray900 = '$imagePath/img_nav_feeds_gray_900.svg';
 
-  static String imgInfoBlueGray300 = '$imagePath/settings/inform.svg';
+  // static String imgInfoBlueGray300 = '$imagePath/img_info_blue_gray_300.svg';
 
   // static String imgFlash2 = '$imagePath/img_flash_2.svg';
 
@@ -458,7 +458,7 @@ class ImageConstant {
   static String card = "$imagePath/settings/credit-card.svg";
   static String pancard = "$imagePath/settings/credit-card.svg";
   static String block = "$imagePath/settings/block.svg";
-  static String delete = "$imagePath/settings/delete.svg";
+  static String delete = "$imagePath/settings/Delete.svg";
   static String upi = "$imagePath/settings/UPI.svg";
 
   //gender
@@ -497,4 +497,9 @@ class ImageConstant {
   static String msg = "$imagePath/settings/msg.svg";
   static String complete = "$imagePath/settings/complete.svg";
   static String singletick = "$imagePath/settings/singletick.svg";
+
+  // sucess
+
+  static String success = "$imagePath/settings/checkSucess.svg";
+  static String message = "$imagePath/settings/message.svg";
 }

@@ -25,7 +25,8 @@ class MyApp extends StatelessWidget {
     return Sizer(builder: (context, orientation, deviceType) {
       return MultiProvider(
         providers: [
-          ChangeNotifierProvider(create: (_) => SocketService()),
+          ChangeNotifierProvider(create: (_) => InboxSocketService()),
+          ChangeNotifierProvider(create: (_) => ChatRoomSocketService()),
         ],
         child: GetMaterialApp(
           debugShowCheckedModeBanner: false,

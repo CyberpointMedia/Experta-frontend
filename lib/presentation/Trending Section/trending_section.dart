@@ -3,11 +3,6 @@ import 'dart:ui';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/Home/home_screen.dart';
 import 'package:experta/presentation/Home/model/home_model.dart';
-import 'package:experta/widgets/app_bar/appbar_leading_image.dart';
-import 'package:experta/widgets/app_bar/appbar_subtitle_six.dart';
-import 'package:experta/widgets/app_bar/custom_app_bar.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class TrendingPeoplePage extends StatelessWidget {
   final List<User> trendingPeople;
@@ -46,7 +41,7 @@ class TrendingPeoplePage extends StatelessWidget {
               _buildAppBar(),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(16.0),
+                  padding: const EdgeInsets.only(left: 16, right: 16, top: 0),
                   child: GridView.builder(
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
@@ -81,7 +76,7 @@ class TrendingPeoplePage extends StatelessWidget {
               onTapArrowLeft();
             }),
         centerTitle: true,
-        title: AppbarSubtitleSix(text: "Trending People"));
+        title: AppbarSubtitleSix(text: "Trending"));
   }
 
   onTapArrowLeft() {
