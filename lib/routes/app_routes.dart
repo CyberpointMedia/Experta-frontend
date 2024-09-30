@@ -139,8 +139,7 @@ class AppRoutes {
 
   static const String dashboard = '/dashboard';
 
-  static const String chattingScreen =
-      '/message_chat_with_user_default_screen';
+  static const String chattingScreen = '/message_chat_with_user_default_screen';
 
   static const String feeds = '/feeds_active_screen';
 
@@ -225,17 +224,18 @@ class AppRoutes {
 
   static const String reviewall = "/all_review";
 
-static const String mybook = "/my_booking";
+  static const String mybook = "/my_booking";
 
 // ignore: constant_identifier_names
-static const String Transaction= "/transection";
+  static const String Transaction = "/transection";
 
 // ignore: constant_identifier_names
-static const String RaiseTicket = "/support";
+  static const String RaiseTicket = "/support";
 
-static const String recordedsession= "/recorded_session";
+  static const String recordedsession = "/recorded_session";
 
 // ignore: constant_identifier_names
+<<<<<<< HEAD
 static const String Bookappointment= "/book_appointment";
 
 static const String sUcessfuly= "/sucessfuly";
@@ -253,9 +253,15 @@ static const String Notificationseting= "/notification_setting";
 static const String blocksearch= "/search_block";
 
 static const String qr = "/share_profile";
+=======
+  static const String Bookappointment = "/book_appointment";
+>>>>>>> fd74aedd948960a685d92b72cfbcb2d6a6d7aece
 
+  static const String sUcessfuly = "/sucessfuly";
 
+  static const String genderchange = "/change_gender";
 
+  static const String qr = "/share_profile";
 
   static const String lottie = "/";
 
@@ -359,7 +365,7 @@ static const String qr = "/share_profile";
     ),
     GetPage(
       name: bank,
-      page: () =>  const VerifyAccount(),
+      page: () => const VerifyAccount(),
       bindings: [
         VerifyAccountBinding(),
       ],
@@ -419,12 +425,9 @@ static const String qr = "/share_profile";
     GetPage(name: dashboard, page: () => DashboardPage(), bindings: [
       DashboardBinding(),
     ]),
-    GetPage(
-        name: chattingScreen,
-        page: () => const ChattingPage(),
-        bindings: [
-          MessageChatWithUserDefaultBinding(),
-        ]),
+    GetPage(name: chattingScreen, page: () => const ChattingPage(), bindings: [
+      MessageChatWithUserDefaultBinding(),
+    ]),
     GetPage(
         name: professionalInfo,
         page: () => const EditProfessionalInfo(),
@@ -500,7 +503,7 @@ static const String qr = "/share_profile";
         bindings: [
           SetPricingBindings(),
         ]),
-    GetPage(name: category, page: () => const CategoryScreen(), bindings: [
+    GetPage(name: category, page: () => CategoryScreen(), bindings: [
       CategoryBinding(),
     ]),
     GetPage(
@@ -631,7 +634,7 @@ static const String qr = "/share_profile";
         bindings: [
           AllReviewsBindings(),
         ]),
-         GetPage(
+    GetPage(
         name: Transaction,
         page: () => const TransactionHistoryPage(),
         customTransition: CustomPageTransition(),
@@ -639,44 +642,44 @@ static const String qr = "/share_profile";
           AllReviewsBindings(),
         ]),
 
-         GetPage(
+    GetPage(
         name: RaiseTicket,
         page: () => const RaiseTicketPage(),
         customTransition: CustomPageTransition(),
         bindings: [
           SupportBinding(),
         ]),
-         GetPage(
+    GetPage(
         name: recordedsession,
-        page: () =>  const RecordedSessionsPage(),
+        page: () => const RecordedSessionsPage(),
         customTransition: CustomPageTransition(),
         bindings: [
           RecordedSessionBinding(),
         ]),
-         GetPage(
+    GetPage(
         name: qr,
-        page: () =>   ShareProfilePage(),
+        page: () => ShareProfilePage(),
         customTransition: CustomPageTransition(),
         bindings: [
           ShareProfileBinding(),
         ]),
-          GetPage(
+    GetPage(
         name: Bookappointment,
-        page: () =>   const BookAppointmentPage(),
+        page: () => const BookAppointmentPage(),
         customTransition: CustomPageTransition(),
         bindings: [
           BookAppointmentBinding(),
         ]),
-         GetPage(
+    GetPage(
         name: sUcessfuly,
-        page: () =>   const BookingConfirmationPage(),
+        page: () => const BookingConfirmationPage(),
         customTransition: CustomPageTransition(),
         bindings: [
           BookingConfirmationPageBindings(),
         ]),
-        GetPage(
+    GetPage(
         name: genderchange,
-        page: () =>   const ChangeGender(),
+        page: () => const ChangeGender(),
         customTransition: CustomPageTransition(),
         bindings: [
           ChangeGenderBinding(),    

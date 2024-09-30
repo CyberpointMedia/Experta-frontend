@@ -29,7 +29,7 @@ class BasicProfileInfoController extends GetxController {
   FocusNode focus1 = FocusNode();
   FocusNode focus2 = FocusNode();
   FocusNode focus3 = FocusNode();
-   FocusNode focus4 = FocusNode();
+  FocusNode focus4 = FocusNode();
 
   RxList<String> socialLinks = <String>[].obs;
   Rx<File?> imageFile = Rx<File?>(null);
@@ -129,9 +129,9 @@ class BasicProfileInfoController extends GetxController {
       final data = {
         "firstName": textField1.text.split(' ').first.trim(),
         "lastName": textField1.text.split(' ').last.trim(),
-        "displayName": textField4.text.trim(),
+        "displayName": textField2.text.trim(),
         "bio": textField3.text.trim(),
-        "Social Links": textField2.text.trim(),
+        "Social Links": textField4.text.trim(),
         "facebook": socialLinks.firstWhere(
             (link) => link.contains('facebook.com'),
             orElse: () => ''),
@@ -147,6 +147,7 @@ class BasicProfileInfoController extends GetxController {
       };
 
       await apiService.postBasicInfo(data, imageFile.value);
+
       Get.back();
       Get.snackbar('Success', 'Profile information saved successfully');
 
@@ -165,7 +166,7 @@ class BasicProfileInfoController extends GetxController {
     focus1.dispose();
     focus2.dispose();
     focus3.dispose();
-     focus4.dispose();
+    focus4.dispose();
     super.dispose();
   }
 }

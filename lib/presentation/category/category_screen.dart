@@ -6,8 +6,17 @@ import 'package:experta/presentation/categoryDetails/category_details_screen.dar
 import 'package:experta/presentation/category/category_controller.dart';
 import 'package:experta/widgets/app_bar/appbar_trailing_iconbutton.dart';
 
-class CategoryScreen extends GetWidget<CategoryController> {
-  const CategoryScreen({super.key});
+class CategoryScreen extends StatefulWidget {
+  CategoryScreen({Key? key}) : super(key: key);
+
+  @override
+  _CategoryScreenState createState() => _CategoryScreenState();
+}
+
+class _CategoryScreenState extends State<CategoryScreen> {
+  int? selectedIndex; // Track the selected index
+  final CategoryController controller =
+      Get.put(CategoryController()); // Initialize controller
 
   @override
   Widget build(BuildContext context) {
@@ -15,6 +24,7 @@ class CategoryScreen extends GetWidget<CategoryController> {
       body: Stack(
         alignment: Alignment.topCenter,
         children: [
+          // Blurred background circle
           Positioned(
             left: 270,
             top: 50,
@@ -53,8 +63,14 @@ class CategoryScreen extends GetWidget<CategoryController> {
                     itemCount: controller.industries.length,
                     itemBuilder: (context, index) {
                       Industry industry = controller.industries[index];
+                      bool isSelected =
+                          selectedIndex == index; // Check if item is selected
+
                       return GestureDetector(
                         onTap: () {
+                          setState(() {
+                            selectedIndex = index;
+                          });
                           Get.to(
                             () => CategoryDetailScreen(
                               categoryName: industry.name,
@@ -62,21 +78,37 @@ class CategoryScreen extends GetWidget<CategoryController> {
                             arguments: {'industry': industry},
                           );
                         },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CustomImageView(
-                              imagePath: industry.icon,
-                              height: 36.v,
-                              width: 36.adaptSize,
-                            ),
-                            const SizedBox(height: 10),
-                            Text(
-                              industry.name,
-                              style: theme.textTheme.headlineLarge
-                                  ?.copyWith(fontSize: 14.fSize),
-                            ),
-                          ],
+                        child: AnimatedContainer(
+                          duration: const Duration(milliseconds: 300),
+                          decoration: BoxDecoration(
+                            color: isSelected
+                                ? Colors.white
+                                : Colors.transparent, // White if selected
+                            borderRadius: BorderRadius.circular(10),
+                            boxShadow: isSelected
+                                ? [
+                                    const BoxShadow(
+                                        color: Colors.grey, blurRadius: 8)
+                                  ]
+                                : [],
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              CustomImageView(
+                                imagePath: industry.icon,
+                                height: 36.v,
+                                width: 36.adaptSize,
+                              ),
+                              const SizedBox(height: 10),
+                              Text(
+                                industry.name,
+                                style: theme.textTheme.headlineLarge?.copyWith(
+                                  fontSize: 14.fSize,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       );
                     },
@@ -84,14 +116,13 @@ class CategoryScreen extends GetWidget<CategoryController> {
                 }),
               ),
             ],
-          )
+          ),
         ],
       ),
     );
   }
 
-  /// Section Widget
-
+  /// AppBar Widget
   PreferredSizeWidget _buildAppBar() {
     return CustomAppBar(
       height: 40.h,
@@ -99,9 +130,7 @@ class CategoryScreen extends GetWidget<CategoryController> {
       leading: AppbarLeadingImage(
         imagePath: ImageConstant.imgArrowLeftOnerrorcontainer,
         margin: EdgeInsets.only(left: 16.h),
-        onTap: () {
-          onTapArrowLeft();
-        },
+        onTap: onTapArrowLeft,
       ),
       centerTitle: true,
       title: AppbarSubtitleSix(text: "Category"),
@@ -109,7 +138,7 @@ class CategoryScreen extends GetWidget<CategoryController> {
         AppbarTrailingIconbutton(
           imagePath: "assets/images/img_frame_30.svg",
           margin: const EdgeInsets.symmetric(horizontal: 16),
-        )
+        ),
       ],
     );
   }

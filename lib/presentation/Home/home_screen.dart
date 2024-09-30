@@ -434,7 +434,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: _buildRowtrending(
-            trending: "Trending People",
+            trending: "Trending",
             seeallOne: "See All",
             onPressed: () {
               Get.to(() => TrendingPeoplePage(
@@ -619,6 +619,26 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                height: 80.0,
+                width: 156.adaptSize,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.black.withOpacity(0.03),
+                      Colors.black.withOpacity(0.5)
+                    ],
+                    begin: Alignment.topCenter,
+                    end: Alignment.bottomCenter,
+                  ),
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(20.0),
+                    bottomRight: Radius.circular(20.0),
+                  ),
+                ),
+              )),
+          Align(
             alignment: Alignment.centerLeft,
             child: Padding(
               padding: const EdgeInsets.only(left: 12, right: 37),
@@ -715,6 +735,26 @@ class UserProfileItemWidget extends StatelessWidget {
               ),
             ),
             Align(
+                alignment: Alignment.bottomCenter,
+                child: Container(
+                  height: 80.0,
+                  width: 156.adaptSize,
+                  decoration: BoxDecoration(
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.black.withOpacity(0.03),
+                        Colors.black.withOpacity(0.5)
+                      ],
+                      begin: Alignment.topCenter,
+                      end: Alignment.bottomCenter,
+                    ),
+                    borderRadius: const BorderRadius.only(
+                      bottomLeft: Radius.circular(20.0),
+                      bottomRight: Radius.circular(20.0),
+                    ),
+                  ),
+                )),
+            Align(
               alignment: Alignment.centerLeft,
               child: Padding(
                 padding: const EdgeInsets.only(left: 12, right: 37),
@@ -751,11 +791,12 @@ class UserProfileItemWidget extends StatelessWidget {
                     Row(
                       children: [
                         SizedBox(
-                            height: 14.v,
-                            width: 14.adaptSize,
-                            child: CustomImageView(imagePath: ImageConstant.imgLayer1,),
-                           
-                                ),
+                          height: 14.v,
+                          width: 14.adaptSize,
+                          child: CustomImageView(
+                            imagePath: ImageConstant.imgLayer1,
+                          ),
+                        ),
                         Padding(
                           padding: const EdgeInsets.only(left: 4),
                           child: RichText(
@@ -774,7 +815,7 @@ class UserProfileItemWidget extends StatelessWidget {
                           ),
                         ),
                       ],
-                    ),
+                    )
                   ],
                 ),
               ),

@@ -8,8 +8,8 @@ import 'package:experta/presentation/userProfile/post_details/post_details.dart'
 import 'package:experta/presentation/user_details/controller/details_controller.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
 import 'package:experta/widgets/custom_outlined_button.dart';
+import 'package:experta/widgets/custom_rating_bar.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
@@ -218,109 +218,113 @@ class _UserDetailsPageState extends State<UserDetailsPage>
     );
   }
 
-void _showBottomSheet2(BuildContext context) {
-  showModalBottomSheet(
-    context: context,
-    builder: (context) {
-      return Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: Colors.green.shade100,
-                  child: const Icon(Icons.call, color: Colors.green),
-                ),
-                title: const Text('Audio Call'),
-                subtitle: const Text('Chat me up, share photos.'),
-                
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SizedBox(
-                      height: 14.0,
-                      width: 14.0,
-                      child: CustomImageView(imagePath: ImageConstant.imgLayer1),
-                    ),
-                    const SizedBox(width: 8.0), // Add some spacing between the image and text
-                    const Text(
-                      '1800/min',
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
-                    ),
-                  ],
-                ),
-                onTap: () {
-                  // Handle audio call action
-                  Navigator.pop(context);
-                },
-              ),
-              const Divider(),
-              ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: Colors.red.shade100,
-                  child: const Icon(Icons.videocam, color: Colors.red),
-                ),
-                title: const Text('Video Call'),
-                subtitle: const Text('Call your doctor directly.'),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SizedBox(
-                      height: 14.0,
-                      width: 14.0,
-                      child: CustomImageView(imagePath: ImageConstant.imgLayer1),
-                    ),
-                    const SizedBox(width: 8.0), 
-                     Padding(
-                          padding: const EdgeInsets.only(left: 4),
-                          child: RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                    text: "${controller.userData.value.data?.pricing?.videoCallPrice ?? 0.0}",
-                                    style: theme.textTheme.labelLarge!),
-                                TextSpan(
-                                    text: "/min",
-                                    style: theme.textTheme.labelLarge?.copyWith(
-                                        fontWeight: FontWeight.w400)),
-                              ],
-                            ),
-                            textAlign: TextAlign.left,
-                          ),
-                        ),
-                  ],
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-              const Divider(),
-              GestureDetector(
-                onTap: () {
-                  Get.toNamed(AppRoutes.Bookappointment);
-                },
-                child: ListTile(
+  void _showBottomSheet2(BuildContext context) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.only(left: 20, right: 20),
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                ListTile(
                   leading: CircleAvatar(
-                    backgroundColor: Colors.yellow.shade100,
-                    child: const Icon(Icons.calendar_today, color: Colors.yellow),
+                    backgroundColor: Colors.green.shade100,
+                    child: const Icon(Icons.call, color: Colors.green),
                   ),
-                  title: const Text('Schedule Call'),
+                  title: const Text('Audio Call'),
                   subtitle: const Text('Chat me up, share photos.'),
-                 
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(
+                        height: 14.0,
+                        width: 14.0,
+                        child:
+                            CustomImageView(imagePath: ImageConstant.imgLayer1),
+                      ),
+                      const SizedBox(
+                          width:
+                              8.0), // Add some spacing between the image and text
+                      const Text(
+                        '1800/min',
+                        style: TextStyle(
+                          color: Colors.black,
+                        ),
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    // Handle audio call action
+                    Navigator.pop(context);
+                  },
                 ),
-              ),
-            ],
+                const Divider(),
+                ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: Colors.red.shade100,
+                    child: const Icon(Icons.videocam, color: Colors.red),
+                  ),
+                  title: const Text('Video Call'),
+                  subtitle: const Text('Call your doctor directly.'),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(
+                        height: 14.0,
+                        width: 14.0,
+                        child:
+                            CustomImageView(imagePath: ImageConstant.imgLayer1),
+                      ),
+                      const SizedBox(width: 8.0),
+                      Padding(
+                        padding: const EdgeInsets.only(left: 4),
+                        child: RichText(
+                          text: TextSpan(
+                            children: [
+                              TextSpan(
+                                  text:
+                                      "${controller.userData.value.data?.pricing?.videoCallPrice ?? 0.0}",
+                                  style: theme.textTheme.labelLarge!),
+                              TextSpan(
+                                  text: "/min",
+                                  style: theme.textTheme.labelLarge
+                                      ?.copyWith(fontWeight: FontWeight.w400)),
+                            ],
+                          ),
+                          textAlign: TextAlign.left,
+                        ),
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                const Divider(),
+                GestureDetector(
+                  onTap: () {
+                    Get.toNamed(AppRoutes.Bookappointment);
+                  },
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: Colors.yellow.shade100,
+                      child: const Icon(Icons.calendar_today,
+                          color: Colors.yellow),
+                    ),
+                    title: const Text('Schedule Call'),
+                    subtitle: const Text('Chat me up, share photos.'),
+                  ),
+                ),
+              ],
+            ),
           ),
-        ),
-      );
-    },
-  );
-}
+        );
+      },
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -486,10 +490,26 @@ void _showBottomSheet2(BuildContext context) {
                       const SizedBox(
                         width: 10,
                       ),
-                      CustomImageView(
-                        height: 50,
-                        width: 50,
-                        imagePath: ImageConstant.msg,
+                      GestureDetector(
+                        onTap: () async {
+                          final chatData = await ApiService().fetchChat(id.id);
+                          log("this is chat Data  ===== $chatData");
+                          log("this is your id ${id.id} and chat is ${chatData!["_id"]}");
+                          if (chatData != null) {
+                            Navigator.pushNamed(
+                              context,
+                              AppRoutes.chattingScreen,
+                              arguments: {'chat': chatData},
+                            );
+                          } else {
+                            print('Failed to load chat');
+                          }
+                        },
+                        child: CustomImageView(
+                          height: 50,
+                          width: 50,
+                          imagePath: ImageConstant.msg,
+                        ),
                       )
                     ],
                   ),
@@ -512,37 +532,34 @@ void _showBottomSheet2(BuildContext context) {
           ),
           Expanded(
             child: SingleChildScrollView(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    _buildChipviewvisual(context),
-                    SizedBox(
-                      height: 5.v,
-                    ),
-                    _buildColumnaboutme(),
-                    SizedBox(
-                      height: 8.v,
-                    ),
-                    _buildColumnexperienc(),
-                    SizedBox(
-                      height: 8.v,
-                    ),
-                    _buildColumneducation(),
-                    SizedBox(
-                      height: 8.v,
-                    ),
-                    _buildColumnachieveme(),
-                    SizedBox(
-                      height: 8.v,
-                    ),
-                    _buildColumnintereste(),
-                    SizedBox(
-                      height: 8.v,
-                    ),
-                    _buildColumnreviews()
-                  ],
-                ),
+              child: Column(
+                children: [
+                  _buildChipviewvisual(context),
+                  SizedBox(
+                    height: 5.v,
+                  ),
+                  _buildColumnaboutme(),
+                  SizedBox(
+                    height: 8.v,
+                  ),
+                  _buildColumnexperienc(),
+                  SizedBox(
+                    height: 8.v,
+                  ),
+                  _buildColumneducation(),
+                  SizedBox(
+                    height: 8.v,
+                  ),
+                  _buildColumnachieveme(),
+                  SizedBox(
+                    height: 8.v,
+                  ),
+                  _buildColumnintereste(),
+                  SizedBox(
+                    height: 8.v,
+                  ),
+                  _buildColumnreviews()
+                ],
               ),
             ),
           ),
@@ -562,14 +579,24 @@ void _showBottomSheet2(BuildContext context) {
           child: CircularProgressIndicator(),
         );
       } else if (posts.isEmpty) {
-        return const Center(
-          child: Text(
-            'No posts available',
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.w400,
+        return Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            CustomImageView(
+              imagePath: ImageConstant.message,
             ),
-          ),
+            const SizedBox(
+              height: 15,
+            ),
+            const Text(
+              'Feeds Empty',
+              style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: Colors.black),
+            ),
+          ],
         );
       } else {
         return Column(
@@ -619,140 +646,150 @@ void _showBottomSheet2(BuildContext context) {
     List<Map<String, dynamic>>? socialMediaLinks =
         controller.userData.value.data?.basicInfo?.getSocialMediaLinks();
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _buildRowaboutme(aboutMeText: "About me"),
-        SizedBox(
-          height: 18.v,
-        ),
-        SizedBox(
-          width: 331.adaptSize,
-          child: Obx(() {
-            return ReadMoreText(
-              controller.userData.value.data?.basicInfo?.bio ?? '',
-              trimLines: 3,
-              colorClickableText: const Color(
-                0XFFD45102,
-              ),
-              trimMode: TrimMode.Line,
-              trimCollapsedText: "Read more",
-              moreStyle:
-                  theme.textTheme.bodyLarge?.copyWith(color: appTheme.gray900),
-              lessStyle:
-                  theme.textTheme.bodyLarge?.copyWith(color: appTheme.gray900),
-            );
-          }),
-        ),
-        SizedBox(
-          height: 17.v,
-        ),
-        if (socialMediaLinks != null && socialMediaLinks.isNotEmpty)
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: socialMediaLinks.map((socialMedia) {
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ExpertaBrowser(
-                        url: socialMedia['link'],
-                        title: socialMedia['name'],
-                      ),
-                    ),
-                  );
-                  print('Opening link: ${socialMedia['link']}');
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: FaIcon(
-                    socialMedia['icon'],
-                    size: 24,
-                  ),
-                ),
-              );
-            }).toList(),
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          _buildRowaboutme(aboutMeText: "About me"),
+          SizedBox(
+            height: 18.v,
           ),
-      ],
+          SizedBox(
+            width: 331.adaptSize,
+            child: Obx(() {
+              return ReadMoreText(
+                controller.userData.value.data?.basicInfo?.bio ?? '',
+                trimLines: 3,
+                colorClickableText: const Color(
+                  0XFFD45102,
+                ),
+                trimMode: TrimMode.Line,
+                trimCollapsedText: "Read more",
+                moreStyle:
+                    theme.textTheme.bodyLarge?.copyWith(color: appTheme.red500),
+                lessStyle:
+                    theme.textTheme.bodyLarge?.copyWith(color: appTheme.red500),
+              );
+            }),
+          ),
+          SizedBox(
+            height: 17.v,
+          ),
+          if (socialMediaLinks != null && socialMediaLinks.isNotEmpty)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: socialMediaLinks.map((socialMedia) {
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ExpertaBrowser(
+                          url: socialMedia['link'],
+                          title: socialMedia['name'],
+                        ),
+                      ),
+                    );
+                    print('Opening link: ${socialMedia['link']}');
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FaIcon(
+                      socialMedia['icon'],
+                      size: 24,
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+        ],
+      ),
     );
   }
 
   Widget _buildColumnexperienc() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(right: 2),
-          child: _buildRoweducation(educationText: "Experience"),
-        ),
-        SizedBox(
-          height: 19.v,
-        ),
-        Obx(() {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: controller.userData.value.data?.workExperience
-                    ?.map((experience) {
-                  String formattedStartDate = experience.startDate != null
-                      ? DateFormat('MMM yyyy').format(experience.startDate!)
-                      : '';
-                  String formattedEndDate = experience.endDate != null
-                      ? DateFormat('MMM yyyy').format(experience.endDate!)
-                      : 'Present';
-                  String totalDuration = '';
-                  if (experience.startDate != null &&
-                      experience.endDate != null) {
-                    Duration duration =
-                        experience.endDate!.difference(experience.startDate!);
-                    int years = (duration.inDays / 365).floor();
-                    int months = ((duration.inDays % 365) / 30).floor();
-                    totalDuration = '$years years $months months';
-                  }
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(right: 2),
+            child: _buildRoweducation(educationText: "Experience"),
+          ),
+          SizedBox(
+            height: 19.v,
+          ),
+          Obx(() {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: controller.userData.value.data?.workExperience
+                      ?.map((experience) {
+                    String formattedStartDate = experience.startDate != null
+                        ? DateFormat('MMM yyyy').format(experience.startDate!)
+                        : '';
+                    String formattedEndDate = experience.endDate != null
+                        ? DateFormat('MMM yyyy').format(experience.endDate!)
+                        : 'Present';
+                    String totalDuration = '';
+                    if (experience.startDate != null &&
+                        experience.endDate != null) {
+                      Duration duration =
+                          experience.endDate!.difference(experience.startDate!);
+                      int years = (duration.inDays / 365).floor();
+                      int months = ((duration.inDays % 365) / 30).floor();
+                      totalDuration = '$years years $months months';
+                    }
 
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        experience.jobTitle ?? '',
-                        style: theme.textTheme.titleMedium!,
-                      ),
-                      SizedBox(
-                        height: 9.v,
-                      ),
-                      Text(
-                        experience.companyName ?? '',
-                        style: theme.textTheme.bodyMedium
-                            ?.copyWith(color: appTheme.gray900),
-                      ),
-                      SizedBox(
-                        height: 5.v,
-                      ),
-                      Text(
-                        "$formattedStartDate - $formattedEndDate · $totalDuration",
-                        style: theme.textTheme.bodyMedium!,
-                      ),
-                      SizedBox(
-                        height: 18.v,
-                      ),
-                      Divider(
-                        height: 1.v,
-                        thickness: 1,
-                        color: const Color(
-                          0XFFE9E9E9,
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          experience.jobTitle ?? '',
+                          style: theme.textTheme.titleMedium!
+                              .copyWith(fontWeight: FontWeight.w600),
                         ),
-                      ),
-                      SizedBox(
-                        height: 19.v,
-                      ),
-                    ],
-                  );
-                }).toList() ??
-                [],
-          );
-        }),
-      ],
+                        SizedBox(
+                          height: 9.v,
+                        ),
+                        Text(
+                          experience.companyName ?? '',
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                              color: appTheme.gray900,
+                              fontWeight: FontWeight.w400),
+                        ),
+                        SizedBox(
+                          height: 5.v,
+                        ),
+                        Text(
+                          "$formattedStartDate - $formattedEndDate · $totalDuration",
+                          style: theme.textTheme.bodyMedium!,
+                        ),
+                        SizedBox(
+                          height: 18.v,
+                        ),
+                        Divider(
+                          height: 1.v,
+                          thickness: 1,
+                          color: const Color(
+                            0XFFE9E9E9,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 19.v,
+                        ),
+                      ],
+                    );
+                  }).toList() ??
+                  [],
+            );
+          }),
+        ],
+      ),
     );
   }
 
@@ -761,14 +798,16 @@ void _showBottomSheet2(BuildContext context) {
     final data = controller.userData.value.data?.expertise;
     final expertiseList = data?.expertise ?? [];
 
-    return Column(
-      children: [
-        _buildRowaboutme(aboutMeText: "Expertise"),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Wrap(
-            spacing: 8.0,
-            runSpacing: 4.0,
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildRowaboutme(aboutMeText: "Expertise"),
+          Wrap(
+            spacing: 4.0,
+            runSpacing: 1.0,
             children: expertiseList.map((expertise) {
               return Chip(
                 label: Text(
@@ -789,123 +828,139 @@ void _showBottomSheet2(BuildContext context) {
               );
             }).toList(),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
   Widget _buildColumneducation() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(right: 2),
-          child: _buildRoweducation(educationText: "Education"),
-        ),
-        SizedBox(
-          height: 19.v,
-        ),
-        Obx(() {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children:
-                controller.userData.value.data?.education?.map((education) {
-                      // Format the dates
-                      String formattedStartDate = education.startDate != null
-                          ? DateFormat('MMM yyyy').format(education.startDate!)
-                          : '';
-                      String formattedEndDate = education.endDate != null
-                          ? DateFormat('MMM yyyy').format(education.endDate!)
-                          : 'Present';
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(right: 2),
+            child: _buildRoweducation(educationText: "Education"),
+          ),
+          SizedBox(
+            height: 19.v,
+          ),
+          Obx(() {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: controller.userData.value.data?.education
+                      ?.map((education) {
+                    // Format the dates
+                    String formattedStartDate = education.startDate != null
+                        ? DateFormat('MMM yyyy').format(education.startDate!)
+                        : '';
+                    String formattedEndDate = education.endDate != null
+                        ? DateFormat('MMM yyyy').format(education.endDate!)
+                        : 'Present';
 
-                      // Calculate the total duration
-                      String totalDuration = '';
-                      if (education.startDate != null &&
-                          education.endDate != null) {
-                        Duration duration =
-                            education.endDate!.difference(education.startDate!);
-                        int years = (duration.inDays / 365).floor();
-                        int months = ((duration.inDays % 365) / 30).floor();
-                        totalDuration = '$years years $months months';
-                      }
+                    // Calculate the total duration
+                    String totalDuration = '';
+                    if (education.startDate != null &&
+                        education.endDate != null) {
+                      Duration duration =
+                          education.endDate!.difference(education.startDate!);
+                      int years = (duration.inDays / 365).floor();
+                      int months = ((duration.inDays % 365) / 30).floor();
+                      totalDuration = '$years years $months months';
+                    }
 
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            education.degree ?? '',
-                            style: theme.textTheme.titleMedium!,
-                          ),
-                          SizedBox(
-                            height: 9.v,
-                          ),
-                          Text(
-                            education.schoolCollege ?? '',
-                            style: theme.textTheme.bodyMedium
-                                ?.copyWith(color: appTheme.gray900),
-                          ),
-                          SizedBox(
-                            height: 4.v,
-                          ),
-                          Text(
-                            "$formattedStartDate - $formattedEndDate · $totalDuration",
-                            style: theme.textTheme.bodyMedium!,
-                          ),
-                          SizedBox(
-                            height: 18.v,
-                          ),
-                        ],
-                      );
-                    }).toList() ??
-                    [],
-          );
-        }),
-      ],
+                    return Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          education.degree ?? '',
+                          style: theme.textTheme.titleMedium!
+                              .copyWith(fontWeight: FontWeight.w600),
+                        ),
+                        SizedBox(
+                          height: 9.v,
+                        ),
+                        Text(
+                          education.schoolCollege ?? '',
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                              color: appTheme.gray900,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500),
+                        ),
+                        SizedBox(
+                          height: 4.v,
+                        ),
+                        Text(
+                          "$formattedStartDate - $formattedEndDate · $totalDuration",
+                          style: theme.textTheme.bodyMedium!,
+                        ),
+                        SizedBox(
+                          height: 18.v,
+                        ),
+                      ],
+                    );
+                  }).toList() ??
+                  [],
+            );
+          }),
+        ],
+      ),
     );
   }
 
   Widget _buildColumnachieveme() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildRowaboutme(aboutMeText: "Achievements"),
-        SizedBox(
-          height: 17.v,
-        ),
-        Obx(() {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: controller
-                    .userData.value.data?.industryOccupation?.achievements
-                    ?.map((achievement) {
-                  return Row(
-                    children: [
-                      SizedBox(
-                        height: 24.v,
-                        width: 25.adaptSize,
-                        child: SvgPicture.asset("assets/images/img_link_1.svg"),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          left: 10,
-                          top: 4,
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildRowaboutme(aboutMeText: "Achievements"),
+          SizedBox(
+            height: 17.v,
+          ),
+          Obx(() {
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: controller
+                      .userData.value.data?.industryOccupation?.achievements
+                      ?.map((achievement) {
+                    return Row(
+                      children: [
+                        SizedBox(
+                          height: 24.v,
+                          width: 25.adaptSize,
+                          child:
+                              SvgPicture.asset("assets/images/img_link_1.svg"),
                         ),
-                        child: Text(
-                          achievement ?? '',
-                          style: theme.textTheme.bodyLarge?.copyWith(
-                            color: appTheme.gray900,
-                            decoration: TextDecoration.underline,
+                        Expanded(
+                          child: Padding(
+                            padding: const EdgeInsets.only(
+                              left: 10,
+                              top: 4,
+                            ),
+                            child: Text(
+                              achievement ?? '',
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.bodyLarge?.copyWith(
+                                color: appTheme.gray900,
+                                fontWeight: FontWeight.w500,
+                                decoration: TextDecoration.underline,
+                              ),
+                            ),
                           ),
-                        ),
-                      )
-                    ],
-                  );
-                }).toList() ??
-                [],
-          );
-        }),
-      ],
+                        )
+                      ],
+                    );
+                  }).toList() ??
+                  [],
+            );
+          }),
+        ],
+      ),
     );
   }
 
@@ -913,170 +968,178 @@ void _showBottomSheet2(BuildContext context) {
     final interest = controller.userData.value.data?.interest;
     final interestList = interest?.interest ?? [];
 
-    return Column(
-      crossAxisAlignment:
-          CrossAxisAlignment.start, // Added for better alignment
-      children: [
-        _buildRowaboutme(aboutMeText: "Interests"),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Wrap(
-            spacing: 8.0,
-            runSpacing: 4.0,
-            children: interestList.map((interest) {
-              return Chip(
-                label: Text(
-                  interest.name ?? '', // Ensure interest name is not null
-                  style: theme.textTheme.bodyMedium!.copyWith(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16,
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildRowaboutme(aboutMeText: "Interested"),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Wrap(
+              spacing: 8.0,
+              runSpacing: 4.0,
+              children: interestList.map((interest) {
+                return Chip(
+                  label: Text(
+                    interest.name ?? '',
+                    style: theme.textTheme.bodyMedium!.copyWith(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16,
+                    ),
                   ),
-                ),
-                backgroundColor: appTheme.gray200,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                  side: BorderSide(
-                    color: appTheme.gray300,
-                  ),
-                ),
-              );
-            }).toList(),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildColumnreviews() {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              "Reviews",
-              style:
-                  theme.textTheme.headlineLarge?.copyWith(fontSize: 16.fSize),
-            ),
-            GestureDetector(
-              onTap: () {
-                var reviews =
-                    controller.userData.value.data?.basicInfo?.reviews;
-                if (reviews != null && reviews.isNotEmpty) {
-                  Get.to(() => AllReviewsPage(reviews: reviews));
-                }
-              },
-              child: Text(
-                "See all",
-                style: theme.textTheme.titleMedium
-                    ?.copyWith(color: appTheme.deepOrangeA200),
-              ),
-            ),
-          ],
-        ),
-        SizedBox(
-          height: 19.v,
-        ),
-        Obx(() {
-          var reviews = controller.userData.value.data?.basicInfo?.reviews;
-          if (reviews == null || reviews.isEmpty) {
-            return Text(
-              "No reviews yet",
-              style:
-                  theme.textTheme.bodyMedium?.copyWith(color: appTheme.gray900),
-            );
-          } else {
-            // Limit the number of reviews to 5
-            var limitedReviews = reviews.take(5).toList();
-            return Column(
-              children: limitedReviews.map((review) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    color: appTheme.gray100,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            CustomImageView(
-                              imagePath: review.profilePic,
-                              height: 50,
-                              width: 50,
-                              radius: BorderRadius.circular(50),
-                            ),
-                            const SizedBox(width: 10),
-                            Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Text(
-                                  review.reviewer.toString(),
-                                  style: theme.textTheme.headlineLarge
-                                      ?.copyWith(fontSize: 14.fSize),
-                                ),
-                                SizedBox(height: 1.v),
-                                Text(
-                                  review.formattedDate.toString(),
-                                  style: theme.textTheme.titleSmall!,
-                                )
-                              ],
-                            )
-                          ],
-                        ),
-                        SizedBox(height: 9.v),
-                        Row(
-                          children: [
-                            RatingBar.builder(
-                              initialRating: review.rating!.toDouble(),
-                              minRating: 0,
-                              direction: Axis.horizontal,
-                              allowHalfRating: false,
-                              itemSize: 22,
-                              itemCount: 5,
-                              updateOnDrag: true,
-                              onRatingUpdate: (rating) {},
-                              itemBuilder: (context, _) {
-                                return const Icon(
-                                  Icons.star,
-                                );
-                              },
-                            ),
-                            const SizedBox(
-                                width: 6), // Added SizedBox for spacing
-                            Text(
-                              review.rating.toString(),
-                              style: theme.textTheme.headlineLarge
-                                  ?.copyWith(fontSize: 16.fSize),
-                            )
-                          ],
-                        ),
-                        SizedBox(height: 8.v),
-                        Container(
-                          width: 304.adaptSize,
-                          margin: const EdgeInsets.only(right: 31),
-                          child: Text(
-                            review.review.toString(),
-                            maxLines: 2,
-                            overflow: TextOverflow.ellipsis,
-                            style: theme.textTheme.bodyMedium
-                                ?.copyWith(color: appTheme.gray900),
-                          ),
-                        ),
-                        SizedBox(height: 8.v), // Added SizedBox for spacing
-                      ],
+                  backgroundColor: appTheme.gray200,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                    side: BorderSide(
+                      color: appTheme.gray300,
                     ),
                   ),
                 );
               }).toList(),
-            );
-          }
-        }),
-        SizedBox(
-          height: 19.v,
-        )
-      ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildColumnreviews() {
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Reviews",
+                style:
+                    theme.textTheme.headlineLarge?.copyWith(fontSize: 16.fSize),
+              ),
+              GestureDetector(
+                onTap: () {
+                  var reviews =
+                      controller.userData.value.data?.basicInfo?.reviews;
+                  if (reviews != null && reviews.isNotEmpty) {
+                    Get.to(() => AllReviewsPage(reviews: reviews));
+                  }
+                },
+                child: Text(
+                  "See all",
+                  style: theme.textTheme.titleMedium
+                      ?.copyWith(color: appTheme.deepOrangeA200),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 19.v,
+          ),
+          Obx(() {
+            var reviews = controller.userData.value.data?.basicInfo?.reviews;
+            if (reviews == null || reviews.isEmpty) {
+              return Text(
+                "No reviews yet",
+                style: theme.textTheme.bodyMedium
+                    ?.copyWith(color: appTheme.gray900),
+              );
+            } else {
+              // Limit the number of reviews to 5
+              var limitedReviews = reviews.take(5).toList();
+              return Column(
+                children: limitedReviews.map((review) {
+                  return Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      padding: const EdgeInsets.only(
+                          left: 15, right: 15, top: 10, bottom: 10),
+                      decoration: BoxDecoration(
+                        color: appTheme.gray100,
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(20.0),
+                        ),
+                      ),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              CustomImageView(
+                                imagePath: review.profilePic,
+                                height: 50,
+                                width: 50,
+                                radius: BorderRadius.circular(50),
+                              ),
+                              const SizedBox(width: 10),
+                              Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    review.reviewer.toString(),
+                                    style: theme.textTheme.headlineLarge
+                                        ?.copyWith(fontSize: 14.fSize),
+                                  ),
+                                  SizedBox(height: 1.v),
+                                  Text(
+                                    review.formattedDate.toString(),
+                                    style: theme.textTheme.titleSmall!,
+                                  )
+                                ],
+                              )
+                            ],
+                          ),
+                          SizedBox(height: 9.v),
+                          Row(
+                            children: [
+                              CustomRatingBar(
+                                initialRating: review.rating!.toDouble(),
+                                itemCount: 5,
+                                itemSize: 22,
+                                onRatingUpdate: (rating) {},
+                                color: appTheme.deepYello,
+                                unselectedColor: appTheme.gray300,
+                              ),
+
+                              const SizedBox(
+                                  width: 6), // Added SizedBox for spacing
+                              Text(
+                                review.rating.toString(),
+                                style: theme.textTheme.headlineLarge
+                                    ?.copyWith(fontSize: 16.fSize),
+                              )
+                            ],
+                          ),
+                          SizedBox(height: 8.v),
+                          Container(
+                            width: 304.adaptSize,
+                            margin: const EdgeInsets.only(right: 31),
+                            child: Text(
+                              review.review.toString(),
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.bodyMedium
+                                  ?.copyWith(color: appTheme.gray900),
+                            ),
+                          ),
+                          SizedBox(height: 8.v), // Added SizedBox for spacing
+                        ],
+                      ),
+                    ),
+                  );
+                }).toList(),
+              );
+            }
+          }),
+          SizedBox(
+            height: 19.v,
+          )
+        ],
+      ),
     );
   }
 

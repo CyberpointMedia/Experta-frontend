@@ -1,4 +1,3 @@
-
 // ignore_for_file: avoid_print
 
 import 'dart:convert';
@@ -43,16 +42,15 @@ class ApiService {
     return _processResponse2(response);
   }
 
-Future<ResendOtpResponseModel?> resendOtp(String phoneNumber) async {
-  final response = await http.post(
-    Uri.parse('$_baseUrl/resend-otp'),
-    headers: {'Content-Type': 'application/json'},
-    body: jsonEncode({'phoneNo': phoneNumber}),
-  );
+  Future<ResendOtpResponseModel?> resendOtp(String phoneNumber) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/resend-otp'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({'phoneNo': phoneNumber}),
+    );
 
-  return _processResponse<ResendOtpResponseModel>(response);
-}
-
+    return _processResponse<ResendOtpResponseModel>(response);
+  }
 
   Future<VerifyOtpResponseModel?> verifyOtp(
       VerifyOtpRequestModel requestModel) async {
@@ -289,8 +287,9 @@ Future<ResendOtpResponseModel?> resendOtp(String phoneNumber) async {
 
     try {
       var response = await request.send();
+      var responseString = await http.Response.fromStream(response);
       if (response.statusCode == 200) {
-        print('Uploaded successfully');
+        log('${responseString.body} Uploaded successfully');
       } else {
         print(
             'Failed to upload: ${response.statusCode} - ${await response.stream.bytesToString()}');
@@ -735,47 +734,43 @@ Future<ResendOtpResponseModel?> resendOtp(String phoneNumber) async {
     }
   }
 
-  Future<List<Map<String, dynamic>>> fetchChats() async {
-    String url = '$_baseUrl/chat';
-    final headers = {
-      'Authorization': 'Bearer $token',
-      'Content-Type': 'application/json',
-    };
-
-    int retryCount = 0;
-    const maxRetries = 3;
-    const retryDelay = Duration(seconds: 2);
-
-    while (retryCount < maxRetries) {
-      try {
-        print('Making request to $url with headers $headers');
-
-        final response = await http
-            .get(Uri.parse(url), headers: headers)
-            .timeout(Duration(seconds: 30)); // Increase timeout duration
-
-        print('Response status: ${response.statusCode}');
-        print('Response body: ${response.body}');
-        if (response.statusCode == 200) {
-          return List<Map<String, dynamic>>.from(json.decode(response.body));
-        } else {
-          // Handle non-200 status codes
-          print('Error: ${response.statusCode} - ${response.reasonPhrase}');
-          throw Exception('Failed to load chats');
-        }
-      } catch (error) {
-        print('Error fetching chats: $error');
-        if (retryCount < maxRetries - 1) {
-          retryCount++;
-          print('Retrying... ($retryCount/$maxRetries)');
-          await Future.delayed(retryDelay);
-        } else {
-          throw Exception('Failed to load chats after $maxRetries attempts');
-        }
-      }
-    }
-    throw Exception('Failed to load chats');
-  }
+  // Future<List<Map<String, dynamic>>> fetchChats() async {
+  //   String url = '$_baseUrl/chat';
+  //   final headers = {
+  //     'Authorization': 'Bearer $token',
+  //     'Content-Type': 'application/json',
+  //   };
+  //   int retryCount = 0;
+  //   const maxRetries = 3;
+  //   const retryDelay = Duration(seconds: 2);
+  //   while (retryCount < maxRetries) {
+  //     try {
+  //       print('Making request to $url with headers $headers');
+  //       final response = await http
+  //           .get(Uri.parse(url), headers: headers)
+  //           .timeout(Duration(seconds: 30)); // Increase timeout duration
+  //       print('Response status: ${response.statusCode}');
+  //       print('Response body: ${response.body}');
+  //       if (response.statusCode == 200) {
+  //         return List<Map<String, dynamic>>.from(json.decode(response.body));
+  //       } else {
+  //         // Handle non-200 status codes
+  //         print('Error: ${response.statusCode} - ${response.reasonPhrase}');
+  //         throw Exception('Failed to load chats');
+  //       }
+  //     } catch (error) {
+  //       print('Error fetching chats: $error');
+  //       if (retryCount < maxRetries - 1) {
+  //         retryCount++;
+  //         print('Retrying... ($retryCount/$maxRetries)');
+  //         await Future.delayed(retryDelay);
+  //       } else {
+  //         throw Exception('Failed to load chats after $maxRetries attempts');
+  //       }
+  //     }
+  //   }
+  //   throw Exception('Failed to load chats');
+  // }
 
   Future<List<Map<String, dynamic>>> fetchMessages(String chatId) async {
     final response = await http.get(
@@ -839,6 +834,26 @@ Future<ResendOtpResponseModel?> resendOtp(String phoneNumber) async {
       return json.decode(response.body);
     } else {
       throw Exception('Failed to send message');
+    }
+  }
+
+  Future<Map<String, dynamic>?> fetchChat(String userId) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/chat'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json',
+      },
+      body: jsonEncode({"userId": userId}),
+    );
+    log('Response status: ${response.statusCode}');
+    log('Response body: ${response.body}');
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      return jsonDecode(response.body);
+    } else {
+      // Handle error
+      print('Failed to load chat ${response.body}');
+      return null;
     }
   }
 

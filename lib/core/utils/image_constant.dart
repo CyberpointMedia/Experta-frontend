@@ -429,7 +429,6 @@ class ImageConstant {
 
   // static String imgPlayGreen500 = '$imagePath/img_play_green_500.png';
 
-
   // static String imgNavFeedsGray900 = '$imagePath/img_nav_feeds_gray_900.svg';
 
   static String imgInfoBlueGray300 = '$imagePath/settings/inform.svg';
@@ -451,7 +450,7 @@ class ImageConstant {
   // PAYMENT
   static String wallet = "$imagePath/wallet.svg";
   static String withdraw = "$imagePath/settings/Withdraw.svg";
-  static String transaction = "$imagePath/settings/Transaction.svg";                                               
+  static String transaction = "$imagePath/settings/Transaction.svg";
   static String uservarification = "$imagePath/settings/User Verify.svg";
   static String reffer = "$imagePath/Star.svg";
   static String help = "$imagePath/settings/24-hours.svg";
@@ -499,7 +498,8 @@ class ImageConstant {
   static String complete = "$imagePath/settings/complete.svg";
   static String singletick = "$imagePath/settings/singletick.svg";
 
-  // sucess 
+  // sucess
 
   static String success = "$imagePath/settings/checkSucess.svg";
+  static String message = "$imagePath/settings/message.svg";
 }
