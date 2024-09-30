@@ -31,6 +31,8 @@ import 'package:experta/presentation/dashboard/binding/dashboard_binding.dart';
 import 'package:experta/presentation/dashboard/dashboard.dart';
 import 'package:experta/presentation/edit_education/binding/edit_education_list_binding.dart';
 import 'package:experta/presentation/edit_education/edit_education.dart';
+import 'package:experta/presentation/edit_experties/binding/edit_experties_binding.dart';
+import 'package:experta/presentation/edit_experties/edit_experties.dart';
 import 'package:experta/presentation/edit_profile/edit_profile_binding/edit_profile_binding.dart';
 import 'package:experta/presentation/edit_profile/edit_profile_setting.dart';
 import 'package:experta/presentation/edit_work_experience/binding/edit_work_experience_binding.dart';
@@ -52,6 +54,8 @@ import 'package:experta/presentation/new_post/binding/new_post_bindings.dart';
 import 'package:experta/presentation/new_post/new_post.dart';
 import 'package:experta/presentation/notification/notification_controller.dart';
 import 'package:experta/presentation/notification/notification_screen.dart';
+import 'package:experta/presentation/notification_settings/binding/notificatin_setting_binding.dart';
+import 'package:experta/presentation/notification_settings/notification_settings.dart';
 import 'package:experta/presentation/onboarding_screen/binding/onboarding_binding.dart';
 import 'package:experta/presentation/onboarding_screen/onboarding_screen.dart';
 import 'package:experta/presentation/pan_detrail/binding/pan_detail_binding.dart';
@@ -66,8 +70,8 @@ import 'package:experta/presentation/recents/binding/recents_binding.dart';
 import 'package:experta/presentation/recents/recent.dart';
 import 'package:experta/presentation/recorded_session/binding/recorded_session_binding.dart';
 import 'package:experta/presentation/recorded_session/recorded_session.dart';
-import 'package:experta/presentation/recorded_session/binding/recorded_session_binding.dart';
-import 'package:experta/presentation/recorded_session/recorded_session.dart';
+import 'package:experta/presentation/search_block/binding/search_block_binding.dart';
+import 'package:experta/presentation/search_block/search_block.dart';
 import 'package:experta/presentation/search_screen/binding/search_binding.dart';
 import 'package:experta/presentation/search_screen/search_screen.dart';
 import 'package:experta/presentation/security_privacy/binding/security_privacy_binding.dart';
@@ -92,9 +96,8 @@ import 'package:experta/presentation/sucessfully/bindings/sucessfully_bindings.d
 import 'package:experta/presentation/sucessfully/sucessfully.dart';
 import 'package:experta/presentation/support/bindings/support_binding.dart';
 import 'package:experta/presentation/support/support.dart';
-import 'package:experta/presentation/transaction/transection.dart';
-import 'package:experta/presentation/support/bindings/support_binding.dart';
-import 'package:experta/presentation/support/support.dart';
+import 'package:experta/presentation/top_up/binding/top_up_binding.dart';
+import 'package:experta/presentation/top_up/top_up.dart';
 import 'package:experta/presentation/transaction/transection.dart';
 import 'package:experta/presentation/userProfile/binding/profile_binding.dart';
 import 'package:experta/presentation/userProfile/user_profile_page.dart';
@@ -106,6 +109,8 @@ import 'package:experta/presentation/verifynumber_screen/binding/verifynumber_bi
 import 'package:experta/presentation/verifynumber_screen/verifynumber_screen.dart';
 import 'package:experta/presentation/wallet/binding/wallet_binding.dart';
 import 'package:experta/presentation/wallet/wallet.dart';
+import 'package:experta/presentation/withdraw/binding/withdraw_binding.dart';
+import 'package:experta/presentation/withdraw/withdraw.dart';
 import 'package:experta/presentation/work_experience/binding/experience_binding.dart';
 import 'package:experta/presentation/work_experience/work_experience.dart';
 
@@ -190,7 +195,7 @@ class AppRoutes {
 
   static const String pandetail = "/pan_detail";
 
-  // static const String adhardetail = "/Aadhar_DetailS";
+  static const String adhardetail = "/Aadhar_DetailS";
 
   static const String changegender = "/change_gender";
 
@@ -236,6 +241,16 @@ static const String Bookappointment= "/book_appointment";
 static const String sUcessfuly= "/sucessfuly";
 
 static const String genderchange= "/change_gender";
+
+static const String topup= "/top_up";
+
+static const String widraw= "/withdraw";
+
+static const String editexperties= "/edit_experties";
+
+static const String Notificationseting= "/notification_setting";
+
+static const String blocksearch= "/search_block";
 
 static const String qr = "/share_profile";
 
@@ -301,13 +316,13 @@ static const String qr = "/share_profile";
         SecuritryPrivacyBinding(),
       ],
     ),
-    // GetPage(
-    //   name: adhardetail,
-    //   page: () => const AadharDetails(),
-    //   bindings: [
-    //     AadharDetailBinding(),
-    //   ],
-    // ),
+    GetPage(
+      name: adhardetail,
+      page: () => const AadharDetails(),
+      bindings: [
+        AadharDetailBinding(),
+      ],
+    ),
     GetPage(
       name: signinPage,
       page: () => const SigninPage(),
@@ -664,7 +679,49 @@ static const String qr = "/share_profile";
         page: () =>   const ChangeGender(),
         customTransition: CustomPageTransition(),
         bindings: [
-          ChangeGenderBinding(),
+          ChangeGenderBinding(),    
+          
+        ]),
+         GetPage(
+        name: topup,
+        page: () =>   TopUpPage(),
+        customTransition: CustomPageTransition(),
+        bindings: [
+          TopUpBinding(),
+          
+        ]),
+        GetPage(
+        name: widraw,
+        page: () =>   WithdrawCreditsPage(),
+        customTransition: CustomPageTransition(),
+        bindings: [
+          WithdrawBinding(),
+          
+        ]),
+
+        GetPage(
+        name: editexperties,
+        page: () =>   EditExpertisePage(),
+        customTransition: CustomPageTransition(),
+        bindings: [
+          EditExpertiesBinding(),
+          
+        ]),
+        GetPage(
+        name: Notificationseting,
+        page: () =>   NotificationsPage(),
+        customTransition: CustomPageTransition(),
+        bindings: [
+          NotificatinSettingBinding(),
+          
+        ]),
+        GetPage(
+        name: blocksearch,
+        page: () =>   ProfileBlockPage(),
+        customTransition: CustomPageTransition(),
+        bindings: [
+          BlockSearchBinding(),
+          
         ]),
   ];
 }

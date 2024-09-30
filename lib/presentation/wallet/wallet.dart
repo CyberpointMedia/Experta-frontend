@@ -41,7 +41,6 @@ class _WalletState extends State<Wallet> {
             ),
           ),
           Column(
-            // mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [_buildAppBar(), _buildAccountSettings1(), _buildAccountSettings2()],
           )
@@ -66,12 +65,11 @@ class _WalletState extends State<Wallet> {
     );
   }
 
- Widget _buildAccountSettings1() {
+  Widget _buildAccountSettings1() {
   return Padding(
     padding: EdgeInsets.only(right: 16.h, left: 16, top: 20),
     child: Container(
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.3,
       padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
       decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
         color: Colors.white,
@@ -87,143 +85,180 @@ class _WalletState extends State<Wallet> {
             style: CustomTextStyles.labelLargeGray700,
           ),
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisAlignment: MainAxisAlignment.start,
             children: [
-              Text(
-                "₹ 3,000",
-                textAlign: TextAlign.left,
-                style: CustomTextStyles.bodyLargeBlack,
-              ),
+              CustomImageView(imagePath: ImageConstant.imgLayer1, height: 28, width: 28),
               Padding(
-                padding: const EdgeInsets.only(right: 160.0), // Add padding here
-                child: GestureDetector(
-                  onTap: () {
-                    setState(() {
-                      _isExpanded = !_isExpanded;
-                    });
-                  },
-                  child: Icon(
-                    _isExpanded ? Icons.arrow_upward : Icons.arrow_downward,
-                    color: Colors.black,
-                  ),
+                padding: const EdgeInsets.only(left: 7),
+                child: Text(
+                  "3,000",
+                  textAlign: TextAlign.left,
+                  style: CustomTextStyles.bodyLargeBlack.copyWith(fontWeight: FontWeight.bold),
+                ),
+              ),
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    _isExpanded = !_isExpanded;
+                  });
+                },
+                child: Icon(
+                  _isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                  size: 25,
+                  color: Colors.black,
                 ),
               ),
             ],
           ),
           const SizedBox(height: 16),
-          if (_isExpanded)
-            const Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      "Deposits",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                    Text(
-                      "₹ 1,500",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 4),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      " Earn",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                    Text(
-                      "₹ 500",
-                      style: TextStyle(
-                        fontSize: 16,
-                        color: Colors.black,
-                        fontWeight: FontWeight.normal,
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          Padding(
-            padding: const EdgeInsets.only(top: 20),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // Top Up Button
-                    SizedBox(
-                      height: 50,
-                      width: 140,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.yellow, // Background color
-                          foregroundColor: Colors.black,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
+          AnimatedContainer(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut,
+            height: _isExpanded ? 70 : 0,
+            child: _isExpanded
+                ? Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                const Text(
+                                  "Deposits",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 5),
+                                  child: CustomImageView(imagePath: ImageConstant.imgInfoBlueGray300),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                CustomImageView(imagePath: ImageConstant.imgLayer1),
+                                const Text(
+                                  " 1,500",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                const Icon(Icons.keyboard_arrow_right)
+                              ],
+                            ),
+                          ],
                         ),
-                        onPressed: () {
-                          // Define your action here
-                          print("Top Up button pressed!");
-                        },
-                        child: const Text(
-                          'Top Up',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        const SizedBox(height: 4),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            Row(
+                              children: [
+                                const Text(
+                                  "Earned",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                Padding(
+                                  padding: const EdgeInsets.only(left: 5),
+                                  child: CustomImageView(imagePath: ImageConstant.imgInfoBlueGray300),
+                                ),
+                              ],
+                            ),
+                            Row(
+                              children: [
+                                CustomImageView(imagePath: ImageConstant.imgLayer1),
+                                const Text(
+                                  " 500",
+                                  style: TextStyle(
+                                    fontSize: 16,
+                                    color: Colors.black,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                                ),
+                                const Icon(Icons.keyboard_arrow_right)
+                              ],
+                            ),
+                          ],
+                        ),
+                      ],
+                    ),
+                  )
+                : null,
+          ),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  // Top Up Button
+                  SizedBox(
+                    height: 55,
+                    width: 165,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.yellow, // Background color
+                        foregroundColor: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
                         ),
                       ),
-                    ),
-                    const SizedBox(width: 16), // Spacing between buttons
-                    // Withdraw Button
-                    SizedBox(
-                      height: 50,
-                      width: 140,
-                      child: ElevatedButton(
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white, // Background color
-                          foregroundColor: Colors.black,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                            side: const BorderSide(color: Colors.grey), // Border color
-                          ),
-                        ),
-                        onPressed: () {
-                          // Define your action here
-                          print("Withdraw button pressed!");
-                        },
-                        child: const Text(
-                          'Withdraw',
-                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                        ),
+                      onPressed: () {
+                        // Define your action here
+                        Get.toNamed(AppRoutes.topup);
+                        print("Top Up button pressed!");
+                      },
+                      child: const Text(
+                        'Top Up',
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
                       ),
                     ),
-                  ],
-                ),
-              ],
-            ),
+                  ),
+                  const SizedBox(width: 60), // Increase the spacing between buttons
+                  // Withdraw Button
+                  SizedBox(
+                    height: 55,
+                    width: 164,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white, // Background color
+                        foregroundColor: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: const BorderSide(color: Colors.grey), // Border color
+                        ),
+                      ),
+                      onPressed: () {
+                        // Define your action here
+                        print("Withdraw button pressed!");
+                      },
+                      child: const Text(
+                        'Withdraw',
+                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ],
           )
         ],
       ),
     ),
   );
 }
+
 
   Widget _buildAccountSettings2() {
     return Align(

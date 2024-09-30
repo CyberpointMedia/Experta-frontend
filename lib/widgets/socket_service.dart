@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:experta/core/app_export.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'package:connectivity_plus/connectivity_plus.dart';
 
 class SocketService with ChangeNotifier {
   late IO.Socket socket;

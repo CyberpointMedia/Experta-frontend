@@ -85,9 +85,9 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
     return [
       _buildTitle("Change User Name"),
       _buildSubtitle("Enter your email or phone number to reset the password."),
-      SizedBox(height: 12,),
+      const SizedBox(height: 12,),
       const Text("User name"),
-      SizedBox(height: 6,),
+      const SizedBox(height: 6,),
       CustomTextFormField(
         hintText: "navi_verma88",
         hintStyle: CustomTextStyles.titleMediumBluegray300,
@@ -146,9 +146,9 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
     return [
       _buildTitle("Change Date of birth"),
       _buildSubtitle("Enter your email or phone number to reset the password."),
-      SizedBox(height: 12,),
+      const SizedBox(height: 12,),
       const Text("Date of birth (DD/MM/YYYY)"),
-      SizedBox(height: 6,),
+      const SizedBox(height: 6,),
       Row(
         children: [
           Expanded(
@@ -195,7 +195,7 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
       ),
       const SizedBox(height: 12,),
       const Text("New Email"),
-      SizedBox(height: 6,),
+      const SizedBox(height: 6,),
       CustomTextFormField(
         hintText: "john.doe@example.com",
         hintStyle: CustomTextStyles.titleMediumBluegray300,

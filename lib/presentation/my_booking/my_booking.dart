@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:experta/core/app_export.dart';
 import 'package:intl/intl.dart';
 
@@ -28,7 +27,6 @@ class Booking {
 
 // Main booking page widget
 class MyBookingPage extends StatefulWidget {
-
   const MyBookingPage({super.key});
 
   @override
@@ -59,158 +57,159 @@ class _MyBookingPageState extends State<MyBookingPage> {
     ),
   ];
 
-  // @override
   bool isPhoneSelected = true;
 
   @override
   Widget build(BuildContext context) {
-  return Scaffold(
-    resizeToAvoidBottomInset: true,
-    body: Stack(
-      children: [
-        Positioned(
-          left: 270,
-          top: 50,
-          child: ImageFiltered(
-            imageFilter: ImageFilter.blur(
-              sigmaX: 60,
-              sigmaY: 60,
-            ),
-            child: Align(
-              child: SizedBox(
-                width: 252,
-                height: 252,
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(126),
-                    color: appTheme.deepOrangeA20.withOpacity(0.35),
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      body: Stack(
+        children: [
+          Positioned(
+            left: 270,
+            top: 50,
+            child: ImageFiltered(
+              imageFilter: ImageFilter.blur(
+                sigmaX: 60,
+                sigmaY: 60,
+              ),
+              child: Align(
+                child: SizedBox(
+                  width: 252,
+                  height: 252,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(126),
+                      color: appTheme.deepOrangeA20.withOpacity(0.35),
+                    ),
                   ),
                 ),
               ),
             ),
           ),
-        ),
-        SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              CustomAppBar(
-      height: 40.h,
-      leadingWidth: 40.h,
-      leading: AppbarLeadingImage(
-        imagePath: ImageConstant.imgArrowLeftOnerrorcontainer,
-        margin: EdgeInsets.only(left: 16.h),
-        onTap: () {
-          onTapArrowLeft();
-        },
+          SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                CustomAppBar(
+                  height: 40.h,
+                  leadingWidth: 40.h,
+                  leading: AppbarLeadingImage(
+                    imagePath: ImageConstant.imgArrowLeftOnerrorcontainer,
+                    margin: EdgeInsets.only(left: 16.h),
+                    onTap: () {
+                      onTapArrowLeft();
+                    },
+                  ),
+                  centerTitle: true,
+                  title: AppbarSubtitleSix(text: "My Bookings"),
+                ),
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(16, 10, 16, 25),
+                  child: Container(
+                    height: 48.v,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: const Color(0xffe4e4e4)),
+                      color: const Color(0xffffffff),
+                      borderRadius: BorderRadius.circular(30),
+                    ),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                isPhoneSelected = true;
+                              });
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: isPhoneSelected
+                                    ? const Color(0xff171717)
+                                    : Colors.transparent,
+                                borderRadius: BorderRadius.circular(30),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'Upcoming',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    height: 1.5,
+                                    color: isPhoneSelected
+                                        ? const Color(0xffffffff)
+                                        : const Color(0xff000000), // Dark black color
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: GestureDetector(
+                            onTap: () {
+                              setState(() {
+                                isPhoneSelected = false;
+                              });
+                            },
+                            child: Container(
+                              decoration: BoxDecoration(
+                                color: !isPhoneSelected
+                                    ? const Color(0xff171717)
+                                    : Colors.transparent,
+                                borderRadius: BorderRadius.circular(100),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  'Past',
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                    height: 1.5,
+                                    color: !isPhoneSelected
+                                        ? const Color(0xffffffff)
+                                        : const Color(0xff000000), // Dark black color
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Visibility(
+                  visible: isPhoneSelected,
+                  child: BookingList(
+                    bookings: bookings.where((booking) => booking.appointmentDate.isAfter(DateTime.now())).toList(),
+                    isUpcomingTab: true,
+                  ),
+                ),
+                Visibility(
+                  visible: !isPhoneSelected,
+                  child: BookingList(
+                    bookings: bookings.where((booking) => booking.appointmentDate.isBefore(DateTime.now())).toList(),
+                    isUpcomingTab: false,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ],
       ),
-      centerTitle: true,
-      title: AppbarSubtitleSix(text: "My Bookings"),
-    ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 10, 16, 25),
-                child: Container(
-                  // width: 138.h,
-                  height: 48.v,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: const Color(0xffe4e4e4)),
-                    color: const Color(0xffffffff),
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              isPhoneSelected = true;
-                            });
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: isPhoneSelected
-                                  ? const Color(0xff171717)
-                                  : Colors.transparent,
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            child: Center(
-                              child: Text(
-                                'Upcomming',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  height: 1.5,
-                                  color: isPhoneSelected
-                                      ? const Color(0xffffffff)
-                                      : const Color(0xff000000), // Dark black color
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              isPhoneSelected = false;
-                            });
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: !isPhoneSelected
-                                  ? const Color(0xff171717)
-                                  : Colors.transparent,
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                            child: Center(
-                              child: Text(
-                                'Past',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  height: 1.5,
-                                  color: !isPhoneSelected
-                                      ? const Color(0xffffffff)
-                                      : const Color(0xff000000), // Dark black color
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              Visibility(
-                visible: isPhoneSelected,
-                child: Container(
-                  color: Colors.transparent,
-                ),
-              ),
-              Visibility(
-                visible: !isPhoneSelected,
-                child: Container(
-                  color: Colors.transparent,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
-    ),
-  );
-}
-}
+    );
+  }
 
- void onTapArrowLeft() {
+  void onTapArrowLeft() {
     Get.back();
   }
+}
+
 // Widget to display a list of bookings
 class BookingList extends StatelessWidget {
   final List<Booking> bookings;
@@ -226,6 +225,8 @@ class BookingList extends StatelessWidget {
       );
     }
     return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
       itemCount: bookings.length,
       itemBuilder: (context, index) {
         final booking = bookings[index];
@@ -402,4 +403,3 @@ class BookingCard extends StatelessWidget {
     );
   }
 }
-

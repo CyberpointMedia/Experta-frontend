@@ -47,7 +47,7 @@ class SettingScreen extends GetWidget<SettingController> {
                               SizedBox(height: 12.v),
                               _buildAppBar(),
                                Padding(
-                                 padding:EdgeInsets.only(left: 10),
+                                 padding:const EdgeInsets.only(left: 10),
                                  child: Container(
                                                margin:
                                                    EdgeInsets.only(top: 7.v, right: 16.h, bottom: 16.v),
@@ -106,12 +106,12 @@ class SettingScreen extends GetWidget<SettingController> {
                                                ])),
                                ),
           Padding(
-           padding:EdgeInsets.only(left: 10),
+           padding:const EdgeInsets.only(left: 10),
             child: _buildBasicSettings(),
           ),
                               SizedBox(height: 16.v),
                               Padding(
-                                   padding:EdgeInsets.only(left: 10),
+                                   padding:const EdgeInsets.only(left: 10),
                                   child: Text("lbl_basic_settings".tr,
                                       style: CustomTextStyles
                                           .titleMediumBluegray30018)),
@@ -210,7 +210,7 @@ class SettingScreen extends GetWidget<SettingController> {
                             onTapmybooking();
                           },
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 3),
+                            padding: const EdgeInsets.only(top: 1),
                             child: Container(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 15.h, vertical: 16.v),
@@ -256,7 +256,7 @@ class SettingScreen extends GetWidget<SettingController> {
                             Get.toNamed(AppRoutes.payment);
                           },
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 3),
+                            padding: const EdgeInsets.only(top: 1),
                             child: Container(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 15.h, vertical: 16.v),
@@ -297,7 +297,7 @@ class SettingScreen extends GetWidget<SettingController> {
                           ),
                         ),
                        Padding(
-  padding: const EdgeInsets.only(top: 3),
+  padding: const EdgeInsets.only(top: 1),
   child: GestureDetector(
     onTap: () {
       // Use GetX to navigate to the RecordedSessionsPage
@@ -343,7 +343,7 @@ class SettingScreen extends GetWidget<SettingController> {
                             Get.toNamed(AppRoutes.bank);
                           },
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 3),
+                            padding: const EdgeInsets.only(top: 1),
                             child: Container(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 15.h, vertical: 16.v),
@@ -502,39 +502,50 @@ class SettingScreen extends GetWidget<SettingController> {
                         ])),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 3),
-                child: Container(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
-                    decoration: AppDecoration.fillOnPrimaryContainer,
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CustomIconButton(
-                              height: 44.adaptSize,
-                              width: 44.adaptSize,
-                              padding: EdgeInsets.all(6.h),
-                              decoration: IconButtonStyleHelper
-                                  .fillPrimaryContainerTL22,
-                              child: CustomImageView(
-                                imagePath: "assets/images/Ringing.svg",
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 15.h, top: 13.v, bottom: 10.v),
-                              child: Text("msg_notification_settings".tr,
-                                  style: theme.textTheme.titleMedium!
-                                      .copyWith(color: appTheme.gray900))),
-                          const Spacer(),
-                          CustomImageView(
-                              imagePath: ImageConstant.imgArrowRightGray900,
-                              height: 24.adaptSize,
-                              width: 24.adaptSize,
-                              margin: EdgeInsets.symmetric(vertical: 10.v))
-                        ])),
-              ),
+  padding: const EdgeInsets.only(top: 1),
+  child: GestureDetector(
+    onTap: () {
+      // Add your tap functionality here
+      Get.toNamed(AppRoutes.Notificationseting);
+      // You can navigate to a new page or perform any action here.
+    },
+    child: Container(
+      padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
+      decoration: AppDecoration.fillOnPrimaryContainer,
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          CustomIconButton(
+            height: 44.adaptSize,
+            width: 44.adaptSize,
+            padding: EdgeInsets.all(6.h),
+            decoration: IconButtonStyleHelper.fillPrimaryContainerTL22,
+            child: CustomImageView(
+              imagePath: "assets/images/Ringing.svg",
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 15.h, top: 13.v, bottom: 10.v),
+            child: Text(
+              "msg_notification_settings".tr,
+              style: theme.textTheme.titleMedium!.copyWith(color: appTheme.gray900),
+            ),
+          ),
+          const Spacer(),
+          CustomImageView(
+            imagePath: ImageConstant.imgArrowRightGray900,
+            height: 24.adaptSize,
+            width: 24.adaptSize,
+            margin: EdgeInsets.symmetric(vertical: 10.v),
+          ),
+        ],
+      ),
+    ),
+  ),
+),
+
               Padding(
-                padding: const EdgeInsets.only(top: 3),
+                padding: const EdgeInsets.only(top: 1),
                 child: Container(
                     padding:
                         EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
@@ -612,7 +623,7 @@ Widget _buildInfo1() {
                       ])),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 3),
+              padding: const EdgeInsets.only(top: 1),
               child: GestureDetector(
                 onTap: () {
                   Get.toNamed(AppRoutes.RaiseTicket); // Navigate to raise ticket
@@ -700,9 +711,9 @@ Widget _buildInfo1() {
 
   /// Navigates to the settingsNotificationsScreen when the action is triggered.
   onTapReferralProgram() {
-    // Get.toNamed(
-    //   AppRoutes.settingsNotificationsScreen,
-    // );
+     Get.toNamed(
+     AppRoutes.Notificationseting,
+    );
   }
 
   /// Navigates to the settingAboutUsScreen when the action is triggered.

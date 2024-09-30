@@ -120,7 +120,7 @@ class _PaymentState extends State<Payment> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Get.toNamed(AppRoutes.changeDateOfBirth);
+                            Get.toNamed(AppRoutes.widraw);
                           },
                           child: Padding(
                             padding: const EdgeInsets.only(top: 1),
