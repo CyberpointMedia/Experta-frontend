@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
 import 'package:experta/widgets/app_bar/appbar_trailing_button_one.dart';
-import 'package:experta/widgets/custom_drop_down.dart';
 import 'package:intl/intl.dart';
 
 class BookAppointmentPage extends StatefulWidget {
@@ -127,28 +126,28 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
       // appBar: _buildAppBar(),
       body: Stack(
         children: [
-           Positioned(
-              left: 270,
-              top: 50,
-              child: ImageFiltered(
-                imageFilter: ImageFilter.blur(sigmaX: 60, sigmaY: 60),
-                child: Align(
-                  child: SizedBox(
-                    width: 252,
-                    height: 252,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(126),
-                        color: appTheme.deepOrangeA20.withOpacity(0.6),
-                      ),
+          Positioned(
+            left: 270,
+            top: 50,
+            child: ImageFiltered(
+              imageFilter: ImageFilter.blur(sigmaX: 60, sigmaY: 60),
+              child: Align(
+                child: SizedBox(
+                  width: 252,
+                  height: 252,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(126),
+                      color: appTheme.deepOrangeA20.withOpacity(0.6),
                     ),
                   ),
                 ),
               ),
             ),
+          ),
           Column(
             children: [
-                _buildAppBar(),
+              _buildAppBar(),
               Flexible(
                 child: Padding(
                   padding: const EdgeInsets.all(16.0),
@@ -195,31 +194,39 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
                         ),
                       ),
                       const SizedBox(height: 10),
-                       // Adding some space between the heading and dropdown
-                       const CustomDropDown(
-                        icon: Icon(Icons.keyboard_arrow_down),
-                        
-                       ),
-                      DropdownButtonFormField<String>(
-                        value: selectedDuration,
-                        items: durations.map((String value) {
-                          return DropdownMenuItem<String>(
-                            value: value,
-                            child: Text(value),
-                          );
-                        }).toList(),
-                        onChanged: (newValue) {
-                          setState(() {
-                            selectedDuration = newValue!;
-                          });
-                        },
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
+                      Container(
+                        decoration: BoxDecoration(
+                          color: Colors.white, // Set background color to white
+                          borderRadius: BorderRadius.circular(10),
+                          border: Border.all(
+                            color: Colors.grey.shade300, // Set border color to grey
+                            width: 1, // Set border width
+                          ),
+                        ),
+                        child: DropdownButtonFormField<String>(
+                          value: selectedDuration,
+                          items: durations.map((String value) {
+                            return DropdownMenuItem<String>(
+                              value: value,
+                              child: Text(value),
+                            );
+                          }).toList(),
+                          onChanged: (newValue) {
+                            setState(() {
+                              selectedDuration = newValue!;
+                            });
+                          },
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                              borderSide: BorderSide(
+                                color: Colors.grey.shade300, // Set border color to grey
+                                width: 1, // Set border width
+                              ),
+                            ),
                           ),
                         ),
                       ),
-                      const SizedBox(height: 20),
                       const SizedBox(height: 20), // Adding space between Call Duration and Available Slot
                       const Align(
                         alignment: Alignment.centerLeft,
@@ -271,14 +278,16 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
                         ),
                       ),
                       const SizedBox(height: 20),
-                CustomElevatedButton(text: "lblcontinue".tr, onPressed: () {
+                      CustomElevatedButton(
+                        text: "lblcontinue".tr,
+                        onPressed: () {
                           Get.toNamed(AppRoutes.bookindeetail, arguments: {
                             'selectedDate': selectedDate,
                             'selectedDuration': selectedDuration,
                             'selectedSlot': selectedSlot,
                           });
-                        },)
-                
+                        },
+                      ),
                     ],
                   ),
                 ),
@@ -315,6 +324,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
   void onTapArrowLeft() {
     Get.back();
   }
+
   void onTapThreeThousand() {
     // Handle custom button tap
   }

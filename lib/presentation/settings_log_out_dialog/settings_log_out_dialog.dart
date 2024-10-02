@@ -1,5 +1,6 @@
 import 'package:experta/core/app_export.dart';
 import 'controller/settings_log_out_controller.dart';
+import 'package:flutter/services.dart'; // Import for SystemNavigator
 
 // ignore_for_file: must_be_immutable
 class SettingsLogOutDialog extends StatelessWidget {
@@ -10,49 +11,60 @@ class SettingsLogOutDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-        width: 270.h,
-        decoration: AppDecoration.fillOnPrimaryContainer
-            .copyWith(borderRadius: BorderRadiusStyle.roundedBorder15),
-        child: Column(mainAxisSize: MainAxisSize.min, children: [
+      width: 270.h,
+      decoration: AppDecoration.fillOnPrimaryContainer
+          .copyWith(borderRadius: BorderRadiusStyle.roundedBorder15),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
           SizedBox(height: 18.v),
           Text("lbl_logout2".tr, style: CustomTextStyles.titleMediumSFProText),
           SizedBox(height: 10.v),
           SizedBox(
-              width: 185.h,
-              child: Text("msg_the_less_text_people".tr,
-                  maxLines: 2,
-                  overflow: TextOverflow.ellipsis,
-                  textAlign: TextAlign.center,
-                  style: CustomTextStyles.bodySmallSFProTextGray900
-                      .copyWith(height: 1.67))),
+            width: 185.h,
+            child: Text(
+              "msg_the_less_text_people".tr,
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+              textAlign: TextAlign.center,
+              style: CustomTextStyles.bodySmallSFProTextGray900.copyWith(height: 1.67),
+            ),
+          ),
           SizedBox(height: 21.v),
           Divider(color: appTheme.gray300),
-          Container(
-              decoration: AppDecoration.fillGray300,
-              child:
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-                CustomElevatedButton(
-                    height: 40.v,
-                    width: 134.h,
-                    text: "lbl_cancel".tr,
-                    buttonStyle: CustomButtonStyles.fillOnPrimaryContainer1,
-                    buttonTextStyle:
-                        CustomTextStyles.bodyLargeSFProTextLightblueA700,
-                    onPressed: () {
-                      onTapCancel();
-                    }),
-                CustomElevatedButton(
-                    height: 40.v,
-                    width: 134.h,
-                    text: "lbl_logout2".tr,
-                    buttonStyle: CustomButtonStyles.fillOnPrimaryContainer1,
-                    buttonTextStyle:
-                        CustomTextStyles.bodyLargeSFProTextLightblueA700,
-                    onPressed: () {
-                      onTapLogout();
-                    })
-              ]))
-        ]));
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CustomElevatedButton(
+                height: 40.v,
+                width: 134.h,
+                text: "lbl_cancel".tr,
+                buttonStyle: CustomButtonStyles.fillOnPrimaryContainer1, // Use the updated style
+                buttonTextStyle: CustomTextStyles.bodyLargeSFProTextLightblueA700,
+                onPressed: () {
+                  onTapCancel();
+                },
+              ),
+              Container(
+                width: 1, // Set the width of the divider
+                height: 40.v, // Match the height of the buttons
+                color: appTheme.gray300, // Set the color to grey
+              ),
+              CustomElevatedButton(
+                height: 40.v,
+                width: 134.h,
+                text: "lbl_logout2".tr,
+                buttonStyle: CustomButtonStyles.fillOnPrimaryContainer1, // Use the updated style
+                buttonTextStyle: CustomTextStyles.bodyLargeSFProTextLightblueA700,
+                onPressed: () {
+                  onTapLogout(); // Pass context to the method
+                },
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
   }
 
   /// Navigates to the settingScreen when the action is triggered.

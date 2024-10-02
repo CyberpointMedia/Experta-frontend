@@ -517,7 +517,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                           child:
                               SvgPicture.asset("assets/images/img_link_1.svg"),
                         ),
-                        SizedBox(width: 10),
+                        const SizedBox(width: 10),
                         Expanded(
                           child: Text(
                             achievement,

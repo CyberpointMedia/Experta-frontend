@@ -282,16 +282,23 @@ class _HomeScreenState extends State<HomeScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text("Complete your Profile",
-                          style: theme.textTheme.titleMedium!),
-                      SizedBox(height: 2.v),
-                      Text("Fill in all required fields",
-                          style: theme.textTheme.bodyLarge
-                              ?.copyWith(fontSize: 12.fSize)),
-                    ],
-                  ),
+  crossAxisAlignment: CrossAxisAlignment.start,
+  children: [
+    Text(
+      "Complete your Profile",
+      style: theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500), // Setting fontWeight to 500
+    ),
+    SizedBox(height: 2.v),
+    Text(
+      "Fill in all required fields",
+      style: theme.textTheme.bodyMedium?.copyWith(
+        fontSize: 12.fSize,
+        fontWeight: FontWeight.w400, // Setting fontWeight to 400
+      ),
+    ),
+  ],
+),
+
                   Container(
                     width: MediaQuery.of(Get.context!).size.width * 0.3,
                     height: 36.v,
@@ -679,7 +686,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           text: TextSpan(
                             children: [
                               TextSpan(
-                                  text: "0",
+                                  text: "60",
                                   style: theme.textTheme.labelLarge!),
                               TextSpan(
                                   text: "/min",

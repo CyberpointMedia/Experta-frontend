@@ -1,5 +1,6 @@
+import 'package:experta/core/app_export.dart';
+import 'package:experta/theme/theme_helper.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class BookingConfirmationPage extends StatelessWidget {
   const BookingConfirmationPage({super.key});
@@ -10,6 +11,7 @@ class BookingConfirmationPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
+        automaticallyImplyLeading: false, // Prevent back button
       ),
       body: Center(
         child: Padding(
@@ -19,17 +21,28 @@ class BookingConfirmationPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                width: 100,
-                height: 100,
+                width: 140.h,
+                height: 140.v,
                 decoration: BoxDecoration(
-                  color: Colors.green.withOpacity(0.1),
+                  color: appTheme.green400.withOpacity(0.1),
                   shape: BoxShape.circle,
                 ),
-                child: const Center(
-                  child: Icon(
-                    Icons.check_circle,
-                    color: Colors.green,
-                    size: 80,
+                child: Center(
+                  child: Container(
+                    width: 92.h,
+                    height: 92.v,
+                    decoration: BoxDecoration(
+                      color: appTheme.green400,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: CustomImageView(
+                        imagePath: ImageConstant.success,
+                        height: 20.v,
+                        width: 30.h,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
                   ),
                 ),
               ),
@@ -47,7 +60,7 @@ class BookingConfirmationPage extends StatelessWidget {
                 'Your appointment booking confirmed.',
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontSize: 16,
+                  fontSize: 14,
                   color: Colors.grey,
                 ),
               ),

@@ -24,157 +24,156 @@ class _SigninPageState extends State<SigninPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        resizeToAvoidBottomInset: true,
-        body: Stack(
-          children: [
-            Positioned(
-              left: 270,
-              top: 50,
-              child: ImageFiltered(
-                imageFilter: ImageFilter.blur(
-                  sigmaX: 60,
-                  sigmaY: 60,
-                ),
-                child: Align(
-                  child: SizedBox(
-                    width: 252,
-                    height: 252,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(126),
-                        color: appTheme.deepOrangeA20.withOpacity(0.6),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 25),
-                    child: Container(
-                      padding: const EdgeInsets.fromLTRB(5, 5, 5, 5),
-                      width: 175,
-                      height: 50,
-                      decoration: BoxDecoration(
-                        border: Border.all(color: const Color(0xffe4e4e4)),
-                        color: const Color(0xffffffff),
-                        borderRadius: BorderRadius.circular(100),
-                      ),
-                      child: Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                isPhoneSelected = true;
-                              });
-                            },
-                            child: Container(
-                              // phoneYN3 (8:10266)
-                              width: 80,
-                              height: double.infinity,
-                              decoration: BoxDecoration(
-                                color: isPhoneSelected
-                                    ? const Color(0xff171717)
-                                    : Colors.transparent,
-                                borderRadius: BorderRadius.circular(100),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'Log In',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500,
-                                    height: 1.5,
-                                    color: isPhoneSelected
-                                        ? const Color(0xffffffff)
-                                        : appTheme.blueGray300,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                          GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                isPhoneSelected = false;
-                              });
-                            },
-                            child: Container(
-                              width: 80,
-                              height: double.infinity,
-                              decoration: BoxDecoration(
-                                color: !isPhoneSelected
-                                    ? const Color(0xff171717)
-                                    : Colors.transparent,
-                                borderRadius: BorderRadius.circular(150),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'Sign Up',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 12,
-                                    fontWeight: FontWeight.w500,
-                                    height: 1.5,
-                                    color: !isPhoneSelected
-                                        ? const Color(0xffffffff)
-                                        : appTheme.blueGray300,
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                  Visibility(
-                    visible: isPhoneSelected,
-                    child: phoneTabContent(),
-                  ),
-                  Visibility(
-                    visible: !isPhoneSelected,
-                    child: emailTabContent(),
-                  ),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildInputField() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+  return Scaffold(
+    resizeToAvoidBottomInset: true,
+    body: Stack(
       children: [
-        Text(
-          "lbl_phone_number".tr,
-          style: theme.textTheme.titleSmall,
+        Positioned(
+          left: 270,
+          top: 50,
+          child: ImageFiltered(
+            imageFilter: ImageFilter.blur(
+              sigmaX: 60,
+              sigmaY: 60,
+            ),
+            child: Align(
+              child: SizedBox(
+                width: 252,
+                height: 252,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(126),
+                    color: appTheme.deepOrangeA20.withOpacity(0.35),
+                  ),
+                ),
+              ),
+            ),
+          ),
         ),
-        SizedBox(height: 6.v),
-        Obx(
-          () => CustomPhoneNumber(
-            country: controller.selectedCountry.value,
-            controller: controller.phoneNumberController,
-            onTap: (Country value) {
-              controller.selectedCountry.value = value;
-            },
+        SingleChildScrollView(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(10, 56, 10, 25),
+                child: Container(
+                  width: 138.h,
+                  height: 31.v,
+                  decoration: BoxDecoration(
+                    border: Border.all(color: const Color(0xffe4e4e4)),
+                    color: const Color(0xffffffff),
+                    borderRadius: BorderRadius.circular(16),
+                  ),
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              isPhoneSelected = true;
+                            });
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: isPhoneSelected
+                                  ? const Color(0xff171717)
+                                  : Colors.transparent,
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Center(
+                              child: Text(
+                                'Log In',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  height: 1.5,
+                                  color: isPhoneSelected
+                                      ? const Color(0xffffffff)
+                                      : const Color(0xff000000), // Dark black color
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                      Expanded(
+                        child: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              isPhoneSelected = false;
+                            });
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: !isPhoneSelected
+                                  ? const Color(0xff171717)
+                                  : Colors.transparent,
+                              borderRadius: BorderRadius.circular(100),
+                            ),
+                            child: Center(
+                              child: Text(
+                                'Sign Up',
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                  height: 1.5,
+                                  color: !isPhoneSelected
+                                      ? const Color(0xffffffff)
+                                      : const Color(0xff000000), // Dark black color
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              Visibility(
+                visible: isPhoneSelected,
+                child: phoneTabContent(),
+              ),
+              Visibility(
+                visible: !isPhoneSelected,
+                child: emailTabContent(),
+              ),
+            ],
           ),
         ),
       ],
-    );
-  }
+    ),
+  );
+}
+
+
+
+ Widget _buildInputField() {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        "lbl_phone_number".tr,
+        style: theme.textTheme.titleSmall!.copyWith(color: Colors.black), // Set text color to black
+      ),
+      SizedBox(height: 6.v),
+      Obx(
+        () => CustomPhoneNumber(
+          country: controller.selectedCountry.value,
+          controller: controller.phoneNumberController,
+          onTap: (Country value) {
+            controller.selectedCountry.value = value;
+          },
+        ),
+      ),
+    ],
+  );
+}
+
 
   Widget _buildTermsText() {
     return RichText(
@@ -202,20 +201,32 @@ class _SigninPageState extends State<SigninPage> {
     );
   }
 
-  Widget _buildContinueButton() {
-    return Obx(() => CustomElevatedButton(
-          text: "lbl_continue".tr,
-          buttonStyle: controller.isPhoneNumberValid.value
-              ? CustomButtonStyles.yellow900
-              : CustomButtonStyles.fillOnError,
-          buttonTextStyle: controller.isPhoneNumberValid.value
-              ? CustomTextStyles.bodySmallffffffff
-              : CustomTextStyles.titleMediumGray400,
-          onPressed: controller.isPhoneNumberValid.value
-              ? () => controller.loginUser(context)
-              : null,
-        ));
-  }
+Widget _buildContinueButton() {
+  return Obx(() {
+    if (controller.isLoading.value) {
+      return const Center(
+        child: CircularProgressIndicator(
+          valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+        ),
+      );
+    } else {
+      return CustomElevatedButton(
+        text: "lbl_continue".tr,
+        buttonStyle: controller.isPhoneNumberValid.value
+            ? CustomButtonStyles.yellow900
+            : CustomButtonStyles.fillOnError,
+        buttonTextStyle: controller.isPhoneNumberValid.value
+            ? CustomTextStyles.bodySmallffffffff
+            : CustomTextStyles.titleMediumGray400,
+        onPressed: controller.isPhoneNumberValid.value
+            ? () => controller.loginUser(context)
+            : null,
+      );
+    }
+  });
+}
+
+
 
   Widget phoneTabContent() {
     return Container(
@@ -236,7 +247,7 @@ class _SigninPageState extends State<SigninPage> {
                   child: const Text(
                     'Welcome Back!',
                     style: TextStyle(
-                      fontSize: 32,
+                      fontSize: 24,
                       fontWeight: FontWeight.w500,
                       height: 1.2575,
                       color: Color(0xff171717),
@@ -277,28 +288,26 @@ class _SigninPageState extends State<SigninPage> {
       height: MediaQuery.of(context).size.height * 0.9,
       child: Form(
         key: _formKey1,
-        child: Container(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              children: [
-                const SizedBox(height: 29),
-                _buildFirstName(),
-                SizedBox(height: 15.v),
-                _buildInputField2(),
-                SizedBox(height: 15.v),
-                _buildInputField1(),
-                const SizedBox(height: 18),
-                _buildContinueButton2(),
-                const SizedBox(height: 25),
-                _buildOrcontinuewithsocial(),
-                SizedBox(height: 15.v),
-                _buildLoginOption(),
-                const Spacer(),
-                _buildTermsText(),
-                SizedBox(height: 15.v),
-              ],
-            ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            children: [
+              const SizedBox(height: 29),
+              _buildFirstName(),
+              SizedBox(height: 15.v),
+              _buildInputField2(),
+              SizedBox(height: 15.v),
+              _buildInputField1(),
+              const SizedBox(height: 18),
+              _buildContinueButton2(),
+              const SizedBox(height: 25),
+              _buildOrcontinuewithsocial(),
+              SizedBox(height: 15.v),
+              _buildLoginOption(),
+              const Spacer(),
+              _buildTermsText(),
+              SizedBox(height: 15.v),
+            ],
           ),
         ),
       ),
@@ -306,124 +315,148 @@ class _SigninPageState extends State<SigninPage> {
   }
 
   Widget _buildInputField2() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "lbl_email".tr,
-          style: theme.textTheme.titleSmall,
-        ),
-        SizedBox(height: 6.v),
-        CustomTextFormField(
-          controller: controller.emailController,
-          focusNode: controller.emailFocusNode,
-          hintText: "lbl_your_email".tr,
-          hintStyle: CustomTextStyles.titleMediumBluegray300,
-          textInputType: TextInputType.emailAddress,
-          validator: (value) {
-            if (value == null || (!isValidEmail(value, isRequired: true))) {
-              return "err_msg_please_enter_valid_email".tr;
-            }
-            return null;
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        "lbl_email".tr,
+        style: theme.textTheme.titleSmall?.copyWith(color: Colors.black), // Set text color to black
+      ),
+      SizedBox(height: 6.v),
+      CustomTextFormField(
+        controller: controller.emailController,
+        focusNode: controller.emailFocusNode,
+        hintText: "lbl_your_email".tr,
+        hintStyle: CustomTextStyles.titleMediumBluegray300,
+        textInputType: TextInputType.emailAddress,
+        validator: (value) {
+          if (value == null || (!isValidEmail(value, isRequired: true))) {
+            return "err_msg_please_enter_valid_email".tr;
+          }
+          return null;
+        },
+      ),
+    ],
+  );
+}
+
+
+ Widget _buildInputField1() {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        "lbl_phone_number".tr,
+        style: theme.textTheme.titleSmall?.copyWith(
+          color: Colors.black,        ),
+      ),
+      SizedBox(height: 6.v),
+      Obx(
+        () => CustomPhoneNumber(
+          country: controller.selectedCountry.value,
+          controller: controller.phoneNumberController,
+          onTap: (Country value) {
+            controller.selectedCountry.value = value;
           },
         ),
-      ],
-    );
-  }
+      ),
+    ],
+  );
+}
 
-  Widget _buildInputField1() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "lbl_phone_number".tr,
-          style: theme.textTheme.titleSmall,
-        ),
-        SizedBox(height: 6.v),
-        Obx(
-          () => CustomPhoneNumber(
-            country: controller.selectedCountry.value,           
-            controller: controller.phoneNumberController,
-            onTap: (Country value) {
-              controller.selectedCountry.value = value;
-            },
-          ),
-        ),
-      ],
-    );
-  }
 
   Widget _buildContinueButton2() {
-    return Column(
-      children: [
-        Obx(() => CustomElevatedButton(
-              text: "Sign Up".tr,
-              buttonStyle: controller.isEmailValid.value
-                  ? CustomButtonStyles.yellow900
-                  : CustomButtonStyles.fillOnError,
-              buttonTextStyle: controller.isEmailValid.value
-                  ? CustomTextStyles.bodySmallffffffff
-                  : CustomTextStyles.titleMediumGray400,
-              onPressed: controller.isEmailValid.value
-                  ? () => controller.registerUser(context)
-                  : null,
-            )),
-        Obx(() {
-          if (controller.errorMessage.isNotEmpty) {
-            return Text(
-              controller.errorMessage.value,
-              style: const TextStyle(color: Colors.red),
-            );
-          }
-          return Container();
-        }),
-      ],
-    );
-  }
+  return Column(
+    children: [
+      Obx(() {
+        if (controller.isLoading.value) {
+          return const Center(
+            child: CircularProgressIndicator(
+              valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+            ),
+          );
+        } else {
+          return CustomElevatedButton(
+            text: "Sign Up".tr,
+            buttonStyle: (controller.isEmailValid.value && controller.isPhoneNumberValid.value && controller.isTextValid.value)
+                ? CustomButtonStyles.yellow900
+                : CustomButtonStyles.fillOnError,
+            buttonTextStyle: (controller.isEmailValid.value && controller.isPhoneNumberValid.value && controller.isTextValid.value)
+                ? CustomTextStyles.bodySmallffffffff
+                : CustomTextStyles.titleMediumGray400,
+            onPressed: (controller.isEmailValid.value && controller.isPhoneNumberValid.value && controller.isTextValid.value)
+                ? () => controller.registerUser(context)
+                : null,
+          );
+        }
+      }),
+      Obx(() {
+        if (controller.errorMessage.isNotEmpty) {
+          return Text(
+            controller.errorMessage.value,
+            style: const TextStyle(color: Colors.red),
+          );
+        }
+        return Container();
+      }),
+    ],
+  );
+}
 
-  Widget _buildFirstName() {
-    return Row(
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "First Name".tr,
-              style: theme.textTheme.titleSmall,
+
+Widget _buildFirstName() {
+  return Row(
+    children: [
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "First Name".tr,
+            style: theme.textTheme.titleSmall?.copyWith(
+              color: Colors.black, // Set text color to black
+              fontWeight: FontWeight.w500, // Set font weight to 500
+            
             ),
-            SizedBox(height: 6.v),
-            CustomTextFormField(
-              width: 150,
-              controller: controller.nameController,
-              focusNode: controller.nameFocusNode,
-              hintText: "First Name".tr,
-              hintStyle: CustomTextStyles.titleMediumBluegray300,
-              textInputType: TextInputType.name,
+          ),
+          SizedBox(height: 6.v),
+          CustomTextFormField(
+            width: 150.v,
+            controller: controller.nameController,
+            focusNode: controller.nameFocusNode,
+            hintText: "First name".tr,
+            hintStyle: CustomTextStyles.titleMediumBluegray300.copyWith(
             ),
-          ],
-        ),
-        SizedBox(width: 20.v),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Last Name".tr,
-              style: theme.textTheme.titleSmall,
+            textInputType: TextInputType.name,
+          ),
+        ],
+      ),
+      SizedBox(width: 38.v),
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Last Name".tr,
+            style: theme.textTheme.titleSmall?.copyWith(
+              color: Colors.black, // Set text color to black
+              fontWeight: FontWeight.w500, // Set font weight to 500
             ),
-            SizedBox(height: 6.v),
-            CustomTextFormField(
-              width: 150,
-              controller: controller.passwordController,
-              focusNode: controller.passwordFocusNode,
-              hintText: "Last Name".tr,
-              hintStyle: CustomTextStyles.titleMediumBluegray300,
-              textInputType: TextInputType.name,
+          ),
+          SizedBox(height: 6.v),
+          CustomTextFormField(
+            width: 150.v,
+            controller: controller.passwordController,
+            focusNode: controller.passwordFocusNode,
+            hintText: "Last name".tr,
+            hintStyle: CustomTextStyles.titleMediumBluegray300.copyWith(
             ),
-          ],
-        ),
-      ],
-    );
-  }
+            textInputType: TextInputType.name,
+          ),
+        ],
+      ),
+    ],
+  );
+}
+
 }
 
 Widget _buildOrcontinuewithsocial() {
@@ -434,10 +467,12 @@ Widget _buildOrcontinuewithsocial() {
           thickness: 2, // Adjust thickness as needed
         ),
       ),
+      SizedBox(width: 15), // Add space between divider and text
       Text(
         'Or continue with social',
         style: TextStyle(color: Colors.black),
       ),
+      SizedBox(width: 15), // Add space between text and divider
       Expanded(
         child: Divider(
           thickness: 2, // Adjust thickness as needed
