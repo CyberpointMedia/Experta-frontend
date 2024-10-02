@@ -1,94 +1,89 @@
+import 'dart:ui';
+import 'package:experta/core/app_export.dart';
+import 'package:experta/theme/theme_helper.dart';
+import 'package:experta/widgets/animated_hint_searchview.dart'; // Your custom search view widget
 import 'package:flutter/material.dart';
 
+// ignore: unused_import
+import '../search_screen/widgets/search_item_widget.dart';
+
 class ProfileBlockPage extends StatelessWidget {
+  final TextEditingController searchController = TextEditingController();
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
-        automaticallyImplyLeading: false,  // Removes the default back icon
-        title: Row(
+    return SafeArea(
+      child: Scaffold(
+        body: Stack(
           children: [
-            // SizedBox to provide height and width to the search box
-            SizedBox(
-              height: 50.0,  // Define the height of the search box
-              width: MediaQuery.of(context).size.width * 0.8,  // Define the width (70% of the screen width)
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.grey.shade200,
-                  borderRadius: BorderRadius.circular(40.0),
+            // Background Blur Circle
+            Positioned(
+              left: 270,
+              top: 50,
+              child: ImageFiltered(
+                imageFilter: ImageFilter.blur(
+                  sigmaX: 60,
+                  sigmaY: 60,
                 ),
-                child: TextField(
-                  decoration: InputDecoration(
-                    prefixIcon: Icon(Icons.search, color: Colors.grey),
-                    hintText: 'Search',
-                    border: InputBorder.none,
-                    contentPadding: EdgeInsets.only(top: 5.0),
+                child: Align(
+                  child: SizedBox(
+                    width: 252,
+                    height: 252,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(126),
+                        color: appTheme.deepOrangeA20.withOpacity(0.6),
+                      ),
+                    ),
                   ),
                 ),
               ),
             ),
-            SizedBox(width: 8.0),
-            TextButton(
-              onPressed: () {
-                Navigator.pop(context);
-              },
-              child: Text(
-                'Cancel',
-                style: TextStyle(color: Colors.black),
-              ),
-            ),
-          ],
-        ),
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: [
-            Row(
+            // Main Content
+            Column(
               children: [
-                CircleAvatar(
-                  radius: 30,
-                  backgroundImage: AssetImage('assets/anjali_arora.png'), // Replace with your image asset
-                ),
-                SizedBox(width: 12.0),
-                const Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
+                Padding(
+                  padding: const EdgeInsets.only(left: 10, top: 25),
+                  child: Row(
                     children: [
-                      Text(
-                        'Anjali Arora',
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                      // Search Bar on the left side of Cancel Button
+                      Expanded(
+                        child: CustomAnimatedSearchView(
+                          // controller: searchController,
+                          hintTexts: const ['Search users'], // Example hints
+                          onChanged: (value) {
+                            // Logic to perform search, e.g. controller.fetchUsersBySearch(value);
+                          },
+                          suffix: _buildClearIcon(), // Add cross icon
                         ),
                       ),
-                      SizedBox(height: 4),
-                      Text(
-                        'Social Media Influencer',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey,
+                      // Cancel Button on the right side
+                      Padding(
+                        padding: EdgeInsets.only(left: 8.h), // Reduce the gap here
+                        child: TextButton(
+                          onPressed: () {
+                            searchController.clear(); // Clear search text
+                            // Optionally, add logic to close the search
+                          },
+                          child: Text(
+                            "lbl_cancel".tr,
+                            style: theme.textTheme.titleMedium!.copyWith(
+                              color: appTheme.gray900,
+                            ),
+                          ),
                         ),
                       ),
                     ],
                   ),
                 ),
-                ElevatedButton(
-                  onPressed: () {
-                    // Add your block functionality here
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.white,
-                    side: BorderSide(color: Colors.grey),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                  ),
-                  child: Text(
-                    'Block',
-                    style: TextStyle(color: Colors.black),
+                // Remaining content (e.g., search results)
+                Expanded(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      _buildSearch(),
+                    ],
                   ),
                 ),
               ],
@@ -98,5 +93,56 @@ class ProfileBlockPage extends StatelessWidget {
       ),
     );
   }
-}
 
+  // Builds the clear icon with increased size
+  Widget _buildClearIcon() {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 8.0), // Add padding around the icon
+      child: IconButton(
+        icon: Icon(
+          Icons.clear,
+          color: appTheme.gray900,
+          size: 35, // Increase icon size here
+        ),
+        onPressed: () {
+          searchController.clear(); // Clear the search text
+        },
+      ),
+    );
+  }
+
+  // Search widget (list or search results)
+  Widget _buildSearch() {
+    return Expanded(
+      child: Align(
+        alignment: Alignment.topCenter,
+        child: Padding(
+          padding: EdgeInsets.only(left: 16.h),
+          // Uncomment and modify this to display search results
+          // child: Obx(
+          //   () {
+          //     if (controller.isLoading.value) {
+          //       return const Center(child: CircularProgressIndicator());
+          //     }
+          //     if (controller.searchResults.value.isEmpty) {
+          //       return const Center(child: Text("No results found"));
+          //     }
+          //     return ListView.separated(
+          //       physics: const BouncingScrollPhysics(),
+          //       shrinkWrap: true,
+          //       separatorBuilder: (context, index) {
+          //         return SizedBox(height: 1.v);
+          //       },
+          //       itemCount: controller.searchResults.value.length,
+          //       itemBuilder: (context, index) {
+          //         SearchResult model = controller.searchResults.value[index];
+          //         return SearchItemWidget(model);
+          //       },
+          //     );
+          //   },
+          // ),
+        ),
+      ),
+    );
+  }
+}

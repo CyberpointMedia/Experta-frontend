@@ -348,8 +348,8 @@ Widget _buildExpertiseSection() {
           return const Center(child: ShimmerLoadingEffect());
         } else {
           return Wrap(
-            spacing: 8.0,
-            runSpacing: 4.0,
+            spacing: 6.0, // Adjusted spacing between chips
+            runSpacing: 6.0, // Adjusted vertical spacing between chip rows
             children: controller.expertiseList.map((expertise) {
               return Chip(
                 label: Row(
@@ -397,6 +397,7 @@ Widget _buildExpertiseSection() {
   );
 }
 
+
   Widget _buildSectionHeader(String title, Function(BuildContext) onEdit) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -407,7 +408,7 @@ Widget _buildExpertiseSection() {
           textAlign: TextAlign.start,
         ),
         Padding(
-          padding: const EdgeInsets.only(right: 10),
+          padding: const EdgeInsets.only(right: 16),
           child: TextButton(
             onPressed: () => onEdit(context),
             child: Text(
@@ -447,79 +448,86 @@ Widget _buildExpertiseSection() {
     );
   }
 
-  Widget _buildEducation() {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              "Education",
-              style: CustomTextStyles.labelMediumBlack900,
-              textAlign: TextAlign.start,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(right: 10),
-              child: TextButton(
-                onPressed: () => Get.toNamed(AppRoutes.education),
-                child: Text(
-                  "Edit",
-                  style: theme.textTheme.bodyLarge!.copyWith(color: Colors.red),
-                  textAlign: TextAlign.start,
-                ),
+ Widget _buildEducation() {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start, // Align content to the left
+    children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "Education",
+            style: CustomTextStyles.labelMediumBlack900,
+            textAlign: TextAlign.start,
+          ),
+          Padding(
+            padding: const EdgeInsets.only(right: 16),
+            child: TextButton(
+              onPressed: () => Get.toNamed(AppRoutes.education),
+              child: Text(
+                "Edit",
+                style: theme.textTheme.bodyLarge!.copyWith(color: Colors.red),
+                textAlign: TextAlign.start,
               ),
             ),
-          ],
-        ),
-        Obx(() {
-          if (controller.isLoading.value) {
-            return const Center(child: ShimmerLoadingEffect());
-          } else if (controller.educationList.isEmpty) {
-            return const Center(child: Text('No education data available'));
-          } else {
-            return ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: controller.educationList.length,
-              itemBuilder: (context, index) {
-                final education = controller.educationList[index];
-                return Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      education.degree,
-                      style: CustomTextStyles.titleMediumSFProTextBlack90001,
-                    ),
-                    const SizedBox(height: 1.0),
-                    Text(
-                      education.schoolCollege,
-                      style: theme.textTheme.bodyLarge!
-                          .copyWith(color: Colors.black),
-                    ),
-                    const SizedBox(height: 1.0),
-                    Text(
-                      '${education.startDate.year} - ${education.endDate.year}',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(fontWeight: FontWeight.bold),
-                    ),
-                    const Divider(),
-                    const SizedBox(height: 5),
-                  ],
-                );
-              },
-            );
-          }
-        }),
-      ],
-    );
-  }
+          ),
+        ],
+      ),
+      Obx(() {
+        if (controller.isLoading.value) {
+          return const Center(child: ShimmerLoadingEffect());
+        } else if (controller.educationList.isEmpty) {
+          return const Center(child: Text('No education data available'));
+        } else {
+          return ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: controller.educationList.length,
+            itemBuilder: (context, index) {
+              final education = controller.educationList[index];
+              return Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    education.degree,
+                    style: CustomTextStyles.titleMediumSFProTextBlack90001,
+                  ),
+                  const SizedBox(height: 4.0), // Adjusted to control the gap
+                  Text(
+                    education.schoolCollege,
+                    style: theme.textTheme.bodyLarge!
+                        .copyWith(color: Colors.black),
+                  ),
+                  const SizedBox(height: 4.0), // Adjusted to create desired gap
+                  Text(
+                    '${education.startDate.year} - ${education.endDate.year}',
+                    style: Theme.of(context)
+                        .textTheme
+                        .bodyMedium
+                        ?.copyWith(fontWeight: FontWeight.bold),
+                  ),
+                  const Divider(),
+                  const SizedBox(height: 7), // This creates exactly 7px of space
+                ],
+              );
+            },
+          );
+        }
+      }),
+    ],
+  );
+}
+
 
   Widget _buildAchievements() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
+         Text(
+            "Achievements",
+            style: CustomTextStyles.labelMediumBlack900,
+            textAlign: TextAlign.start,
+          ),
         ...controller.linkControllers.asMap().entries.map((entry) {
           final index = entry.key;
           final textController = entry.value;

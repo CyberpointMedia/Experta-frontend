@@ -80,7 +80,7 @@ class _SigninPageState extends State<SigninPage> {
                               color: isPhoneSelected
                                   ? const Color(0xff171717)
                                   : Colors.transparent,
-                              borderRadius: BorderRadius.circular(16),
+                              borderRadius: BorderRadius.circular(20),
                             ),
                             child: Center(
                               child: Text(
@@ -152,27 +152,28 @@ class _SigninPageState extends State<SigninPage> {
 
 
 
-  Widget _buildInputField() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "lbl_phone_number".tr,
-          style: theme.textTheme.titleSmall,
+ Widget _buildInputField() {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        "lbl_phone_number".tr,
+        style: theme.textTheme.titleSmall!.copyWith(color: Colors.black), // Set text color to black
+      ),
+      SizedBox(height: 6.v),
+      Obx(
+        () => CustomPhoneNumber(
+          country: controller.selectedCountry.value,
+          controller: controller.phoneNumberController,
+          onTap: (Country value) {
+            controller.selectedCountry.value = value;
+          },
         ),
-        SizedBox(height: 6.v),
-        Obx(
-          () => CustomPhoneNumber(
-            country: controller.selectedCountry.value,
-            controller: controller.phoneNumberController,
-            onTap: (Country value) {
-              controller.selectedCountry.value = value;
-            },
-          ),
-        ),
-      ],
-    );
-  }
+      ),
+    ],
+  );
+}
+
 
   Widget _buildTermsText() {
     return RichText(
@@ -287,28 +288,26 @@ Widget _buildContinueButton() {
       height: MediaQuery.of(context).size.height * 0.9,
       child: Form(
         key: _formKey1,
-        child: Container(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              children: [
-                const SizedBox(height: 29),
-                _buildFirstName(),
-                SizedBox(height: 15.v),
-                _buildInputField2(),
-                SizedBox(height: 15.v),
-                _buildInputField1(),
-                const SizedBox(height: 18),
-                _buildContinueButton2(),
-                const SizedBox(height: 25),
-                _buildOrcontinuewithsocial(),
-                SizedBox(height: 15.v),
-                _buildLoginOption(),
-                const Spacer(),
-                _buildTermsText(),
-                SizedBox(height: 15.v),
-              ],
-            ),
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          child: Column(
+            children: [
+              const SizedBox(height: 29),
+              _buildFirstName(),
+              SizedBox(height: 15.v),
+              _buildInputField2(),
+              SizedBox(height: 15.v),
+              _buildInputField1(),
+              const SizedBox(height: 18),
+              _buildContinueButton2(),
+              const SizedBox(height: 25),
+              _buildOrcontinuewithsocial(),
+              SizedBox(height: 15.v),
+              _buildLoginOption(),
+              const Spacer(),
+              _buildTermsText(),
+              SizedBox(height: 15.v),
+            ],
           ),
         ),
       ),
@@ -316,52 +315,55 @@ Widget _buildContinueButton() {
   }
 
   Widget _buildInputField2() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "lbl_email".tr,
-          style: theme.textTheme.titleSmall,
-        ),
-        SizedBox(height: 6.v),
-        CustomTextFormField(
-          controller: controller.emailController,
-          focusNode: controller.emailFocusNode,
-          hintText: "lbl_your_email".tr,
-          hintStyle: CustomTextStyles.titleMediumBluegray300,
-          textInputType: TextInputType.emailAddress,
-          validator: (value) {
-            if (value == null || (!isValidEmail(value, isRequired: true))) {
-              return "err_msg_please_enter_valid_email".tr;
-            }
-            return null;
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        "lbl_email".tr,
+        style: theme.textTheme.titleSmall?.copyWith(color: Colors.black), // Set text color to black
+      ),
+      SizedBox(height: 6.v),
+      CustomTextFormField(
+        controller: controller.emailController,
+        focusNode: controller.emailFocusNode,
+        hintText: "lbl_your_email".tr,
+        hintStyle: CustomTextStyles.titleMediumBluegray300,
+        textInputType: TextInputType.emailAddress,
+        validator: (value) {
+          if (value == null || (!isValidEmail(value, isRequired: true))) {
+            return "err_msg_please_enter_valid_email".tr;
+          }
+          return null;
+        },
+      ),
+    ],
+  );
+}
+
+
+ Widget _buildInputField1() {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        "lbl_phone_number".tr,
+        style: theme.textTheme.titleSmall?.copyWith(
+          color: Colors.black,        ),
+      ),
+      SizedBox(height: 6.v),
+      Obx(
+        () => CustomPhoneNumber(
+          country: controller.selectedCountry.value,
+          controller: controller.phoneNumberController,
+          onTap: (Country value) {
+            controller.selectedCountry.value = value;
           },
         ),
-      ],
-    );
-  }
+      ),
+    ],
+  );
+}
 
-  Widget _buildInputField1() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "lbl_phone_number".tr,
-          style: theme.textTheme.titleSmall,
-        ),
-        SizedBox(height: 6.v),
-        Obx(
-          () => CustomPhoneNumber(
-            country: controller.selectedCountry.value,           
-            controller: controller.phoneNumberController,
-            onTap: (Country value) {
-              controller.selectedCountry.value = value;
-            },
-          ),
-        ),
-      ],
-    );
-  }
 
   Widget _buildContinueButton2() {
   return Column(
@@ -402,49 +404,59 @@ Widget _buildContinueButton() {
 }
 
 
-  Widget _buildFirstName() {
-    return Row(
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "First Name".tr,
-              style: theme.textTheme.titleSmall,
+Widget _buildFirstName() {
+  return Row(
+    children: [
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "First Name".tr,
+            style: theme.textTheme.titleSmall?.copyWith(
+              color: Colors.black, // Set text color to black
+              fontWeight: FontWeight.w500, // Set font weight to 500
+            
             ),
-            SizedBox(height: 6.v),
-            CustomTextFormField(
-              width: 150,
-              controller: controller.nameController,
-              focusNode: controller.nameFocusNode,
-              hintText: "First Name".tr,
-              hintStyle: CustomTextStyles.titleMediumBluegray300,
-              textInputType: TextInputType.name,
+          ),
+          SizedBox(height: 6.v),
+          CustomTextFormField(
+            width: 150.v,
+            controller: controller.nameController,
+            focusNode: controller.nameFocusNode,
+            hintText: "First name".tr,
+            hintStyle: CustomTextStyles.titleMediumBluegray300.copyWith(
             ),
-          ],
-        ),
-        SizedBox(width: 20.v),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Last Name".tr,
-              style: theme.textTheme.titleSmall,
+            textInputType: TextInputType.name,
+          ),
+        ],
+      ),
+      SizedBox(width: 38.v),
+      Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Last Name".tr,
+            style: theme.textTheme.titleSmall?.copyWith(
+              color: Colors.black, // Set text color to black
+              fontWeight: FontWeight.w500, // Set font weight to 500
             ),
-            SizedBox(height: 6.v),
-            CustomTextFormField(
-              width: 150,
-              controller: controller.passwordController,
-              focusNode: controller.passwordFocusNode,
-              hintText: "Last Name".tr,
-              hintStyle: CustomTextStyles.titleMediumBluegray300,
-              textInputType: TextInputType.name,
+          ),
+          SizedBox(height: 6.v),
+          CustomTextFormField(
+            width: 150.v,
+            controller: controller.passwordController,
+            focusNode: controller.passwordFocusNode,
+            hintText: "Last name".tr,
+            hintStyle: CustomTextStyles.titleMediumBluegray300.copyWith(
             ),
-          ],
-        ),
-      ],
-    );
-  }
+            textInputType: TextInputType.name,
+          ),
+        ],
+      ),
+    ],
+  );
+}
+
 }
 
 Widget _buildOrcontinuewithsocial() {

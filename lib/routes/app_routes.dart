@@ -235,7 +235,7 @@ class AppRoutes {
   static const String recordedsession = "/recorded_session";
 
 // ignore: constant_identifier_names
-<<<<<<< HEAD
+// <<<<<<< HEAD
 static const String Bookappointment= "/book_appointment";
 
 static const String sUcessfuly= "/sucessfuly";
@@ -253,15 +253,15 @@ static const String Notificationseting= "/notification_setting";
 static const String blocksearch= "/search_block";
 
 static const String qr = "/share_profile";
-=======
-  static const String Bookappointment = "/book_appointment";
->>>>>>> fd74aedd948960a685d92b72cfbcb2d6a6d7aece
+// =======
+  // static const String Bookappointment = "/book_appointment";
+// >>>>>>> fd74aedd948960a685d92b72cfbcb2d6a6d7aece
 
-  static const String sUcessfuly = "/sucessfuly";
+  // static const String sUcessfuly = "/sucessfuly";
 
-  static const String genderchange = "/change_gender";
+  // static const String genderchange = "/change_gender";
 
-  static const String qr = "/share_profile";
+  // static const String qr = "/share_profile";
 
   static const String lottie = "/";
 

@@ -11,6 +11,7 @@ class BookingConfirmationPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
+        automaticallyImplyLeading: false, // Prevent back button
       ),
       body: Center(
         child: Padding(
@@ -26,25 +27,23 @@ class BookingConfirmationPage extends StatelessWidget {
                   color: appTheme.green400.withOpacity(0.1),
                   shape: BoxShape.circle,
                 ),
-                child:  Center(
+                child: Center(
                   child: Container(
-  width: 92.h,
-  height: 92.v,
-  decoration: BoxDecoration(
-    color: appTheme.green400,
-    shape: BoxShape.circle, 
-  ),
-  child: Center( 
-    child: CustomImageView(
-      imagePath: ImageConstant.success,
-      height: 20.v,
-      width: 30.h,
-      fit: BoxFit.contain,
-    ),
-  ),
-),
-
-
+                    width: 92.h,
+                    height: 92.v,
+                    decoration: BoxDecoration(
+                      color: appTheme.green400,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: CustomImageView(
+                        imagePath: ImageConstant.success,
+                        height: 20.v,
+                        width: 30.h,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
                 ),
               ),
               const SizedBox(height: 20),

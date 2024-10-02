@@ -1,4 +1,5 @@
 import 'package:experta/core/app_export.dart';
+import 'package:experta/widgets/app_bar/appbar_trailing_button_one.dart';
 import 'package:intl/intl.dart';
 
 class BookingDetailPage extends StatelessWidget {
@@ -17,7 +18,8 @@ class BookingDetailPage extends StatelessWidget {
         preferredSize: const Size.fromHeight(80.0),
         child: _buildAppBar(),
       ),
-      body: Padding(
+      body: Container(
+        color: Colors.white, // Set the background color to white
         padding: const EdgeInsets.fromLTRB(25, 12, 25, 20), // Adjust padding to avoid overflow
         child: Column(
           children: [
@@ -37,22 +39,33 @@ class BookingDetailPage extends StatelessWidget {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             _buildInfoRow(
-                              Icons.calendar_today,
                               'Date & Time',
                               '${DateFormat.EEEE().format(selectedDate)}, ${DateFormat.MMMMd().format(selectedDate)}\n$selectedSlot',
+                              leading: CircleAvatar(
+                                backgroundColor: Colors.yellow.shade100,
+                                child: const Icon(Icons.calendar_today, color: Colors.yellow),
+                              ),
                             ),
                             const Divider(),
                             _buildAppointmentType('Video Call'),
-                            const Divider(),
-                            _buildInfoRow(Icons.access_time, 'Call Duration', selectedDuration),
+                            const Divider(), // Divider added here
+                            _buildInfoRow(
+                              'Call Duration',
+                              selectedDuration,
+                              leading: CircleAvatar(
+                                backgroundColor: Colors.green.shade100,
+                                child: const Icon(Icons.call, color: Colors.green),
+                              ),
+                            ),
                           ],
                         ),
                       ),
                     ),
                     const SizedBox(height: 20),
                     _buildAppointmentWith(),
+                    const SizedBox(height: 80),
                     const Divider(), // Divider added here
-                    const SizedBox(height: 20),
+                    const SizedBox(height: 50),
                     _buildPaymentInfo(),
                     const SizedBox(height: 20),
                   ],
@@ -72,13 +85,13 @@ class BookingDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildInfoRow(IconData icon, String title, String value) {
+  Widget _buildInfoRow(String title, String value, {Widget? leading}) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         children: [
-          Icon(icon, color: Colors.blue, size: 32),
-          const SizedBox(width: 16),
+          if (leading != null) leading,
+          if (leading != null) const SizedBox(width: 16),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -113,8 +126,11 @@ class BookingDetailPage extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 8.0),
       child: Row(
         children: [
-          const Icon(Icons.videocam, color: Colors.blue, size: 32),
-          const SizedBox(width: 16),
+          CircleAvatar(
+            backgroundColor: Colors.red.shade100,
+            child: const Icon(Icons.videocam, color: Colors.red),
+          ),
+          const SizedBox(width: 35),
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
@@ -197,6 +213,7 @@ class BookingDetailPage extends StatelessWidget {
             ),
           ),
         ),
+        const Divider(), // Divider added here
       ],
     );
   }
@@ -210,20 +227,34 @@ class BookingDetailPage extends StatelessWidget {
           style: TextStyle(
             color: Colors.black,
             fontWeight: FontWeight.bold,
-            fontSize: 18,
+            fontSize: 16,
           ),
         ),
-        const SizedBox(height: 8),
-        Container(
-          color: Colors.transparent,
-          child: const Text(
-            'Total credits',
-            style: TextStyle(
-              color: Colors.black,
-              fontWeight: FontWeight.normal,
-              fontSize: 14,
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            const Text(
+              'Total credits',
+              style: TextStyle(
+                color: Colors.black,
+                fontWeight: FontWeight.normal,
+                fontSize: 16,
+              ),
             ),
-          ),
+            const Spacer(),
+            SizedBox(
+              height: 14.0,
+              width: 14.0,
+              child: CustomImageView(imagePath: ImageConstant.imgLayer1),
+            ),
+            const SizedBox(width: 8.0), // Add some spacing between the image and text
+            const Text(
+              '2800',
+              style: TextStyle(
+                color: Colors.black,
+              ),
+            ),
+          ],
         ),
       ],
     );
@@ -241,14 +272,21 @@ class BookingDetailPage extends StatelessWidget {
         },
       ),
       centerTitle: true,
-      title: Padding(
-        padding: const EdgeInsets.only(top: 8.0),
-        child: AppbarSubtitleSix(text: "Booking Detail"),
-      ),
+      title: AppbarSubtitleSix(text: "Booking detail"),
+      actions: [
+        AppbarTrailingButtonOne(
+          margin: EdgeInsets.only(right: 12.h, top: 8.v),
+          onTap: onTapThreeThousand,
+        ),
+      ],
     );
   }
 
   void onTapArrowLeft() {
     Get.back();
+  }
+
+  void onTapThreeThousand() {
+    // Handle custom button tap
   }
 }

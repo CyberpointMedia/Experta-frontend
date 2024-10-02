@@ -39,7 +39,7 @@ class RaiseTicketPage extends StatelessWidget {
               children: [
                 // Custom AppBar
                 _buildAppBar(),
-                
+
                 // Body content
                 Expanded(
                   child: Padding(
@@ -57,15 +57,25 @@ class RaiseTicketPage extends StatelessWidget {
                           decoration: InputDecoration(
                             hintText: "Enter subject",
                             filled: true,
-                            fillColor: Colors.white, // Updated color to white
+                            fillColor: Colors.white,
                             border: OutlineInputBorder(
-                              borderSide: BorderSide.none, // Remove border
                               borderRadius: BorderRadius.circular(10.0),
+                              borderSide: const BorderSide(
+                                color: Colors.grey, // Light grey border color
+                                width: 1.0, // Border thickness
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              borderSide: const BorderSide(
+                                color: Colors.grey, // Light grey border color
+                                width: 1.0, // Border thickness
+                              ),
                             ),
                           ),
                         ),
                         const SizedBox(height: 16),
-                        
+
                         // Description Field
                         const Text(
                           "Description",
@@ -77,15 +87,25 @@ class RaiseTicketPage extends StatelessWidget {
                           decoration: InputDecoration(
                             hintText: "Enter description here",
                             filled: true,
-                            fillColor: Colors.white, // Updated color to white
+                            fillColor: Colors.white,
                             border: OutlineInputBorder(
-                              borderSide: BorderSide.none, // Remove border
                               borderRadius: BorderRadius.circular(10.0),
+                              borderSide: const BorderSide(
+                                color: Colors.grey, // Light grey border color
+                                width: 1.0,
+                              ),
+                            ),
+                            enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10.0),
+                              borderSide: const BorderSide(
+                                color: Colors.grey, // Light grey border color
+                                width: 1.0,
+                              ),
                             ),
                           ),
                         ),
                         const SizedBox(height: 16),
-                        
+
                         // Upload File Section
                         GestureDetector(
                           onTap: () {
@@ -97,7 +117,7 @@ class RaiseTicketPage extends StatelessWidget {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10.0),
                               border: Border.all(color: Colors.grey),
-                              color: Colors.white, // Updated color to white
+                              color: Colors.white,
                             ),
                             child: const Column(
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -118,10 +138,10 @@ class RaiseTicketPage extends StatelessWidget {
                           style: TextStyle(color: Colors.black54, fontSize: 12),
                         ),
                         const Spacer(),
-                        
+
                         // Submit Button
                         const SizedBox(
-                          width: double.infinity, 
+                          width: double.infinity,
                           // Full width
                           // child: ElevatedButton(
                           //   onPressed: () {
@@ -175,10 +195,4 @@ class RaiseTicketPage extends StatelessWidget {
   void onTapArrowLeft() {
     Get.back(); // Using GetX to navigate back
   }
-}
-
-void main() {
-  runApp(const MaterialApp(
-    home: RaiseTicketPage(),
-  ));
 }
