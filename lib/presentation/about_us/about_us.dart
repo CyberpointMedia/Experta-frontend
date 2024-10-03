@@ -92,7 +92,7 @@ class _AboutUsState extends State<AboutUs> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     CustomIconButton(
-                                        height: 44.adaptSize,
+                                        height: Get.height*0.03,
                                         width: 44.adaptSize,
                                         padding: EdgeInsets.all(6.h),
                                         decoration:

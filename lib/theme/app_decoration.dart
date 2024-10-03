@@ -50,6 +50,9 @@ class AppDecoration {
   static BoxDecoration get fillOnPrimaryContainer => BoxDecoration(
         color: theme.colorScheme.onPrimaryContainer.withOpacity(1),
       );
+      static BoxDecoration get fillOnPrimaryCantainer => BoxDecoration(
+        color: theme.colorScheme.onPrimaryCantainer.withOpacity(0),
+      );
   static BoxDecoration get fillPrimary => BoxDecoration(
         color: theme.colorScheme.primary,
       );
