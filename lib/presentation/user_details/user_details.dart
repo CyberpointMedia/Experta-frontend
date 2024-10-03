@@ -331,7 +331,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
 
 
   @override
-  Widget build(BuildContext context) {
+ Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
       child: Scaffold(
@@ -525,6 +525,9 @@ class _UserDetailsPageState extends State<UserDetailsPage>
       ),
     );
   }
+
+
+
 
   Widget _buildAboutMe() {
     return SizedBox(
@@ -809,9 +812,10 @@ class _UserDetailsPageState extends State<UserDetailsPage>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildRowaboutme(aboutMeText: "Expertise"),
+          SizedBox(height: 8.v),
           Wrap(
-            spacing: 4.0,
-            runSpacing: 1.0,
+            spacing: 10.0,
+            runSpacing: 7.0,
             children: expertiseList.map((expertise) {
               return Chip(
                 label: Text(

@@ -120,7 +120,7 @@ class _SigninPageState extends State<SigninPage> {
                                 style: TextStyle(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w500,
-                                  height: 1.5,
+                                  height: 1.5.v,
                                   color: !isPhoneSelected
                                       ? const Color(0xffffffff)
                                       : const Color(0xff000000), // Dark black color

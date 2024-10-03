@@ -50,11 +50,13 @@ class CustomBottomBar extends StatelessWidget {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-        const SizedBox(
-          width: double.maxFinite,
-          child: Divider(),
-        ),
+        // const SizedBox(
+        //   width: double.maxFinite,
+        //   child: Divider(),
+        // ),
+
         Container(
+          height: Get.height*0.09,
           decoration: const BoxDecoration(),
           child: BottomNavigationBar(
             backgroundColor: Colors.white,
@@ -68,7 +70,7 @@ class CustomBottomBar extends StatelessWidget {
               return BottomNavigationBarItem(
                 icon: Container(
                   width: double.infinity,
-                  decoration: AppDecoration.fillOnPrimaryContainer,
+                  decoration: AppDecoration.fillOnPrimaryCantainer,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.center,
@@ -94,7 +96,7 @@ class CustomBottomBar extends StatelessWidget {
                 ),
                 activeIcon: Container(
                   width: double.infinity,
-                  decoration: AppDecoration.fillOnPrimaryContainer,
+                  decoration: AppDecoration.fillOnPrimaryCantainer,
                   child: Column(
                     mainAxisSize: MainAxisSize.min,
                     crossAxisAlignment: CrossAxisAlignment.center,

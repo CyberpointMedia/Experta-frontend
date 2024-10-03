@@ -286,7 +286,8 @@ class _HomeScreenState extends State<HomeScreen> {
   children: [
     Text(
       "Complete your Profile",
-      style: theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500), // Setting fontWeight to 500
+      // style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
+       style: theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w500), // Setting fontWeight to 500
     ),
     SizedBox(height: 2.v),
     Text(
@@ -368,12 +369,14 @@ class _HomeScreenState extends State<HomeScreen> {
             child: _buildRowtrending(
               trending: "Category",
               seeallOne: "See All",
+              
               onPressed: () {
                 Get.toNamed(AppRoutes.category,
                     arguments: {'industries': controller.industries});
               },
             ),
           ),
+           SizedBox(height: 9.v),
           SizedBox(
             height: 80.v,
             child: Obx(
@@ -450,6 +453,7 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           ),
         ),
+         SizedBox(height: 9.v),
         Obx(() {
           if (controller.isLoading.value) {
             return SizedBox(
@@ -521,6 +525,7 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
           ),
+           SizedBox(height: 9.v),
           Obx(() {
             if (controller.isLoading.value) {
               return SizedBox(
@@ -574,23 +579,36 @@ class _HomeScreenState extends State<HomeScreen> {
     }).toList();
   }
 
-  Widget _buildRowtrending(
-      {required String trending,
-      required String seeallOne,
-      required Function onPressed}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(trending, style: theme.textTheme.titleLarge!),
-        TextButton(
-          onPressed: () => onPressed(),
-          child: Text(seeallOne,
-              style: theme.textTheme.titleMedium
-                  ?.copyWith(color: appTheme.deepOrangeA200)),
+ Widget _buildRowtrending({
+  required String trending,
+  required String seeallOne,
+  required Function onPressed,
+}) {
+  return Row(
+    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+    children: [
+      Text(
+        trending,
+        style: theme.textTheme.titleLarge!.copyWith(
+          fontSize: 22,
+          fontWeight: FontWeight.w700,
         ),
-      ],
-    );
-  }
+      ),
+      TextButton(
+        onPressed: () => onPressed(),
+        child: Text(
+          seeallOne,
+          style: theme.textTheme.titleMedium?.copyWith(
+            fontSize: 16,
+            fontWeight: FontWeight.w500,
+            color: appTheme.deepOrangeA200,
+          ),
+        ),
+      ),
+    ],
+  );
+}
+
 
   Widget _buildShimmerEffect() {
     return Shimmer.fromColors(
