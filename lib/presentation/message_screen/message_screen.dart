@@ -1,10 +1,10 @@
+import 'dart:developer';
 import 'dart:ui';
-import 'package:experta/widgets/socket_service.dart';
-import 'package:provider/provider.dart';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/message_screen/widgets/anjaliarora_item_widget.dart';
 import 'package:experta/widgets/app_bar/appbar_subtitle.dart';
 import 'package:experta/widgets/app_bar/appbar_trailing_iconbutton.dart';
+import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'controller/message_controller.dart';
 
 class MessageScreen extends StatefulWidget {
@@ -16,76 +16,141 @@ class MessageScreen extends StatefulWidget {
 
 class _MessageScreenState extends State<MessageScreen> {
   final MessageController controller = Get.put(MessageController());
-  List<dynamic> filteredChats = [];
+  late IO.Socket socket;
+  late ApiService apiServices;
+  List<Map<String, dynamic>> chats = [];
+  List<Map<String, dynamic>> filteredChats = [];
+  bool isFetchingChats = false;
+  final currentUserId = PrefUtils().getaddress();
+  Set<String> onlineUsers = {};
 
   @override
   void initState() {
     super.initState();
-    final socketService =
-        Provider.of<InboxSocketService>(context, listen: false);
-    final currentUserId = PrefUtils().getaddress();
-    socketService.initUser(currentUserId!);
-    controller.searchController.addListener(_filterChats);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      try {
+        apiServices = ApiService();
+        initSocket();
+        fetchChats(currentUserId!);
+      } catch (error) {
+        log('Error in initState: $error');
+      }
+    });
 
-    // Fetch initial chats
-    socketService.fetchChats(currentUserId);
-    socketService.onChatsFetched((data) {
+    controller.searchController.addListener(_filterChats);
+  }
+
+  void initSocket() {
+    final currentUserId = PrefUtils().getaddress();
+
+    // Initialize the socket connection
+    socket = IO.io('http://3.110.252.174:8080', <String, dynamic>{
+      'transports': ['websocket'],
+      'autoConnect': false, // Prevents automatic connection
+    });
+
+    // Set up socket event listeners
+    socket.onConnect((_) {
+      log('Connected to socket');
+      socket.emit('init_user', currentUserId);
+      log('User ID emitted: $currentUserId');
+      fetchChats(currentUserId!);
+    });
+
+    socket.on('chats_fetched', (data) {
+      log('Chats fetched event received: $data');
+      // Ensure data is a list
+      if (data is List) {
+        setState(() {
+          chats = List<Map<String, dynamic>>.from(
+              data.map((chat) => Map<String, dynamic>.from(chat)));
+          isFetchingChats = false;
+          _filterChats(); // Filter chats after fetching
+        });
+      } else {
+        log('Invalid data format for chats_fetched');
+      }
+    });
+
+    socket.on('update_unread_count', (data) {
+      log('Update unread count event received: $data');
+      // Implement your logic to update unread counts here
+    });
+
+    socket.on('getUserOnline', (data) {
+      // Extracting the 'userId' from the map
+      String userId = data['userId'];
+      log('User online event received: $userId');
       setState(() {
-        filteredChats = data;
+        onlineUsers.add(userId);
       });
     });
+
+    socket.on('getUserOffline', (data) {
+      // Extracting the 'userId' from the map
+      String userId = data['userId'];
+      log('User offline event received: $userId');
+      setState(() {
+        onlineUsers.remove(userId);
+      });
+    });
+
+    socket.onDisconnect((_) {
+      log('Disconnected from socket');
+    });
+
+    socket.connect(); // Manually connect the socket
+  }
+
+  // Fetch chats for the given user ID
+  void fetchChats(String userId) {
+    setState(() {
+      isFetchingChats = true;
+    });
+    socket.emit('fetch_chats', userId);
+  }
+
+  // Mark messages as read
+  void markMessagesAsRead(String chatId, String userId) {
+    socket.emit('mark_messages_read', {'chatId': chatId, 'userId': userId});
+  }
+
+  void _filterChats() {
+    final query = controller.searchController.text.toLowerCase();
+    if (query.isEmpty) {
+      setState(() {
+        filteredChats = chats;
+      });
+    } else {
+      setState(() {
+        filteredChats = chats.where((chat) {
+          final otherUser = chat['users']?.firstWhere(
+            (u) => u['_id'] != PrefUtils().getaddress(),
+            orElse: () => null,
+          );
+          if (otherUser == null) return false;
+
+          final displayName =
+              otherUser['basicInfo']?['displayName']?.toLowerCase() ??
+                  otherUser['email']?.toLowerCase() ??
+                  'unknown';
+
+          return displayName.contains(query);
+        }).toList();
+      });
+    }
+    log('Filtered Chats: $filteredChats');
   }
 
   @override
   void dispose() {
-    controller.searchController.removeListener(_filterChats);
     controller.searchController.clear();
+    socket.dispose();
     super.dispose();
-  }
-
-  void _filterChats() {
-    final socketService =
-        Provider.of<InboxSocketService>(context, listen: false);
-    final query = controller.searchController.text.toLowerCase();
-    setState(() {
-      filteredChats = socketService.chats.where((chat) {
-        final otherUser = chat['users']?.firstWhere(
-          (u) => u['_id'] != PrefUtils().getaddress(),
-          orElse: () => null,
-        );
-        if (otherUser == null) return false;
-
-        final displayName =
-            otherUser['basicInfo']?['displayName']?.toLowerCase() ??
-                otherUser['email']?.toLowerCase() ??
-                'unknown';
-
-        return displayName.contains(query);
-      }).toList();
-    });
-  }
-
-  int handleUnreadCount(Map<String, dynamic> chat, String currentUserId) {
-    final unreadCounts = chat['unreadCounts'];
-
-    if (unreadCounts is List) {
-      final unreadCount = unreadCounts.firstWhere(
-        (uc) => uc['user'] == currentUserId,
-        orElse: () => {'count': 0},
-      )['count'];
-
-      return unreadCount is int
-          ? unreadCount
-          : int.tryParse(unreadCount.toString()) ?? 0;
-    } else {
-      // If unreadCounts is not a list, return 0 or handle accordingly
-      return 0;
-    }
   }
 
   @override
   Widget build(BuildContext context) {
-    final socketService = Provider.of<InboxSocketService>(context);
     final currentUserId = PrefUtils().getaddress();
 
     return SafeArea(
@@ -199,130 +264,150 @@ class _MessageScreenState extends State<MessageScreen> {
   }
 
   Widget _buildChatList(String currentUserId) {
-    return ListView.builder(
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      itemCount: filteredChats.length,
-      itemBuilder: (context, index) {
-        final chat = filteredChats[index];
-        final otherUser = chat['users']?.firstWhere(
-          (u) => u['_id'] != currentUserId,
-          orElse: () => null,
-        );
+    return Expanded(
+      child: ListView.builder(
+        shrinkWrap: true,
+        scrollDirection: Axis.vertical,
+        itemCount: filteredChats.length,
+        itemBuilder: (context, index) {
+          final chat = filteredChats[index];
+          final otherUser = chat['users']?.firstWhere(
+            (u) => u['_id'] != currentUserId,
+            orElse: () => null,
+          );
 
-        if (otherUser == null) {
-          return const SizedBox.shrink();
-        }
+          if (otherUser == null) {
+            return const SizedBox.shrink();
+          }
 
-        final unreadCountInt = handleUnreadCount(chat, currentUserId);
-        final basicInfo = otherUser['basicInfo'];
-        final profilePic = basicInfo?['profilePic'];
-        final online = otherUser['online'];
-        final displayName =
-            basicInfo?['displayName'] ?? basicInfo['firstName'] ?? 'Unknown';
-        final lastMessage =
-            chat['lastMessage']?['content'] ?? 'No messages yet';
-        final lastMessageTime = chat['lastMessage']?["time"] ?? "0.00";
+          final unreadCount = chat['unreadCounts']?.firstWhere(
+            (uc) => uc['user'] == currentUserId,
+            orElse: () => {'count': 0},
+          )['count'];
 
-        return GestureDetector(
-          onTap: () {
-            Get.toNamed(
-              AppRoutes.chattingScreen,
-              arguments: {'chat': chat},
-            );
-          },
-          child: Padding(
-            padding: EdgeInsets.symmetric(vertical: 10.v),
-            child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
-              Stack(
-                alignment: Alignment.bottomRight,
-                children: [
-                  CustomImageView(
-                    height: 60.v,
-                    width: 60.h,
-                    imagePath: profilePic ?? ImageConstant.imageNotFound,
-                    radius: BorderRadius.circular(50.h),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomRight,
-                    child: Container(
-                      height: 16.adaptSize,
-                      width: 16.adaptSize,
-                      decoration: BoxDecoration(
-                        color: online == true
-                            ? appTheme.green400
-                            : appTheme.red500,
-                        borderRadius: BorderRadius.circular(8.h),
-                        border: Border.all(
-                          color: appTheme.whiteA700,
-                          width: 2.h,
+          int unreadCountInt = (unreadCount is int)
+              ? unreadCount
+              : int.tryParse(unreadCount.toString()) ?? 0;
+          final basicInfo = otherUser['basicInfo'];
+          final profilePic = basicInfo?['profilePic'];
+          final online = otherUser['online'];
+          final displayName =
+              basicInfo?['displayName'] ?? basicInfo['firstName'] ?? 'Unknown';
+          final lastMessage =
+              chat['lastMessage']?['content'] ?? 'No messages yet';
+          final lastMessageTime = chat['lastMessage']?["time"] ?? "0.00";
+
+          return GestureDetector(
+            onTap: () {
+              Get.toNamed(
+                AppRoutes.chattingScreen,
+                arguments: {'chat': chat, 'socket': socket},
+              );
+            },
+            child: Padding(
+              padding: EdgeInsets.symmetric(vertical: 10.v),
+              child:
+                  Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+                Stack(
+                  alignment: Alignment.bottomRight,
+                  children: [
+                    CustomImageView(
+                      height: 55.h,
+                      width: 55.v,
+                      imagePath: profilePic ?? ImageConstant.imageNotFound,
+                      radius: BorderRadius.circular(55.h),
+                      border: Border.all(color: appTheme.deepYello),
+                    ),
+                    Align(
+                      alignment: Alignment.bottomRight,
+                      child: Container(
+                        height: 16.adaptSize,
+                        width: 16.adaptSize,
+                        decoration: BoxDecoration(
+                          color: online == true
+                              ? appTheme.green400
+                              : appTheme.red500,
+                          borderRadius: BorderRadius.circular(8.h),
+                          border: Border.all(
+                            color: theme.colorScheme.onPrimaryContainer
+                                .withOpacity(1),
+                            width: 2.h,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
-              ),
-              SizedBox(width: 12.h),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Text(
-                          displayName,
-                          style: CustomTextStyles.titleMediumSemiBold,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                        if (basicInfo?['isVerified'] == true)
-                          CustomImageView(
-                              imagePath: ImageConstant.imgVerified,
-                              height: 16.adaptSize,
-                              width: 16.adaptSize,
-                              margin: EdgeInsets.only(
-                                  left: 2.h, top: 2.v, bottom: 2.v)),
-                        Text(
-                          lastMessageTime,
-                          style: CustomTextStyles.bodyMediumLight,
-                        ),
-                      ],
-                    ),
-                    SizedBox(height: 5.v),
-                    Row(
-                      children: [
-                        Expanded(
-                          child: Text(lastMessage,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              style: theme.textTheme.bodyLarge),
-                        ),
-                        if (unreadCountInt > 0)
-                          CircleAvatar(
-                            backgroundColor: appTheme.deepOrangeA20,
-                            radius: 12,
-                            child: Text(
-                              '$unreadCountInt',
-                              style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 12,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ),
-                      ],
-                    ),
                   ],
                 ),
-              ),
-            ]),
-          ),
-        );
-      },
+                Expanded(
+                    child: Padding(
+                        padding:
+                            EdgeInsets.only(left: 15.h, top: 4.v, bottom: 7.v),
+                        child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(
+                                  width: 270.h,
+                                  child: Row(children: [
+                                    Column(
+                                      children: [
+                                        Text(displayName,
+                                            style: CustomTextStyles
+                                                .titleMediumSemiBold),
+                                        SizedBox(height: 2.v),
+                                        Text(lastMessage,
+                                            style: theme.textTheme.bodyLarge!
+                                                .copyWith(
+                                                    overflow:
+                                                        TextOverflow.ellipsis)),
+                                      ],
+                                    ),
+                                    if (basicInfo?['isVerified'] == true)
+                                      CustomImageView(
+                                          imagePath: ImageConstant.imgVerified,
+                                          height: 16.adaptSize,
+                                          width: 16.adaptSize,
+                                          margin: EdgeInsets.only(
+                                              left: 2.h,
+                                              top: 2.v,
+                                              bottom: 2.v)),
+                                    const Spacer(),
+                                    Column(
+                                      children: [
+                                        Text(lastMessageTime,
+                                            textAlign: TextAlign.right,
+                                            style: CustomTextStyles
+                                                .bodyMediumLight),
+                                        if (unreadCountInt > 0)
+                                          CircleAvatar(
+                                            radius: 10,
+                                            backgroundColor: appTheme.deepYello,
+                                            child: Text(
+                                              '$unreadCountInt',
+                                              style: const TextStyle(
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.bold),
+                                            ),
+                                          ),
+                                      ],
+                                    ),
+                                  ])),
+                            ]))),
+              ]),
+            ),
+          );
+        },
+      ),
     );
   }
-}
 
-void onTapBellTwo() {
-  Get.toNamed(AppRoutes.notification);
+  onTapArrowLeft() {
+    Get.back();
+  }
+
+  /// Navigates to the notificationScreen when the action is triggered.
+  onTapBellTwo() {
+    Get.toNamed(
+      AppRoutes.notification,
+    );
+  }
 }

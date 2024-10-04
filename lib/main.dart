@@ -23,22 +23,16 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Sizer(builder: (context, orientation, deviceType) {
-      return MultiProvider(
-        providers: [
-          ChangeNotifierProvider(create: (_) => InboxSocketService()),
-          ChangeNotifierProvider(create: (_) => ChatRoomSocketService()),
-        ],
-        child: GetMaterialApp(
-          debugShowCheckedModeBanner: false,
-          theme: theme,
-          translations: AppLocalization(),
-          locale: Get.deviceLocale,
-          fallbackLocale: const Locale('en', 'US'),
-          title: 'experta',
-          initialBinding: InitialBindings(),
-          initialRoute: AppRoutes.initialRoute,
-          getPages: AppRoutes.pages,
-        ),
+      return GetMaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: theme,
+        translations: AppLocalization(),
+        locale: Get.deviceLocale,
+        fallbackLocale: const Locale('en', 'US'),
+        title: 'experta',
+        initialBinding: InitialBindings(),
+        initialRoute: AppRoutes.initialRoute,
+        getPages: AppRoutes.pages,
       );
     });
   }
