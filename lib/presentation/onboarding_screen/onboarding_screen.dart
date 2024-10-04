@@ -117,7 +117,7 @@ class OnboardingScreen extends GetWidget<OnboardingController> {
               alignment: Alignment.bottomCenter,
               child: Container(
                 color: Colors.white,
-                height: 450.v,
+                height: MediaQuery.of(context).size.height * 0.5,
                 child: Column(
                   children: [
                     Text(

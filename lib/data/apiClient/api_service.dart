@@ -814,28 +814,38 @@ class ApiService {
     }
   }
 
-  Future<Map<String, dynamic>> sendMessage(
-      String content, String chatId) async {
-    log("the sent message $content and chat id $chatId");
-    final response = await http.post(
-      Uri.parse('$_baseUrl/message'),
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json',
-      },
-      body: json.encode({
-        'content': content,
-        'chatId': chatId,
-      }),
-    );
+Future<Map<String, dynamic>> sendMessage(
+    String content, String chatId, List<File> files) async {
+  log("the sent message $content and chat id $chatId");
 
-    if (response.statusCode == 200 || response.statusCode == 201) {
-      log("Response body: ${response.body}");
-      return json.decode(response.body);
-    } else {
-      throw Exception('Failed to send message');
-    }
+  var uri = Uri.parse('$_baseUrl/message');
+  var request = http.MultipartRequest('POST', uri)
+    ..headers['Authorization'] = 'Bearer $token'
+    ..fields['content'] = content
+    ..fields['chatId'] = chatId;
+
+  for (var file in files) {
+    var stream = http.ByteStream(file.openRead());
+    var length = await file.length();
+    var multipartFile = http.MultipartFile(
+      'file', // This should match the key expected by your server
+      stream,
+      length,
+      filename: basename(file.path),
+    );
+    request.files.add(multipartFile);
   }
+
+  var response = await request.send();
+
+  if (response.statusCode == 200 || response.statusCode == 201) {
+    var responseBody = await response.stream.bytesToString();
+    log("Response body: $responseBody");
+    return json.decode(responseBody);
+  } else {
+    throw Exception('Failed to send message');
+  }
+}
 
   Future<Map<String, dynamic>?> fetchChat(String userId) async {
     final response = await http.post(
