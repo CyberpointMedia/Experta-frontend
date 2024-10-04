@@ -142,8 +142,8 @@ class _UserDetailsPageState extends State<UserDetailsPage>
               });
 
               return SizedBox(
-                height: 200,
-                width: 200,
+                height: 200.v,
+                width: 200.h,
                 child: Center(
                   child: Lottie.asset("assets/jsonfiles/tick.json"),
                 ),
@@ -703,10 +703,10 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                     print('Opening link: ${socialMedia['link']}');
                   },
                   child: Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding:  EdgeInsets.all(8.adaptSize),
                     child: FaIcon(
                       socialMedia['icon'],
-                      size: 24,
+                      size: 24.adaptSize,
                     ),
                   ),
                 );
@@ -761,7 +761,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                               .copyWith(fontWeight: FontWeight.w600),
                         ),
                         SizedBox(
-                          height: 9.v,
+                          height: 0.v,
                         ),
                         Text(
                           experience.companyName ?? '',
@@ -814,8 +814,8 @@ class _UserDetailsPageState extends State<UserDetailsPage>
           _buildRowaboutme(aboutMeText: "Expertise"),
           SizedBox(height: 8.v),
           Wrap(
-            spacing: 10.0,
-            runSpacing: 7.0,
+            spacing: 10.v,
+            runSpacing: 7.h,
             children: expertiseList.map((expertise) {
               return Chip(
                 label: Text(
@@ -823,7 +823,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                   style: theme.textTheme.bodyMedium!.copyWith(
                     color: Colors.black,
                     fontWeight: FontWeight.w500,
-                    fontSize: 16,
+                    fontSize: 16.fSize,
                   ),
                 ),
                 backgroundColor: appTheme.gray200,
@@ -850,7 +850,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Padding(
-            padding: const EdgeInsets.only(right: 2),
+            padding: EdgeInsets.only(right: 2.adaptSize),
             child: _buildRoweducation(educationText: "Education"),
           ),
           SizedBox(
@@ -895,7 +895,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                           education.schoolCollege ?? '',
                           style: theme.textTheme.bodyMedium?.copyWith(
                               color: appTheme.gray900,
-                              fontSize: 14,
+                              fontSize: 14.fSize,
                               fontWeight: FontWeight.w500),
                         ),
                         SizedBox(
@@ -946,9 +946,9 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                         ),
                         Expanded(
                           child: Padding(
-                            padding: const EdgeInsets.only(
-                              left: 10,
-                              top: 4,
+                            padding: EdgeInsets.only(
+                              left: 10.adaptSize,
+                              top: 4.adaptSize,
                             ),
                             child: Text(
                               achievement ?? '',
@@ -995,7 +995,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                     style: theme.textTheme.bodyMedium!.copyWith(
                       color: Colors.black,
                       fontWeight: FontWeight.w500,
-                      fontSize: 16,
+                      fontSize: 16.fSize,
                     ),
                   ),
                   backgroundColor: appTheme.gray200,
@@ -1057,14 +1057,14 @@ class _UserDetailsPageState extends State<UserDetailsPage>
               );
             } else {
               // Limit the number of reviews to 5
-              var limitedReviews = reviews.take(5).toList();
+              var limitedReviews = reviews.take(3).toList();
               return Column(
                 children: limitedReviews.map((review) {
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
                       padding: const EdgeInsets.only(
-                          left: 15, right: 15, top: 10, bottom: 10),
+                          left: 16, right: 16, top: 10, bottom: 10),
                       decoration: BoxDecoration(
                         color: appTheme.gray100,
                         borderRadius: const BorderRadius.all(
@@ -1079,8 +1079,8 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                             children: [
                               CustomImageView(
                                 imagePath: review.profilePic,
-                                height: 50,
-                                width: 50,
+                                height: 50.v,
+                                width: 50.h,
                                 radius: BorderRadius.circular(50),
                               ),
                               const SizedBox(width: 10),
@@ -1113,8 +1113,8 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                                 unselectedColor: appTheme.gray300,
                               ),
 
-                              const SizedBox(
-                                  width: 6), // Added SizedBox for spacing
+                               SizedBox(
+                                  width: 6.h), // Added SizedBox for spacing
                               Text(
                                 review.rating.toString(),
                                 style: theme.textTheme.headlineLarge
@@ -1188,7 +1188,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
         controller.userData.value.data?.basicInfo?.getTotalFollowing() ?? 0;
 
     return Padding(
-      padding: const EdgeInsets.only(left: 13, right: 30, top: 30),
+      padding:  EdgeInsets.only(left: 13.h, right: 30.h, top: 30.v),
       child: Column(
         children: [
           Row(
@@ -1290,7 +1290,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                 padding: EdgeInsets.only(left: 15.v, top: 20.v),
                 child: CustomImageView(
                   height: 70.v,
-                  width: 70.v,
+                  width: 70.h,
                   radius: BorderRadius.circular(50.v),
                   imagePath:
                       controller.userData.value.data?.basicInfo?.profilePic ??
@@ -1373,8 +1373,8 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                   style: CustomTextStyles.bodyLargeBlack90001,
                 ),
                 Container(
-                  width: 1.0,
-                  height: 15,
+                  width: 1.v,
+                  height: 15.h,
                   color: Colors.grey,
                   margin: const EdgeInsets.symmetric(horizontal: 10.0),
                 ),

@@ -5,7 +5,6 @@ import 'package:experta/core/utils/web_view/web_view.dart';
 import 'package:experta/presentation/all_review/all_review.dart';
 import 'package:experta/presentation/userProfile/controller/profile_controller.dart';
 import 'package:experta/presentation/userProfile/post_details/post_details.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -149,7 +148,7 @@ class _UserProfilePageState extends State<UserProfilePage>
           Expanded(
             child: SingleChildScrollView(
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding:  EdgeInsets.all(8.adaptSize),
                 child: Column(
                   children: [
                     _buildChipviewvisual(context),
@@ -195,11 +194,11 @@ class _UserProfilePageState extends State<UserProfilePage>
           child: CircularProgressIndicator(),
         );
       } else if (posts.isEmpty) {
-        return const Center(
+        return  Center(
           child: Text(
             'No posts available',
             style: TextStyle(
-              fontSize: 18,
+              fontSize: 18.fSize,
               fontWeight: FontWeight.w400,
             ),
           ),
@@ -402,7 +401,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                   style: theme.textTheme.bodyMedium!.copyWith(
                     color: Colors.black,
                     fontWeight: FontWeight.w500,
-                    fontSize: 16,
+                    fontSize: 16.fSize,
                   ),
                 ),
                 backgroundColor: appTheme.gray200,
@@ -560,7 +559,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                   style: theme.textTheme.bodyMedium!.copyWith(
                     color: Colors.black,
                     fontWeight: FontWeight.w500,
-                    fontSize: 16,
+                    fontSize: 16.fSize,
                   ),
                 ),
                 backgroundColor: appTheme.gray200,
@@ -632,8 +631,8 @@ class _UserProfilePageState extends State<UserProfilePage>
                           children: [
                             CustomImageView(
                               imagePath: review.profilePic,
-                              height: 50,
-                              width: 50,
+                              height: 50.v,
+                              width: 50.h,
                               radius: BorderRadius.circular(50),
                             ),
                             const SizedBox(width: 10),
@@ -671,8 +670,8 @@ class _UserProfilePageState extends State<UserProfilePage>
                                 );
                               },
                             ),
-                            const SizedBox(
-                                width: 6), // Added SizedBox for spacing
+                             SizedBox(
+                                width: 6.adaptSize), // Added SizedBox for spacing
                             Text(
                               review.rating.toString(),
                               style: theme.textTheme.headlineLarge
@@ -713,9 +712,9 @@ class _UserProfilePageState extends State<UserProfilePage>
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Padding(
-          padding: const EdgeInsets.only(
-            top: 1,
-            bottom: 2,
+          padding:  EdgeInsets.only(
+            top: 1.adaptSize,
+            bottom: 2.adaptSize,
           ),
           child: Text(
             aboutMeText,
@@ -978,7 +977,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                 ),
                 Container(
                   width: 1.0,
-                  height: 15,
+                  height: 15.v,
                   color: Colors.grey,
                   margin: const EdgeInsets.symmetric(horizontal: 10.0),
                 ),
