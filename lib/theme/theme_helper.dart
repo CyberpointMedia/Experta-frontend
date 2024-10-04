@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:experta/core/utils/pref_utils.dart';
 import 'package:experta/core/utils/size_utils.dart';
 import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 /// Helper class for managing themes and colors.
 class ThemeHelper {
@@ -48,7 +49,6 @@ class ThemeHelper {
     var colorScheme =
         _supportedColorScheme[_appTheme] ?? ColorSchemes.primaryColorScheme;
     return ThemeData(
-       fontFamily: 'Roboto',
       visualDensity: VisualDensity.standard,
       colorScheme: colorScheme,
       textTheme: TextThemes.textTheme(colorScheme),
@@ -110,79 +110,67 @@ class ThemeHelper {
   ThemeData themeData() => _getThemeData();
 }
 
-/// Class containing the supported text theme styles.
+/// Class containing the supported text theme styles.`
 class TextThemes {
   static TextTheme textTheme(ColorScheme colorScheme) => TextTheme(
-        bodyLarge: TextStyle(
+        bodyLarge: GoogleFonts.roboto(
           color: appTheme.blueGray300,
           fontSize: 16.fSize,
-          fontFamily: 'Roboto',
-          fontWeight: FontWeight.w300,
+          fontWeight: FontWeight.w400,
         ),
-        bodyMedium: TextStyle(
+        bodyMedium: GoogleFonts.roboto(
           color: appTheme.blueGray300,
           fontSize: 14.fSize,
-          fontFamily: 'Roboto',
-          fontWeight: FontWeight.w300,
+          fontWeight: FontWeight.w400,
         ),
-        bodySmall: TextStyle(
+        bodySmall: GoogleFonts.roboto(
           color: colorScheme.onPrimaryContainer.withOpacity(1),
           fontSize: 10.fSize,
-          fontFamily: 'Roboto',
-          fontWeight: FontWeight.w300,
+          fontWeight: FontWeight.w400,
         ),
-        displaySmall: TextStyle(
+        displaySmall: GoogleFonts.roboto(
           color: appTheme.gray900,
           fontSize: 36.fSize,
-          fontFamily: 'Roboto',
-          fontWeight: FontWeight.w300,
+          fontWeight: FontWeight.w500,
         ),
-        headlineLarge: TextStyle(
+        headlineLarge: GoogleFonts.roboto(
           color: appTheme.gray900,
           fontSize: 32.fSize,
-          fontFamily: 'Roboto',
-          fontWeight: FontWeight.w500,
-        ),
-        headlineMedium: TextStyle(
-          color: appTheme.gray900,
-          fontSize: 26.fSize,
-          fontFamily: 'Roboto',
-          fontWeight: FontWeight.w500,
-        ),
-        headlineSmall: TextStyle(
-          color: appTheme.gray900,
-          fontSize: 24.fSize,
-          fontFamily: 'Roboto',
-          fontWeight: FontWeight.w500,
-        ),
-        labelLarge: TextStyle(
-          color: const Color(0XFFFFFFFF),
-          fontSize: 12.fSize,
-          fontFamily: 'Roboto',
           fontWeight: FontWeight.w600,
         ),
-        labelMedium: TextStyle(
+        headlineMedium: GoogleFonts.roboto(
+          color: appTheme.gray900,
+          fontSize: 26.fSize,
+          fontWeight: FontWeight.w700,
+        ),
+        headlineSmall: GoogleFonts.roboto(
+          color: appTheme.gray900,
+          fontSize: 24.fSize,
+          fontWeight: FontWeight.w500,
+        ),
+        labelLarge: GoogleFonts.roboto(
+          color: const Color(0XFFFFFFFF),
+          fontSize: 12.fSize,
+          fontWeight: FontWeight.w600,
+        ),
+        labelMedium: GoogleFonts.roboto(
           color: appTheme.blueGray300,
           fontSize: 10.fSize,
-          fontFamily: 'Roboto',
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w600,
         ),
-        titleLarge: TextStyle(
+        titleLarge: GoogleFonts.roboto(
           color: appTheme.gray900,
           fontSize: 22.fSize,
-          fontFamily: 'Roboto',
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w700,
         ),
-        titleMedium: TextStyle(
+        titleMedium: GoogleFonts.roboto(
           color: appTheme.gray900,
           fontSize: 16.fSize,
-          fontFamily: 'Roboto',
           fontWeight: FontWeight.w500,
         ),
-        titleSmall: TextStyle(
+        titleSmall: GoogleFonts.roboto(
           color: appTheme.blueGray300,
           fontSize: 14.fSize,
-          fontFamily: 'Roboto',
           fontWeight: FontWeight.w500,
         ),
       );

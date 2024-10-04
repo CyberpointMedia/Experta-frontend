@@ -285,7 +285,7 @@ Widget _buildContinueButton() {
     return Container(
       color: Colors.transparent,
       width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.9,
+      height: MediaQuery.of(context).size.height*0.87,
       child: Form(
         key: _formKey1,
         child: Padding(
