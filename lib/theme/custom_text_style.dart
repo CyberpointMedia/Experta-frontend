@@ -73,7 +73,7 @@ class CustomTextStyles {
       theme.textTheme.bodySmall!.sFProText.copyWith(
         color: appTheme.gray900,
         fontSize: 12.fSize,
-        fontWeight: FontWeight.w300,
+        fontWeight: FontWeight.w100,
       );
   static get bodySmallffffffff => theme.textTheme.titleMedium!.copyWith(
         color: const Color(0XFFFFFFFF),
@@ -341,25 +341,29 @@ class CustomTextStyles {
 extension on TextStyle {
   TextStyle get inter {
     return copyWith(
-      fontFamily: 'Inter',
+      fontFamily: 'Roboto',
+      fontFeatures: const [FontFeature.enable('kern')],
     );
   }
 
   TextStyle get gilroy {
     return copyWith(
-      fontFamily: 'Gilroy',
+      fontFamily: 'Roboto',
+      fontFeatures: const [FontFeature.enable('kern')],
     );
   }
 
   TextStyle get sFProDisplay {
     return copyWith(
-      fontFamily: 'SF Pro Display',
+      fontFamily: 'Roboto',
+      fontFeatures: const [FontFeature.enable('kern')],
     );
   }
 
   TextStyle get sFProText {
     return copyWith(
-      fontFamily: 'SF Pro Text',
+      fontFamily: 'Roboto',
+      fontFeatures: const [FontFeature.enable('kern')],
     );
   }
 }

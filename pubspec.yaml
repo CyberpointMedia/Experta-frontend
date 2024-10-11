@@ -107,38 +107,43 @@ flutter:
     - assets/images/
     - assets/images/settings/
     - assets/jsonfiles/
-  fonts: 
-    - family: Inter
-      fonts: 
-        - asset: assets/fonts/InterMedium.ttf
-          weight: 500
-        - asset: assets/fonts/InterRegular.ttf
-          weight: 400
-    - family: SF Pro Display
-      fonts: 
-        - asset: assets/fonts/SFProDisplayRegular.ttf
-          weight: 400
-        - asset: assets/fonts/SFProDisplayMedium.ttf
-          weight: 500
-        - asset: assets/fonts/SFProDisplayBold.ttf
+  
+  fonts:
+    - family: Roboto
+      fonts:
+        - asset: assets/fonts/Roboto-Black.ttf
+          weight: 900
+        - asset: assets/fonts/Roboto-BlackItalic.ttf
+          weight: 900
+          style: italic
+        - asset: assets/fonts/Roboto-Bold.ttf
           weight: 700
-        - asset: assets/fonts/SFProDisplaySemibold.ttf
-          weight: 600
-        - asset: assets/fonts/SFProDisplayLight.ttf
+        - asset: assets/fonts/Roboto-BoldCondensed.ttf
+          weight: 700
+        - asset: assets/fonts/Roboto-BoldCondensedItalic.ttf
+          weight: 700
+          style: italic
+        - asset: assets/fonts/Roboto-BoldItalic.ttf
+          weight: 700
+          style: italic
+        - asset: assets/fonts/Roboto-Condensed.ttf
+        - asset: assets/fonts/Roboto-CondensedItalic.ttf
+          style: italic
+        - asset: assets/fonts/Roboto-Italic.ttf
+          style: italic
+        - asset: assets/fonts/Roboto-Light.ttf
           weight: 300
-    - family: Gilroy
-      fonts: 
-        - asset: assets/fonts/GilroySemiBold.ttf
-          weight: 600
-        - asset: assets/fonts/GilroyMedium.ttf
-          weight: 500
-    - family: SF Pro Text
-      fonts: 
-        - asset: assets/fonts/SFProTextSemibold.ttf
-          weight: 600
-        - asset: assets/fonts/SFProTextMedium.ttf
-          weight: 500
-        - asset: assets/fonts/SFProTextRegular.ttf
-          weight: 400
-        - asset: assets/fonts/SFProTextLight.ttf
+        - asset: assets/fonts/Roboto-LightItalic.ttf
           weight: 300
+          style: italic
+        - asset: assets/fonts/Roboto-Medium.ttf
+          weight: 500
+        - asset: assets/fonts/Roboto-MediumItalic.ttf
+          weight: 500
+          style: italic
+        - asset: assets/fonts/Roboto-Regular.ttf
+        - asset: assets/fonts/Roboto-Thin.ttf
+          weight: 100
+        - asset: assets/fonts/Roboto-ThinItalic.ttf
+          weight: 100
+          style: italic

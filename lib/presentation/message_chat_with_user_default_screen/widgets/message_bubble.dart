@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:experta/core/app_export.dart';
 
 class MessageBubble extends StatelessWidget {
@@ -41,7 +40,7 @@ class MessageBubble extends StatelessWidget {
                         children: [
                           SizedBox(height: 2.v),
                           Text(content,
-                              style: CustomTextStyles.bodyLargeGray900),
+                              style: CustomTextStyles.bodyMediumLight),
                         ],
                       ),
                     ),
@@ -76,7 +75,7 @@ class MessageBubble extends StatelessWidget {
                         children: [
                           SizedBox(height: 2.v),
                           Text(content,
-                              style: CustomTextStyles.bodyLargeGray900),
+                              style: CustomTextStyles.bodyMediumLight),
                         ],
                       ),
                     ),

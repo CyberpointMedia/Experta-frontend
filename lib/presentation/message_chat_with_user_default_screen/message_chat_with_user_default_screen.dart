@@ -421,7 +421,10 @@ class _ChattingPageState extends State<ChattingPage> {
                                                             Text(
                                                                 "${msg['content']}",
                                                                 style: CustomTextStyles
-                                                                    .bodyLargeGray900),
+                                                                    .bodyMediumBlack90001
+                                                                    .copyWith(
+                                                                        fontWeight:
+                                                                            FontWeight.bold)),
                                                           ],
                                                         ),
                                                       ),
@@ -482,7 +485,10 @@ class _ChattingPageState extends State<ChattingPage> {
                                                             Text(
                                                                 "${msg['content']}",
                                                                 style: CustomTextStyles
-                                                                    .bodyLargeGray900),
+                                                                    .bodyMediumBlack90001
+                                                                    .copyWith(
+                                                                        fontWeight:
+                                                                            FontWeight.bold)),
                                                           ],
                                                         ),
                                                       ),
@@ -497,8 +503,9 @@ class _ChattingPageState extends State<ChattingPage> {
                                                           style: CustomTextStyles
                                                               .bodySmallBluegray300
                                                               .copyWith(
-                                                                  color: appTheme
-                                                                      .blueGray300),
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold),
                                                         ),
                                                       ),
                                                     ],
@@ -553,12 +560,12 @@ class _ChattingPageState extends State<ChattingPage> {
                         EdgeInsets.only(top: 16.v, right: 30.h, bottom: 16.v),
                     borderDecoration: TextFormFieldStyleHelper.outlineGrayTL26,
                     fillColor: appTheme.gray20002,
-                    suffix: IconButton(
-                      icon: const Icon(CupertinoIcons.paperclip),
-                      onPressed: () {
-                        pickFiles();
-                      },
-                    ),
+                    // suffix: IconButton(
+                    //   icon: const Icon(CupertinoIcons.paperclip),
+                    //   onPressed: () {
+                    //     pickFiles();
+                    //   },
+                    // ),
                   ),
                 ),
                 Padding(
@@ -601,7 +608,7 @@ class _ChattingPageState extends State<ChattingPage> {
         Text(
           time,
           style: CustomTextStyles.bodySmallBluegray300
-              .copyWith(color: appTheme.blueGray300),
+              .copyWith(fontWeight: FontWeight.bold),
         ),
         const SizedBox(width: 4),
         if (isReadByBoth)
