@@ -204,11 +204,11 @@ class _WalletState extends State<Wallet> {
                 children: [
                   // Top Up Button
                   SizedBox(
-                    height: 55,
-                    width: 165,
+                    height: 55.adaptSize,
+                    width: 135.adaptSize,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.yellow, // Background color
+                        backgroundColor: Colors.yellow.shade300, // Background color
                         foregroundColor: Colors.black,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(10),
@@ -225,11 +225,11 @@ class _WalletState extends State<Wallet> {
                       ),
                     ),
                   ),
-                  const SizedBox(width: 60), // Increase the spacing between buttons
+                  SizedBox(width: 40.adaptSize), // Increase the spacing between buttons
                   // Withdraw Button
                   SizedBox(
-                    height: 55,
-                    width: 164,
+                    height: 55.adaptSize,
+                    width: 135.adaptSize,
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.white, // Background color

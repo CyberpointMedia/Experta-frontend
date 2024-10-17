@@ -107,8 +107,11 @@ class AppDecoration {
   static BoxDecoration get gradientOnPrimaryContainerToOnPrimaryContainer =>
       BoxDecoration(
         gradient: LinearGradient(
+
           begin: const Alignment(0.16
           , 0.5),
+
+          // begin: const Alignment(0.20, 0.50),
           end: const Alignment(0.17, 0.01),
           colors: [
             theme.colorScheme.onPrimaryContainer.withOpacity(1),

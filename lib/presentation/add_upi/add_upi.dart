@@ -22,8 +22,8 @@ class _AddUpiState extends State<AddUpi> {
         body: Stack(
           children: [
              Positioned(
-            left: 270,
-            top: 50,
+            left: 270.adaptSize,
+            top: 50.adaptSize,
             child: ImageFiltered(
               imageFilter: ImageFilter.blur(
                 sigmaX: 60,
@@ -31,8 +31,8 @@ class _AddUpiState extends State<AddUpi> {
               ),
               child: Align(
                 child: SizedBox(
-                  width: 252,
-                  height: 252,
+                  width: 252.adaptSize,
+                  height: 252.adaptSize,
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(126),
@@ -51,7 +51,7 @@ class _AddUpiState extends State<AddUpi> {
                 children: [
                   //Text("Change User Name",style: theme.textTheme.headlineSmall!.copyWith(color: Colors.black,fontWeight: FontWeight.bold),),
                   const Text("UPI ID"),
-                  SizedBox(height: 6,),
+                   SizedBox(height: 6.adaptSize,),
                   CustomTextFormField(
                     hintText: "Enter your UPI ID",
                      hintStyle: CustomTextStyles.titleMediumBluegray300,

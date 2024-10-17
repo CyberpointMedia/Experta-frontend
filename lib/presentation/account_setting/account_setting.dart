@@ -158,7 +158,7 @@ class _AccountSettingsState extends State<AccountSettings> {
                 ),
                 GestureDetector(
                   onTap: () {
-                  Get.toNamed(AppRoutes.genderchange); // Navigate to raise ticket
+                  Get.toNamed(AppRoutes.qr); // Navigate to raise ticket
                 },
                   child: Padding(
                     padding: const EdgeInsets.only(top: 1),

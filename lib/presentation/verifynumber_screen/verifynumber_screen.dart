@@ -46,10 +46,10 @@ class VerifynumberScreen extends GetWidget<VerifynumberController> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(top: 20, bottom: 20),
+                      padding:  EdgeInsets.only(top: 20.adaptSize, bottom: 20.adaptSize),
                       child: CustomAppBar(
-                        height: 20,
-                        leadingWidth: 25,
+                        height: 20.adaptSize,
+                        leadingWidth: 25.adaptSize,
                         leading: AppbarLeadingImage(
                           imagePath: ImageConstant.imgIcon,
                           margin: const EdgeInsets.only(left: 10),
@@ -94,7 +94,7 @@ class VerifynumberScreen extends GetWidget<VerifynumberController> {
             ),
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 25, bottom: 20),
+            padding:  EdgeInsets.only(left: 25.adaptSize, bottom: 20.adaptSize),
             child: Builder(
               builder: (context) {
                 // Extract the phone number from the controller

@@ -251,8 +251,8 @@ Widget _buildBottomSheetContent(BuildContext context, Comment? comment) {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Container(
-          height: 5,
-          width: 20,
+          height: 5.v,
+          width: 20.h,
           decoration: BoxDecoration(
               color: Colors.grey, borderRadius: BorderRadius.circular(20)),
         ),

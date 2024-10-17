@@ -116,12 +116,12 @@ class TextThemes {
         bodyLarge: GoogleFonts.roboto(
           color: appTheme.blueGray300,
           fontSize: 16.fSize,
-          fontWeight: FontWeight.w400,
+          fontWeight: FontWeight.w300,
         ),
         bodyMedium: GoogleFonts.roboto(
           color: appTheme.blueGray300,
-          fontSize: 14.fSize,
-          fontWeight: FontWeight.w400,
+          fontSize: 12.fSize,
+          fontWeight: FontWeight.w300,
         ),
         bodySmall: GoogleFonts.roboto(
           color: colorScheme.onPrimaryContainer.withOpacity(1),
@@ -131,12 +131,12 @@ class TextThemes {
         displaySmall: GoogleFonts.roboto(
           color: appTheme.gray900,
           fontSize: 36.fSize,
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w400,
         ),
         headlineLarge: GoogleFonts.roboto(
           color: appTheme.gray900,
-          fontSize: 32.fSize,
-          fontWeight: FontWeight.w600,
+          fontSize: 16.fSize,
+          fontWeight: FontWeight.w400,
         ),
         headlineMedium: GoogleFonts.roboto(
           color: appTheme.gray900,
@@ -145,13 +145,13 @@ class TextThemes {
         ),
         headlineSmall: GoogleFonts.roboto(
           color: appTheme.gray900,
-          fontSize: 24.fSize,
-          fontWeight: FontWeight.w500,
+          fontSize: 20.fSize,
+          fontWeight: FontWeight.w400,
         ),
         labelLarge: GoogleFonts.roboto(
           color: const Color(0XFFFFFFFF),
           fontSize: 12.fSize,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w500,
         ),
         labelMedium: GoogleFonts.roboto(
           color: appTheme.blueGray300,
@@ -165,13 +165,13 @@ class TextThemes {
         ),
         titleMedium: GoogleFonts.roboto(
           color: appTheme.gray900,
-          fontSize: 16.fSize,
-          fontWeight: FontWeight.w500,
+          fontSize: 14.fSize,
+          fontWeight: FontWeight.w300,
         ),
         titleSmall: GoogleFonts.roboto(
           color: appTheme.blueGray300,
           fontSize: 14.fSize,
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w400,
         ),
       );
 }

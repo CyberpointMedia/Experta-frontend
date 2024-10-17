@@ -74,7 +74,7 @@ class CustomButtonStyles {
   static ButtonStyle get fillPrimaryTL23 => ElevatedButton.styleFrom(
         backgroundColor: theme.colorScheme.primary,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(23.h),
+          borderRadius: BorderRadius.circular(30.h),
         ),
       );
 

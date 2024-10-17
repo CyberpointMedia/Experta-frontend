@@ -14,4 +14,5 @@ class ShareProfileController extends GetxController {
   // void shareQR() {
   //   Share.share("Check out my profile: $qrData");
   // }
+  
 }

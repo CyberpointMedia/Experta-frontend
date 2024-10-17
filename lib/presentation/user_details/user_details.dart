@@ -223,7 +223,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
     context: context,
     builder: (context) {
       return Padding(
-        padding: const EdgeInsets.only(left: 20, right: 20),
+        padding:  EdgeInsets.only(left: 20.adaptSize, right: 20.adaptSize),
         child: Container(
           padding: const EdgeInsets.symmetric(vertical: 16.0),
           child: Column(
@@ -243,8 +243,8 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                   mainAxisSize: MainAxisSize.min,
                   children: [
                     SizedBox(
-                      height: 14.0,
-                      width: 14.0,
+                      height: 14.adaptSize,
+                      width: 14.adaptSize,
                       child: CustomImageView(imagePath: ImageConstant.imgLayer1),
                     ),
                     const SizedBox(
@@ -335,7 +335,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
     return PopScope(
       canPop: false,
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.grey.shade50,
         // appBar: ,
         body: Stack(
           children: [
@@ -349,8 +349,8 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                 ),
                 child: Align(
                   child: SizedBox(
-                    width: 252,
-                    height: 252,
+                    width: 252.adaptSize,
+                    height: 252.adaptSize,
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(126),
@@ -374,7 +374,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                       leading: AppbarLeadingImage(
                         imagePath: ImageConstant.imgArrowLeftOnerrorcontainer,
                         margin: EdgeInsets.only(
-                            left: 16.h, top: 10, bottom: 10, right: 16),
+                            left: 16.h, top: 10.adaptSize, bottom: 10.adaptSize, right: 16.adaptSize),
                         onTap: () {
                           onTapArrowLeft();
                         },
@@ -396,8 +396,8 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                           child: CustomElevatedButton(
                             buttonStyle: CustomButtonStyles.fillOnError2,
                             buttonTextStyle: CustomTextStyles.bodySmallffffffff,
-                            height: 36,
-                            width: 70,
+                            height: 36.adaptSize,
+                            width: 70.adaptSize,
                             text: controller.userData.value.data?.isFollowing ==
                                     false
                                 ? "Follow"
@@ -543,7 +543,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                 children: [
                   _buildChipviewvisual(context),
                   SizedBox(
-                    height: 5.v,
+                    height: 8.v,
                   ),
                   _buildColumnaboutme(),
                   SizedBox(
@@ -662,7 +662,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
         children: [
           _buildRowaboutme(aboutMeText: "About me"),
           SizedBox(
-            height: 18.v,
+            height: 20.v,
           ),
           SizedBox(
             width: 331.adaptSize,
@@ -812,7 +812,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           _buildRowaboutme(aboutMeText: "Expertise"),
-          SizedBox(height: 8.v),
+          SizedBox(height: 10.v),
           Wrap(
             spacing: 10.v,
             runSpacing: 7.h,

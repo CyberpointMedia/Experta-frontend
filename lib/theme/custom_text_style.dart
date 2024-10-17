@@ -79,6 +79,10 @@ class CustomTextStyles {
         color: const Color(0XFFFFFFFF),
         fontSize: 16.fSize,
       );
+  static get bodySmall0XFF171717 => theme.textTheme.titleMedium!.copyWith(
+    color: const Color(0XFF171717),
+    fontSize: 16.fSize,
+  );
   // Display text style
   static get displaySmallff171717 => theme.textTheme.displaySmall!.copyWith(
         color: const Color(0XFF171717),

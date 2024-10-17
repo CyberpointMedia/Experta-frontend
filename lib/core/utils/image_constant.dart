@@ -437,6 +437,9 @@ class ImageConstant {
 
   // static String imgShieldGray900 = '$imagePath/img_shield_gray_900.svg';
 
+static String noto = "$imagePath/settings/bell.svg";
+
+
   static String imageNotFound = 'assets/images/image_not_found.png';
 
   // ACCOUNT STTING

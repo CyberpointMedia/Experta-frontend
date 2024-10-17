@@ -253,9 +253,7 @@ static const String Notificationseting= "/notification_setting";
 static const String blocksearch= "/search_block";
 
 static const String qr = "/share_profile";
-// =======
   // static const String Bookappointment = "/book_appointment";
-// >>>>>>> fd74aedd948960a685d92b72cfbcb2d6a6d7aece
 
   // static const String sUcessfuly = "/sucessfuly";
 

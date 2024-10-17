@@ -172,7 +172,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
                           ],
                         ),
                       ),
-                      const SizedBox(height: 10), // Adding space between heading and date selector
+                       SizedBox(height: 10.adaptSize), // Adding space between heading and date selector
                       SizedBox(
                         height: 80,
                         child: ListView(
@@ -181,19 +181,19 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
                           children: _buildDateWidgets(selectedDate),
                         ),
                       ),
-                      const SizedBox(height: 20),
-                      const Align(
+                       SizedBox(height: 20.adaptSize),
+                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
                           'Call Duration',
                           style: TextStyle(
-                            fontSize: 16,
+                            fontSize: 16.fSize,
                             fontWeight: FontWeight.bold,
                             color: Colors.black, // Set color to dark black
                           ),
                         ),
                       ),
-                      const SizedBox(height: 10),
+                       SizedBox(height: 10.fSize),
                       Container(
                         decoration: BoxDecoration(
                           color: Colors.white, // Set background color to white
@@ -227,14 +227,14 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
                           ),
                         ),
                       ),
-                      const SizedBox(height: 20), // Adding space between Call Duration and Available Slot
-                      const Align(
+                       SizedBox(height: 20.adaptSize), // Adding space between Call Duration and Available Slot
+                       Align(
                         alignment: Alignment.centerLeft,
                         child: Text(
                           'Available Slot',
                           style: TextStyle(
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
+                            fontSize: 16.fSize,
+                            fontWeight: FontWeight.w900,
                             color: Colors.black, // Set color to dark black
                           ),
                         ),

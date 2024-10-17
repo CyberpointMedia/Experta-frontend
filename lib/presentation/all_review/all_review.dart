@@ -12,21 +12,22 @@ class AllReviewsPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.white,
+        backgroundColor: Colors.grey.shade50,
+        appBar: _buildAppBar(),
         body: Stack(
           children: [
             Positioned(
-              left: 270,
-              top: 50,
+              left: 270.adaptSize,
+              top: 50.adaptSize,
               child: ImageFiltered(
                 imageFilter: ImageFilter.blur(
-                  sigmaX: 60,
-                  sigmaY: 60,
+                  sigmaX: 60.adaptSize,
+                  sigmaY: 60.adaptSize,
                 ),
                 child: Align(
                   child: SizedBox(
-                    width: 252,
-                    height: 252,
+                    width: 252.adaptSize,
+                    height: 252.adaptSize,
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(126),
@@ -39,18 +40,6 @@ class AllReviewsPage extends StatelessWidget {
             ),
             Column(
               children: [
-                AppBar(
-                  leading: IconButton(
-                    icon: const Icon(Icons.arrow_back),
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                  ),
-                  title: const Text('All Reviews'),
-                  centerTitle: true,
-                  backgroundColor: Colors.transparent, // No elevation
-                  foregroundColor: Colors.black,
-                ),
                 Expanded(
                   child: reviews.isEmpty
                       ? Center(
@@ -66,13 +55,12 @@ class AllReviewsPage extends StatelessWidget {
                           itemBuilder: (context, index) {
                             var review = reviews[index];
                             return Padding(
-                              padding: const EdgeInsets.only(bottom: 10.0), // Reduced gap
+                              padding: const EdgeInsets.only(bottom: 10.0),
                               child: Container(
                                 padding: const EdgeInsets.all(16.0),
                                 decoration: BoxDecoration(
                                   color: Colors.white,
                                   borderRadius: BorderRadius.circular(12.0),
-                                  // Removed the boxShadow to eliminate elevation
                                 ),
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -81,8 +69,8 @@ class AllReviewsPage extends StatelessWidget {
                                       children: [
                                         CustomImageView(
                                           imagePath: review.profilePic,
-                                          height: 50,
-                                          width: 50,
+                                          height: 50.adaptSize,
+                                          width: 50.adaptSize,
                                           radius: BorderRadius.circular(50),
                                         ),
                                         const SizedBox(width: 10),
@@ -99,7 +87,7 @@ class AllReviewsPage extends StatelessWidget {
                                             Text(
                                               review.formattedDate.toString(),
                                               style: theme.textTheme.titleSmall!,
-                                            )
+                                            ),
                                           ],
                                         )
                                       ],
@@ -114,12 +102,11 @@ class AllReviewsPage extends StatelessWidget {
                                           direction: Axis.horizontal,
                                           allowHalfRating: false,
                                           itemSize: 22,
-                                          updateOnDrag: true,
                                           onRatingUpdate: (rating) {},
                                           itemBuilder: (context, _) {
                                             return Icon(
                                               Icons.star,
-                                              color: appTheme.deepYello, // Changed star color to primary color
+                                              color: appTheme.deepYello,
                                             );
                                           },
                                         ),
@@ -128,7 +115,7 @@ class AllReviewsPage extends StatelessWidget {
                                           review.rating.toString(),
                                           style: theme.textTheme.headlineLarge
                                               ?.copyWith(fontSize: 16.fSize),
-                                        )
+                                        ),
                                       ],
                                     ),
                                     SizedBox(height: 8.v),
@@ -157,5 +144,25 @@ class AllReviewsPage extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  PreferredSizeWidget _buildAppBar() {
+    return CustomAppBar(
+      height: 70.h,
+      leadingWidth: 40.h,
+      leading: AppbarLeadingImage(
+        imagePath: ImageConstant.imgArrowLeftOnerrorcontainer,
+        margin: EdgeInsets.only(left: 16.h),
+        onTap: () {
+          onTapArrowLeft();
+        },
+      ),
+      centerTitle: true,
+      title: AppbarSubtitleSix(text: "All Reviews"),
+    );
+  }
+
+  void onTapArrowLeft() {
+    Get.back();
   }
 }

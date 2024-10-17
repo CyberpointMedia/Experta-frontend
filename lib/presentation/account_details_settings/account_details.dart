@@ -89,7 +89,7 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
       const Text("User name"),
       const SizedBox(height: 6,),
       CustomTextFormField(
-        hintText: "navi_verma88",
+        // hintText: "navi_verma88",
         hintStyle: CustomTextStyles.titleMediumBluegray300,
         textInputType: TextInputType.name,
         controller: controller.textField1,
@@ -153,7 +153,7 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
         children: [
           Expanded(
             child: CustomTextFormField(
-              hintText: "01/01/2024",
+              // hintText: "01/01/2024",
               hintStyle: CustomTextStyles.titleMediumBluegray300,
               textInputType: TextInputType.datetime,
  controller: controller.textField2,
@@ -184,10 +184,10 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
       _buildTitle("Change Email"),
       _buildSubtitle("Enter your email or phone number to reset the password."),
       const SizedBox(height: 12,),
-      const Text("Current Email"),
+      // const Text("Current Email"),
       SizedBox(height: 6,),
       CustomTextFormField(
-        hintText: "john.doe@example.com",
+        // hintText: "john.doe@example.com",
         hintStyle: CustomTextStyles.titleMediumBluegray300,
         textInputType: TextInputType.emailAddress,
         controller: controller.textField3,
@@ -197,7 +197,7 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
       const Text("New Email"),
       const SizedBox(height: 6,),
       CustomTextFormField(
-        hintText: "john.doe@example.com",
+        // hintText: "john.doe@example.com",
         hintStyle: CustomTextStyles.titleMediumBluegray300,
         textInputType: TextInputType.emailAddress,
         controller: controller.textField4,
@@ -221,7 +221,7 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
       const Text("Phone Number"),
       SizedBox(height: 6,),
       CustomTextFormField(
-        hintText: "+1 123 456 7890",
+        // hintText: "+1 123 456 7890",
         hintStyle: CustomTextStyles.titleMediumBluegray300,
         textInputType: TextInputType.phone,
         controller: controller.textField5,

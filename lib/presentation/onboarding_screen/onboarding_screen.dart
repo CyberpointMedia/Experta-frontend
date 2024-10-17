@@ -117,7 +117,7 @@ class OnboardingScreen extends GetWidget<OnboardingController> {
               alignment: Alignment.bottomCenter,
               child: Container(
                 color: Colors.white,
-                height: 450.v,
+                height: MediaQuery.of(context).size.height * 0.5,
                 child: Column(
                   children: [
                     Text(
@@ -130,13 +130,16 @@ class OnboardingScreen extends GetWidget<OnboardingController> {
                     SizedBox(height: 15.v),
                     _buildLoginOption(),
                     const Spacer(),
+                   
                     Container(
                       width: 334.h,
                       margin: EdgeInsets.only(bottom: 51.v),
                       child: RichText(
                         text: TextSpan(
                           children: [
+                          
                             TextSpan(
+                              
                               text: "msg_by_clicking_the2".tr,
                               style: CustomTextStyles.bodyMediumff95a4b7,
                             ),
@@ -157,6 +160,7 @@ class OnboardingScreen extends GetWidget<OnboardingController> {
                         textAlign: TextAlign.center,
                       ),
                     ),
+                  
                   ],
                 ),
               ),
