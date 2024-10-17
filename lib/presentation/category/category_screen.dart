@@ -90,7 +90,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
                             const SizedBox(height: 10),
                             Text(
                               industry.name,
-                              style:  theme.textTheme.!.copyWith(color: Colors.black),
+                              style:  theme.textTheme.bodyMedium!.copyWith(color: Colors.black),
                             ),
                           ],
                         ),
