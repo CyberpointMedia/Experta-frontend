@@ -18,6 +18,7 @@ class SplashScreen extends GetWidget<SplashController> {
               top: 50,
               child: ImageFiltered(
                 imageFilter: ImageFilter.blur(
+                  tileMode: TileMode.decal,
                   sigmaX: 80,
                   sigmaY: 80,
                 ),
@@ -40,6 +41,7 @@ class SplashScreen extends GetWidget<SplashController> {
               top: 0,
               child: ImageFiltered(
                 imageFilter: ImageFilter.blur(
+                  tileMode: TileMode.decal,
                   sigmaX: 80,
                   sigmaY: 80,
                 ),
@@ -62,6 +64,7 @@ class SplashScreen extends GetWidget<SplashController> {
               bottom: 50,
               child: ImageFiltered(
                 imageFilter: ImageFilter.blur(
+                  tileMode: TileMode.decal,
                   sigmaX: 80,
                   sigmaY: 80,
                 ),
@@ -79,7 +82,8 @@ class SplashScreen extends GetWidget<SplashController> {
                 ),
               ),
             ),
-            Center( // Wrap with Center to center the widget in the screen
+            Center(
+              // Wrap with Center to center the widget in the screen
               child: _buildVector(), // Centering the vector icon
             ),
           ],

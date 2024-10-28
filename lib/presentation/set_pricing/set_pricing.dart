@@ -58,7 +58,8 @@ class _SetPricingState extends State<SetPricing> {
       left: 270,
       top: 50,
       child: ImageFiltered(
-        imageFilter: ImageFilter.blur(sigmaX: 60, sigmaY: 60),
+        imageFilter:
+            ImageFilter.blur(tileMode: TileMode.decal, sigmaX: 60, sigmaY: 60),
         child: Align(
           child: SizedBox(
             width: 252,
@@ -105,13 +106,14 @@ class _SetPricingState extends State<SetPricing> {
                     TextSpan(
                       text: 'Audio Call ',
                       style: CustomTextStyles.bodySmallSFProTextGray900
-                          .copyWith(fontWeight: FontWeight.bold, color:Colors.grey),
+                          .copyWith(
+                              fontWeight: FontWeight.bold, color: Colors.grey),
                     ),
                     TextSpan(
                       text: '(For 10 minute) ',
                       style: CustomTextStyles.bodySmallSFProTextGray900
-                          .copyWith(fontWeight: FontWeight.bold, color:Colors.grey),
-                          
+                          .copyWith(
+                              fontWeight: FontWeight.bold, color: Colors.grey),
                     ),
                     TextSpan(
                       text: '*',
@@ -140,18 +142,20 @@ class _SetPricingState extends State<SetPricing> {
                     TextSpan(
                       text: 'Video Call ',
                       style: CustomTextStyles.bodySmallSFProTextGray900
-                          .copyWith(fontWeight: FontWeight.bold, color:Colors.grey),
+                          .copyWith(
+                              fontWeight: FontWeight.bold, color: Colors.grey),
                     ),
                     TextSpan(
                       text: '(For 10 minute) ',
                       style: CustomTextStyles.bodySmallSFProTextGray900
-                          .copyWith(fontWeight: FontWeight.bold, color:Colors.grey),
+                          .copyWith(
+                              fontWeight: FontWeight.bold, color: Colors.grey),
                     ),
                     TextSpan(
                       text: '*',
                       style: CustomTextStyles.labelMediumGray900
                           .copyWith(color: Colors.red),
-                    ),   
+                    ),
                   ],
                 ),
               )),

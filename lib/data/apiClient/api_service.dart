@@ -11,6 +11,7 @@ import 'package:experta/data/models/request/verify_otp_request_model.dart';
 import 'package:experta/data/models/response/login_response_model.dart';
 import 'package:experta/data/models/response/resend_otp_response_model.dart';
 import 'package:experta/data/models/response/verify_otp_response_model.dart';
+import 'package:experta/data/models/transaction_list.dart';
 import 'package:experta/presentation/additional_info/model/additional_model.dart';
 import 'package:experta/presentation/additional_info/model/interest_model.dart';
 import 'package:experta/presentation/feeds_active_screen/models/feeds_active_model.dart';
@@ -814,38 +815,38 @@ class ApiService {
     }
   }
 
-Future<Map<String, dynamic>> sendMessage(
-    String content, String chatId, List<File> files) async {
-  log("the sent message $content and chat id $chatId");
+  Future<Map<String, dynamic>> sendMessage(
+      String content, String chatId, List<File> files) async {
+    log("the sent message $content and chat id $chatId");
 
-  var uri = Uri.parse('$_baseUrl/message');
-  var request = http.MultipartRequest('POST', uri)
-    ..headers['Authorization'] = 'Bearer $token'
-    ..fields['content'] = content
-    ..fields['chatId'] = chatId;
+    var uri = Uri.parse('$_baseUrl/message');
+    var request = http.MultipartRequest('POST', uri)
+      ..headers['Authorization'] = 'Bearer $token'
+      ..fields['content'] = content
+      ..fields['chatId'] = chatId;
 
-  for (var file in files) {
-    var stream = http.ByteStream(file.openRead());
-    var length = await file.length();
-    var multipartFile = http.MultipartFile(
-      'file', // This should match the key expected by your server
-      stream,
-      length,
-      filename: basename(file.path),
-    );
-    request.files.add(multipartFile);
+    for (var file in files) {
+      var stream = http.ByteStream(file.openRead());
+      var length = await file.length();
+      var multipartFile = http.MultipartFile(
+        'file', // This should match the key expected by your server
+        stream,
+        length,
+        filename: basename(file.path),
+      );
+      request.files.add(multipartFile);
+    }
+
+    var response = await request.send();
+
+    if (response.statusCode == 200 || response.statusCode == 201) {
+      var responseBody = await response.stream.bytesToString();
+      log("Response body: $responseBody");
+      return json.decode(responseBody);
+    } else {
+      throw Exception('Failed to send message');
+    }
   }
-
-  var response = await request.send();
-
-  if (response.statusCode == 200 || response.statusCode == 201) {
-    var responseBody = await response.stream.bytesToString();
-    log("Response body: $responseBody");
-    return json.decode(responseBody);
-  } else {
-    throw Exception('Failed to send message');
-  }
-}
 
   Future<Map<String, dynamic>?> fetchChat(String userId) async {
     final response = await http.post(
@@ -927,6 +928,181 @@ Future<Map<String, dynamic>> sendMessage(
       default:
         throw FetchDataException(
             'Error occurred while communicating with server with status code: ${response.statusCode}');
+    }
+  }
+
+// wallet page apis
+
+  Future<int?> getWalletBalance() async {
+    const url = 'http://3.110.252.174:8080/api/wallet-balance';
+
+    try {
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json'
+        },
+      );
+
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        if (data['status'] == 'success') {
+          return data['data']['balance'];
+        } else {
+          throw Exception('Failed to get balance ${response.body}');
+        }
+      } else {
+        throw Exception('Failed to connect to server ${response.body}');
+      }
+    } catch (e) {
+      print('Error: $e');
+      return null;
+    }
+  }
+
+  Future<Map<String, dynamic>> createOrder(double amount) async {
+    try {
+      final response = await http.post(
+        Uri.parse("$_baseUrl/create-razorpay-order"),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json'
+        },
+        body: jsonEncode({'amount': (amount).toInt()}),
+      );
+      if (response.statusCode == 200) {
+        log("hey the response is ${response.body}");
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to create order');
+      }
+    } catch (e) {
+      log('Error creating order: $e');
+      rethrow;
+    }
+  }
+
+  Future<Map<String, dynamic>> verifyPayment(
+      String orderId, String paymentId, String signature) async {
+    try {
+      final response = await http.post(
+        Uri.parse("$_baseUrl/verify-payment"),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json'
+        },
+        body: jsonEncode({
+          'razorpay_order_id': orderId,
+          'razorpay_payment_id': paymentId,
+          'razorpay_signature': signature,
+        }),
+      );
+      if (response.statusCode == 200) {
+        log("hey the response is ${response.body}");
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to verify payment');
+      }
+    } catch (e) {
+      log('Error verifying payment: $e');
+      rethrow;
+    }
+  }
+
+  Future<List<Transaction>> fetchTransactionHistory() async {
+    final response = await http.get(
+      Uri.parse('$_baseUrl/transaction-history'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json'
+      },
+    );
+
+    if (response.statusCode == 200) {
+      final Map<String, dynamic> jsonResponse = json.decode(response.body);
+      if (jsonResponse['status'] == 'success') {
+        List<dynamic> data = jsonResponse['data'];
+        return data
+            .map((transaction) => Transaction.fromJson(transaction))
+            .toList();
+      } else {
+        throw Exception('Failed to load transaction history');
+      }
+    } else {
+      throw Exception('Failed to load transaction history');
+    }
+  }
+
+  Future<Map<String, dynamic>> createBooking(
+      Map<String, dynamic> bookingData) async {
+    final response = await http.post(
+      Uri.parse('$_baseUrl/create-booking'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json'
+      },
+      body: jsonEncode(bookingData),
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body);
+    } else {
+      throw Exception('Failed to create booking');
+    }
+  }
+
+  Future<Map<String, dynamic>> getUserAvailability(String userId) async {
+    final String url = '$_baseUrl/user-availability/$userId';
+
+    try {
+      final response = await http.get(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json'
+        },
+      );
+
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      } else {
+        throw Exception('Failed to load user availability');
+      }
+    } catch (e) {
+      throw Exception('Failed to load user availability: $e');
+    }
+  }
+
+  Future<List<dynamic>> fetchClientBookings() async {
+    final response = await http.get(
+      Uri.parse('$_baseUrl/bookings-as-client'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json'
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body)['data'];
+    } else {
+      throw Exception('Failed to load client bookings');
+    }
+  }
+
+  Future<List<dynamic>> fetchExpertBookings() async {
+    final response = await http.get(
+      Uri.parse('$_baseUrl/bookings-as-expert'),
+      headers: {
+        'Authorization': 'Bearer $token',
+        'Content-Type': 'application/json'
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body)['data'];
+    } else {
+      throw Exception('Failed to load expert bookings');
     }
   }
 }

@@ -23,7 +23,7 @@ class _ReportReasonSheetState extends State<ReportReasonSheet> {
   @override
   void initState() {
     super.initState();
-    log("itemId: ${widget.itemId}, itemType: ${widget.itemType}, selectedReasonId: ${selectedReasonId},");
+    log("itemId: ${widget.itemId}, itemType: ${widget.itemType}, selectedReasonId: $selectedReasonId,");
     fetchReasons();
   }
 

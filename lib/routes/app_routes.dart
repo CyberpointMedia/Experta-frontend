@@ -98,7 +98,7 @@ import 'package:experta/presentation/support/bindings/support_binding.dart';
 import 'package:experta/presentation/support/support.dart';
 import 'package:experta/presentation/top_up/binding/top_up_binding.dart';
 import 'package:experta/presentation/top_up/top_up.dart';
-import 'package:experta/presentation/transaction/transection.dart';
+import 'package:experta/presentation/transaction/transactions_list.dart';
 import 'package:experta/presentation/userProfile/binding/profile_binding.dart';
 import 'package:experta/presentation/userProfile/user_profile_page.dart';
 import 'package:experta/presentation/user_details/binding/details_binding.dart';
@@ -253,13 +253,6 @@ static const String Notificationseting= "/notification_setting";
 static const String blocksearch= "/search_block";
 
 static const String qr = "/share_profile";
-  // static const String Bookappointment = "/book_appointment";
-
-  // static const String sUcessfuly = "/sucessfuly";
-
-  // static const String genderchange = "/change_gender";
-
-  // static const String qr = "/share_profile";
 
   static const String lottie = "/";
 
@@ -343,7 +336,7 @@ static const String qr = "/share_profile";
     ),
     GetPage(
       name: block,
-      page: () => BlockedPage(),
+      page: () => const BlockedPage(),
       bindings: [
         BlockedBinding(),
       ],
@@ -603,7 +596,7 @@ static const String qr = "/share_profile";
         ]),
     GetPage(
         name: mybook,
-        page: () => MyBookingPage(),
+        page: () => const MyBookingPage(),
         customTransition: CustomPageTransition(),
         bindings: [
           MyBookingBinding(),
@@ -685,7 +678,7 @@ static const String qr = "/share_profile";
         ]),
          GetPage(
         name: topup,
-        page: () =>   TopUpPage(),
+        page: () =>   const TopUpPage(),
         customTransition: CustomPageTransition(),
         bindings: [
           TopUpBinding(),
@@ -693,7 +686,7 @@ static const String qr = "/share_profile";
         ]),
         GetPage(
         name: widraw,
-        page: () =>   WithdrawCreditsPage(),
+        page: () =>   const WithdrawCreditsPage(),
         customTransition: CustomPageTransition(),
         bindings: [
           WithdrawBinding(),
@@ -710,7 +703,7 @@ static const String qr = "/share_profile";
         ]),
         GetPage(
         name: Notificationseting,
-        page: () =>   NotificationsPage(),
+        page: () =>   const NotificationsPage(),
         customTransition: CustomPageTransition(),
         bindings: [
           NotificatinSettingBinding(),

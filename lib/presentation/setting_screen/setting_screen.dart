@@ -13,121 +13,136 @@ class SettingScreen extends GetWidget<SettingController> {
   Widget build(BuildContext context) {
     return Scaffold(
         body: Stack(
-          children: [
-              Positioned(
-            left: 270,
-            top: 50,
-            child: ImageFiltered(
-              imageFilter: ImageFilter.blur(
-                sigmaX: 60,
-                sigmaY: 60,
-              ),
-              child: Align(
-                child: SizedBox(
-                  width: 252,
-                  height: 252,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(126),
-                      color: appTheme.deepOrangeA20.withOpacity(0.6),
-                    ),
+      children: [
+        Positioned(
+          left: 270,
+          top: 50,
+          child: ImageFiltered(
+            imageFilter: ImageFilter.blur(
+              tileMode: TileMode.decal,
+              sigmaX: 60,
+              sigmaY: 60,
+            ),
+            child: Align(
+              child: SizedBox(
+                width: 252,
+                height: 252,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(126),
+                    color: appTheme.deepOrangeA20.withOpacity(0.6),
                   ),
                 ),
               ),
             ),
           ),
-            SizedBox(
-                width: SizeUtils.width,
-                child: SingleChildScrollView(
-                    child: Padding(
-                        padding: EdgeInsets.only(bottom: 5.v),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(height: 12.v),
-                              _buildAppBar(),
-                               Padding(
-                                 padding:const EdgeInsets.only(left: 10),
-                                 child: Container(
-                                               margin:
-                                                   EdgeInsets.only(top: 7.v, right: 16.h, bottom: 16.v),
-                                               padding:
-                                                   EdgeInsets.symmetric(horizontal: 16.h, vertical: 17.v),
-                                               decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
-                                                   borderRadius: BorderRadiusStyle.roundedBorder20),
-                                               child: Row(children: [
-                                                 (controller.imagePath != "")? CustomImageView(
-                                                           imagePath: controller.imagePath,
-                                                           height: 48.adaptSize,
-                                                           width: 48.adaptSize,
-                                                           radius: BorderRadius.circular(24.h),
-                                                           alignment: Alignment.center):CustomImageView(
-                                                           imagePath: 'assets/images/image_not_found.png',
-                                                           height: 48.adaptSize,
-                                                           width: 48.adaptSize,
-                                                           radius: BorderRadius.circular(24.h),
-                                                           alignment: Alignment.center),
-                                                 Padding(
-                                                     padding: EdgeInsets.only(left: 15.h),
-                                                     child: Column(
-                                                         crossAxisAlignment: CrossAxisAlignment.start,
-                                                         children: [
-                                                           Text(controller.name.toString(),
-                                                               style: CustomTextStyles.titleMediumSemiBold),
-                                                           SizedBox(height: 4.v),
-                                                           GestureDetector(
-                                                               onTap: () {
-                                  // onTapEditProfile();
-                                  Get.toNamed(
-                                    AppRoutes.editProfileSetting,
-                                  );
-                                                               },
-                                                               child: Row(children: [
+        ),
+        SizedBox(
+            width: SizeUtils.width,
+            child: SingleChildScrollView(
+                child: Padding(
+                    padding: EdgeInsets.only(bottom: 5.v),
+                    child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: 12.v),
+                          _buildAppBar(),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: Container(
+                                margin: EdgeInsets.only(
+                                    top: 7.v, right: 16.h, bottom: 16.v),
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 16.h, vertical: 17.v),
+                                decoration: AppDecoration.fillOnPrimaryContainer
+                                    .copyWith(
+                                        borderRadius:
+                                            BorderRadiusStyle.roundedBorder20),
+                                child: Row(children: [
+                                  (controller.imagePath != "")
+                                      ? CustomImageView(
+                                          imagePath: controller.imagePath,
+                                          height: 48.adaptSize,
+                                          width: 48.adaptSize,
+                                          radius: BorderRadius.circular(24.h),
+                                          alignment: Alignment.center)
+                                      : CustomImageView(
+                                          imagePath:
+                                              'assets/images/image_not_found.png',
+                                          height: 48.adaptSize,
+                                          width: 48.adaptSize,
+                                          radius: BorderRadius.circular(24.h),
+                                          alignment: Alignment.center),
                                   Padding(
-                                      padding: EdgeInsets.only(bottom: 1.v),
-                                      child: Text("lbl_edit_profile".tr,
-                                          style: theme.textTheme.bodyMedium)),
-                                  CustomImageView(
-                                      imagePath: ImageConstant.imgArrowRight,
-                                      height: 18.adaptSize,
-                                      width: 18.adaptSize,
-                                      margin: EdgeInsets.only(left: 3.h))
-                                                               ]))
-                                                         ])),
-                                                 const Spacer(),
-                                                 CustomElevatedButton(
-                                                     height: 34.v,
-                                                     width: 84.h,
-                                                     
-                                                     text: "lbl_share_profile".tr,
-                                                     margin: EdgeInsets.symmetric(vertical: 7.v),
-                                                     buttonStyle: CustomButtonStyles.fillGreen,
-                                                     buttonTextStyle: CustomTextStyles.labelLargeGray900)
-                                               ])),
-                               ),
-          Padding(
-           padding:const EdgeInsets.only(left: 10),
-            child: _buildBasicSettings(),
-          ),
-                              SizedBox(height: 16.v),
-                              Padding(
-                                   padding:const EdgeInsets.only(left: 10),
-                                  child: Text("lbl_basic_settings".tr,
-                                      style: CustomTextStyles
-                                          .titleMediumBluegray30018)),
-                              SizedBox(height: 12.v),
-                              _buildShield1(),
-                              SizedBox(height: 16.v),
-                              Padding(
-                                  padding: EdgeInsets.only(left: 16.h),
-                                  child: Text("lbl_basic_settings".tr,
-                                      style: CustomTextStyles
-                                          .titleMediumBluegray30018)),
-                              SizedBox(height: 12.v),
-                              _buildInfo1()
-                            ])))),
-          ],
-        ));
+                                      padding: EdgeInsets.only(left: 15.h),
+                                      child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Text(controller.name.toString(),
+                                                style: CustomTextStyles
+                                                    .titleMediumSemiBold),
+                                            SizedBox(height: 4.v),
+                                            GestureDetector(
+                                                onTap: () {
+                                                  // onTapEditProfile();
+                                                  Get.toNamed(
+                                                    AppRoutes
+                                                        .editProfileSetting,
+                                                  );
+                                                },
+                                                child: Row(children: [
+                                                  Padding(
+                                                      padding: EdgeInsets.only(
+                                                          bottom: 1.v),
+                                                      child: Text(
+                                                          "lbl_edit_profile".tr,
+                                                          style: theme.textTheme
+                                                              .bodyMedium)),
+                                                  CustomImageView(
+                                                      imagePath: ImageConstant
+                                                          .imgArrowRight,
+                                                      height: 18.adaptSize,
+                                                      width: 18.adaptSize,
+                                                      margin: EdgeInsets.only(
+                                                          left: 3.h))
+                                                ]))
+                                          ])),
+                                  const Spacer(),
+                                  CustomElevatedButton(
+                                      height: 34.v,
+                                      width: 84.h,
+                                      text: "lbl_share_profile".tr,
+                                      margin:
+                                          EdgeInsets.symmetric(vertical: 7.v),
+                                      buttonStyle: CustomButtonStyles.fillGreen,
+                                      buttonTextStyle:
+                                          CustomTextStyles.labelLargeGray900)
+                                ])),
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: _buildBasicSettings(),
+                          ),
+                          SizedBox(height: 16.v),
+                          Padding(
+                              padding: const EdgeInsets.only(left: 10),
+                              child: Text("lbl_basic_settings".tr,
+                                  style: CustomTextStyles
+                                      .titleMediumBluegray30018)),
+                          SizedBox(height: 12.v),
+                          _buildShield1(),
+                          SizedBox(height: 16.v),
+                          Padding(
+                              padding: EdgeInsets.only(left: 16.h),
+                              child: Text("lbl_basic_settings".tr,
+                                  style: CustomTextStyles
+                                      .titleMediumBluegray30018)),
+                          SizedBox(height: 12.v),
+                          _buildInfo1()
+                        ])))),
+      ],
+    ));
   }
 
   /// Section Widget
@@ -296,48 +311,54 @@ class SettingScreen extends GetWidget<SettingController> {
                                     ])),
                           ),
                         ),
-                       Padding(
-  padding: const EdgeInsets.only(top: 1),
-  child: GestureDetector(
-    onTap: () {
-      // Use GetX to navigate to the RecordedSessionsPage
-      Get.toNamed(AppRoutes.recordedsession); // Assuming you've set the route in your app
-    },
-    child: Container(
-      padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
-      decoration: AppDecoration.fillOnPrimaryContainer,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CustomIconButton(
-            height: 44.adaptSize,
-            width: 44.adaptSize,
-            padding: EdgeInsets.all(10.h),
-            decoration: IconButtonStyleHelper.fillOrange,
-            child: CustomImageView(
-              imagePath: "assets/images/camera.svg",
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 15.h, top: 13.v, bottom: 10.v),
-            child: Text(
-              "msg_recorded_sessions".tr,
-              style: theme.textTheme.titleMedium!.copyWith(color: appTheme.gray900),
-            ),
-          ),
-          const Spacer(),
-          CustomImageView(
-            imagePath: ImageConstant.imgArrowRightGray900,
-            height: 24.adaptSize,
-            width: 24.adaptSize,
-            margin: EdgeInsets.symmetric(vertical: 10.v),
-          ),
-        ],
-      ),
-    ),
-  ),
-),
-
+                        Padding(
+                          padding: const EdgeInsets.only(top: 1),
+                          child: GestureDetector(
+                            onTap: () {
+                              // Use GetX to navigate to the RecordedSessionsPage
+                              Get.toNamed(AppRoutes
+                                  .recordedsession); // Assuming you've set the route in your app
+                            },
+                            child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 15.h, vertical: 16.v),
+                              decoration: AppDecoration.fillOnPrimaryContainer,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  CustomIconButton(
+                                    height: 44.adaptSize,
+                                    width: 44.adaptSize,
+                                    padding: EdgeInsets.all(10.h),
+                                    decoration:
+                                        IconButtonStyleHelper.fillOrange,
+                                    child: CustomImageView(
+                                      imagePath: "assets/images/camera.svg",
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        left: 15.h, top: 13.v, bottom: 10.v),
+                                    child: Text(
+                                      "msg_recorded_sessions".tr,
+                                      style: theme.textTheme.titleMedium!
+                                          .copyWith(color: appTheme.gray900),
+                                    ),
+                                  ),
+                                  const Spacer(),
+                                  CustomImageView(
+                                    imagePath:
+                                        ImageConstant.imgArrowRightGray900,
+                                    height: 24.adaptSize,
+                                    width: 24.adaptSize,
+                                    margin:
+                                        EdgeInsets.symmetric(vertical: 10.v),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
                         GestureDetector(
                           onTap: () {
                             Get.toNamed(AppRoutes.bank);
@@ -397,7 +418,7 @@ class SettingScreen extends GetWidget<SettingController> {
   //       width: 359.h,
   //       margin: EdgeInsets.only(left: 16.h),
   //       child: Stack(alignment: Alignment.topLeft, children: [
-        
+
   //         Container(
   //             margin:
   //                 EdgeInsets.only(top: 50.v, right: 16.h, bottom: 456.v),
@@ -448,7 +469,7 @@ class SettingScreen extends GetWidget<SettingController> {
   //               CustomElevatedButton(
   //                   height: 34.v,
   //                   width: 84.h,
-                    
+
   //                   text: "lbl_share_profile".tr,
   //                   margin: EdgeInsets.symmetric(vertical: 7.v),
   //                   buttonStyle: CustomButtonStyles.fillGreen,
@@ -502,48 +523,51 @@ class SettingScreen extends GetWidget<SettingController> {
                         ])),
               ),
               Padding(
-  padding: const EdgeInsets.only(top: 1),
-  child: GestureDetector(
-    onTap: () {
-      // Add your tap functionality here
-      Get.toNamed(AppRoutes.Notificationseting);
-      // You can navigate to a new page or perform any action here.
-    },
-    child: Container(
-      padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
-      decoration: AppDecoration.fillOnPrimaryContainer,
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          CustomIconButton(
-            height: 44.adaptSize,
-            width: 44.adaptSize,
-            padding: EdgeInsets.all(6.h),
-            decoration: IconButtonStyleHelper.fillPrimaryContainerTL22,
-            child: CustomImageView(
-              imagePath: "assets/images/Ringing.svg",
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(left: 15.h, top: 13.v, bottom: 10.v),
-            child: Text(
-              "msg_notification_settings".tr,
-              style: theme.textTheme.titleMedium!.copyWith(color: appTheme.gray900),
-            ),
-          ),
-          const Spacer(),
-          CustomImageView(
-            imagePath: ImageConstant.imgArrowRightGray900,
-            height: 24.adaptSize,
-            width: 24.adaptSize,
-            margin: EdgeInsets.symmetric(vertical: 10.v),
-          ),
-        ],
-      ),
-    ),
-  ),
-),
-
+                padding: const EdgeInsets.only(top: 1),
+                child: GestureDetector(
+                  onTap: () {
+                    // Add your tap functionality here
+                    Get.toNamed(AppRoutes.Notificationseting);
+                    // You can navigate to a new page or perform any action here.
+                  },
+                  child: Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
+                    decoration: AppDecoration.fillOnPrimaryContainer,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CustomIconButton(
+                          height: 44.adaptSize,
+                          width: 44.adaptSize,
+                          padding: EdgeInsets.all(6.h),
+                          decoration:
+                              IconButtonStyleHelper.fillPrimaryContainerTL22,
+                          child: CustomImageView(
+                            imagePath: "assets/images/Ringing.svg",
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                              left: 15.h, top: 13.v, bottom: 10.v),
+                          child: Text(
+                            "msg_notification_settings".tr,
+                            style: theme.textTheme.titleMedium!
+                                .copyWith(color: appTheme.gray900),
+                          ),
+                        ),
+                        const Spacer(),
+                        CustomImageView(
+                          imagePath: ImageConstant.imgArrowRightGray900,
+                          height: 24.adaptSize,
+                          width: 24.adaptSize,
+                          margin: EdgeInsets.symmetric(vertical: 10.v),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
               Padding(
                 padding: const EdgeInsets.only(top: 1),
                 child: Container(
@@ -580,104 +604,105 @@ class SettingScreen extends GetWidget<SettingController> {
   }
 
   /// Section Widget
-Widget _buildInfo1() {
-  return Align(
-      alignment: Alignment.center,
-      child: Container(
-          margin: EdgeInsets.symmetric(horizontal: 16.h),
-          decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
-              color: Colors.transparent,
-              borderRadius: BorderRadiusStyle.roundedBorder20),
-          child: Column(mainAxisSize: MainAxisSize.min, children: [
-            GestureDetector(
-              onTap: () {
-                Get.toNamed(AppRoutes.aboutus);
-              },
-              child: Container(
-                  padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
-                  decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
-                      borderRadius: BorderRadiusStyle.customBorderBL20),
-                  child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
+  Widget _buildInfo1() {
+    return Align(
+        alignment: Alignment.center,
+        child: Container(
+            margin: EdgeInsets.symmetric(horizontal: 16.h),
+            decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
+                color: Colors.transparent,
+                borderRadius: BorderRadiusStyle.roundedBorder20),
+            child: Column(mainAxisSize: MainAxisSize.min, children: [
+              GestureDetector(
+                onTap: () {
+                  Get.toNamed(AppRoutes.aboutus);
+                },
+                child: Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
+                    decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
+                        borderRadius: BorderRadiusStyle.customBorderBL20),
+                    child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          CustomIconButton(
+                              height: 44.adaptSize,
+                              width: 44.adaptSize,
+                              padding: EdgeInsets.all(6.h),
+                              decoration: IconButtonStyleHelper.fillDeepPurple,
+                              child: CustomImageView(
+                                imagePath: "assets/images/Info.svg",
+                              )),
+                          Padding(
+                              padding: EdgeInsets.only(
+                                  left: 15.h, top: 13.v, bottom: 10.v),
+                              child: Text("lbl_about_us".tr,
+                                  style: theme.textTheme.titleMedium!
+                                      .copyWith(color: appTheme.gray900))),
+                          const Spacer(),
+                          CustomImageView(
+                              imagePath: ImageConstant.imgArrowRightGray900,
+                              height: 24.adaptSize,
+                              width: 24.adaptSize,
+                              margin: EdgeInsets.symmetric(vertical: 10.v))
+                        ])),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 1),
+                child: GestureDetector(
+                  onTap: () {
+                    Get.toNamed(
+                        AppRoutes.RaiseTicket); // Navigate to raise ticket
+                  },
+                  child: Container(
+                      padding: EdgeInsets.fromLTRB(16.h, 16.v, 16.h, 15.v),
+                      decoration: AppDecoration.outlineGray300011,
+                      child: Row(children: [
+                        Container(
+                            height: 44.adaptSize,
+                            width: 44.adaptSize,
+                            padding: EdgeInsets.all(10.h),
+                            decoration: AppDecoration.fillGreen400.copyWith(
+                                borderRadius: BorderRadiusStyle.circleBorder23),
+                            child: CustomImageView(
+                                imagePath: "assets/images/hour.svg",
+                                height: 24.adaptSize,
+                                width: 24.adaptSize,
+                                alignment: Alignment.center)),
+                        Padding(
+                            padding: EdgeInsets.only(
+                                left: 15.h, top: 13.v, bottom: 10.v),
+                            child: Text("lbl_support".tr,
+                                style: theme.textTheme.titleMedium))
+                      ])),
+                ),
+              ),
+              GestureDetector(
+                  onTap: () {
+                    onTapPower();
+                  },
+                  child: Container(
+                      padding: EdgeInsets.all(16.h),
+                      decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
+                          borderRadius: BorderRadiusStyle.customBorderL20),
+                      child: Row(children: [
                         CustomIconButton(
                             height: 44.adaptSize,
                             width: 44.adaptSize,
                             padding: EdgeInsets.all(6.h),
-                            decoration: IconButtonStyleHelper.fillDeepPurple,
+                            decoration:
+                                IconButtonStyleHelper.fillPrimaryContainerTL22,
                             child: CustomImageView(
-                              imagePath: "assets/images/Info.svg",
+                              imagePath: "assets/images/Logout.svg",
                             )),
                         Padding(
                             padding: EdgeInsets.only(
                                 left: 15.h, top: 13.v, bottom: 10.v),
-                            child: Text("lbl_about_us".tr,
-                                style: theme.textTheme.titleMedium!
-                                    .copyWith(color: appTheme.gray900))),
-                        const Spacer(),
-                        CustomImageView(
-                            imagePath: ImageConstant.imgArrowRightGray900,
-                            height: 24.adaptSize,
-                            width: 24.adaptSize,
-                            margin: EdgeInsets.symmetric(vertical: 10.v))
-                      ])),
-            ),
-            Padding(
-              padding: const EdgeInsets.only(top: 1),
-              child: GestureDetector(
-                onTap: () {
-                  Get.toNamed(AppRoutes.RaiseTicket); // Navigate to raise ticket
-                },
-                child: Container(
-                    padding: EdgeInsets.fromLTRB(16.h, 16.v, 16.h, 15.v),
-                    decoration: AppDecoration.outlineGray300011,
-                    child: Row(children: [
-                      Container(
-                          height: 44.adaptSize,
-                          width: 44.adaptSize,
-                          padding: EdgeInsets.all(10.h),
-                          decoration: AppDecoration.fillGreen400.copyWith(
-                              borderRadius: BorderRadiusStyle.circleBorder23),
-                          child: CustomImageView(
-                              imagePath: "assets/images/hour.svg",
-                              height: 24.adaptSize,
-                              width: 24.adaptSize,
-                              alignment: Alignment.center)),
-                      Padding(
-                          padding: EdgeInsets.only(
-                              left: 15.h, top: 13.v, bottom: 10.v),
-                          child: Text("lbl_support".tr,
-                              style: theme.textTheme.titleMedium))
-                    ])),
-              ),
-            ),
-            GestureDetector(
-                onTap: () {
-                  onTapPower();
-                },
-                child: Container(
-                    padding: EdgeInsets.all(16.h),
-                    decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
-                        borderRadius: BorderRadiusStyle.customBorderL20),
-                    child: Row(children: [
-                      CustomIconButton(
-                          height: 44.adaptSize,
-                          width: 44.adaptSize,
-                          padding: EdgeInsets.all(6.h),
-                          decoration:
-                              IconButtonStyleHelper.fillPrimaryContainerTL22,
-                          child: CustomImageView(
-                            imagePath: "assets/images/Logout.svg",
-                          )),
-                      Padding(
-                          padding: EdgeInsets.only(
-                              left: 15.h, top: 13.v, bottom: 10.v),
-                          child: Text("lbl_log_out".tr,
-                              style: theme.textTheme.titleMedium))
-                    ])))
-          ])));
-}
-
+                            child: Text("lbl_log_out".tr,
+                                style: theme.textTheme.titleMedium))
+                      ])))
+            ])));
+  }
 
   onTapArrowLeft() {
     Get.back();
@@ -711,8 +736,8 @@ Widget _buildInfo1() {
 
   /// Navigates to the settingsNotificationsScreen when the action is triggered.
   onTapReferralProgram() {
-     Get.toNamed(
-     AppRoutes.Notificationseting,
+    Get.toNamed(
+      AppRoutes.Notificationseting,
     );
   }
 

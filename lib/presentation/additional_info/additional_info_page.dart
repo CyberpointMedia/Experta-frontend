@@ -21,7 +21,8 @@ class _AdditionalInfoPageState extends State<AdditionalInfoPage> {
         children: [
           _buildBackgroundBlur(),
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16.0), // Add padding here
+            padding: const EdgeInsets.symmetric(
+                horizontal: 16.0), // Add padding here
             child: CustomScrollView(
               slivers: [
                 SliverToBoxAdapter(child: _buildAppBar()),
@@ -46,7 +47,8 @@ class _AdditionalInfoPageState extends State<AdditionalInfoPage> {
       left: 270,
       top: 50,
       child: ImageFiltered(
-        imageFilter: ImageFilter.blur(sigmaX: 60, sigmaY: 60),
+        imageFilter:
+            ImageFilter.blur(tileMode: TileMode.decal, sigmaX: 60, sigmaY: 60),
         child: Align(
           child: SizedBox(
             width: 252,
@@ -116,7 +118,8 @@ class _AdditionalInfoPageState extends State<AdditionalInfoPage> {
                   deleteIcon: const Icon(Icons.close),
                   onDeleted: () {
                     setState(() {
-                      controller.languageData.value.data?.languages.remove(language);
+                      controller.languageData.value.data?.languages
+                          .remove(language);
                     });
                   },
                   shape: RoundedRectangleBorder(
@@ -205,7 +208,8 @@ class _AdditionalInfoPageState extends State<AdditionalInfoPage> {
             onPressed: onEdit,
             child: Text(
               "Edit",
-              style: theme.textTheme.bodyLarge!.copyWith(color: Colors.orange[900]),
+              style: theme.textTheme.bodyLarge!
+                  .copyWith(color: Colors.orange[900]),
               textAlign: TextAlign.start,
             ),
           ),

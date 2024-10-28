@@ -9,7 +9,7 @@ import 'package:experta/presentation/user_details/controller/details_controller.
 import 'package:experta/widgets/custom_icon_button.dart';
 import 'package:experta/widgets/custom_outlined_button.dart';
 import 'package:experta/widgets/custom_rating_bar.dart';
-import 'package:flutter/material.dart';
+import 'package:experta/widgets/report.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
@@ -41,8 +41,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
   void _showBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      backgroundColor:
-          Colors.transparent, // Set the background color to transparent
+      backgroundColor: Colors.transparent,
       builder: (context) {
         return Container(
           padding: const EdgeInsets.only(top: 20, bottom: 20),
@@ -58,35 +57,35 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                   child: Column(
                     children: [
                       ListTile(
-                        title: const Center(
+                        title: Center(
                           child: Text(
                             'Report this user',
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontSize: 16.0,
-                            ),
+                            style:
+                                CustomTextStyles.titleMediumSFProTextBlack90001,
                           ),
                         ),
                         onTap: () {
-                          // Handle report action
-                          Navigator.pop(context);
+                          showModalBottomSheet(
+                            context: context,
+                            builder: (context) => ReportReasonSheet(
+                              itemId: id.id,
+                              itemType: 'User',
+                            ),
+                          );
                         },
                       ),
                       const Divider(),
                       ListTile(
-                        title: const Center(
+                        title: Center(
                           child: Text(
                             'Block this user',
-                            style: TextStyle(
-                              color: Colors.red,
-                              fontSize: 16.0,
-                            ),
+                            style:
+                                CustomTextStyles.titleMediumSFProTextBlack90001,
                           ),
                         ),
                         onTap: () {
                           Navigator.pop(context);
-                          _showBlockUserDialog(context, id.id,
-                              controller); // Show the block user confirmation dialog
+                          _showBlockUserDialog(context, id.id, controller);
                         },
                       ),
                     ],
@@ -219,119 +218,138 @@ class _UserDetailsPageState extends State<UserDetailsPage>
   }
 
   void _showBottomSheet2(BuildContext context) {
-  showModalBottomSheet(
-    context: context,
-    builder: (context) {
-      return Padding(
-        padding:  EdgeInsets.only(left: 20.adaptSize, right: 20.adaptSize),
-        child: Container(
-          padding: const EdgeInsets.symmetric(vertical: 16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: <Widget>[
-              ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: Colors.green.shade100,
-                  child: const Icon(Icons.call, color: Colors.green),
-                ),
-                title: const Text('Audio Call'),
-                subtitle: const Text(
-                  'Chat me up, share photos.',
-                  style: TextStyle(color: Colors.grey), // Set the color to grey
-                ),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SizedBox(
-                      height: 14.adaptSize,
-                      width: 14.adaptSize,
-                      child: CustomImageView(imagePath: ImageConstant.imgLayer1),
-                    ),
-                    const SizedBox(
-                        width: 8.0), // Add some spacing between the image and text
-                    const Text(
-                      '1800/min',
-                      style: TextStyle(
-                        color: Colors.black,
-                      ),
-                    ),
-                  ],
-                ),
-                onTap: () {
-                  // Handle audio call action
-                  Navigator.pop(context);
-                },
-              ),
-              const Divider(),
-              ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: Colors.red.shade100,
-                  child: const Icon(Icons.videocam, color: Colors.red),
-                ),
-                title: const Text('Video Call'),
-                subtitle: const Text(
-                  'Call your doctor directly.',
-                  style: TextStyle(color: Colors.grey), // Set the color to grey
-                ),
-                trailing: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    SizedBox(
-                      height: 14.0,
-                      width: 14.0,
-                      child: CustomImageView(imagePath: ImageConstant.imgLayer1),
-                    ),
-                    const SizedBox(width: 8.0),
-                    Padding(
-                      padding: const EdgeInsets.only(left: 4),
-                      child: RichText(
-                        text: TextSpan(
-                          children: [
-                            TextSpan(
-                                text: "${controller.userData.value.data?.pricing?.videoCallPrice ?? 0.0}",
-                                style: theme.textTheme.labelLarge!),
-                            TextSpan(
-                                text: "/min",
-                                style: theme.textTheme.labelLarge?.copyWith(fontWeight: FontWeight.w400)),
-                          ],
-                        ),
-                        textAlign: TextAlign.left,
-                      ),
-                    ),
-                  ],
-                ),
-                onTap: () {
-                  Navigator.pop(context);
-                },
-              ),
-              const Divider(),
-              GestureDetector(
-                onTap: () {
-                  Get.toNamed(AppRoutes.Bookappointment);
-                },
-                child: ListTile(
+    final data = controller.userData.value.data?.pricing;
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding: EdgeInsets.only(left: 20.adaptSize, right: 20.adaptSize),
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                ListTile(
                   leading: CircleAvatar(
-                    backgroundColor: Colors.yellow.shade100,
-                    child: const Icon(Icons.calendar_today, color: Colors.yellow),
+                    backgroundColor: Colors.green.shade100,
+                    child: const Icon(Icons.call, color: Colors.green),
                   ),
-                  title: const Text('Schedule Call'),
-                  subtitle: const Text(
-                    'Chat me up, share photos.',
-                    style: TextStyle(color: Colors.grey), // Set the color to grey
+                  title: Text(
+                    'Audio Call',
+                    style: CustomTextStyles.titleMedium18,
+                  ),
+                  subtitle: Text(
+                    'Call me up',
+                    style: CustomTextStyles
+                        .titleSmallGilroyff95a4b7, // Set the color to grey
+                  ),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(
+                        height: 14.adaptSize,
+                        width: 14.adaptSize,
+                        child:
+                            CustomImageView(imagePath: ImageConstant.imgLayer1),
+                      ),
+                      const SizedBox(
+                          width:
+                              8.0), // Add some spacing between the image and text
+                      Text(
+                        "${data!.audioCallPrice}/min",
+                        style: CustomTextStyles.bodySmall0XFF171717,
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                const Divider(),
+                ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: Colors.red.shade100,
+                    child: const Icon(Icons.videocam, color: Colors.red),
+                  ),
+                  title: Text(
+                    'Video Call',
+                    style: CustomTextStyles.titleMedium18,
+                  ),
+                  subtitle: Text(
+                    'Call the profeesional directly.',
+                    style: CustomTextStyles.titleSmallGilroyff95a4b7,
+                  ),
+                  trailing: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      SizedBox(
+                        height: 14.0,
+                        width: 14.0,
+                        child:
+                            CustomImageView(imagePath: ImageConstant.imgLayer1),
+                      ),
+                      const SizedBox(width: 8.0),
+                      Text(
+                        "${data.videoCallPrice}/min",
+                        style: CustomTextStyles.bodySmall0XFF171717,
+                      ),
+                    ],
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                ),
+                const Divider(),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                    Get.toNamed(AppRoutes.Bookappointment, arguments: {
+                      'profile': controller
+                              .userData.value.data?.basicInfo?.profilePic ??
+                          '',
+                      'firstname': controller
+                              .userData.value.data?.basicInfo?.firstName ??
+                          '',
+                      'lastname':
+                          controller.userData.value.data?.basicInfo?.lastName ??
+                              '',
+                      'industry': controller.userData.value.data
+                              ?.industryOccupation?.industry?.name ??
+                          '',
+                      'occupation': controller.userData.value.data
+                              ?.industryOccupation?.occupation?.name ??
+                          '',
+                      'price': data.videoCallPrice.toString() ?? '',
+                      'id': id.id ?? '',
+                    });
+                  },
+                  child: ListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: Colors.yellow.shade100,
+                      child: const Icon(Icons.calendar_today,
+                          color: Colors.yellow),
+                    ),
+                    title: Text(
+                      'Schedule Call',
+                      style: CustomTextStyles.titleMedium18,
+                    ),
+                    subtitle: Text(
+                      'Book an Appointment with me',
+                      style: CustomTextStyles
+                          .titleSmallGilroyff95a4b7, // Set the color to grey
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
-        ),
-      );
-    },
-  );
-}
-
+        );
+      },
+    );
+  }
 
   @override
- Widget build(BuildContext context) {
+  Widget build(BuildContext context) {
     return PopScope(
       canPop: false,
       child: Scaffold(
@@ -344,6 +362,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
               top: 50,
               child: ImageFiltered(
                 imageFilter: ImageFilter.blur(
+                  tileMode: TileMode.decal,
                   sigmaX: 60,
                   sigmaY: 60,
                 ),
@@ -374,7 +393,10 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                       leading: AppbarLeadingImage(
                         imagePath: ImageConstant.imgArrowLeftOnerrorcontainer,
                         margin: EdgeInsets.only(
-                            left: 16.h, top: 10.adaptSize, bottom: 10.adaptSize, right: 16.adaptSize),
+                            left: 16.h,
+                            top: 10.adaptSize,
+                            bottom: 10.adaptSize,
+                            right: 16.adaptSize),
                         onTap: () {
                           onTapArrowLeft();
                         },
@@ -386,44 +408,46 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                               '',
                           style: theme.textTheme.titleMedium!.copyWith(
                               color: appTheme.gray900,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold),
+                              fontSize: 22,
+                              fontWeight: FontWeight.w700),
                         );
                       }),
                       actions: [
-                        Padding(
-                          padding: const EdgeInsets.only(right: 0),
-                          child: CustomElevatedButton(
-                            buttonStyle: CustomButtonStyles.fillOnError2,
-                            buttonTextStyle: CustomTextStyles.bodySmallffffffff,
-                            height: 36.adaptSize,
-                            width: 70.adaptSize,
-                            text: controller.userData.value.data?.isFollowing ==
-                                    false
-                                ? "Follow"
-                                : "unfollow",
-                            onPressed: () {
-                              if (controller.isFollowing.value == false) {
-                                controller.followUser(
-                                    controller.userData.value.data?.id ?? '');
-                                controller.fetchUserData(
-                                    controller.userData.value.data?.id ?? '');
-                                setState(() {
-                                  controller.isFollowing.value = true;
-                                });
-                                log("now the new value of is following is ==== ${controller.isFollowing.value}");
-                              } else {
-                                // Handle unfollow logic here if needed
-                                // controller.unfollowUser(controller.userData.value.data?.id ?? '');
-                                controller.fetchUserData(
-                                    controller.userData.value.data?.id ?? '');
-                                setState(() {
-                                  controller.isFollowing.value = false;
-                                });
-                              }
-                            },
-                          ),
-                        ),
+                        Obx(() {
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 0),
+                            child: CustomElevatedButton(
+                              buttonStyle: CustomButtonStyles.fillOnError2,
+                              buttonTextStyle:
+                                  CustomTextStyles.bodySmallffffffff,
+                              height: 36.adaptSize,
+                              width: 70.adaptSize,
+                              text:
+                                  controller.userData.value.data?.isFollowing ==
+                                          false
+                                      ? "Follow"
+                                      : "unfollow",
+                              onPressed: () {
+                                if (controller.isFollowing.value == false) {
+                                  controller.followUser(
+                                      controller.userData.value.data?.id ?? '');
+                                  controller.fetchUserData(
+                                      controller.userData.value.data?.id ?? '');
+                                  setState(() {
+                                    controller.isFollowing.value = true;
+                                  });
+                                  log("now the new value of is following is ==== ${controller.isFollowing.value}");
+                                } else {
+                                  controller.fetchUserData(
+                                      controller.userData.value.data?.id ?? '');
+                                  setState(() {
+                                    controller.isFollowing.value = false;
+                                  });
+                                }
+                              },
+                            ),
+                          );
+                        }),
                         IconButton(
                           icon: const Icon(Icons.more_vert),
                           onPressed: () {
@@ -525,9 +549,6 @@ class _UserDetailsPageState extends State<UserDetailsPage>
       ),
     );
   }
-
-
-
 
   Widget _buildAboutMe() {
     return SizedBox(
@@ -703,7 +724,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                     print('Opening link: ${socialMedia['link']}');
                   },
                   child: Padding(
-                    padding:  EdgeInsets.all(8.adaptSize),
+                    padding: EdgeInsets.all(8.adaptSize),
                     child: FaIcon(
                       socialMedia['icon'],
                       size: 24.adaptSize,
@@ -1113,7 +1134,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                                 unselectedColor: appTheme.gray300,
                               ),
 
-                               SizedBox(
+                              SizedBox(
                                   width: 6.h), // Added SizedBox for spacing
                               Text(
                                 review.rating.toString(),
@@ -1188,7 +1209,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
         controller.userData.value.data?.basicInfo?.getTotalFollowing() ?? 0;
 
     return Padding(
-      padding:  EdgeInsets.only(left: 13.h, right: 30.h, top: 30.v),
+      padding: EdgeInsets.only(left: 13.h, right: 30.h, top: 30.v),
       child: Column(
         children: [
           Row(
@@ -1347,7 +1368,10 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                     children: controller.userData.value.data?.language?.language
                             ?.map((e) => Text(
                                   e.name.toString(),
-                                  style: CustomTextStyles.bodyLargeBlack90001,
+                                  style: theme.textTheme.bodyMedium!.copyWith(
+                                      color: appTheme.black900,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500),
                                 ))
                             .toList() ??
                         [],
@@ -1370,7 +1394,10 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                 Text(
                   "Reg no: ${controller.userData.value.data?.industryOccupation?.registrationNumber ?? " N/A"}",
                   textAlign: TextAlign.left,
-                  style: CustomTextStyles.bodyLargeBlack90001,
+                  style: theme.textTheme.bodyMedium!.copyWith(
+                      color: appTheme.black900,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500),
                 ),
                 Container(
                   width: 1.v,
@@ -1386,9 +1413,12 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                   width: 10.v,
                 ),
                 Text(
-                  "587",
+                  controller.userData.value.data?.noOfBooking.toString() ?? "",
                   textAlign: TextAlign.left,
-                  style: CustomTextStyles.titleMediumBold,
+                  style: theme.textTheme.bodyMedium!.copyWith(
+                      color: appTheme.black900,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500),
                 ),
                 SizedBox(
                   width: 5.v,
@@ -1396,7 +1426,10 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                 Text(
                   "Consultation",
                   textAlign: TextAlign.left,
-                  style: CustomTextStyles.bodyLargeBlack90001,
+                  style: theme.textTheme.bodyMedium!.copyWith(
+                      color: appTheme.black900,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500),
                 ),
               ],
             ),

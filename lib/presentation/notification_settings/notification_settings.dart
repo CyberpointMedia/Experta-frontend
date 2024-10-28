@@ -28,6 +28,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
             top: 50,
             child: ImageFiltered(
               imageFilter: ImageFilter.blur(
+                tileMode: TileMode.decal,
                 sigmaX: 60,
                 sigmaY: 60,
               ),
@@ -55,7 +56,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                   child: ListView(
                     children: [
                       const SizedBox(height: 0.0),
-                      
+
                       // "Push notification" text and "Pause all" switch in a single column
                       Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -83,8 +84,11 @@ class _NotificationsPageState extends State<NotificationsPage> {
                                 pauseAll = value;
                               });
                             },
-                            activeTrackColor: Colors.green, // Entire button color when active
-                            thumbColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+                            activeTrackColor:
+                                Colors.green, // Entire button color when active
+                            thumbColor:
+                                MaterialStateProperty.resolveWith<Color>(
+                                    (Set<MaterialState> states) {
                               if (states.contains(MaterialState.selected)) {
                                 return Colors.white; // White thumb when active
                               }
@@ -104,7 +108,8 @@ class _NotificationsPageState extends State<NotificationsPage> {
                           });
                         },
                         activeTrackColor: Colors.green,
-                        thumbColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+                        thumbColor: MaterialStateProperty.resolveWith<Color>(
+                            (Set<MaterialState> states) {
                           if (states.contains(MaterialState.selected)) {
                             return Colors.white;
                           }
@@ -120,7 +125,8 @@ class _NotificationsPageState extends State<NotificationsPage> {
                           });
                         },
                         activeTrackColor: Colors.green,
-                        thumbColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+                        thumbColor: MaterialStateProperty.resolveWith<Color>(
+                            (Set<MaterialState> states) {
                           if (states.contains(MaterialState.selected)) {
                             return Colors.white;
                           }
@@ -136,7 +142,8 @@ class _NotificationsPageState extends State<NotificationsPage> {
                           });
                         },
                         activeTrackColor: Colors.green,
-                        thumbColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+                        thumbColor: MaterialStateProperty.resolveWith<Color>(
+                            (Set<MaterialState> states) {
                           if (states.contains(MaterialState.selected)) {
                             return Colors.white;
                           }
@@ -152,7 +159,8 @@ class _NotificationsPageState extends State<NotificationsPage> {
                           });
                         },
                         activeTrackColor: Colors.green,
-                        thumbColor: MaterialStateProperty.resolveWith<Color>((Set<MaterialState> states) {
+                        thumbColor: MaterialStateProperty.resolveWith<Color>(
+                            (Set<MaterialState> states) {
                           if (states.contains(MaterialState.selected)) {
                             return Colors.white;
                           }

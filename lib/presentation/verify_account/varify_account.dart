@@ -19,7 +19,6 @@ class _VerifyAccountState extends State<VerifyAccount> {
   // ignore: non_constant_identifier_names
   final TextEditingController AadharCardController = TextEditingController();
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -30,6 +29,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
             top: 50,
             child: ImageFiltered(
               imageFilter: ImageFilter.blur(
+                tileMode: TileMode.decal,
                 sigmaX: 60,
                 sigmaY: 60,
               ),
@@ -95,7 +95,8 @@ class _VerifyAccountState extends State<VerifyAccount> {
                       Get.toNamed(AppRoutes.changeUserName);
                     },
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 15.h, vertical: 16.v),
                       decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
                         borderRadius: BorderRadiusStyle.customBorderBL20,
                       ),
@@ -107,10 +108,12 @@ class _VerifyAccountState extends State<VerifyAccount> {
                             width: 44.adaptSize,
                             padding: EdgeInsets.all(6.h),
                             decoration: IconButtonStyleHelper.fillPrimary,
-                            child: CustomImageView(imagePath: ImageConstant.user),
+                            child:
+                                CustomImageView(imagePath: ImageConstant.user),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(left: 15.h, top: 13.v, bottom: 10.v),
+                            padding: EdgeInsets.only(
+                                left: 15.h, top: 13.v, bottom: 10.v),
                             child: Text(
                               "U9465288001",
                               style: theme.textTheme.titleMedium!.copyWith(
@@ -136,7 +139,8 @@ class _VerifyAccountState extends State<VerifyAccount> {
                     child: Padding(
                       padding: const EdgeInsets.only(top: 1),
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 15.h, vertical: 16.v),
                         decoration: AppDecoration.fillOnPrimaryContainer,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -146,10 +150,12 @@ class _VerifyAccountState extends State<VerifyAccount> {
                               width: 44.adaptSize,
                               padding: EdgeInsets.all(6.h),
                               decoration: IconButtonStyleHelper.fillDeepPurple,
-                              child: CustomImageView(imagePath: ImageConstant.birthday),
+                              child: CustomImageView(
+                                  imagePath: ImageConstant.birthday),
                             ),
                             Padding(
-                              padding: EdgeInsets.only(left: 15.h, top: 13.v, bottom: 10.v),
+                              padding: EdgeInsets.only(
+                                  left: 15.h, top: 13.v, bottom: 10.v),
                               child: Text(
                                 "Email Address",
                                 style: theme.textTheme.titleMedium!.copyWith(
@@ -176,7 +182,8 @@ class _VerifyAccountState extends State<VerifyAccount> {
                     child: Padding(
                       padding: const EdgeInsets.only(top: 1),
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 15.h, vertical: 16.v),
                         decoration: AppDecoration.fillOnPrimaryContainer,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -186,10 +193,12 @@ class _VerifyAccountState extends State<VerifyAccount> {
                               width: 44.adaptSize,
                               padding: EdgeInsets.all(6.h),
                               decoration: IconButtonStyleHelper.fillGreenTL24,
-                              child: CustomImageView(imagePath: ImageConstant.card),
+                              child: CustomImageView(
+                                  imagePath: ImageConstant.card),
                             ),
                             Padding(
-                              padding: EdgeInsets.only(left: 15.h, top: 13.v, bottom: 10.v),
+                              padding: EdgeInsets.only(
+                                  left: 15.h, top: 13.v, bottom: 10.v),
                               child: Text(
                                 "Pan Card",
                                 style: theme.textTheme.titleMedium!.copyWith(
@@ -217,7 +226,8 @@ class _VerifyAccountState extends State<VerifyAccount> {
                     child: Padding(
                       padding: const EdgeInsets.only(top: 1),
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 15.h, vertical: 16.v),
                         decoration: AppDecoration.fillOnPrimaryContainer,
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.center,
@@ -227,10 +237,12 @@ class _VerifyAccountState extends State<VerifyAccount> {
                               width: 44.adaptSize,
                               padding: EdgeInsets.all(10.h),
                               decoration: IconButtonStyleHelper.fillOrange,
-                              child: CustomImageView(imagePath: ImageConstant.pancard),
+                              child: CustomImageView(
+                                  imagePath: ImageConstant.pancard),
                             ),
                             Padding(
-                              padding: EdgeInsets.only(left: 15.h, top: 13.v, bottom: 10.v),
+                              padding: EdgeInsets.only(
+                                  left: 15.h, top: 13.v, bottom: 10.v),
                               child: Text(
                                 "Aadhaar Card",
                                 style: theme.textTheme.titleMedium!.copyWith(
@@ -257,8 +269,10 @@ class _VerifyAccountState extends State<VerifyAccount> {
                     child: Padding(
                       padding: const EdgeInsets.only(top: 1),
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
-                        decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 15.h, vertical: 16.v),
+                        decoration:
+                            AppDecoration.fillOnPrimaryContainer.copyWith(
                           borderRadius: BorderRadiusStyle.customBorderL20,
                         ),
                         child: Row(
@@ -269,10 +283,12 @@ class _VerifyAccountState extends State<VerifyAccount> {
                               width: 44.adaptSize,
                               padding: EdgeInsets.all(10.h),
                               decoration: IconButtonStyleHelper.fillGrayTL22,
-                              child: CustomImageView(imagePath: ImageConstant.bank),
+                              child: CustomImageView(
+                                  imagePath: ImageConstant.bank),
                             ),
                             Padding(
-                              padding: EdgeInsets.only(left: 15.h, top: 13.v, bottom: 10.v),
+                              padding: EdgeInsets.only(
+                                  left: 15.h, top: 13.v, bottom: 10.v),
                               child: Text(
                                 "Payment Method",
                                 style: theme.textTheme.titleMedium!.copyWith(
@@ -300,214 +316,220 @@ class _VerifyAccountState extends State<VerifyAccount> {
       ),
     );
   }
-void _showPANVerificationDialog() {
-  final formKey = GlobalKey<FormState>();
-  final TextEditingController panController = TextEditingController();
 
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start, // Align to the left
-              children: [
-                Center( // Center the CircleAvatar and Icon
-                  child: CircleAvatar(
-                    radius: 30,
-                    backgroundColor: Colors.green.shade100,
-                    child: const Icon(Icons.credit_card, color: Colors.green, size: 30),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                const Center( // Center the PAN Verification text
-                  child: Text(
-                    "PAN Verification",
-                    style: TextStyle(
-                      fontSize: 22,
-                      
-                      color: Colors.black,
+  void _showPANVerificationDialog() {
+    final formKey = GlobalKey<FormState>();
+    final TextEditingController panController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Form(
+              key: formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment:
+                    CrossAxisAlignment.start, // Align to the left
+                children: [
+                  Center(
+                    // Center the CircleAvatar and Icon
+                    child: CircleAvatar(
+                      radius: 30,
+                      backgroundColor: Colors.green.shade100,
+                      child: const Icon(Icons.credit_card,
+                          color: Colors.green, size: 30),
                     ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  "As per regulations, it is mandatory to verify your PAN details.",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.grey.shade600,
-                  ),
-                ),
-                const SizedBox(height: 16),
-                Container(
-  width: double.infinity, // Adjust width as needed
-  height: 40.0, // Adjust height as needed
-  decoration: BoxDecoration(
-    borderRadius: BorderRadius.circular(50),
-    border: Border.all(color: Colors.amber, width: 1.0),
-  ),
-  child: const Row(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      Icon(Icons.flash_on, color: Colors.amber),
-      SizedBox(width: 5),
-      Text("Takes less than 5 secs"),
-    ],
-  ),
-),
-                const SizedBox(height: 16),
-                const Text(
-                  "Enter PAN number", // Example PAN number
-                  style: TextStyle(
-                    fontSize: 14, // Adjust the font size to match the text style above
-                    
-                  ),
-                ),
-                const SizedBox(height: 8), // Add some space between the PAN number and the TextFormField
-                CustomTextFormField(
-                  controller: panController,
-                  autofocus: false,
-                  hintText: "Enter Your 10 Digit PAN Number",
-                  hintStyle: CustomTextStyles.titleMediumGray400,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your PAN number';
-                    }
-                    if (value.length != 10) {
-                      return 'PAN number must be 10 characters';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                CustomElevatedButton(
-                  onPressed: () {
-                    if (formKey.currentState!.validate()) {
-                      // Add your verification logic here
-                    }
-                  },
-                 
-                  text:"Verify"
-                ),
-              ],
-            ),
-          ),
-        ),
-      );
-    },
-  );
-}
-
-void showAadhaarCardVerificationDialog() {
-  final formKey = GlobalKey<FormState>();
-  final TextEditingController aadhaarCardController = TextEditingController();
-
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return Dialog(
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Form(
-            key: formKey,
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Center(
-                  child: CircleAvatar(
-                    radius: 30,
-                    backgroundColor: Colors.green.shade100,
-                    child: const Icon(Icons.credit_card, color: Colors.green, size: 30),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                const Center(
-                  child: Text(
-                    "Aadhaar Verification",
-                    style: TextStyle(
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.black,
+                  const SizedBox(height: 16),
+                  const Center(
+                    // Center the PAN Verification text
+                    child: Text(
+                      "PAN Verification",
+                      style: TextStyle(
+                        fontSize: 22,
+                        color: Colors.black,
+                      ),
                     ),
                   ),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  "As per regulations, it is mandatory to verify your Aadhaar details.",
-                  textAlign: TextAlign.center,
-                  style: TextStyle(
-                    color: Colors.grey.shade500,
+                  const SizedBox(height: 16),
+                  Text(
+                    "As per regulations, it is mandatory to verify your PAN details.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.grey.shade600,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 16),
-               Container(
-  width: double.infinity, // Adjust width as needed
-  height: 40.0, // Adjust height as needed
-  decoration: BoxDecoration(
-    borderRadius: BorderRadius.circular(50),
-    border: Border.all(color: Colors.amber, width: 1.0,),
-  ),
-  child: const Row(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      Icon(Icons.flash_on, color: Colors.yellow),
-      SizedBox(width: 5,),
-      Text("Takes less than 5 secs"),
-    ],
-  ),
-),
-
-                const SizedBox(height: 16),
-                const Text(
-                  "Enter Aadhaar number",
-                  style: TextStyle(
-                    fontSize: 14,
+                  const SizedBox(height: 16),
+                  Container(
+                    width: double.infinity, // Adjust width as needed
+                    height: 40.0, // Adjust height as needed
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      border: Border.all(color: Colors.amber, width: 1.0),
+                    ),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.flash_on, color: Colors.amber),
+                        SizedBox(width: 5),
+                        Text("Takes less than 5 secs"),
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(height: 8),
-                CustomTextFormField(
-                  controller: aadhaarCardController,
-                  autofocus: false,
-                  hintText: "Enter Your 12 Digit Aadhaar Number",
-                  hintStyle: CustomTextStyles.titleMediumGray400,
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your PAN number';
-                    }
-                    if (value.length != 12) {
-                      return 'PAN number must be 12characters';
-                    }
-                    return null;
-                  },
-                ),
-                const SizedBox(height: 16),
-                 CustomElevatedButton(
-                  onPressed: () {
-                    if (formKey.currentState!.validate()) {
-                      // Add your verification logic here
-                    }
-                  },
-                 
-                  text:"Verify"
-                ),
-              ],
+                  const SizedBox(height: 16),
+                  const Text(
+                    "Enter PAN number", // Example PAN number
+                    style: TextStyle(
+                      fontSize:
+                          14, // Adjust the font size to match the text style above
+                    ),
+                  ),
+                  const SizedBox(
+                      height:
+                          8), // Add some space between the PAN number and the TextFormField
+                  CustomTextFormField(
+                    controller: panController,
+                    autofocus: false,
+                    hintText: "Enter Your 10 Digit PAN Number",
+                    hintStyle: CustomTextStyles.titleMediumGray400,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your PAN number';
+                      }
+                      if (value.length != 10) {
+                        return 'PAN number must be 10 characters';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  CustomElevatedButton(
+                      onPressed: () {
+                        if (formKey.currentState!.validate()) {
+                          // Add your verification logic here
+                        }
+                      },
+                      text: "Verify"),
+                ],
+              ),
             ),
           ),
-        ),
-      );
-    },
-  );
-}
+        );
+      },
+    );
+  }
 
+  void showAadhaarCardVerificationDialog() {
+    final formKey = GlobalKey<FormState>();
+    final TextEditingController aadhaarCardController = TextEditingController();
 
-
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Form(
+              key: formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Center(
+                    child: CircleAvatar(
+                      radius: 30,
+                      backgroundColor: Colors.green.shade100,
+                      child: const Icon(Icons.credit_card,
+                          color: Colors.green, size: 30),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const Center(
+                    child: Text(
+                      "Aadhaar Verification",
+                      style: TextStyle(
+                        fontSize: 22,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.black,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    "As per regulations, it is mandatory to verify your Aadhaar details.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      color: Colors.grey.shade500,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Container(
+                    width: double.infinity, // Adjust width as needed
+                    height: 40.0, // Adjust height as needed
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      border: Border.all(
+                        color: Colors.amber,
+                        width: 1.0,
+                      ),
+                    ),
+                    child: const Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.flash_on, color: Colors.yellow),
+                        SizedBox(
+                          width: 5,
+                        ),
+                        Text("Takes less than 5 secs"),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const Text(
+                    "Enter Aadhaar number",
+                    style: TextStyle(
+                      fontSize: 14,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  CustomTextFormField(
+                    controller: aadhaarCardController,
+                    autofocus: false,
+                    hintText: "Enter Your 12 Digit Aadhaar Number",
+                    hintStyle: CustomTextStyles.titleMediumGray400,
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your PAN number';
+                      }
+                      if (value.length != 12) {
+                        return 'PAN number must be 12characters';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  CustomElevatedButton(
+                      onPressed: () {
+                        if (formKey.currentState!.validate()) {
+                          // Add your verification logic here
+                        }
+                      },
+                      text: "Verify"),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   void onTapArrowLeft() {
     Get.back();

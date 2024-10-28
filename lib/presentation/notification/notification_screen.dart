@@ -77,6 +77,7 @@ class NotificationScreen extends GetWidget<NotificationController> {
       top: 50,
       child: ImageFiltered(
         imageFilter: ImageFilter.blur(
+          tileMode: TileMode.decal,
           sigmaX: 60,
           sigmaY: 60,
         ),

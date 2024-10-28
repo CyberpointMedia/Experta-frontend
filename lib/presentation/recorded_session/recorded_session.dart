@@ -59,6 +59,7 @@ class _RecordedSessionsPageState extends State<RecordedSessionsPage> {
             top: 50,
             child: ImageFiltered(
               imageFilter: ImageFilter.blur(
+                tileMode: TileMode.decal,
                 sigmaX: 60,
                 sigmaY: 60,
               ),
@@ -108,7 +109,10 @@ class _RecordedSessionsPageState extends State<RecordedSessionsPage> {
   Widget _buildRecordedSessionsList() {
     return ListView.builder(
       itemCount: sessions.length,
-      padding: const EdgeInsets.only(left: 16.0, top: 16,),
+      padding: const EdgeInsets.only(
+        left: 16.0,
+        top: 16,
+      ),
       itemBuilder: (context, index) {
         return Padding(
           padding: EdgeInsets.only(bottom: 16.h),
@@ -193,7 +197,8 @@ class RecordedSessionTile extends StatelessWidget {
                     ),
                   ),
                   Padding(
-                    padding: const EdgeInsets.all(5.0), // Add padding around the icon
+                    padding: const EdgeInsets.all(
+                        5.0), // Add padding around the icon
                     child: PopupMenuButton<String>(
                       onSelected: (value) {
                         if (value == 'Delete') {
@@ -204,24 +209,32 @@ class RecordedSessionTile extends StatelessWidget {
                         PopupMenuItem<String>(
                           value: 'Delete',
                           child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 4.0), // Reduce vertical padding
-                            height: 30, // Reduce the overall height of the popup item
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 4.0), // Reduce vertical padding
+                            height:
+                                30, // Reduce the overall height of the popup item
                             child: const Text(
                               'Delete',
                               style: TextStyle(
-                                fontSize: 14.0, // Adjust font size for better visibility
+                                fontSize:
+                                    14.0, // Adjust font size for better visibility
                               ),
                             ),
                           ),
                         ),
                       ],
-                      icon: const Icon(Icons.more_vert, color: Colors.grey), // Set the color to grey
-                      padding: const EdgeInsets.all(4), // Removes any default padding
-                      offset: const Offset(0, 30), // Adjusts the popup position relative to the icon
+                      icon: const Icon(Icons.more_vert,
+                          color: Colors.grey), // Set the color to grey
+                      padding: const EdgeInsets.all(
+                          4), // Removes any default padding
+                      offset: const Offset(0,
+                          30), // Adjusts the popup position relative to the icon
                       shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(8.0), // Rounded corners for the popup menu
+                        borderRadius: BorderRadius.circular(
+                            8.0), // Rounded corners for the popup menu
                       ),
-                      elevation: 2.0, // Adds elevation for a better visual effect
+                      elevation:
+                          2.0, // Adds elevation for a better visual effect
                     ),
                   ),
                 ],
@@ -233,7 +246,8 @@ class RecordedSessionTile extends StatelessWidget {
                   fontSize: 14.0,
                 ),
                 maxLines: 1, // Ensure the text is displayed in a single line
-                overflow: TextOverflow.ellipsis, // Show ellipsis if the text is too long
+                overflow: TextOverflow
+                    .ellipsis, // Show ellipsis if the text is too long
               ),
               const SizedBox(height: 4.0),
               Column(
@@ -243,7 +257,8 @@ class RecordedSessionTile extends StatelessWidget {
                     date,
                     style: const TextStyle(color: Colors.grey),
                   ),
-                  const SizedBox(height: 4.0), // Add some space between date and time
+                  const SizedBox(
+                      height: 4.0), // Add some space between date and time
                   Text(
                     time,
                     style: const TextStyle(color: Colors.grey),

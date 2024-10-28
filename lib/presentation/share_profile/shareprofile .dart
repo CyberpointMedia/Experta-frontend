@@ -21,6 +21,7 @@ class ShareProfilePage extends StatelessWidget {
             top: 50,
             child: ImageFiltered(
               imageFilter: ImageFilter.blur(
+                tileMode: TileMode.decal,
                 sigmaX: 60,
                 sigmaY: 60,
               ),
@@ -47,9 +48,10 @@ class ShareProfilePage extends StatelessWidget {
               // Profile Picture and Info
               CircleAvatar(
                 radius: 40.adaptSize, // Profile picture size
-                backgroundImage: AssetImage("assets/profile_image.jpg"), // Replace with actual profile image path
+                backgroundImage: AssetImage(
+                    "assets/profile_image.jpg"), // Replace with actual profile image path
               ),
-               SizedBox(height: 10.adaptSize), // Spacing between avatar and text
+              SizedBox(height: 10.adaptSize), // Spacing between avatar and text
               Text(
                 "Naveen Verma", // Replace with dynamic username
                 style: TextStyle(
@@ -58,7 +60,7 @@ class ShareProfilePage extends StatelessWidget {
                   color: Colors.black,
                 ),
               ),
-               SizedBox(height: 5.adaptSize),
+              SizedBox(height: 5.adaptSize),
               Text(
                 "UI/UX Designer", // Replace with dynamic job title
                 style: TextStyle(
@@ -66,7 +68,7 @@ class ShareProfilePage extends StatelessWidget {
                   color: Colors.grey,
                 ),
               ),
-               SizedBox(height: 20.adaptSize), // Spacing before QR code
+              SizedBox(height: 20.adaptSize), // Spacing before QR code
               // QR Code Container
               Container(
                 padding: const EdgeInsets.all(16.0),

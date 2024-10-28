@@ -21,6 +21,7 @@ class _AboutUsState extends State<AboutUs> {
             top: 50,
             child: ImageFiltered(
               imageFilter: ImageFilter.blur(
+                tileMode: TileMode.decal,
                 sigmaX: 60,
                 sigmaY: 60,
               ),
@@ -92,7 +93,7 @@ class _AboutUsState extends State<AboutUs> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     CustomIconButton(
-                                        height: Get.height*0.03,
+                                        height: Get.height * 0.03,
                                         width: 44.adaptSize,
                                         padding: EdgeInsets.all(6.h),
                                         decoration:
@@ -165,7 +166,6 @@ class _AboutUsState extends State<AboutUs> {
                           ),
                         ),
                         GestureDetector(
-                        
                           child: Padding(
                             padding: const EdgeInsets.only(top: 1),
                             child: Container(

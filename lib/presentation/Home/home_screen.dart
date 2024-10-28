@@ -35,7 +35,8 @@ class _HomeScreenState extends State<HomeScreen> {
               top: 50.adaptSize,
               child: ImageFiltered(
                 imageFilter: ImageFilter.blur(
-                 sigmaX: 100,
+                  tileMode: TileMode.decal,
+                  sigmaX: 100,
                   sigmaY: 100,
                 ),
                 child: Align(
@@ -66,7 +67,8 @@ class _HomeScreenState extends State<HomeScreen> {
               );
             })),
             Padding(
-              padding: EdgeInsets.only(top: 120.adaptSize, left: 20.adaptSize, right: 20.adaptSize),
+              padding: EdgeInsets.only(
+                  top: 120.adaptSize, left: 20.adaptSize, right: 20.adaptSize),
               child: Obx(() {
                 if (controller.isLoading.value) {
                   return const Center(child: CircularProgressIndicator());
@@ -78,7 +80,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 return const SizedBox.shrink();
               }),
             ),
-          
           ],
         ),
       ),
@@ -86,49 +87,44 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   PreferredSizeWidget _buildAppBar() {
-  return CustomAppBar(
-    height: 50.h,
-    leadingWidth: 150.h,
-    leading: AppbarLeadingImage(
-      imagePath: ImageConstant.dashboard,
-      margin: const EdgeInsets.only(left: 20),
-    ),
-    actions: [
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: IconButton(
-          onPressed: () {
-            Get.toNamed(AppRoutes.notification);
-          },
-         
-          padding: const EdgeInsets.only(right: 5),
-          icon: Container(
-            width: 35.0, 
-            height: 35.0,
-            padding: EdgeInsets.all(5),
-            decoration: IconButtonStyleHelper.outline.copyWith(
-              // color: appTheme.gray20002,
-              color: appTheme.whiteA700.withOpacity(0.6),
-              border: Border.all(
-      color: Colors.white, 
-      width: 1.5, // Border width
-    ),
-
-            ),
-            
-            child: CustomImageView(
-              imagePath: ImageConstant.imgBell02,
-              height: 8.0, // Set the desired height
-              width: 8.0,  // Set the desired width
+    return CustomAppBar(
+      height: 50.h,
+      leadingWidth: 150.h,
+      leading: AppbarLeadingImage(
+        imagePath: ImageConstant.dashboard,
+        margin: const EdgeInsets.only(left: 20),
+      ),
+      actions: [
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: IconButton(
+            onPressed: () {
+              Get.toNamed(AppRoutes.notification);
+            },
+            padding: const EdgeInsets.only(right: 5),
+            icon: Container(
+              width: 35.0,
+              height: 35.0,
+              padding: EdgeInsets.all(5),
+              decoration: IconButtonStyleHelper.outline.copyWith(
+                // color: appTheme.gray20002,
+                color: appTheme.whiteA700.withOpacity(0.6),
+                border: Border.all(
+                  color: Colors.white,
+                  width: 1.5, // Border width
+                ),
+              ),
+              child: CustomImageView(
+                imagePath: ImageConstant.imgBell02,
+                height: 8.0, // Set the desired height
+                width: 8.0, // Set the desired width
+              ),
             ),
           ),
-        ),
-      )
-
-    ],
-  );
-}
-
+        )
+      ],
+    );
+  }
 
   final List<String> hintTexts = [
     "msg_search_your_interest".tr,
@@ -279,7 +275,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
       return Container(
         margin: const EdgeInsets.fromLTRB(5, 20, 6, 0),
-        padding:  EdgeInsets.symmetric(horizontal: 13.adaptSize, vertical: 14.adaptSize),
+        padding: EdgeInsets.symmetric(
+            horizontal: 13.adaptSize, vertical: 14.adaptSize),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(10),
@@ -289,53 +286,56 @@ class _HomeScreenState extends State<HomeScreen> {
           mainAxisSize: MainAxisSize.min,
           children: [
             Padding(
-              padding:  EdgeInsets.only(left: 0.adaptSize,right: 0.adaptSize),
+              padding: EdgeInsets.only(left: 0.adaptSize, right: 0.adaptSize),
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Column(
-  crossAxisAlignment: CrossAxisAlignment.start,
-  children: [
-    Text(
-      "Complete your Profile",
-      // style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
-       style: theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w200), // Setting fontWeight to 500
-    ),
-    SizedBox(height: 2.v),
-    Text(
-      "Fill in all required fields",
-      style: theme.textTheme.bodyMedium!.copyWith(
-        // fontSize: 12.fSize,
-        // fontWeight: FontWeight.w200, 
-      ),
-    ),
-  ],
-),
-                 Container(
-  width: MediaQuery.of(Get.context!).size.width * 0.3,
-  height: 36.v,
-  margin: EdgeInsets.only(bottom: 2.adaptSize),
-  child: ElevatedButton(
-    style: ElevatedButton.styleFrom(
-      backgroundColor: theme.primaryColor,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(30),
-      ),
-      visualDensity: const VisualDensity(vertical: -4, horizontal: -4),
-      padding: EdgeInsets.symmetric(horizontal: 20.v, vertical: 9.h),
-      elevation: 0,  // Remove the elevation
-    ),
-    onPressed: () {
-      Get.toNamed(AppRoutes.editProfileSetting,
-          arguments: controller.profileCompletion.value);
-    },
-    child: Text(
-      "Edit Profile",
-      style: theme.textTheme.displaySmall?.copyWith(fontSize: 14.fSize),
-    ),
-  ),
-),
-
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "Complete your Profile",
+                        // style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
+                        style: theme.textTheme.titleMedium!
+                            .copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      SizedBox(height: 2.v),
+                      Text(
+                        "Fill in all required fields",
+                        style: theme.textTheme.bodyMedium!.copyWith(
+                          // fontSize: 12.fSize,
+                          fontWeight: FontWeight.w300,
+                        ),
+                      ),
+                    ],
+                  ),
+                  Container(
+                    width: MediaQuery.of(Get.context!).size.width * 0.3,
+                    height: 36.v,
+                    margin: EdgeInsets.only(bottom: 2.adaptSize),
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: theme.primaryColor,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        visualDensity:
+                            const VisualDensity(vertical: -4, horizontal: -4),
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 20.v, vertical: 9.h),
+                        elevation: 0,
+                      ),
+                      onPressed: () {
+                        Get.toNamed(AppRoutes.editProfileSetting,
+                            arguments: controller.profileCompletion.value);
+                      },
+                      child: Text(
+                        "Edit Profile",
+                        style: theme.textTheme.displaySmall
+                            ?.copyWith(fontSize: 14.fSize),
+                      ),
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -369,153 +369,151 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   Widget _buildColumncategory() {
-  return Padding(
-    padding: const EdgeInsets.only(left: 16),
-    child: Column(
+    return Padding(
+      padding: const EdgeInsets.only(left: 16),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: _buildRowtrending(
+              trending: "Category",
+              seeallOne: "See All",
+              onPressed: () {
+                Get.toNamed(AppRoutes.category,
+                    arguments: {'industries': controller.industries});
+              },
+            ),
+          ),
+          SizedBox(height: 9.v),
+          SizedBox(
+            height: 80.v,
+            child: Obx(
+              () {
+                if (controller.isLoading.value) {
+                  return _buildShimmerEffect();
+                }
+                if (controller.industries.isEmpty) {
+                  return const Center(child: Text("No items available"));
+                }
+                return ListView.separated(
+                  scrollDirection: Axis.horizontal,
+                  separatorBuilder: (context, index) =>
+                      SizedBox(width: 15.adaptSize),
+                  itemCount: controller.industries.length,
+                  itemBuilder: (context, index) {
+                    Industry industry = controller.industries[index];
+
+                    return Container(
+                      decoration: BoxDecoration(
+                        color: const Color(0XFFFFFFFF),
+                        borderRadius: BorderRadius.circular(10),
+                        // Removed boxShadow
+                      ),
+                      width: 80.adaptSize,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          SizedBox(
+                            height: 30.adaptSize,
+                            width: 30.adaptSize,
+                            child: CustomImageView(imagePath: industry.icon),
+                          ),
+                          SizedBox(height: 5.v),
+                          Text(
+                            industry.name,
+                            style: theme.textTheme.labelMedium!
+                                .copyWith(color: Colors.black),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                );
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTrendingPeopleSection() {
+    return Column(
       children: [
         Padding(
-          padding: const EdgeInsets.only(right: 8),
+          padding: EdgeInsets.only(left: 16.adaptSize, right: 8.adaptSize),
           child: _buildRowtrending(
-            trending: "Category",
+            trending: "Trending",
             seeallOne: "See All",
             onPressed: () {
-              Get.toNamed(AppRoutes.category,
-                  arguments: {'industries': controller.industries});
+              Get.to(() => TrendingPeoplePage(
+                    trendingPeople: controller.trendingPeople,
+                  ));
             },
           ),
         ),
         SizedBox(height: 9.v),
-        SizedBox(
-          height: 80.v,
-          child: Obx(
-            () {
-              if (controller.isLoading.value) {
-                return _buildShimmerEffect();
-              }
-              if (controller.industries.isEmpty) {
-                return const Center(child: Text("No items available"));
-              }
-              return ListView.separated(
+        Obx(() {
+          if (controller.isLoading.value) {
+            return SizedBox(
+              height: 220.v,
+              child: ListView.separated(
+                padding: EdgeInsets.only(left: 16.adaptSize),
                 scrollDirection: Axis.horizontal,
                 separatorBuilder: (context, index) =>
-                    SizedBox(width: 15.adaptSize),
-                itemCount: controller.industries.length,
+                    SizedBox(width: 10.adaptSize),
+                itemCount: 15,
                 itemBuilder: (context, index) {
-                  Industry industry = controller.industries[index];
-
-                  return Container(
-                    decoration: BoxDecoration(
-                      color: const Color(0XFFFFFFFF),
-                      borderRadius: BorderRadius.circular(10),
-                      // Removed boxShadow
-                    ),
-                    width: 80.adaptSize,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        SizedBox(
-                          height: 30.adaptSize,
-                          width: 30.adaptSize,
-                          child: CustomImageView(imagePath: industry.icon),
-                        ),
-                        SizedBox(height: 5.v),
-                        Text(
-                          industry.name,
-                          style: theme.textTheme.labelMedium!
-                              .copyWith(color: Colors.black),
-                        ),
-                      ],
-                    ),
-                  );
+                  return _buildShimmerEffect();
                 },
-              );
-            },
-          ),
-        ),
+              ),
+            );
+          }
+          var trendingPeople = controller.trendingPeople;
+          if (trendingPeople.isEmpty) {
+            return SizedBox(
+              height: 220.v,
+              child: ListView.separated(
+                padding: EdgeInsets.only(left: 16.adaptSize),
+                scrollDirection: Axis.horizontal,
+                separatorBuilder: (context, index) =>
+                    SizedBox(width: 10.adaptSize),
+                itemCount: 5,
+                itemBuilder: (context, index) {
+                  return _buildEmptyContainer();
+                },
+              ),
+            );
+          }
+          return SizedBox(
+            height: 220.v,
+            child: ListView.separated(
+              padding: const EdgeInsets.only(left: 16),
+              scrollDirection: Axis.horizontal,
+              separatorBuilder: (context, index) =>
+                  SizedBox(width: 10.adaptSize),
+              itemCount: trendingPeople.length,
+              itemBuilder: (context, index) {
+                User user = trendingPeople[index];
+                return UserProfileItemWidget(
+                    user: user); // Check this widget for shadows
+              },
+            ),
+          );
+        }),
+        SizedBox(height: 30.v),
       ],
-    ),
-  );
-}
-
-
-  Widget _buildTrendingPeopleSection() {
-  return Column(
-    children: [
-      Padding(
-        padding:  EdgeInsets.only(left: 16.adaptSize,right: 8.adaptSize),
-        
-        child: _buildRowtrending(
-          trending: "Trending",
-          seeallOne: "See All",
-          onPressed: () {
-            Get.to(() => TrendingPeoplePage(
-                  trendingPeople: controller.trendingPeople,
-                ));
-          },
-        ),
-      ),
-      SizedBox(height: 9.v),
-      Obx(() {
-        if (controller.isLoading.value) {
-          return SizedBox(
-            height: 220.v,
-            child: ListView.separated(
-              padding: EdgeInsets.only(left: 16.adaptSize),
-              scrollDirection: Axis.horizontal,
-              separatorBuilder: (context, index) =>
-                  SizedBox(width: 10.adaptSize),
-              itemCount: 15,
-              itemBuilder: (context, index) {
-                return _buildShimmerEffect();
-              },
-            ),
-          );
-        }
-        var trendingPeople = controller.trendingPeople;
-        if (trendingPeople.isEmpty) {
-          return SizedBox(
-            height: 220.v,
-            child: ListView.separated(
-              padding: EdgeInsets.only(left: 16.adaptSize),
-              scrollDirection: Axis.horizontal,
-              separatorBuilder: (context, index) =>
-                  SizedBox(width: 10.adaptSize),
-              itemCount: 5,
-              itemBuilder: (context, index) {
-                return _buildEmptyContainer();
-              },
-            ),
-          );
-        }
-        return SizedBox(
-          height: 220.v,
-          child: ListView.separated(
-            padding: const EdgeInsets.only(left: 16),
-            scrollDirection: Axis.horizontal,
-            separatorBuilder: (context, index) =>
-                SizedBox(width: 10.adaptSize),
-            itemCount: trendingPeople.length,
-            itemBuilder: (context, index) {
-              User user = trendingPeople[index];
-              return UserProfileItemWidget(user: user); // Check this widget for shadows
-            },
-          ),
-        );
-      }),
-      SizedBox(height: 30.v),
-    ],
-  );
-}
-
+    );
+  }
 
   List<Widget> _buildSections() {
     return controller.industries.map((industry) {
       return Column(
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 16,right: 8.0),
+            padding: const EdgeInsets.only(left: 16, right: 8.0),
             child: _buildRowtrending(
               trending: industry.name,
               seeallOne: "See All",
@@ -529,7 +527,7 @@ class _HomeScreenState extends State<HomeScreen> {
               },
             ),
           ),
-           SizedBox(height: 9.v),
+          SizedBox(height: 9.v),
           Obx(() {
             if (controller.isLoading.value) {
               return SizedBox(
@@ -583,36 +581,35 @@ class _HomeScreenState extends State<HomeScreen> {
     }).toList();
   }
 
- Widget _buildRowtrending({
-  required String trending,
-  required String seeallOne,
-  required Function onPressed,
-}) {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    children: [
-      Text(
-        trending,
-        style: theme.textTheme.titleLarge!.copyWith(
-          fontSize: 18.fSize,
-          // fontWeight: FontWeight.w400,
-        ),
-      ),
-      TextButton(
-        onPressed: () => onPressed(),
-        child: Text(
-          seeallOne,
-          style: theme.textTheme.titleMedium?.copyWith(
-            fontSize: 15.fSize,
+  Widget _buildRowtrending({
+    required String trending,
+    required String seeallOne,
+    required Function onPressed,
+  }) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          trending,
+          style: theme.textTheme.titleLarge!.copyWith(
+            fontSize: 18.fSize,
             // fontWeight: FontWeight.w400,
-            color: appTheme.deepOrangeA200,
           ),
         ),
-      ),
-    ],
-  );
-}
-
+        TextButton(
+          onPressed: () => onPressed(),
+          child: Text(
+            seeallOne,
+            style: theme.textTheme.titleMedium?.copyWith(
+              fontSize: 15.fSize,
+              // fontWeight: FontWeight.w400,
+              color: appTheme.deepOrangeA200,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
 
   Widget _buildShimmerEffect() {
     return Shimmer.fromColors(
@@ -648,33 +645,34 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           Align(
-  alignment: Alignment.bottomCenter,
-  child: Container(
-    // Adjust the height and width as necessary
-    decoration: BoxDecoration(
-      gradient: LinearGradient(
-        colors: [
-          Colors.black.withOpacity(0.5), // Fully black at the bottom
-          Colors.transparent,            // Fully transparent at the middle
-        ],
-        stops: [0.0, 0.5], // Stops the gradient transition at the middle (50%)
-        begin: Alignment.bottomCenter,
-        end: Alignment(0.0, -0.5), // End at the middle (custom alignment)
-      ),
-      borderRadius: const BorderRadius.only(
-        bottomLeft: Radius.circular(23.0),
-        bottomRight: Radius.circular(23.0),
-      ),
-    ),
-  ),
-),
-
-
-
+            alignment: Alignment.bottomCenter,
+            child: Container(
+              // Adjust the height and width as necessary
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  colors: [
+                    Colors.black.withOpacity(0.5), // Fully black at the bottom
+                    Colors.transparent, // Fully transparent at the middle
+                  ],
+                  stops: [
+                    0.0,
+                    0.5
+                  ], // Stops the gradient transition at the middle (50%)
+                  begin: Alignment.bottomCenter,
+                  end: Alignment(
+                      0.0, -0.5), // End at the middle (custom alignment)
+                ),
+                borderRadius: const BorderRadius.only(
+                  bottomLeft: Radius.circular(23.0),
+                  bottomRight: Radius.circular(23.0),
+                ),
+              ),
+            ),
+          ),
           Align(
             alignment: Alignment.centerLeft,
             child: Padding(
-              padding:  EdgeInsets.only(left: 12.adaptSize, right: 37.adaptSize),
+              padding: EdgeInsets.only(left: 12.adaptSize, right: 37.adaptSize),
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -696,7 +694,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Text(
                     "Not found",
                     style: theme.textTheme.bodyLarge?.copyWith(
-                        color:  Color(0XFFFFFFFF), fontSize: 11.fSize),
+                        color: Color(0XFFFFFFFF), fontSize: 11.fSize),
                   ),
                   SizedBox(height: 6.v),
                   Row(
@@ -767,29 +765,32 @@ class UserProfileItemWidget extends StatelessWidget {
                 ),
               ),
             ),
-           Align(
-  alignment: Alignment.bottomCenter,
-  child: Container(
-    // Adjust the height and width as necessary
-    decoration: BoxDecoration(
-      gradient: LinearGradient(
-        colors: [
-          Colors.black.withOpacity(0.5), // Fully black at the bottom
-          Colors.transparent,            // Fully transparent at the middle
-        ],
-        stops: [0.0, 0.5], // Stops the gradient transition at the middle (50%)
-        begin: Alignment.bottomCenter,
-        end: Alignment(0.0, -0.5), // End at the middle (custom alignment)
-      ),
-      borderRadius: const BorderRadius.only(
-        bottomLeft: Radius.circular(23.0),
-        bottomRight: Radius.circular(23.0),
-      ),
-    ),
-  ),
-),
-
-                
+            Align(
+              alignment: Alignment.bottomCenter,
+              child: Container(
+                // Adjust the height and width as necessary
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [
+                      Colors.black
+                          .withOpacity(0.5), // Fully black at the bottom
+                      Colors.transparent, // Fully transparent at the middle
+                    ],
+                    stops: [
+                      0.0,
+                      0.5
+                    ], // Stops the gradient transition at the middle (50%)
+                    begin: Alignment.bottomCenter,
+                    end: Alignment(
+                        0.0, -0.5), // End at the middle (custom alignment)
+                  ),
+                  borderRadius: const BorderRadius.only(
+                    bottomLeft: Radius.circular(23.0),
+                    bottomRight: Radius.circular(23.0),
+                  ),
+                ),
+              ),
+            ),
             Align(
               alignment: Alignment.centerLeft,
               child: Padding(
@@ -866,7 +867,7 @@ class UserProfileItemWidget extends StatelessWidget {
 Widget _buildStatusContainer(String text, Color color) {
   return Container(
     width: 44.adaptSize,
-    padding:  EdgeInsets.symmetric(vertical: 2.v),
+    padding: EdgeInsets.symmetric(vertical: 2.v),
     decoration: BoxDecoration(
       color: const Color(0X4C171717),
       borderRadius: BorderRadius.circular(24),
@@ -896,8 +897,9 @@ Widget _buildStatusContainer(String text, Color color) {
 Widget _buildRatingContainer(String text) {
   return Container(
     width: 37.adaptSize,
-    margin:  EdgeInsets.only(left: 2.adaptSize),
-    padding:  EdgeInsets.symmetric(horizontal: 4.adaptSize, vertical: 2.adaptSize),
+    margin: EdgeInsets.only(left: 2.adaptSize),
+    padding:
+        EdgeInsets.symmetric(horizontal: 4.adaptSize, vertical: 2.adaptSize),
     decoration: BoxDecoration(
       color: const Color(0X4C171717),
       borderRadius: BorderRadius.circular(24),

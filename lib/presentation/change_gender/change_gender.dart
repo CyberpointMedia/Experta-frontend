@@ -41,6 +41,7 @@ class _ChangeGenderState extends State<ChangeGender> {
               top: 50,
               child: ImageFiltered(
                 imageFilter: ImageFilter.blur(
+                  tileMode: TileMode.decal,
                   sigmaX: 60,
                   sigmaY: 60,
                 ),
@@ -87,19 +88,22 @@ class _ChangeGenderState extends State<ChangeGender> {
           Center(
             // Centering the Row horizontally and vertically
             child: Row(
-              mainAxisAlignment: MainAxisAlignment.center, // Centering Row content
+              mainAxisAlignment:
+                  MainAxisAlignment.center, // Centering Row content
               children: [
                 GestureDetector(
                   onTap: _selectMale,
                   child: Container(
                     width: 144.0,
                     height: 144.0,
-                    padding: const EdgeInsets.symmetric(vertical: 28.0, horizontal: 24.0),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 28.0, horizontal: 24.0),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10.0),
                       border: Border.all(
-                        color: isMaleSelected ? Colors.yellow : Colors.transparent,
+                        color:
+                            isMaleSelected ? Colors.yellow : Colors.transparent,
                         width: 2.0,
                       ),
                     ),
@@ -112,12 +116,15 @@ class _ChangeGenderState extends State<ChangeGender> {
                           width: 50.0,
                           height: 50.0,
                         ),
-                        const SizedBox(width: 8.0), // Adding space between image and text
+                        const SizedBox(
+                            width: 8.0), // Adding space between image and text
                         Text(
                           "Male",
                           style: TextStyle(
                             color: Colors.black,
-                            fontWeight: isMaleSelected ? FontWeight.bold : FontWeight.normal,
+                            fontWeight: isMaleSelected
+                                ? FontWeight.bold
+                                : FontWeight.normal,
                           ),
                         ),
                       ],
@@ -130,12 +137,15 @@ class _ChangeGenderState extends State<ChangeGender> {
                   child: Container(
                     width: 144.0,
                     height: 144.0,
-                    padding: const EdgeInsets.symmetric(vertical: 28.0, horizontal: 24.0),
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 28.0, horizontal: 24.0),
                     decoration: BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(10.0),
                       border: Border.all(
-                        color: isFemaleSelected ? Colors.yellow : Colors.transparent,
+                        color: isFemaleSelected
+                            ? Colors.yellow
+                            : Colors.transparent,
                         width: 2.0,
                       ),
                     ),
@@ -153,7 +163,9 @@ class _ChangeGenderState extends State<ChangeGender> {
                           "Female",
                           style: TextStyle(
                             color: Colors.black,
-                            fontWeight: isFemaleSelected ? FontWeight.bold : FontWeight.normal,
+                            fontWeight: isFemaleSelected
+                                ? FontWeight.bold
+                                : FontWeight.normal,
                           ),
                         ),
                       ],

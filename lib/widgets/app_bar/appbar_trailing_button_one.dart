@@ -1,24 +1,28 @@
+import 'package:experta/presentation/wallet/wallet.dart';
 import 'package:experta/widgets/custom_outlined_button.dart';
 import 'package:outline_gradient_button/outline_gradient_button.dart';
 import 'package:experta/core/app_export.dart';
 
 // ignore: must_be_immutable
 class AppbarTrailingButtonOne extends StatelessWidget {
+  final int balance;
+
   AppbarTrailingButtonOne({
     super.key,
     this.margin,
     this.onTap,
+    required this.balance, // Make balance a required parameter
   });
 
   EdgeInsetsGeometry? margin;
-
   Function? onTap;
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        onTap!.call();
+        Navigator.push(
+            context, MaterialPageRoute(builder: (_) => const Wallet()));
       },
       child: Padding(
         padding: margin ?? EdgeInsets.zero,
@@ -48,7 +52,7 @@ class AppbarTrailingButtonOne extends StatelessWidget {
           child: CustomOutlinedButton(
             height: 40.v,
             width: 78.h,
-            text: "lbl_3000".tr,
+            text: "$balance", // Use the balance here
             leftIcon: Container(
               margin: EdgeInsets.only(right: 6.h),
               child: CustomImageView(
@@ -59,6 +63,10 @@ class AppbarTrailingButtonOne extends StatelessWidget {
             ),
             buttonStyle: CustomButtonStyles.outlineTL20,
             buttonTextStyle: CustomTextStyles.titleSmallGray900SemiBold,
+            onPressed: () {
+              Navigator.push(
+                  context, MaterialPageRoute(builder: (_) => const Wallet()));
+            },
           ),
         ),
       ),

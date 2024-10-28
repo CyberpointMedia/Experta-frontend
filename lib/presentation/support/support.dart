@@ -16,6 +16,7 @@ class RaiseTicketPage extends StatelessWidget {
             top: 50,
             child: ImageFiltered(
               imageFilter: ImageFilter.blur(
+                tileMode: TileMode.decal,
                 sigmaX: 60,
                 sigmaY: 60,
               ),
@@ -26,7 +27,8 @@ class RaiseTicketPage extends StatelessWidget {
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(126),
-                      color: appTheme.deepOrangeA20.withOpacity(0.6), // Adjust the color
+                      color: appTheme.deepOrangeA20
+                          .withOpacity(0.6), // Adjust the color
                     ),
                   ),
                 ),
@@ -122,7 +124,8 @@ class RaiseTicketPage extends StatelessWidget {
                             child: const Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(Icons.cloud_upload, size: 40, color: Colors.grey),
+                                Icon(Icons.cloud_upload,
+                                    size: 40, color: Colors.grey),
                                 SizedBox(height: 8),
                                 Text(
                                   "Upload your file",

@@ -15,9 +15,11 @@ class AddBankAccount extends StatefulWidget {
 class _AddBankAccountState extends State<AddBankAccount> {
   // Controllers for each field
   final TextEditingController accountNumberController = TextEditingController();
-  final TextEditingController reEnterAccountNumberController = TextEditingController();
+  final TextEditingController reEnterAccountNumberController =
+      TextEditingController();
   final TextEditingController ifscCodeController = TextEditingController();
-  final TextEditingController accountHolderNameController = TextEditingController();
+  final TextEditingController accountHolderNameController =
+      TextEditingController();
 
   // Focus nodes for each field
   final FocusNode accountNumberFocusNode = FocusNode();
@@ -53,6 +55,7 @@ class _AddBankAccountState extends State<AddBankAccount> {
               top: 50,
               child: ImageFiltered(
                 imageFilter: ImageFilter.blur(
+                  tileMode: TileMode.decal,
                   sigmaX: 60,
                   sigmaY: 60,
                 ),
@@ -118,13 +121,14 @@ class _AddBankAccountState extends State<AddBankAccount> {
                     focusNode: accountHolderNameFocusNode,
                     autofocus: false,
                   ),
-                  const SizedBox(height: 20), // Add some space before the important message
-                  
+                  const SizedBox(
+                      height:
+                          20), // Add some space before the important message
+
                   // Important message
                   const Text(
                     "Important:",
                     style: TextStyle(
-                      
                       fontSize: 16,
                       color: Colors.black, // Set the color to dark black
                     ),
