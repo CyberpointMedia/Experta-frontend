@@ -179,7 +179,7 @@ class TextThemes {
           color: appTheme.gray900,
           fontSize: 22.fSize,
           fontFamily: 'Roboto',
-          fontWeight: FontWeight.w700,
+          fontWeight: FontWeight.bold,
           fontFeatures: const [FontFeature.enable('kern')],
         ),
         titleMedium: TextStyle(

@@ -123,7 +123,7 @@ class OnboardingScreen extends GetWidget<OnboardingController> {
                     Text(
   "msg_sign_up_or_log_in".tr,
   style: CustomTextStyles.bodyLargeGray900.copyWith(
-    fontWeight: FontWeight.w400, // Setting font weight to 400
+    // fontWeight: FontWeight.bold, // Setting font weight to 400
   ),
 ),
 
