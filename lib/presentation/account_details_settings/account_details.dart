@@ -47,7 +47,8 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
       left: 270,
       top: 50,
       child: ImageFiltered(
-        imageFilter: ImageFilter.blur(sigmaX: 60, sigmaY: 60),
+        imageFilter:
+            ImageFilter.blur(tileMode: TileMode.decal, sigmaX: 60, sigmaY: 60),
         child: Align(
           child: SizedBox(
             width: 252,
@@ -85,18 +86,23 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
     return [
       _buildTitle("Change User Name"),
       _buildSubtitle("Enter your email or phone number to reset the password."),
-      const SizedBox(height: 12,),
+      const SizedBox(
+        height: 12,
+      ),
       const Text("User name"),
-      const SizedBox(height: 6,),
+      const SizedBox(
+        height: 6,
+      ),
       CustomTextFormField(
-        hintText: "navi_verma88",
+        // hintText: "navi_verma88",
         hintStyle: CustomTextStyles.titleMediumBluegray300,
         textInputType: TextInputType.name,
         controller: controller.textField1,
         focusNode: controller.focus1,
       ),
       const Spacer(),
-      _buildSaveButton(context, controller.textField1.text.isNotEmpty, "User Name changed Successfully", "Please Fill the user name"),
+      _buildSaveButton(context, controller.textField1.text.isNotEmpty,
+          "User Name changed Successfully", "Please Fill the user name"),
     ];
   }
 
@@ -112,10 +118,10 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
   //         mainAxisAlignment: MainAxisAlignment.center,
   //         children: [
   //           _buildGenderSelection(
-  //             "Male", 
-  //             ImageConstant.male, 
-  //             ImageConstant.maleunselected, 
-  //             isMaleSelected.value, 
+  //             "Male",
+  //             ImageConstant.male,
+  //             ImageConstant.maleunselected,
+  //             isMaleSelected.value,
   //             () {
   //               isMaleSelected.value = true;
   //               isFemaleSelected.value = false;
@@ -124,10 +130,10 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
   //           ),
   //           const SizedBox(width: 16.0),
   //           _buildGenderSelection(
-  //             "Female", 
-  //             ImageConstant.female, 
-  //             ImageConstant.femele, 
-  //             isFemaleSelected.value, 
+  //             "Female",
+  //             ImageConstant.female,
+  //             ImageConstant.femele,
+  //             isFemaleSelected.value,
   //             () {
   //               isFemaleSelected.value = true;
   //               isMaleSelected.value = false;
@@ -146,36 +152,41 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
     return [
       _buildTitle("Change Date of birth"),
       _buildSubtitle("Enter your email or phone number to reset the password."),
-      const SizedBox(height: 12,),
+      const SizedBox(
+        height: 12,
+      ),
       const Text("Date of birth (DD/MM/YYYY)"),
-      const SizedBox(height: 6,),
+      const SizedBox(
+        height: 6,
+      ),
       Row(
         children: [
           Expanded(
             child: CustomTextFormField(
-              hintText: "01/01/2024",
+              // hintText: "01/01/2024",
               hintStyle: CustomTextStyles.titleMediumBluegray300,
               textInputType: TextInputType.datetime,
- controller: controller.textField2,
+              controller: controller.textField2,
               focusNode: FocusNode(),
               suffix: CustomIconButton(
-                decoration:const BoxDecoration(color: Colors.transparent),
-                                          
-                height: 24.0, // Adjust the size as needed
+                  decoration: const BoxDecoration(color: Colors.transparent),
+                  height: 24.0, // Adjust the size as needed
                   width: 24.0,
-                child: CustomImageView(
-                                            imagePath:
-                                                ImageConstant.imgCalendar, color: appTheme.blueGray300,onTap: () => _selectDate(context),)
-              
-                    // Adjust the size as needed
-                ),
-              ),
+                  child: CustomImageView(
+                    imagePath: ImageConstant.imgCalendar,
+                    color: appTheme.blueGray300,
+                    onTap: () => _selectDate(context),
+                  )
+
+                  // Adjust the size as needed
+                  ),
             ),
-          
+          ),
         ],
       ),
       const Spacer(),
-      _buildSaveButton(context, controller.textField5.text.isNotEmpty, "Phone Number changed Successfully", "Please Fill the phone number"),
+      _buildSaveButton(context, controller.textField5.text.isNotEmpty,
+          "Phone Number changed Successfully", "Please Fill the phone number"),
     ];
   }
 
@@ -183,21 +194,29 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
     return [
       _buildTitle("Change Email"),
       _buildSubtitle("Enter your email or phone number to reset the password."),
-      const SizedBox(height: 12,),
-      const Text("Current Email"),
-      SizedBox(height: 6,),
+      const SizedBox(
+        height: 12,
+      ),
+      // const Text("Current Email"),
+      SizedBox(
+        height: 6,
+      ),
       CustomTextFormField(
-        hintText: "john.doe@example.com",
+        // hintText: "john.doe@example.com",
         hintStyle: CustomTextStyles.titleMediumBluegray300,
         textInputType: TextInputType.emailAddress,
         controller: controller.textField3,
         focusNode: controller.focus3,
       ),
-      const SizedBox(height: 12,),
+      const SizedBox(
+        height: 12,
+      ),
       const Text("New Email"),
-      const SizedBox(height: 6,),
+      const SizedBox(
+        height: 6,
+      ),
       CustomTextFormField(
-        hintText: "john.doe@example.com",
+        // hintText: "john.doe@example.com",
         hintStyle: CustomTextStyles.titleMediumBluegray300,
         textInputType: TextInputType.emailAddress,
         controller: controller.textField4,
@@ -205,11 +224,11 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
       ),
       const Spacer(),
       _buildSaveButton(
-        context,
-        controller.textField3.text.isNotEmpty || controller.textField4.text.isNotEmpty, 
-        "Email changed Successfully", 
-        "Please Fill the email"
-      ),
+          context,
+          controller.textField3.text.isNotEmpty ||
+              controller.textField4.text.isNotEmpty,
+          "Email changed Successfully",
+          "Please Fill the email"),
     ];
   }
 
@@ -217,11 +236,15 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
     return [
       _buildTitle("Change Phone Number"),
       _buildSubtitle("Enter your phone number to update it."),
-      const SizedBox(height: 12,),
+      const SizedBox(
+        height: 12,
+      ),
       const Text("Phone Number"),
-      SizedBox(height: 6,),
+      SizedBox(
+        height: 6,
+      ),
       CustomTextFormField(
-        hintText: "+1 123 456 7890",
+        // hintText: "+1 123 456 7890",
         hintStyle: CustomTextStyles.titleMediumBluegray300,
         textInputType: TextInputType.phone,
         controller: controller.textField5,
@@ -235,7 +258,8 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
   Widget _buildTitle(String text) {
     return Text(
       text,
-      style: theme.textTheme.headlineSmall!.copyWith(color: Colors.black, fontWeight: FontWeight.bold),
+      style: theme.textTheme.headlineSmall!
+          .copyWith(color: Colors.black, fontWeight: FontWeight.bold),
     );
   }
 
@@ -246,7 +270,8 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
     );
   }
 
-  Widget _buildSaveButton(BuildContext context, bool isValid, String successMessage, String errorMessage) {
+  Widget _buildSaveButton(BuildContext context, bool isValid,
+      String successMessage, String errorMessage) {
     return CustomElevatedButton(
       text: "Save",
       onPressed: () async {
@@ -278,19 +303,20 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
 
           // Show success toast
           // ignore: use_build_context_synchronously
-          CustomToast().showToast(context: context, message: successMessage, isSuccess: true);
+          CustomToast().showToast(
+              context: context, message: successMessage, isSuccess: true);
           Get.toNamed(AppRoutes.accountSetting);
         } else {
-          CustomToast().showToast(context: context, message: errorMessage, isSuccess: false);
+          CustomToast().showToast(
+              context: context, message: errorMessage, isSuccess: false);
         }
       },
       margin: const EdgeInsets.all(10),
     );
   }
 
-  Widget _buildGenderSelection(
-    String label, String selectedIcon, String unselectedIcon, bool isSelected, VoidCallback onPressed
-  ) {
+  Widget _buildGenderSelection(String label, String selectedIcon,
+      String unselectedIcon, bool isSelected, VoidCallback onPressed) {
     return InkWell(
       onTap: onPressed,
       child: Column(
@@ -321,7 +347,8 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
 
     if (pickedDate != null) {
       setState(() {
-        controller.textField2.text = "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
+        controller.textField2.text =
+            "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
       });
     }
   }

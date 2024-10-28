@@ -56,7 +56,7 @@ class CustomBottomBar extends StatelessWidget {
         // ),
 
         Container(
-          height: Get.height*0.09,
+          height: Get.height * 0.097,
           decoration: const BoxDecoration(),
           child: BottomNavigationBar(
             backgroundColor: Colors.white,

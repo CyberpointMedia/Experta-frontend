@@ -57,7 +57,7 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
   Future<void> _fetchTransactions() async {
     try {
       final fetchedTransactions = await apiService.fetchTransactionHistory();
-      log('Fetched Transactions: ${fetchedTransactions.join(', ')}');
+      log('Fetched Transactions: $fetchedTransactions');
       setState(() {
         transactions = fetchedTransactions;
         filteredTransactions = fetchedTransactions;
@@ -70,33 +70,42 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
   void _filterTransactions() {
     setState(() {
       filteredTransactions = transactions.where((transaction) {
-        final matchesSearchQuery = transaction.type
-                .toLowerCase()
-                .contains(searchQuery.toLowerCase()) ||
-            (transaction.description
-                    ?.toLowerCase()
-                    .contains(searchQuery.toLowerCase()) ??
-                false);
+        // Check if the transaction matches the search query
+        final matchesSearchQuery =
+            transaction.type.toLowerCase().contains(searchQuery.toLowerCase());
+
+        // Check if the transaction matches the selected date range
         final matchesDateRange = (_selectedFromDate == null ||
                 transaction.createdAt.isAfter(_selectedFromDate!)) &&
             (_selectedToDate == null ||
-                transaction.createdAt
-                    .isBefore(_selectedToDate!.add(const Duration(days: 1))));
+                transaction.createdAt.isBefore(_selectedToDate!
+                    .add(Duration(days: 1)))); // Ensure inclusive of end date
+
+        // Check if the transaction matches the selected statuses
         final matchesStatus = selectedStatuses.isEmpty ||
             selectedStatuses.contains(transaction.status.toLowerCase());
+
+        // Check if the transaction matches the selected payment types
         final matchesPaymentType = selectedPaymentTypes.isEmpty ||
             selectedPaymentTypes.contains(transaction.type.toLowerCase());
-        final createdMonth =
-            DateFormat('MMMM \'yy').format(transaction.createdAt);
+
+        // Extract the month from the createdAt date
+        final createdAtDate = DateTime.parse(transaction.createdAt.toString());
+        final createdMonth = DateFormat('MMMM \'yy').format(createdAtDate);
+
+        // Check if the created month is in the selected months
         final matchesPaymentMonth =
             selectedMonths.isEmpty || selectedMonths.contains(createdMonth);
 
+        // Return true only if all conditions match
         return matchesSearchQuery &&
             matchesDateRange &&
             matchesStatus &&
             matchesPaymentType &&
             matchesPaymentMonth;
       }).toList();
+
+      log('Filtered Transactions: $filteredTransactions');
     });
   }
 
@@ -105,46 +114,43 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
         await Permission.storage.request().isGranted) {
       final xlsio.Workbook workbook = xlsio.Workbook();
       final xlsio.Worksheet sheet = workbook.worksheets[0];
+
       final xlsio.Style headerStyle = workbook.styles.add('headerStyle');
       headerStyle.bold = true;
       headerStyle.hAlign = xlsio.HAlignType.center;
       headerStyle.vAlign = xlsio.VAlignType.center;
       headerStyle.fontName = 'Calibri';
+
       final xlsio.Style dataCellStyle = workbook.styles.add('dataCellStyle');
       dataCellStyle.hAlign = xlsio.HAlignType.center;
       dataCellStyle.vAlign = xlsio.VAlignType.center;
+
       final headerRow = [
-        'Transaction ID',
+        'ID',
+        'User',
         'Type',
         'Amount',
         'Status',
-        'Description',
         'Payment Method',
-        'Created At',
-        'Sender ID',
-        'Receiver ID',
-        'Booking Type',
-        'Booking Status'
+        'Created At'
       ];
+
       for (int col = 0; col < headerRow.length; col++) {
         final cell = sheet.getRangeByIndex(1, col + 1);
         cell.setText(headerRow[col]);
         cell.cellStyle = headerStyle;
       }
+
       for (int row = 0; row < filteredTransactions.length; row++) {
         var transaction = filteredTransactions[row];
         var rowData = [
-          transaction.id,
+          transaction.id.toString(),
+          transaction.user,
           transaction.type,
-          "₹${transaction.amount}",
+          transaction.amount,
           transaction.status,
-          transaction.description ?? '',
-          transaction.paymentMethod ?? '',
-          DateFormat('yyyy-MM-dd HH:mm').format(transaction.createdAt),
-          transaction.sender?.id ?? '',
-          transaction.receiver?.id ?? '',
-          transaction.relatedBooking?.type ?? '',
-          transaction.relatedBooking?.status ?? ''
+          transaction.paymentMethod,
+          DateFormat.yMMMd().format(transaction.createdAt),
         ];
 
         for (int col = 0; col < rowData.length; col++) {
@@ -153,29 +159,31 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
           cell.cellStyle = dataCellStyle;
         }
       }
-      for (int i = 1; i <= headerRow.length; i++) {
-        sheet.autoFitColumn(i);
-      }
+
       final List<int> bytes = workbook.saveAsStream();
       workbook.dispose();
+
       final Directory downloadsDirectory =
           Directory('/storage/emulated/0/Download/MyExcelFiles');
       if (!await downloadsDirectory.exists()) {
         await downloadsDirectory.create(recursive: true);
       }
+
       final filePath =
           '${downloadsDirectory.path}/transactions_${DateTime.now().millisecondsSinceEpoch}.xlsx';
       final file = File(filePath);
       await file.writeAsBytes(bytes);
+
       await _showDownloadNotification(filePath);
+
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Excel file downloaded to $filePath')),
       );
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(
-          content: Text('Storage permission is required to download the file'),
-        ),
+            content:
+                Text('Storage permission is required to download the file')),
       );
     }
   }
@@ -226,26 +234,15 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                 shape: const RoundedRectangleBorder(
                   borderRadius: BorderRadius.vertical(top: Radius.circular(0)),
                 ),
-                builder: (BuildContext context) {
-                  // Return a StatefulBuilder to maintain state
-                  return StatefulBuilder(
-                    builder: (BuildContext context, StateSetter setModalState) {
-                      return DraggableScrollableSheet(
-                        expand: false,
-                        initialChildSize: 0.85,
-                        maxChildSize: 0.85,
-                        minChildSize: 0.3,
-                        builder: (context, scrollController) {
-                          return _buildFilterSheet(
-                            scrollController,
-                            transactions,
-                            setModalState,
-                          );
-                        },
-                      );
-                    },
-                  );
-                },
+                builder: (context) => DraggableScrollableSheet(
+                  expand: false,
+                  initialChildSize: 0.85,
+                  maxChildSize: 0.85,
+                  minChildSize: 0.3,
+                  builder: (context, scrollController) {
+                    return _buildFilterSheet(scrollController, transactions);
+                  },
+                ),
               );
             },
             child: Container(
@@ -290,76 +287,46 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
   }
 
   Widget _buildTransactionTile(Transaction transaction) {
-    final String? myUserId = PrefUtils().getaddress();
+    DateTime dateTime = DateTime.parse(transaction.createdAt.toString());
 
-    String formattedTime = DateFormat('hh:mm a').format(transaction.createdAt);
     DateTime today = DateTime.now();
     DateTime yesterday = today.subtract(const Duration(days: 1));
 
+    String formattedTime = DateFormat('hh:mm a').format(dateTime);
+
     String displayText;
-    if (transaction.createdAt.year == today.year &&
-        transaction.createdAt.month == today.month &&
-        transaction.createdAt.day == today.day) {
+
+    if (dateTime.year == today.year &&
+        dateTime.month == today.month &&
+        dateTime.day == today.day) {
       displayText = 'Today, $formattedTime';
-    } else if (transaction.createdAt.year == yesterday.year &&
-        transaction.createdAt.month == yesterday.month &&
-        transaction.createdAt.day == yesterday.day) {
+    } else if (dateTime.year == yesterday.year &&
+        dateTime.month == yesterday.month &&
+        dateTime.day == yesterday.day) {
       displayText = 'Yesterday, $formattedTime';
     } else {
-      String formattedDate =
-          DateFormat('MMM dd, yyyy').format(transaction.createdAt);
+      String formattedDate = DateFormat('MMM dd, yyyy').format(dateTime);
       displayText = '$formattedDate, $formattedTime';
     }
 
-    String transactionIcon;
-    if (transaction.type == 'deposit') {
-      transactionIcon = ImageConstant.topup;
-    } else if (transaction.type == 'booking_payment') {
-      bool isPayment = transaction.sender?.id == myUserId;
-      transactionIcon =
-          isPayment ? ImageConstant.transact : ImageConstant.receive;
-    } else if (transaction.type == 'refund') {
-      transactionIcon = ImageConstant.deposit;
-    } else {
-      transactionIcon = ImageConstant.transact;
-    }
-
-    String typeDisplayText;
-    if (transaction.type == 'booking_payment') {
-      // Check if the sender's ID matches your ID
-      bool isPayment = transaction.sender?.id == myUserId;
-      typeDisplayText = isPayment ? 'Transfer' : 'Received';
-    } else {
-      switch (transaction.type) {
-        case 'deposit':
-          typeDisplayText = 'Top up';
-          break;
-        case 'refund':
-          typeDisplayText = 'Refund';
-          break;
-        default:
-          typeDisplayText = transaction.type;
-      }
-    }
-
-    // Determine if amount should show + or -
-    bool isPositiveTransaction = transaction.type == 'refund' ||
-        transaction.type == 'deposit' ||
-        (transaction.type == 'booking_payment' &&
-            transaction.receiver?.id == myUserId);
-
     return ListTile(
       leading: CustomIconButton(
-        height: 40.adaptSize,
-        width: 40.adaptSize,
-        padding: EdgeInsets.all(10.h),
-        decoration: IconButtonStyleHelper.outline2,
-        child: CustomImageView(
-          imagePath: transactionIcon,
-        ),
-      ),
+          height: 44.adaptSize,
+          width: 44.adaptSize,
+          padding: EdgeInsets.all(10.h),
+          decoration: IconButtonStyleHelper.outline2,
+          child: CustomImageView(
+              imagePath: transaction.type == 'payment'
+                  ? ImageConstant.transact
+                  : transaction.type == 'receive'
+                      ? ImageConstant.deposit
+                      : ImageConstant.topup)),
       title: Text(
-        typeDisplayText,
+        transaction.type == 'deposit'
+            ? 'Top up'
+            : transaction.type == 'payment'
+                ? 'Transfer'
+                : transaction.type,
         style: CustomTextStyles.labelLargeSFProTextBlack90001,
       ),
       subtitle: Text(
@@ -374,26 +341,27 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
             text: TextSpan(
               children: [
                 TextSpan(
-                  text: isPositiveTransaction ? '+ ' : '- ',
+                  text: transaction.type == 'payment'
+                      ? (transaction.amount > 0 ? '- ' : '')
+                      : (transaction.amount > 0 ? '+ ' : ''),
                   style: TextStyle(
-                    color: isPositiveTransaction ? Colors.green : Colors.red,
+                    color: transaction.type == 'payment'
+                        ? Colors.red
+                        : Colors.green,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 TextSpan(
-                  text: "₹${transaction.amount}",
-                  style: CustomTextStyles.labelLargeSFProTextBlack90001,
-                ),
+                    text: transaction.type == 'deposit'
+                        ? "₹${transaction.amount}"
+                        : transaction.amount.toString(),
+                    style: CustomTextStyles.labelLargeSFProTextBlack90001),
               ],
             ),
           ),
           Text(
-            transaction.status.capitalize ?? transaction.status,
-            style: TextStyle(
-              color: transaction.status == 'completed'
-                  ? Colors.green
-                  : Colors.grey,
-            ),
+            transaction.status == 'completed' ? 'Success' : transaction.status,
+            style: const TextStyle(color: Colors.grey),
           ),
         ],
       ),
@@ -488,8 +456,8 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
     Get.back();
   }
 
-  Widget _buildFilterSheet(ScrollController scrollController,
-      List<Transaction> transactions, StateSetter setModalState) {
+  Widget _buildFilterSheet(
+      ScrollController scrollController, List<Transaction> transactions) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: SingleChildScrollView(
@@ -539,16 +507,14 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                   ),
                   selected: selectedStatuses.contains(status),
                   onSelected: (bool value) {
-                    setModalState(() {
+                    setState(() {
                       if (value) {
                         selectedStatuses.add(status);
                       } else {
                         selectedStatuses.remove(status);
                       }
                     });
-                    setState(() {
-                      _filterTransactions();
-                    });
+                    _filterTransactions();
                   },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(50),
@@ -578,24 +544,10 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
             const SizedBox(height: 10),
             Wrap(
               spacing: 8.0,
-              children: ['deposit', 'booking_payment', 'refund'].map((type) {
-                String displayText;
-                switch (type) {
-                  case 'deposit':
-                    displayText = 'Top up';
-                    break;
-                  case 'booking_payment':
-                    displayText = 'Booking Payment';
-                    break;
-                  case 'refund':
-                    displayText = 'Refund';
-                    break;
-                  default:
-                    displayText = type;
-                }
+              children: ['Deposit', 'Received', 'Withdrawals'].map((type) {
                 return FilterChip(
                   label: Text(
-                    displayText,
+                    type,
                     style: theme.textTheme.bodyMedium!.copyWith(
                         color: appTheme.black90001,
                         fontSize: 16,
@@ -603,16 +555,7 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                   ),
                   selected: selectedPaymentTypes.contains(type),
                   onSelected: (bool value) {
-                    setModalState(() {
-                      if (value) {
-                        selectedPaymentTypes.add(type);
-                      } else {
-                        selectedPaymentTypes.remove(type);
-                      }
-                    });
-                    setState(() {
-                      _filterTransactions();
-                    });
+                    _togglePaymentTypeFilter(type);
                   },
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(50),
@@ -653,15 +596,13 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                   ),
                   selected: selectedMonths.contains(month),
                   onSelected: (bool value) {
-                    setModalState(() {
+                    setState(() {
                       if (value) {
                         selectedMonths.add(month);
                       } else {
                         selectedMonths.remove(month);
                       }
-                    });
-                    setState(() {
-                      _filterTransactions();
+                      _filterTransactions(); // Update transactions when a month is selected/deselected
                     });
                   },
                   shape: RoundedRectangleBorder(
@@ -694,23 +635,14 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
               children: [
                 Expanded(
                   child: GestureDetector(
-                    onTap: () async {
-                      final DateTime? picked =
-                          await _selectDate(context, false);
-                      if (picked != null) {
-                        setModalState(() {
-                          _selectedFromDate = picked;
-                        });
-                        setState(() {
-                          _filterTransactions();
-                        });
-                      }
-                    },
+                    onTap: () => _selectDate(context, false),
                     child: Container(
                       decoration: BoxDecoration(
-                          border: Border.all(color: appTheme.gray200),
-                          borderRadius: BorderRadius.circular(13)),
-                      padding: const EdgeInsets.all(12),
+                        border: Border.all(color: appTheme.gray200),
+                        borderRadius: BorderRadius.circular(13),
+                      ),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 20.0, horizontal: 12.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -726,6 +658,7 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                           CustomImageView(
                             imagePath: ImageConstant.imgCalendar,
                             color: appTheme.blueGray300,
+                            onTap: () => _selectDate(context, false),
                           ),
                         ],
                       ),
@@ -735,23 +668,14 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                 const SizedBox(width: 25),
                 Expanded(
                   child: GestureDetector(
-                    onTap: () async {
-                      final DateTime? picked = await _selectDate(context, true);
-                      if (picked != null) {
-                        setModalState(() {
-                          _selectedToDate = picked;
-                        });
-                        setState(() {
-                          _filterTransactions();
-                        });
-                      }
-                    },
+                    onTap: () => _selectDate(context, true),
                     child: Container(
                       decoration: BoxDecoration(
                         border: Border.all(color: appTheme.gray200),
-                        borderRadius: BorderRadius.circular(13),
+                        borderRadius: BorderRadius.circular(10),
                       ),
-                      padding: const EdgeInsets.all(12),
+                      padding: const EdgeInsets.symmetric(
+                          vertical: 20.0, horizontal: 12.0),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
@@ -767,6 +691,7 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                           CustomImageView(
                             imagePath: ImageConstant.imgCalendar,
                             color: appTheme.blueGray300,
+                            onTap: () => _selectDate(context, true),
                           ),
                         ],
                       ),
@@ -781,18 +706,16 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
               children: [
                 CustomElevatedButton(
                   height: 50,
-                  width: MediaQuery.of(context).size.width * 0.4,
+                  width: 163,
                   onPressed: () {
-                    setModalState(() {
+                    setState(() {
                       selectedStatuses.clear();
                       selectedPaymentTypes.clear();
-                      selectedMonths.clear();
+                      selectedMonths.clear(); // Clear selected months as well
                       _selectedFromDate = null;
                       _selectedToDate = null;
                       searchQuery = '';
-                    });
-                    setState(() {
-                      _filterTransactions();
+                      _filterTransactions(); // Call to update transactions
                     });
                   },
                   buttonStyle: ElevatedButton.styleFrom(
@@ -802,12 +725,13 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                       borderRadius: BorderRadius.circular(50),
                       side: BorderSide(color: appTheme.gray200),
                     ),
+                    minimumSize: const Size(200, 85),
                   ),
                   text: 'Clear All',
                 ),
                 CustomElevatedButton(
                   height: 50,
-                  width: MediaQuery.of(context).size.width * 0.4,
+                  width: 163,
                   onPressed: () {
                     Navigator.pop(context);
                   },
@@ -817,6 +741,7 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(50),
                     ),
+                    minimumSize: const Size(200, 85),
                   ),
                   text: 'Apply',
                 ),
@@ -837,14 +762,35 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
     });
   }
 
-  Future<DateTime?> _selectDate(BuildContext context, bool isToDate) async {
+  void _toggleStatusFilter(String status) {
+    setState(() {
+      if (selectedStatuses.contains(status)) {
+        selectedStatuses.remove(status);
+      } else {
+        selectedStatuses.add(status);
+      }
+      _filterTransactions();
+    });
+  }
+
+  void _togglePaymentTypeFilter(String type) {
+    setState(() {
+      if (selectedPaymentTypes.contains(type)) {
+        selectedPaymentTypes.remove(type);
+      } else {
+        selectedPaymentTypes.add(type);
+      }
+      _filterTransactions(); // Update transactions on change
+    });
+  }
+
+  Future<void> _selectDate(BuildContext context, bool isToDate) async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: DateTime.now(),
     );
-
     if (picked != null) {
       setState(() {
         if (isToDate) {
@@ -855,7 +801,5 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
         _filterTransactions();
       });
     }
-
-    return picked;
   }
 }

@@ -11,14 +11,13 @@ class PaymentMethod extends StatefulWidget {
   const PaymentMethod({super.key});
 
   @override
-  
-  State<PaymentMethod> createState() => _PaymentMethodState ();
+  State<PaymentMethod> createState() => _PaymentMethodState();
 }
 
 class _PaymentMethodState extends State<PaymentMethod> {
   @override
   Widget build(BuildContext context) {
-    return  Scaffold(
+    return Scaffold(
       body: Stack(
         children: [
           Positioned(
@@ -26,6 +25,7 @@ class _PaymentMethodState extends State<PaymentMethod> {
             top: 50,
             child: ImageFiltered(
               imageFilter: ImageFilter.blur(
+                tileMode: TileMode.decal,
                 sigmaX: 60,
                 sigmaY: 60,
               ),
@@ -52,6 +52,7 @@ class _PaymentMethodState extends State<PaymentMethod> {
       ),
     );
   }
+
   PreferredSizeWidget _buildAppBar() {
     return CustomAppBar(
         height: 40.h,
@@ -65,7 +66,8 @@ class _PaymentMethodState extends State<PaymentMethod> {
         centerTitle: true,
         title: AppbarSubtitleSix(text: "Payment Method"));
   }
-   Widget _buildAccountSettings() {
+
+  Widget _buildAccountSettings() {
     return Align(
         alignment: Alignment.bottomCenter,
         child: Padding(
@@ -101,8 +103,8 @@ class _PaymentMethodState extends State<PaymentMethod> {
                                         decoration:
                                             IconButtonStyleHelper.fillPrimary,
                                         child: CustomImageView(
-                                            imagePath:ImageConstant.upi,)),
-                                             
+                                          imagePath: ImageConstant.upi,
+                                        )),
                                     Padding(
                                         padding: EdgeInsets.only(
                                             left: 15.h,
@@ -126,58 +128,54 @@ class _PaymentMethodState extends State<PaymentMethod> {
                           onTap: () {
                             Get.toNamed(AppRoutes.addbankaccount);
                           },
-                        child:Padding(
-                      
-                          padding: const EdgeInsets.only(top: 1),
-                          child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 15.h, vertical: 16.v),
-                              decoration: AppDecoration.fillOnPrimaryContainer
-                                  .copyWith(
-                                      borderRadius:
-                                          BorderRadiusStyle.customBorderL20),
-                              child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    CustomIconButton(
-                                        height: 44.adaptSize,
-                                        width: 44.adaptSize,
-                                        padding: EdgeInsets.all(10.h),
-                                        decoration:
-                                            IconButtonStyleHelper.fillDeepPurple,
-                                        child: CustomImageView(
-                                          imagePath: ImageConstant.bank,
-                                         
-                                        )),
-                                    Padding(
-                                        padding: EdgeInsets.only(
-                                            left: 15.h,
-                                            top: 13.v,
-                                            bottom: 10.v),
-                                        child: Text("Add Bank Account",
-                                            style: theme.textTheme.titleMedium!
-                                                .copyWith(
-                                                    color: appTheme.gray900))),
-                                    const Spacer(),
-                                    CustomImageView(
-                                        imagePath:
-                                            ImageConstant.imgArrowRightGray900,
-                                        height: 24.adaptSize,
-                                        width: 24.adaptSize,
-                                        margin: EdgeInsets.symmetric(
-                                            vertical: 10.v)),
-                                  ])),
+                          child: Padding(
+                            padding: const EdgeInsets.only(top: 1),
+                            child: Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 15.h, vertical: 16.v),
+                                decoration: AppDecoration.fillOnPrimaryContainer
+                                    .copyWith(
+                                        borderRadius:
+                                            BorderRadiusStyle.customBorderL20),
+                                child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      CustomIconButton(
+                                          height: 44.adaptSize,
+                                          width: 44.adaptSize,
+                                          padding: EdgeInsets.all(10.h),
+                                          decoration: IconButtonStyleHelper
+                                              .fillDeepPurple,
+                                          child: CustomImageView(
+                                            imagePath: ImageConstant.bank,
+                                          )),
+                                      Padding(
+                                          padding: EdgeInsets.only(
+                                              left: 15.h,
+                                              top: 13.v,
+                                              bottom: 10.v),
+                                          child: Text("Add Bank Account",
+                                              style: theme
+                                                  .textTheme.titleMedium!
+                                                  .copyWith(
+                                                      color:
+                                                          appTheme.gray900))),
+                                      const Spacer(),
+                                      CustomImageView(
+                                          imagePath: ImageConstant
+                                              .imgArrowRightGray900,
+                                          height: 24.adaptSize,
+                                          width: 24.adaptSize,
+                                          margin: EdgeInsets.symmetric(
+                                              vertical: 10.v)),
+                                    ])),
+                          ),
                         ),
-                      ),
                       ]))
                 ])));
   }
 
-
-
   onTapArrowLeft() {
     Get.back();
   }
- 
 }
-

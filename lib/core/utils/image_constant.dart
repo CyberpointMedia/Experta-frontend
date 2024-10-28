@@ -431,11 +431,13 @@ class ImageConstant {
 
   // static String imgNavFeedsGray900 = '$imagePath/img_nav_feeds_gray_900.svg';
 
-  // static String imgInfoBlueGray300 = '$imagePath/img_info_blue_gray_300.svg';
+  static String imgInfoBlueGray300 = '$imagePath/settings/inform.svg';
 
   // static String imgFlash2 = '$imagePath/img_flash_2.svg';
 
   // static String imgShieldGray900 = '$imagePath/img_shield_gray_900.svg';
+
+  static String noto = "$imagePath/settings/bell.svg";
 
   static String imageNotFound = 'assets/images/image_not_found.png';
 
@@ -502,4 +504,17 @@ class ImageConstant {
 
   static String success = "$imagePath/settings/checkSucess.svg";
   static String message = "$imagePath/settings/message.svg";
+
+  // Transations
+
+  static String topup = "assets/images/wallet/walletTransactions.svg";
+  static String deposit = "assets/images/wallet/deposit.svg";
+  static String transact = "assets/images/wallet/transact.svg";
+  static String excel = "assets/images/wallet/Excel.svg";
+  static String filtercross = "assets/images/wallet/filtercross.svg";
+  static String calender = "assets/images/wallet/calender.svg";
+  static String videocam = "assets/images/wallet/videocam.svg";
+
+
+  // videocam.svg
 }

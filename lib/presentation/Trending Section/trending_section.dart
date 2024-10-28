@@ -19,6 +19,7 @@ class TrendingPeoplePage extends StatelessWidget {
             top: 50,
             child: ImageFiltered(
               imageFilter: ImageFilter.blur(
+                tileMode: TileMode.decal,
                 sigmaX: 60,
                 sigmaY: 60,
               ),
@@ -41,13 +42,14 @@ class TrendingPeoplePage extends StatelessWidget {
               _buildAppBar(),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 16, right: 16, top: 0),
+                  padding: EdgeInsets.only(
+                      left: 16.adaptSize, right: 16.adaptSize, top: 0),
                   child: GridView.builder(
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
-                      crossAxisSpacing: 10.0,
-                      mainAxisSpacing: 10.0,
+                      crossAxisSpacing: 16.0, // Set gap between columns to 16
+                      mainAxisSpacing: 16.0, // Set gap between rows to 16
                       childAspectRatio: 0.75,
                     ),
                     itemCount: trendingPeople.length,

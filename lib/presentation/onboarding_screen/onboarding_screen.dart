@@ -46,6 +46,7 @@ class OnboardingScreen extends GetWidget<OnboardingController> {
               top: 50,
               child: ImageFiltered(
                 imageFilter: ImageFilter.blur(
+                  tileMode: TileMode.decal,
                   sigmaX: 60,
                   sigmaY: 60,
                 ),
@@ -70,6 +71,7 @@ class OnboardingScreen extends GetWidget<OnboardingController> {
                 opacity: 0.2,
                 child: ImageFiltered(
                   imageFilter: ImageFilter.blur(
+                    tileMode: TileMode.decal,
                     sigmaX: 60,
                     sigmaY: 60,
                   ),
@@ -95,6 +97,7 @@ class OnboardingScreen extends GetWidget<OnboardingController> {
                 opacity: 0.2,
                 child: ImageFiltered(
                   imageFilter: ImageFilter.blur(
+                    tileMode: TileMode.decal,
                     sigmaX: 60,
                     sigmaY: 60,
                   ),
@@ -121,12 +124,12 @@ class OnboardingScreen extends GetWidget<OnboardingController> {
                 child: Column(
                   children: [
                     Text(
-  "msg_sign_up_or_log_in".tr,
-  style: CustomTextStyles.bodyLargeGray900.copyWith(
-    // fontWeight: FontWeight.bold, // Setting font weight to 400
-  ),
-),
-
+                      "msg_sign_up_or_log_in".tr,
+                      style: CustomTextStyles.bodyLargeGray900.copyWith(
+                        fontWeight:
+                            FontWeight.w400, // Setting font weight to 400
+                      ),
+                    ),
                     SizedBox(height: 15.v),
                     _buildLoginOption(),
                     const Spacer(),

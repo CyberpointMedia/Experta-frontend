@@ -1,13 +1,9 @@
 import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
-import 'package:experta/widgets/app_bar/appbar_leading_image.dart';
-import 'package:experta/widgets/app_bar/appbar_subtitle_six.dart';
-import 'package:experta/widgets/app_bar/custom_app_bar.dart';
-import 'package:experta/widgets/custom_elevated_button.dart';
 import 'package:experta/widgets/custom_text_form_field.dart';
 import 'package:experta/widgets/custom_toast_message.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; // Import this for Colors.black
 
 class AddBankAccount extends StatefulWidget {
   const AddBankAccount({super.key});
@@ -33,11 +29,11 @@ class _AddBankAccountState extends State<AddBankAccount> {
 
   @override
   void dispose() {
-    // clear controllers and focus nodes to free up resources
-    accountNumberController.clear();
-    reEnterAccountNumberController.clear();
-    ifscCodeController.clear();
-    accountHolderNameController.clear();
+    // Dispose controllers and focus nodes to free up resources
+    accountNumberController.dispose();
+    reEnterAccountNumberController.dispose();
+    ifscCodeController.dispose();
+    accountHolderNameController.dispose();
 
     accountNumberFocusNode.dispose();
     reEnterAccountNumberFocusNode.dispose();
@@ -59,6 +55,7 @@ class _AddBankAccountState extends State<AddBankAccount> {
               top: 50,
               child: ImageFiltered(
                 imageFilter: ImageFilter.blur(
+                  tileMode: TileMode.decal,
                   sigmaX: 60,
                   sigmaY: 60,
                 ),
@@ -77,11 +74,12 @@ class _AddBankAccountState extends State<AddBankAccount> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 30, left: 15, right: 15),
+              padding: const EdgeInsets.only(top: 15, left: 16, right: 16),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text("Account Number"),
+                  const SizedBox(height: 6),
                   CustomTextFormField(
                     hintText: "Bank account number",
                     hintStyle: CustomTextStyles.titleMediumBluegray300,
@@ -92,6 +90,7 @@ class _AddBankAccountState extends State<AddBankAccount> {
                   ),
                   const SizedBox(height: 10),
                   const Text("Re-enter Account Number"),
+                  const SizedBox(height: 6),
                   CustomTextFormField(
                     hintText: "Re-enter bank account number",
                     hintStyle: CustomTextStyles.titleMediumBluegray300,
@@ -102,6 +101,7 @@ class _AddBankAccountState extends State<AddBankAccount> {
                   ),
                   const SizedBox(height: 10),
                   const Text("IFSC Code"),
+                  const SizedBox(height: 6),
                   CustomTextFormField(
                     hintText: "Enter IFSC code",
                     hintStyle: CustomTextStyles.titleMediumBluegray300,
@@ -112,6 +112,7 @@ class _AddBankAccountState extends State<AddBankAccount> {
                   ),
                   const SizedBox(height: 10),
                   const Text("Account Holder Name"),
+                  const SizedBox(height: 6),
                   CustomTextFormField(
                     hintText: "Account holder’s name",
                     hintStyle: CustomTextStyles.titleMediumBluegray300,
@@ -119,6 +120,32 @@ class _AddBankAccountState extends State<AddBankAccount> {
                     controller: accountHolderNameController,
                     focusNode: accountHolderNameFocusNode,
                     autofocus: false,
+                  ),
+                  const SizedBox(
+                      height:
+                          20), // Add some space before the important message
+
+                  // Important message
+                  const Text(
+                    "Important:",
+                    style: TextStyle(
+                      fontSize: 16,
+                      color: Colors.black, // Set the color to dark black
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  const Text(
+                    "• Your full name on bank account, Aadhaar card and PAN card should match.",
+                    style: TextStyle(
+                      fontSize: 14,
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  const Text(
+                    "• Transfer might take up to 48 hours to reflect in your account.",
+                    style: TextStyle(
+                      fontSize: 14,
+                    ),
                   ),
                   const Spacer(),
                   CustomElevatedButton(

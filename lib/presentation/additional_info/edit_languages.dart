@@ -1,14 +1,7 @@
 import 'dart:ui';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/additional_info/model/interest_model.dart';
-import 'package:flutter/material.dart';
 import 'package:experta/presentation/additional_info/controller/language_controller.dart';
-import 'package:experta/widgets/app_bar/appbar_leading_image.dart';
-import 'package:experta/widgets/app_bar/appbar_subtitle_six.dart';
-import 'package:experta/widgets/app_bar/custom_app_bar.dart';
-import 'package:experta/widgets/custom_elevated_button.dart';
-import 'package:experta/widgets/custom_search_view.dart';
-import 'package:shimmer/shimmer.dart';
 
 class EditLanguagePage extends StatelessWidget {
   final List<Language> initialSelectedLanguages;
@@ -49,7 +42,8 @@ class EditLanguagePage extends StatelessWidget {
       left: 270,
       top: 50,
       child: ImageFiltered(
-        imageFilter: ImageFilter.blur(sigmaX: 60, sigmaY: 60),
+        imageFilter:
+            ImageFilter.blur(tileMode: TileMode.decal, sigmaX: 60, sigmaY: 60),
         child: Align(
           child: SizedBox(
             width: 252,
@@ -71,9 +65,9 @@ class EditLanguagePage extends StatelessWidget {
       height: 40.h,
       leadingWidth: 40.h,
       leading: AppbarLeadingImage(
-        imagePath: ImageConstant.imgArrowLeftOnerrorcontainer,
+        imagePath: ImageConstant.cross, // Update this to your cross icon path
         margin: EdgeInsets.only(left: 16.h),
-        onTap: onTapArrowLeft,
+        onTap: onTapCrossIcon,
       ),
       centerTitle: true,
       title: AppbarSubtitleSix(text: "Edit Languages"),
@@ -86,7 +80,7 @@ class EditLanguagePage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildHeader(),
+          // _buildHeader(),
           CustomSearchView(
             hintText: "Search your language",
             onChanged: (query) {
@@ -107,27 +101,27 @@ class EditLanguagePage extends StatelessWidget {
     );
   }
 
-  Widget _buildHeader() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            "What’s your language?",
-            style: CustomTextStyles.titleMediumBlack90001,
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-            "Pick your favorite languages to find groups and events related to them",
-            style: CustomTextStyles.bodyMediumLight,
-          ),
-        ),
-      ],
-    );
-  }
+  // Widget _buildHeader() {
+  //   return Column(
+  //     crossAxisAlignment: CrossAxisAlignment.start,
+  //     children: [
+  //       Padding(
+  //         padding: const EdgeInsets.all(8.0),
+  //         child: Text(
+  //           "What’s your language?",
+  //           style: CustomTextStyles.titleMediumBlack90001,
+  //         ),
+  //       ),
+  //       Padding(
+  //         padding: const EdgeInsets.all(8.0),
+  //         child: Text(
+  //           "Pick your favorite languages to find groups and events related to them",
+  //           style: CustomTextStyles.bodyMediumLight,
+  //         ),
+  //       ),
+  //     ],
+  //   );
+  // }
 
   Widget _buildLanguageList(
       LanguageController controller, BuildContext context) {
@@ -192,7 +186,7 @@ class EditLanguagePage extends StatelessWidget {
     });
   }
 
-  void onTapArrowLeft() {
+  void onTapCrossIcon() {
     Get.back();
   }
 

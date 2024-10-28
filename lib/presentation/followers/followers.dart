@@ -19,8 +19,6 @@ class _FollowersPageState extends State<FollowersPage> {
   final FollowersAndFollowingController controller =
       Get.put(FollowersAndFollowingController());
 
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -87,7 +85,8 @@ class _FollowersPageState extends State<FollowersPage> {
       left: 270,
       top: 50,
       child: ImageFiltered(
-        imageFilter: ImageFilter.blur(sigmaX: 60, sigmaY: 60),
+        imageFilter:
+            ImageFilter.blur(tileMode: TileMode.decal, sigmaX: 60, sigmaY: 60),
         child: Align(
           child: SizedBox(
             width: 252,
@@ -135,24 +134,27 @@ class FollowerTile extends StatelessWidget {
       ),
       title: Text(follower.displayName),
       subtitle: Text("${follower.industry} | ${follower.occupation}"),
-      trailing: (controller.userProfile=="userProfile")?ElevatedButton(
-        onPressed: () async {
-          await controller.removeConnection(follower.id, "removeFollower");
-        },
-        style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(4.0), // Rectangular shape
-          ),
-          backgroundColor: Colors.white,
-          minimumSize: const Size(100, 50), // Set width and height
-        ),
-        child: const Text(
-          'Remove',
-          style: TextStyle(
-            color: Colors.black, // Text color black
-          ),
-        ),
-      ):const SizedBox.shrink(),
+      trailing: (controller.userProfile == "userProfile")
+          ? ElevatedButton(
+              onPressed: () async {
+                await controller.removeConnection(
+                    follower.id, "removeFollower");
+              },
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(4.0), // Rectangular shape
+                ),
+                backgroundColor: Colors.white,
+                minimumSize: const Size(100, 50), // Set width and height
+              ),
+              child: const Text(
+                'Remove',
+                style: TextStyle(
+                  color: Colors.black, // Text color black
+                ),
+              ),
+            )
+          : const SizedBox.shrink(),
     );
   }
 }

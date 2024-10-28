@@ -282,7 +282,7 @@ Widget _buildBottomSheetContent(BuildContext context, Comment? comment) {
                   showModalBottomSheet(
                     context: context,
                     builder: (context) => ReportReasonSheet(
-                      itemId: comment?.id ?? '',
+                      itemId: feed!.id,
                       itemType: 'Post',
                     ),
                   );
@@ -449,7 +449,8 @@ class FeedItem extends StatelessWidget {
                             height: 24.adaptSize,
                             width: 24.adaptSize,
                             onTap: () async {
-                              await controller.likeUnlikePost(feed.id.toString());
+                              await controller
+                                  .likeUnlikePost(feed.id.toString());
                             },
                           ),
                           Padding(
@@ -510,7 +511,8 @@ class FeedItem extends StatelessWidget {
                                           Row(
                                             children: [
                                               Text(
-                                                comment.user.displayName.toString(),
+                                                comment.user.displayName
+                                                    .toString(),
                                                 style: theme
                                                     .textTheme.bodyMedium!
                                                     .copyWith(
@@ -531,7 +533,8 @@ class FeedItem extends StatelessWidget {
                                                   top: 4.v,
                                                 ),
                                                 child: Text(
-                                                  comment.formattedDate.toString(),
+                                                  comment.formattedDate
+                                                      .toString(),
                                                   style: CustomTextStyles
                                                       .bodySmallBluegray300,
                                                 ),
@@ -665,7 +668,8 @@ class CommentsPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CircleAvatar(
-                    backgroundImage: NetworkImage(comment.user.profilePic.toString()),
+                    backgroundImage:
+                        NetworkImage(comment.user.profilePic.toString()),
                     radius: 15,
                   ),
                   const SizedBox(width: 10),
@@ -834,7 +838,8 @@ class _CommentInputFieldState extends State<CommentInputField> {
                   onPressed: isEnabled
                       ? () async {
                           await _controller.postComment(
-                              widget.feed.id.toString(), _commentController.text);
+                              widget.feed.id.toString(),
+                              _commentController.text);
                           _commentController.clear();
                           // ignore: use_build_context_synchronously
                           Navigator.pop(context); // Close the bottom sheet

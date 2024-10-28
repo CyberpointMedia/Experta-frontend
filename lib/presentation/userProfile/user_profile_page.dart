@@ -4,7 +4,6 @@ import 'package:experta/core/app_export.dart';
 import 'package:experta/core/utils/web_view/web_view.dart';
 import 'package:experta/presentation/all_review/all_review.dart';
 import 'package:experta/presentation/userProfile/controller/profile_controller.dart';
-import 'package:experta/presentation/userProfile/post_details/controller/post_details_controller.dart';
 import 'package:experta/presentation/userProfile/post_details/post_details.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -42,6 +41,7 @@ class _UserProfilePageState extends State<UserProfilePage>
               top: 50,
               child: ImageFiltered(
                 imageFilter: ImageFilter.blur(
+                  tileMode: TileMode.decal,
                   sigmaX: 60,
                   sigmaY: 60,
                 ),
@@ -76,13 +76,13 @@ class _UserProfilePageState extends State<UserProfilePage>
                               '',
                           style: theme.textTheme.titleMedium!.copyWith(
                               color: appTheme.gray900,
-                              fontSize: 20,
+                              fontSize: 20.fSize,
                               fontWeight: FontWeight.bold),
                         );
                       }),
                       actions: [
                         CustomImageView(
-                          margin: const EdgeInsets.all(8),
+                          margin: EdgeInsets.all(8.adaptSize),
                           imagePath: "assets/images/settings.svg",
                           onTap: () {
                             Get.toNamed(AppRoutes.settingScreen);
@@ -95,7 +95,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(top: 50),
+                              padding: EdgeInsets.only(top: 30.adaptSize),
                               child: _profilepicBody(),
                             ),
                             _ratingSection(),
@@ -149,30 +149,30 @@ class _UserProfilePageState extends State<UserProfilePage>
           Expanded(
             child: SingleChildScrollView(
               child: Padding(
-                padding:  EdgeInsets.all(8.adaptSize),
+                padding: EdgeInsets.all(8.adaptSize),
                 child: Column(
                   children: [
                     _buildChipviewvisual(context),
                     SizedBox(
-                      height: 5.v,
+                      height: 8.v,
                     ),
                     _buildColumnaboutme(),
                     SizedBox(
                       height: 8.v,
                     ),
-                    _buildColumnexperienc(),
+                    _buildColumnExperience(),
                     SizedBox(
                       height: 8.v,
                     ),
-                    _buildColumneducation(),
+                    _buildColumnEducation(),
                     SizedBox(
                       height: 8.v,
                     ),
-                    _buildColumnachieveme(),
+                    _buildColumnAchievements(),
                     SizedBox(
                       height: 8.v,
                     ),
-                    _buildColumnintereste(),
+                    _buildColumnInterests(),
                     SizedBox(
                       height: 8.v,
                     ),
@@ -195,7 +195,7 @@ class _UserProfilePageState extends State<UserProfilePage>
           child: CircularProgressIndicator(),
         );
       } else if (posts.isEmpty) {
-        return  Center(
+        return Center(
           child: Text(
             'No posts available',
             style: TextStyle(
@@ -242,143 +242,154 @@ class _UserProfilePageState extends State<UserProfilePage>
     List<Map<String, dynamic>>? socialMediaLinks =
         controller.userData.value.data?.basicInfo?.getSocialMediaLinks();
 
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        _buildRowaboutme(aboutMeText: "About me"),
-        SizedBox(
-          height: 18.v,
-        ),
-        SizedBox(
-          width: 331.adaptSize,
-          child: Obx(() {
-            return ReadMoreText(
-              controller.userData.value.data?.basicInfo?.bio ?? '',
-              trimLines: 3,
-              colorClickableText: const Color(
-                0XFFD45102,
-              ),
-              trimMode: TrimMode.Line,
-              trimCollapsedText: "Read more",
-              moreStyle:
-                  theme.textTheme.bodyLarge?.copyWith(color: appTheme.gray900),
-              lessStyle:
-                  theme.textTheme.bodyLarge?.copyWith(color: appTheme.gray900),
-            );
-          }),
-        ),
-        SizedBox(
-          height: 17.v,
-        ),
-        if (socialMediaLinks != null && socialMediaLinks.isNotEmpty)
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: socialMediaLinks.map((socialMedia) {
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ExpertaBrowser(
-                        url: socialMedia['link'],
-                        title: socialMedia['name'],
-                      ),
-                    ),
-                  );
-                  print('Opening link: ${socialMedia['link']}');
-                },
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: FaIcon(
-                    socialMedia['icon'],
-                    size: 24,
-                  ),
+    return Container(
+      color: Colors.white, // Card-like appearance
+      padding: const EdgeInsets.all(10), // Padding inside the card for spacing
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          _buildRowaboutme(aboutMeText: "About me"),
+          SizedBox(
+            height: 18.v,
+          ),
+          SizedBox(
+            width: 331.adaptSize,
+            child: Obx(() {
+              return ReadMoreText(
+                controller.userData.value.data?.basicInfo?.bio ?? '',
+                trimLines: 3,
+                colorClickableText: const Color(0XFFD45102),
+                trimMode: TrimMode.Line,
+                trimCollapsedText: "Read more",
+                trimExpandedText: "Read less",
+                style: theme.textTheme.bodyMedium?.copyWith(
+                  color: appTheme.gray900, // Same style as the body text
+                ),
+                moreStyle: theme.textTheme.bodyMedium?.copyWith(
+                  color: appTheme.deepOrangeA200, // Color for 'Read more'
+                  fontSize: theme.textTheme.bodyMedium
+                      ?.fontSize, // Same font size as paragraph
+                ),
+                lessStyle: theme.textTheme.bodyMedium?.copyWith(
+                  color: appTheme.deepOrangeA200, // Color for 'Read less'
+                  fontSize: theme.textTheme.bodyMedium
+                      ?.fontSize, // Same font size as paragraph
                 ),
               );
-            }).toList(),
+            }),
           ),
-      ],
+          SizedBox(
+            height: 17.v,
+          ),
+          if (socialMediaLinks != null && socialMediaLinks.isNotEmpty)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: socialMediaLinks.map((socialMedia) {
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ExpertaBrowser(
+                          url: socialMedia['link'],
+                          title: socialMedia['name'],
+                        ),
+                      ),
+                    );
+                    print('Opening link: ${socialMedia['link']}');
+                  },
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: FaIcon(
+                      socialMedia['icon'],
+                      size: 24,
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+        ],
+      ),
     );
   }
 
-  Widget _buildColumnexperienc() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(right: 2),
-          child: _buildRoweducation(educationText: "Experience"),
-        ),
-        SizedBox(
-          height: 19.v,
-        ),
-        Obx(() {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: controller.userData.value.data?.workExperience
-                    ?.map((experience) {
-                  // Format the dates
-                  String formattedStartDate = experience.startDate != null
-                      ? DateFormat('MMM yyyy').format(experience.startDate!)
-                      : '';
-                  String formattedEndDate = experience.endDate != null
-                      ? DateFormat('MMM yyyy').format(experience.endDate!)
-                      : 'Present';
+  Widget _buildColumnExperience() {
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(right: 2),
+            child: _buildRoweducation(educationText: "Experience"),
+          ),
+          SizedBox(
+            height: 19.v,
+          ),
+          Obx(() {
+            var workExperience =
+                controller.userData.value.data?.workExperience ?? [];
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: List.generate(workExperience.length, (index) {
+                var experience = workExperience[index];
 
-                  // Calculate the total duration
-                  String totalDuration = '';
-                  if (experience.startDate != null &&
-                      experience.endDate != null) {
-                    Duration duration =
-                        experience.endDate!.difference(experience.startDate!);
-                    int years = (duration.inDays / 365).floor();
-                    int months = ((duration.inDays % 365) / 30).floor();
-                    totalDuration = '$years years $months months';
-                  }
+                // Format the dates
+                String formattedStartDate = experience.startDate != null
+                    ? DateFormat('MMM yyyy').format(experience.startDate!)
+                    : '';
+                String formattedEndDate = experience.endDate != null
+                    ? DateFormat('MMM yyyy').format(experience.endDate!)
+                    : 'Present';
 
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        experience.jobTitle ?? '',
-                        style: theme.textTheme.titleMedium!,
-                      ),
-                      SizedBox(
-                        height: 9.v,
-                      ),
-                      Text(
-                        experience.companyName ?? '',
-                        style: theme.textTheme.bodyMedium
-                            ?.copyWith(color: appTheme.gray900),
-                      ),
-                      SizedBox(
-                        height: 5.v,
-                      ),
-                      Text(
-                        "$formattedStartDate - $formattedEndDate · $totalDuration",
-                        style: theme.textTheme.bodyMedium!,
-                      ),
-                      SizedBox(
-                        height: 18.v,
-                      ),
+                // Calculate the total duration
+                String totalDuration = '';
+                if (experience.startDate != null &&
+                    experience.endDate != null) {
+                  Duration duration =
+                      experience.endDate!.difference(experience.startDate!);
+                  int years = (duration.inDays / 365).floor();
+                  int months = ((duration.inDays % 365) / 30).floor();
+                  totalDuration = '$years years $months months';
+                }
+
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      experience.jobTitle ?? '',
+                      style: theme.textTheme.titleMedium!,
+                    ),
+                    SizedBox(height: 9.v),
+                    Text(
+                      experience.companyName ?? '',
+                      style: theme.textTheme.bodyMedium
+                          ?.copyWith(color: appTheme.gray900),
+                    ),
+                    SizedBox(height: 5.v),
+                    Text(
+                      "$formattedStartDate - $formattedEndDate · $totalDuration",
+                      style: theme.textTheme.bodyMedium!,
+                    ),
+                    SizedBox(height: 18.v),
+
+                    // Show the divider only if there is more than one experience
+                    if (workExperience.length > 1 &&
+                        index < workExperience.length - 1)
                       Divider(
                         height: 1.v,
                         thickness: 1,
-                        color: const Color(
-                          0XFFE9E9E9,
-                        ),
+                        color: const Color(0XFFE9E9E9),
                       ),
-                      SizedBox(
-                        height: 19.v,
-                      ),
-                    ],
-                  );
-                }).toList() ??
-                [],
-          );
-        }),
-      ],
+                  ],
+                );
+              }),
+            );
+          }),
+        ],
+      ),
     );
   }
 
@@ -387,194 +398,234 @@ class _UserProfilePageState extends State<UserProfilePage>
     final data = controller.userData.value.data?.expertise;
     final expertiseList = data?.expertise ?? [];
 
-    return Column(
-      children: [
-        _buildRowaboutme(aboutMeText: "Expertise"),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Wrap(
-            spacing: 8.0,
-            runSpacing: 4.0,
-            children: expertiseList.map((expertise) {
-              return Chip(
-                label: Text(
-                  expertise.name.toString(),
-                  style: theme.textTheme.bodyMedium!.copyWith(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16.fSize,
+    return Container(
+      color: Colors.white, // Card-like appearance
+      padding: const EdgeInsets.all(10), // Padding around the card content
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildRowaboutme(aboutMeText: "Expertise"),
+          const SizedBox(
+              height: 8.0), // Added space for better visual separation
+          Padding(
+            padding:
+                const EdgeInsets.all(8.0), // Padding around the expertise chips
+            child: Wrap(
+              spacing: 8.0,
+              runSpacing: 4.0,
+              children: expertiseList.map((expertise) {
+                return Chip(
+                  label: Text(
+                    expertise.name.toString(),
+                    style: theme.textTheme.bodyMedium!.copyWith(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16.fSize,
+                    ),
                   ),
-                ),
-                backgroundColor: appTheme.gray200,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                  side: BorderSide(
-                    color: appTheme.gray300,
+                  backgroundColor: appTheme.gray200,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                    side: BorderSide(
+                      color: appTheme.gray300,
+                    ),
                   ),
-                ),
-              );
-            }).toList(),
+                );
+              }).toList(),
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
-  Widget _buildColumneducation() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(right: 2),
-          child: _buildRoweducation(educationText: "Education"),
-        ),
-        SizedBox(
-          height: 19.v,
-        ),
-        Obx(() {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children:
-                controller.userData.value.data?.education?.map((education) {
-                      // Format the dates
-                      String formattedStartDate = education.startDate != null
-                          ? DateFormat('MMM yyyy').format(education.startDate!)
-                          : '';
-                      String formattedEndDate = education.endDate != null
-                          ? DateFormat('MMM yyyy').format(education.endDate!)
-                          : 'Present';
+  Widget _buildColumnEducation() {
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(right: 2),
+            child: _buildRoweducation(educationText: "Education"),
+          ),
+          SizedBox(
+            height: 19.v,
+          ),
+          Obx(() {
+            var educationList = controller.userData.value.data?.education ?? [];
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: List.generate(educationList.length, (index) {
+                var education = educationList[index];
 
-                      // Calculate the total duration
-                      String totalDuration = '';
-                      if (education.startDate != null &&
-                          education.endDate != null) {
-                        Duration duration =
-                            education.endDate!.difference(education.startDate!);
-                        int years = (duration.inDays / 365).floor();
-                        int months = ((duration.inDays % 365) / 30).floor();
-                        totalDuration = '$years years $months months';
-                      }
+                // Format the dates
+                String formattedStartDate = education.startDate != null
+                    ? DateFormat('MMM yyyy').format(education.startDate!)
+                    : '';
+                String formattedEndDate = education.endDate != null
+                    ? DateFormat('MMM yyyy').format(education.endDate!)
+                    : 'Present';
 
-                      return Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
+                // Calculate the total duration
+                String totalDuration = '';
+                if (education.startDate != null && education.endDate != null) {
+                  Duration duration =
+                      education.endDate!.difference(education.startDate!);
+                  int years = (duration.inDays / 365).floor();
+                  int months = ((duration.inDays % 365) / 30).floor();
+                  totalDuration = '$years years $months months';
+                }
+
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      education.degree ?? '',
+                      style: theme.textTheme.titleMedium!,
+                    ),
+                    SizedBox(height: 9.v),
+                    Text(
+                      education.schoolCollege ?? '',
+                      style: theme.textTheme.bodyMedium
+                          ?.copyWith(color: appTheme.gray900),
+                    ),
+                    SizedBox(height: 4.v),
+                    Text(
+                      "$formattedStartDate - $formattedEndDate · $totalDuration",
+                      style: theme.textTheme.bodyMedium!,
+                    ),
+                    SizedBox(height: 18.v),
+
+                    // Show the divider only if there is more than one education item
+                    if (educationList.length > 1 &&
+                        index < educationList.length - 1)
+                      Divider(
+                        height: 1.v,
+                        thickness: 1,
+                        color: const Color(0XFFE9E9E9),
+                      ),
+                  ],
+                );
+              }),
+            );
+          }),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildColumnAchievements() {
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildRowaboutme(aboutMeText: "Achievements"),
+          SizedBox(
+            height: 17.v,
+          ),
+          Obx(() {
+            var achievements = controller
+                    .userData.value.data?.industryOccupation?.achievements ??
+                [];
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: List.generate(achievements.length, (index) {
+                var achievement = achievements[index];
+
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          bottom: 8.0, left: 10, right: 10),
+                      child: Row(
                         children: [
-                          Text(
-                            education.degree ?? '',
-                            style: theme.textTheme.titleMedium!,
-                          ),
                           SizedBox(
-                            height: 9.v,
+                            height: 24.v,
+                            width: 25.adaptSize,
+                            child: SvgPicture.asset(
+                                "assets/images/img_link_1.svg"),
                           ),
-                          Text(
-                            education.schoolCollege ?? '',
-                            style: theme.textTheme.bodyMedium
-                                ?.copyWith(color: appTheme.gray900),
-                          ),
-                          SizedBox(
-                            height: 4.v,
-                          ),
-                          Text(
-                            "$formattedStartDate - $formattedEndDate · $totalDuration",
-                            style: theme.textTheme.bodyMedium!,
-                          ),
-                          SizedBox(
-                            height: 18.v,
-                          ),
-                        ],
-                      );
-                    }).toList() ??
-                    [],
-          );
-        }),
-      ],
-    );
-  }
-
-  Widget _buildColumnachieveme() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildRowaboutme(aboutMeText: "Achievements"),
-        SizedBox(
-          height: 17.v,
-        ),
-        Obx(() {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: controller
-                    .userData.value.data?.industryOccupation?.achievements
-                    ?.map((achievement) {
-                  return Padding(
-                    padding:
-                        const EdgeInsets.only(bottom: 8.0, left: 10, right: 10),
-                    child: Row(
-                      children: [
-                        SizedBox(
-                          height: 24.v,
-                          width: 25.adaptSize,
-                          child:
-                              SvgPicture.asset("assets/images/img_link_1.svg"),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Text(
-                            achievement,
-                            overflow: TextOverflow.ellipsis,
-                            maxLines: 1,
-                            style: theme.textTheme.bodyLarge?.copyWith(
-                              color: appTheme.gray900,
-                              decoration: TextDecoration.underline,
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: Text(
+                              achievement,
+                              overflow: TextOverflow.ellipsis,
+                              maxLines: 1,
+                              style: theme.textTheme.bodyLarge?.copyWith(
+                                color: appTheme.gray900,
+                                decoration: TextDecoration.underline,
+                              ),
                             ),
                           ),
-                        )
-                      ],
+                        ],
+                      ),
                     ),
-                  );
-                }).toList() ??
-                [],
-          );
-        }),
-      ],
+
+                    // Show the divider only if there is more than one achievement
+                    if (achievements.length > 1 &&
+                        index < achievements.length - 1)
+                      Divider(
+                        height: 1.v,
+                        thickness: 1,
+                        color: const Color(0XFFE9E9E9),
+                      ),
+                  ],
+                );
+              }),
+            );
+          }),
+        ],
+      ),
     );
   }
 
-  Widget _buildColumnintereste() {
+  Widget _buildColumnInterests() {
     final interest = controller.userData.value.data?.interest;
     final interestList = interest?.interest ?? [];
 
-    return Column(
-      crossAxisAlignment:
-          CrossAxisAlignment.start, // Added for better alignment
-      children: [
-        _buildRowaboutme(aboutMeText: "Interests"),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Wrap(
-            spacing: 8.0,
-            runSpacing: 4.0,
-            children: interestList.map((interest) {
-              return Chip(
-                label: Text(
-                  interest.name ?? '', // Ensure interest name is not null
-                  style: theme.textTheme.bodyMedium!.copyWith(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16.fSize,
-                  ),
-                ),
-                backgroundColor: appTheme.gray200,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                  side: BorderSide(
-                    color: appTheme.gray300,
-                  ),
-                ),
-              );
-            }).toList(),
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildRowaboutme(aboutMeText: "Interests"),
+          SizedBox(
+            height: 17.v,
           ),
-        ),
-      ],
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Wrap(
+              spacing: 8.0, // Horizontal spacing between chips
+              runSpacing: 4.0, // Vertical spacing between lines of chips
+              children: interestList.map((interest) {
+                return Chip(
+                  label: Text(
+                    interest.name ?? '', // Ensure interest name is not null
+                    style: theme.textTheme.bodyMedium!.copyWith(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16.fSize,
+                    ),
+                  ),
+                  backgroundColor: appTheme.gray200,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                    side: BorderSide(
+                      color: appTheme.gray300,
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -623,7 +674,16 @@ class _UserProfilePageState extends State<UserProfilePage>
                 return Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Container(
-                    color: appTheme.gray100,
+                    // Apply circular border to the container
+                    decoration: BoxDecoration(
+                      color: appTheme.gray100,
+                      borderRadius: BorderRadius.circular(
+                          15), // Circular border with radius 15
+                      border: Border.all(
+                        color: appTheme.gray300, // Border color
+                        width: 0, // Border width
+                      ),
+                    ),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -636,7 +696,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                               width: 50.h,
                               radius: BorderRadius.circular(50),
                             ),
-                            const SizedBox(width: 10),
+                            SizedBox(width: 10.adaptSize),
                             Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
@@ -649,7 +709,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                                 Text(
                                   review.formattedDate.toString(),
                                   style: theme.textTheme.titleSmall!,
-                                )
+                                ),
                               ],
                             )
                           ],
@@ -671,13 +731,14 @@ class _UserProfilePageState extends State<UserProfilePage>
                                 );
                               },
                             ),
-                             SizedBox(
-                                width: 6.adaptSize), // Added SizedBox for spacing
+                            SizedBox(
+                              width: 6.adaptSize,
+                            ), // Added SizedBox for spacing
                             Text(
                               review.rating.toString(),
                               style: theme.textTheme.headlineLarge
                                   ?.copyWith(fontSize: 16.fSize),
-                            )
+                            ),
                           ],
                         ),
                         SizedBox(height: 8.v),
@@ -703,7 +764,7 @@ class _UserProfilePageState extends State<UserProfilePage>
         }),
         SizedBox(
           height: 19.v,
-        )
+        ),
       ],
     );
   }
@@ -713,7 +774,7 @@ class _UserProfilePageState extends State<UserProfilePage>
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Padding(
-          padding:  EdgeInsets.only(
+          padding: EdgeInsets.only(
             top: 1.adaptSize,
             bottom: 2.adaptSize,
           ),
@@ -745,7 +806,8 @@ class _UserProfilePageState extends State<UserProfilePage>
         controller.userData.value.data?.basicInfo?.getTotalFollowing() ?? 0;
 
     return Padding(
-      padding: const EdgeInsets.only(left: 13, right: 30, top: 30),
+      padding: EdgeInsets.only(
+          left: 13.adaptSize, right: 30.adaptSize, top: 30.adaptSize),
       child: Column(
         children: [
           Obx(() {
@@ -940,8 +1002,8 @@ class _UserProfilePageState extends State<UserProfilePage>
                 ),
                 Expanded(
                   child: Wrap(
-                    spacing: 8.0,
-                    runSpacing: 4.0,
+                    spacing: 8.adaptSize,
+                    runSpacing: 4.adaptSize,
                     children: controller.userData.value.data?.language?.language
                             ?.map((e) => Text(
                                   e.name.toString(),

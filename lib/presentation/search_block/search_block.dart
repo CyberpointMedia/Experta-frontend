@@ -22,6 +22,7 @@ class ProfileBlockPage extends StatelessWidget {
               top: 50,
               child: ImageFiltered(
                 imageFilter: ImageFilter.blur(
+                  tileMode: TileMode.decal,
                   sigmaX: 60,
                   sigmaY: 60,
                 ),
@@ -59,7 +60,8 @@ class ProfileBlockPage extends StatelessWidget {
                       ),
                       // Cancel Button on the right side
                       Padding(
-                        padding: EdgeInsets.only(left: 8.h), // Reduce the gap here
+                        padding:
+                            EdgeInsets.only(left: 8.h), // Reduce the gap here
                         child: TextButton(
                           onPressed: () {
                             searchController.clear(); // Clear search text
@@ -97,7 +99,8 @@ class ProfileBlockPage extends StatelessWidget {
   // Builds the clear icon with increased size
   Widget _buildClearIcon() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 8.0), // Add padding around the icon
+      padding: const EdgeInsets.symmetric(
+          horizontal: 8.0), // Add padding around the icon
       child: IconButton(
         icon: Icon(
           Icons.clear,

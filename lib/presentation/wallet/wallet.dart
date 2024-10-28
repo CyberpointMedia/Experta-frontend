@@ -11,7 +11,25 @@ class Wallet extends StatefulWidget {
 }
 
 class _WalletState extends State<Wallet> {
-  bool _isExpanded = false; // Track the visibility state
+  bool _isExpanded = false;
+  int? balance;
+  bool isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    fetchWalletBalance();
+  }
+
+  Future<void> fetchWalletBalance() async {
+    ApiService apiServices = ApiService();
+    int? fetchedBalance = await apiServices.getWalletBalance();
+
+    setState(() {
+      balance = fetchedBalance;
+      isLoading = false;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +41,7 @@ class _WalletState extends State<Wallet> {
             top: 50,
             child: ImageFiltered(
               imageFilter: ImageFilter.blur(
+                tileMode: TileMode.decal,
                 sigmaX: 60,
                 sigmaY: 60,
               ),
@@ -42,7 +61,11 @@ class _WalletState extends State<Wallet> {
           ),
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
-            children: [_buildAppBar(), _buildAccountSettings1(), _buildAccountSettings2()],
+            children: [
+              _buildAppBar(),
+              _buildAccountSettings1(),
+              _buildAccountSettings2()
+            ],
           )
         ],
       ),
@@ -66,199 +89,207 @@ class _WalletState extends State<Wallet> {
   }
 
   Widget _buildAccountSettings1() {
-  return Padding(
-    padding: EdgeInsets.only(right: 16.h, left: 16, top: 20),
-    child: Container(
-      width: MediaQuery.of(context).size.width,
-      padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
-      decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
-        color: Colors.white,
-        borderRadius: BorderRadiusStyle.roundedBorder20,
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            "Total Wallet Balance",
-            textAlign: TextAlign.left,
-            style: CustomTextStyles.labelLargeGray700,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              CustomImageView(imagePath: ImageConstant.imgLayer1, height: 28, width: 28),
-              Padding(
-                padding: const EdgeInsets.only(left: 7),
-                child: Text(
-                  "3,000",
-                  textAlign: TextAlign.left,
-                  style: CustomTextStyles.bodyLargeBlack.copyWith(fontWeight: FontWeight.bold),
+    return Padding(
+      padding: EdgeInsets.only(right: 16.h, left: 16, top: 20),
+      child: Container(
+        width: MediaQuery.of(context).size.width,
+        padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
+        decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
+          color: Colors.white,
+          borderRadius: BorderRadiusStyle.roundedBorder20,
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "Total Wallet Balance",
+              textAlign: TextAlign.left,
+              style: CustomTextStyles.labelLargeGray700,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                CustomImageView(
+                    imagePath: ImageConstant.imgLayer1, height: 28, width: 28),
+                Padding(
+                  padding: const EdgeInsets.only(left: 7),
+                  child: isLoading
+                      ? const Center(child: CircularProgressIndicator())
+                      : balance != null
+                          ? Text(
+                              balance.toString(),
+                              textAlign: TextAlign.left,
+                              style: CustomTextStyles.bodyLargeBlack
+                                  .copyWith(fontWeight: FontWeight.bold),
+                            )
+                          : const Text('Failed to load balance',
+                              style:
+                                  TextStyle(fontSize: 24, color: Colors.red)),
                 ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  setState(() {
-                    _isExpanded = !_isExpanded;
-                  });
-                },
-                child: Icon(
-                  _isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
-                  size: 25,
-                  color: Colors.black,
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      _isExpanded = !_isExpanded;
+                    });
+                  },
+                  child: Icon(
+                    _isExpanded
+                        ? Icons.keyboard_arrow_up
+                        : Icons.keyboard_arrow_down,
+                    size: 25,
+                    color: Colors.black,
+                  ),
                 ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 16),
-          AnimatedContainer(
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut,
-            height: _isExpanded ? 70 : 0,
-            child: _isExpanded
-                ? Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                const Text(
-                                  "Deposits",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
+              ],
+            ),
+            const SizedBox(height: 16),
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 100),
+              curve: Curves.easeInOut,
+              height: _isExpanded ? 80 : 0,
+              child: _isExpanded
+                  ? Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  const Text(
+                                    "Deposits",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 5),
-                                  child: CustomImageView(imagePath: ImageConstant.imgInfoBlueGray300),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                CustomImageView(imagePath: ImageConstant.imgLayer1),
-                                const Text(
-                                  " 1,500",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 5),
+                                    child: CustomImageView(
+                                        imagePath:
+                                            ImageConstant.imgInfoBlueGray300),
                                   ),
-                                ),
-                                const Icon(Icons.keyboard_arrow_right)
-                              ],
-                            ),
-                          ],
-                        ),
-                        const SizedBox(height: 4),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            Row(
-                              children: [
-                                const Text(
-                                  "Earned",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  CustomImageView(
+                                      imagePath: ImageConstant.imgLayer1),
+                                  const Text(
+                                    " 1,500",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                   ),
-                                ),
-                                Padding(
-                                  padding: const EdgeInsets.only(left: 5),
-                                  child: CustomImageView(imagePath: ImageConstant.imgInfoBlueGray300),
-                                ),
-                              ],
-                            ),
-                            Row(
-                              children: [
-                                CustomImageView(imagePath: ImageConstant.imgLayer1),
-                                const Text(
-                                  " 500",
-                                  style: TextStyle(
-                                    fontSize: 16,
-                                    color: Colors.black,
-                                    fontWeight: FontWeight.w500,
+                                  const Icon(Icons.keyboard_arrow_right)
+                                ],
+                              ),
+                            ],
+                          ),
+                          const SizedBox(height: 4),
+                          Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Row(
+                                children: [
+                                  const Text(
+                                    "Earned",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w500,
+                                    ),
                                   ),
-                                ),
-                                const Icon(Icons.keyboard_arrow_right)
-                              ],
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 5),
+                                    child: CustomImageView(
+                                        imagePath:
+                                            ImageConstant.imgInfoBlueGray300),
+                                  ),
+                                ],
+                              ),
+                              Row(
+                                children: [
+                                  CustomImageView(
+                                      imagePath: ImageConstant.imgLayer1),
+                                  const Text(
+                                    " 500",
+                                    style: TextStyle(
+                                      fontSize: 16,
+                                      color: Colors.black,
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ),
+                                  const Icon(Icons.keyboard_arrow_right)
+                                ],
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    )
+                  : null,
+            ),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    // Top Up Button
+                    SizedBox(
+                      height: 55.adaptSize,
+                      width: 135.adaptSize,
+                      child: CustomElevatedButton(
+                          buttonStyle: ElevatedButton.styleFrom(
+                            backgroundColor: theme.primaryColor,
+                            foregroundColor: Colors.black,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
                             ),
-                          ],
-                        ),
-                      ],
+                          ),
+                          onPressed: () {
+                            // Define your action here
+                            Get.toNamed(AppRoutes.topup);
+                            print("Top Up button pressed!");
+                          },
+                          text: 'Top Up'),
                     ),
-                  )
-                : null,
-          ),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  // Top Up Button
-                  SizedBox(
-                    height: 55,
-                    width: 165,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.yellow, // Background color
-                        foregroundColor: Colors.black,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
+                    SizedBox(width: 40.adaptSize),
+                    // Withdraw Button
+                    SizedBox(
+                      height: 55.adaptSize,
+                      width: 135.adaptSize,
+                      child: CustomElevatedButton(
+                        buttonStyle: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          foregroundColor: Colors.black,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            side: BorderSide(color: appTheme.gray300),
+                          ),
                         ),
-                      ),
-                      onPressed: () {
-                        // Define your action here
-                        Get.toNamed(AppRoutes.topup);
-                        print("Top Up button pressed!");
-                      },
-                      child: const Text(
-                        'Top Up',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                        onPressed: () {
+                          Get.toNamed(AppRoutes.widraw);
+                          print("Withdraw button pressed!");
+                        },
+                        text: "Withdraw",
                       ),
                     ),
-                  ),
-                  const SizedBox(width: 60), // Increase the spacing between buttons
-                  // Withdraw Button
-                  SizedBox(
-                    height: 55,
-                    width: 164,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white, // Background color
-                        foregroundColor: Colors.black,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          side: const BorderSide(color: Colors.grey), // Border color
-                        ),
-                      ),
-                      onPressed: () {
-                        // Define your action here
-                        print("Withdraw button pressed!");
-                      },
-                      child: const Text(
-                        'Withdraw',
-                        style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ],
-          )
-        ],
+                  ],
+                ),
+              ],
+            )
+          ],
+        ),
       ),
-    ),
-  );
-}
-
+    );
+  }
 
   Widget _buildAccountSettings2() {
     return Align(
@@ -278,10 +309,11 @@ class _WalletState extends State<Wallet> {
               child: Column(mainAxisSize: MainAxisSize.min, children: [
                 GestureDetector(
                   onTap: () {
-                    Get.toNamed(AppRoutes.changeUserName);
+                    Get.toNamed(AppRoutes.Transaction);
                   },
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
                     decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
                       borderRadius: BorderRadiusStyle.customBorderBL20,
                     ),
@@ -298,10 +330,12 @@ class _WalletState extends State<Wallet> {
                           ),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(left: 15.h, top: 13.v, bottom: 10.v),
+                          padding: EdgeInsets.only(
+                              left: 15.h, top: 13.v, bottom: 10.v),
                           child: Text(
                             "Transactions",
-                            style: theme.textTheme.titleMedium!.copyWith(color: appTheme.gray900),
+                            style: theme.textTheme.titleMedium!
+                                .copyWith(color: appTheme.gray900),
                           ),
                         ),
                         const Spacer(),
@@ -322,7 +356,8 @@ class _WalletState extends State<Wallet> {
                   child: Padding(
                     padding: const EdgeInsets.only(top: 1),
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 15.h, vertical: 16.v),
                       decoration: AppDecoration.fillOnPrimaryContainer,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -337,10 +372,12 @@ class _WalletState extends State<Wallet> {
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(left: 15.h, top: 13.v, bottom: 10.v),
+                            padding: EdgeInsets.only(
+                                left: 15.h, top: 13.v, bottom: 10.v),
                             child: Text(
                               "KYC Verification",
-                              style: theme.textTheme.titleMedium!.copyWith(color: appTheme.gray900),
+                              style: theme.textTheme.titleMedium!
+                                  .copyWith(color: appTheme.gray900),
                             ),
                           ),
                           const Spacer(),
@@ -362,7 +399,8 @@ class _WalletState extends State<Wallet> {
                   child: Padding(
                     padding: const EdgeInsets.only(top: 1),
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 15.h, vertical: 16.v),
                       decoration: AppDecoration.fillOnPrimaryContainer,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -377,10 +415,12 @@ class _WalletState extends State<Wallet> {
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(left: 15.h, top: 13.v, bottom: 10.v),
+                            padding: EdgeInsets.only(
+                                left: 15.h, top: 13.v, bottom: 10.v),
                             child: Text(
                               "Referral Program",
-                              style: theme.textTheme.titleMedium!.copyWith(color: appTheme.gray900),
+                              style: theme.textTheme.titleMedium!
+                                  .copyWith(color: appTheme.gray900),
                             ),
                           ),
                           const Spacer(),
@@ -402,7 +442,8 @@ class _WalletState extends State<Wallet> {
                   child: Padding(
                     padding: const EdgeInsets.only(top: 1),
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 15.h, vertical: 16.v),
                       decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
                         borderRadius: BorderRadiusStyle.customBorderL20,
                       ),
@@ -419,10 +460,12 @@ class _WalletState extends State<Wallet> {
                             ),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(left: 15.h, top: 13.v, bottom: 10.v),
+                            padding: EdgeInsets.only(
+                                left: 15.h, top: 13.v, bottom: 10.v),
                             child: Text(
                               "Need Help?",
-                              style: theme.textTheme.titleMedium!.copyWith(color: appTheme.gray900),
+                              style: theme.textTheme.titleMedium!
+                                  .copyWith(color: appTheme.gray900),
                             ),
                           ),
                           const Spacer(),

@@ -32,6 +32,7 @@ class _ChattingPageState extends State<ChattingPage> {
   final currentUserId = PrefUtils().getaddress();
   List<File> selectedFiles = [];
   bool isLoading = true;
+  int? balance;
 
   Future<void> pickFiles() async {
     FilePickerResult? result =
@@ -54,6 +55,17 @@ class _ChattingPageState extends State<ChattingPage> {
     apiServices = ApiService();
     fetchMessages();
     initializeSocket();
+    fetchWalletBalance();
+  }
+
+  Future<void> fetchWalletBalance() async {
+    ApiService apiServices = ApiService();
+    int? fetchedBalance = await apiServices.getWalletBalance();
+
+    setState(() {
+      balance = fetchedBalance;
+      isLoading = false;
+    });
   }
 
   void initializeSocket() {
@@ -283,6 +295,7 @@ class _ChattingPageState extends State<ChattingPage> {
           ),
           actions: [
             AppbarTrailingButtonOne(
+              balance: balance ?? 0,
               margin: EdgeInsets.only(left: 12.h, top: 8.v),
               onTap: onTapThreeThousand,
             ),
@@ -305,7 +318,8 @@ class _ChattingPageState extends State<ChattingPage> {
               left: 270,
               top: 50,
               child: ImageFiltered(
-                imageFilter: ImageFilter.blur(sigmaX: 60, sigmaY: 60),
+                imageFilter: ImageFilter.blur(
+                    tileMode: TileMode.decal, sigmaX: 60, sigmaY: 60),
                 child: Align(
                   child: SizedBox(
                     width: 252,
@@ -633,7 +647,7 @@ void onTapArrowLeft() {
 }
 
 void onTapThreeThousand() {
-  // Handle the action for the trailing button
+  Get.toNamed(AppRoutes.wallet);
 }
 
 void onTapVideo() {

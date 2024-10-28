@@ -12,7 +12,6 @@ class FollowingPage extends StatefulWidget {
 }
 
 class _FollowingPageState extends State<FollowingPage> {
- 
   final FollowersAndFollowingController controller =
       Get.put(FollowersAndFollowingController());
 
@@ -82,7 +81,8 @@ class _FollowingPageState extends State<FollowingPage> {
       left: 270,
       top: 50,
       child: ImageFiltered(
-        imageFilter: ImageFilter.blur(sigmaX: 60, sigmaY: 60),
+        imageFilter:
+            ImageFilter.blur(tileMode: TileMode.decal, sigmaX: 60, sigmaY: 60),
         child: Align(
           child: SizedBox(
             width: 252,
@@ -130,24 +130,26 @@ class FollowingTile extends StatelessWidget {
       ),
       title: Text(following.displayName),
       subtitle: Text("${following.industry} | ${following.occupation}"),
-      trailing: (controller.userProfile=="userProfile")?ElevatedButton(
-        onPressed: () async {
-          await controller.removeConnection(following.id, "unfollow");
-        },
-        style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(4.0), // Rectangular shape
-          ),
-          backgroundColor: Colors.white,
-          minimumSize: const Size(100, 50), // Set width and height
-        ),
-        child: const Text(
-          'Unfollow',
-          style: TextStyle(
-            color: Colors.black, // Text color black
-          ),
-        ),
-      ):const SizedBox.shrink(),
+      trailing: (controller.userProfile == "userProfile")
+          ? ElevatedButton(
+              onPressed: () async {
+                await controller.removeConnection(following.id, "unfollow");
+              },
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(4.0), // Rectangular shape
+                ),
+                backgroundColor: Colors.white,
+                minimumSize: const Size(100, 50), // Set width and height
+              ),
+              child: const Text(
+                'Unfollow',
+                style: TextStyle(
+                  color: Colors.black, // Text color black
+                ),
+              ),
+            )
+          : const SizedBox.shrink(),
     );
   }
 }

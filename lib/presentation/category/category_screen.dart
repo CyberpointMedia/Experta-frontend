@@ -3,14 +3,9 @@ import 'dart:ui';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/Home/model/home_model.dart';
 import 'package:experta/presentation/categoryDetails/category_details_screen.dart';
-import 'package:experta/widgets/app_bar/appbar_subtitle_six.dart';
-import 'package:experta/widgets/app_bar/custom_app_bar.dart';
-import 'package:flutter/material.dart';
 import 'package:experta/presentation/category/category_controller.dart';
-import 'package:experta/widgets/app_bar/appbar_leading_image.dart';
-import 'package:experta/widgets/app_bar/appbar_title.dart';
 import 'package:experta/widgets/app_bar/appbar_trailing_iconbutton.dart';
-import 'package:flutter/widgets.dart';
+import 'package:experta/widgets/custom_icon_button.dart';
 
 class CategoryScreen extends StatefulWidget {
   CategoryScreen({Key? key}) : super(key: key);
@@ -36,6 +31,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
             top: 50,
             child: ImageFiltered(
               imageFilter: ImageFilter.blur(
+                tileMode: TileMode.decal,
                 sigmaX: 60,
                 sigmaY: 60,
               ),
@@ -84,37 +80,21 @@ class _CategoryScreenState extends State<CategoryScreen> {
                             arguments: {'industry': industry},
                           );
                         },
-                        child: AnimatedContainer(
-                          duration: const Duration(milliseconds: 300),
-                          decoration: BoxDecoration(
-                            color: isSelected
-                                ? Colors.white
-                                : Colors.transparent, // White if selected
-                            borderRadius: BorderRadius.circular(10),
-                            boxShadow: isSelected
-                                ? [
-                                    const BoxShadow(
-                                        color: Colors.grey, blurRadius: 8)
-                                  ]
-                                : [],
-                          ),
-                          child: Column(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              CustomImageView(
-                                imagePath: industry.icon,
-                                height: 36.v,
-                                width: 36.adaptSize,
-                              ),
-                              const SizedBox(height: 10),
-                              Text(
-                                industry.name,
-                                style: theme.textTheme.headlineLarge?.copyWith(
-                                  fontSize: 14.fSize,
-                                ),
-                              ),
-                            ],
-                          ),
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CustomImageView(
+                              imagePath: industry.icon,
+                              height: 36.v,
+                              width: 36.adaptSize,
+                            ),
+                            const SizedBox(height: 10),
+                            Text(
+                              industry.name,
+                              style: theme.textTheme.bodyMedium!
+                                  .copyWith(color: Colors.black),
+                            ),
+                          ],
                         ),
                       );
                     },
@@ -141,10 +121,33 @@ class _CategoryScreenState extends State<CategoryScreen> {
       centerTitle: true,
       title: AppbarSubtitleSix(text: "Category"),
       actions: [
-        AppbarTrailingIconbutton(
-          imagePath: "assets/images/img_frame_30.svg",
-          margin: const EdgeInsets.symmetric(horizontal: 16),
-        ),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: IconButton(
+            onPressed: () {
+              Get.toNamed(AppRoutes.notification);
+            },
+            padding: const EdgeInsets.only(right: 5),
+            icon: Container(
+              width: 35.0,
+              height: 35.0,
+              padding: EdgeInsets.all(5),
+              decoration: IconButtonStyleHelper.outline.copyWith(
+                // color: appTheme.gray20002,
+                color: appTheme.whiteA700.withOpacity(0.6),
+                border: Border.all(
+                  color: Colors.white,
+                  width: 1.5, // Border width
+                ),
+              ),
+              child: CustomImageView(
+                imagePath: ImageConstant.imgBell02,
+                height: 8.0, // Set the desired height
+                width: 8.0, // Set the desired width
+              ),
+            ),
+          ),
+        )
       ],
     );
   }

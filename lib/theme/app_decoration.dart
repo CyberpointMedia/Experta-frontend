@@ -50,6 +50,9 @@ class AppDecoration {
   static BoxDecoration get fillOnPrimaryContainer => BoxDecoration(
         color: theme.colorScheme.onPrimaryContainer.withOpacity(1),
       );
+  static BoxDecoration get fillOnPrimaryCantainer => BoxDecoration(
+        color: theme.colorScheme.onPrimaryContainer.withOpacity(0),
+      );
   static BoxDecoration get fillPrimary => BoxDecoration(
         color: theme.colorScheme.primary,
       );
@@ -104,7 +107,9 @@ class AppDecoration {
   static BoxDecoration get gradientOnPrimaryContainerToOnPrimaryContainer =>
       BoxDecoration(
         gradient: LinearGradient(
-          begin: const Alignment(0.20, 0.50),
+          begin: const Alignment(0.16, 0.5),
+
+          // begin: const Alignment(0.20, 0.50),
           end: const Alignment(0.17, 0.01),
           colors: [
             theme.colorScheme.onPrimaryContainer.withOpacity(1),

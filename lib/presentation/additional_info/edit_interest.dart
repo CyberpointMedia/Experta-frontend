@@ -1,15 +1,7 @@
-import 'dart:developer';
 import 'dart:ui';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/additional_info/controller/edit_interest_controller.dart';
 import 'package:experta/presentation/additional_info/model/interest_model.dart';
-import 'package:experta/widgets/app_bar/appbar_leading_image.dart';
-import 'package:experta/widgets/app_bar/appbar_subtitle_six.dart';
-import 'package:experta/widgets/app_bar/custom_app_bar.dart';
-import 'package:experta/widgets/custom_elevated_button.dart';
-import 'package:experta/widgets/custom_search_view.dart';
-import 'package:flutter/material.dart';
-import 'package:shimmer/shimmer.dart';
 
 class EditInterestPage extends StatefulWidget {
   const EditInterestPage({super.key});
@@ -59,7 +51,8 @@ class _EditInterestPageState extends State<EditInterestPage> {
       left: 270,
       top: 50,
       child: ImageFiltered(
-        imageFilter: ImageFilter.blur(sigmaX: 60, sigmaY: 60),
+        imageFilter:
+            ImageFilter.blur(tileMode: TileMode.decal, sigmaX: 60, sigmaY: 60),
         child: Align(
           child: SizedBox(
             width: 252,
@@ -92,7 +85,7 @@ class _EditInterestPageState extends State<EditInterestPage> {
 
   Widget _bodyWidget(BuildContext context, InterestController controller) {
     return Padding(
-      padding: const EdgeInsets.only(left: 20, top: 20, right: 20),
+      padding: const EdgeInsets.only(left: 16, top: 20, right: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -108,6 +101,8 @@ class _EditInterestPageState extends State<EditInterestPage> {
             child: Text(
               "Pick your favorite interests to find groups and events related to them",
               style: CustomTextStyles.bodyMediumLight,
+              // "Pick your favorite interests to find groups and events related to them",
+              // style: CustomTextStyles.bodyMediumLight,
             ),
           ),
           CustomSearchView(
