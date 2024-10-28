@@ -82,7 +82,8 @@ class _SetAvailabilityState extends State<SetAvailability> {
       left: 270,
       top: 50,
       child: ImageFiltered(
-        imageFilter: ImageFilter.blur(sigmaX: 60, sigmaY: 60),
+        imageFilter:
+            ImageFilter.blur(tileMode: TileMode.decal, sigmaX: 60, sigmaY: 60),
         child: Align(
           child: SizedBox(
             width: 252,
@@ -142,7 +143,10 @@ class _SetAvailabilityState extends State<SetAvailability> {
         controller.deleteAvailability(availability.id);
       },
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 16.0,),
+        padding: const EdgeInsets.symmetric(
+          vertical: 6.0,
+          horizontal: 16.0,
+        ),
         child: SizedBox(
           width: double.infinity,
           child: Card(
@@ -169,7 +173,8 @@ class _SetAvailabilityState extends State<SetAvailability> {
                       Text(
                         '${convertTo12HourFormat(availability.startTime)} - ${convertTo12HourFormat(availability.endTime)}',
                         style: CustomTextStyles.labelBigBlack900.copyWith(
-                          color: Colors.black, // Change the time text to dark black
+                          color: Colors
+                              .black, // Change the time text to dark black
                         ),
                       ),
                       GestureDetector(

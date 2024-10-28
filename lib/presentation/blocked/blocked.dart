@@ -29,7 +29,8 @@ class _BlockedPageState extends State<BlockedPage> {
               const SizedBox(height: 15),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0), // Padding to match the AppBar
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 16.0), // Padding to match the AppBar
                   child: Column(
                     children: [
                       const CustomSearchView(
@@ -42,14 +43,17 @@ class _BlockedPageState extends State<BlockedPage> {
                                 child: CircularProgressIndicator());
                           }
                           if (controller.blockedUsers.isEmpty) {
-                            return const Center(child: Text('No blocked users'));
+                            return const Center(
+                                child: Text('No blocked users'));
                           }
                           return ListView.builder(
                             itemCount: controller.blockedUsers.length,
                             itemBuilder: (context, index) {
                               final user = controller.blockedUsers[index];
                               return Padding(
-                                padding: const EdgeInsets.symmetric(vertical: 8.0), // Optional vertical padding between items
+                                padding: const EdgeInsets.symmetric(
+                                    vertical:
+                                        8.0), // Optional vertical padding between items
                                 child: UserTile(
                                   user: user,
                                   onUnblock: () {
@@ -105,7 +109,8 @@ class _BlockedPageState extends State<BlockedPage> {
       left: 270,
       top: 50,
       child: ImageFiltered(
-        imageFilter: ImageFilter.blur(sigmaX: 60, sigmaY: 60),
+        imageFilter:
+            ImageFilter.blur(tileMode: TileMode.decal, sigmaX: 60, sigmaY: 60),
         child: Align(
           child: SizedBox(
             width: 252,
@@ -136,7 +141,8 @@ class UserTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16.0), // Add padding to match the AppBar
+      contentPadding: const EdgeInsets.symmetric(
+          horizontal: 16.0), // Add padding to match the AppBar
       leading: ClipOval(
         child: SizedBox(
           width: 40.0, // Adjust the size as needed

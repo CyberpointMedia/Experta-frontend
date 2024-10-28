@@ -24,6 +24,7 @@ class _SecurityPrivacyState extends State<SecurityPrivacy> {
             top: 50,
             child: ImageFiltered(
               imageFilter: ImageFilter.blur(
+                tileMode: TileMode.decal,
                 sigmaX: 60,
                 sigmaY: 60,
               ),

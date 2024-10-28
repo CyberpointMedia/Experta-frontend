@@ -12,16 +12,18 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Function onTapThreeThousand;
   final Function onTapVideo;
   final Function onTapPhone;
+  final int balance;
 
   const ChatAppBar({
-    Key? key,
+    super.key,
     required this.displayName,
     required this.isConnected,
     required this.onTapArrowLeft,
     required this.onTapThreeThousand,
     required this.onTapVideo,
     required this.onTapPhone,
-  }) : super(key: key);
+    required this.balance,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -44,7 +46,8 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
                 if (isConnected)
                   Padding(
                     padding: EdgeInsets.only(left: 8.h),
-                    child: const Icon(Icons.circle, color: Colors.green, size: 12),
+                    child:
+                        const Icon(Icons.circle, color: Colors.green, size: 12),
                   ),
                 AppbarTitleImage(
                   imagePath: ImageConstant.imgVerified,
@@ -57,6 +60,7 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       actions: [
         AppbarTrailingButtonOne(
+          balance: balance,
           margin: EdgeInsets.only(left: 12.h, top: 8.v),
           onTap: onTapThreeThousand,
         ),

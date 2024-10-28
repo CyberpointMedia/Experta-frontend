@@ -67,6 +67,7 @@ class _AadharDetailsState extends State<AadharDetails> {
               top: 50,
               child: ImageFiltered(
                 imageFilter: ImageFilter.blur(
+                  tileMode: TileMode.decal,
                   sigmaX: 60,
                   sigmaY: 60,
                 ),
@@ -91,7 +92,9 @@ class _AadharDetailsState extends State<AadharDetails> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text("Full Name"),
-                     SizedBox(height: 6,),
+                    SizedBox(
+                      height: 6,
+                    ),
                     CustomTextFormField(
                       hintText: "Naveen Verma",
                       hintStyle: CustomTextStyles.titleMediumBluegray300,
@@ -102,7 +105,9 @@ class _AadharDetailsState extends State<AadharDetails> {
                     ),
                     const SizedBox(height: 10),
                     const Text("Aadhaar Number"),
-                     SizedBox(height: 6,),
+                    SizedBox(
+                      height: 6,
+                    ),
                     CustomTextFormField(
                       hintText: "4400 2059 9088",
                       hintStyle: CustomTextStyles.titleMediumBluegray300,
@@ -113,7 +118,9 @@ class _AadharDetailsState extends State<AadharDetails> {
                     ),
                     const SizedBox(height: 10),
                     const Text("Date of Birth"),
-                     SizedBox(height: 6,),
+                    SizedBox(
+                      height: 6,
+                    ),
                     CustomTextFormField(
                       hintText: "25/11/1992",
                       hintStyle: CustomTextStyles.titleMediumBluegray300,
@@ -124,9 +131,12 @@ class _AadharDetailsState extends State<AadharDetails> {
                     ),
                     const SizedBox(height: 10),
                     const Text("Address"),
-                     SizedBox(height: 6,),
+                    SizedBox(
+                      height: 6,
+                    ),
                     CustomTextFormField(
-                      hintText: "Flat no 351, 4th floor, Tower 2, Sector 91, Mohali",
+                      hintText:
+                          "Flat no 351, 4th floor, Tower 2, Sector 91, Mohali",
                       hintStyle: CustomTextStyles.titleMediumBluegray300,
                       textInputType: TextInputType.streetAddress,
                       controller: addressController,
@@ -135,7 +145,9 @@ class _AadharDetailsState extends State<AadharDetails> {
                     ),
                     const SizedBox(height: 10),
                     const Text("State"),
-                     SizedBox(height: 6,),
+                    SizedBox(
+                      height: 6,
+                    ),
                     CustomTextFormField(
                       hintText: "Punjab",
                       hintStyle: CustomTextStyles.titleMediumBluegray300,
@@ -146,7 +158,9 @@ class _AadharDetailsState extends State<AadharDetails> {
                     ),
                     const SizedBox(height: 10),
                     const Text("City"),
-                     SizedBox(height: 6,),
+                    SizedBox(
+                      height: 6,
+                    ),
                     CustomTextFormField(
                       hintText: "SAS Nagar (Mohali)",
                       hintStyle: CustomTextStyles.titleMediumBluegray300,
@@ -157,7 +171,9 @@ class _AadharDetailsState extends State<AadharDetails> {
                     ),
                     const SizedBox(height: 10),
                     const Text("Pin Code"),
-                     SizedBox(height: 6,),
+                    SizedBox(
+                      height: 6,
+                    ),
                     CustomTextFormField(
                       hintText: "140308",
                       hintStyle: CustomTextStyles.titleMediumBluegray300,

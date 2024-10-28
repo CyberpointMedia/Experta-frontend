@@ -12,31 +12,33 @@ class VerifynumberScreen extends GetWidget<VerifynumberController> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        resizeToAvoidBottomInset: true, // This allows the UI to resize when the keyboard is shown
+        resizeToAvoidBottomInset:
+            true, // This allows the UI to resize when the keyboard is shown
         body: Stack(
           children: [
-            // Positioned(
-            //   left: 205,
-            //   top: 50,
-            //   child: ImageFiltered(
-            //     imageFilter: ImageFilter.blur(
-            //       sigmaX: 40,
-            //       sigmaY: 40,
-            //     ),
-            //     child: Align(
-            //       child: SizedBox(
-            //         width: 252,
-            //         height: 252,
-            //         child: Container(
-            //           decoration: BoxDecoration(
-            //             borderRadius: BorderRadius.circular(126),
-            //             color: appTheme.deepOrangeA20,
-            //           ),
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // ),
+            Positioned(
+              left: 205,
+              top: 50,
+              child: ImageFiltered(
+                imageFilter: ImageFilter.blur(
+                  tileMode: TileMode.decal,
+                  sigmaX: 40,
+                  sigmaY: 40,
+                ),
+                child: Align(
+                  child: SizedBox(
+                    width: 252,
+                    height: 252,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(126),
+                        color: appTheme.deepOrangeA20,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
             SizedBox(
               width: double.maxFinite,
               child: SingleChildScrollView(
@@ -46,7 +48,8 @@ class VerifynumberScreen extends GetWidget<VerifynumberController> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   children: [
                     Padding(
-                      padding:  EdgeInsets.only(top: 20.adaptSize, bottom: 20.adaptSize),
+                      padding: EdgeInsets.only(
+                          top: 20.adaptSize, bottom: 20.adaptSize),
                       child: CustomAppBar(
                         height: 20.adaptSize,
                         leadingWidth: 25.adaptSize,
@@ -70,7 +73,8 @@ class VerifynumberScreen extends GetWidget<VerifynumberController> {
           padding: EdgeInsets.only(
             left: 16.h,
             right: 16.h,
-            bottom: MediaQuery.of(context).viewInsets.bottom + 16.v, // Ensures padding when the keyboard is shown
+            bottom: MediaQuery.of(context).viewInsets.bottom +
+                16.v, // Ensures padding when the keyboard is shown
           ),
           child: _buildContinue(),
         ),
@@ -94,14 +98,15 @@ class VerifynumberScreen extends GetWidget<VerifynumberController> {
             ),
           ),
           Padding(
-            padding:  EdgeInsets.only(left: 25.adaptSize, bottom: 20.adaptSize),
+            padding: EdgeInsets.only(left: 25.adaptSize, bottom: 20.adaptSize),
             child: Builder(
               builder: (context) {
                 // Extract the phone number from the controller
                 String phoneNumber = controller.phoneNumberController.text;
 
                 // Define the country code
-                String countryCode = "+91"; // You can dynamically get this if needed
+                String countryCode =
+                    "+91"; // You can dynamically get this if needed
 
                 // Define the masked number
                 String maskedNumber = phoneNumber.length > 3
@@ -131,12 +136,12 @@ class VerifynumberScreen extends GetWidget<VerifynumberController> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 15),
             child: Obx(() => CustomPinCodeTextField(
-              context: Get.context!,
-              controller: controller.otpController.value,
-              onChanged: (value) {
-                controller.complete.value = value.length == 6;
-              },
-            )),
+                  context: Get.context!,
+                  controller: controller.otpController.value,
+                  onChanged: (value) {
+                    controller.complete.value = value.length == 6;
+                  },
+                )),
           ),
           Center(
             child: RichText(
@@ -152,7 +157,8 @@ class VerifynumberScreen extends GetWidget<VerifynumberController> {
                     style: CustomTextStyles.titleSmallGilroyff171717,
                     recognizer: TapGestureRecognizer()
                       ..onTap = () async {
-                        controller.resendOtp(controller.phoneNumberController.text);
+                        controller
+                            .resendOtp(controller.phoneNumberController.text);
 
                         // Optionally, show feedback to the user
                         Get.snackbar(
@@ -175,15 +181,15 @@ class VerifynumberScreen extends GetWidget<VerifynumberController> {
   /// Section Widget
   Widget _buildContinue() {
     return Obx(() => CustomElevatedButton(
-      isDisabled: controller.complete.value == false,
-      text: "lblcontinue".tr,
-      buttonTextStyle: CustomTextStyles.bodySmallffffffff,
-      onPressed: controller.complete.value
-          ? () {
-              controller.verifyOtp();
-            }
-          : null,
-    ));
+          isDisabled: controller.complete.value == false,
+          text: "lblcontinue".tr,
+          buttonTextStyle: CustomTextStyles.bodySmallffffffff,
+          onPressed: controller.complete.value
+              ? () {
+                  controller.verifyOtp();
+                }
+              : null,
+        ));
   }
 
   /// Navigates to the previous screen.

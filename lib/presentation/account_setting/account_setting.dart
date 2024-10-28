@@ -25,6 +25,7 @@ class _AccountSettingsState extends State<AccountSettings> {
             top: 50,
             child: ImageFiltered(
               imageFilter: ImageFilter.blur(
+                tileMode: TileMode.decal,
                 sigmaX: 60,
                 sigmaY: 60,
               ),
@@ -57,7 +58,9 @@ class _AccountSettingsState extends State<AccountSettings> {
       leadingWidth: 40.h,
       leading: AppbarLeadingImage(
         imagePath: ImageConstant.imgArrowLeftOnerrorcontainer,
-        margin: EdgeInsets.only(left: 16.h,),
+        margin: EdgeInsets.only(
+          left: 16.h,
+        ),
         onTap: () {
           onTapArrowLeft();
         },
@@ -71,7 +74,8 @@ class _AccountSettingsState extends State<AccountSettings> {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Padding(
-        padding: EdgeInsets.only(right: 16.h, left: 16, top: 7), // Adjusted top padding to 7
+        padding: EdgeInsets.only(
+            right: 16.h, left: 16, top: 7), // Adjusted top padding to 7
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -88,7 +92,8 @@ class _AccountSettingsState extends State<AccountSettings> {
                     navigateToSettingsDetail('Username');
                   },
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
                     decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
                       borderRadius: BorderRadiusStyle.customBorderBL20,
                     ),
@@ -103,9 +108,12 @@ class _AccountSettingsState extends State<AccountSettings> {
                           child: CustomImageView(imagePath: ImageConstant.user),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(left: 15.h, top: 13.v, bottom: 10.v),
-                          child: Text("Username",
-                            style: theme.textTheme.titleMedium!.copyWith(color: appTheme.gray900),
+                          padding: EdgeInsets.only(
+                              left: 15.h, top: 13.v, bottom: 10.v),
+                          child: Text(
+                            "Username",
+                            style: theme.textTheme.titleMedium!
+                                .copyWith(color: appTheme.gray900),
                           ),
                         ),
                         const Spacer(),
@@ -126,7 +134,8 @@ class _AccountSettingsState extends State<AccountSettings> {
                   child: Padding(
                     padding: const EdgeInsets.only(top: 1),
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 15.h, vertical: 16.v),
                       decoration: AppDecoration.fillOnPrimaryContainer,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -136,12 +145,16 @@ class _AccountSettingsState extends State<AccountSettings> {
                             width: 44.adaptSize,
                             padding: EdgeInsets.all(6.h),
                             decoration: IconButtonStyleHelper.fillDeepPurple,
-                            child: CustomImageView(imagePath: ImageConstant.birthday),
+                            child: CustomImageView(
+                                imagePath: ImageConstant.birthday),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(left: 15.h, top: 13.v, bottom: 10.v),
-                            child: Text("Birthday",
-                              style: theme.textTheme.titleMedium!.copyWith(color: appTheme.gray900),
+                            padding: EdgeInsets.only(
+                                left: 15.h, top: 13.v, bottom: 10.v),
+                            child: Text(
+                              "Birthday",
+                              style: theme.textTheme.titleMedium!
+                                  .copyWith(color: appTheme.gray900),
                             ),
                           ),
                           const Spacer(),
@@ -158,12 +171,13 @@ class _AccountSettingsState extends State<AccountSettings> {
                 ),
                 GestureDetector(
                   onTap: () {
-                  Get.toNamed(AppRoutes.qr); // Navigate to raise ticket
-                },
+                    Get.toNamed(AppRoutes.qr); // Navigate to raise ticket
+                  },
                   child: Padding(
                     padding: const EdgeInsets.only(top: 1),
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 15.h, vertical: 16.v),
                       decoration: AppDecoration.fillOnPrimaryContainer,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -173,12 +187,16 @@ class _AccountSettingsState extends State<AccountSettings> {
                             width: 44.adaptSize,
                             padding: EdgeInsets.all(6.h),
                             decoration: IconButtonStyleHelper.fillGreenTL24,
-                            child: CustomImageView(imagePath: ImageConstant.gender),
+                            child: CustomImageView(
+                                imagePath: ImageConstant.gender),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(left: 15.h, top: 13.v, bottom: 10.v),
-                            child: Text("Gender",
-                              style: theme.textTheme.titleMedium!.copyWith(color: appTheme.gray900),
+                            padding: EdgeInsets.only(
+                                left: 15.h, top: 13.v, bottom: 10.v),
+                            child: Text(
+                              "Gender",
+                              style: theme.textTheme.titleMedium!
+                                  .copyWith(color: appTheme.gray900),
                             ),
                           ),
                           const Spacer(),
@@ -200,7 +218,8 @@ class _AccountSettingsState extends State<AccountSettings> {
                   child: Padding(
                     padding: const EdgeInsets.only(top: 1),
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 15.h, vertical: 16.v),
                       decoration: AppDecoration.fillOnPrimaryContainer,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -210,12 +229,16 @@ class _AccountSettingsState extends State<AccountSettings> {
                             width: 44.adaptSize,
                             padding: EdgeInsets.all(10.h),
                             decoration: IconButtonStyleHelper.fillOrange,
-                            child: CustomImageView(imagePath: ImageConstant.email),
+                            child:
+                                CustomImageView(imagePath: ImageConstant.email),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(left: 15.h, top: 13.v, bottom: 10.v),
-                            child: Text("Change Email",
-                              style: theme.textTheme.titleMedium!.copyWith(color: appTheme.gray900),
+                            padding: EdgeInsets.only(
+                                left: 15.h, top: 13.v, bottom: 10.v),
+                            child: Text(
+                              "Change Email",
+                              style: theme.textTheme.titleMedium!
+                                  .copyWith(color: appTheme.gray900),
                             ),
                           ),
                           const Spacer(),
@@ -237,7 +260,8 @@ class _AccountSettingsState extends State<AccountSettings> {
                   child: Padding(
                     padding: const EdgeInsets.only(top: 1),
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 15.h, vertical: 16.v),
                       decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
                         borderRadius: BorderRadiusStyle.customBorderL20,
                       ),
@@ -249,12 +273,16 @@ class _AccountSettingsState extends State<AccountSettings> {
                             width: 44.adaptSize,
                             padding: EdgeInsets.all(10.h),
                             decoration: IconButtonStyleHelper.fillGrayTL22,
-                            child: CustomImageView(imagePath: ImageConstant.phone),
+                            child:
+                                CustomImageView(imagePath: ImageConstant.phone),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(left: 15.h, top: 13.v, bottom: 10.v),
-                            child: Text("Phone Number",
-                              style: theme.textTheme.titleMedium!.copyWith(color: appTheme.gray900),
+                            padding: EdgeInsets.only(
+                                left: 15.h, top: 13.v, bottom: 10.v),
+                            child: Text(
+                              "Phone Number",
+                              style: theme.textTheme.titleMedium!
+                                  .copyWith(color: appTheme.gray900),
                             ),
                           ),
                           const Spacer(),

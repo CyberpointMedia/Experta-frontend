@@ -21,6 +21,7 @@ class AllReviewsPage extends StatelessWidget {
               top: 50.adaptSize,
               child: ImageFiltered(
                 imageFilter: ImageFilter.blur(
+                  tileMode: TileMode.decal,
                   sigmaX: 60.adaptSize,
                   sigmaY: 60.adaptSize,
                 ),
@@ -80,13 +81,16 @@ class AllReviewsPage extends StatelessWidget {
                                           children: [
                                             Text(
                                               review.reviewer.toString(),
-                                              style: theme.textTheme.headlineLarge
-                                                  ?.copyWith(fontSize: 14.fSize),
+                                              style: theme
+                                                  .textTheme.headlineLarge
+                                                  ?.copyWith(
+                                                      fontSize: 14.fSize),
                                             ),
                                             SizedBox(height: 1.v),
                                             Text(
                                               review.formattedDate.toString(),
-                                              style: theme.textTheme.titleSmall!,
+                                              style:
+                                                  theme.textTheme.titleSmall!,
                                             ),
                                           ],
                                         )

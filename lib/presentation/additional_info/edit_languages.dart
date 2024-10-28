@@ -42,7 +42,8 @@ class EditLanguagePage extends StatelessWidget {
       left: 270,
       top: 50,
       child: ImageFiltered(
-        imageFilter: ImageFilter.blur(sigmaX: 60, sigmaY: 60),
+        imageFilter:
+            ImageFilter.blur(tileMode: TileMode.decal, sigmaX: 60, sigmaY: 60),
         child: Align(
           child: SizedBox(
             width: 252,
@@ -79,7 +80,7 @@ class EditLanguagePage extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-         // _buildHeader(),
+          // _buildHeader(),
           CustomSearchView(
             hintText: "Search your language",
             onChanged: (query) {

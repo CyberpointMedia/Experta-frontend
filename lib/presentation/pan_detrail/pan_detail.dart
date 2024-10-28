@@ -50,6 +50,7 @@ class _PanDetailState extends State<PanDetail> {
               top: 50,
               child: ImageFiltered(
                 imageFilter: ImageFilter.blur(
+                  tileMode: TileMode.decal,
                   sigmaX: 60,
                   sigmaY: 60,
                 ),
@@ -73,7 +74,9 @@ class _PanDetailState extends State<PanDetail> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text("Full Name"),
-                  SizedBox(height: 6,),
+                  SizedBox(
+                    height: 6,
+                  ),
                   CustomTextFormField(
                     hintText: "Naveen Verma",
                     hintStyle: CustomTextStyles.titleMediumBluegray300,
@@ -84,7 +87,9 @@ class _PanDetailState extends State<PanDetail> {
                   ),
                   const SizedBox(height: 20),
                   const Text("PAN Number"),
-                  SizedBox(height: 6,),
+                  SizedBox(
+                    height: 6,
+                  ),
                   CustomTextFormField(
                     hintText: "AMAPV8100G",
                     hintStyle: CustomTextStyles.titleMediumBluegray300,
@@ -95,7 +100,9 @@ class _PanDetailState extends State<PanDetail> {
                   ),
                   const SizedBox(height: 20),
                   const Text("Date of Birth"),
-                  SizedBox(height: 6,),
+                  SizedBox(
+                    height: 6,
+                  ),
                   CustomTextFormField(
                     hintText: "25/11/1992",
                     hintStyle: CustomTextStyles.titleMediumBluegray300,
@@ -105,29 +112,29 @@ class _PanDetailState extends State<PanDetail> {
                     autofocus: false,
                   ),
                   const Spacer(),
-                //   CustomElevatedButton(
-                //     text: "Save",
-                //     onPressed: () {
-                //       if (fullNameController.text.isNotEmpty &&
-                //           panNumberController.text.isNotEmpty &&
-                //           dateOfBirthController.text.isNotEmpty) {
-                //         CustomToast().showToast(
-                //           context: context,
-                //           message: "Details saved successfully",
-                //           isSuccess: true,
-                //         );
-                //         Get.toNamed(AppRoutes.accountSetting);
-                //       } else {
-                //         CustomToast().showToast(
-                //           context: context,
-                //           message: "Please fill in all the fields",
-                //           isSuccess: false,
-                //         );
-                //       }
-                //     },
-                //     margin: const EdgeInsets.all(10),
-                //   ),
-                 ],
+                  //   CustomElevatedButton(
+                  //     text: "Save",
+                  //     onPressed: () {
+                  //       if (fullNameController.text.isNotEmpty &&
+                  //           panNumberController.text.isNotEmpty &&
+                  //           dateOfBirthController.text.isNotEmpty) {
+                  //         CustomToast().showToast(
+                  //           context: context,
+                  //           message: "Details saved successfully",
+                  //           isSuccess: true,
+                  //         );
+                  //         Get.toNamed(AppRoutes.accountSetting);
+                  //       } else {
+                  //         CustomToast().showToast(
+                  //           context: context,
+                  //           message: "Please fill in all the fields",
+                  //           isSuccess: false,
+                  //         );
+                  //       }
+                  //     },
+                  //     margin: const EdgeInsets.all(10),
+                  //   ),
+                ],
               ),
             ),
           ],

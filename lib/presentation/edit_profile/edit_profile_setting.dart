@@ -36,7 +36,8 @@ class _EditProfileSettingsState extends State<EditProfileSettings> {
       left: 270,
       top: 50,
       child: ImageFiltered(
-        imageFilter: ImageFilter.blur(sigmaX: 60, sigmaY: 60),
+        imageFilter:
+            ImageFilter.blur(tileMode: TileMode.decal, sigmaX: 60, sigmaY: 60),
         child: Align(
           child: SizedBox(
             width: 252,
@@ -71,7 +72,7 @@ class _EditProfileSettingsState extends State<EditProfileSettings> {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Padding(
-         padding: EdgeInsets.only(right: 16.h, left: 16, top: 7),
+        padding: EdgeInsets.only(right: 16.h, left: 16, top: 7),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,

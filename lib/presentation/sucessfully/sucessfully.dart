@@ -1,6 +1,4 @@
 import 'package:experta/core/app_export.dart';
-import 'package:experta/theme/theme_helper.dart';
-import 'package:flutter/material.dart';
 
 class BookingConfirmationPage extends StatelessWidget {
   const BookingConfirmationPage({super.key});
@@ -47,22 +45,19 @@ class BookingConfirmationPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 20),
-              const Text(
+              Text(
                 'Successfully',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black, // Set the color to dark black
-                ),
+                style: theme.textTheme.bodyMedium!.copyWith(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700,
+                    color: appTheme.black900),
               ),
               const SizedBox(height: 8),
-              const Text(
+              Text(
                 'Your appointment booking confirmed.',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 14,
-                  color: Colors.grey,
-                ),
+                style: theme.textTheme.bodyMedium!
+                    .copyWith(fontSize: 14, fontWeight: FontWeight.w500),
               ),
             ],
           ),

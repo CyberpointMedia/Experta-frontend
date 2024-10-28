@@ -31,6 +31,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
             top: 50,
             child: ImageFiltered(
               imageFilter: ImageFilter.blur(
+                tileMode: TileMode.decal,
                 sigmaX: 60,
                 sigmaY: 60,
               ),
@@ -90,7 +91,8 @@ class _CategoryScreenState extends State<CategoryScreen> {
                             const SizedBox(height: 10),
                             Text(
                               industry.name,
-                              style:  theme.textTheme.bodyMedium!.copyWith(color: Colors.black),
+                              style: theme.textTheme.bodyMedium!
+                                  .copyWith(color: Colors.black),
                             ),
                           ],
                         ),
@@ -119,38 +121,34 @@ class _CategoryScreenState extends State<CategoryScreen> {
       centerTitle: true,
       title: AppbarSubtitleSix(text: "Category"),
       actions: [
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 10),
-        child: IconButton(
-          onPressed: () {
-            Get.toNamed(AppRoutes.notification);
-          },
-         
-          padding: const EdgeInsets.only(right: 5),
-          icon: Container(
-            width: 35.0, 
-            height: 35.0,
-            padding: EdgeInsets.all(5),
-            decoration: IconButtonStyleHelper.outline.copyWith(
-              // color: appTheme.gray20002,
-              color: appTheme.whiteA700.withOpacity(0.6),
-              border: Border.all(
-      color: Colors.white, 
-      width: 1.5, // Border width
-    ),
-
-            ),
-            
-            child: CustomImageView(
-              imagePath: ImageConstant.imgBell02,
-              height: 8.0, // Set the desired height
-              width: 8.0,  // Set the desired width
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: IconButton(
+            onPressed: () {
+              Get.toNamed(AppRoutes.notification);
+            },
+            padding: const EdgeInsets.only(right: 5),
+            icon: Container(
+              width: 35.0,
+              height: 35.0,
+              padding: EdgeInsets.all(5),
+              decoration: IconButtonStyleHelper.outline.copyWith(
+                // color: appTheme.gray20002,
+                color: appTheme.whiteA700.withOpacity(0.6),
+                border: Border.all(
+                  color: Colors.white,
+                  width: 1.5, // Border width
+                ),
+              ),
+              child: CustomImageView(
+                imagePath: ImageConstant.imgBell02,
+                height: 8.0, // Set the desired height
+                width: 8.0, // Set the desired width
+              ),
             ),
           ),
-        ),
-      )
-
-    ],
+        )
+      ],
     );
   }
 

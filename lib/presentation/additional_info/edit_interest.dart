@@ -1,9 +1,7 @@
-
 import 'dart:ui';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/additional_info/controller/edit_interest_controller.dart';
 import 'package:experta/presentation/additional_info/model/interest_model.dart';
-
 
 class EditInterestPage extends StatefulWidget {
   const EditInterestPage({super.key});
@@ -53,7 +51,8 @@ class _EditInterestPageState extends State<EditInterestPage> {
       left: 270,
       top: 50,
       child: ImageFiltered(
-        imageFilter: ImageFilter.blur(sigmaX: 60, sigmaY: 60),
+        imageFilter:
+            ImageFilter.blur(tileMode: TileMode.decal, sigmaX: 60, sigmaY: 60),
         child: Align(
           child: SizedBox(
             width: 252,
@@ -100,7 +99,7 @@ class _EditInterestPageState extends State<EditInterestPage> {
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-                            "Pick your favorite interests to find groups and events related to them",
+              "Pick your favorite interests to find groups and events related to them",
               style: CustomTextStyles.bodyMediumLight,
               // "Pick your favorite interests to find groups and events related to them",
               // style: CustomTextStyles.bodyMediumLight,

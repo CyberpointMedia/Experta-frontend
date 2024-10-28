@@ -57,6 +57,7 @@ class _SearchScreenState extends State<SearchScreen> {
               top: 50,
               child: ImageFiltered(
                 imageFilter: ImageFilter.blur(
+                  tileMode: TileMode.decal,
                   sigmaX: 60,
                   sigmaY: 60,
                 ),
@@ -81,7 +82,7 @@ class _SearchScreenState extends State<SearchScreen> {
                   child: Row(
                     children: [
                       CustomAnimatedSearchView(
-                        width: MediaQuery.of(context).size.width*0.73,
+                        width: MediaQuery.of(context).size.width * 0.73,
                         controller: controller.searchPageController,
                         hintTextDuration: const Duration(seconds: 2),
                         hintTexts: hintTexts,

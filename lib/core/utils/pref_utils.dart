@@ -49,11 +49,12 @@ class PrefUtils {
     }
   }
 
-/// Save image to SharedPreferences
+  /// Save image to SharedPreferences
   Future<void> setProfileImage(String imagePath) async {
     await _sharedPreferences!.setString('img', imagePath);
   }
-    /// Retrieve image from SharedPreferences
+
+  /// Retrieve image from SharedPreferences
   String? getProfileImage() {
     return _sharedPreferences!.getString('img');
   }
@@ -63,11 +64,12 @@ class PrefUtils {
     await _sharedPreferences!.remove('img');
   }
 
- /// Save name to SharedPreferences
+  /// Save name to SharedPreferences
   Future<void> setProfileName(String name) async {
     await _sharedPreferences!.setString('name', name);
   }
-    /// Retrieve name from SharedPreferences
+
+  /// Retrieve name from SharedPreferences
   String? getProfileName() {
     return _sharedPreferences!.getString('name');
   }
@@ -77,11 +79,12 @@ class PrefUtils {
     await _sharedPreferences!.remove('name');
   }
 
- /// Save address to SharedPreferences
+  /// Save address to SharedPreferences
   Future<void> setaddress(String address) async {
     await _sharedPreferences!.setString('address', address);
   }
-    /// Retrieve address from SharedPreferences
+
+  /// Retrieve address from SharedPreferences
   String? getaddress() {
     return _sharedPreferences!.getString('address');
   }
@@ -91,11 +94,12 @@ class PrefUtils {
     await _sharedPreferences!.remove('address');
   }
 
-   /// Save address to SharedPreferences
+  /// Save address to SharedPreferences
   Future<void> setbasic(String basicInfo) async {
     await _sharedPreferences!.setString('basicInfo', basicInfo);
   }
-    /// Retrieve address from SharedPreferences
+
+  /// Retrieve address from SharedPreferences
   String? getbasic() {
     return _sharedPreferences!.getString('basicInfo');
   }
@@ -104,5 +108,4 @@ class PrefUtils {
   Future<void> removebasic() async {
     await _sharedPreferences!.remove('basicInfo');
   }
-
 }

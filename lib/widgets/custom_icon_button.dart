@@ -79,12 +79,20 @@ extension IconButtonStyleHelper on CustomIconButton {
         color: theme.colorScheme.onPrimaryContainer.withOpacity(0.35),
         borderRadius: BorderRadius.circular(20.h),
       );
+  static BoxDecoration get outline2 => BoxDecoration(
+      color: theme.colorScheme.onPrimaryContainer.withOpacity(0.35),
+      borderRadius: BorderRadius.circular(20.h),
+      border: Border.all(color: appTheme.gray300));
   static BoxDecoration get fillGreen => BoxDecoration(
         color: appTheme.green400,
         borderRadius: BorderRadius.circular(24.h),
       );
   static BoxDecoration get fillPrimaryContainer => BoxDecoration(
         color: theme.colorScheme.primaryContainer,
+        borderRadius: BorderRadius.circular(24.h),
+      );
+  static BoxDecoration get fillPrimaryContainerT123 => BoxDecoration(
+        color: theme.colorScheme.primaryContainer.withOpacity(0.1),
         borderRadius: BorderRadius.circular(24.h),
       );
   static BoxDecoration get fillPrimaryTL24 => BoxDecoration(
@@ -139,7 +147,7 @@ extension IconButtonStyleHelper on CustomIconButton {
         color: appTheme.green100.withOpacity(0.5),
         borderRadius: BorderRadius.circular(24.h),
       );
-       static BoxDecoration get fillGreenTL245 => BoxDecoration(
+  static BoxDecoration get fillGreenTL245 => BoxDecoration(
         color: appTheme.green400.withOpacity(0.15),
         borderRadius: BorderRadius.circular(48.h),
       );
