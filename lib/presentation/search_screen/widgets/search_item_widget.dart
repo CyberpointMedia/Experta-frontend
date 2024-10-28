@@ -48,7 +48,7 @@ class SearchItemWidget extends StatelessWidget {
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 10),
+                padding:  EdgeInsets.only(left: 10.adaptSize),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   mainAxisAlignment: MainAxisAlignment.center,

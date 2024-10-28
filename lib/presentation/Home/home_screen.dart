@@ -299,7 +299,7 @@ class _HomeScreenState extends State<HomeScreen> {
     Text(
       "Complete your Profile",
       // style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
-       style: theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.w200), // Setting fontWeight to 500
+       style: theme.textTheme.titleMedium!.copyWith(fontWeight: FontWeight.bold), // Setting fontWeight to 500
     ),
     SizedBox(height: 2.v),
     Text(
