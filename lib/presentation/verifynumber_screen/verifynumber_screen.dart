@@ -1,4 +1,3 @@
-import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
 import 'package:experta/widgets/custom_pin_code_text_field.dart';
@@ -16,29 +15,29 @@ class VerifynumberScreen extends GetWidget<VerifynumberController> {
             true, // This allows the UI to resize when the keyboard is shown
         body: Stack(
           children: [
-            Positioned(
-              left: 205,
-              top: 50,
-              child: ImageFiltered(
-                imageFilter: ImageFilter.blur(
-                  tileMode: TileMode.decal,
-                  sigmaX: 40,
-                  sigmaY: 40,
-                ),
-                child: Align(
-                  child: SizedBox(
-                    width: 252,
-                    height: 252,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(126),
-                        color: appTheme.deepOrangeA20,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            // Positioned(
+            //   left: 205,
+            //   top: 50,
+            //   child: ImageFiltered(
+            //     imageFilter: ImageFilter.blur(
+            //       tileMode: TileMode.decal,
+            //       sigmaX: 40,
+            //       sigmaY: 40,
+            //     ),
+            //     child: Align(
+            //       child: SizedBox(
+            //         width: 252,
+            //         height: 252,
+            //         child: Container(
+            //           decoration: BoxDecoration(
+            //             borderRadius: BorderRadius.circular(126),
+            //             color: appTheme.deepOrangeA20,
+            //           ),
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // ),
             SizedBox(
               width: double.maxFinite,
               child: SingleChildScrollView(
@@ -183,7 +182,7 @@ class VerifynumberScreen extends GetWidget<VerifynumberController> {
     return Obx(() => CustomElevatedButton(
           isDisabled: controller.complete.value == false,
           text: "lblcontinue".tr,
-          buttonTextStyle: CustomTextStyles.bodySmallffffffff,
+          buttonTextStyle: CustomTextStyles.bodySmall0XFF171717,
           onPressed: controller.complete.value
               ? () {
                   controller.verifyOtp();
@@ -192,7 +191,7 @@ class VerifynumberScreen extends GetWidget<VerifynumberController> {
         ));
   }
 
-  /// Navigates to the previous screen.
+  // Navigates to the previous screen.
   onTapIcon() {
     Get.back();
   }

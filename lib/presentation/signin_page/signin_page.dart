@@ -178,23 +178,44 @@ class _SigninPageState extends State<SigninPage> {
 
   Widget _buildTermsText() {
     return RichText(
+      textScaleFactor: 1.01,
       text: TextSpan(
         children: [
           TextSpan(
             text: "msg_by_continuing_i2".tr,
-            style: CustomTextStyles.bodyMediumff95a4b7,
+            style: theme.textTheme.titleMedium!.copyWith(
+        color: appTheme.gray400,
+        fontSize: 14.fSize,
+        fontWeight: FontWeight.w500,
+
+      ),
           ),
           TextSpan(
             text: "msg_terms_conditions".tr,
-            style: CustomTextStyles.titleSmallff171717,
+            style:theme.textTheme.titleMedium!.copyWith(
+        color: appTheme.black900,
+                fontSize: 14.fSize,
+
+        fontWeight: FontWeight.w400,
+      ),
           ),
           TextSpan(
             text: "lbl".tr,
-            style: CustomTextStyles.bodyMediumff95a4b7,
+              style: theme.textTheme.titleMedium!.copyWith(
+        color: appTheme.gray400,
+                fontSize: 14.fSize,
+
+        fontWeight: FontWeight.w500,
+
+      ),
           ),
           TextSpan(
             text: "lbl_privacy_policy".tr,
-            style: CustomTextStyles.titleSmallff171717,
+           style:theme.textTheme.titleMedium!.copyWith(
+        color: appTheme.black900,
+                fontSize: 14.fSize,
+        fontWeight: FontWeight.w400,
+      ),
           ),
         ],
       ),
@@ -249,7 +270,7 @@ class _SigninPageState extends State<SigninPage> {
                       fontSize: 24.fSize,
                       fontWeight: FontWeight.w500,
                       height: 1.2575,
-                      color: Color(0xff171717),
+                      color: const Color(0xff171717),
                     ),
                   ),
                 ),
@@ -259,7 +280,7 @@ class _SigninPageState extends State<SigninPage> {
                     fontSize: 14.fSize,
                     fontWeight: FontWeight.w500,
                     height: 1.2575,
-                    color: Color(0xff95a4b7),
+                    color: const Color(0xff95a4b7),
                   ),
                 ),
                 const SizedBox(height: 29),
@@ -320,8 +341,11 @@ class _SigninPageState extends State<SigninPage> {
       children: [
         Text(
           "lbl_email".tr,
-          style: theme.textTheme.bodyMedium
-              ?.copyWith(color: Colors.black), // Set text color to black
+          style: theme.textTheme.bodyMedium?.copyWith(
+                color: Colors.black,
+                 fontSize: 14.fSize, // Set text color to black
+                fontWeight: FontWeight.w500, // Set font weight to 500
+              ),  // Set text color to black
         ),
         SizedBox(height: 3.v),
         CustomTextFormField(
@@ -348,8 +372,10 @@ class _SigninPageState extends State<SigninPage> {
         Text(
           "lbl_phone_number".tr,
           style: theme.textTheme.bodyMedium?.copyWith(
-            color: Colors.black,
-          ),
+                color: Colors.black,
+                 fontSize: 14.fSize, // Set text color to black
+                fontWeight: FontWeight.w500, // Set font weight to 500
+              ),
         ),
         SizedBox(height: 3.v),
         Obx(
@@ -418,13 +444,14 @@ class _SigninPageState extends State<SigninPage> {
             Text(
               "First Name".tr,
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: Colors.black, // Set text color to black
-                // fontWeight: FontWeight.w300, // Set font weight to 500
+                color: Colors.black,
+                 fontSize: 14.fSize, // Set text color to black
+                fontWeight: FontWeight.w500, // Set font weight to 500
               ),
             ),
             SizedBox(height: 3.v),
             CustomTextFormField(
-              width: 160.v,
+              width: 150.v,
               controller: controller.nameController,
               focusNode: controller.nameFocusNode,
               hintText: "First name".tr,
@@ -440,7 +467,8 @@ class _SigninPageState extends State<SigninPage> {
             Text(
               "Last Name".tr,
               style: theme.textTheme.bodyMedium?.copyWith(
-                color: Colors.black, // Set text color to black
+                color: Colors.black,
+                fontSize: 14.fSize, // Set text color to black
                 fontWeight: FontWeight.w500, // Set font weight to 500
               ),
             ),
@@ -469,14 +497,18 @@ Widget _buildOrcontinuewithsocial() {
         ),
       ),
       SizedBox(width: 15.adaptSize), // Add space between divider and text
-      const Text(
+       Text(
         'Or continue with social',
-        style: TextStyle(color: Colors.black),
+       style:theme.textTheme.bodySmall!.copyWith(
+        fontSize: 12.fSize,
+        color: appTheme.black900,
+        fontWeight: FontWeight.w500,
+      ),
       ),
       SizedBox(width: 15.adaptSize), // Add space between text and divider
       const Expanded(
         child: Divider(
-          thickness: 2, // Adjust thickness as needed
+          thickness: 1, // Adjust thickness as needed
         ),
       ),
     ],
@@ -555,11 +587,11 @@ Widget _buildLoginOption() {
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          SizedBox(height: 15.v),
+          SizedBox(height: 10.v),
           _buildContinueWithGoogle(),
-          SizedBox(height: 15.v),
+          SizedBox(height: 10.v),
           _buildContinueWithFacebook(),
-          SizedBox(height: 15.v),
+          SizedBox(height: 10.v),
           _buildContinueWithApple(),
         ],
       ),

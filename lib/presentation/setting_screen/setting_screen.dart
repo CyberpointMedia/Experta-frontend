@@ -80,8 +80,11 @@ class SettingScreen extends GetWidget<SettingController> {
                                               CrossAxisAlignment.start,
                                           children: [
                                             Text(controller.name.toString(),
-                                                style: CustomTextStyles
-                                                    .titleMediumSemiBold),
+                                                style:  theme.textTheme.bodyLarge!.copyWith(
+        fontSize: 18.fSize,
+        fontWeight: FontWeight.w600,
+        color: appTheme.black900
+      ),),
                                             SizedBox(height: 4.v),
                                             GestureDetector(
                                                 onTap: () {
@@ -312,7 +315,7 @@ class SettingScreen extends GetWidget<SettingController> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 1),
+                          padding:  EdgeInsets.only(top: 1.adaptSize),
                           child: GestureDetector(
                             onTap: () {
                               // Use GetX to navigate to the RecordedSessionsPage

@@ -8,7 +8,7 @@ import 'package:experta/widgets/app_bar/appbar_trailing_iconbutton.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
 
 class CategoryScreen extends StatefulWidget {
-  CategoryScreen({Key? key}) : super(key: key);
+  const CategoryScreen({super.key});
 
   @override
   _CategoryScreenState createState() => _CategoryScreenState();
@@ -131,7 +131,7 @@ class _CategoryScreenState extends State<CategoryScreen> {
             icon: Container(
               width: 35.0,
               height: 35.0,
-              padding: EdgeInsets.all(5),
+              padding: const EdgeInsets.all(5),
               decoration: IconButtonStyleHelper.outline.copyWith(
                 // color: appTheme.gray20002,
                 color: appTheme.whiteA700.withOpacity(0.6),

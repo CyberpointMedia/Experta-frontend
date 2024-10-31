@@ -39,7 +39,7 @@ class MyBookingPage extends StatefulWidget {
 class _MyBookingPageState extends State<MyBookingPage> {
   List<Booking> bookings = [];
   bool isPhoneSelected = true;
-  final ApiService apiService = ApiService(); 
+  final ApiService apiService = ApiService();
 
   @override
   void initState() {
@@ -79,7 +79,6 @@ class _MyBookingPageState extends State<MyBookingPage> {
         ];
       });
     } catch (e) {
-      // Handle error
       print('Failed to load bookings: $e');
     }
   }
@@ -108,141 +107,118 @@ class _MyBookingPageState extends State<MyBookingPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: true,
-      body: Stack(
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.start,
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          Positioned(
-            left: 270,
-            top: 50,
-            child: ImageFiltered(
-              imageFilter: ImageFilter.blur(
-                tileMode: TileMode.decal,
-                sigmaX: 60,
-                sigmaY: 60,
+          _buildAppBar(),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(16, 10, 16, 25),
+            child: Container(
+              height: 48,
+              decoration: BoxDecoration(
+                border: Border.all(color: const Color(0xffe4e4e4)),
+                color: const Color(0xffffffff),
+                borderRadius: BorderRadius.circular(30),
               ),
-              child: Align(
-                child: SizedBox(
-                  width: 252,
-                  height: 252,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(126),
-                      color: Colors.deepOrange.withOpacity(0.35),
+              child: Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          isPhoneSelected = true;
+                        });
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          color: isPhoneSelected
+                              ? Colors.black
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Upcoming',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              height: 1.5,
+                              color: isPhoneSelected
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                  Expanded(
+                    child: GestureDetector(
+                      onTap: () {
+                        setState(() {
+                          isPhoneSelected = false;
+                        });
+                      },
+                      child: Container(
+                        margin: const EdgeInsets.all(5),
+                        decoration: BoxDecoration(
+                          color: !isPhoneSelected
+                              ? Colors.black
+                              : Colors.transparent,
+                          borderRadius: BorderRadius.circular(30),
+                        ),
+                        child: Center(
+                          child: Text(
+                            'Past',
+                            textAlign: TextAlign.center,
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                              height: 1.5,
+                              color: !isPhoneSelected
+                                  ? Colors.white
+                                  : Colors.black,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              _buildAppBar(),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 10, 16, 25),
-                child: Container(
-                  height: 48,
-                  decoration: BoxDecoration(
-                    border: Border.all(color: const Color(0xffe4e4e4)),
-                    color: const Color(0xffffffff),
-                    borderRadius: BorderRadius.circular(30),
+          Expanded(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Visibility(
+                    visible: isPhoneSelected,
+                    child: BookingList(
+                      bookings: bookings
+                          .where((booking) => booking.appointmentDate
+                              .isAfter(DateTime.now()))
+                          .toList(),
+                      isUpcomingTab: true,
+                    ),
                   ),
-                  child: Row(
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              isPhoneSelected = true;
-                            });
-                          },
-                          child: Container(
-                            margin: const EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                              color: isPhoneSelected
-                                  ? Colors.black
-                                  : Colors.transparent,
-                              borderRadius: BorderRadius.circular(30),
-                            ),
-                            child: Center(
-                              child: Text(
-                                'Upcoming',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  height: 1.5,
-                                  color: isPhoneSelected
-                                      ? Colors.white
-                                      : Colors.black,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              isPhoneSelected = false;
-                            });
-                          },
-                          child: Container(
-                            margin: const EdgeInsets.all(5),
-                            decoration: BoxDecoration(
-                              color: !isPhoneSelected
-                                  ? Colors.black
-                                  : Colors.transparent,
-                              borderRadius: BorderRadius.circular(100),
-                            ),
-                            child: Center(
-                              child: Text(
-                                'Past',
-                                textAlign: TextAlign.center,
-                                style: TextStyle(
-                                  fontSize: 14,
-                                  fontWeight: FontWeight.w500,
-                                  height: 1.5,
-                                  color: !isPhoneSelected
-                                      ? Colors.white
-                                      : Colors.black,
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ],
+                  Visibility(
+                    visible: !isPhoneSelected,
+                    child: BookingList(
+                      bookings: bookings
+                          .where((booking) => booking.appointmentDate
+                              .isBefore(DateTime.now()))
+                          .toList(),
+                      isUpcomingTab: false,
+                    ),
                   ),
-                ),
+                ],
               ),
-              SingleChildScrollView(
-                child: Visibility(
-                  visible: isPhoneSelected,
-                  child: BookingList(
-                    bookings: bookings
-                        .where((booking) =>
-                            booking.appointmentDate.isAfter(DateTime.now()))
-                        .toList(),
-                    isUpcomingTab: true,
-                  ),
-                ),
-              ),
-              SingleChildScrollView(
-                child: Visibility(
-                  visible: !isPhoneSelected,
-                  child: BookingList(
-                    bookings: bookings
-                        .where((booking) =>
-                            booking.appointmentDate.isBefore(DateTime.now()))
-                        .toList(),
-                    isUpcomingTab: false,
-                  ),
-                ),
-              ),
-            ],
+            ),
           ),
         ],
       ),
@@ -263,24 +239,18 @@ class BookingList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
-      child: bookings.isEmpty
-          ? const Center(
-              child: Text('No bookings available'),
-            )
-          : ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: bookings.length,
-              itemBuilder: (context, index) {
-                final booking = bookings[index];
-                return BookingCard(
-                    booking: booking, isUpcomingTab: isUpcomingTab);
-              },
-            ),
-    );
+    return bookings.isEmpty
+        ? const Center(child: Text('No bookings available'))
+        : ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            itemCount: bookings.length,
+            itemBuilder: (context, index) {
+              final booking = bookings[index];
+              return BookingCard(
+                  booking: booking, isUpcomingTab: isUpcomingTab);
+            },
+          );
   }
 }
 
@@ -289,8 +259,11 @@ class BookingCard extends StatelessWidget {
   final Booking booking;
   final bool isUpcomingTab;
 
-  const BookingCard(
-      {super.key, required this.booking, required this.isUpcomingTab});
+  const BookingCard({
+    super.key,
+    required this.booking,
+    required this.isUpcomingTab,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -332,126 +305,48 @@ class BookingCard extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 16.0),
-            const Row(
+            SizedBox(height: 16.adaptSize),
+            Row(
               children: [
-                Icon(Icons.calendar_today, color: Colors.grey, size: 16.0),
-                SizedBox(width: 4.0),
-                Text(
+                const Icon(Icons.calendar_today, color: Colors.grey, size: 16.0),
+                SizedBox(width: 4.adaptSize),
+                const Text(
                   'Appointment:',
                   style: TextStyle(
                       fontWeight: FontWeight.bold, color: Colors.black54),
                 ),
               ],
             ),
-            const SizedBox(height: 4.0),
+            SizedBox(height: 4.adaptSize),
             Row(
               children: [
-                const SizedBox(width: 24.0),
+                SizedBox(width: 24.adaptSize),
                 Expanded(
                   child: Text(
                     '${DateFormat('EEE, d MMM yyyy, hh:mm a').format(booking.appointmentDate)} - ${DateFormat('hh:mm a').format(booking.appointmentDate.add(Duration(minutes: int.parse(booking.duration.split(' ')[0]))))}',
-                    style:
-                        const TextStyle(fontSize: 16.0, color: Colors.black54),
+                    style: TextStyle(fontSize: 16.fSize, color: Colors.black54),
                   ),
                 ),
               ],
             ),
-            const SizedBox(height: 8.0),
+            SizedBox(height: 8.adaptSize),
             Row(
               children: [
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Row(
-                      children: [
-                        Icon(Icons.timer, color: Colors.grey, size: 16.0),
-                        SizedBox(width: 4.0),
-                        Text(
-                          'Call Duration:',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black54),
-                        ),
-                      ],
-                    ),
-                    const SizedBox(height: 4.0),
                     Text(
-                      booking.duration,
-                      style:
-                          const TextStyle(fontSize: 16.0, color: Colors.black),
+                      'Duration: ${booking.duration}',
+                      style: TextStyle(fontSize: 14.fSize, color: Colors.black54),
                     ),
-                  ],
-                ),
-                const Spacer(),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const Row(
-                      children: [
-                        Icon(Icons.info_outline,
-                            color: Colors.grey, size: 16.0),
-                        SizedBox(width: 4.0),
-                        Text(
-                          'Status:',
-                          style: TextStyle(
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black54),
-                        ),
-                      ],
+                    Text(
+                      'Status: ${booking.status}',
+                      style: TextStyle(fontSize: 14.fSize, color: Colors.black54),
                     ),
-                    const SizedBox(height: 4.0),
-                    if (booking.isAccepted)
-                      Row(
-                        children: [
-                          const Icon(Icons.check_circle,
-                              color: Colors.green, size: 16.0),
-                          const SizedBox(width: 4.0),
-                          Text(
-                            booking.status,
-                            style: const TextStyle(
-                                fontSize: 16.0, color: Colors.black),
-                          ),
-                        ],
-                      ),
                   ],
                 ),
               ],
             ),
-            const SizedBox(height: 16.0),
-            if (isUpcomingTab && booking.isFromExpertApi)
-              Row(
-                children: [
-                  if (!booking.isAccepted)
-                    Expanded(
-                      child: ElevatedButton(
-                        onPressed: () {
-                          // Handle Accept
-                        },
-                        style: ElevatedButton.styleFrom(
-                          fixedSize: const Size.fromHeight(50),
-                          backgroundColor: Colors.yellow,
-                        ),
-                        child: const Text('Accept',
-                            style: TextStyle(color: Colors.black)),
-                      ),
-                    ),
-                  const SizedBox(width: 16.0),
-                  if (!booking.isAccepted)
-                    Expanded(
-                      child: OutlinedButton(
-                        onPressed: () {
-                          // Handle Reject
-                        },
-                        style: OutlinedButton.styleFrom(
-                          fixedSize: const Size.fromHeight(50),
-                        ),
-                        child: const Text('Reject',
-                            style: TextStyle(color: Colors.black)),
-                      ),
-                    ),
-                ],
-              ),
           ],
         ),
       ),

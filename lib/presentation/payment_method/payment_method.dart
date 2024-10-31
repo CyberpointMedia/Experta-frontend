@@ -1,11 +1,7 @@
 import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
-import 'package:experta/widgets/app_bar/appbar_leading_image.dart';
-import 'package:experta/widgets/app_bar/appbar_subtitle_six.dart';
-import 'package:experta/widgets/app_bar/custom_app_bar.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
-import 'package:flutter/material.dart';
 
 class PaymentMethod extends StatefulWidget {
   const PaymentMethod({super.key});
@@ -71,7 +67,7 @@ class _PaymentMethodState extends State<PaymentMethod> {
     return Align(
         alignment: Alignment.bottomCenter,
         child: Padding(
-            padding: EdgeInsets.only(right: 16.h, left: 16, top: 50),
+            padding: const EdgeInsets.only(right: 16, left: 16, top: 15),
             child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,

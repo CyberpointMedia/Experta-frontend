@@ -10,11 +10,6 @@ class PostDetailsPageController extends GetxController {
   ApiService apiServices = ApiService();
   final String? address = PrefUtils().getaddress();
 
-  @override
-  void onInit() {
-    super.onInit();
-    // fetchFeeds();
-  }
 
   Future<void> fetchFeeds(String userId) async {
     try {

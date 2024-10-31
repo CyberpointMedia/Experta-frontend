@@ -44,12 +44,12 @@ class _UserDetailsPageState extends State<UserDetailsPage>
       backgroundColor: Colors.transparent,
       builder: (context) {
         return Container(
-          padding: const EdgeInsets.only(top: 20, bottom: 20),
+          padding:  EdgeInsets.only(top: 20.fSize, bottom: 20.fSize),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20),
+                padding:  EdgeInsets.only(left: 20.fSize, right: 20.fSize),
                 child: Container(
                   decoration: const BoxDecoration(
                       color: Colors.white,
@@ -94,18 +94,18 @@ class _UserDetailsPageState extends State<UserDetailsPage>
               ),
               const SizedBox(height: 10.0),
               Padding(
-                padding: const EdgeInsets.only(left: 20, right: 20),
+                padding: EdgeInsets.only(left: 20.fSize, right: 20.fSize),
                 child: Container(
                   decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(16))),
                   child: ListTile(
-                    title: const Center(
+                    title:  Center(
                       child: Text(
                         'Cancel',
                         style: TextStyle(
                           color: Colors.black,
-                          fontSize: 16.0,
+                          fontSize: 16.fSize
                         ),
                       ),
                     ),
@@ -353,8 +353,6 @@ class _UserDetailsPageState extends State<UserDetailsPage>
     return PopScope(
       canPop: false,
       child: Scaffold(
-        backgroundColor: Colors.grey.shade50,
-        // appBar: ,
         body: Stack(
           children: [
             Positioned(
@@ -373,7 +371,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(126),
-                        color: appTheme.deepOrangeA20.withOpacity(0.6),
+                        color: appTheme.deepOrangeA20,
                       ),
                     ),
                   ),
@@ -385,11 +383,13 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                 headerSliverBuilder: (context, innerBoxIsScrolled) {
                   return [
                     SliverAppBar(
+                      
                       pinned: true,
                       automaticallyImplyLeading: false,
                       expandedHeight: MediaQuery.of(context).size.height * 0.45,
-                      backgroundColor: Colors.transparent,
+                      backgroundColor: Colors.white.withOpacity(0.4),
                       primary: true,
+                      
                       leading: AppbarLeadingImage(
                         imagePath: ImageConstant.imgArrowLeftOnerrorcontainer,
                         margin: EdgeInsets.only(
@@ -501,10 +501,11 @@ class _UserDetailsPageState extends State<UserDetailsPage>
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
+
                 color: appTheme.whiteA700,
                 child: Padding(
-                  padding: const EdgeInsets.only(
-                      bottom: 15, right: 10, left: 10, top: 10),
+                  padding:  EdgeInsets.only(
+                      bottom: 15.adaptSize, right: 10.adaptSize, left: 10.adaptSize, top: 30.adaptSize),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -523,19 +524,15 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                           final chatData = await ApiService().fetchChat(id.id);
                           log("this is chat Data  ===== $chatData");
                           log("this is your id ${id.id} and chat is ${chatData!["_id"]}");
-                          if (chatData != null) {
-                            Navigator.pushNamed(
-                              context,
-                              AppRoutes.chattingScreen,
-                              arguments: {'chat': chatData},
-                            );
-                          } else {
-                            print('Failed to load chat');
-                          }
-                        },
+                          Navigator.pushNamed(
+                            context,
+                            AppRoutes.chattingScreen,
+                            arguments: {'chat': chatData},
+                          );
+                                                },
                         child: CustomImageView(
-                          height: 50,
-                          width: 50,
+                          height: 50.adaptSize,
+                          width: 50.adaptSize,
                           imagePath: ImageConstant.msg,
                         ),
                       )
@@ -552,11 +549,11 @@ class _UserDetailsPageState extends State<UserDetailsPage>
 
   Widget _buildAboutMe() {
     return SizedBox(
-      width: 430.adaptSize,
+      // width: 430.adaptSize,
       child: Column(
         children: [
           SizedBox(
-            height: 15.v,
+            height: 0.v,
           ),
           Expanded(
             child: SingleChildScrollView(
@@ -822,45 +819,45 @@ class _UserDetailsPageState extends State<UserDetailsPage>
   }
 
   Widget _buildChipviewvisual(BuildContext context) {
-    final theme = Theme.of(context);
-    final data = controller.userData.value.data?.expertise;
-    final expertiseList = data?.expertise ?? [];
+  final theme = Theme.of(context);
+  final data = controller.userData.value.data?.expertise;
+  final expertiseList = data?.expertise ?? [];
 
-    return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildRowaboutme(aboutMeText: "Expertise"),
-          SizedBox(height: 10.v),
-          Wrap(
-            spacing: 10.v,
-            runSpacing: 7.h,
-            children: expertiseList.map((expertise) {
-              return Chip(
-                label: Text(
-                  expertise.name.toString(),
-                  style: theme.textTheme.bodyMedium!.copyWith(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16.fSize,
-                  ),
+  return Container(
+    color: Colors.white,
+    padding: const EdgeInsets.all(10),
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildRowaboutme(aboutMeText: "Expertise"),
+        SizedBox(height: 10.v),
+        Wrap(
+          spacing: 10.v,
+          runSpacing: 10.h,
+          children: expertiseList.map((expertise) {
+            return Chip(
+              label: Text(
+                expertise.name.toString(),
+                style: theme.textTheme.bodyMedium!.copyWith(
+                  color: Colors.black,
+                  fontWeight: FontWeight.w500, // Set font weight to 600
+                  fontSize: 16.fSize, // Set font size to 16 pixels
                 ),
-                backgroundColor: appTheme.gray200,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                  side: BorderSide(
-                    color: appTheme.gray300,
-                  ),
+              ),
+              backgroundColor: appTheme.gray200,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(20.0),
+                side: BorderSide(
+                  color: appTheme.gray300,
                 ),
-              );
-            }).toList(),
-          ),
-        ],
-      ),
-    );
-  }
+              ),
+            );
+          }).toList(),
+        ),
+      ],
+    ),
+  );
+}
 
   Widget _buildColumneducation() {
     return Container(
@@ -1005,10 +1002,10 @@ class _UserDetailsPageState extends State<UserDetailsPage>
         children: [
           _buildRowaboutme(aboutMeText: "Interested"),
           Padding(
-            padding: const EdgeInsets.all(8.0),
+            padding:  const EdgeInsets.all(8.0),
             child: Wrap(
-              spacing: 8.0,
-              runSpacing: 4.0,
+              spacing: 8.adaptSize,
+              runSpacing: 4.adaptSize,
               children: interestList.map((interest) {
                 return Chip(
                   label: Text(
@@ -1084,8 +1081,8 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
-                      padding: const EdgeInsets.only(
-                          left: 16, right: 16, top: 10, bottom: 10),
+                      padding:  EdgeInsets.only(
+                          left: 16.adaptSize, right: 16.adaptSize, top: 10.adaptSize, bottom: 10.adaptSize),
                       decoration: BoxDecoration(
                         color: appTheme.gray100,
                         borderRadius: const BorderRadius.all(

@@ -97,7 +97,7 @@ class _AadharDetailsState extends State<AadharDetails> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     const Text("Full Name"),
-                    SizedBox(
+                    const SizedBox(
                       height: 6,
                     ),
                     CustomTextFormField(
@@ -110,7 +110,7 @@ class _AadharDetailsState extends State<AadharDetails> {
                     ),
                     const SizedBox(height: 10),
                     const Text("Aadhaar Number"),
-                    SizedBox(
+                    const SizedBox(
                       height: 6,
                     ),
                     CustomTextFormField(
@@ -123,7 +123,7 @@ class _AadharDetailsState extends State<AadharDetails> {
                     ),
                     const SizedBox(height: 10),
                     const Text("Date of Birth"),
-                    SizedBox(
+                    const SizedBox(
                       height: 6,
                     ),
                     CustomTextFormField(
@@ -136,7 +136,7 @@ class _AadharDetailsState extends State<AadharDetails> {
                     ),
                     const SizedBox(height: 10),
                     const Text("Address"),
-                    SizedBox(
+                    const SizedBox(
                       height: 6,
                     ),
                     CustomTextFormField(
@@ -150,7 +150,7 @@ class _AadharDetailsState extends State<AadharDetails> {
                     ),
                     const SizedBox(height: 10),
                     const Text("State"),
-                    SizedBox(
+                    const SizedBox(
                       height: 6,
                     ),
                     CustomTextFormField(
@@ -163,7 +163,7 @@ class _AadharDetailsState extends State<AadharDetails> {
                     ),
                     const SizedBox(height: 10),
                     const Text("City"),
-                    SizedBox(
+                    const SizedBox(
                       height: 6,
                     ),
                     CustomTextFormField(
@@ -176,7 +176,7 @@ class _AadharDetailsState extends State<AadharDetails> {
                     ),
                     const SizedBox(height: 10),
                     const Text("Pin Code"),
-                    SizedBox(
+                    const SizedBox(
                       height: 6,
                     ),
                     CustomTextFormField(

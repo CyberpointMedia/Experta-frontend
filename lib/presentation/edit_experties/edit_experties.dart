@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
 class EditExpertisePage extends StatefulWidget {
+  const EditExpertisePage({super.key});
+
   @override
   _EditExpertisePageState createState() => _EditExpertisePageState();
 }
@@ -34,7 +36,7 @@ class _EditExpertisePageState extends State<EditExpertisePage> {
       appBar: AppBar(
         title: const Text('Edit Expertise'),
         leading: IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context); // Navigate back
           },
@@ -66,7 +68,7 @@ class _EditExpertisePageState extends State<EditExpertisePage> {
               children: expertise.map((skill) {
                 return Chip(
                   label: Text(skill),
-                  deleteIcon: Icon(Icons.close),
+                  deleteIcon: const Icon(Icons.close),
                   onDeleted: () {
                     _deleteExpertise(skill); // Delete skill
                   },

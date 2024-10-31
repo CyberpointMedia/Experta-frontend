@@ -89,7 +89,7 @@ class _BlockedPageState extends State<BlockedPage> {
       title: AppbarSubtitleSix(text: "Blocked"),
       actions: [
         IconButton(
-          icon: Icon(Icons.add, color: Colors.black),
+          icon: const Icon(Icons.add, color: Colors.black),
           onPressed: () {
             Get.toNamed(AppRoutes.blocksearch);
             // Define what should happen when the plus icon is pressed

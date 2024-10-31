@@ -1,9 +1,6 @@
 import 'dart:ui';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/categoryDetails/category_details_screen.dart';
-import 'package:experta/theme/theme_helper.dart';
-import 'package:experta/widgets/app_bar/custom_app_bar.dart';
-import 'package:flutter/material.dart';
 
 class RecordedSessionsPage extends StatefulWidget {
   const RecordedSessionsPage({super.key});

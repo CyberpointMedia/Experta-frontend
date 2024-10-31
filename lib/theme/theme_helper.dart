@@ -83,8 +83,8 @@ class ThemeHelper {
         ),
       ),
       radioTheme: RadioThemeData(
-        fillColor: MaterialStateProperty.resolveWith((states) {
-          if (states.contains(MaterialState.selected)) {
+        fillColor: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
             return colorScheme.onPrimaryContainer.withOpacity(1);
           }
           return colorScheme.onSurface;
@@ -203,7 +203,7 @@ class TextThemes {
 class ColorSchemes {
   static const primaryColorScheme = ColorScheme.light(
     // Primary colors
-    primary: Color(0XFFFEDC33),
+    primary: Color(0XFFFFDF00),
     primaryContainer: Color(0XFFEC1313),
     secondaryContainer: Color(0XFFEC9513),
 

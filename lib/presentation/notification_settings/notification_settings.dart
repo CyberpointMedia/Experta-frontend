@@ -87,9 +87,9 @@ class _NotificationsPageState extends State<NotificationsPage> {
                             activeTrackColor:
                                 Colors.green, // Entire button color when active
                             thumbColor:
-                                MaterialStateProperty.resolveWith<Color>(
-                                    (Set<MaterialState> states) {
-                              if (states.contains(MaterialState.selected)) {
+                                WidgetStateProperty.resolveWith<Color>(
+                                    (Set<WidgetState> states) {
+                              if (states.contains(WidgetState.selected)) {
                                 return Colors.white; // White thumb when active
                               }
                               return Colors.grey; // Grey thumb when inactive
@@ -100,7 +100,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
                       // Remaining toggles
                       SwitchListTile(
-                        title: Text("Post, Like and Comment"),
+                        title: const Text("Post, Like and Comment"),
                         value: postLikeComment,
                         onChanged: (bool value) {
                           setState(() {
@@ -108,16 +108,16 @@ class _NotificationsPageState extends State<NotificationsPage> {
                           });
                         },
                         activeTrackColor: Colors.green,
-                        thumbColor: MaterialStateProperty.resolveWith<Color>(
-                            (Set<MaterialState> states) {
-                          if (states.contains(MaterialState.selected)) {
+                        thumbColor: WidgetStateProperty.resolveWith<Color>(
+                            (Set<WidgetState> states) {
+                          if (states.contains(WidgetState.selected)) {
                             return Colors.white;
                           }
                           return Colors.grey;
                         }),
                       ),
                       SwitchListTile(
-                        title: Text("Following and Followers"),
+                        title: const Text("Following and Followers"),
                         value: followingFollowers,
                         onChanged: (bool value) {
                           setState(() {
@@ -125,16 +125,16 @@ class _NotificationsPageState extends State<NotificationsPage> {
                           });
                         },
                         activeTrackColor: Colors.green,
-                        thumbColor: MaterialStateProperty.resolveWith<Color>(
-                            (Set<MaterialState> states) {
-                          if (states.contains(MaterialState.selected)) {
+                        thumbColor: WidgetStateProperty.resolveWith<Color>(
+                            (Set<WidgetState> states) {
+                          if (states.contains(WidgetState.selected)) {
                             return Colors.white;
                           }
                           return Colors.grey;
                         }),
                       ),
                       SwitchListTile(
-                        title: Text("Messages"),
+                        title: const Text("Messages"),
                         value: messages,
                         onChanged: (bool value) {
                           setState(() {
@@ -142,16 +142,16 @@ class _NotificationsPageState extends State<NotificationsPage> {
                           });
                         },
                         activeTrackColor: Colors.green,
-                        thumbColor: MaterialStateProperty.resolveWith<Color>(
-                            (Set<MaterialState> states) {
-                          if (states.contains(MaterialState.selected)) {
+                        thumbColor: WidgetStateProperty.resolveWith<Color>(
+                            (Set<WidgetState> states) {
+                          if (states.contains(WidgetState.selected)) {
                             return Colors.white;
                           }
                           return Colors.grey;
                         }),
                       ),
                       SwitchListTile(
-                        title: Text("Calls"),
+                        title: const Text("Calls"),
                         value: calls,
                         onChanged: (bool value) {
                           setState(() {
@@ -159,9 +159,9 @@ class _NotificationsPageState extends State<NotificationsPage> {
                           });
                         },
                         activeTrackColor: Colors.green,
-                        thumbColor: MaterialStateProperty.resolveWith<Color>(
-                            (Set<MaterialState> states) {
-                          if (states.contains(MaterialState.selected)) {
+                        thumbColor: WidgetStateProperty.resolveWith<Color>(
+                            (Set<WidgetState> states) {
+                          if (states.contains(WidgetState.selected)) {
                             return Colors.white;
                           }
                           return Colors.grey;
