@@ -540,8 +540,8 @@ class _UserProfilePageState extends State<UserProfilePage>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(
-                          bottom: 8.0, left: 10, right: 10),
+                      padding:  EdgeInsets.only(
+                          bottom: 8.adaptSize, left: 10.adaptSize, right: 10.adaptSize),
                       child: Row(
                         children: [
                           SizedBox(
@@ -550,7 +550,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                             child: SvgPicture.asset(
                                 "assets/images/img_link_1.svg"),
                           ),
-                          const SizedBox(width: 10),
+                           SizedBox(width: 10.adaptSize),
                           Expanded(
                             child: Text(
                               achievement,
@@ -820,9 +820,9 @@ class _UserProfilePageState extends State<UserProfilePage>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
-                          padding: const EdgeInsets.only(
-                            top: 1,
-                            bottom: 2,
+                          padding:  EdgeInsets.only(
+                            top: 1.adaptSize,
+                            bottom: 2.adaptSize,
                           ),
                           child: SizedBox(
                             height: 18.v,
@@ -832,7 +832,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(left: 2),
+                          padding:  EdgeInsets.only(left: 2.adaptSize),
                           child: Text(
                             "${controller.userData.value.data?.basicInfo?.rating ?? "N/A"}",
                             style: theme.textTheme.headlineLarge
@@ -921,10 +921,10 @@ class _UserProfilePageState extends State<UserProfilePage>
             height: 16.v,
           ),
           CustomElevatedButton(
-            leftIcon: const Icon(
+            leftIcon:  Icon(
               Icons.add,
               color: Colors.black,
-              size: 15,
+              size: 15.adaptSize,
             ),
             text: "Create Post",
             onPressed: () {
@@ -991,7 +991,7 @@ class _UserProfilePageState extends State<UserProfilePage>
           ),
           Padding(
             padding: EdgeInsets.only(top: 20.v, left: 10.v),
-            child: Row(
+            child:  Row(
               children: [
                 CustomImageView(
                   margin: EdgeInsets.only(left: 5.v),
@@ -1002,12 +1002,15 @@ class _UserProfilePageState extends State<UserProfilePage>
                 ),
                 Expanded(
                   child: Wrap(
-                    spacing: 8.adaptSize,
-                    runSpacing: 4.adaptSize,
+                    spacing: 8.0,
+                    runSpacing: 4.0,
                     children: controller.userData.value.data?.language?.language
                             ?.map((e) => Text(
                                   e.name.toString(),
-                                  style: CustomTextStyles.bodyLargeBlack90001,
+                                  style: theme.textTheme.bodyMedium!.copyWith(
+                                      color: appTheme.black900,
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500),
                                 ))
                             .toList() ??
                         [],
@@ -1030,19 +1033,19 @@ class _UserProfilePageState extends State<UserProfilePage>
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.3,
                   child: Text(
-                    "Reg no: ${controller.userData.value.data?.industryOccupation?.registrationNumber ?? " 22354678"}",
+                    "Reg no: ${controller.userData.value.data?.industryOccupation?.registrationNumber ?? " N/A"}",
                     textAlign: TextAlign.left,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    style: theme.textTheme.bodyLarge!
-                        .copyWith(color: appTheme.black90001),
+                  style: theme.textTheme.bodyMedium!.copyWith(
+                      color: appTheme.black900,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500),
                   ),
                 ),
-                Container(
-                  width: 1.0,
-                  height: 15.v,
+                               Container(
+                  width: 1.v,
+                  height: 15.h,
                   color: Colors.grey,
-                  margin: const EdgeInsets.symmetric(horizontal: 10.0),
+                  margin:  EdgeInsets.symmetric(horizontal: 10.adaptSize),
                 ),
                 CustomImageView(
                   margin: EdgeInsets.only(left: 5.v),
@@ -1052,17 +1055,24 @@ class _UserProfilePageState extends State<UserProfilePage>
                   width: 10.v,
                 ),
                 Text(
-                  "570",
+                  controller.userData.value.data?.noOfBooking.toString() ?? "",
                   textAlign: TextAlign.left,
-                  style: CustomTextStyles.titleMediumBold,
+                  style: theme.textTheme.bodyMedium!.copyWith(
+                      color: appTheme.black900,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500),
                 ),
                 SizedBox(
                   width: 5.v,
                 ),
                 Text(
                   "Consultation",
-                  textAlign: TextAlign.left,
-                  style: CustomTextStyles.bodyLargeBlack90001,
+                 textAlign: TextAlign.left,
+                  style: theme.textTheme.bodyMedium!.copyWith(
+                      color: appTheme.black900,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500),
+               
                 ),
               ],
             ),

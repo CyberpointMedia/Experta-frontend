@@ -198,7 +198,7 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
         height: 12,
       ),
       // const Text("Current Email"),
-      SizedBox(
+      const SizedBox(
         height: 6,
       ),
       CustomTextFormField(
@@ -240,7 +240,7 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
         height: 12,
       ),
       const Text("Phone Number"),
-      SizedBox(
+      const SizedBox(
         height: 6,
       ),
       CustomTextFormField(

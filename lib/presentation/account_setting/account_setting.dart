@@ -12,7 +12,7 @@ class AccountSettings extends StatefulWidget {
 
 class _AccountSettingsState extends State<AccountSettings> {
   void navigateToSettingsDetail(String keyword) {
-    Get.to(() => DynamicSettingsPage(), arguments: {'keyword': keyword});
+    Get.to(() => const DynamicSettingsPage(), arguments: {'keyword': keyword});
   }
 
   @override

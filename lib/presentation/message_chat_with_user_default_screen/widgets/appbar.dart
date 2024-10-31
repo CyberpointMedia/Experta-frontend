@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/widgets/app_bar/appbar_subtitle_one.dart';
 import 'package:experta/widgets/app_bar/appbar_title_image.dart';

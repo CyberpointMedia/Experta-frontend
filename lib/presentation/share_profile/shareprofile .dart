@@ -48,7 +48,7 @@ class ShareProfilePage extends StatelessWidget {
               // Profile Picture and Info
               CircleAvatar(
                 radius: 40.adaptSize, // Profile picture size
-                backgroundImage: AssetImage(
+                backgroundImage: const AssetImage(
                     "assets/profile_image.jpg"), // Replace with actual profile image path
               ),
               SizedBox(height: 10.adaptSize), // Spacing between avatar and text
@@ -80,7 +80,7 @@ class ShareProfilePage extends StatelessWidget {
                       color: Colors.grey.withOpacity(0.5),
                       spreadRadius: 4,
                       blurRadius: 8,
-                      offset: Offset(0, 2), // Shadow position
+                      offset: const Offset(0, 2), // Shadow position
                     ),
                   ],
                 ),
@@ -131,7 +131,7 @@ class ShareProfilePage extends StatelessWidget {
       backgroundColor: Colors.transparent,
       elevation: 0,
       leading: IconButton(
-        icon: Icon(Icons.arrow_back, color: Colors.black),
+        icon: const Icon(Icons.arrow_back, color: Colors.black),
         onPressed: () {
           Get.back(); // Back navigation
         },

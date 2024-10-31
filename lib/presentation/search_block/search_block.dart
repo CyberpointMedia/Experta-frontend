@@ -10,6 +10,8 @@ import '../search_screen/widgets/search_item_widget.dart';
 class ProfileBlockPage extends StatelessWidget {
   final TextEditingController searchController = TextEditingController();
 
+  ProfileBlockPage({super.key});
+
   @override
   Widget build(BuildContext context) {
     return SafeArea(

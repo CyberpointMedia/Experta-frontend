@@ -3,7 +3,7 @@ import 'dart:ui';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/widgets/custom_text_form_field.dart';
 import 'package:experta/widgets/custom_toast_message.dart';
-import 'package:flutter/material.dart'; // Import this for Colors.black
+// Import this for Colors.black
 
 class AddBankAccount extends StatefulWidget {
   const AddBankAccount({super.key});

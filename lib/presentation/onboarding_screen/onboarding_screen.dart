@@ -125,9 +125,10 @@ class OnboardingScreen extends GetWidget<OnboardingController> {
                   children: [
                     Text(
                       "msg_sign_up_or_log_in".tr,
-                      style: CustomTextStyles.bodyLargeGray900.copyWith(
-                        fontWeight:
-                            FontWeight.w400, // Setting font weight to 400
+                      style:theme.textTheme.bodyMedium!.copyWith(
+                        fontSize: 16.fSize,
+                        fontWeight: FontWeight.w500,
+                        color: appTheme.black900
                       ),
                     ),
                     SizedBox(height: 15.v),
@@ -137,23 +138,38 @@ class OnboardingScreen extends GetWidget<OnboardingController> {
                       width: 334.h,
                       margin: EdgeInsets.only(bottom: 51.v),
                       child: RichText(
+                        textScaleFactor: 0.9,
                         text: TextSpan(
                           children: [
                             TextSpan(
                               text: "msg_by_clicking_the2".tr,
-                              style: CustomTextStyles.bodyMediumff95a4b7,
+                              style: theme.textTheme.titleSmall!.copyWith(
+        color: appTheme.gray400,
+        fontWeight: FontWeight.w500,
+
+      ),
                             ),
                             TextSpan(
                               text: "msg_terms_of_service".tr,
-                              style: CustomTextStyles.titleSmallff171717,
+                              style:theme.textTheme.titleSmall!.copyWith(
+        color: appTheme.black900,
+        fontWeight: FontWeight.w400,
+      ),
                             ),
                             TextSpan(
                               text: "msg_and_acknowledged".tr,
-                              style: CustomTextStyles.bodyMediumff95a4b7,
+                              style: theme.textTheme.titleSmall!.copyWith(
+        color: appTheme.gray400,
+        fontWeight: FontWeight.w500,
+      ),
                             ),
                             TextSpan(
                               text: "lbl_privacy_policy".tr,
-                              style: CustomTextStyles.titleSmallff171717,
+                              style:theme.textTheme.titleSmall!.copyWith(
+        color: appTheme.black900,
+        fontWeight: FontWeight.w400,
+      ),
+             
                             ),
                           ],
                         ),
@@ -301,11 +317,11 @@ class OnboardingScreen extends GetWidget<OnboardingController> {
           mainAxisSize: MainAxisSize.min,
           children: [
             _buildContinueWithPhoneemail(),
-            SizedBox(height: 15.v),
+            SizedBox(height: 10.v),
             _buildContinueWithGoogle(),
-            SizedBox(height: 15.v),
+            SizedBox(height: 10.v),
             _buildContinueWithFacebook(),
-            SizedBox(height: 15.v),
+            SizedBox(height: 10.v),
             _buildContinueWithApple(),
           ],
         ),

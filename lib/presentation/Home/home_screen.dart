@@ -28,6 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         backgroundColor: appTheme.gray20002,
+        appBar: _buildAppBar(),
         body: Stack(
           children: [
             Positioned(
@@ -56,7 +57,7 @@ class _HomeScreenState extends State<HomeScreen> {
             SingleChildScrollView(child: Obx(() {
               return Column(
                 children: [
-                  _buildAppBar(),
+                  // _buildAppBar(),
                   _buildStackaccentone(),
                   SizedBox(height: 3.v),
                   _buildColumncategory(),
@@ -105,7 +106,7 @@ class _HomeScreenState extends State<HomeScreen> {
             icon: Container(
               width: 35.0,
               height: 35.0,
-              padding: EdgeInsets.all(5),
+              padding: const EdgeInsets.all(5),
               decoration: IconButtonStyleHelper.outline.copyWith(
                 // color: appTheme.gray20002,
                 color: appTheme.whiteA700.withOpacity(0.6),
@@ -176,9 +177,6 @@ class _HomeScreenState extends State<HomeScreen> {
       child: Column(
         children: [
           Obx(() {
-            if (controller.searchResults == null) {
-              return const Center(child: CircularProgressIndicator());
-            }
             return Expanded(
               child: ListView.builder(
                 shrinkWrap: true,
@@ -592,8 +590,8 @@ class _HomeScreenState extends State<HomeScreen> {
         Text(
           trending,
           style: theme.textTheme.titleLarge!.copyWith(
-            fontSize: 18.fSize,
-            // fontWeight: FontWeight.w400,
+            fontSize: 22.fSize,
+            fontWeight: FontWeight.w700,
           ),
         ),
         TextButton(
@@ -601,8 +599,8 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Text(
             seeallOne,
             style: theme.textTheme.titleMedium?.copyWith(
-              fontSize: 15.fSize,
-              // fontWeight: FontWeight.w400,
+              fontSize: 16.fSize,
+              fontWeight: FontWeight.w500,
               color: appTheme.deepOrangeA200,
             ),
           ),
@@ -654,12 +652,12 @@ class _HomeScreenState extends State<HomeScreen> {
                     Colors.black.withOpacity(0.5), // Fully black at the bottom
                     Colors.transparent, // Fully transparent at the middle
                   ],
-                  stops: [
+                  stops: const [
                     0.0,
                     0.5
                   ], // Stops the gradient transition at the middle (50%)
                   begin: Alignment.bottomCenter,
-                  end: Alignment(
+                  end: const Alignment(
                       0.0, -0.5), // End at the middle (custom alignment)
                 ),
                 borderRadius: const BorderRadius.only(
@@ -694,7 +692,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   Text(
                     "Not found",
                     style: theme.textTheme.bodyLarge?.copyWith(
-                        color: Color(0XFFFFFFFF), fontSize: 11.fSize),
+                        color: const Color(0XFFFFFFFF), fontSize: 11.fSize),
                   ),
                   SizedBox(height: 6.v),
                   Row(
@@ -776,12 +774,12 @@ class UserProfileItemWidget extends StatelessWidget {
                           .withOpacity(0.5), // Fully black at the bottom
                       Colors.transparent, // Fully transparent at the middle
                     ],
-                    stops: [
+                    stops: const [
                       0.0,
                       0.5
                     ], // Stops the gradient transition at the middle (50%)
                     begin: Alignment.bottomCenter,
-                    end: Alignment(
+                    end: const Alignment(
                         0.0, -0.5), // End at the middle (custom alignment)
                   ),
                   borderRadius: const BorderRadius.only(

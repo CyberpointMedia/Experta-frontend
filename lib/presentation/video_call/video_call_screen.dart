@@ -153,7 +153,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
   void _handleReconnection() {
     log('Attempting to reconnect peer...');
-    if (peer != null && peer.disconnected) {
+    if (peer.disconnected) {
       peer.reconnect(); // Reconnect if the peer was disconnected
     }
   }
@@ -168,7 +168,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
     socket.on('connect', (_) {
       log('Connected to signaling server.');
-      if (peer.id != null && widget.userId != null) {
+      if (peer.id != null) {
         _joinMeeting();
       } else {
         log('Error: peerId or userId is null');

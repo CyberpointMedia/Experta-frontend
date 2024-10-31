@@ -74,7 +74,7 @@ class _PanDetailState extends State<PanDetail> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text("Full Name"),
-                  SizedBox(
+                  const SizedBox(
                     height: 6,
                   ),
                   CustomTextFormField(
@@ -87,7 +87,7 @@ class _PanDetailState extends State<PanDetail> {
                   ),
                   const SizedBox(height: 20),
                   const Text("PAN Number"),
-                  SizedBox(
+                  const SizedBox(
                     height: 6,
                   ),
                   CustomTextFormField(
@@ -100,7 +100,7 @@ class _PanDetailState extends State<PanDetail> {
                   ),
                   const SizedBox(height: 20),
                   const Text("Date of Birth"),
-                  SizedBox(
+                  const SizedBox(
                     height: 6,
                   ),
                   CustomTextFormField(

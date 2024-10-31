@@ -1,4 +1,3 @@
-import 'package:flutter/material.dart';
 import 'package:experta/core/app_export.dart';
 
 class MessageBubble extends StatelessWidget {

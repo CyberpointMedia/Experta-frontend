@@ -520,7 +520,7 @@ class _ChattingPageState extends State<ChattingPage> {
                                                 ),
                                         ],
                                       );
-                                    }).toList(),
+                                    }),
                                   ],
                                 );
                               },

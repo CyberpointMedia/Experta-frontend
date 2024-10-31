@@ -1,6 +1,6 @@
 import 'package:experta/core/app_export.dart';
 import 'controller/settings_log_out_controller.dart';
-import 'package:flutter/services.dart'; // Import for SystemNavigator
+// Import for SystemNavigator
 
 // ignore_for_file: must_be_immutable
 class SettingsLogOutDialog extends StatelessWidget {

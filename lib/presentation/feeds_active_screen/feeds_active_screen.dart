@@ -716,7 +716,7 @@ class CommentsPage extends StatelessWidget {
   }
 }
 
-/// Navigates to the notificationScreen when the action is triggered.
+// Navigates to the notificationScreen when the action is triggered.
 onTapBtnBellTwo() {
   Get.toNamed(
     AppRoutes.notification,

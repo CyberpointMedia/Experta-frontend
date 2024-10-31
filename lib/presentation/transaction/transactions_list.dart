@@ -79,7 +79,7 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                 transaction.createdAt.isAfter(_selectedFromDate!)) &&
             (_selectedToDate == null ||
                 transaction.createdAt.isBefore(_selectedToDate!
-                    .add(Duration(days: 1)))); // Ensure inclusive of end date
+                    .add(const Duration(days: 1)))); // Ensure inclusive of end date
 
         // Check if the transaction matches the selected statuses
         final matchesStatus = selectedStatuses.isEmpty ||

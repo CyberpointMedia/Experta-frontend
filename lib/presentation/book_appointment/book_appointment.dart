@@ -279,7 +279,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
                         items: durationModels,
                         onChanged: (newValue) {
                           setState(() {
-                            selectedDuration = newValue!
+                            selectedDuration = newValue
                                 .title; // Update selectedDuration with the title (String value)
                             filterAvailableSlots();
                           });

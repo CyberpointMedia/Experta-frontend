@@ -1,8 +1,6 @@
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/Home/model/home_model.dart';
 import 'package:experta/presentation/categoryDetails/category_controller.dart';
-import 'package:flutter/material.dart';
-import 'package:shimmer/shimmer.dart';
 
 class CategoryDetailScreen extends StatelessWidget {
   final String categoryName;

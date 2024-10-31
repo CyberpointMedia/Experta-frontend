@@ -157,7 +157,7 @@ class MessageList extends StatelessWidget {
                         ),
                 ],
               );
-            }).toList(),
+            }),
           ],
         );
       },

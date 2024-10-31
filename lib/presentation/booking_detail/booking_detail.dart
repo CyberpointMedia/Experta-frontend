@@ -3,7 +3,6 @@ import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/sucessfully/sucessfully.dart';
-import 'package:experta/presentation/user_details/user_details.dart';
 import 'package:experta/widgets/app_bar/appbar_trailing_button_one.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
 import 'package:intl/intl.dart';

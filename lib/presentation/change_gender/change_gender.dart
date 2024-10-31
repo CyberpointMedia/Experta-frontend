@@ -84,7 +84,7 @@ class _ChangeGenderState extends State<ChangeGender> {
               maxLines: 2,
             ),
           ),
-          SizedBox(height: 12),
+          const SizedBox(height: 12),
           Center(
             // Centering the Row horizontally and vertically
             child: Row(

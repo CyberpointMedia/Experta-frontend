@@ -1,7 +1,5 @@
-import 'package:experta/widgets/socket_service.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-import 'package:provider/provider.dart';
 import 'core/app_export.dart';
 
 Future<void> main() async {
