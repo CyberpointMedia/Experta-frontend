@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
+import 'package:experta/presentation/verify_account/face_live.dart';
 //import 'package:experta/widgets/custom_elevated_button.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
 import 'package:experta/widgets/custom_text_form_field.dart';
@@ -218,10 +219,56 @@ class _VerifyAccountState extends State<VerifyAccount> {
                       ),
                     ),
                   ),
+                  // GestureDetector(
+                  //   onTap: () {
+                  //     //Get.toNamed(AppRoutes.adhardetail);
+                  //     showAadhaarCardVerificationDialog();
+                  //   },
+                  //   child: Padding(
+                  //     padding: const EdgeInsets.only(top: 1),
+                  //     child: Container(
+                  //       padding: EdgeInsets.symmetric(
+                  //           horizontal: 15.h, vertical: 16.v),
+                  //       decoration: AppDecoration.fillOnPrimaryContainer,
+                  //       child: Row(
+                  //         mainAxisAlignment: MainAxisAlignment.center,
+                  //         children: [
+                  //           CustomIconButton(
+                  //             height: 44.adaptSize,
+                  //             width: 44.adaptSize,
+                  //             padding: EdgeInsets.all(10.h),
+                  //             decoration: IconButtonStyleHelper.fillOrange,
+                  //             child: CustomImageView(
+                  //                 imagePath: ImageConstant.pancard),
+                  //           ),
+                  //           Padding(
+                  //             padding: EdgeInsets.only(
+                  //                 left: 15.h, top: 13.v, bottom: 10.v),
+                  //             child: Text(
+                  //               "Aadhaar Card",
+                  //               style: theme.textTheme.titleMedium!.copyWith(
+                  //                 color: appTheme.gray900,
+                  //               ),
+                  //             ),
+                  //           ),
+                  //           const Spacer(),
+                  //           CustomImageView(
+                  //             imagePath: ImageConstant.imgArrowRightGray900,
+                  //             height: 24.adaptSize,
+                  //             width: 24.adaptSize,
+                  //             margin: EdgeInsets.symmetric(vertical: 10.v),
+                  //           ),
+                  //         ],
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                   GestureDetector(
                     onTap: () {
-                      //Get.toNamed(AppRoutes.adhardetail);
-                      showAadhaarCardVerificationDialog();
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => const FaceDetectorView()));
                     },
                     child: Padding(
                       padding: const EdgeInsets.only(top: 1),
@@ -244,7 +291,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
                               padding: EdgeInsets.only(
                                   left: 15.h, top: 13.v, bottom: 10.v),
                               child: Text(
-                                "Aadhaar Card",
+                                "Face Liveliness",
                                 style: theme.textTheme.titleMedium!.copyWith(
                                   color: appTheme.gray900,
                                 ),
@@ -262,6 +309,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
                       ),
                     ),
                   ),
+
                   GestureDetector(
                     onTap: () {
                       Get.toNamed(AppRoutes.paymentmethod);
