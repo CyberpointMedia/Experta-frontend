@@ -66,7 +66,6 @@ dependencies:
   geocoding: ^3.0.0
   geolocator: ^12.0.0
   permission_handler: ^11.3.1
-  image: ^4.2.0
   webview_flutter: ^4.8.0
   fluttertoast: ^8.2.6
   dio: ^5.5.0+1
@@ -85,6 +84,11 @@ dependencies:
   excel: ^4.0.6
   syncfusion_flutter_xlsio: ^27.1.56
   flutter_local_notifications: ^17.2.4
+  camera: ^0.10.6
+  speech_to_text: ^6.6.0
+  google_mlkit_face_detection: 
+  image: ^4.3.0
+  google_mlkit_commons: any
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -98,6 +102,7 @@ dev_dependencies:
 
 dependency_overrides:
   http: ^1.2.1
+  google_mlkit_commons:
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

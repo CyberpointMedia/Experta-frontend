@@ -1,14 +1,16 @@
 import 'package:camera/camera.dart';
+import 'package:experta/presentation/verify_account/face.dart/gallery.dart';
 import 'package:flutter/material.dart';
 import 'package:google_mlkit_commons/google_mlkit_commons.dart';
 
 import 'camera_view.dart';
 
+
 enum DetectorViewMode { liveFeed, gallery }
 
 class DetectorView extends StatefulWidget {
-  const DetectorView({
-    super.key,
+  DetectorView({
+    Key? key,
     required this.title,
     required this.onImage,
     this.customPaint,
@@ -18,7 +20,7 @@ class DetectorView extends StatefulWidget {
     this.onCameraFeedReady,
     this.onDetectorViewModeChanged,
     this.onCameraLensDirectionChanged,
-  });
+  }) : super(key: key);
 
   final String title;
   final CustomPaint? customPaint;
@@ -54,7 +56,11 @@ class _DetectorViewState extends State<DetectorView> {
             initialCameraLensDirection: widget.initialCameraLensDirection,
             onCameraLensDirectionChanged: widget.onCameraLensDirectionChanged,
           )
-        : Container();
+        : GalleryView(
+            title: widget.title,
+            text: widget.text,
+            onImage: widget.onImage,
+            onDetectorViewModeChanged: _onDetectorViewModeChanged);
   }
 
   void _onDetectorViewModeChanged() {

@@ -44,7 +44,7 @@ class _GalleryViewState extends State<GalleryView> {
           title: Text(widget.title),
           actions: [
             Padding(
-              padding: const EdgeInsets.only(right: 20.0),
+              padding: EdgeInsets.only(right: 20.0),
               child: GestureDetector(
                 onTap: widget.onDetectorViewModeChanged,
                 child: Icon(
@@ -70,28 +70,28 @@ class _GalleryViewState extends State<GalleryView> {
                 ],
               ),
             )
-          : const Icon(
+          : Icon(
               Icons.image,
               size: 200,
             ),
       Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: EdgeInsets.symmetric(horizontal: 16),
         child: ElevatedButton(
           onPressed: _getImageAsset,
-          child: const Text('From Assets'),
+          child: Text('From Assets'),
         ),
       ),
       Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: EdgeInsets.symmetric(horizontal: 16),
         child: ElevatedButton(
-          child: const Text('From Gallery'),
+          child: Text('From Gallery'),
           onPressed: () => _getImage(ImageSource.gallery),
         ),
       ),
       Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
+        padding: EdgeInsets.symmetric(horizontal: 16),
         child: ElevatedButton(
-          child: const Text('Take a picture'),
+          child: Text('Take a picture'),
           onPressed: () => _getImage(ImageSource.camera),
         ),
       ),
@@ -138,7 +138,7 @@ class _GalleryViewState extends State<GalleryView> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Text(
+                  Text(
                     'Select image',
                     style: TextStyle(fontSize: 20),
                   ),
@@ -165,7 +165,7 @@ class _GalleryViewState extends State<GalleryView> {
                   ),
                   ElevatedButton(
                       onPressed: () => Navigator.of(context).pop(),
-                      child: const Text('Cancel')),
+                      child: Text('Cancel')),
                 ],
               ),
             ),

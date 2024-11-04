@@ -1,7 +1,7 @@
 import 'dart:io';
-import 'package:flutter_tts/flutter_tts.dart';
+
 import 'package:camera/camera.dart';
-import 'package:experta/core/app_export.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_mlkit_commons/google_mlkit_commons.dart';
 
@@ -37,25 +37,12 @@ class _CameraViewState extends State<CameraView> {
   double _maxAvailableExposureOffset = 0.0;
   double _currentExposureOffset = 0.0;
   bool _changingCameraLens = false;
-  final FlutterTts _flutterTts = FlutterTts();
-  String targetSentence = "I am the Boss";
 
   @override
   void initState() {
     super.initState();
-    _initializeTTS();
+
     _initialize();
-  }
-
-  // Initialize Text-to-Speech (TTS)
-  void _initializeTTS() async {
-    await _flutterTts.setLanguage("en-US");
-    await _flutterTts.setPitch(1.0);
-  }
-
-  // Speak a sentence using TTS
-  Future<void> _speak(String text) async {
-    await _flutterTts.speak(text);
   }
 
   void _initialize() async {
@@ -70,15 +57,12 @@ class _CameraViewState extends State<CameraView> {
     }
     if (_cameraIndex != -1) {
       _startLiveFeed();
-      _speak("Camera is initialized, please look at the camera.");
     }
   }
 
   @override
   void dispose() {
     _stopLiveFeed();
-    _flutterTts.stop();
-
     super.dispose();
   }
 
@@ -98,37 +82,19 @@ class _CameraViewState extends State<CameraView> {
         children: <Widget>[
           Center(
             child: _changingCameraLens
-                ? const Center(
-                    child: Text('Changing camera lens'),
+                ? Center(
+                    child: const Text('Changing camera lens'),
                   )
                 : CameraPreview(
                     _controller!,
                     child: widget.customPaint,
                   ),
           ),
-          Positioned(
-            top: 100,
-            left: 20,
-            right: 20,
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              decoration: BoxDecoration(
-                color: Colors.black.withOpacity(0.7),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: Text(
-                targetSentence,
-                style:
-                    theme.textTheme.bodyMedium!.copyWith(color: Colors.white),
-                textAlign: TextAlign.center,
-              ),
-            ),
-          ),
           _backButton(),
-          // _switchLiveCameraToggle(),
-          // _detectionViewModeToggle(),
-          // _zoomControl(),
-          // _exposureControl(),
+          _switchLiveCameraToggle(),
+          _detectionViewModeToggle(),
+          _zoomControl(),
+          _exposureControl(),
         ],
       ),
     );
@@ -144,7 +110,7 @@ class _CameraViewState extends State<CameraView> {
             heroTag: Object(),
             onPressed: () => Navigator.of(context).pop(),
             backgroundColor: Colors.black54,
-            child: const Icon(
+            child: Icon(
               Icons.arrow_back_ios_outlined,
               size: 20,
             ),
@@ -152,23 +118,23 @@ class _CameraViewState extends State<CameraView> {
         ),
       );
 
-  // Widget _detectionViewModeToggle() => Positioned(
-  //       bottom: 8,
-  //       left: 8,
-  //       child: SizedBox(
-  //         height: 50.0,
-  //         width: 50.0,
-  //         child: FloatingActionButton(
-  //           heroTag: Object(),
-  //           onPressed: widget.onDetectorViewModeChanged,
-  //           backgroundColor: Colors.black54,
-  //           child: const Icon(
-  //             Icons.photo_library_outlined,
-  //             size: 25,
-  //           ),
-  //         ),
-  //       ),
-  //     );
+  Widget _detectionViewModeToggle() => Positioned(
+        bottom: 8,
+        left: 8,
+        child: SizedBox(
+          height: 50.0,
+          width: 50.0,
+          child: FloatingActionButton(
+            heroTag: Object(),
+            onPressed: widget.onDetectorViewModeChanged,
+            backgroundColor: Colors.black54,
+            child: Icon(
+              Icons.photo_library_outlined,
+              size: 25,
+            ),
+          ),
+        ),
+      );
 
   Widget _switchLiveCameraToggle() => Positioned(
         bottom: 8,
@@ -190,103 +156,103 @@ class _CameraViewState extends State<CameraView> {
         ),
       );
 
-  // Widget _zoomControl() => Positioned(
-  //       bottom: 16,
-  //       left: 0,
-  //       right: 0,
-  //       child: Align(
-  //         alignment: Alignment.bottomCenter,
-  //         child: SizedBox(
-  //           width: 250,
-  //           child: Row(
-  //             mainAxisAlignment: MainAxisAlignment.center,
-  //             crossAxisAlignment: CrossAxisAlignment.center,
-  //             children: [
-  //               Expanded(
-  //                 child: Slider(
-  //                   value: _currentZoomLevel,
-  //                   min: _minAvailableZoom,
-  //                   max: _maxAvailableZoom,
-  //                   activeColor: Colors.white,
-  //                   inactiveColor: Colors.white30,
-  //                   onChanged: (value) async {
-  //                     setState(() {
-  //                       _currentZoomLevel = value;
-  //                     });
-  //                     await _controller?.setZoomLevel(value);
-  //                   },
-  //                 ),
-  //               ),
-  //               Container(
-  //                 width: 50,
-  //                 decoration: BoxDecoration(
-  //                   color: Colors.black54,
-  //                   borderRadius: BorderRadius.circular(10.0),
-  //                 ),
-  //                 child: Padding(
-  //                   padding: const EdgeInsets.all(8.0),
-  //                   child: Center(
-  //                     child: Text(
-  //                       '${_currentZoomLevel.toStringAsFixed(1)}x',
-  //                       style: const TextStyle(color: Colors.white),
-  //                     ),
-  //                   ),
-  //                 ),
-  //               ),
-  //             ],
-  //           ),
-  //         ),
-  //       ),
-  //     );
+  Widget _zoomControl() => Positioned(
+        bottom: 16,
+        left: 0,
+        right: 0,
+        child: Align(
+          alignment: Alignment.bottomCenter,
+          child: SizedBox(
+            width: 250,
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Slider(
+                    value: _currentZoomLevel,
+                    min: _minAvailableZoom,
+                    max: _maxAvailableZoom,
+                    activeColor: Colors.white,
+                    inactiveColor: Colors.white30,
+                    onChanged: (value) async {
+                      setState(() {
+                        _currentZoomLevel = value;
+                      });
+                      await _controller?.setZoomLevel(value);
+                    },
+                  ),
+                ),
+                Container(
+                  width: 50,
+                  decoration: BoxDecoration(
+                    color: Colors.black54,
+                    borderRadius: BorderRadius.circular(10.0),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Center(
+                      child: Text(
+                        '${_currentZoomLevel.toStringAsFixed(1)}x',
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      );
 
-  // Widget _exposureControl() => Positioned(
-  //       top: 40,
-  //       right: 8,
-  //       child: ConstrainedBox(
-  //         constraints: const BoxConstraints(
-  //           maxHeight: 250,
-  //         ),
-  //         child: Column(children: [
-  //           Container(
-  //             width: 55,
-  //             decoration: BoxDecoration(
-  //               color: Colors.black54,
-  //               borderRadius: BorderRadius.circular(10.0),
-  //             ),
-  //             child: Padding(
-  //               padding: const EdgeInsets.all(8.0),
-  //               child: Center(
-  //                 child: Text(
-  //                   '${_currentExposureOffset.toStringAsFixed(1)}x',
-  //                   style: const TextStyle(color: Colors.white),
-  //                 ),
-  //               ),
-  //             ),
-  //           ),
-  //           Expanded(
-  //             child: RotatedBox(
-  //               quarterTurns: 3,
-  //               child: SizedBox(
-  //                 height: 30,
-  //                 child: Slider(
-  //                   value: _currentExposureOffset,
-  //                   min: _minAvailableExposureOffset,
-  //                   max: _maxAvailableExposureOffset,
-  //                   activeColor: Colors.white,
-  //                   inactiveColor: Colors.white30,
-  //                   onChanged: (value) async {
-  //                     setState(() {
-  //                       _currentExposureOffset = value;
-  //                     });
-  //                     await _controller?.setExposureOffset(value);
-  //                   },
-  //                 ),
-  //               ),
-  //             ),
-  //           )
-  //         ]),
-  //       ),
-  //     );
+  Widget _exposureControl() => Positioned(
+        top: 40,
+        right: 8,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            maxHeight: 250,
+          ),
+          child: Column(children: [
+            Container(
+              width: 55,
+              decoration: BoxDecoration(
+                color: Colors.black54,
+                borderRadius: BorderRadius.circular(10.0),
+              ),
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Center(
+                  child: Text(
+                    '${_currentExposureOffset.toStringAsFixed(1)}x',
+                    style: TextStyle(color: Colors.white),
+                  ),
+                ),
+              ),
+            ),
+            Expanded(
+              child: RotatedBox(
+                quarterTurns: 3,
+                child: SizedBox(
+                  height: 30,
+                  child: Slider(
+                    value: _currentExposureOffset,
+                    min: _minAvailableExposureOffset,
+                    max: _maxAvailableExposureOffset,
+                    activeColor: Colors.white,
+                    inactiveColor: Colors.white30,
+                    onChanged: (value) async {
+                      setState(() {
+                        _currentExposureOffset = value;
+                      });
+                      await _controller?.setExposureOffset(value);
+                    },
+                  ),
+                ),
+              ),
+            )
+          ]),
+        ),
+      );
 
   Future _startLiveFeed() async {
     final camera = _cameras[_cameraIndex];
@@ -346,11 +312,8 @@ class _CameraViewState extends State<CameraView> {
 
   void _processCameraImage(CameraImage image) {
     final inputImage = _inputImageFromCameraImage(image);
-    if (inputImage == null) {
-      return;
-    } else {
-      widget.onImage(inputImage);
-    }
+    if (inputImage == null) return;
+    widget.onImage(inputImage);
   }
 
   final _orientations = {
@@ -400,9 +363,7 @@ class _CameraViewState extends State<CameraView> {
     // * bgra8888 for iOS
     if (format == null ||
         (Platform.isAndroid && format != InputImageFormat.nv21) ||
-        (Platform.isIOS && format != InputImageFormat.bgra8888)) {
-      return null;
-    }
+        (Platform.isIOS && format != InputImageFormat.bgra8888)) return null;
 
     // since format is constraint to nv21 or bgra8888, both only have one plane
     if (image.planes.length != 1) return null;
