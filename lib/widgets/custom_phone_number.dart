@@ -97,6 +97,7 @@ class _CustomPhoneNumberState extends State<CustomPhoneNumber> {
                 focusedBorder: InputBorder.none,
                 contentPadding: EdgeInsets.zero,
               ),
+              style: CustomTextStyles.titleMediumBluegray300,
               keyboardType: TextInputType.phone,
               focusNode: _focusNode,
               validator: (value) {

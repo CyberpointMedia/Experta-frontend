@@ -203,7 +203,7 @@ class TextThemes {
 class ColorSchemes {
   static const primaryColorScheme = ColorScheme.light(
     // Primary colors
-    primary: Color(0XFFFFDF00),
+    primary: Color(0XFFFEDC33),
     primaryContainer: Color(0XFFEC1313),
     secondaryContainer: Color(0XFFEC9513),
 

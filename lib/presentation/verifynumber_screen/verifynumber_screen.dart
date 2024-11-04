@@ -1,3 +1,4 @@
+import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
 import 'package:experta/widgets/custom_pin_code_text_field.dart';
@@ -11,60 +12,40 @@ class VerifynumberScreen extends GetWidget<VerifynumberController> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        resizeToAvoidBottomInset:
-            true, // This allows the UI to resize when the keyboard is shown
+        resizeToAvoidBottomInset: true, // Allows UI to resize when keyboard is shown
         body: Stack(
           children: [
-            // Positioned(
-            //   left: 205,
-            //   top: 50,
-            //   child: ImageFiltered(
-            //     imageFilter: ImageFilter.blur(
-            //       tileMode: TileMode.decal,
-            //       sigmaX: 40,
-            //       sigmaY: 40,
-            //     ),
-            //     child: Align(
-            //       child: SizedBox(
-            //         width: 252,
-            //         height: 252,
-            //         child: Container(
-            //           decoration: BoxDecoration(
-            //             borderRadius: BorderRadius.circular(126),
-            //             color: appTheme.deepOrangeA20,
-            //           ),
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // ),
-            SizedBox(
-              width: double.maxFinite,
-              child: SingleChildScrollView(
-                // Makes sure the content is scrollable when the keyboard is up
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: EdgeInsets.only(
-                          top: 20.adaptSize, bottom: 20.adaptSize),
-                      child: CustomAppBar(
-                        height: 20.adaptSize,
-                        leadingWidth: 25.adaptSize,
-                        leading: AppbarLeadingImage(
-                          imagePath: ImageConstant.imgIcon,
-                          margin: const EdgeInsets.only(left: 10),
-                          onTap: () {
-                            onTapIcon();
-                          },
-                        ),
+            Positioned(
+              left: 205,
+              top: 50,
+              child: ImageFiltered(
+                imageFilter: ImageFilter.blur(
+                  tileMode: TileMode.decal,
+                  sigmaX: 40,
+                  sigmaY: 40,
+                ),
+                child: Align(
+                  child: SizedBox(
+                    width: 252,
+                    height: 252,
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(126),
+                        color: appTheme.deepOrangeA20.withOpacity(0.35),
                       ),
                     ),
-                    _buildOtpView(),
-                  ],
+                  ),
                 ),
               ),
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                _buildAppBar(),
+              
+                    _buildOtpView(),
+              ],
             ),
           ],
         ),
@@ -72,8 +53,7 @@ class VerifynumberScreen extends GetWidget<VerifynumberController> {
           padding: EdgeInsets.only(
             left: 16.h,
             right: 16.h,
-            bottom: MediaQuery.of(context).viewInsets.bottom +
-                16.v, // Ensures padding when the keyboard is shown
+            bottom: MediaQuery.of(context).viewInsets.bottom + 16.v,
           ),
           child: _buildContinue(),
         ),
@@ -81,49 +61,53 @@ class VerifynumberScreen extends GetWidget<VerifynumberController> {
     );
   }
 
-  /// Section Widget
+  Widget _buildAppBar() {
+    return CustomAppBar(
+      height: 65,
+      leadingWidth: 45,
+      leading: IconButton(
+        onPressed: () {
+          Get.back();
+        },
+        icon: const Icon(Icons.arrow_back, color: Colors.black),
+      ),
+    );
+  }
+
   Widget _buildOtpView() {
     return SizedBox(
       width: double.infinity,
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Padding(
-            padding: const EdgeInsets.only(left: 25, bottom: 10),
+            padding: const EdgeInsets.only(left: 20, bottom: 10),
             child: Text(
               "msg_we_just_sent_you".tr,
-              style: theme.textTheme.headlineSmall,
+              style: theme.textTheme.titleLarge,
             ),
           ),
           Padding(
             padding: EdgeInsets.only(left: 25.adaptSize, bottom: 20.adaptSize),
             child: Builder(
               builder: (context) {
-                // Extract the phone number from the controller
                 String phoneNumber = controller.phoneNumberController.text;
-
-                // Define the country code
-                String countryCode =
-                    "+91"; // You can dynamically get this if needed
-
-                // Define the masked number
+                String countryCode = "+91";
                 String maskedNumber = phoneNumber.length > 3
                     ? "$countryCode ${"*" * (phoneNumber.length - 3)} ${phoneNumber.substring(phoneNumber.length - 3)}"
-                    : phoneNumber; // If phoneNumber is less than 3 digits, show it as is
+                    : phoneNumber;
 
                 return RichText(
                   text: TextSpan(
                     style: theme.textTheme.titleSmall,
                     children: [
+                      TextSpan(text: "${"msg_enter_the_security".tr} ",style:theme.textTheme.displayMedium!.copyWith(
+                          color: appTheme.gray400
+                        ),),
                       TextSpan(
-                        text: "${"msg_enter_the_security".tr} ", // Main text
-                      ),
-                      TextSpan(
-                        text: maskedNumber, // Masked phone number
-                        style: const TextStyle(
-                          fontWeight: FontWeight.bold, // Bold the number
-                          color: Colors.black, // Optional: change color
+                        text: maskedNumber,
+                        style:theme.textTheme.displayMedium!.copyWith(
+                          color: appTheme.gray400
                         ),
                       ),
                     ],
@@ -148,7 +132,9 @@ class VerifynumberScreen extends GetWidget<VerifynumberController> {
                 children: [
                   TextSpan(
                     text: "msg_didn_t_receive_the2".tr,
-                    style: CustomTextStyles.titleSmallGilroyff95a4b7,
+                    style:theme.textTheme.titleSmall!.copyWith(
+                          color: appTheme.gray400
+                        ),
                   ),
                   const TextSpan(text: " "),
                   TextSpan(
@@ -156,10 +142,7 @@ class VerifynumberScreen extends GetWidget<VerifynumberController> {
                     style: CustomTextStyles.titleSmallGilroyff171717,
                     recognizer: TapGestureRecognizer()
                       ..onTap = () async {
-                        controller
-                            .resendOtp(controller.phoneNumberController.text);
-
-                        // Optionally, show feedback to the user
+                        controller.resendOtp(controller.phoneNumberController.text);
                         Get.snackbar(
                           'OTP Resent',
                           'A new security code has been sent to your phone number.',
@@ -177,10 +160,9 @@ class VerifynumberScreen extends GetWidget<VerifynumberController> {
     );
   }
 
-  /// Section Widget
   Widget _buildContinue() {
     return Obx(() => CustomElevatedButton(
-          isDisabled: controller.complete.value == false,
+          isDisabled: !controller.complete.value,
           text: "lblcontinue".tr,
           buttonTextStyle: CustomTextStyles.bodySmall0XFF171717,
           onPressed: controller.complete.value
@@ -191,8 +173,7 @@ class VerifynumberScreen extends GetWidget<VerifynumberController> {
         ));
   }
 
-  // Navigates to the previous screen.
-  onTapIcon() {
+  void onTapIcon() {
     Get.back();
   }
 }
