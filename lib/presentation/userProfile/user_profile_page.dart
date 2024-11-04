@@ -563,7 +563,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                             ),
                           ),
                         ],
-                      ),
+                      )
                     ),
 
                     // Show the divider only if there is more than one achievement

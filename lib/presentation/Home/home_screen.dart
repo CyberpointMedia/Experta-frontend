@@ -300,10 +300,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       SizedBox(height: 2.v),
                       Text(
                         "Fill in all required fields",
-                        style: theme.textTheme.bodyMedium!.copyWith(
-                          // fontSize: 12.fSize,
-                          fontWeight: FontWeight.w300,
-                        ),
+                        style: theme.textTheme.titleSmall
                       ),
                     ],
                   ),
