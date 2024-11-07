@@ -47,4 +47,6 @@ class ProfileController extends GetxController {
       isLoading(false);
     }
   }
+
+  void removeExpertise(UserExpertise expertise) {}
 }

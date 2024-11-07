@@ -1,4 +1,3 @@
-// home_screen.dart
 import 'dart:ui';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/Home/model/home_model.dart';
@@ -443,8 +442,8 @@ class _HomeScreenState extends State<HomeScreen> {
             trending: "Trending",
             seeallOne: "See All",
             onPressed: () {
-              Get.to(() => TrendingPeoplePage(
-                    trendingPeople: controller.trendingPeople,
+              Get.to(() => const TrendingPeoplePage(
+                    // trendingPeople: controller.trendingPeople,
                   ));
             },
           ),

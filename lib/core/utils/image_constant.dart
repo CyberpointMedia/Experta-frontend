@@ -275,6 +275,8 @@ class ImageConstant {
 
   static String imgCalendar = '$imagePath/settings/calendar.svg';
 
+   static String imgedit = '$imagePath/settings/Frame.svg';
+
   // static String imgIconBlueGray300 = '$imagePath/img_icon_blue_gray_300.svg';
 
   // static String imgCamera = '$imagePath/img_camera.svg';

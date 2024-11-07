@@ -832,8 +832,8 @@ class _UserDetailsPageState extends State<UserDetailsPage>
         _buildRowaboutme(aboutMeText: "Expertise"),
         SizedBox(height: 10.v),
         Wrap(
-          spacing: 10.v,
-          runSpacing: 10.h,
+          spacing: 4.v,
+          runSpacing: 6.h,
           children: expertiseList.map((expertise) {
             return Chip(
               label: Text(
@@ -1243,7 +1243,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                   ),
                   Text(
                     "Overall Ratings",
-                    style: theme.textTheme.bodyMedium!,
+                    style: theme.textTheme.titleSmall!,
                   )
                 ],
               ),
@@ -1256,6 +1256,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                 child: _buildColumnFourHundredFifty(
                   dynamicText: "$totalFollowers",
                   dynamicText1: "Followers",
+                  
                 ),
               ),
               const Spacer(
@@ -1288,7 +1289,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
         ),
         Text(
           dynamicText1,
-          style: theme.textTheme.bodyMedium!,
+          style: theme.textTheme.titleSmall!,
         )
       ],
     );
@@ -1393,7 +1394,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                   textAlign: TextAlign.left,
                   style: theme.textTheme.bodyMedium!.copyWith(
                       color: appTheme.black900,
-                      fontSize: 14,
+                      fontSize: 14.fSize,
                       fontWeight: FontWeight.w500),
                 ),
                 Container(
@@ -1414,7 +1415,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                   textAlign: TextAlign.left,
                   style: theme.textTheme.bodyMedium!.copyWith(
                       color: appTheme.black900,
-                      fontSize: 14,
+                      fontSize: 14.fSize,
                       fontWeight: FontWeight.w500),
                 ),
                 SizedBox(

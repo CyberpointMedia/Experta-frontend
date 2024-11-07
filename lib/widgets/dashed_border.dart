@@ -10,7 +10,7 @@ class DashedBorderPainter extends CustomPainter {
     required this.color,
     this.strokeWidth = 1.0,
     this.dashWidth = 5.0,
-    this.dashSpace = 3.0,
+    this.dashSpace = 3.0, required double topGap, required double bottomGap,
   });
 
   @override

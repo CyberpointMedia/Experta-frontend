@@ -363,6 +363,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
         ),
       ),
     );
+  
   }
 
   void _showPANVerificationDialog() {
