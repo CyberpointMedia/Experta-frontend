@@ -1,8 +1,6 @@
 import 'dart:ui';
 import 'package:experta/core/app_export.dart';
-import 'package:experta/theme/theme_helper.dart';
 import 'package:experta/widgets/animated_hint_searchview.dart'; // Your custom search view widget
-import 'package:flutter/material.dart';
 
 // ignore: unused_import
 import '../search_screen/widgets/search_item_widget.dart';

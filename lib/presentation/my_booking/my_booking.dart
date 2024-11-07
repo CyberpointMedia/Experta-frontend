@@ -1,12 +1,15 @@
 import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
+import 'package:experta/widgets/custom_icon_button.dart';
 import 'package:intl/intl.dart';
 
 // Define the Booking class
 class Booking {
+  final String id;
   final String name;
   final String role;
+  final String industry;
   final String profileImageUrl;
   final DateTime appointmentDate;
   final String duration;
@@ -16,8 +19,10 @@ class Booking {
   final bool isFromExpertApi;
 
   Booking({
+    required this.id,
     required this.name,
     required this.role,
+    required this.industry,
     required this.profileImageUrl,
     required this.appointmentDate,
     required this.duration,
@@ -37,50 +42,223 @@ class MyBookingPage extends StatefulWidget {
 }
 
 class _MyBookingPageState extends State<MyBookingPage> {
-  List<Booking> bookings = [];
   bool isPhoneSelected = true;
   final ApiService apiService = ApiService();
 
-  @override
-  void initState() {
-    super.initState();
-    fetchBookings();
-  }
-
-  Future<void> fetchBookings() async {
+  Future<List<Booking>> fetchBookings() async {
     try {
       final clientData = await apiService.fetchClientBookings();
       final expertData = await apiService.fetchExpertBookings();
 
-      setState(() {
-        bookings = [
-          ...clientData.map<Booking>((booking) => Booking(
-                name: booking['expert']['displayName'],
-                role: booking['expert']['occupation'] ?? '',
-                profileImageUrl: booking['expert']['profilePic'],
-                appointmentDate: DateTime.parse(booking['startTime']),
-                duration: '${booking['duration']} minute',
-                status: booking['status'],
-                isAccepted: booking['status'] == 'confirmed',
-                appointmentType: booking['type'],
-                isFromExpertApi: false,
-              )),
-          ...expertData.map<Booking>((booking) => Booking(
-                name: booking['client']['displayName'],
-                role: booking['client']['occupation'] ?? '',
-                profileImageUrl: booking['client']['profilePic'],
-                appointmentDate: DateTime.parse(booking['startTime']),
-                duration: '${booking['duration']} minute',
-                status: booking['status'],
-                isAccepted: booking['status'] == 'confirmed',
-                appointmentType: booking['type'],
-                isFromExpertApi: true,
-              )),
-        ];
-      });
-    } catch (e) {
+      final List<Booking> mappedBookings = [
+        ...clientData.map<Booking>((booking) {
+          // Safely access nested properties
+          final expertInfo = booking['expert'] ?? {};
+          final basicInfo = expertInfo['basicInfo'] ?? {};
+          final industryOccupation = expertInfo['industryOccupation'] ?? {};
+          final industry = industryOccupation['industry'] ?? {};
+          final occupation = industryOccupation['occupation'] ?? {};
+
+          return Booking(
+            id: booking['_id'] ?? {},
+            name: basicInfo['displayName']?.toString() ?? 'Unknown',
+            role: occupation['name']?.toString() ?? '',
+            industry: industry['name']?.toString() ?? '',
+            profileImageUrl: basicInfo['profilePic']?.toString() ?? '',
+            appointmentDate: DateTime.parse(
+                booking['startTime'] ?? DateTime.now().toIso8601String()),
+            duration: '${booking['duration']?.toString() ?? '0'} minute',
+            status: booking['status']?.toString() ?? 'pending',
+            isAccepted: booking['status'] == 'confirmed',
+            appointmentType: booking['type']?.toString() ?? '',
+            isFromExpertApi: false,
+          );
+        }),
+        ...expertData.map<Booking>((booking) {
+          // Safely access nested properties
+          final clientInfo = booking['client'] ?? {};
+          final basicInfo = clientInfo['basicInfo'] ?? {};
+          final industryOccupation = clientInfo['industryOccupation'] ?? {};
+          final industry = industryOccupation['industry'] ?? {};
+          final occupation = industryOccupation['occupation'] ?? {};
+
+          return Booking(
+            id: booking['_id'] ?? {},
+            name: basicInfo['displayName']?.toString() ?? 'Unknown',
+            role: occupation['name']?.toString() ?? '',
+            industry: industry['name']?.toString() ?? '',
+            profileImageUrl: basicInfo['profilePic']?.toString() ?? '',
+            appointmentDate: DateTime.parse(
+                booking['startTime'] ?? DateTime.now().toIso8601String()),
+            duration: '${booking['duration']?.toString() ?? '0'} minute',
+            status: booking['status']?.toString() ?? 'pending',
+            isAccepted: booking['status'] == 'confirmed',
+            appointmentType: booking['type']?.toString() ?? '',
+            isFromExpertApi: true,
+          );
+        }),
+      ];
+
+      return mappedBookings;
+    } catch (e, stackTrace) {
       print('Failed to load bookings: $e');
+      print('Stack trace: $stackTrace');
+      rethrow;
     }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      resizeToAvoidBottomInset: true,
+      body: Stack(
+        children: [
+          Positioned(
+            left: 270,
+            top: 50,
+            child: ImageFiltered(
+              imageFilter: ImageFilter.blur(
+                tileMode: TileMode.decal,
+                sigmaX: 60,
+                sigmaY: 60,
+              ),
+              child: Align(
+                child: SizedBox(
+                  width: 252,
+                  height: 252,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(126),
+                      color: appTheme.deepOrangeA20.withOpacity(0.6),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+          Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              _buildAppBar(),
+              _buildTabSelector(),
+              Expanded(
+                child: FutureBuilder<List<Booking>>(
+                  future: fetchBookings(),
+                  builder: (context, snapshot) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+
+                    if (snapshot.hasError) {
+                      return Center(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            const Icon(Icons.error_outline,
+                                size: 48, color: Colors.red),
+                            const SizedBox(height: 16),
+                            Text('Error: ${snapshot.error}'),
+                            ElevatedButton(
+                              onPressed: () => setState(() {}),
+                              child: const Text('Retry'),
+                            ),
+                          ],
+                        ),
+                      );
+                    }
+
+                    if (!snapshot.hasData || snapshot.data!.isEmpty) {
+                      return const Center(
+                        child: Text('No bookings available'),
+                      );
+                    }
+
+                    final bookings = snapshot.data!;
+                    return SingleChildScrollView(
+                      child: Column(
+                        children: [
+                          Visibility(
+                            visible: isPhoneSelected,
+                            child: BookingList(
+                              bookings: bookings
+                                  .where((booking) => booking.appointmentDate
+                                      .isAfter(DateTime.now()))
+                                  .toList(),
+                              isUpcomingTab: true,
+                            ),
+                          ),
+                          Visibility(
+                            visible: !isPhoneSelected,
+                            child: BookingList(
+                              bookings: bookings
+                                  .where((booking) => booking.appointmentDate
+                                      .isBefore(DateTime.now()))
+                                  .toList(),
+                              isUpcomingTab: false,
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildTabSelector() {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 10, 16, 5),
+      child: Container(
+        height: 48,
+        decoration: BoxDecoration(
+          border: Border.all(color: const Color(0xffe4e4e4)),
+          color: const Color(0xffffffff),
+          borderRadius: BorderRadius.circular(30),
+        ),
+        child: Row(
+          children: [
+            _buildTab(true, 'Upcoming'),
+            _buildTab(false, 'Past'),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTab(bool isUpcoming, String text) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => setState(() => isPhoneSelected = isUpcoming),
+        child: Container(
+          margin: const EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            color: (isPhoneSelected == isUpcoming)
+                ? Colors.black
+                : Colors.transparent,
+            borderRadius: BorderRadius.circular(30),
+          ),
+          child: Center(
+            child: Text(
+              text,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                height: 1.5,
+                color: (isPhoneSelected == isUpcoming)
+                    ? Colors.white
+                    : Colors.black,
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   PreferredSizeWidget _buildAppBar() {
@@ -102,128 +280,6 @@ class _MyBookingPageState extends State<MyBookingPage> {
   void onTapArrowLeft() {
     Get.back();
   }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: true,
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          _buildAppBar(),
-          Padding(
-            padding: const EdgeInsets.fromLTRB(16, 10, 16, 25),
-            child: Container(
-              height: 48,
-              decoration: BoxDecoration(
-                border: Border.all(color: const Color(0xffe4e4e4)),
-                color: const Color(0xffffffff),
-                borderRadius: BorderRadius.circular(30),
-              ),
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          isPhoneSelected = true;
-                        });
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          color: isPhoneSelected
-                              ? Colors.black
-                              : Colors.transparent,
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Upcoming',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              height: 1.5,
-                              color: isPhoneSelected
-                                  ? Colors.white
-                                  : Colors.black,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Expanded(
-                    child: GestureDetector(
-                      onTap: () {
-                        setState(() {
-                          isPhoneSelected = false;
-                        });
-                      },
-                      child: Container(
-                        margin: const EdgeInsets.all(5),
-                        decoration: BoxDecoration(
-                          color: !isPhoneSelected
-                              ? Colors.black
-                              : Colors.transparent,
-                          borderRadius: BorderRadius.circular(30),
-                        ),
-                        child: Center(
-                          child: Text(
-                            'Past',
-                            textAlign: TextAlign.center,
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                              height: 1.5,
-                              color: !isPhoneSelected
-                                  ? Colors.white
-                                  : Colors.black,
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-          Expanded(
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Visibility(
-                    visible: isPhoneSelected,
-                    child: BookingList(
-                      bookings: bookings
-                          .where((booking) => booking.appointmentDate
-                              .isAfter(DateTime.now()))
-                          .toList(),
-                      isUpcomingTab: true,
-                    ),
-                  ),
-                  Visibility(
-                    visible: !isPhoneSelected,
-                    child: BookingList(
-                      bookings: bookings
-                          .where((booking) => booking.appointmentDate
-                              .isBefore(DateTime.now()))
-                          .toList(),
-                      isUpcomingTab: false,
-                    ),
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
 
 // Widget to display a list of bookings
@@ -239,23 +295,37 @@ class BookingList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return bookings.isEmpty
-        ? const Center(child: Text('No bookings available'))
-        : ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            itemCount: bookings.length,
-            itemBuilder: (context, index) {
-              final booking = bookings[index];
-              return BookingCard(
-                  booking: booking, isUpcomingTab: isUpcomingTab);
-            },
-          );
+    print('Building BookingList with ${bookings.length} bookings');
+    print('isUpcomingTab: $isUpcomingTab');
+
+    if (bookings.isEmpty) {
+      return const Center(
+        child: Padding(
+          padding: EdgeInsets.all(16.0),
+          child: Text(
+            'No bookings available',
+            style: TextStyle(fontSize: 16),
+          ),
+        ),
+      );
+    }
+
+    return ListView.builder(
+      shrinkWrap: true,
+      physics: const NeverScrollableScrollPhysics(),
+      itemCount: bookings.length,
+      itemBuilder: (context, index) {
+        final booking = bookings[index];
+        print('Building booking card for ${booking.name}');
+        return BookingCard(booking: booking, isUpcomingTab: isUpcomingTab);
+      },
+    );
   }
 }
 
 // Widget to display individual booking cards
-class BookingCard extends StatelessWidget {
+
+class BookingCard extends StatefulWidget {
   final Booking booking;
   final bool isUpcomingTab;
 
@@ -266,18 +336,55 @@ class BookingCard extends StatelessWidget {
   });
 
   @override
+  State<BookingCard> createState() => _BookingCardState();
+}
+
+class _BookingCardState extends State<BookingCard> {
+  final ApiService apiService = ApiService();
+  @override
   Widget build(BuildContext context) {
     return Card(
       margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Row(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
+            child: Row(
               children: [
-                CircleAvatar(
-                  backgroundImage: NetworkImage(booking.profileImageUrl),
+                SizedBox(
+                  width: 55,
+                  child: Stack(
+                    children: [
+                      CircleAvatar(
+                        backgroundImage:
+                            NetworkImage(widget.booking.profileImageUrl),
+                        radius: 24,
+                      ),
+                      Positioned(
+                        top: 24,
+                        left: 35,
+                        bottom: 0,
+                        child: widget.booking.appointmentType == 'video'
+                            ? CustomImageView(
+                                height: 18.adaptSize,
+                                width: 18.adaptSize,
+                                imagePath: 'assets/images/bookings/video.svg',
+                              )
+                            : CustomIconButton(
+                                height: 18.adaptSize,
+                                width: 18.adaptSize,
+                                padding: EdgeInsets.all(3.h),
+                                decoration: IconButtonStyleHelper.fillGreenTL24,
+                                child: CustomImageView(
+                                  imagePath: ImageConstant.call,
+                                )),
+                      )
+                    ],
+                  ),
                 ),
                 const SizedBox(width: 12.0),
                 Column(
@@ -285,70 +392,189 @@ class BookingCard extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        Text(
-                          booking.name,
-                          style: const TextStyle(fontWeight: FontWeight.bold),
+                        Text(widget.booking.name,
+                            style: theme.textTheme.titleLarge!
+                                .copyWith(fontSize: 16)),
+                        const SizedBox(width: 6),
+                        const Icon(
+                          Icons.verified,
+                          color: Colors.deepPurple,
+                          size: 16.0,
                         ),
-                        if (booking.isAccepted)
-                          const Icon(
-                            Icons.check_circle,
-                            color: Colors.blue,
-                            size: 16.0,
-                          ),
                       ],
                     ),
-                    Text(
-                      booking.role,
-                      style: const TextStyle(color: Colors.grey),
-                    ),
+                    Text(widget.booking.role,
+                        style: theme.textTheme.titleSmall!.copyWith(
+                            color: appTheme.gray600,
+                            fontSize: 12,
+                            fontWeight: FontWeight.w400)),
                   ],
                 ),
               ],
             ),
-            SizedBox(height: 16.adaptSize),
-            Row(
+          ),
+          const SizedBox(height: 16.0),
+          const Divider(),
+          Padding(
+            padding: const EdgeInsets.only(left: 16, right: 16, top: 10),
+            child: Text(
+              'Appointment date',
+              style: theme.textTheme.bodySmall!.copyWith(
+                  fontSize: 12.0,
+                  color: Colors.grey,
+                  fontWeight: FontWeight.w500),
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(
+              left: 16,
+              right: 16,
+            ),
+            child: Row(
               children: [
-                const Icon(Icons.calendar_today, color: Colors.grey, size: 16.0),
-                SizedBox(width: 4.adaptSize),
-                const Text(
-                  'Appointment:',
-                  style: TextStyle(
-                      fontWeight: FontWeight.bold, color: Colors.black54),
+                const Icon(Icons.calendar_today,
+                    color: Colors.black, size: 14.0),
+                const SizedBox(width: 4.0),
+                Text(
+                  '${DateFormat('EEE, d MMM yyyy').format(widget.booking.appointmentDate)} • ${DateFormat('hh:mm a').format(widget.booking.appointmentDate)} - ${DateFormat('hh:mm a').format(widget.booking.appointmentDate.add(Duration(minutes: int.parse(widget.booking.duration.split(' ')[0]))))}',
+                  style: theme.textTheme.bodySmall!.copyWith(
+                      fontSize: 14.0,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500),
                 ),
               ],
             ),
-            SizedBox(height: 4.adaptSize),
-            Row(
-              children: [
-                SizedBox(width: 24.adaptSize),
-                Expanded(
-                  child: Text(
-                    '${DateFormat('EEE, d MMM yyyy, hh:mm a').format(booking.appointmentDate)} - ${DateFormat('hh:mm a').format(booking.appointmentDate.add(Duration(minutes: int.parse(booking.duration.split(' ')[0]))))}',
-                    style: TextStyle(fontSize: 16.fSize, color: Colors.black54),
-                  ),
-                ),
-              ],
-            ),
-            SizedBox(height: 8.adaptSize),
-            Row(
+          ),
+          const SizedBox(height: 12.0),
+          Padding(
+            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+            child: Row(
               children: [
                 Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Duration: ${booking.duration}',
-                      style: TextStyle(fontSize: 14.fSize, color: Colors.black54),
+                      'Call Duration',
+                      style: theme.textTheme.bodySmall!.copyWith(
+                          fontSize: 12.0,
+                          color: Colors.grey,
+                          fontWeight: FontWeight.w500),
                     ),
-                    Text(
-                      'Status: ${booking.status}',
-                      style: TextStyle(fontSize: 14.fSize, color: Colors.black54),
+                    Row(
+                      children: [
+                        const Icon(Icons.access_time,
+                            color: Colors.black, size: 16.0),
+                        const SizedBox(width: 4.0),
+                        Text(
+                          widget.booking.duration,
+                          style: theme.textTheme.bodySmall!.copyWith(
+                              fontSize: 14.0,
+                              color: Colors.black,
+                              fontWeight: FontWeight.w500),
+                        ),
+                      ],
                     ),
                   ],
                 ),
+                const SizedBox(
+                  width: 80,
+                ),
+                if (!widget.booking.isFromExpertApi ||
+                    widget.booking.isFromExpertApi &&
+                        widget.booking.status.toLowerCase() == 'accepted' ||
+                    widget.booking.isFromExpertApi &&
+                        widget.booking.status.toLowerCase() == 'rejected')
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Status',
+                        style: theme.textTheme.bodySmall!.copyWith(
+                            fontSize: 12.0,
+                            color: Colors.grey,
+                            fontWeight: FontWeight.w500),
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                            "•",
+                            style: TextStyle(
+                              fontSize: 14.0,
+                              color: widget.booking.status.toLowerCase() ==
+                                      'accepted'
+                                  ? Colors.green
+                                  : Colors.red,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          const SizedBox(width: 4.0),
+                          Text(
+                            '${widget.booking.status[0].toUpperCase()}${widget.booking.status.substring(1)}',
+                            style: theme.textTheme.bodySmall!.copyWith(
+                                fontSize: 14.0,
+                                color: Colors.black,
+                                fontWeight: FontWeight.w500),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
               ],
             ),
-          ],
-        ),
+          ),
+          if (widget.booking.isFromExpertApi &&
+              widget.isUpcomingTab &&
+              widget.booking.status.toLowerCase() == 'pending')
+            Padding(
+              padding: const EdgeInsets.only(top: 0, bottom: 16),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  SizedBox(
+                    height: 45.adaptSize,
+                    width: 145.adaptSize,
+                    child: CustomElevatedButton(
+                        buttonStyle: ElevatedButton.styleFrom(
+                          backgroundColor: theme.primaryColor,
+                          foregroundColor: Colors.black,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                        ),
+                        onPressed: () {
+                          print("Accept button pressed!");
+                          apiService.updateBookingStatus(
+                              widget.booking.id, "accepted");
+                          setState(() {});
+                        },
+                        text: 'Accept'),
+                  ),
+                  SizedBox(
+                    height: 45.adaptSize,
+                    width: 145.adaptSize,
+                    child: CustomElevatedButton(
+                      buttonStyle: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.white,
+                        foregroundColor: Colors.black,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                          side: BorderSide(color: appTheme.gray300),
+                        ),
+                      ),
+                      onPressed: () {
+                        print("Reject button pressed!");
+                        apiService.updateBookingStatus(
+                            widget.booking.id, "rejected");
+                        setState(() {});
+                      },
+                      text: "Reject",
+                    ),
+                  ),
+                ],
+              ),
+            ),
+        ],
       ),
     );
   }

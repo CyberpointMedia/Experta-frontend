@@ -1,7 +1,5 @@
 import 'dart:ui';
 import 'package:experta/core/app_export.dart';
-import 'package:flutter/material.dart';
-import '../../widgets/app_bar/custom_app_bar.dart';
 
 class NotificationsPage extends StatefulWidget {
   const NotificationsPage({super.key});

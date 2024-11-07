@@ -4,7 +4,6 @@ import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/Home/model/home_model.dart';
 import 'package:experta/presentation/categoryDetails/category_details_screen.dart';
 import 'package:experta/presentation/category/category_controller.dart';
-import 'package:experta/widgets/app_bar/appbar_trailing_iconbutton.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
 
 class CategoryScreen extends StatefulWidget {

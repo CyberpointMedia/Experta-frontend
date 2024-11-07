@@ -88,6 +88,12 @@ dependencies:
   google_mlkit_face_detection: 
   image: ^4.3.0
   google_mlkit_commons: any
+  flutter_tts: ^4.0.2
+  share_plus: ^10.0.0
+  screenshot: ^3.0.0
+  firebase_core: ^3.4.0
+  firebase_messaging: ^15.1.0
+  firebase_auth: ^5.2.0
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -114,6 +120,7 @@ flutter:
     - assets/images/
     - assets/images/wallet/
     - assets/images/settings/
+    - assets/images/bookings/
     - assets/jsonfiles/
   
   fonts:

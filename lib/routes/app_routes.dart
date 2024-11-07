@@ -494,7 +494,7 @@ static const String qr = "/share_profile";
         bindings: [
           SetPricingBindings(),
         ]),
-    GetPage(name: category, page: () => CategoryScreen(), bindings: [
+    GetPage(name: category, page: () => const CategoryScreen(), bindings: [
       CategoryBinding(),
     ]),
     GetPage(
@@ -608,7 +608,7 @@ static const String qr = "/share_profile";
         bindings: [
           ProfileBinding(),
         ]),
-    GetPage(name: rating, page: () => RatingPage(), bindings: [
+    GetPage(name: rating, page: () => const RatingPage(), bindings: [
       RatingPageBinding(),
     ]),
     GetPage(
@@ -695,7 +695,7 @@ static const String qr = "/share_profile";
 
         GetPage(
         name: editexperties,
-        page: () =>   EditExpertisePage(),
+        page: () =>   const EditExpertisePage(),
         customTransition: CustomPageTransition(),
         bindings: [
           EditExpertiesBinding(),

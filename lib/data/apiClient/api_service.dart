@@ -16,6 +16,8 @@ import 'package:experta/presentation/additional_info/model/additional_model.dart
 import 'package:experta/presentation/additional_info/model/interest_model.dart';
 import 'package:experta/presentation/feeds_active_screen/models/feeds_active_model.dart';
 import 'package:experta/presentation/professional_info/model/professional_model.dart';
+import 'package:experta/presentation/share_profile/models/share_profile_model.dart';
+import 'package:experta/presentation/verify_account/Models/verify_account_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
 import 'package:path/path.dart';
@@ -1075,34 +1077,212 @@ class ApiService {
   }
 
   Future<List<dynamic>> fetchClientBookings() async {
-    final response = await http.get(
-      Uri.parse('$_baseUrl/bookings-as-client'),
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json'
-      },
-    );
+    print('Fetching client bookings...');
+    try {
+      final response = await http.get(
+        Uri.parse('$_baseUrl/bookings-as-client'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json'
+        },
+      );
 
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body)['data'];
-    } else {
-      throw Exception('Failed to load client bookings');
+      print('Client bookings response status: ${response.statusCode}');
+      print('Client bookings response body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final decodedResponse = jsonDecode(response.body);
+        return decodedResponse['data'] as List<dynamic>;
+      } else {
+        throw Exception(
+            'Failed to load client bookings: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error in fetchClientBookings: $e');
+      rethrow;
     }
   }
 
   Future<List<dynamic>> fetchExpertBookings() async {
-    final response = await http.get(
-      Uri.parse('$_baseUrl/bookings-as-expert'),
-      headers: {
-        'Authorization': 'Bearer $token',
-        'Content-Type': 'application/json'
-      },
-    );
+    print('Fetching expert bookings...');
+    try {
+      final response = await http.get(
+        Uri.parse('$_baseUrl/bookings-as-expert'),
+        headers: {
+          'Authorization': 'Bearer $token',
+          'Content-Type': 'application/json'
+        },
+      );
 
-    if (response.statusCode == 200) {
-      return jsonDecode(response.body)['data'];
-    } else {
-      throw Exception('Failed to load expert bookings');
+      print('Expert bookings response status: ${response.statusCode}');
+      print('Expert bookings response body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final decodedResponse = jsonDecode(response.body);
+        return decodedResponse['data'] as List<dynamic>;
+      } else {
+        throw Exception(
+            'Failed to load expert bookings: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error in fetchExpertBookings: $e');
+      rethrow;
+    }
+  }
+
+  Future<void> updateBookingStatus(String bookingId, String status) async {
+    final url = Uri.parse('$_baseUrl/update-booking-status');
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+    final body = json.encode({
+      'bookingId': bookingId,
+      'status': status,
+    });
+
+    try {
+      final response = await http.patch(url, headers: headers, body: body);
+
+      if (response.statusCode == 200) {
+        final responseData = json.decode(response.body);
+        print('API Response: $responseData');
+        if (responseData['status'] == 'success') {
+          // Handle success
+          print('Booking status updated successfully!');
+        } else {
+          // Handle failure
+          print('Failed to update booking status: ${responseData['message']}');
+        }
+      } else {
+        print('Error: ${response.statusCode}');
+      }
+    } catch (error) {
+      print('Error updating booking status: $error');
+    }
+  }
+
+  Future<ShareProfileResponse> getShareProfile() async {
+    try {
+      final headers = {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      };
+      final response = await http.post(
+        Uri.parse('$_baseUrl/share-profile'),
+        headers: headers,
+      );
+
+      if (response.statusCode == 200) {
+        final jsonData = json.decode(response.body);
+        return ShareProfileResponse.fromJson(jsonData);
+      } else {
+        throw Exception('Failed to load profile data');
+      }
+    } catch (e) {
+      throw Exception('Error fetching profile data: $e');
+    }
+  }
+
+  Future<Map<String, dynamic>> verifyPAN(String panNumber) async {
+    final url = Uri.parse('$_baseUrl/kyc/verify-pan');
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+    final body = json.encode({"panNumber": panNumber});
+
+    try {
+      final response = await http.post(url, headers: headers, body: body);
+
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      } else {
+        throw Exception(
+            'Failed to verify PAN. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error verifying PAN: $e');
+    }
+  }
+
+  Future<Map<String, dynamic>> verifyBank({
+    required String accountNumber,
+    required String ifsc,
+  }) async {
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+    try {
+      final response = await http.post(
+        Uri.parse('$_baseUrl/kyc/verify-bank'),
+        headers: headers,
+        body: json.encode({
+          'accountNumber': accountNumber,
+          'ifsc': ifsc,
+        }),
+      );
+      log(response.body);
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      } else {
+        throw Exception('Failed to verify bank details');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
+
+  Future<Map<String, dynamic>> verifyFaceLiveness(bool livenessStatus) async {
+    final url = Uri.parse('$_baseUrl/kyc/face-liveness-client');
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+    final body = jsonEncode({'livenessStatus': livenessStatus});
+
+    try {
+      final response = await http.post(url, headers: headers, body: body);
+      if (response.statusCode == 200) {
+        final data = jsonDecode(response.body);
+        if (data['status'] == 'success') {
+          return data['data']['data']['faceLiveness'];
+        } else {
+          throw Exception('Failed to verify face liveness.');
+        }
+      } else {
+        throw Exception('Server error: ${response.statusCode}');
+      }
+    } catch (e) {
+      throw Exception('Error occurred: $e');
+    }
+  }
+
+  Future<KYCResponse?> getKYCStatus() async {
+    try {
+      final response = await http.get(
+        Uri.parse('$_baseUrl/kyc/status'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      log('Response status: ${response.statusCode}');
+      log('Response body: ${response.body}');
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> jsonResponse = json.decode(response.body);
+        if (jsonResponse['status'] == 'success') {
+          log("${jsonResponse['data']}");
+          return KYCResponse.fromJson(jsonResponse['data']);
+        }
+      }
+      return null;
+    } catch (e) {
+      print('Error fetching KYC status: $e');
+      return null;
     }
   }
 }
