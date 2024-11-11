@@ -10,8 +10,9 @@ class SearchResult {
   String firstName;
   String industry;
   String occupation;
-  List<String> languages;
-  List<String> expertises;
+  List<Language>? language;
+  List<Expertise>? expertise;
+  Pricing? pricing;
 
   SearchResult({
     required this.id,
@@ -25,8 +26,9 @@ class SearchResult {
     required this.firstName,
     required this.industry,
     required this.occupation,
-    required this.languages,
-    required this.expertises,
+     this.language,
+     this.expertise,
+     this.pricing,
   });
 
   factory SearchResult.fromJson(Map<String, dynamic> json) {
@@ -42,8 +44,13 @@ class SearchResult {
       firstName: json['firstName'] ?? '',
       industry: json['industry'] ?? '',
       occupation: json['occupation'] ?? '',
-      languages: List<String>.from(json['languages'] ?? []),
-      expertises: List<String>.from(json['expertises'] ?? []),
+      language: (json['language'] as List<dynamic>)
+          .map((e) => Language.fromJson(e))
+          .toList(),
+      expertise: (json['expertise'] as List<dynamic>)
+          .map((e) => Expertise.fromJson(e))
+          .toList(),
+      pricing: Pricing.fromJson(json['pricing']),
     );
   }
 
@@ -60,8 +67,9 @@ class SearchResult {
       'firstName': firstName,
       'industry': industry,
       'occupation': occupation,
-      'languages': languages,
-      'expertises': expertises,
+      'language': language!.map((e) => e.toMap()).toList(),
+      'expertise': expertise!.map((e) => e.toMap()).toList(),
+      'pricing': pricing!.toMap(),
     };
   }
 
@@ -78,8 +86,13 @@ class SearchResult {
       firstName: map['firstName'] ?? '',
       industry: map['industry'] ?? '',
       occupation: map['occupation'] ?? '',
-      languages: List<String>.from(map['languages'] ?? []),
-      expertises: List<String>.from(map['expertises'] ?? []),
+      language: (map['language'] as List<dynamic>)
+          .map((e) => Language.fromJson(e))
+          .toList(),
+      expertise: (map['expertise'] as List<dynamic>)
+          .map((e) => Expertise.fromJson(e))
+          .toList(),
+      pricing: Pricing.fromJson(map['pricing']),
     );
   }
 }
@@ -108,6 +121,16 @@ class Language {
       v: json['__v'],
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      '_id': id,
+      'name': name,
+      'createdAt': createdAt.toIso8601String(),
+      'updatedAt': updatedAt.toIso8601String(),
+      '__v': v,
+    };
+  }
 }
 
 class Expertise {
@@ -134,6 +157,16 @@ class Expertise {
       v: json['__v'],
     );
   }
+
+  Map<String, dynamic> toMap() {
+    return {
+      '_id': id,
+      'name': name,
+      'createdAt': createdAt.toIso8601String(),
+      'updatedAt': updatedAt.toIso8601String(),
+      '__v': v,
+    };
+  }
 }
 
 class Pricing {
@@ -159,6 +192,16 @@ class Pricing {
       messagePrice: json['messagePrice'] ?? 0,
       videoCallPrice: json['videoCallPrice'] ?? 0,
     );
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      '_id': id,
+      '__v': v,
+      'audioCallPrice': audioCallPrice,
+      'messagePrice': messagePrice,
+      'videoCallPrice': videoCallPrice,
+    };
   }
 }
 
