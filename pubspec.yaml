@@ -21,7 +21,7 @@ version: 1.0.0+1
 environment:
   sdk: '>=3.3.0 <4.0.0'
 
-# Dependencies specify other packages that your package needs in order to work.
+# Dependencies specify other packages that your package needs in order t999o work.
 # To automatically upgrade your package dependencies to the latest versions
 # consider running flutter pub upgrade --major-versions. Alternatively,
 # dependencies can be manually updated by changing the version numbers below to
@@ -94,6 +94,7 @@ dependencies:
   firebase_core: ^3.4.0
   firebase_messaging: ^15.1.0
   firebase_auth: ^5.2.0
+  device_info_plus: ^10.1.2
 dev_dependencies:
   flutter_test:
     sdk: flutter

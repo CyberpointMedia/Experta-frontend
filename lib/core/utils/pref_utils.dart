@@ -24,7 +24,7 @@ class PrefUtils {
 
   /// Retrieve token from SharedPreferences
   String? getToken() {
-    return _sharedPreferences!.getString('token');
+    return _sharedPreferences?.getString('token');
   }
 
   /// Remove token from SharedPreferences
@@ -107,5 +107,35 @@ class PrefUtils {
   /// Remove address from SharedPreferences
   Future<void> removebasic() async {
     await _sharedPreferences!.remove('basicInfo');
+  }
+
+  /// Save Fcmtoken to SharedPreferences
+  Future<void> setFcmToken(String fcmtoken) async {
+    await _sharedPreferences!.setString('fcmtoken', fcmtoken);
+  }
+
+  /// Retrieve token from SharedPreferences
+  String? getFcmToken() {
+    return _sharedPreferences?.getString('fcmtoken');
+  }
+
+  /// Remove token from SharedPreferences
+  Future<void> removeFcmToken() async {
+    await _sharedPreferences!.remove('fcmtoken');
+  }
+
+  /// Save Fcmtoken to SharedPreferences
+  Future<void> setDeviceInfo(String deviceInfo) async {
+    await _sharedPreferences!.setString('deviceInfo', deviceInfo);
+  }
+
+  /// Retrieve token from SharedPreferences
+  String? getDeviceInfo() {
+    return _sharedPreferences?.getString('deviceInfo');
+  }
+
+  /// Remove token from SharedPreferences
+  Future<void> removeDeviceInfo() async {
+    await _sharedPreferences!.remove('deviceInfo');
   }
 }

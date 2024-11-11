@@ -275,17 +275,15 @@ class ShareProfilePage extends StatelessWidget {
         // targetSize: const Size(1080, 1920),
       );
 
-      if (imageBytes != null) {
-        final tempDir = await getTemporaryDirectory();
-        final file = await File('${tempDir.path}/profile_card.png').create();
-        await file.writeAsBytes(imageBytes, flush: true);
+      final tempDir = await getTemporaryDirectory();
+      final file = await File('${tempDir.path}/profile_card.png').create();
+      await file.writeAsBytes(imageBytes, flush: true);
 
-        await Share.shareXFiles(
-          [XFile(file.path)],
-          text: 'Check out my profile: https://your-profile-link.com',
-        );
-      }
-    } catch (e) {
+      await Share.shareXFiles(
+        [XFile(file.path)],
+        text: 'Check out my profile: https://your-profile-link.com',
+      );
+        } catch (e) {
       print('Error sharing profile: $e');
       Get.snackbar('Error', 'Failed to share profile');
     }

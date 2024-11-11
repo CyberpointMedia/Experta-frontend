@@ -47,29 +47,29 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyD4t4y-6SGWd2jK3cz0kv-H23x2r5zyti4',
-    appId: '1:999699075378:web:b9315846593317e732872b',
-    messagingSenderId: '999699075378',
-    projectId: 'experta-ce200',
-    authDomain: 'experta-ce200.firebaseapp.com',
-    storageBucket: 'experta-ce200.firebasestorage.app',
-    measurementId: 'G-SF7JSGHD4E',
+    apiKey: 'AIzaSyD4w9iIBnOpUFuro01jMBbwt03kyVJDj5A',
+    appId: '1:651672354813:web:16a7284446ac979cee6394',
+    messagingSenderId: '651672354813',
+    projectId: 'experta-30f9e',
+    authDomain: 'experta-30f9e.firebaseapp.com',
+    storageBucket: 'experta-30f9e.firebasestorage.app',
+    measurementId: 'G-SNL8941N2D',
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyDmeb9gWLh6-dLeR7BD_iSlaPy2DIYx7n0',
-    appId: '1:999699075378:android:08738b019d14b49632872b',
-    messagingSenderId: '999699075378',
-    projectId: 'experta-ce200',
-    storageBucket: 'experta-ce200.firebasestorage.app',
+    apiKey: 'AIzaSyAImJvYzhOu_sCqqHOrVtEvvZX8hpAi5Bo',
+    appId: '1:651672354813:android:ecc8e892f789c8b2ee6394',
+    messagingSenderId: '651672354813',
+    projectId: 'experta-30f9e',
+    storageBucket: 'experta-30f9e.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDBE1iHM3lR1J7uuf7w_OYHDMzRlFYXuTE',
-    appId: '1:999699075378:ios:02de8d5400f02dce32872b',
-    messagingSenderId: '999699075378',
-    projectId: 'experta-ce200',
-    storageBucket: 'experta-ce200.firebasestorage.app',
+    apiKey: 'AIzaSyDrv9lsiri0gt9BHHxzEK1w0tdG50r2UGk',
+    appId: '1:651672354813:ios:5faf51e2e6d53a2dee6394',
+    messagingSenderId: '651672354813',
+    projectId: 'experta-30f9e',
+    storageBucket: 'experta-30f9e.firebasestorage.app',
     iosBundleId: 'com.example.expert',
   );
 }
