@@ -116,7 +116,7 @@ class _RatingPageState extends State<RatingPage> {
 }
 
 void main() {
-  runApp(MaterialApp(
+  runApp(const MaterialApp(
     home: RatingPage(),
   ));
 }

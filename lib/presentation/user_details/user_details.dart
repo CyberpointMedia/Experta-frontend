@@ -44,12 +44,12 @@ class _UserDetailsPageState extends State<UserDetailsPage>
       backgroundColor: Colors.transparent,
       builder: (context) {
         return Container(
-          padding:  EdgeInsets.only(top: 20.fSize, bottom: 20.fSize),
+          padding: EdgeInsets.only(top: 20.fSize, bottom: 20.fSize),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Padding(
-                padding:  EdgeInsets.only(left: 20.fSize, right: 20.fSize),
+                padding: EdgeInsets.only(left: 20.fSize, right: 20.fSize),
                 child: Container(
                   decoration: const BoxDecoration(
                       color: Colors.white,
@@ -100,13 +100,11 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                       color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(16))),
                   child: ListTile(
-                    title:  Center(
+                    title: Center(
                       child: Text(
                         'Cancel',
-                        style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 16.fSize
-                        ),
+                        style:
+                            TextStyle(color: Colors.black, fontSize: 16.fSize),
                       ),
                     ),
                     onTap: () {
@@ -230,10 +228,18 @@ class _UserDetailsPageState extends State<UserDetailsPage>
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: Colors.green.shade100,
-                    child: const Icon(Icons.call, color: Colors.green),
-                  ),
+                  leading: CustomIconButton(
+                      height: 44.adaptSize,
+                      width: 44.adaptSize,
+                      padding: EdgeInsets.all(10.h),
+                      decoration: IconButtonStyleHelper.fillGreenTL24,
+                      child: CustomImageView(
+                        imagePath: ImageConstant.call,
+                      )),
+                  // leading: CircleAvatar(
+                  //   backgroundColor: Colors.green.shade100,
+                  //   child: const Icon(Icons.call, color: Colors.green),
+                  // ),
                   title: Text(
                     'Audio Call',
                     style: CustomTextStyles.titleMedium18,
@@ -267,10 +273,14 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                 ),
                 const Divider(),
                 ListTile(
-                  leading: CircleAvatar(
-                    backgroundColor: Colors.red.shade100,
-                    child: const Icon(Icons.videocam, color: Colors.red),
-                  ),
+                  leading: CustomIconButton(
+                      height: 44.adaptSize,
+                      width: 44.adaptSize,
+                      padding: EdgeInsets.all(10.h),
+                      decoration:
+                          IconButtonStyleHelper.fillPrimaryContainerT123,
+                      child:
+                          CustomImageView(imagePath: ImageConstant.videocam)),
                   title: Text(
                     'Video Call',
                     style: CustomTextStyles.titleMedium18,
@@ -383,13 +393,11 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                 headerSliverBuilder: (context, innerBoxIsScrolled) {
                   return [
                     SliverAppBar(
-                      
                       pinned: true,
                       automaticallyImplyLeading: false,
                       expandedHeight: MediaQuery.of(context).size.height * 0.45,
                       backgroundColor: Colors.white.withOpacity(0.4),
                       primary: true,
-                      
                       leading: AppbarLeadingImage(
                         imagePath: ImageConstant.imgArrowLeftOnerrorcontainer,
                         margin: EdgeInsets.only(
@@ -501,11 +509,13 @@ class _UserDetailsPageState extends State<UserDetailsPage>
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
-
                 color: appTheme.whiteA700,
                 child: Padding(
-                  padding:  EdgeInsets.only(
-                      bottom: 15.adaptSize, right: 10.adaptSize, left: 10.adaptSize, top: 30.adaptSize),
+                  padding: EdgeInsets.only(
+                      bottom: 15.adaptSize,
+                      right: 10.adaptSize,
+                      left: 10.adaptSize,
+                      top: 30.adaptSize),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -529,7 +539,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                             AppRoutes.chattingScreen,
                             arguments: {'chat': chatData},
                           );
-                                                },
+                        },
                         child: CustomImageView(
                           height: 50.adaptSize,
                           width: 50.adaptSize,
@@ -819,45 +829,45 @@ class _UserDetailsPageState extends State<UserDetailsPage>
   }
 
   Widget _buildChipviewvisual(BuildContext context) {
-  final theme = Theme.of(context);
-  final data = controller.userData.value.data?.expertise;
-  final expertiseList = data?.expertise ?? [];
+    final theme = Theme.of(context);
+    final data = controller.userData.value.data?.expertise;
+    final expertiseList = data?.expertise ?? [];
 
-  return Container(
-    color: Colors.white,
-    padding: const EdgeInsets.all(10),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildRowaboutme(aboutMeText: "Expertise"),
-        SizedBox(height: 10.v),
-        Wrap(
-          spacing: 4.v,
-          runSpacing: 6.h,
-          children: expertiseList.map((expertise) {
-            return Chip(
-              label: Text(
-                expertise.name.toString(),
-                style: theme.textTheme.bodyMedium!.copyWith(
-                  color: Colors.black,
-                  fontWeight: FontWeight.w500, // Set font weight to 600
-                  fontSize: 16.fSize, // Set font size to 16 pixels
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildRowaboutme(aboutMeText: "Expertise"),
+          SizedBox(height: 10.v),
+          Wrap(
+            spacing: 10.v,
+            runSpacing: 10.h,
+            children: expertiseList.map((expertise) {
+              return Chip(
+                label: Text(
+                  expertise.name.toString(),
+                  style: theme.textTheme.bodyMedium!.copyWith(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500, // Set font weight to 600
+                    fontSize: 16.fSize, // Set font size to 16 pixels
+                  ),
                 ),
-              ),
-              backgroundColor: appTheme.gray200,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(20.0),
-                side: BorderSide(
-                  color: appTheme.gray300,
+                backgroundColor: appTheme.gray200,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                  side: BorderSide(
+                    color: appTheme.gray300,
+                  ),
                 ),
-              ),
-            );
-          }).toList(),
-        ),
-      ],
-    ),
-  );
-}
+              );
+            }).toList(),
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget _buildColumneducation() {
     return Container(
@@ -1002,7 +1012,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
         children: [
           _buildRowaboutme(aboutMeText: "Interested"),
           Padding(
-            padding:  const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             child: Wrap(
               spacing: 8.adaptSize,
               runSpacing: 4.adaptSize,
@@ -1081,8 +1091,11 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                   return Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
-                      padding:  EdgeInsets.only(
-                          left: 16.adaptSize, right: 16.adaptSize, top: 10.adaptSize, bottom: 10.adaptSize),
+                      padding: EdgeInsets.only(
+                          left: 16.adaptSize,
+                          right: 16.adaptSize,
+                          top: 10.adaptSize,
+                          bottom: 10.adaptSize),
                       decoration: BoxDecoration(
                         color: appTheme.gray100,
                         borderRadius: const BorderRadius.all(

@@ -242,6 +242,7 @@ class PrimaryColors {
   Color get deepOrangeA200 => const Color(0XFFFE7733); //FFCA9A
   Color get deepOrangeA20 => const Color(0XFFFFCA9A);
   Color get deepYello => const Color(0XFFFFDF68);
+  Color get panCol => const Color(0XFFBDAD5E);
 
   // DeepPurple
   Color get deepPurple300 => const Color(0XFF9270D8);
@@ -287,8 +288,9 @@ class PrimaryColors {
 
   // Red
   Color get red500 => const Color(0XFFEB4335);
-
   Color get readmore => const Color(0XFFD45102);
+
+  // Color get readmore => const Color(0XFFD45102);
 
   // White
   Color get whiteA700 => const Color(0XFFFCFCFE);

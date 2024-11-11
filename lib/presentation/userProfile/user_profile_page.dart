@@ -296,7 +296,7 @@ class _UserProfilePageState extends State<UserProfilePage>
         SizedBox(height: 17.v),
         if (socialMediaLinks != null && socialMediaLinks.isNotEmpty)
           Row(
-            mainAxisAlignment: MainAxisAlignment.center,
+             mainAxisAlignment: MainAxisAlignment.center,
             children: socialMediaLinks.map((socialMedia) {
               return GestureDetector(
                 onTap: () {
@@ -430,7 +430,7 @@ class _UserProfilePageState extends State<UserProfilePage>
 
   return Container(
     color: Colors.white, // Card-like appearance
-    padding: const EdgeInsets.all(10), // Padding around the card content
+    padding:  EdgeInsets.all(10), // Padding around the card content
     child: Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -459,10 +459,8 @@ class _UserProfilePageState extends State<UserProfilePage>
               return Chip(
                 label: Text(
                   expertise.name.toString(),
-                  style: theme.textTheme.bodyMedium!.copyWith(
+                  style: theme.textTheme.titleSmall!.copyWith(
                     color: Colors.black,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16.fSize,
                   ),
                 ),
                 backgroundColor: appTheme.gray200,
@@ -600,31 +598,32 @@ class _UserProfilePageState extends State<UserProfilePage>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding:  EdgeInsets.only(
-                          bottom: 8.adaptSize, left: 10.adaptSize, right: 10.adaptSize),
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            height: 24.v,
-                            width: 25.adaptSize,
-                            child: SvgPicture.asset(
-                                "assets/images/img_link_1.svg"),
-                          ),
-                           SizedBox(width: 10.adaptSize),
-                          Expanded(
-                            child: Text(
-                              achievement,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              style: theme.textTheme.bodyLarge?.copyWith(
-                                color: appTheme.gray900,
-                                decoration: TextDecoration.underline,
+                        padding: EdgeInsets.only(
+                            bottom: 8.adaptSize,
+                            left: 10.adaptSize,
+                            right: 10.adaptSize),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              height: 24.v,
+                              width: 25.adaptSize,
+                              child: SvgPicture.asset(
+                                  "assets/images/img_link_1.svg"),
+                            ),
+                            SizedBox(width: 10.adaptSize),
+                            Expanded(
+                              child: Text(
+                                achievement,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: theme.textTheme.bodyLarge?.copyWith(
+                                  color: appTheme.gray900,
+                                  decoration: TextDecoration.underline,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      )
-                    ),
+                          ],
+                        )),
 
                     // Show the divider only if there is more than one achievement
                     if (achievements.length > 1 &&
@@ -704,61 +703,55 @@ class _UserProfilePageState extends State<UserProfilePage>
   );
 }
 
-  Widget _buildColumnreviews() {
-    return Column(
-      children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              "Reviews",
-              style:
-                  theme.textTheme.headlineLarge?.copyWith(fontSize: 16.fSize),
+
+ Widget _buildColumnreviews() {
+  return Column(
+    children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Text(
+            "Reviews",
+            style: theme.textTheme.headlineLarge?.copyWith(fontSize: 16.fSize),
+          ),
+          GestureDetector(
+            onTap: () {
+              var reviews = controller.userData.value.data?.basicInfo?.reviews;
+              Get.to(() => AllReviewsPage(reviews: reviews ?? []));
+            },
+            child: Text(
+              "See all",
+              style: theme.textTheme.titleMedium
+                  ?.copyWith(color: appTheme.deepOrangeA200),
             ),
-            GestureDetector(
-              onTap: () {
-                var reviews =
-                    controller.userData.value.data?.basicInfo?.reviews;
-                // Navigate to the AllReviewsPage even if there are no reviews
-                Get.to(() => AllReviewsPage(reviews: reviews ?? []));
-              },
-              child: Text(
-                "See all",
-                style: theme.textTheme.titleMedium
-                    ?.copyWith(color: appTheme.deepOrangeA200),
-              ),
-            ),
-          ],
-        ),
-        SizedBox(
-          height: 19.v,
-        ),
-        Obx(() {
-          var reviews = controller.userData.value.data?.basicInfo?.reviews;
-          if (reviews == null || reviews.isEmpty) {
-            return Text(
-              "No reviews yet",
-              style:
-                  theme.textTheme.bodyMedium?.copyWith(color: appTheme.gray900),
-            );
-          } else {
-            // Limit the number of reviews to 3
-            var limitedReviews = reviews.take(3).toList();
-            return Column(
-              children: limitedReviews.map((review) {
-                return Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Container(
-                    // Apply circular border to the container
-                    decoration: BoxDecoration(
-                      color: appTheme.gray100,
-                      borderRadius: BorderRadius.circular(
-                          15), // Circular border with radius 15
-                      border: Border.all(
-                        color: appTheme.gray300, // Border color
-                        width: 0, // Border width
-                      ),
+          ),
+        ],
+      ),
+      SizedBox(height: 19.v),
+      Obx(() {
+        var reviews = controller.userData.value.data?.basicInfo?.reviews;
+        if (reviews == null || reviews.isEmpty) {
+          return Text(
+            "No reviews yet",
+            style: theme.textTheme.bodyMedium?.copyWith(color: appTheme.gray900),
+          );
+        } else {
+          var limitedReviews = reviews.take(3).toList();
+          return Column(
+            children: limitedReviews.map((review) {
+              return Padding(
+                padding: const EdgeInsets.all(7), // Padding of 7 from all sides
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: appTheme.gray100,
+                    borderRadius: BorderRadius.circular(15),
+                    border: Border.all(
+                      color: appTheme.gray300,
+                      width: 0,
                     ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(8.0), // Padding inside container
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       crossAxisAlignment: CrossAxisAlignment.start,
@@ -777,8 +770,10 @@ class _UserProfilePageState extends State<UserProfilePage>
                               children: [
                                 Text(
                                   review.reviewer.toString(),
-                                  style: theme.textTheme.headlineLarge
-                                      ?.copyWith(fontSize: 14.fSize, fontWeight: FontWeight.w600,),
+                                  style: theme.textTheme.headlineLarge?.copyWith(
+                                    fontSize: 14.fSize,
+                                    fontWeight: FontWeight.w600,
+                                  ),
                                 ),
                                 SizedBox(height: 1.v),
                                 Text(
@@ -786,7 +781,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                                   style: theme.textTheme.titleSmall!,
                                 ),
                               ],
-                            )
+                            ),
                           ],
                         ),
                         SizedBox(height: 9.v),
@@ -801,18 +796,16 @@ class _UserProfilePageState extends State<UserProfilePage>
                               updateOnDrag: true,
                               onRatingUpdate: (rating) {},
                               itemBuilder: (context, _) {
-                                return const Icon(
+                                return Icon(
                                   Icons.star,
+                                  color: appTheme.deepYello, // Set star color to yellow
                                 );
                               },
                             ),
-                            SizedBox(
-                              width: 6.adaptSize,
-                            ), // Added SizedBox for spacing
+                            SizedBox(width: 6.adaptSize),
                             Text(
                               review.rating.toString(),
-                              style: theme.textTheme.headlineLarge
-                                  ?.copyWith(fontSize: 16.fSize),
+                              style: theme.textTheme.headlineLarge?.copyWith(fontSize: 16.fSize),
                             ),
                           ],
                         ),
@@ -824,25 +817,29 @@ class _UserProfilePageState extends State<UserProfilePage>
                             review.review.toString(),
                             maxLines: 2,
                             overflow: TextOverflow.ellipsis,
-                            style: theme.textTheme.bodyMedium
-                                ?.copyWith(color: appTheme.gray900),
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              color: appTheme.gray900,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ),
-                        SizedBox(height: 8.v), // Added SizedBox for spacing
+                        SizedBox(height: 8.v), // Spacing below review text
                       ],
                     ),
                   ),
-                );
-              }).toList(),
-            );
-          }
-        }),
-        SizedBox(
-          height: 19.v,
-        ),
-      ],
-    );
-  }
+                ),
+              );
+            }).toList(),
+          );
+        }
+      }),
+      SizedBox(height: 19.v),
+    ],
+  );
+}
+
+
 
   Widget _buildRowaboutme({required String aboutMeText}) {
     return Row(
@@ -895,7 +892,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
-                          padding:  EdgeInsets.only(
+                          padding: EdgeInsets.only(
                             top: 1.adaptSize,
                             bottom: 2.adaptSize,
                           ),
@@ -907,7 +904,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                           ),
                         ),
                         Padding(
-                          padding:  EdgeInsets.only(left: 2.adaptSize),
+                          padding: EdgeInsets.only(left: 2.adaptSize),
                           child: Text(
                             "${controller.userData.value.data?.basicInfo?.rating ?? "N/A"}",
                             style: theme.textTheme.headlineLarge
@@ -996,7 +993,7 @@ class _UserProfilePageState extends State<UserProfilePage>
             height: 16.v,
           ),
           CustomElevatedButton(
-            leftIcon:  Icon(
+            leftIcon: Icon(
               Icons.add,
               color: Colors.black,
               size: 15.adaptSize,
@@ -1066,7 +1063,7 @@ class _UserProfilePageState extends State<UserProfilePage>
           ),
           Padding(
             padding: EdgeInsets.only(top: 20.v, left: 10.v),
-            child:  Row(
+            child: Row(
               children: [
                 CustomImageView(
                   margin: EdgeInsets.only(left: 5.v),
@@ -1110,17 +1107,17 @@ class _UserProfilePageState extends State<UserProfilePage>
                   child: Text(
                     "Reg no: ${controller.userData.value.data?.industryOccupation?.registrationNumber ?? " N/A"}",
                     textAlign: TextAlign.left,
-                  style: theme.textTheme.bodyMedium!.copyWith(
-                      color: appTheme.black900,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500),
+                    style: theme.textTheme.bodyMedium!.copyWith(
+                        color: appTheme.black900,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500),
                   ),
                 ),
-                               Container(
+                Container(
                   width: 1.v,
                   height: 15.h,
                   color: Colors.grey,
-                  margin:  EdgeInsets.symmetric(horizontal: 10.adaptSize),
+                  margin: EdgeInsets.symmetric(horizontal: 10.adaptSize),
                 ),
                 CustomImageView(
                   margin: EdgeInsets.only(left: 5.v),
@@ -1142,12 +1139,11 @@ class _UserProfilePageState extends State<UserProfilePage>
                 ),
                 Text(
                   "Consultation",
-                 textAlign: TextAlign.left,
+                  textAlign: TextAlign.left,
                   style: theme.textTheme.bodyMedium!.copyWith(
                       color: appTheme.black900,
                       fontSize: 14,
                       fontWeight: FontWeight.w500),
-               
                 ),
               ],
             ),

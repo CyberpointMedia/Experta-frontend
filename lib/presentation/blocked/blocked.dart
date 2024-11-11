@@ -3,8 +3,6 @@ import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/blocked/controller/blocked_controller.dart';
 import 'package:experta/presentation/blocked/models/blocked_model.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 
 class BlockedPage extends StatefulWidget {
   const BlockedPage({super.key});

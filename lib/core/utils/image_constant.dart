@@ -507,7 +507,7 @@ class ImageConstant {
   static String success = "$imagePath/settings/checkSucess.svg";
   static String message = "$imagePath/settings/message.svg";
 
-  // Transations
+  // Transactions
 
   static String topup = "assets/images/wallet/walletTransactions.svg";
   static String deposit = "assets/images/wallet/deposit.svg";
@@ -516,7 +516,10 @@ class ImageConstant {
   static String filtercross = "assets/images/wallet/filtercross.svg";
   static String calender = "assets/images/wallet/calender.svg";
   static String videocam = "assets/images/wallet/videocam.svg";
+  static String call = "assets/images/wallet/call.svg";
 
+  //  Pan card
 
-  // videocam.svg
+  static String pan = "assets/images/bookings/pan.svg";
+  static String panset = "assets/images/bookings/panset.svg";
 }

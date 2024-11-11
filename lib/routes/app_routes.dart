@@ -1,6 +1,8 @@
 import 'package:experta/presentation/Aadhaar_Details/aadhar_details.dart';
 import 'package:experta/presentation/Aadhaar_Details/binding/aadhar_details_binding.dart';
 import 'package:experta/presentation/Basic_Info/basic_info.dart';
+import 'package:experta/presentation/Refferal/bindings/refferal_screen_bindings.dart';
+import 'package:experta/presentation/Refferal/refferal_screen.dart';
 import 'package:experta/presentation/about_us/about_us.dart';
 import 'package:experta/presentation/about_us/binding/about_us_binding.dart';
 import 'package:experta/presentation/account_setting/account_setting.dart';
@@ -256,6 +258,10 @@ static const String qr = "/share_profile";
 
   static const String lottie = "/";
 
+
+   static const String reffer = "/Refferal";
+
+
   static List<GetPage> pages = [
     GetPage(
       name: onboardingScreen,
@@ -494,7 +500,7 @@ static const String qr = "/share_profile";
         bindings: [
           SetPricingBindings(),
         ]),
-    GetPage(name: category, page: () => CategoryScreen(), bindings: [
+    GetPage(name: category, page: () => const CategoryScreen(), bindings: [
       CategoryBinding(),
     ]),
     GetPage(
@@ -608,7 +614,7 @@ static const String qr = "/share_profile";
         bindings: [
           ProfileBinding(),
         ]),
-    GetPage(name: rating, page: () => RatingPage(), bindings: [
+    GetPage(name: rating, page: () => const RatingPage(), bindings: [
       RatingPageBinding(),
     ]),
     GetPage(
@@ -695,7 +701,7 @@ static const String qr = "/share_profile";
 
         GetPage(
         name: editexperties,
-        page: () =>   EditExpertisePage(),
+        page: () =>   const EditExpertisePage(),
         customTransition: CustomPageTransition(),
         bindings: [
           EditExpertiesBinding(),
@@ -717,5 +723,13 @@ static const String qr = "/share_profile";
           BlockSearchBinding(),
           
         ]),
+
+         GetPage(
+      name: reffer,
+      page: () =>  ReferAndEarnPage(),
+      bindings: [
+        RefferalScreenBindings(),
+      ],
+    ),
   ];
 }
