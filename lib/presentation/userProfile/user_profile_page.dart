@@ -1004,16 +1004,53 @@ class _UserProfilePageState extends State<UserProfilePage>
                   child: Wrap(
                     spacing: 8.0,
                     runSpacing: 4.0,
-                    children: controller.userData.value.data?.language?.language
-                            ?.map((e) => Text(
-                                  e.name.toString(),
-                                  style: theme.textTheme.bodyMedium!.copyWith(
+                    children: (() {
+                      final languages =
+                          controller.userData.value.data?.language?.language;
+
+                      if (languages != null && languages.isNotEmpty) {
+                        final languageNames =
+                            languages.map((e) => e.name.toString()).toList();
+
+                        if (languageNames.length > 3) {
+                          return [
+                            ...languageNames
+                                .take(3)
+                                .map((name) => Text(
+                                      name,
+                                      style:
+                                          theme.textTheme.bodyMedium!.copyWith(
+                                        color: appTheme.black900,
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w500,
+                                      ),
+                                    ))
+                                .toList(),
+                            Text(
+                              '+${languageNames.length - 3} more',
+                              style: theme.textTheme.bodyMedium!.copyWith(
+                                color: appTheme.black900,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ];
+                        } else {
+                          return languageNames
+                              .map((name) => Text(
+                                    name,
+                                    style: theme.textTheme.bodyMedium!.copyWith(
                                       color: appTheme.black900,
                                       fontSize: 14,
-                                      fontWeight: FontWeight.w500),
-                                ))
-                            .toList() ??
-                        [],
+                                      fontWeight: FontWeight.w500,
+                                    ),
+                                  ))
+                              .toList();
+                        }
+                      } else {
+                        return <Widget>[];
+                      }
+                    })(),
                   ),
                 ),
               ],

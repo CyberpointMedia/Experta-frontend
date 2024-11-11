@@ -43,15 +43,8 @@ class TrendingPeoplePage extends StatelessWidget {
               Expanded(
                 child: Padding(
                   padding: EdgeInsets.only(
-                      left: 16.adaptSize, right: 16.adaptSize, top: 0),
-                  child: GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 16.0, // Set gap between columns to 16
-                      mainAxisSpacing: 16.0, // Set gap between rows to 16
-                      childAspectRatio: 0.75,
-                    ),
+                      left: 16.adaptSize, right: 0.adaptSize, top: 0),
+                  child: ListView.builder(
                     itemCount: trendingPeople.length,
                     itemBuilder: (context, index) {
                       User user = trendingPeople[index];
