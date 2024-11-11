@@ -44,8 +44,8 @@ class HomeController extends GetxController {
     trendingPeople.value = updatedTrendingPeople;
   }
 
-  Future<void> fetch()async{
- trendingPeople.value = await fetchTrendingPeople();
+  Future<void> fetch() async {
+    trendingPeople.value = await fetchTrendingPeople();
   }
 
   @override
@@ -54,7 +54,7 @@ class HomeController extends GetxController {
     fetchIndustries();
     searchController.addListener(_onSearchChanged);
     fetchProfileCompletion(address.toString());
-   fetch();
+    fetch();
   }
 
   void _onSearchChanged() {
