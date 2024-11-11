@@ -1285,6 +1285,90 @@ class ApiService {
       return null;
     }
   }
+
+  // Function to register device with API
+  Future<void> registerDevice({
+    required String fcmToken,
+    required String deviceInfo,
+  }) async {
+    final url = Uri.parse("$_baseUrl/register-device");
+
+    final body = jsonEncode({
+      "fcmToken": fcmToken,
+      "deviceInfo": deviceInfo,
+    });
+
+    try {
+      log("Calling API to register device...");
+      final response = await http.post(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer $token',
+        },
+        body: body,
+      );
+
+      if (response.statusCode == 200) {
+        log("Device registered successfully: ${response.body}");
+      } else {
+        log("Failed to register device: ${response.statusCode}, ${response.body}");
+      }
+    } catch (e) {
+      log("Error registering device: $e", error: e);
+    }
+  }
+
+  // Fetch Notifications API
+  Future<Map<String, dynamic>> fetchNotifications(
+      {int page = 1, int limit = 20}) async {
+    try {
+      final response = await http.get(
+        Uri.parse('$_baseUrl/notifications?page=$page&limit=$limit'),
+        headers: {
+          "Content-Type": "application/json",
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to load notifications');
+      }
+    } catch (e) {
+      print("Error fetching notifications: $e");
+      rethrow;
+    }
+  }
+
+  // Mark a specific notification as read
+  Future<void> markNotificationAsRead(String notificationId) async {
+    final response = await http.patch(
+      Uri.parse('$_baseUrl/notifications/$notificationId/read'),
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $token',
+      },
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Failed to mark notification as read');
+    }
+  }
+
+  // Mark all notifications as read
+  Future<void> markAllNotificationsAsRead() async {
+    final response = await http.patch(
+      Uri.parse('$_baseUrl/notifications/read-all'),
+      headers: {
+        "Content-Type": "application/json",
+        'Authorization': 'Bearer $token',
+      },
+    );
+    if (response.statusCode != 200) {
+      throw Exception('Failed to mark all notifications as read');
+    }
+  }
 }
 
 class BadRequestException implements Exception {

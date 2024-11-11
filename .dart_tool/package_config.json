@@ -63,21 +63,21 @@
     },
     {
       "name": "camera_android",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/camera_android-0.10.10",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/camera_android-0.10.9+16",
       "packageUri": "lib/",
       "languageVersion": "3.5"
     },
     {
       "name": "camera_avfoundation",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/camera_avfoundation-0.9.18",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/camera_avfoundation-0.9.17+4",
       "packageUri": "lib/",
-      "languageVersion": "3.4"
+      "languageVersion": "3.3"
     },
     {
       "name": "camera_platform_interface",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/camera_platform_interface-2.9.0",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/camera_platform_interface-2.8.0",
       "packageUri": "lib/",
-      "languageVersion": "3.4"
+      "languageVersion": "3.2"
     },
     {
       "name": "camera_web",
@@ -105,9 +105,9 @@
     },
     {
       "name": "collection",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/collection-1.19.0",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/collection-1.18.0",
       "packageUri": "lib/",
-      "languageVersion": "3.4"
+      "languageVersion": "2.18"
     },
     {
       "name": "colorfilter_generator",
@@ -147,9 +147,9 @@
     },
     {
       "name": "csslib",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/csslib-1.0.0",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/csslib-1.0.2",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "3.1"
     },
     {
       "name": "cupertino_icons",
@@ -170,6 +170,18 @@
       "languageVersion": "2.17"
     },
     {
+      "name": "device_info_plus",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/device_info_plus-10.1.2",
+      "packageUri": "lib/",
+      "languageVersion": "3.3"
+    },
+    {
+      "name": "device_info_plus_platform_interface",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/device_info_plus_platform_interface-7.0.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "dio",
       "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/dio-5.7.0",
       "packageUri": "lib/",
@@ -182,12 +194,6 @@
       "languageVersion": "3.3"
     },
     {
-      "name": "equatable",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/equatable-2.0.5",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
-    },
-    {
       "name": "eventify",
       "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/eventify-1.0.1",
       "packageUri": "lib/",
@@ -198,12 +204,6 @@
       "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/events_emitter-0.5.2",
       "packageUri": "lib/",
       "languageVersion": "2.17"
-    },
-    {
-      "name": "excel",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/excel-4.0.6",
-      "packageUri": "lib/",
-      "languageVersion": "3.0"
     },
     {
       "name": "extended_image",
@@ -291,7 +291,7 @@
     },
     {
       "name": "firebase_core_platform_interface",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/firebase_core_platform_interface-5.4.0",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/firebase_core_platform_interface-5.3.0",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -387,9 +387,9 @@
     },
     {
       "name": "flutter_svg",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/flutter_svg-2.0.10+1",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/flutter_svg-2.0.11",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "3.4"
     },
     {
       "name": "flutter_test",
@@ -399,9 +399,9 @@
     },
     {
       "name": "flutter_tts",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/flutter_tts-4.2.1",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/flutter_tts-4.0.2",
       "packageUri": "lib/",
-      "languageVersion": "3.4"
+      "languageVersion": "2.15"
     },
     {
       "name": "flutter_web_plugins",
@@ -423,7 +423,7 @@
     },
     {
       "name": "font_awesome_flutter",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/font_awesome_flutter-10.7.0",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/font_awesome_flutter-10.8.0",
       "packageUri": "lib/",
       "languageVersion": "3.0"
     },
@@ -513,9 +513,9 @@
     },
     {
       "name": "html",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/html-0.15.4",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/html-0.15.5",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "3.2"
     },
     {
       "name": "http",
@@ -573,7 +573,7 @@
     },
     {
       "name": "image_picker_android",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/image_picker_android-0.8.12+16",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/image_picker_android-0.8.12+17",
       "packageUri": "lib/",
       "languageVersion": "3.5"
     },
@@ -639,13 +639,13 @@
     },
     {
       "name": "leak_tracker",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/leak_tracker-10.0.7",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/leak_tracker-10.0.5",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
     {
       "name": "leak_tracker_flutter_testing",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/leak_tracker_flutter_testing-3.0.8",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/leak_tracker_flutter_testing-3.0.5",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -741,15 +741,15 @@
     },
     {
       "name": "path_parsing",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/path_parsing-1.0.1",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/path_parsing-1.1.0",
       "packageUri": "lib/",
-      "languageVersion": "2.12"
+      "languageVersion": "3.3"
     },
     {
       "name": "path_provider",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/path_provider-2.1.4",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/path_provider-2.1.5",
       "packageUri": "lib/",
-      "languageVersion": "3.2"
+      "languageVersion": "3.4"
     },
     {
       "name": "path_provider_android",
@@ -837,7 +837,7 @@
     },
     {
       "name": "photo_manager",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/photo_manager-3.5.1",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/photo_manager-3.6.1",
       "packageUri": "lib/",
       "languageVersion": "2.13"
     },
@@ -945,7 +945,7 @@
     },
     {
       "name": "share_plus_platform_interface",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/share_plus_platform_interface-5.0.2",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/share_plus_platform_interface-5.0.1",
       "packageUri": "lib/",
       "languageVersion": "2.18"
     },
@@ -1083,9 +1083,9 @@
     },
     {
       "name": "stack_trace",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/stack_trace-1.12.0",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/stack_trace-1.11.1",
       "packageUri": "lib/",
-      "languageVersion": "3.4"
+      "languageVersion": "2.18"
     },
     {
       "name": "staggered_grid_view_flutter",
@@ -1101,15 +1101,15 @@
     },
     {
       "name": "stream_transform",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/stream_transform-2.1.1",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/stream_transform-2.1.0",
       "packageUri": "lib/",
-      "languageVersion": "3.1"
+      "languageVersion": "2.14"
     },
     {
       "name": "string_scanner",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/string_scanner-1.3.0",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/string_scanner-1.2.0",
       "packageUri": "lib/",
-      "languageVersion": "3.1"
+      "languageVersion": "2.18"
     },
     {
       "name": "stylish_pull_to_refresh",
@@ -1119,19 +1119,19 @@
     },
     {
       "name": "syncfusion_flutter_core",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/syncfusion_flutter_core-27.1.56",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/syncfusion_flutter_core-27.1.57",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "syncfusion_flutter_xlsio",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/syncfusion_flutter_xlsio-27.1.56",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/syncfusion_flutter_xlsio-27.1.57",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "syncfusion_officecore",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/syncfusion_officecore-27.1.56",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/syncfusion_officecore-27.1.57",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
@@ -1149,9 +1149,9 @@
     },
     {
       "name": "test_api",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/test_api-0.7.3",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/test_api-0.7.2",
       "packageUri": "lib/",
-      "languageVersion": "3.4"
+      "languageVersion": "3.2"
     },
     {
       "name": "timezone",
@@ -1167,7 +1167,7 @@
     },
     {
       "name": "url_launcher_linux",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/url_launcher_linux-3.2.1",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/url_launcher_linux-3.2.0",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -1179,15 +1179,15 @@
     },
     {
       "name": "url_launcher_web",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/url_launcher_web-2.4.0",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/url_launcher_web-2.3.3",
       "packageUri": "lib/",
-      "languageVersion": "3.6"
+      "languageVersion": "3.3"
     },
     {
       "name": "url_launcher_windows",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/url_launcher_windows-3.1.4",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/url_launcher_windows-3.1.3",
       "packageUri": "lib/",
-      "languageVersion": "3.4"
+      "languageVersion": "3.3"
     },
     {
       "name": "uuid",
@@ -1197,21 +1197,21 @@
     },
     {
       "name": "vector_graphics",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/vector_graphics-1.1.11+1",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/vector_graphics-1.1.12",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "3.4"
     },
     {
       "name": "vector_graphics_codec",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/vector_graphics_codec-1.1.11+1",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/vector_graphics_codec-1.1.12",
       "packageUri": "lib/",
-      "languageVersion": "2.17"
+      "languageVersion": "3.4"
     },
     {
       "name": "vector_graphics_compiler",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/vector_graphics_compiler-1.1.11+1",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/vector_graphics_compiler-1.1.12",
       "packageUri": "lib/",
-      "languageVersion": "2.19"
+      "languageVersion": "3.4"
     },
     {
       "name": "vector_math",
@@ -1227,7 +1227,7 @@
     },
     {
       "name": "video_player_android",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/video_player_android-2.7.13",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/video_player_android-2.7.16",
       "packageUri": "lib/",
       "languageVersion": "3.5"
     },
@@ -1245,13 +1245,13 @@
     },
     {
       "name": "video_player_web",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/video_player_web-2.3.2",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/video_player_web-2.3.3",
       "packageUri": "lib/",
-      "languageVersion": "3.3"
+      "languageVersion": "3.4"
     },
     {
       "name": "vm_service",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/vm_service-14.3.0",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/vm_service-14.2.5",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -1305,9 +1305,15 @@
     },
     {
       "name": "win32",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/win32-5.7.0",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/win32-5.8.0",
       "packageUri": "lib/",
       "languageVersion": "3.5"
+    },
+    {
+      "name": "win32_registry",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/win32_registry-1.1.5",
+      "packageUri": "lib/",
+      "languageVersion": "3.4"
     },
     {
       "name": "xdg_directories",
@@ -1328,10 +1334,10 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2025-01-17T10:27:03.498099Z",
+  "generated": "2024-11-11T11:19:35.092858Z",
   "generator": "pub",
-  "generatorVersion": "3.6.0",
+  "generatorVersion": "3.5.3",
   "flutterRoot": "file:///usr/local/Caskroom/flutter/3.19.1/flutter",
-  "flutterVersion": "3.27.1",
+  "flutterVersion": "3.24.3",
   "pubCache": "file:///Users/apple/.pub-cache"
 }

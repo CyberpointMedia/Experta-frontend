@@ -2,10 +2,9 @@ import 'dart:ui';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/Home/model/home_model.dart';
 import 'package:experta/presentation/Trending%20Section/trending_section.dart';
-import 'package:experta/presentation/categoryDetails/category_details_screen.dart';
 import 'package:experta/presentation/dashboard/controller/dashboard_controller.dart';
 import 'package:experta/widgets/animated_hint_searchview.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:experta/widgets/dashed_border.dart';
 import 'package:experta/presentation/Home/controller/home_controller.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
 
@@ -17,9 +16,15 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  HomeController controller = Get.put(HomeController());
-  final DashboardController dashboardController =
-      Get.find<DashboardController>();
+  late HomeController controller;
+  late DashboardController dashboardController;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = Get.put(HomeController());
+    dashboardController = Get.find<DashboardController>();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,52 +38,49 @@ class _HomeScreenState extends State<HomeScreen> {
             Positioned(
               left: 270.adaptSize,
               top: 50.adaptSize,
-              child: ImageFiltered(
-                imageFilter: ImageFilter.blur(
-                  tileMode: TileMode.decal,
-                  sigmaX: 100,
-                  sigmaY: 100,
-                ),
-                child: Align(
-                  child: SizedBox(
-                    width: 252.adaptSize,
-                    height: 252.adaptSize,
-                    child: Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(126),
-                        color: appTheme.deepOrangeA20.withOpacity(0.6),
+              child: IgnorePointer(
+                child: ImageFiltered(
+                  imageFilter: ImageFilter.blur(
+                    tileMode: TileMode.decal,
+                    sigmaX: 100,
+                    sigmaY: 100,
+                  ),
+                  child: Align(
+                    child: SizedBox(
+                      width: 252.adaptSize,
+                      height: 252.adaptSize,
+                      child: Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(126),
+                          color: appTheme.deepOrangeA20.withOpacity(0.6),
+                        ),
                       ),
                     ),
                   ),
                 ),
               ),
             ),
-            SingleChildScrollView(child: Obx(() {
-              return Column(
-                children: [
-                  // _buildAppBar(),
-                  _buildStackaccentone(),
-                  SizedBox(height: 3.v),
-                  _buildColumncategory(),
-                  SizedBox(height: 28.v),
-                  _buildTrendingPeopleSection(),
-                  ..._buildSections(),
+            RefreshIndicator(
+              onRefresh: () async => controller.refreshData(),
+              child: CustomScrollView(
+                slivers: [
+                  SliverToBoxAdapter(child: _buildStackaccentone()),
+                  SliverToBoxAdapter(
+                    child: Obx(() {
+                      if (controller.isLoading.value) {
+                        return const Center(child: CircularProgressIndicator());
+                      }
+                      if (controller.searchController.text.isNotEmpty &&
+                          controller.searchResults.isNotEmpty) {
+                        return _buildSearchResults();
+                      }
+                      return const SizedBox.shrink();
+                    }),
+                  ),
+                  SliverToBoxAdapter(child: _buildColumncategory()),
+                  SliverToBoxAdapter(child: _buildTrendingPeopleSection()),
                 ],
-              );
-            })),
-            Padding(
-              padding: EdgeInsets.only(
-                  top: 120.adaptSize, left: 20.adaptSize, right: 20.adaptSize),
-              child: Obx(() {
-                if (controller.isLoading.value) {
-                  return const Center(child: CircularProgressIndicator());
-                }
-                if (controller.searchController.text.isNotEmpty &&
-                    controller.searchResults.isNotEmpty) {
-                  return _buildSearchResults();
-                }
-                return const SizedBox.shrink();
-              }),
+              ),
             ),
           ],
         ),
@@ -153,11 +155,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   controller.fetchUsersBySearch(value);
                 },
               ),
-              // child: CustomSearchView(
-              //   width: double.infinity,
-              //   controller: controller.searchController,
-              //   hintText: "msg_search_your_interest".tr,
-              // ),
             ),
           ),
           _buildColumnedit(),
@@ -297,10 +294,8 @@ class _HomeScreenState extends State<HomeScreen> {
                             .copyWith(fontWeight: FontWeight.bold),
                       ),
                       SizedBox(height: 2.v),
-                      Text(
-                        "Fill in all required fields",
-                        style: theme.textTheme.titleSmall
-                      ),
+                      Text("Fill in all required fields",
+                          style: theme.textTheme.titleSmall),
                     ],
                   ),
                   Container(
@@ -435,9 +430,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   Widget _buildTrendingPeopleSection() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
-          padding: EdgeInsets.only(left: 16.adaptSize, right: 8.adaptSize),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: _buildRowtrending(
             trending: "Trending",
             seeallOne: "See All",
@@ -448,131 +444,52 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           ),
         ),
-        SizedBox(height: 9.v),
-        Obx(() {
-          if (controller.isLoading.value) {
-            return SizedBox(
-              height: 220.v,
-              child: ListView.separated(
-                padding: EdgeInsets.only(left: 16.adaptSize),
-                scrollDirection: Axis.horizontal,
-                separatorBuilder: (context, index) =>
-                    SizedBox(width: 10.adaptSize),
-                itemCount: 15,
-                itemBuilder: (context, index) {
-                  return _buildShimmerEffect();
-                },
-              ),
-            );
-          }
-          var trendingPeople = controller.trendingPeople;
-          if (trendingPeople.isEmpty) {
-            return SizedBox(
-              height: 220.v,
-              child: ListView.separated(
-                padding: EdgeInsets.only(left: 16.adaptSize),
-                scrollDirection: Axis.horizontal,
-                separatorBuilder: (context, index) =>
-                    SizedBox(width: 10.adaptSize),
-                itemCount: 5,
-                itemBuilder: (context, index) {
-                  return _buildEmptyContainer();
-                },
-              ),
-            );
-          }
-          return SizedBox(
-            height: 220.v,
-            child: ListView.separated(
-              padding: const EdgeInsets.only(left: 16),
-              scrollDirection: Axis.horizontal,
-              separatorBuilder: (context, index) =>
-                  SizedBox(width: 10.adaptSize),
-              itemCount: trendingPeople.length,
-              itemBuilder: (context, index) {
-                User user = trendingPeople[index];
-                return UserProfileItemWidget(
-                    user: user); // Check this widget for shadows
-              },
-            ),
-          );
-        }),
-        SizedBox(height: 30.v),
+        const SizedBox(height: 10), // Standard spacing
+        SizedBox(
+          height: MediaQuery.of(context).size.height * 1.8,
+          child: FutureBuilder<List<User>>(
+            future: controller.fetchTrendingPeople(),
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return _buildLoadingList();
+              } else if (snapshot.hasError) {
+                return Center(
+                  child: Text('Error: ${snapshot.error}'),
+                );
+              }
+
+              final users = snapshot.data ?? [];
+
+              return Padding(
+                padding: const EdgeInsets.only(left: 16),
+                child: ListView.separated(
+                  physics: const NeverScrollableScrollPhysics(),
+                  itemCount: 5,
+                  itemBuilder: (context, index) {
+                    return UserProfileItemWidget(user: users[index]);
+                  },
+                  separatorBuilder: (context, index) =>
+                      const SizedBox(height: 10), // Add space between items
+                ),
+              );
+            },
+          ),
+        ),
+
+        const SizedBox(height: 30),
       ],
     );
   }
 
-  List<Widget> _buildSections() {
-    return controller.industries.map((industry) {
-      return Column(
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 16, right: 8.0),
-            child: _buildRowtrending(
-              trending: industry.name,
-              seeallOne: "See All",
-              onPressed: () {
-                Get.to(
-                  () => CategoryDetailScreen(
-                    categoryName: industry.name,
-                  ),
-                  arguments: {'industry': industry},
-                );
-              },
-            ),
-          ),
-          SizedBox(height: 9.v),
-          Obx(() {
-            if (controller.isLoading.value) {
-              return SizedBox(
-                height: 220.v,
-                child: ListView.separated(
-                  padding: const EdgeInsets.only(left: 16),
-                  scrollDirection: Axis.horizontal,
-                  separatorBuilder: (context, index) =>
-                      SizedBox(width: 10.adaptSize),
-                  itemCount: 15,
-                  itemBuilder: (context, index) {
-                    return _buildShimmerEffect();
-                  },
-                ),
-              );
-            }
-            var users = controller.usersByIndustry[industry.id] ?? [];
-            if (users.isEmpty) {
-              return SizedBox(
-                height: 220.v,
-                child: ListView.separated(
-                  padding: const EdgeInsets.only(left: 16),
-                  scrollDirection: Axis.horizontal,
-                  separatorBuilder: (context, index) =>
-                      SizedBox(width: 10.adaptSize),
-                  itemCount: 5,
-                  itemBuilder: (context, index) {
-                    return _buildEmptyContainer();
-                  },
-                ),
-              );
-            }
-            return SizedBox(
-              height: 220.v,
-              child: ListView.separated(
-                padding: EdgeInsets.only(left: 16.adaptSize),
-                scrollDirection: Axis.horizontal,
-                separatorBuilder: (context, index) =>
-                    SizedBox(width: 10.adaptSize),
-                itemCount: users.length,
-                itemBuilder: (context, index) {
-                  User user = users[index];
-                  return UserProfileItemWidget(user: user);
-                },
-              ),
-            );
-          }),
-          SizedBox(height: 30.v),
-        ],
-      );
-    }).toList();
+  Widget _buildLoadingList() {
+    return ListView.separated(
+      scrollDirection: Axis.vertical,
+      physics: const BouncingScrollPhysics(),
+      padding: const EdgeInsets.only(left: 16),
+      separatorBuilder: (context, index) => const SizedBox(width: 10),
+      itemCount: 15,
+      itemBuilder: (context, index) => _buildShimmerEffect(),
+    );
   }
 
   Widget _buildRowtrending({
@@ -618,239 +535,257 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
-
-  Widget _buildEmptyContainer() {
-    return SizedBox(
-      height: 220.v,
-      width: 156.adaptSize,
-      child: Stack(
-        alignment: Alignment.centerLeft,
-        children: [
-          Align(
-            alignment: Alignment.center,
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(24),
-              child: CustomImageView(
-                imagePath: ImageConstant.imgWomanWithHeadsetVideoCall1,
-                height: 220.v,
-                width: 156.adaptSize,
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              // Adjust the height and width as necessary
-              decoration: BoxDecoration(
-                gradient: LinearGradient(
-                  colors: [
-                    Colors.black.withOpacity(0.5), // Fully black at the bottom
-                    Colors.transparent, // Fully transparent at the middle
-                  ],
-                  stops: const [
-                    0.0,
-                    0.5
-                  ], // Stops the gradient transition at the middle (50%)
-                  begin: Alignment.bottomCenter,
-                  end: const Alignment(
-                      0.0, -0.5), // End at the middle (custom alignment)
-                ),
-                borderRadius: const BorderRadius.only(
-                  bottomLeft: Radius.circular(23.0),
-                  bottomRight: Radius.circular(23.0),
-                ),
-              ),
-            ),
-          ),
-          Align(
-            alignment: Alignment.centerLeft,
-            child: Padding(
-              padding: EdgeInsets.only(left: 12.adaptSize, right: 37.adaptSize),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      _buildStatusContainer("Offline", appTheme.red500),
-                      _buildRatingContainer("0"),
-                    ],
-                  ),
-                  SizedBox(height: 126.v),
-                  Text(
-                    "Not Found",
-                    maxLines: 1,
-                    style: theme.textTheme.labelLarge
-                        ?.copyWith(fontSize: 14.fSize),
-                  ),
-                  SizedBox(height: 2.v),
-                  Text(
-                    "Not found",
-                    style: theme.textTheme.bodyLarge?.copyWith(
-                        color: const Color(0XFFFFFFFF), fontSize: 11.fSize),
-                  ),
-                  SizedBox(height: 6.v),
-                  Row(
-                    children: [
-                      SizedBox(
-                          height: 14.v,
-                          width: 14.adaptSize,
-                          child: SvgPicture.asset(
-                              "assets/images/img_layer_1.svg")),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 4),
-                        child: RichText(
-                          text: TextSpan(
-                            children: [
-                              TextSpan(
-                                  text: "60",
-                                  style: theme.textTheme.labelLarge!),
-                              TextSpan(
-                                  text: "/min",
-                                  style: theme.textTheme.labelLarge
-                                      ?.copyWith(fontWeight: FontWeight.w400)),
-                            ],
-                          ),
-                          textAlign: TextAlign.left,
-                        ),
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
 }
 
 class UserProfileItemWidget extends StatelessWidget {
   final User user;
 
-  const UserProfileItemWidget({required this.user, super.key});
+  const UserProfileItemWidget({super.key, required this.user});
 
   @override
   Widget build(BuildContext context) {
-    print("hey the user is ${user.profilePic}/ ${user.displayName}");
     return GestureDetector(
       onTap: () {
         Get.toNamed(AppRoutes.detailsPage, arguments: {"user": user});
       },
-      child: SizedBox(
-        height: 220.v,
-        width: 156.adaptSize,
+      child: Padding(
+        padding: const EdgeInsets.only(right: 16, bottom: 10),
         child: Stack(
-          alignment: Alignment.centerLeft,
           children: [
-            Align(
-              alignment: Alignment.center,
-              child: ClipRRect(
+            Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
                 borderRadius: BorderRadius.circular(24),
-                child: CustomImageView(
-                  imagePath: user.profilePic == ""
-                      ? ImageConstant.imgWomanWithHeadsetVideoCall1
-                      : user.profilePic,
-                  height: 220.v,
-                  width: 163.adaptSize,
-                  fit: BoxFit.cover,
-                ),
               ),
-            ),
-            Align(
-              alignment: Alignment.bottomCenter,
-              child: Container(
-                // Adjust the height and width as necessary
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      Colors.black
-                          .withOpacity(0.5), // Fully black at the bottom
-                      Colors.transparent, // Fully transparent at the middle
-                    ],
-                    stops: const [
-                      0.0,
-                      0.5
-                    ], // Stops the gradient transition at the middle (50%)
-                    begin: Alignment.bottomCenter,
-                    end: const Alignment(
-                        0.0, -0.5), // End at the middle (custom alignment)
-                  ),
-                  borderRadius: const BorderRadius.only(
-                    bottomLeft: Radius.circular(23.0),
-                    bottomRight: Radius.circular(23.0),
-                  ),
-                ),
-              ),
-            ),
-            Align(
-              alignment: Alignment.centerLeft,
-              child: Padding(
-                padding: const EdgeInsets.only(left: 12, right: 37),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 30, right: 30, top: 30),
+                    child: Row(
+                      crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildStatusContainer(
-                            user.online ? "Online" : "Offline",
-                            user.online ? appTheme.green400 : appTheme.red500),
-                        _buildRatingContainer(
-                            // ignore: unnecessary_string_interpolations
-                            "${user.rating.toStringAsFixed(1)}"),
-                      ],
-                    ),
-                    SizedBox(height: 126.v),
-                    Text(
-                      user.displayName == "" ? "Not Found" : user.displayName,
-                      maxLines: 1,
-                      style: theme.textTheme.labelLarge
-                          ?.copyWith(fontSize: 14.fSize),
-                    ),
-                    SizedBox(height: 2.v),
-                    Text(
-                      user.industry == ""
-                          ? "Not Found"
-                          : "${user.industry} | ${user.occupation}",
-                      style: theme.textTheme.bodyLarge?.copyWith(
-                          color: const Color(0XFFFFFFFF), fontSize: 11.fSize),
-                    ),
-                    SizedBox(height: 6.v),
-                    Row(
-                      children: [
-                        SizedBox(
-                          height: 14.v,
-                          width: 14.adaptSize,
-                          child: CustomImageView(
-                            imagePath: ImageConstant.imgLayer1,
-                          ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.only(left: 4),
-                          child: RichText(
-                            text: TextSpan(
-                              children: [
-                                TextSpan(
-                                    text: "${user.pricing.videoCallPrice}",
-                                    style: theme.textTheme.labelLarge!),
-                                TextSpan(
-                                    text: "/min",
-                                    style: theme.textTheme.labelLarge?.copyWith(
-                                        fontWeight: FontWeight.w400)),
-                              ],
+                        Stack(
+                          children: [
+                            CircleAvatar(
+                              radius: 32,
+                              backgroundColor: Colors.orange,
+                              child: CustomImageView(
+                                radius: BorderRadius.circular(30),
+                                imagePath: user.profilePic.isNotEmpty
+                                    ? user.profilePic
+                                    : ImageConstant.imageNotFound,
+                              ),
                             ),
-                            textAlign: TextAlign.left,
+                            Positioned(
+                              bottom: 0,
+                              right: 2,
+                              child: Container(
+                                height: 15,
+                                width: 15,
+                                decoration: BoxDecoration(
+                                  color: Colors.green,
+                                  shape: BoxShape.circle,
+                                  border:
+                                      Border.all(color: Colors.white, width: 2),
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(width: 10),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                    user.displayName.isNotEmpty
+                                        ? user.displayName
+                                        : "anonymous",
+                                    style: TextStyle(
+                                      fontSize: 16.fSize,
+                                      fontWeight: FontWeight.w600,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                  const SizedBox(width: 5),
+                                  const Icon(Icons.verified,
+                                      color: Colors.deepPurple, size: 16),
+                                  const Spacer(),
+                                  Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 6, vertical: 2),
+                                    decoration: BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.circular(30),
+                                      border: Border.all(
+                                          color: Colors.orange, width: 1),
+                                    ),
+                                    child: Row(
+                                      children: [
+                                        const Icon(Icons.star,
+                                            color: Colors.orange, size: 14),
+                                        const SizedBox(width: 4),
+                                        Text(
+                                          user.rating.toString(),
+                                          style: const TextStyle(
+                                              color: Colors.black,
+                                              fontSize: 12),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
+                              Text(
+                                user.industry.isNotEmpty
+                                    ? "${user.industry} | ${user.occupation}"
+                                    : "No data",
+                                style: TextStyle(
+                                  fontSize: 12.fSize,
+                                  fontWeight: FontWeight.w500,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              Row(
+                                children: [
+                                  CustomImageView(
+                                    height: 14,
+                                    width: 14,
+                                    imagePath: "assets/images/language.svg",
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.only(left: 5),
+                                    child: Text(
+                                      (() {
+                                        if (user.language != null &&
+                                            user.language!.isNotEmpty) {
+                                          final languages = user.language!
+                                              .map((l) => l.name)
+                                              .toList();
+
+                                          if (languages.length > 3) {
+                                            return '${languages.take(3).join(', ')} +${languages.length - 3} more';
+                                          } else {
+                                            return languages.join(', ');
+                                          }
+                                        } else {
+                                          return 'No languages';
+                                        }
+                                      })(),
+                                      style: TextStyle(
+                                        fontSize: 12.fSize,
+                                        fontWeight: FontWeight.w500,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
                           ),
                         ),
                       ],
-                    )
-                  ],
-                ),
+                    ),
+                  ),
+                  const SizedBox(height: 15),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 0, right: 0, top: 0),
+                    child: CustomPaint(
+                      painter: DashedBorderPainter(
+                        color: Colors.grey,
+                        strokeWidth: 1,
+                        dashWidth: 6.0,
+                        dashSpace: 2.0,
+                      ),
+                      child: Container(height: 1),
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Padding(
+                    padding:
+                        const EdgeInsets.only(left: 30, right: 30, top: 10),
+                    child: Wrap(
+                      spacing: 8.adaptSize,
+                      runSpacing: 8.adaptSize,
+                      children:
+                          user.expertise == null || user.expertise!.isEmpty
+                              ? [_buildChip('No expertise')]
+                              : [
+                                  ...user.expertise!
+                                      .take(3)
+                                      .map((e) => _buildChip(e.name)),
+                                  if (user.expertise!.length > 3)
+                                    _buildChip(
+                                      '+${user.expertise!.length - 3}',
+                                    ),
+                                ],
+                    ),
+                  ),
+                  const SizedBox(height: 30),
+                  Container(
+                    decoration: BoxDecoration(
+                      color: appTheme.gray100,
+                      borderRadius: const BorderRadius.vertical(
+                          bottom: Radius.circular(24)),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        _buildActionButton(Icons.video_call,
+                            "${user.pricing.videoCallPrice}", Colors.red),
+                        Container(
+                          color: appTheme.gray300,
+                          width: 0.5,
+                          height: 50,
+                        ),
+                        _buildActionButton(Icons.phone,
+                            "${user.pricing.audioCallPrice}", Colors.green),
+                        Container(
+                          color: appTheme.gray300,
+                          width: 0.5,
+                          height: 50,
+                        ),
+                        _buildActionButton(Icons.message,
+                            "${user.pricing.messagePrice}", appTheme.yellow900),
+                      ],
+                    ),
+                  ),
+                ],
               ),
             ),
+
+            // "Top Rated" Ribbon
+            Positioned(
+              top: 55,
+              left: -15,
+              child: Transform.rotate(
+                angle: -45 * (3.141592653589793 / 180),
+                alignment: Alignment.topLeft,
+                child: Container(
+                  width: 100,
+                  padding:
+                      const EdgeInsets.symmetric(vertical: 3, horizontal: 8),
+                  decoration: const BoxDecoration(
+                    color: Colors.orange,
+                  ),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(Icons.star, color: Colors.white, size: 16),
+                      SizedBox(width: 4),
+                      Text(
+                        "Top Rated",
+                        style: TextStyle(color: Colors.white),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            )
           ],
         ),
       ),
@@ -858,62 +793,34 @@ class UserProfileItemWidget extends StatelessWidget {
   }
 }
 
-Widget _buildStatusContainer(String text, Color color) {
+Widget _buildChip(String label) {
   return Container(
-    width: 44.adaptSize,
-    padding: EdgeInsets.symmetric(vertical: 2.v),
     decoration: BoxDecoration(
-      color: const Color(0X4C171717),
-      borderRadius: BorderRadius.circular(24),
+      color: Colors.grey[200],
+      borderRadius: BorderRadius.circular(60),
     ),
-    child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        Container(
-          height: 4.v,
-          width: 4.adaptSize,
-          margin: const EdgeInsets.symmetric(vertical: 4),
-          decoration: BoxDecoration(
-            color: color,
-            borderRadius: BorderRadius.circular(2),
-          ),
-        ),
-        Text(
-          text,
-          style: theme.textTheme.bodySmall
-              ?.copyWith(color: const Color(0XFFFFFFFF)),
-        ),
-      ],
+    padding:
+        EdgeInsets.symmetric(horizontal: 12.adaptSize, vertical: 6.adaptSize),
+    child: Text(
+      label,
+      style: TextStyle(
+        fontSize: 12.fSize,
+        fontWeight: FontWeight.w500,
+        color: Colors.black,
+      ),
     ),
   );
 }
 
-Widget _buildRatingContainer(String text) {
-  return Container(
-    width: 37.adaptSize,
-    margin: EdgeInsets.only(left: 2.adaptSize),
-    padding:
-        EdgeInsets.symmetric(horizontal: 4.adaptSize, vertical: 2.adaptSize),
-    decoration: BoxDecoration(
-      color: const Color(0X4C171717),
-      borderRadius: BorderRadius.circular(24),
-    ),
-    child: Row(
-      children: [
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: 1.h),
-          child: SizedBox(
-            height: 10.v,
-            width: 10.adaptSize,
-            child: SvgPicture.asset("assets/images/img_star.svg"),
-          ),
-        ),
-        Text(
-          text,
-          style: theme.textTheme.bodySmall
-              ?.copyWith(color: const Color(0XFFFFFFFF)),
-        ),
-      ],
-    ),
+Widget _buildActionButton(IconData icon, String label, Color color) {
+  return Row(
+    children: [
+      Icon(icon, color: color),
+      SizedBox(width: 4.adaptSize),
+      Text(
+        label,
+        style: const TextStyle(fontWeight: FontWeight.bold),
+      ),
+    ],
   );
 }

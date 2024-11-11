@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/Home/controller/home_controller.dart';
 import 'package:experta/presentation/dashboard/models/dashboard_model.dart';
@@ -11,17 +13,31 @@ class DashboardController extends GetxController {
   Rx<DashboardModel> dashboardModelObj = DashboardModel().obs;
   RxMap<String, dynamic> pageArguments = <String, dynamic>{}.obs;
   RxInt selectedIndex = 0.obs;
-
+  final String? fcmtoken = PrefUtils().getFcmToken();
+  final String? deviceInfo = PrefUtils().getDeviceInfo();
+  final ApiService _apiService = ApiService();
   @override
   void onInit() {
     super.onInit();
-
+    _fetchAndRegisterDevice();
     // Lazy load the controllers
     Get.lazyPut(() => HomeController(), fenix: true);
     Get.lazyPut(() => SearchPageController(), fenix: true);
     Get.lazyPut(() => MessageController(), fenix: true);
     Get.lazyPut(() => FeedsActiveController(), fenix: true);
     Get.lazyPut(() => ProfileController(), fenix: true);
+  }
+
+  // Get FCM token and register the device
+  Future<void> _fetchAndRegisterDevice() async {
+    try {
+      await _apiService.registerDevice(
+        fcmToken: fcmtoken.toString(),
+        deviceInfo: deviceInfo.toString(),
+      );
+    } catch (e) {
+      log("Error fetching FCM Token or device info: $e", error: e);
+    }
   }
 
   void onPageChanged(int index) {

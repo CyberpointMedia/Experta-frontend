@@ -14,11 +14,40 @@ class HomeController extends GetxController {
   TextEditingController searchController = TextEditingController();
   final String? address = PrefUtils().getaddress();
 
+  Future<void> refreshData() async {
+    try {
+      isLoading.value = true;
+
+      // Parallel execution of data fetching for better performance
+      await Future.wait([
+        _refreshTrendingPeople(),
+      ]);
+
+      // Clear search results when refreshing
+      searchController.clear();
+      searchResults.clear();
+    } catch (e) {
+      // Error handling
+      debugPrint('Error refreshing data: $e');
+      Get.snackbar(
+        'Error',
+        'Failed to refresh data. Please try again.',
+        snackPosition: SnackPosition.BOTTOM,
+      );
+    } finally {
+      isLoading.value = false;
+    }
+  }
+
+  Future<void> _refreshTrendingPeople() async {
+    final updatedTrendingPeople = await fetchTrendingPeople();
+    trendingPeople.value = updatedTrendingPeople;
+  }
+
   @override
   void onInit() {
     super.onInit();
     fetchIndustries();
-    fetchTrendingPeople();
     searchController.addListener(_onSearchChanged);
     fetchProfileCompletion(address.toString());
   }
@@ -95,21 +124,20 @@ class HomeController extends GetxController {
     }
   }
 
-  void fetchTrendingPeople() async {
-    isLoading.value = true;
+// Modify your API call function to return Future<List<User>>
+  Future<List<User>> fetchTrendingPeople() async {
     try {
       final response =
           await http.get(Uri.parse('http://3.110.252.174:8080/api/trending'));
       if (response.statusCode == 200) {
         var data = json.decode(response.body)['data'] as List;
-        trendingPeople.value = data.map((json) => User.fromJson(json)).toList();
+        return data.map((json) => User.fromJson(json)).toList();
       } else {
-        print('Failed to load trending people: ${response.statusCode}');
+        throw Exception(
+            'Failed to load trending people: ${response.statusCode}');
       }
     } catch (e) {
-      print('Error: $e');
-    } finally {
-      isLoading.value = false;
+      throw Exception('Error: $e');
     }
   }
 
