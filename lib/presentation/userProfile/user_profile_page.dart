@@ -254,16 +254,16 @@ class _UserProfilePageState extends State<UserProfilePage>
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             _buildRowaboutme(aboutMeText: "About me"),
-            GestureDetector(
-              onTap: () {
-                // Add your edit functionality here
-              },
-              child: CustomImageView(
-                height: 19,
-                width: 19,
-                                imagePath: "assets/images/Frame.svg",
-                              )
-            ),
+            // GestureDetector(
+            //   onTap: () {
+            //     // Add your edit functionality here
+            //   },
+            //   child: CustomImageView(
+            //     height: 19,
+            //     width: 19,
+            //                     imagePath: "assets/images/Frame.svg",
+            //                   )
+            // ),
           ],
         ),
         SizedBox(height: 18.v),
@@ -345,14 +345,14 @@ class _UserProfilePageState extends State<UserProfilePage>
               padding: const EdgeInsets.only(right: 2),
               child: _buildRoweducation(educationText: "Experience"),
             ),
-            GestureDetector(
-              onTap: () {
-                // Add your edit functionality here
-              },
-              child: CustomImageView(
-                                imagePath: "assets/images/Frame.svg",
-                              )
-            ),
+            // GestureDetector(
+            //   onTap: () {
+            //     // Add your edit functionality here
+            //   },
+            //   child: CustomImageView(
+            //                     imagePath: "assets/images/Frame.svg",
+            //                   )
+            // ),
           ],
         ),
         SizedBox(height: 19.v),
@@ -440,14 +440,14 @@ class _UserProfilePageState extends State<UserProfilePage>
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             _buildRowaboutme(aboutMeText: "Expertise"),
-            GestureDetector(
-              onTap: () {
-                // Add your edit function here
-              },
-             child: CustomImageView(
-                                imagePath: "assets/images/Frame.svg",
-                              )
-            ),
+            // GestureDetector(
+            //   onTap: () {
+            //     // Add your edit function here
+            //   },
+            //  child: CustomImageView(
+            //                     imagePath: "assets/images/Frame.svg",
+            //                   )
+            // ),
           ],
         ),
         const SizedBox(height: 8.0), // Added space for better visual separation
@@ -498,14 +498,14 @@ class _UserProfilePageState extends State<UserProfilePage>
               padding: const EdgeInsets.only(right: 2),
               child: _buildRoweducation(educationText: "Education"),
             ),
-            GestureDetector(
-              onTap: () {
-                // Add your edit functionality here
-              },
-              child: CustomImageView(
-                                imagePath: "assets/images/Frame.svg",
-                              )
-            ),
+            // GestureDetector(
+            //   onTap: () {
+            //     // Add your edit functionality here
+            //   },
+            //   child: CustomImageView(
+            //                     imagePath: "assets/images/Frame.svg",
+            //                   )
+            // ),
           ],
         ),
         SizedBox(height: 19.v),
@@ -661,14 +661,14 @@ class _UserProfilePageState extends State<UserProfilePage>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _buildRowaboutme(aboutMeText: "Interests"),
-              GestureDetector(
-                onTap: () {
-                  // Define the edit action here
-                },
-               child: CustomImageView(
-                                imagePath: "assets/images/Frame.svg",
-                              )
-              ),
+              // GestureDetector(
+              //   onTap: () {
+              //     // Define the edit action here
+              //   },
+              //  child: CustomImageView(
+              //                   imagePath: "assets/images/Frame.svg",
+              //                 )
+              // ),
             ],
           ),
         ),

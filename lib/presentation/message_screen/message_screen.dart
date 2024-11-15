@@ -164,7 +164,6 @@ class _MessageScreenState extends State<MessageScreen> {
           actions: [
             AppbarTrailingIconbutton(
                 imagePath: ImageConstant.imgBell02,
-
                 margin: EdgeInsets.symmetric(horizontal: 16.h),
                 onTap: () {
                   onTapBellTwo();
