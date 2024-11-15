@@ -8,7 +8,6 @@ import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:peerdart/peerdart.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:path_provider/path_provider.dart';
-
 import '../../core/utils/image_constant.dart';
 import '../../core/utils/pref_utils.dart';
 import '../../theme/theme_helper.dart';
@@ -21,12 +20,15 @@ class VideoCallScreen extends StatefulWidget {
   final String userId;
   final String meetingId;
   final String userName;
+  final String bookingId;
+  final String profilePic;
 
   const VideoCallScreen({
     super.key,
     required this.userId,
     required this.meetingId,
     required this.userName,
+    required this.bookingId, required this.profilePic,
   });
 
   @override
@@ -67,7 +69,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   void dispose() {
     localRenderer.dispose();
     remoteRenderer.dispose();
-    callTimer?.cancel();
+    stopCallTimer();
     localStream?.dispose();
     peer.dispose();
     socket.disconnect();
@@ -87,6 +89,16 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
         callDuration++;
       });
     });
+  }
+
+  void stopCallTimer() {
+    callTimer?.cancel();
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (_) => RatingPage(
+                  bookingId: widget.bookingId, userName: widget.userName, profilePic: widget.profilePic,
+                )));
   }
 
   // Format duration as MM:SS
@@ -246,7 +258,8 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
           remoteRenderer.srcObject = null;
 
           // Stop timer
-          callTimer?.cancel();
+
+          stopCallTimer();
 
           // Close media connection
           if (mediaConnection != null) {
@@ -560,7 +573,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     log('Ending call...');
 
     // Stop timer
-    callTimer?.cancel();
+    stopCallTimer();
 
     // Clean up media streams
     remoteStream?.getTracks().forEach((track) => track.stop());
@@ -590,8 +603,6 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
     // Navigate back if context is still valid
     if (mounted && Navigator.canPop(context)) {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (_) => const RatingPage()));
       // Navigator.pop(context);
     }
   }

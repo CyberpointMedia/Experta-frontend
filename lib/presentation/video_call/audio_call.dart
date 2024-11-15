@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:experta/core/utils/image_constant.dart';
 import 'package:experta/core/utils/size_utils.dart';
+import 'package:experta/presentation/give_rating/give_rating.dart';
 import 'package:experta/theme/theme_helper.dart';
 import 'package:experta/widgets/custom_image_view.dart';
 import 'package:flutter/material.dart';
@@ -15,12 +16,16 @@ class AudioCallScreen extends StatefulWidget {
   final String userId;
   final String meetingId;
   final String userName;
+  final String bookingId;
+  final String profilePic;
 
   const AudioCallScreen({
     super.key,
     required this.userId,
     required this.meetingId,
     required this.userName,
+    required this.bookingId,
+    required this.profilePic,
   });
 
   @override
@@ -60,7 +65,7 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
   void dispose() {
     localRenderer.dispose();
     remoteRenderer.dispose();
-    callTimer?.cancel();
+    stopCallTimer();
     localStream?.dispose();
     peer.dispose();
     socket.disconnect();
@@ -74,6 +79,18 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
         callDuration++;
       });
     });
+  }
+
+  void stopCallTimer() {
+    callTimer?.cancel();
+    Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+            builder: (_) => RatingPage(
+                  bookingId: widget.bookingId,
+                  userName: widget.userName,
+                  profilePic: widget.profilePic,
+                )));
   }
 
   // Format duration as MM:SS
@@ -222,7 +239,7 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
           remoteRenderer.srcObject = null;
 
           // Stop timer
-          callTimer?.cancel();
+          stopCallTimer();
 
           // Close media connection
           if (mediaConnection != null) {
@@ -365,7 +382,6 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
     }
   }
 
-
   void _showSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -379,7 +395,8 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
     log('Ending call...');
 
     // Stop timer
-    callTimer?.cancel();
+
+    stopCallTimer();
 
     // Clean up media streams
     remoteStream?.getTracks().forEach((track) => track.stop());
