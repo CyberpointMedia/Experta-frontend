@@ -89,8 +89,7 @@ class _ReferAndEarnPageState extends State<ReferAndEarnPage> {
                   // Header for "How it works?"
                   Row(
                     children: [
-                      Icon(Icons.info_outline, 
-                      color: appTheme.gray400),
+                      Icon(Icons.info_outline, color: appTheme.gray400),
                       const SizedBox(width: 8),
                       Text(
                         "How it works?",
@@ -102,22 +101,20 @@ class _ReferAndEarnPageState extends State<ReferAndEarnPage> {
                   ),
                   const SizedBox(height: 20),
 
-                  // Steps
-                  buildStep(
+                  // Steps with dividers
+                  buildStepWithDivider(
                     stepNumber: "1",
                     title: "Share Your Link",
                     description: "Share your unique referral link with friends. The more, the merrier!",
                     theme: theme,
                   ),
-                  const SizedBox(height: 20),
-                  buildStep(
+                  buildStepWithDivider(
                     stepNumber: "2",
                     title: "Friend Registers",
-                    description: "When your friend registers on [App Name], you both win!",
+                    description: "When your friend registers on Experta, you both win!",
                     theme: theme,
                   ),
-                  const SizedBox(height: 20),
-                  buildStep(
+                  buildStepWithDivider(
                     stepNumber: "3",
                     title: "First Call Bonus",
                     description: "Earn tokens when your referred friend makes their first call.",
@@ -129,14 +126,13 @@ class _ReferAndEarnPageState extends State<ReferAndEarnPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                        const CustomElevatedButton(
+                      const CustomElevatedButton(
                         height: 56,
                         width: 300,
-                        leftIcon: Icon(
-                          Icons.wechat
-                        ),
-                        text: 'Share via WhatsApp'),
-                    const SizedBox(width: 10,),
+                        leftIcon: Icon(Icons.wechat),
+                        text: 'Share via WhatsApp',
+                      ),
+                      const SizedBox(width: 10),
                       CircleAvatar(
                         radius: 23,
                         backgroundColor: Colors.grey.shade200,
@@ -144,7 +140,7 @@ class _ReferAndEarnPageState extends State<ReferAndEarnPage> {
                           onPressed: () {
                             // Add your share functionality here
                           },
-                          icon: const Icon(Icons.share_outlined,size: 24, color: Colors.black),
+                          icon: const Icon(Icons.share_outlined, size: 24, color: Colors.black),
                         ),
                       ),
                     ],
@@ -178,57 +174,71 @@ class _ReferAndEarnPageState extends State<ReferAndEarnPage> {
     Get.back();
   }
 
-  // Function to build each step
-  // Function to build each step
-Widget buildStep({
-  required String stepNumber,
-  required String title,
-  required String description,
-  required ThemeData theme,
-}) {
-  return Row(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Container(
-        padding: const EdgeInsets.all(4), // Space between the border and CircleAvatar
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          border: Border.all(color: Colors.grey, width: 2), // Grey border
-        ),
-        child: CircleAvatar(
-          radius: 25,
-          backgroundColor: appTheme.gray400.withOpacity(0.2),
-          child: Text(
-            stepNumber,
-            style: TextStyle(color: appTheme.gray400, fontWeight: FontWeight.bold),
-          ),
-        ),
-      ),
-      const SizedBox(width: 12),
-      Expanded(
-        child: Column(
+  // Function to build each step with a divider
+  Widget buildStepWithDivider({
+    required String stepNumber,
+    required String title,
+    required String description,
+    required ThemeData theme,
+  }) {
+    return Column(
+      children: [
+        Row(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-                title,
-              style: theme.textTheme.bodyMedium!.copyWith(
-                fontWeight: FontWeight.w400,
-                fontSize: 16.fSize,
-                color: appTheme.black900,
-              ),
+            Column(
+              children: [
+                Container(
+                  padding: const EdgeInsets.all(4), // Space between the border and CircleAvatar
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: Colors.grey, width: 2), // Grey border
+                  ),
+                  child: CircleAvatar(
+                    radius: 25,
+                    backgroundColor: appTheme.gray400.withOpacity(0.2),
+                    child: Text(
+                      stepNumber,
+                      style: TextStyle(color: appTheme.gray400, fontWeight: FontWeight.bold),
+                    ),
+                  ),
+                ),
+                if (stepNumber != "3") // Show line only for steps 1 and 2
+                  Container(
+                    height: 50, // Height of the vertical line
+                    width: 2, // Width of the vertical line
+                    color: appTheme.gray400, // Color of the line
+                  ),
+              ],
             ),
-            const SizedBox(height: 4),
-            Text(
-               description,
-              style: theme.textTheme.bodyMedium!.copyWith(
-                fontWeight: FontWeight.w500,
-                fontSize: 14,
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: theme.textTheme.bodyMedium!.copyWith(
+                      fontWeight: FontWeight.w400,
+                      fontSize: 16.fSize,
+                      color: appTheme.black900,
+                    ),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    description,
+                    style: theme.textTheme.bodyMedium!.copyWith(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
         ),
-      ),
-    ],
-  );
-}
+        const SizedBox(height: 20), // Add spacing between steps
+      ],
+    );
+  }
 }
