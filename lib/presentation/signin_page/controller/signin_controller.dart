@@ -25,6 +25,7 @@ class SigninController extends GetxController {
   final FocusNode nameFocusNode = FocusNode();
   final FocusNode passwordFocusNode = FocusNode();
   final ApiService _apiService = ApiService();
+  PrefUtils prefUtils = PrefUtils();
   var isLoading = false.obs;
   var errorMessage = ''.obs;
   var isPhoneNumberValid =
@@ -52,10 +53,10 @@ class SigninController extends GetxController {
     isEmailValid.value = isValidEmail(emailController.text, isRequired: true);
   }
 
+  void _validateName() {
+    isTextValid.value = isText(nameController.text, isRequired: true);
+  }
 
- void _validateName() {
-  isTextValid.value = isText(nameController.text, isRequired: true);
-}
   void _validatePassword() {
     isPasswordValid.value =
         isValidPassword(passwordController.text, isRequired: true);
@@ -75,6 +76,7 @@ class SigninController extends GetxController {
           message: 'Otp Sent Sucessfully',
           isSuccess: true,
         );
+        await prefUtils.setEmail("${response.data.email}");
         log('hi the otp is ${response.data.otp}');
         var otp = response.data.otp;
         Get.toNamed(AppRoutes.verifynumberScreen,
@@ -103,18 +105,17 @@ class SigninController extends GetxController {
       log('Response received: ${response.toString()}');
 
       if (response is RegisterResponseSuccess) {
-        
         log('Registration successful: ${response.data.toString()}');
         CustomToast().showToast(
           context: context,
           message: 'Otp Sent Sucessfully',
           isSuccess: true,
         );
-         log('hi the otp is ${response.data.otp}');
+        log('hi the otp is ${response.data.otp}');
         var otp = response.data.otp;
         Get.toNamed(
           AppRoutes.verifynumberScreen,
-           arguments: [phoneNumberController, otp],
+          arguments: [phoneNumberController, otp],
         );
       } else if (response is RegisterResponseError) {
         log("Registration failed: ${response.error.errorMessage}");

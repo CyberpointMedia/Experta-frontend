@@ -79,6 +79,21 @@ class PrefUtils {
     await _sharedPreferences!.remove('name');
   }
 
+  /// Save email to SharedPreferences
+  Future<void> setEmail(String email) async {
+    await _sharedPreferences!.setString('email', email);
+  }
+
+  /// Retrieve name from SharedPreferences
+  String? getEmail() {
+    return _sharedPreferences!.getString('email');
+  }
+
+  /// Remove name from SharedPreferences
+  Future<void> removeEmail() async {
+    await _sharedPreferences!.remove('email');
+  }
+
   /// Save address to SharedPreferences
   Future<void> setaddress(String address) async {
     await _sharedPreferences!.setString('address', address);

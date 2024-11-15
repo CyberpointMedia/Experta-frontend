@@ -1119,19 +1119,19 @@
     },
     {
       "name": "syncfusion_flutter_core",
-      "rootUri": "file:///C:/Users/sanja/AppData/Local/Pub/Cache/hosted/pub.dev/syncfusion_flutter_core-27.1.58",
+      "rootUri": "file:///C:/Users/sanja/AppData/Local/Pub/Cache/hosted/pub.dev/syncfusion_flutter_core-27.2.2",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "syncfusion_flutter_xlsio",
-      "rootUri": "file:///C:/Users/sanja/AppData/Local/Pub/Cache/hosted/pub.dev/syncfusion_flutter_xlsio-27.1.58",
+      "rootUri": "file:///C:/Users/sanja/AppData/Local/Pub/Cache/hosted/pub.dev/syncfusion_flutter_xlsio-27.2.2",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "syncfusion_officecore",
-      "rootUri": "file:///C:/Users/sanja/AppData/Local/Pub/Cache/hosted/pub.dev/syncfusion_officecore-27.1.58",
+      "rootUri": "file:///C:/Users/sanja/AppData/Local/Pub/Cache/hosted/pub.dev/syncfusion_officecore-27.2.2",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
@@ -1334,7 +1334,7 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2024-11-15T09:29:30.396355Z",
+  "generated": "2024-11-15T10:33:11.315697Z",
   "generator": "pub",
   "generatorVersion": "3.5.4",
   "flutterRoot": "file:///C:/source/flutter",

@@ -1,3 +1,4 @@
+// import 'dart:convert';
 import 'dart:developer';
 import 'dart:ui';
 
@@ -31,6 +32,9 @@ class _UserDetailsPageState extends State<UserDetailsPage>
   DetailsController controller = Get.put(DetailsController());
   final currentUserId = PrefUtils().getaddress();
   late TabController _tabController;
+  String? email = PrefUtils().getEmail();
+  final CallApiService _apiService = CallApiService();
+  final ApiService apiService = ApiService();
 
   @override
   void initState() {
@@ -39,10 +43,91 @@ class _UserDetailsPageState extends State<UserDetailsPage>
     super.initState();
   }
 
-  final CallApiService _apiService = CallApiService();
+  void _scheduleMeeting(String type) async {
+    DateTime currentTime = DateTime.now();
 
-  void _startCall(
-      String userId, String meetingId, String Type, String userName) async {
+    // Calculate the time 30 minutes from now
+    DateTime timeAfter30Minutes = currentTime.add(const Duration(minutes: 1));
+
+    // Convert both times to ISO 8601 string format
+    String isoStartTime = currentTime.toIso8601String();
+    String isoEndTime = timeAfter30Minutes.toIso8601String();
+
+    // Create booking data
+    final bookingData = {
+      "expertId": controller.id.id,
+      "startTime": "${isoStartTime}Z",
+      "endTime": "${isoEndTime}Z",
+      "type": type
+    };
+    log("$bookingData");
+    try {
+      final responses = await apiService.createBooking(bookingData);
+
+      if (responses['status'] == 'success') {
+        // final Map<String, dynamic> responseData = jsonDecode(response.body);
+
+        // Access the fields using the map
+        final meetingId = responses['data']['_id'];
+        _startCall(
+            controller.id.id,
+            meetingId,
+            type,
+            controller.userData.value.data!.basicInfo!.firstName.toString(),
+            controller.userData.value.data!.basicInfo!.profilePic.toString());
+      } else {
+        _showErrorDialog(
+            context, "NO this is ${responses['error']['errorMessage']}");
+      }
+    } catch (e) {
+      _showErrorDialog(context, e.toString());
+    }
+    // ScaffoldMessenger.of(context).showSnackBar(
+    //   const SnackBar(content: Text('Meeting scheduled successfully')),
+    // );
+    // final meetingData = {
+    //   'meetingName': "experta consultation",
+    //   'from': currentUserId,
+    //   'to': controller.id.id,
+    //   'date': DateTime.now().toIso8601String(),
+    //   'fromEmail': email,
+    //   'toEmail': email,
+    //   'duration': 30,
+    // };
+    // final response = await _apiService.scheduleMeeting(meetingData);
+    // if (response.statusCode == 201) {
+    //   // Convert to ISO 8601 format
+    //   // Get the current time
+
+    // } else {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     const SnackBar(content: Text('Failed to schedule meeting')),
+    //   );
+    // }
+  }
+
+  void _showErrorDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _startCall(String userId, String meetingId, String Type, String userName,
+      String profilePic) async {
     if (userId.isNotEmpty && meetingId.isNotEmpty) {
       if (userId != currentUserId.toString()) {
         final response = await _apiService.getMeeting(meetingId);
@@ -55,6 +140,8 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                       userId: userId,
                       meetingId: meetingId,
                       userName: userName,
+                      bookingId: meetingId,
+                      profilePic: profilePic,
                     ),
                   ),
                 )
@@ -65,6 +152,8 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                       userId: userId,
                       meetingId: meetingId,
                       userName: userName,
+                      bookingId: meetingId,
+                      profilePic: profilePic,
                     ),
                   ),
                 );
@@ -432,33 +521,21 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                         ImageConstant.videocam,
                         "${pricing.videoCallPrice}/min",
                         Colors.red,
-                        () => _startCall(
-                            controller.id.id,
-                            "123456",
-                            'video',
-                            controller.userData.value.data?.basicInfo
-                                    ?.firstName ??
-                                ''),
+                        () => _scheduleMeeting('video'),
                       ),
                       _buildVerticalDivider(),
                       _buildActionButton(
                         ImageConstant.call,
                         "${pricing.audioCallPrice}/min",
                         Colors.green,
-                        () => _startCall(
-                            controller.id.id,
-                            "123456",
-                            'audio',
-                            controller.userData.value.data?.basicInfo
-                                    ?.firstName ??
-                                ''),
+                        () => () => _scheduleMeeting('audio'),
                       ),
                       _buildVerticalDivider(),
                       _buildActionButton(
                         ImageConstant.msg,
                         "${pricing.messagePrice}/msg",
                         appTheme.yellow900,
-                        () {}, // Message action
+                        () {},
                       ),
                     ],
                   );
@@ -1221,7 +1298,6 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                 child: _buildColumnFourHundredFifty(
                   dynamicText: "$totalFollowers",
                   dynamicText1: "Followers",
-                  
                 ),
               ),
               const Spacer(
