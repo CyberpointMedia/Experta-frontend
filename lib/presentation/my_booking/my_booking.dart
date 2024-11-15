@@ -1,7 +1,12 @@
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
+import 'package:experta/data/apiClient/call_api_service.dart';
+import 'package:experta/presentation/video_call/audio_call.dart';
+import 'package:experta/presentation/video_call/video_call_screen.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 
 // Define the Booking class
@@ -341,155 +346,196 @@ class BookingCard extends StatefulWidget {
 
 class _BookingCardState extends State<BookingCard> {
   final ApiService apiService = ApiService();
+  final CallApiService _apiService = CallApiService();
+  final currentUserId = PrefUtils().getaddress();
+  void _startCall(String userId, String meetingId, String Type, String userName,
+      String profilePic) async {
+    if (userId.isNotEmpty && meetingId.isNotEmpty) {
+      if (userId != currentUserId.toString()) {
+        final response = await _apiService.getMeeting(meetingId);
+        if (response.statusCode == 201) {
+          Type == 'video'
+              ? Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => VideoCallScreen(
+                      userId: userId,
+                      meetingId: meetingId,
+                      userName: userName,
+                      bookingId: meetingId,
+                      profilePic: profilePic,
+                    ),
+                  ),
+                )
+              : Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AudioCallScreen(
+                      userId: userId,
+                      meetingId: meetingId,
+                      userName: userName,
+                      bookingId: meetingId,
+                      profilePic: profilePic,
+                    ),
+                  ),
+                );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Failed to get meeting details')),
+          );
+        }
+      } else {
+        Fluttertoast.showToast(
+            msg: "You cannot call yourself",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: appTheme.red500,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('Please enter both User ID and Meeting ID')),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Card(
-      margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
-            child: Row(
-              children: [
-                SizedBox(
-                  width: 55,
-                  child: Stack(
-                    children: [
-                      CircleAvatar(
-                        backgroundImage:
-                            NetworkImage(widget.booking.profileImageUrl),
-                        radius: 24,
-                      ),
-                      Positioned(
-                        top: 24,
-                        left: 35,
-                        bottom: 0,
-                        child: widget.booking.appointmentType == 'video'
-                            ? CustomImageView(
-                                height: 18.adaptSize,
-                                width: 18.adaptSize,
-                                imagePath: 'assets/images/bookings/video.svg',
-                              )
-                            : CustomIconButton(
-                                height: 18.adaptSize,
-                                width: 18.adaptSize,
-                                padding: EdgeInsets.all(3.h),
-                                decoration: IconButtonStyleHelper.fillGreenTL24,
-                                child: CustomImageView(
-                                  imagePath: ImageConstant.call,
-                                )),
-                      )
-                    ],
+    return GestureDetector(
+      onTap: () {
+        final now = DateTime.now();
+        final appointmentStart = widget.booking.appointmentDate;
+        final appointmentEnd = appointmentStart.add(Duration(
+            minutes: int.parse(widget.booking.duration.split(' ')[0])));
+
+        if (now.isAfter(appointmentStart) && now.isBefore(appointmentEnd)) {
+          log("card pressed");
+          _startCall(
+            widget.booking.id,
+            widget.booking.id,
+            widget.booking.appointmentType,
+            widget.booking.name,
+            widget.booking.profileImageUrl,
+          );
+        }
+      },
+      child: Card(
+        margin: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16, top: 16),
+              child: Row(
+                children: [
+                  SizedBox(
+                    width: 55,
+                    child: Stack(
+                      children: [
+                        CircleAvatar(
+                          backgroundImage:
+                              NetworkImage(widget.booking.profileImageUrl),
+                          radius: 24,
+                        ),
+                        Positioned(
+                          top: 24,
+                          left: 35,
+                          bottom: 0,
+                          child: widget.booking.appointmentType == 'video'
+                              ? CustomImageView(
+                                  height: 18.adaptSize,
+                                  width: 18.adaptSize,
+                                  imagePath: 'assets/images/bookings/video.svg',
+                                )
+                              : CustomIconButton(
+                                  height: 18.adaptSize,
+                                  width: 18.adaptSize,
+                                  padding: EdgeInsets.all(3.h),
+                                  decoration:
+                                      IconButtonStyleHelper.fillGreenTL24,
+                                  child: CustomImageView(
+                                    imagePath: ImageConstant.call,
+                                  )),
+                        )
+                      ],
+                    ),
                   ),
-                ),
-                const SizedBox(width: 12.0),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      children: [
-                        Text(widget.booking.name,
-                            style: theme.textTheme.titleLarge!
-                                .copyWith(fontSize: 16)),
-                        const SizedBox(width: 6),
-                        const Icon(
-                          Icons.verified,
-                          color: Colors.deepPurple,
-                          size: 16.0,
-                        ),
-                      ],
-                    ),
-                    Text(widget.booking.role,
-                        style: theme.textTheme.titleSmall!.copyWith(
-                            color: appTheme.gray600,
-                            fontSize: 12,
-                            fontWeight: FontWeight.w400)),
-                  ],
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 16.0),
-          const Divider(),
-          Padding(
-            padding: const EdgeInsets.only(left: 16, right: 16, top: 10),
-            child: Text(
-              'Appointment date',
-              style: theme.textTheme.bodySmall!.copyWith(
-                  fontSize: 12.0,
-                  color: Colors.grey,
-                  fontWeight: FontWeight.w500),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(
-              left: 16,
-              right: 16,
-            ),
-            child: Row(
-              children: [
-                const Icon(Icons.calendar_today,
-                    color: Colors.black, size: 14.0),
-                const SizedBox(width: 4.0),
-                Text(
-                  '${DateFormat('EEE, d MMM yyyy').format(widget.booking.appointmentDate)} • ${DateFormat('hh:mm a').format(widget.booking.appointmentDate)} - ${DateFormat('hh:mm a').format(widget.booking.appointmentDate.add(Duration(minutes: int.parse(widget.booking.duration.split(' ')[0]))))}',
-                  style: theme.textTheme.bodySmall!.copyWith(
-                      fontSize: 14.0,
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(height: 12.0),
-          Padding(
-            padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
-            child: Row(
-              children: [
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Call Duration',
-                      style: theme.textTheme.bodySmall!.copyWith(
-                          fontSize: 12.0,
-                          color: Colors.grey,
-                          fontWeight: FontWeight.w500),
-                    ),
-                    Row(
-                      children: [
-                        const Icon(Icons.access_time,
-                            color: Colors.black, size: 16.0),
-                        const SizedBox(width: 4.0),
-                        Text(
-                          widget.booking.duration,
-                          style: theme.textTheme.bodySmall!.copyWith(
-                              fontSize: 14.0,
-                              color: Colors.black,
-                              fontWeight: FontWeight.w500),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  width: 80,
-                ),
-                if (!widget.booking.isFromExpertApi ||
-                    widget.booking.isFromExpertApi &&
-                        widget.booking.status.toLowerCase() == 'accepted' ||
-                    widget.booking.isFromExpertApi &&
-                        widget.booking.status.toLowerCase() == 'rejected')
+                  const SizedBox(width: 12.0),
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
+                      Row(
+                        children: [
+                          Text(widget.booking.name,
+                              style: theme.textTheme.titleLarge!
+                                  .copyWith(fontSize: 16)),
+                          const SizedBox(width: 6),
+                          const Icon(
+                            Icons.verified,
+                            color: Colors.deepPurple,
+                            size: 16.0,
+                          ),
+                        ],
+                      ),
+                      Text(widget.booking.role,
+                          style: theme.textTheme.titleSmall!.copyWith(
+                              color: appTheme.gray600,
+                              fontSize: 12,
+                              fontWeight: FontWeight.w400)),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 16.0),
+            const Divider(),
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16, top: 10),
+              child: Text(
+                'Appointment date',
+                style: theme.textTheme.bodySmall!.copyWith(
+                    fontSize: 12.0,
+                    color: Colors.grey,
+                    fontWeight: FontWeight.w500),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(
+                left: 16,
+                right: 16,
+              ),
+              child: Row(
+                children: [
+                  const Icon(Icons.calendar_today,
+                      color: Colors.black, size: 14.0),
+                  const SizedBox(width: 4.0),
+                  Text(
+                    '${DateFormat('EEE, d MMM yyyy').format(widget.booking.appointmentDate)} • ${DateFormat('hh:mm a').format(widget.booking.appointmentDate)} - ${DateFormat('hh:mm a').format(widget.booking.appointmentDate.add(Duration(minutes: int.parse(widget.booking.duration.split(' ')[0]))))}',
+                    style: theme.textTheme.bodySmall!.copyWith(
+                        fontSize: 14.0,
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500),
+                  ),
+                ],
+              ),
+            ),
+            const SizedBox(height: 12.0),
+            Padding(
+              padding: const EdgeInsets.only(left: 16, right: 16, bottom: 16),
+              child: Row(
+                children: [
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                       Text(
-                        'Status',
+                        'Call Duration',
                         style: theme.textTheme.bodySmall!.copyWith(
                             fontSize: 12.0,
                             color: Colors.grey,
@@ -497,20 +543,11 @@ class _BookingCardState extends State<BookingCard> {
                       ),
                       Row(
                         children: [
-                          Text(
-                            "•",
-                            style: TextStyle(
-                              fontSize: 14.0,
-                              color: widget.booking.status.toLowerCase() ==
-                                      'accepted'
-                                  ? Colors.green
-                                  : Colors.red,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
+                          const Icon(Icons.access_time,
+                              color: Colors.black, size: 16.0),
                           const SizedBox(width: 4.0),
                           Text(
-                            '${widget.booking.status[0].toUpperCase()}${widget.booking.status.substring(1)}',
+                            widget.booking.duration,
                             style: theme.textTheme.bodySmall!.copyWith(
                                 fontSize: 14.0,
                                 color: Colors.black,
@@ -520,61 +557,105 @@ class _BookingCardState extends State<BookingCard> {
                       ),
                     ],
                   ),
-              ],
-            ),
-          ),
-          if (widget.booking.isFromExpertApi &&
-              widget.isUpcomingTab &&
-              widget.booking.status.toLowerCase() == 'pending')
-            Padding(
-              padding: const EdgeInsets.only(top: 0, bottom: 16),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  SizedBox(
-                    height: 45.adaptSize,
-                    width: 145.adaptSize,
-                    child: CustomElevatedButton(
-                        buttonStyle: ElevatedButton.styleFrom(
-                          backgroundColor: theme.primaryColor,
-                          foregroundColor: Colors.black,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(10),
-                          ),
-                        ),
-                        onPressed: () {
-                          print("Accept button pressed!");
-                          apiService.updateBookingStatus(
-                              widget.booking.id, "accepted");
-                          setState(() {});
-                        },
-                        text: 'Accept'),
+                  const SizedBox(
+                    width: 80,
                   ),
-                  SizedBox(
-                    height: 45.adaptSize,
-                    width: 145.adaptSize,
-                    child: CustomElevatedButton(
-                      buttonStyle: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.white,
-                        foregroundColor: Colors.black,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(10),
-                          side: BorderSide(color: appTheme.gray300),
+                  if (!widget.booking.isFromExpertApi ||
+                      widget.booking.isFromExpertApi &&
+                          widget.booking.status.toLowerCase() == 'accepted' ||
+                      widget.booking.isFromExpertApi &&
+                          widget.booking.status.toLowerCase() == 'rejected')
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          'Status',
+                          style: theme.textTheme.bodySmall!.copyWith(
+                              fontSize: 12.0,
+                              color: Colors.grey,
+                              fontWeight: FontWeight.w500),
                         ),
-                      ),
-                      onPressed: () {
-                        print("Reject button pressed!");
-                        apiService.updateBookingStatus(
-                            widget.booking.id, "rejected");
-                        setState(() {});
-                      },
-                      text: "Reject",
+                        Row(
+                          children: [
+                            Text(
+                              "•",
+                              style: TextStyle(
+                                fontSize: 14.0,
+                                color: widget.booking.status.toLowerCase() ==
+                                        'accepted'
+                                    ? Colors.green
+                                    : Colors.red,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            const SizedBox(width: 4.0),
+                            Text(
+                              '${widget.booking.status[0].toUpperCase()}${widget.booking.status.substring(1)}',
+                              style: theme.textTheme.bodySmall!.copyWith(
+                                  fontSize: 14.0,
+                                  color: Colors.black,
+                                  fontWeight: FontWeight.w500),
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-                  ),
                 ],
               ),
             ),
-        ],
+            if (widget.booking.isFromExpertApi &&
+                widget.isUpcomingTab &&
+                widget.booking.status.toLowerCase() == 'pending')
+              Padding(
+                padding: const EdgeInsets.only(top: 0, bottom: 16),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    SizedBox(
+                      height: 45.adaptSize,
+                      width: 145.adaptSize,
+                      child: CustomElevatedButton(
+                          buttonStyle: ElevatedButton.styleFrom(
+                            backgroundColor: theme.primaryColor,
+                            foregroundColor: Colors.black,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          onPressed: () {
+                            print("Accept button pressed!");
+                            apiService.updateBookingStatus(
+                                widget.booking.id, "accepted");
+                            setState(() {});
+                          },
+                          text: 'Accept'),
+                    ),
+                    SizedBox(
+                      height: 45.adaptSize,
+                      width: 145.adaptSize,
+                      child: CustomElevatedButton(
+                        buttonStyle: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.white,
+                          foregroundColor: Colors.black,
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(10),
+                            side: BorderSide(color: appTheme.gray300),
+                          ),
+                        ),
+                        onPressed: () {
+                          print("Reject button pressed!");
+                          apiService.updateBookingStatus(
+                              widget.booking.id, "rejected");
+                          setState(() {});
+                        },
+                        text: "Reject",
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+          ],
+        ),
       ),
     );
   }

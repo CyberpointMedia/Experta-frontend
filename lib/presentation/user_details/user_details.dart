@@ -35,6 +35,8 @@ class _UserDetailsPageState extends State<UserDetailsPage>
   String? email = PrefUtils().getEmail();
   final CallApiService _apiService = CallApiService();
   final ApiService apiService = ApiService();
+  bool isLoading = false;
+  bool isLoading1 = false;
 
   @override
   void initState() {
@@ -47,7 +49,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
     DateTime currentTime = DateTime.now();
 
     // Calculate the time 30 minutes from now
-    DateTime timeAfter30Minutes = currentTime.add(const Duration(minutes: 30));
+    DateTime timeAfter30Minutes = currentTime.add(const Duration(minutes: 1));
 
     // Convert both times to ISO 8601 string format
     String isoStartTime = currentTime.toIso8601String();
@@ -65,6 +67,13 @@ class _UserDetailsPageState extends State<UserDetailsPage>
       final responses = await apiService.createBooking(bookingData);
 
       if (responses['status'] == 'success') {
+        type == 'video'
+            ? setState(() {
+                isLoading = false;
+              })
+            : setState(() {
+                isLoading1 = false;
+              });
         // final Map<String, dynamic> responseData = jsonDecode(response.body);
 
         // Access the fields using the map
@@ -76,15 +85,14 @@ class _UserDetailsPageState extends State<UserDetailsPage>
             controller.userData.value.data!.basicInfo!.firstName.toString(),
             controller.userData.value.data!.basicInfo!.profilePic.toString());
       } else {
-        _showErrorDialog(
-            context, "NO this is ${responses['error']['errorMessage']}");
+        _showErrorDialog(context, " ${responses['error']['errorMessage']}");
       }
     } catch (e) {
       _showErrorDialog(context, e.toString());
     }
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(content: Text('Meeting scheduled successfully')),
-    );
+    // ScaffoldMessenger.of(context).showSnackBar(
+    //   const SnackBar(content: Text('Meeting scheduled successfully')),
+    // );
     // final meetingData = {
     //   'meetingName': "experta consultation",
     //   'from': currentUserId,
@@ -517,19 +525,37 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      _buildActionButton(
-                        ImageConstant.videocam,
-                        "${pricing.videoCallPrice}/min",
-                        Colors.red,
-                        () => _scheduleMeeting('video'),
-                      ),
+                      isLoading
+                          ? CircularProgressIndicator(
+                              color: theme.primaryColor,
+                            )
+                          : _buildActionButton(
+                              ImageConstant.videocam,
+                              "${pricing.videoCallPrice}/min",
+                              Colors.red,
+                              () {
+                                setState(() {
+                                  isLoading = true;
+                                });
+                                _scheduleMeeting('video');
+                              },
+                            ),
                       _buildVerticalDivider(),
-                      _buildActionButton(
-                        ImageConstant.call,
-                        "${pricing.audioCallPrice}/min",
-                        Colors.green,
-                        () => () => _scheduleMeeting('audio'),
-                      ),
+                      isLoading1
+                          ? CircularProgressIndicator(
+                              color: theme.primaryColor,
+                            )
+                          : _buildActionButton(
+                              ImageConstant.call,
+                              "${pricing.audioCallPrice}/min",
+                              Colors.green,
+                              () {
+                                setState(() {
+                                  isLoading1 = true;
+                                });
+                                _scheduleMeeting('audio');
+                              },
+                            ),
                       _buildVerticalDivider(),
                       _buildActionButton(
                         ImageConstant.msg,
@@ -761,10 +787,6 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                       height: 24.adaptSize,
                       width: 24.adaptSize,
                     ),
-                    // child: FaIcon(
-                    //   socialMedia['icon'],
-                    //   size: 24.adaptSize,
-                    // ),
                   ),
                 );
               }).toList(),
