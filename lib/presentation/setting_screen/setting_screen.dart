@@ -94,7 +94,7 @@ class SettingScreen extends GetWidget<SettingController> {
     return Align(
         alignment: Alignment.bottomLeft,
         child: Padding(
-            padding: EdgeInsets.only(right: 16.h, top: 10.v),
+            padding: EdgeInsets.only(right: 16.h, top: 10.v, left: 5.h),
             child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -493,37 +493,40 @@ class SettingScreen extends GetWidget<SettingController> {
                   ),
                 ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 1),
-                child: Container(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
-                    decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
-                        borderRadius: BorderRadiusStyle.customBorderL20),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CustomIconButton(
-                              height: 44.adaptSize,
-                              width: 44.adaptSize,
-                              padding: EdgeInsets.all(6.h),
-                              decoration: IconButtonStyleHelper.fillYellowE,
-                              child: CustomImageView(
-                                imagePath: "assets/images/Star.svg",
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 15.h, top: 13.v, bottom: 10.v),
-                              child: Text("msg_referral_program".tr,
-                                  style: theme.textTheme.titleMedium!
-                                      .copyWith(color: appTheme.gray900))),
-                          const Spacer(),
-                          CustomImageView(
-                              imagePath: ImageConstant.imgArrowRightGray900,
-                              height: 24.adaptSize,
-                              width: 24.adaptSize,
-                              margin: EdgeInsets.symmetric(vertical: 10.v))
-                        ])),
+              GestureDetector(
+                onTap: () => Get.toNamed(AppRoutes.reffer),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 1),
+                  child: Container(
+                      padding:
+                          EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
+                      decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
+                          borderRadius: BorderRadiusStyle.customBorderL20),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center, 
+                          children: [
+                            CustomIconButton(
+                                height: 44.adaptSize,
+                                width: 44.adaptSize,
+                                padding: EdgeInsets.all(6.h),
+                                decoration: IconButtonStyleHelper.fillYellowE,
+                                child: CustomImageView(
+                                  imagePath: "assets/images/Star.svg",
+                                )),
+                            Padding(
+                                padding: EdgeInsets.only(
+                                    left: 15.h, top: 13.v, bottom: 10.v),
+                                child: Text("msg_referral_program".tr,
+                                    style: theme.textTheme.titleMedium!
+                                        .copyWith(color: appTheme.gray900))),
+                            const Spacer(),
+                            CustomImageView(
+                                imagePath: ImageConstant.imgArrowRightGray900,
+                                height: 24.adaptSize,
+                                width: 24.adaptSize,
+                                margin: EdgeInsets.symmetric(vertical: 10.v))
+                          ])),
+                ),
               ),
             ])));
   }

@@ -409,7 +409,7 @@ class _WalletState extends State<Wallet> {
                             height: 44.adaptSize,
                             width: 44.adaptSize,
                             padding: EdgeInsets.all(6.h),
-                            decoration: IconButtonStyleHelper.fillGrayTL22,
+                            decoration: IconButtonStyleHelper.fillYellowE,
                             child: CustomImageView(
                               imagePath: ImageConstant.reffer,
                             ),
@@ -454,9 +454,9 @@ class _WalletState extends State<Wallet> {
                             height: 44.adaptSize,
                             width: 44.adaptSize,
                             padding: EdgeInsets.all(10.h),
-                            decoration: IconButtonStyleHelper.fillGreenTL24,
+                            decoration: IconButtonStyleHelper.fillPrimaryContainerTL22,
                             child: CustomImageView(
-                              imagePath: ImageConstant.help,
+                              imagePath: "assets/images/24-hours.svg",
                             ),
                           ),
                           Padding(

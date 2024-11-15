@@ -200,7 +200,7 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
             padding: const EdgeInsets.only(bottom: 5),
             child: Text(
               "Your Name",
-              style: CustomTextStyles.bodyLargeBlack90001,
+              style:theme.textTheme.titleMedium!.copyWith(color: Colors.black, fontSize: 14.fSize, fontWeight: FontWeight.w500,),
               textAlign: TextAlign.start,
             ),
           ),
@@ -210,13 +210,16 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
             focusNode: controller.focus1,
             hintText: "Your Name".tr,
             hintStyle: CustomTextStyles.titleMediumBluegray300,
+            textStyle:theme.textTheme.titleMedium!.copyWith(color: Colors.black, fontSize: 16.fSize, fontWeight: FontWeight.w500,),
+ 
             textInputType: TextInputType.name,
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 5, top: 10),
             child: Text(
               "Display Name",
-              style: CustomTextStyles.bodyLargeBlack90001,
+                            style:theme.textTheme.titleMedium!.copyWith(color: Colors.black, fontSize: 14.fSize, fontWeight: FontWeight.w500,),
+
               textAlign: TextAlign.start,
             ),
           ),
@@ -226,13 +229,16 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
             width: MediaQuery.of(context).size.width,
             hintText: "Display Name".tr,
             hintStyle: CustomTextStyles.titleMediumBluegray300,
+                        textStyle:theme.textTheme.titleMedium!.copyWith(color: Colors.black, fontSize: 16.fSize, fontWeight: FontWeight.w500,),
+
             textInputType: TextInputType.name,
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 5, top: 10),
             child: Text(
               "Bio",
-              style: CustomTextStyles.bodyLargeBlack90001,
+                            style:theme.textTheme.titleMedium!.copyWith(color: Colors.black, fontSize: 14.fSize, fontWeight: FontWeight.w500,),
+
               textAlign: TextAlign.start,
             ),
           ),
@@ -241,13 +247,14 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
             focusNode: controller.focus3,
             hintText: "Write Your Bio",
             hintStyle: CustomTextStyles.titleMediumBluegray300,
+                        textStyle:theme.textTheme.titleMedium!.copyWith(color: Colors.black, fontSize: 16.fSize, fontWeight: FontWeight.w500,),
+
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 5, top: 10),
             child: Text(
               "Social Links",
-              style: CustomTextStyles.bodyLargeBlack90001,
-              textAlign: TextAlign.start,
+style:theme.textTheme.titleMedium!.copyWith(color: Colors.black, fontSize: 14.fSize, fontWeight: FontWeight.w500,),              textAlign: TextAlign.start,
             ),
           ),
           Obx(() => Column(

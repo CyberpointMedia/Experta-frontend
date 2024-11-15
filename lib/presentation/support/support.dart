@@ -27,8 +27,7 @@ class RaiseTicketPage extends StatelessWidget {
                   child: Container(
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(126),
-                      color: appTheme.deepOrangeA20
-                          .withOpacity(0.6), // Adjust the color
+                      color: appTheme.deepOrangeA20.withOpacity(0.6),
                     ),
                   ),
                 ),
@@ -63,15 +62,15 @@ class RaiseTicketPage extends StatelessWidget {
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
                               borderSide: const BorderSide(
-                                color: Colors.grey, // Light grey border color
-                                width: 1.0, // Border thickness
+                                color: Colors.grey,
+                                width: 1.0,
                               ),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
                               borderSide: const BorderSide(
-                                color: Colors.grey, // Light grey border color
-                                width: 1.0, // Border thickness
+                                color: Colors.grey,
+                                width: 1.0,
                               ),
                             ),
                           ),
@@ -93,14 +92,14 @@ class RaiseTicketPage extends StatelessWidget {
                             border: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
                               borderSide: const BorderSide(
-                                color: Colors.grey, // Light grey border color
+                                color: Colors.grey,
                                 width: 1.0,
                               ),
                             ),
                             enabledBorder: OutlineInputBorder(
                               borderRadius: BorderRadius.circular(10.0),
                               borderSide: const BorderSide(
-                                color: Colors.grey, // Light grey border color
+                                color: Colors.grey,
                                 width: 1.0,
                               ),
                             ),
@@ -108,30 +107,37 @@ class RaiseTicketPage extends StatelessWidget {
                         ),
                         const SizedBox(height: 16),
 
-                        // Upload File Section
+                        // Upload File Section with Dashed Border
                         GestureDetector(
                           onTap: () {
                             // Handle file upload
                           },
-                          child: Container(
-                            height: 120,
-                            width: double.infinity,
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10.0),
-                              border: Border.all(color: Colors.grey),
-                              color: Colors.white,
+                          child: CustomPaint(
+                            painter: DashedBorderPainter(
+                              color: Colors.grey,
+                              strokeWidth: 1.0,
+                              dashWidth: 5.0,
+                              dashSpace: 3.0,
                             ),
-                            child: const Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Icon(Icons.cloud_upload,
-                                    size: 40, color: Colors.grey),
-                                SizedBox(height: 8),
-                                Text(
-                                  "Upload your file",
-                                  style: TextStyle(color: Colors.grey),
-                                ),
-                              ],
+                            child: Container(
+                              height: 120,
+                              width: double.infinity,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(10.0),
+                                color: Colors.white,
+                              ),
+                              child: const Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Icon(Icons.cloud_upload,
+                                      size: 40, color: Colors.grey),
+                                  SizedBox(height: 8),
+                                  Text(
+                                    "Upload your file",
+                                    style: TextStyle(color: Colors.grey),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ),
@@ -145,24 +151,7 @@ class RaiseTicketPage extends StatelessWidget {
                         // Submit Button
                         const SizedBox(
                           width: double.infinity,
-                          // Full width
-                          // child: ElevatedButton(
-                          //   onPressed: () {
-                          //     // Handle submit action
-                          //   },
-                          //   style: ElevatedButton.styleFrom(
-                          //     backgroundColor: Colors.yellow,
-                          //     padding: const EdgeInsets.symmetric(vertical: 16),
-                          //     shape: RoundedRectangleBorder(
-                          //       borderRadius: BorderRadius.circular(24),
-                          //     ),
-                          //     minimumSize: const Size(150, 60), // Custom size for the button
-                          //   ),
-                          //   child: const Text(
-                          //     "Submit",
-                          //     style: TextStyle(color: Colors.black, fontSize: 15), // Larger text
-                          //   ),
-                          // ),
+                          // Add your submit button here if needed
                         ),
                       ],
                     ),
@@ -178,24 +167,91 @@ class RaiseTicketPage extends StatelessWidget {
 
   PreferredSizeWidget _buildAppBar() {
     return CustomAppBar(
-      height: 40.h, // Adjust height as needed
-      leadingWidth: 40.h,
+      height: 40.0,
+      leadingWidth: 40.0,
       leading: AppbarLeadingImage(
         imagePath: ImageConstant.imgArrowLeftOnerrorcontainer,
-        margin: EdgeInsets.only(left: 16.h),
+        margin: const EdgeInsets.only(left: 16.0),
         onTap: () {
-          onTapArrowLeft(); // Go back when tapped
+          onTapArrowLeft();
         },
       ),
       centerTitle: true,
       title: AppbarSubtitleSix(
-        text: "Raise Ticket", // Your custom title
+        text: "Raise Ticket",
       ),
     );
   }
 
   // Function for back navigation
   void onTapArrowLeft() {
-    Get.back(); // Using GetX to navigate back
+    Get.back();
+  }
+}
+
+class DashedBorderPainter extends CustomPainter {
+  final Color color;
+  final double strokeWidth;
+  final double dashWidth;
+  final double dashSpace;
+  final double? topGap;
+  final double? bottomGap;
+
+  DashedBorderPainter({
+    required this.color,
+    this.strokeWidth = 1.0,
+    this.dashWidth = 5.0,
+    this.dashSpace = 3.0,
+    this.topGap,
+    this.bottomGap,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = strokeWidth
+      ..style = PaintingStyle.stroke;
+
+    double startX = 0;
+    final path = Path();
+
+    // Top border
+    while (startX < size.width) {
+      path.moveTo(startX, 0);
+      path.lineTo(startX + dashWidth, 0);
+      startX += dashWidth + dashSpace;
+    }
+
+    // Right border
+    double startY = 0;
+    while (startY < size.height) {
+      path.moveTo(size.width, startY);
+      path.lineTo(size.width, startY + dashWidth);
+      startY += dashWidth + dashSpace;
+    }
+
+    // Bottom border
+    startX = size.width;
+    while (startX > 0) {
+      path.moveTo(startX, size.height);
+      path.lineTo(startX - dashWidth, size.height);
+      startX -= dashWidth + dashSpace;
+    }
+
+    // Left border
+    startY = size.height;
+    while (startY > 0) {
+      path.moveTo(0, startY);
+      path.lineTo(0, startY - dashWidth);
+      startY -= dashWidth + dashSpace;
+    }
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
   }
 }

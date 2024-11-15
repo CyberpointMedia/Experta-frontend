@@ -285,13 +285,13 @@ static const String qr = "/share_profile";
         AddBankAccountBinding(),
       ],
     ),
-    GetPage(
-      name: pandetail,
-      page: () => const PanDetail(),
-      bindings: [
-        PanDetailBinding(),
-      ],
-    ),
+    // GetPage(
+    //   name: pandetail,
+    //   page: () => const PanDetail(),
+    //   bindings: [
+    //     PanDetailBinding(),
+    //   ],
+    // ),
     GetPage(
       name: paymentmethod,
       page: () => const PaymentMethod(),
@@ -525,13 +525,13 @@ static const String qr = "/share_profile";
         FollowersBinding(),
       ],
     ),
-    GetPage(
-      name: pandetail,
-      page: () => const PanDetail(),
-      bindings: [
-        PanDetailBinding(),
-      ],
-    ),
+    // GetPage(
+    //   name: pandetail,
+    //   page: () => const PanDetail(),
+    //   bindings: [
+    //     PanDetailBinding(),
+    //   ],
+    // ),
     GetPage(
       name: paymentmethod,
       page: () => const PaymentMethod(),

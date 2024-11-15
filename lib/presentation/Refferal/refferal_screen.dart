@@ -1,4 +1,5 @@
 import 'package:experta/core/app_export.dart';
+import 'package:flutter/material.dart';
 
 class ReferAndEarnPage extends StatefulWidget {
   const ReferAndEarnPage({super.key});
@@ -22,7 +23,7 @@ class _ReferAndEarnPageState extends State<ReferAndEarnPage> {
             child: Stack(
               children: [
                 Container(
-                  height: MediaQuery.of(context).size.height * 0.42,
+                  height: MediaQuery.of(context).size.height * 0.4,
                   width: double.infinity,
                   color: theme.primaryColor,
                   child: CustomImageView(
@@ -33,7 +34,7 @@ class _ReferAndEarnPageState extends State<ReferAndEarnPage> {
                 Positioned(
                   left: 0,
                   right: 0,
-                  top: MediaQuery.of(context).size.height * 0.1,
+                  top: 130,
                   child: CustomImageView(
                     imagePath: 'assets/images/bookings/gift.svg',
                   ),
@@ -41,7 +42,7 @@ class _ReferAndEarnPageState extends State<ReferAndEarnPage> {
                 Positioned(
                   left: 0,
                   right: 0,
-                  top: MediaQuery.of(context).size.height * 0.3,
+                  top: 270,
                   child: Text(
                     "Refer & Earn Rewards",
                     textAlign: TextAlign.center,
@@ -54,7 +55,7 @@ class _ReferAndEarnPageState extends State<ReferAndEarnPage> {
                 Positioned(
                   left: 0,
                   right: 0,
-                  top: MediaQuery.of(context).size.height * 0.34,
+                  top: 305,
                   child: Text(
                     "Share Experta with your friends and earn\nrewards",
                     textAlign: TextAlign.center,
@@ -79,76 +80,71 @@ class _ReferAndEarnPageState extends State<ReferAndEarnPage> {
               topRight: Radius.circular(23),
             ),
             child: Container(
-              height: MediaQuery.of(context).size.height * 0.58,
+              height: MediaQuery.of(context).size.height * 0.6,
               color: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  // Header for "How it works?"
                   Row(
                     children: [
-                      CustomImageView(
-                        imagePath: ImageConstant.i,
-                      ),
+                      Icon(Icons.info_outline, 
+                      color: appTheme.gray400),
                       const SizedBox(width: 8),
                       Text(
                         "How it works?",
                         style: theme.textTheme.titleSmall!.copyWith(
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.bold,
                         ),
                       ),
                     ],
                   ),
                   const SizedBox(height: 20),
-                  buildStepWithDivider(
+
+                  // Steps
+                  buildStep(
                     stepNumber: "1",
                     title: "Share Your Link",
-                    description:
-                        "Share your unique referral link with friends. The more, the merrier!",
+                    description: "Share your unique referral link with friends. The more, the merrier!",
                     theme: theme,
                   ),
-                  buildStepWithDivider(
+                  const SizedBox(height: 20),
+                  buildStep(
                     stepNumber: "2",
                     title: "Friend Registers",
-                    description:
-                        "When your friend registers on Experta, you both win!",
+                    description: "When your friend registers on [App Name], you both win!",
                     theme: theme,
                   ),
-                  buildStepWithDivider(
+                  const SizedBox(height: 20),
+                  buildStep(
                     stepNumber: "3",
                     title: "First Call Bonus",
-                    description:
-                        "Earn tokens when your referred friend makes their first call.",
+                    description: "Earn tokens when your referred friend makes their first call.",
                     theme: theme,
                   ),
                   const Spacer(),
+
+                  // Bottom Buttons
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      CustomElevatedButton(
+                        const CustomElevatedButton(
                         height: 56,
-                        width: MediaQuery.of(context).size.width * 0.7,
-                        leftIcon: Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: CustomImageView(
-                            imagePath: ImageConstant.whatsapp,
-                          ),
+                        width: 300,
+                        leftIcon: Icon(
+                          Icons.wechat
                         ),
-                        text: 'Share via WhatsApp',
-                      ),
-                      const SizedBox(width: 10),
-                      Container(
-                        height: 56,
-                        width: 56,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          border:
-                              Border.all(color: appTheme.gray300, width: 0.5),
-                        ),
+                        text: 'Share via WhatsApp'),
+                    const SizedBox(width: 10,),
+                      CircleAvatar(
+                        radius: 23,
+                        backgroundColor: Colors.grey.shade200,
                         child: IconButton(
-                          onPressed: () {},
-                          icon: const Icon(Icons.share_outlined,
-                              size: 24, color: Colors.black),
+                          onPressed: () {
+                            // Add your share functionality here
+                          },
+                          icon: const Icon(Icons.share_outlined,size: 24, color: Colors.black),
                         ),
                       ),
                     ],
@@ -182,105 +178,57 @@ class _ReferAndEarnPageState extends State<ReferAndEarnPage> {
     Get.back();
   }
 
-  Widget buildStepWithDivider({
-    required String stepNumber,
-    required String title,
-    required String description,
-    required ThemeData theme,
-  }) {
-    return Column(
-      children: [
-        Row(
+  // Function to build each step
+  // Function to build each step
+Widget buildStep({
+  required String stepNumber,
+  required String title,
+  required String description,
+  required ThemeData theme,
+}) {
+  return Row(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Container(
+        padding: const EdgeInsets.all(4), // Space between the border and CircleAvatar
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          border: Border.all(color: Colors.grey, width: 2), // Grey border
+        ),
+        child: CircleAvatar(
+          radius: 25,
+          backgroundColor: appTheme.gray400.withOpacity(0.2),
+          child: Text(
+            stepNumber,
+            style: TextStyle(color: appTheme.gray400, fontWeight: FontWeight.bold),
+          ),
+        ),
+      ),
+      const SizedBox(width: 12),
+      Expanded(
+        child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Column(
-              children: [
-                Container(
-                  height: 48,
-                  width: 48,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    border: Border.all(color: appTheme.gray300, width: 0.5),
-                  ),
-                  child: Center(
-                    child: Text(
-                      stepNumber,
-                      style: TextStyle(
-                        color: appTheme.black900,
-                        fontWeight: FontWeight.w500,
-                      ),
-                    ),
-                  ),
-                ),
-                if (stepNumber != "3")
-                  SizedBox(
-                    height: 25,
-                    child: CustomPaint(
-                      painter: DottedLinePainter(
-                        color: appTheme.gray400,
-                      ),
-                    ),
-                  ),
-              ],
+            Text(
+                title,
+              style: theme.textTheme.bodyMedium!.copyWith(
+                fontWeight: FontWeight.w400,
+                fontSize: 16.fSize,
+                color: appTheme.black900,
+              ),
             ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    title,
-                    style: theme.textTheme.titleMedium!.copyWith(
-                      color: appTheme.black900,
-                    ),
-                  ),
-                  const SizedBox(height: 4),
-                  Padding(
-                    padding: const EdgeInsets.only(right: 20),
-                    child: Text(
-                      description,
-                      style: theme.textTheme.titleSmall,
-                    ),
-                  ),
-                ],
+            const SizedBox(height: 4),
+            Text(
+               description,
+              style: theme.textTheme.bodyMedium!.copyWith(
+                fontWeight: FontWeight.w500,
+                fontSize: 14,
               ),
             ),
           ],
         ),
-      ],
-    );
-  }
+      ),
+    ],
+  );
 }
-
-// Add this custom painter class
-class DottedLinePainter extends CustomPainter {
-  final Color color;
-
-  DottedLinePainter({required this.color});
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    Paint paint = Paint()
-      ..color = color
-      ..strokeWidth = 1
-      ..strokeCap = StrokeCap.round;
-
-    double startY = 0;
-    double endY = size.height;
-    double dashHeight = 1;
-    double gapHeight = 3;
-    double currentY = startY;
-
-    while (currentY < endY) {
-      canvas.drawLine(
-        Offset(0, currentY),
-        Offset(0, currentY + dashHeight),
-        paint,
-      );
-      currentY += dashHeight + gapHeight;
-    }
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) => false;
 }

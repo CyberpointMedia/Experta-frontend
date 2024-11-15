@@ -89,7 +89,7 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
       const SizedBox(
         height: 12,
       ),
-      const Text("User name"),
+      Text("User name"),
       const SizedBox(
         height: 6,
       ),
@@ -259,14 +259,15 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
     return Text(
       text,
       style: theme.textTheme.headlineSmall!
-          .copyWith(color: Colors.black, fontWeight: FontWeight.bold),
+          .copyWith(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 24.fSize),
     );
   }
 
   Widget _buildSubtitle(String text) {
     return Padding(
-      padding: const EdgeInsets.only(top: 5, bottom: 15),
-      child: Text(text, maxLines: 1),
+      padding:  EdgeInsets.only(top: 5.adaptSize, bottom: 15.adaptSize),
+      child: Text(text, maxLines: 1, style: theme.textTheme.headlineSmall!
+          .copyWith(color: appTheme.blueGray300, fontWeight: FontWeight.w400, fontSize: 14.fSize),),
     );
   }
 

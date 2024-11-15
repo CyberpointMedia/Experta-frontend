@@ -276,6 +276,7 @@ class ImageConstant {
   static String imgCalendar = '$imagePath/settings/calendar.svg';
 
    static String imgedit = '$imagePath/settings/Frame.svg';
+   static String img = '$imagePath/settings/Frame 1171276710.svg';
 
   // static String imgIconBlueGray300 = '$imagePath/img_icon_blue_gray_300.svg';
 
@@ -461,9 +462,10 @@ class ImageConstant {
   static String bank = "$imagePath/settings/Bank.svg";
   static String card = "$imagePath/settings/credit-card.svg";
   static String pancard = "$imagePath/settings/credit-card.svg";
-  static String block = "$imagePath/settings/block.svg";
+  static String block = "assets/images/bookings/block.sv";
   static String delete = "$imagePath/settings/Delete.svg";
   static String upi = "$imagePath/settings/UPI.svg";
+  static String hr = "$imagePath/settings/24-hours.svg";
 
   //gender
   static String male = "$imagePath/settings/male.svg";
@@ -517,6 +519,7 @@ class ImageConstant {
   static String calender = "assets/images/wallet/calender.svg";
   static String videocam = "assets/images/wallet/videocam.svg";
   static String call = "assets/images/wallet/call.svg";
+   static String rate = "assets/images/wallet/verify.svg";
 
   //  Pan card
 

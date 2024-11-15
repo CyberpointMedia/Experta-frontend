@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
@@ -11,6 +12,7 @@ class TrendingPeoplePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log("$trendingPeople");
     return Scaffold(
       body: Stack(
         children: [
@@ -78,3 +80,4 @@ class TrendingPeoplePage extends StatelessWidget {
     Get.back();
   }
 }
+      
