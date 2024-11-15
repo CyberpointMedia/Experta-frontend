@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
+import 'package:experta/presentation/pan_detrail/pan_detail.dart';
 import 'package:experta/presentation/verify_account/Models/verify_account_model.dart';
 import 'package:experta/presentation/verify_account/face_live.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
@@ -390,7 +391,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
                                 height: 44.adaptSize,
                                 width: 44.adaptSize,
                                 padding: EdgeInsets.all(10.h),
-                                decoration: IconButtonStyleHelper.fillGrayTL22,
+                                decoration: IconButtonStyleHelper.fillOnPrimaryContainer,
                                 child: CustomImageView(
                                     imagePath: ImageConstant.bank),
                               ),
@@ -623,11 +624,18 @@ class _VerifyAccountState extends State<VerifyAccount> {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () {
-                      (kycData!.panVerification!.verificationStatus == false)
-                          ? _showPANVerificationDialog()
-                          : null;
-                    },
+                   onTap: () {
+  if (kycData!.panVerification!.verificationStatus == false) {
+    _showPANVerificationDialog();
+  } else {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (context) => const PanDetail(name: '', panno: '', dob: '',), // Replace NextPage with your actual page class
+      ),
+    );
+  }
+},
                     child: Padding(
                       padding: const EdgeInsets.only(top: 1),
                       child: Container(

@@ -104,7 +104,7 @@ class _SecurityPrivacyState extends State<SecurityPrivacy> {
                             padding: EdgeInsets.all(10.h),
                             decoration: IconButtonStyleHelper.fillPrimary,
                             child:
-                                CustomImageView(imagePath: ImageConstant.block),
+                                CustomImageView(imagePath: "assets/images/bookings/block.svg"),
                           ),
                           Padding(
                             padding: EdgeInsets.only(

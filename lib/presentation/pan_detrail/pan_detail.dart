@@ -5,7 +5,11 @@ import 'package:experta/presentation/add_upi/controller/add_upi_controller.dart'
 import 'package:experta/widgets/custom_text_form_field.dart';
 
 class PanDetail extends StatefulWidget {
-  const PanDetail({super.key});
+ final String name;
+ final String panno;
+ final String dob;
+ 
+  const PanDetail({super.key, required this.name, required this.panno, required this.dob});
 
   @override
   State<PanDetail> createState() => _PanDetailState();
@@ -97,19 +101,19 @@ class _PanDetailState extends State<PanDetail> {
                     focusNode: panNumberFocusNode,
                     autofocus: false,
                   ),
-                  const SizedBox(height: 20),
-                  const Text("Date of Birth"),
-                  const SizedBox(
-                    height: 6,
-                  ),
-                  CustomTextFormField(
-                    hintText: "25/11/1992",
-                    hintStyle: CustomTextStyles.titleMediumBluegray300,
-                    textInputType: TextInputType.datetime,
-                    controller: dateOfBirthController,
-                    focusNode: dateOfBirthFocusNode,
-                    autofocus: false,
-                  ),
+                  // const SizedBox(height: 20),
+                  // const Text("Date of Birth"),
+                  // const SizedBox(
+                  //   height: 6,
+                  // ),
+                  // CustomTextFormField(
+                  //   hintText: "25/11/1992",
+                  //   hintStyle: CustomTextStyles.titleMediumBluegray300,
+                  //   textInputType: TextInputType.datetime,
+                  //   controller: dateOfBirthController,
+                  //   focusNode: dateOfBirthFocusNode,
+                  //   autofocus: false,
+                  // ),
                   const Spacer(),
                   //   CustomElevatedButton(
                   //     text: "Save",

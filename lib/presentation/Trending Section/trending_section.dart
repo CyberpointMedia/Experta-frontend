@@ -80,3 +80,4 @@ class TrendingPeoplePage extends StatelessWidget {
     Get.back();
   }
 }
+      

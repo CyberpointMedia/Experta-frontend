@@ -156,7 +156,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                     SizedBox(
                       height: 8.v,
                     ),
-                    _buildColumnaboutme(),
+                  _buildColumnaboutme(),
                     SizedBox(
                       height: 8.v,
                     ),
@@ -453,8 +453,8 @@ class _UserProfilePageState extends State<UserProfilePage>
         Padding(
           padding: const EdgeInsets.all(8.0), // Padding around the expertise chips
           child: Wrap(
-            spacing: 8.0,
-            runSpacing: 4.0,
+            spacing: 4.0,
+            runSpacing: 0.0,
             children: expertiseList.map((expertise) {
               return Chip(
                 label: Text(

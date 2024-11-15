@@ -94,7 +94,7 @@ class SettingScreen extends GetWidget<SettingController> {
     return Align(
         alignment: Alignment.bottomLeft,
         child: Padding(
-            padding: EdgeInsets.only(right: 16.h, top: 10.v),
+            padding: EdgeInsets.only(right: 16.h, top: 10.v, left: 5.h),
             child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -503,7 +503,7 @@ class SettingScreen extends GetWidget<SettingController> {
                       decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
                           borderRadius: BorderRadiusStyle.customBorderL20),
                       child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center, 
                           children: [
                             CustomIconButton(
                                 height: 44.adaptSize,

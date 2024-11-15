@@ -332,7 +332,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             SizedBox(height: 12.v),
             Padding(
-              padding: const EdgeInsets.only(left: 1),
+              padding:  EdgeInsets.only(left: 1),
               child: Container(
                 height: 8.v,
                 width: 313.adaptSize,
@@ -552,7 +552,7 @@ class UserProfileItemWidget extends StatelessWidget {
         Get.toNamed(AppRoutes.detailsPage, arguments: {"user": user});
       },
       child: Padding(
-        padding: const EdgeInsets.only(right: 16, bottom: 10),
+        padding:  EdgeInsets.only(right: 16.adaptSize, bottom: 10.adaptSize),
         child: Stack(
           children: [
             Container(
@@ -565,28 +565,34 @@ class UserProfileItemWidget extends StatelessWidget {
                 children: [
                   Padding(
                     padding:
-                        const EdgeInsets.only(left: 30, right: 30, top: 30),
+                         EdgeInsets.only(left: 30.adaptSize, right: 30.adaptSize, top: 30.adaptSize),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Stack(
                           children: [
                             CircleAvatar(
-                              radius: 32,
+                              radius: 30.adaptSize,
                               backgroundColor: Colors.orange,
-                              child: CustomImageView(
-                                radius: BorderRadius.circular(30),
-                                imagePath: user.profilePic.isNotEmpty
-                                    ? user.profilePic
-                                    : ImageConstant.imageNotFound,
+                              child: CircleAvatar(
+                                radius: 28.adaptSize,
+                              backgroundColor: Colors.white,
+                                child: CustomImageView(
+                                  height: 50,
+                                  width: 50,
+                                  radius: BorderRadius.circular(25),
+                                  imagePath: user.profilePic.isNotEmpty
+                                      ? user.profilePic
+                                      : ImageConstant.imageNotFound,
+                                ),
                               ),
                             ),
                             Positioned(
                               bottom: 0,
                               right: 2,
                               child: Container(
-                                height: 15,
-                                width: 15,
+                                height: 15.adaptSize,
+                                width: 15.adaptSize,
                                 decoration: BoxDecoration(
                                   color: Colors.green,
                                   shape: BoxShape.circle,
@@ -619,8 +625,8 @@ class UserProfileItemWidget extends StatelessWidget {
                                       color: Colors.deepPurple, size: 16),
                                   const Spacer(),
                                   Container(
-                                    padding: const EdgeInsets.symmetric(
-                                        horizontal: 6, vertical: 2),
+                                    padding:  EdgeInsets.symmetric(
+                                        horizontal: 6.adaptSize, vertical: 2.adaptSize),
                                     decoration: BoxDecoration(
                                       color: Colors.white,
                                       borderRadius: BorderRadius.circular(30),
@@ -631,12 +637,12 @@ class UserProfileItemWidget extends StatelessWidget {
                                       children: [
                                         const Icon(Icons.star,
                                             color: Colors.orange, size: 14),
-                                        const SizedBox(width: 4),
+                                         SizedBox(width: 4.adaptSize),
                                         Text(
                                           user.rating.toString(),
-                                          style: const TextStyle(
+                                          style:  TextStyle(
                                               color: Colors.black,
-                                              fontSize: 12),
+                                              fontSize: 12.fSize),
                                         ),
                                       ],
                                     ),
@@ -656,8 +662,8 @@ class UserProfileItemWidget extends StatelessWidget {
                               Row(
                                 children: [
                                   CustomImageView(
-                                    height: 14,
-                                    width: 14,
+                                    height: 14.adaptSize,
+                                    width: 14.adaptSize,
                                     imagePath: "assets/images/language.svg",
                                   ),
                                   Padding(
@@ -696,12 +702,12 @@ class UserProfileItemWidget extends StatelessWidget {
                   ),
                   const SizedBox(height: 15),
                   Padding(
-                    padding: const EdgeInsets.only(left: 0, right: 0, top: 0),
+                    padding:  EdgeInsets.only(left: 0, right: 0, top: 0),
                     child: CustomPaint(
                       painter: DashedBorderPainter(
                         color: Colors.grey,
                         strokeWidth: 1,
-                        dashWidth: 6.0,
+                        dashWidth: 2.0,
                         dashSpace: 2.0,
                       ),
                       child: Container(height: 1),
@@ -710,7 +716,7 @@ class UserProfileItemWidget extends StatelessWidget {
                   const SizedBox(height: 8),
                   Padding(
                     padding:
-                        const EdgeInsets.only(left: 30, right: 30, top: 10),
+                         EdgeInsets.only(left: 30.adaptSize, right: 30.adaptSize, top: 10.adaptSize),
                     child: Wrap(
                       spacing: 8.adaptSize,
                       runSpacing: 8.adaptSize,
@@ -728,7 +734,7 @@ class UserProfileItemWidget extends StatelessWidget {
                                 ],
                     ),
                   ),
-                  const SizedBox(height: 30),
+                   SizedBox(height: 30.adaptSize),
                   Container(
                     decoration: BoxDecoration(
                       color: appTheme.gray100,
@@ -737,24 +743,34 @@ class UserProfileItemWidget extends StatelessWidget {
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        _buildActionButton(Icons.video_call,
-                            "${user.pricing.videoCallPrice}", Colors.red),
-                        Container(
-                          color: appTheme.gray300,
-                          width: 0.5,
-                          height: 50,
-                        ),
-                        _buildActionButton(Icons.phone,
-                            "${user.pricing.audioCallPrice}", Colors.green),
-                        Container(
-                          color: appTheme.gray300,
-                          width: 0.5,
-                          height: 50,
-                        ),
-                        _buildActionButton(Icons.message,
-                            "${user.pricing.messagePrice}", appTheme.yellow900),
-                      ],
+                     children: [
+  _buildActionButton(
+    CustomImageView(imagePath: ImageConstant.videocam), // Replaced with CustomImageView
+    "${user.pricing.videoCallPrice}",
+    Colors.red,
+  ),
+  Container(
+    color: appTheme.gray300,
+    width: 0.5.adaptSize,
+    height: 50.adaptSize,
+  ),
+  _buildActionButton(
+    CustomImageView(imagePath: ImageConstant.call,),
+    "${user.pricing.audioCallPrice}",
+    Colors.green,
+  ),
+  Container(
+    color: appTheme.gray300,
+    width: 0.5.adaptSize,
+    height: 50.adaptSize,
+  ),
+  _buildActionButton(
+     CustomImageView(imagePath: ImageConstant.msg,),
+    "${user.pricing.messagePrice}",
+    appTheme.yellow900,
+  ),
+],
+
                     ),
                   ),
                 ],
@@ -763,24 +779,24 @@ class UserProfileItemWidget extends StatelessWidget {
 
             // "Top Rated" Ribbon
             Positioned(
-              top: 55,
-              left: -15,
+              top: 55.adaptSize,
+              left: -15.adaptSize,
               child: Transform.rotate(
                 angle: -45 * (3.141592653589793 / 180),
                 alignment: Alignment.topLeft,
                 child: Container(
-                  width: 100,
+                  width: 100.adaptSize,
                   padding:
-                      const EdgeInsets.symmetric(vertical: 3, horizontal: 8),
-                  decoration: const BoxDecoration(
+                       EdgeInsets.symmetric(vertical: 3.adaptSize, horizontal: 8.adaptSize),
+                  decoration:  const BoxDecoration(
                     color: Colors.orange,
                   ),
                   child:  Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Icon(Icons.star, color: Colors.white, size: 16.fSize),
-                      SizedBox(width: 4),
-                      Text(
+                       CustomImageView(imagePath:"assets/images/verify.svg"),
+                      SizedBox(width: 2.adaptSize),
+                      const Text(
                         "Top Rated",
                         style: TextStyle(color: Colors.white),
                       ),
@@ -813,17 +829,19 @@ Widget _buildChip(String label) {
       ),
     ),
   );
-}
+} 
 
-Widget _buildActionButton(IconData icon, String label, Color color) {
-  return Row(
+Widget _buildActionButton(Widget iconWidget, String price, Color color) {
+  return Column(
+    mainAxisAlignment: MainAxisAlignment.center,
     children: [
-      Icon(icon, color: color),
-      SizedBox(width: 4.adaptSize),
+      iconWidget, // Use the widget directly
+       SizedBox(height: 8.fSize),
       Text(
-        label,
-        style: const TextStyle(fontWeight: FontWeight.bold),
+        price,
+        style: TextStyle(color: color),
       ),
     ],
   );
 }
+

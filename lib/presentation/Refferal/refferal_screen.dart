@@ -129,7 +129,7 @@ class _ReferAndEarnPageState extends State<ReferAndEarnPage> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                       CustomElevatedButton(
+                        const CustomElevatedButton(
                         height: 56,
                         width: 300,
                         leftIcon: Icon(
@@ -210,7 +210,7 @@ Widget buildStep({
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              title,
+                title,
               style: theme.textTheme.bodyMedium!.copyWith(
                 fontWeight: FontWeight.w400,
                 fontSize: 16.fSize,
@@ -219,7 +219,7 @@ Widget buildStep({
             ),
             const SizedBox(height: 4),
             Text(
-              description,
+               description,
               style: theme.textTheme.bodyMedium!.copyWith(
                 fontWeight: FontWeight.w500,
                 fontSize: 14,

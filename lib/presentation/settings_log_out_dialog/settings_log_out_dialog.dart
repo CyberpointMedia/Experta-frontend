@@ -18,7 +18,14 @@ class SettingsLogOutDialog extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           SizedBox(height: 18.v),
-          Text("lbl_logout2".tr, style: CustomTextStyles.titleMediumSFProText),
+          Text("lbl_logout2".tr,
+          style:theme.textTheme.bodySmall!.copyWith(
+        color: Colors.black,
+        fontSize: 16.fSize,
+        fontWeight: FontWeight.w400,
+        // height: 1.67,
+      )
+            ),
           SizedBox(height: 10.v),
           SizedBox(
             width: 185.h,
@@ -27,7 +34,12 @@ class SettingsLogOutDialog extends StatelessWidget {
               maxLines: 2,
               overflow: TextOverflow.ellipsis,
               textAlign: TextAlign.center,
-              style: CustomTextStyles.bodySmallSFProTextGray900.copyWith(height: 1.67),
+              style:theme.textTheme.bodySmall!.copyWith(
+        color: Colors.black,
+        fontSize: 12.fSize,
+        fontWeight: FontWeight.w300,
+        height: 1.67,
+      )
             ),
           ),
           SizedBox(height: 21.v),
@@ -40,7 +52,11 @@ class SettingsLogOutDialog extends StatelessWidget {
                 width: 134.h,
                 text: "lbl_cancel".tr,
                 buttonStyle: CustomButtonStyles.fillOnPrimaryContainer1, // Use the updated style
-                buttonTextStyle: CustomTextStyles.bodyLargeSFProTextLightblueA700,
+                buttonTextStyle: theme.textTheme.bodyLarge!.copyWith(
+        color: appTheme.lightBlueA700,
+        fontSize: 17.fSize,
+        fontWeight: FontWeight.w500
+      ),
                 onPressed: () {
                   onTapCancel();
                 },
@@ -55,7 +71,11 @@ class SettingsLogOutDialog extends StatelessWidget {
                 width: 134.h,
                 text: "lbl_logout2".tr,
                 buttonStyle: CustomButtonStyles.fillOnPrimaryContainer1, // Use the updated style
-                buttonTextStyle: CustomTextStyles.bodyLargeSFProTextLightblueA700,
+                buttonTextStyle: theme.textTheme.bodyLarge!.copyWith(
+        color: appTheme.lightBlueA700,
+        fontSize: 17.fSize,
+        fontWeight: FontWeight.w500
+      ),
                 onPressed: () {
                   onTapLogout(); // Pass context to the method
                 },
