@@ -223,6 +223,7 @@ class PrimaryColors {
   // Black
   Color get black900 => const Color(0XFF0A0A0B);
   Color get black90001 => const Color(0XFF000000);
+  Color get blackCall => const Color(0XFF2F3034);
 
   // Blacke
   Color get black9001e => const Color(0X1E060B14);

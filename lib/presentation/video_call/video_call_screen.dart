@@ -1,4 +1,6 @@
+import 'dart:async';
 import 'dart:developer';
+import 'package:experta/core/utils/size_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
@@ -6,14 +8,24 @@ import 'package:peerdart/peerdart.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:path_provider/path_provider.dart';
 
+import '../../core/utils/image_constant.dart';
+import '../../core/utils/pref_utils.dart';
+import '../../theme/theme_helper.dart';
+import '../../widgets/app_bar/appbar_leading_image.dart';
+import '../../widgets/app_bar/appbar_subtitle_six.dart';
+import '../../widgets/app_bar/custom_app_bar.dart';
+import '../../widgets/custom_image_view.dart';
+
 class VideoCallScreen extends StatefulWidget {
   final String userId;
   final String meetingId;
+  final String userName;
 
   const VideoCallScreen({
     super.key,
     required this.userId,
     required this.meetingId,
+    required this.userName,
   });
 
   @override
@@ -23,6 +35,8 @@ class VideoCallScreen extends StatefulWidget {
 class _VideoCallScreenState extends State<VideoCallScreen> {
   final RTCVideoRenderer localRenderer = RTCVideoRenderer();
   final RTCVideoRenderer remoteRenderer = RTCVideoRenderer();
+  String? imagePath = PrefUtils().getProfileImage();
+  String? name = PrefUtils().getProfileName();
   late IO.Socket socket;
   late Peer peer;
   MediaConnection? mediaConnection;
@@ -38,6 +52,8 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   bool isFrontCamera = true;
   String? remoteUserId;
   bool isSharing = false;
+  Timer? callTimer;
+  int callDuration = 0;
 
   @override
   void initState() {
@@ -50,6 +66,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   void dispose() {
     localRenderer.dispose();
     remoteRenderer.dispose();
+    callTimer?.cancel();
     localStream?.dispose();
     peer.dispose();
     socket.disconnect();
@@ -62,9 +79,28 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     setState(() {});
   }
 
+  // Start call timer
+  void startCallTimer() {
+    callTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      setState(() {
+        callDuration++;
+      });
+    });
+  }
+
+  // Format duration as MM:SS
+  String formatDuration(int duration) {
+    final minutes = (duration ~/ 60).toString().padLeft(2, '0');
+    final seconds = (duration % 60).toString().padLeft(2, '0');
+    return "$minutes:$seconds";
+  }
+
   Future<void> _initializeSignaling() async {
     try {
       await _startLocalStream();
+      if (localStream == null) {
+        throw Exception('Failed to initialize local stream');
+      }
       _setupPeerConnection();
       _connectSocket();
     } catch (e) {
@@ -104,21 +140,27 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   }
 
   void _setupPeerConnection() {
-    final config = {
+    final Map<String, dynamic> config = {
       'iceServers': [
         {
-          'urls': [
-            'stun:stun.l.google.com:19302',
-            'stun:stun2.l.google.com:19302',
-            'stun:stun.stunprotocol.org:3478'
-          ]
+          'urls': 'stun:stun.l.google.com:19302',
         },
         {
-          'urls': 'turn:openrelay.metered.ca:80',
-          'username': 'openrelayproject',
-          'credential': 'openrelayproject',
-        },
-      ]
+          'urls': [
+            'turn:turn.experta.io:3478?transport=udp',
+            'turn:turn.experta.io:3478?transport=tcp',
+            'turns:turn.experta.io:5349?transport=tcp'
+          ],
+          'username': 'admin',
+          'credential': 'experta',
+          'credentialType': 'password'
+        }
+      ],
+      'sdpSemantics': 'unified-plan',
+      'iceTransportPolicy': 'all',
+      'bundlePolicy': 'max-bundle',
+      'rtcpMuxPolicy': 'require',
+      'iceCandidatePoolSize': 1
     };
 
     peer = Peer(
@@ -127,6 +169,14 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
         port: 443,
         secure: true,
         config: config,
+        debug: LogLevel.All,
+        // constraints: {
+        //   'mandatory': {
+        //     'OfferToReceiveAudio': true,
+        //     'OfferToReceiveVideo': true,
+        //   },
+        //   'optional': []
+        // },
       ),
     );
 
@@ -142,18 +192,17 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
     peer.on('disconnected').listen((_) {
       log('Peer connection disconnected.');
-      _handleReconnection(); // Handle reconnections when peer disconnects
+      _handleReconnection();
     });
 
     peer.on('error').listen((error) {
       log('Peer connection error: $error');
-      // Handle any peer connection errors
     });
   }
 
   void _handleReconnection() {
     log('Attempting to reconnect peer...');
-    if (peer.disconnected) {
+    if (peer != null && peer.disconnected) {
       peer.reconnect(); // Reconnect if the peer was disconnected
     }
   }
@@ -168,7 +217,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
     socket.on('connect', (_) {
       log('Connected to signaling server.');
-      if (peer.id != null) {
+      if (peer.id != null && widget.userId != null) {
         _joinMeeting();
       } else {
         log('Error: peerId or userId is null');
@@ -185,9 +234,29 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
       }
     });
 
-    socket.on('user-disconnected', (_) {
+    socket.on('user-disconnected', (data) {
       log('User disconnected');
-      _removeRemoteStream();
+      if (mounted) {
+        setState(() {
+          // Clear remote stream
+          remoteStream?.getTracks().forEach((track) => track.stop());
+          remoteStream?.dispose();
+          remoteStream = null;
+          remoteRenderer.srcObject = null;
+
+          // Stop timer
+          callTimer?.cancel();
+
+          // Close media connection
+          if (mediaConnection != null) {
+            mediaConnection!.close();
+            mediaConnection = null;
+          }
+        });
+
+        // Navigate back
+        Navigator.of(context).pop();
+      }
     });
 
     socket.on('error', (error) {
@@ -207,28 +276,104 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
   void _makeCall(String peerId) {
     log('Making a call to $peerId');
-    mediaConnection = peer.call(peerId, localStream!);
+    try {
+      if (localStream == null) {
+        throw Exception('Local stream is not initialized');
+      }
 
-    mediaConnection?.on<MediaStream>('stream').listen((remoteStream) {
-      log('Remote stream received.');
-      setState(() {
-        remoteRenderer.srcObject = remoteStream;
-        this.remoteStream = remoteStream;
+      // Create media connection with local stream
+      mediaConnection = peer.call(peerId, localStream!);
+
+      if (mediaConnection == null) {
+        throw Exception('Failed to create media connection');
+      }
+
+      // Handle remote stream
+      mediaConnection?.on<MediaStream>('stream').listen((stream) {
+        log('Remote stream received.');
+        if (!mounted) return;
+
+        setState(() {
+          remoteStream = stream;
+          remoteRenderer.srcObject = stream;
+          startCallTimer();
+        });
       });
-    });
+
+      // Handle errors
+      mediaConnection?.on('error').listen((error) {
+        log('Media connection error: $error');
+      });
+    } catch (e) {
+      log('Error making call: $e');
+      _showSnackBar('Failed to make call: $e');
+    }
   }
 
   void _answerCall(MediaConnection call) {
     log('Answering call...');
-    call.answer(localStream!);
+    try {
+      if (localStream == null) {
+        log('Error: Local stream is null');
+        throw Exception('Local stream is not initialized');
+      }
 
-    call.on<MediaStream>('stream').listen((remoteStream) {
-      log('Remote stream received.');
-      setState(() {
-        remoteRenderer.srcObject = remoteStream;
-        this.remoteStream = remoteStream;
+      log('Local stream tracks before answering:');
+      localStream!.getTracks().forEach((track) {
+        log('Track kind: ${track.kind}, enabled: ${track.enabled}, id: ${track.id}');
       });
-    });
+
+      call.answer(localStream!);
+      log('Call answered with local stream');
+
+      call.on<MediaStream>('stream').listen((stream) {
+        log('Remote stream received in answer');
+        log('Remote stream tracks: ${stream.getTracks().length}');
+        stream.getTracks().forEach((track) {
+          log('Remote track kind: ${track.kind}, enabled: ${track.enabled}, id: ${track.id}');
+        });
+
+        if (!mounted) {
+          log('Widget not mounted, returning');
+          return;
+        }
+
+        setState(() {
+          remoteStream = stream;
+          remoteRenderer.srcObject = stream;
+          startCallTimer();
+          log('Remote renderer updated with new stream');
+        });
+      });
+
+      // Add track event listener
+      call.on('track').listen((event) {
+        log('New track received');
+        log('Track kind: ${event.track.kind}, enabled: ${event.track.enabled}, id: ${event.track.id}');
+
+        if (event.track.kind == 'video') {
+          setState(() {
+            if (remoteStream != null) {
+              remoteStream!.addTrack(event.track);
+              remoteRenderer.srcObject = remoteStream;
+              log('New video track added to remote stream');
+            } else {
+              log('Remote stream is null, cannot add track');
+            }
+          });
+        }
+      });
+
+      call.on('error').listen((error) {
+        log('Call answer error: $error');
+      });
+
+      mediaConnection = call;
+      log('Media connection stored');
+    } catch (e) {
+      log('Error answering call: $e');
+      _showSnackBar('Failed to answer call: $e');
+    }
   }
 
   void toggleVideo() {
@@ -275,28 +420,43 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
   Future<void> startScreenShare() async {
     try {
-      // Start the foreground service
-      const platform =
-          MethodChannel('com.example.video_call_testing/screen_capture');
+      log('Starting screen share...');
+      const platform = MethodChannel('com.example.expert/screen_capture');
       await platform.invokeMethod('startService');
+      log('Foreground service started');
 
-      MediaStream screenStream;
-      if (WebRTC.platformIsWeb) {
-        screenStream = await navigator.mediaDevices.getDisplayMedia({
-          'video': true,
-        });
-      } else {
-        screenStream = await navigator.mediaDevices.getDisplayMedia({
-          'video': {'mediaSource': 'screen'},
-          'audio': true
-        });
-      }
+      MediaStream screenStream = await navigator.mediaDevices.getDisplayMedia({
+        'video': {'mediaSource': 'screen'},
+        'audio': true
+      });
 
-      if (localStream != null && mediaConnection != null) {
+      log('Screen stream obtained');
+      log('Screen stream tracks: ${screenStream.getTracks().length}');
+      screenStream.getTracks().forEach((track) {
+        log('Track kind: ${track.kind}, enabled: ${track.enabled}, id: ${track.id}');
+      });
+
+      if (mediaConnection != null) {
+        // Store old tracks to stop them later
+        final oldTracks = localStream?.getTracks();
+
+        // Add the new screen share stream to existing connection
+        log('Adding screen share stream to existing connection');
         mediaConnection!.addStream(screenStream);
-        localRenderer.srcObject = screenStream;
-      } else {
-        throw Exception("PeerConnection or LocalStream is not initialized.");
+
+        // Update local stream reference
+        localStream = screenStream;
+
+        // Update local renderer
+        setState(() {
+          log('Updating local renderer with screen stream');
+          localRenderer.srcObject = screenStream;
+        });
+
+        // Stop old tracks after successful switch
+        oldTracks?.forEach((track) => track.stop());
+
+        isSharing = true;
       }
     } catch (e) {
       _showSnackBar('Failed to start screen sharing: $e');
@@ -305,15 +465,36 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   }
 
   Future<void> stopScreenShare() async {
-    if (isSharing) {
-      // Stop sharing and switch back to the local video stream
-      localStream?.getVideoTracks().forEach((track) {
-        track.enabled = true; // Re-enable local video
-      });
-      isSharing = false;
-      setState(() {
-        // Update UI if necessary
-      });
+    try {
+      if (isSharing) {
+        log('Stopping screen share...');
+        // Store screen sharing tracks to stop them later
+        final screenTracks = localStream?.getTracks();
+
+        // Reinitialize camera stream
+        await _startLocalStream();
+
+        if (mediaConnection != null && localStream != null) {
+          log('Adding camera stream to existing connection');
+          mediaConnection!.addStream(localStream!);
+
+          // Update local renderer
+          setState(() {
+            log('Updating local renderer with camera stream');
+            localRenderer.srcObject = localStream;
+          });
+
+          // Stop screen sharing tracks after successful switch
+          screenTracks?.forEach((track) => track.stop());
+        }
+
+        setState(() {
+          isSharing = false;
+        });
+      }
+    } catch (e) {
+      _showSnackBar('Failed to stop screen sharing: $e');
+      log('Error stopping screen share: $e');
     }
   }
 
@@ -361,15 +542,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     }
 
     setState(() {
-      isRecording = !isRecording; // Toggle the recording state
-    });
-  }
-
-  void _removeRemoteStream() {
-    log('Removing remote stream...');
-    setState(() {
-      remoteRenderer.srcObject = null;
-      remoteStream?.dispose();
+      isRecording = !isRecording;
     });
   }
 
@@ -383,12 +556,69 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   }
 
   void endCall() {
-    socket.close();
-    peer.close();
-    localRenderer.dispose();
-    localStream!.dispose();
-    _removeRemoteStream();
-    Navigator.pop(context);
+    log('Ending call...');
+
+    // Stop timer
+    callTimer?.cancel();
+
+    // Clean up media streams
+    remoteStream?.getTracks().forEach((track) => track.stop());
+    localStream?.getTracks().forEach((track) => track.stop());
+
+    // Clean up connections
+    if (mediaConnection != null) {
+      mediaConnection!.close();
+      mediaConnection = null;
+    }
+
+    // Clean up renderers
+    if (mounted) {
+      setState(() {
+        remoteRenderer.srcObject = null;
+        localRenderer.srcObject = null;
+      });
+    }
+
+    // Dispose resources
+    remoteStream?.dispose();
+    localStream?.dispose();
+
+    // Disconnect socket and peer
+    socket.disconnect();
+    peer.dispose();
+
+    // Navigate back if context is still valid
+    if (mounted && Navigator.canPop(context)) {
+      Navigator.pop(context);
+    }
+  }
+
+  PreferredSizeWidget _buildAppBar() {
+    return CustomAppBar(
+      backgroundColor: Colors.transparent,
+      height: 40.h,
+      leadingWidth: 40.h,
+      leading: AppbarLeadingImage(
+        imagePath: ImageConstant.imgArrowLeftOnerrorcontainer,
+        margin: EdgeInsets.only(left: 16.h),
+        imgColor: Colors.white,
+        onTap: endCall,
+      ),
+      centerTitle: true,
+      title: AppbarSubtitleSix(
+        text: 'End-to-end Encrypted',
+        textColor: Colors.white,
+      ),
+      actions: [
+        Padding(
+          padding: const EdgeInsets.only(right: 16.0),
+          child: CustomImageView(
+            imagePath: ImageConstant.camera,
+            onTap: switchCam,
+          ),
+        ),
+      ],
+    );
   }
 
   @override
@@ -398,48 +628,67 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
     return Scaffold(
       backgroundColor: Colors.black,
-      appBar: AppBar(
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        title: const Text(
-          'Video Call',
-          style: TextStyle(color: Colors.white, fontSize: 14),
-        ),
-        actions: [
-          IconButton(
-              onPressed: switchCam,
-              icon: Image.asset(
-                height: 30,
-                "assets/images/camera.png",
-                color: Colors.white,
-              ))
-        ],
-      ),
+      appBar: _buildAppBar(),
       body: Column(
         children: [
           Expanded(
             child: Stack(
               children: [
-                Positioned.fill(
-                  child: remoteRenderer.srcObject == null
-                      ? const Center(
-                          child: Text("Waiting for remote user...",
-                              style: TextStyle(color: Colors.white)))
-                      : (remoteStream!.getVideoTracks().isEmpty)
-                          ? Center(
-                              child: CircleAvatar(
+                Container(
+                  height: MediaQuery.of(context).size.height * 0.78,
+                  width: double.infinity,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(20),
+                    color: appTheme.blackCall,
+                  ),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(20),
+                    child: remoteRenderer.srcObject == null
+                        ? Center(
+                            child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              CircleAvatar(
                                 radius: 50,
                                 backgroundColor: Colors.grey[700],
                                 child: Text(
-                                  remoteUserId != null ? remoteUserId![0] : '',
+                                  widget.userName[0] ?? '',
                                   style: const TextStyle(
                                     fontSize: 40,
                                     color: Colors.white,
                                   ),
                                 ),
                               ),
-                            )
-                          : RTCVideoView(remoteRenderer),
+                              const SizedBox(
+                                height: 10,
+                              ),
+                              Text("Waiting for ${widget.userName ?? ''}...",
+                                  style: const TextStyle(color: Colors.white)),
+                            ],
+                          ))
+                        : (remoteStream!.getVideoTracks().isEmpty)
+                            ? Center(
+                                child: CircleAvatar(
+                                  radius: 50,
+                                  backgroundColor: Colors.grey[700],
+                                  child: Text(
+                                    widget.userName != null
+                                        ? widget.userName![0]
+                                        : '',
+                                    style: const TextStyle(
+                                      fontSize: 40,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              )
+                            : RTCVideoView(
+                                remoteRenderer,
+                                objectFit: RTCVideoViewObjectFit
+                                    .RTCVideoViewObjectFitCover,
+                              ),
+                  ),
                 ),
                 Positioned(
                   top: 0.02 * screenHeight,
