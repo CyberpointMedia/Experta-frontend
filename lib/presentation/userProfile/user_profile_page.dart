@@ -155,7 +155,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                     SizedBox(
                       height: 8.v,
                     ),
-                  _buildColumnaboutme(),
+                    _buildColumnaboutme(),
                     SizedBox(
                       height: 8.v,
                     ),
@@ -237,10 +237,10 @@ class _UserProfilePageState extends State<UserProfilePage>
     });
   }
 
- Widget _buildColumnaboutme() {
-  List<Map<String, dynamic>>? socialMediaLinks =
-      controller.userData.value.data?.basicInfo?.getSocialMediaLinks();
-  final theme = Theme.of(context);
+  Widget _buildColumnaboutme() {
+    List<Map<String, dynamic>>? socialMediaLinks =
+        controller.userData.value.data?.basicInfo?.getSocialMediaLinks();
+    final theme = Theme.of(context);
 
   return Container(
     color: Colors.white, // Card-like appearance
@@ -328,8 +328,8 @@ class _UserProfilePageState extends State<UserProfilePage>
     );
   }
 
- Widget _buildColumnExperience() {
-  final theme = Theme.of(context);
+  Widget _buildColumnExperience() {
+    final theme = Theme.of(context);
 
   return Container(
     color: Colors.white,
@@ -363,71 +363,76 @@ class _UserProfilePageState extends State<UserProfilePage>
             children: List.generate(workExperience.length, (index) {
               var experience = workExperience[index];
 
-              // Format the dates
-              String formattedStartDate = experience.startDate != null
-                  ? DateFormat('MMM yyyy').format(experience.startDate!)
-                  : '';
-              String formattedEndDate = experience.endDate != null
-                  ? DateFormat('MMM yyyy').format(experience.endDate!)
-                  : 'Present';
+                // Format the dates
+                String formattedStartDate = experience.startDate != null
+                    ? DateFormat('MMM yyyy').format(experience.startDate!)
+                    : '';
+                String formattedEndDate = experience.endDate != null
+                    ? DateFormat('MMM yyyy').format(experience.endDate!)
+                    : 'Present';
 
-              // Calculate the total duration
-              String totalDuration = '';
-              if (experience.startDate != null && experience.endDate != null) {
-                Duration duration = experience.endDate!.difference(experience.startDate!);
-                int years = (duration.inDays / 365).floor();
-                int months = ((duration.inDays % 365) / 30).floor();
-                totalDuration = '$years years $months months';
-              }
+                // Calculate the total duration
+                String totalDuration = '';
+                if (experience.startDate != null &&
+                    experience.endDate != null) {
+                  Duration duration =
+                      experience.endDate!.difference(experience.startDate!);
+                  int years = (duration.inDays / 365).floor();
+                  int months = ((duration.inDays % 365) / 30).floor();
+                  totalDuration = '$years years $months months';
+                }
 
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    experience.jobTitle ?? '',
-                    style: theme.textTheme.titleMedium!.copyWith(
-                      fontSize: 16.fSize,
-                      fontWeight: FontWeight.w400,
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      experience.jobTitle ?? '',
+                      style: theme.textTheme.titleMedium!.copyWith(
+                        fontSize: 16.fSize,
+                        fontWeight: FontWeight.w400,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 9.v),
-                  Text(
-                    experience.companyName ?? '',
-                    style: theme.textTheme.bodyMedium?.copyWith(color: appTheme.gray900,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14.fSize,),
-                  ),
-                  SizedBox(height: 5.v),
-                  Text(
-                    "$formattedStartDate - $formattedEndDate · $totalDuration",
-                    style: theme.textTheme.bodyMedium!.copyWith(
-                      fontSize: 14.fSize,
-                      fontWeight: FontWeight.w500,
+                    SizedBox(height: 9.v),
+                    Text(
+                      experience.companyName ?? '',
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: appTheme.gray900,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14.fSize,
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 18.v),
-
-                  // Show the divider only if there is more than one experience
-                  if (workExperience.length > 1 && index < workExperience.length - 1)
-                    Divider(
-                      height: 1.v,
-                      thickness: 1,
-                      color: const Color(0XFFE9E9E9),
+                    SizedBox(height: 5.v),
+                    Text(
+                      "$formattedStartDate - $formattedEndDate · $totalDuration",
+                      style: theme.textTheme.bodyMedium!.copyWith(
+                        fontSize: 14.fSize,
+                        fontWeight: FontWeight.w500,
+                      ),
                     ),
-                ],
-              );
-            }),
-          );
-        }),
-      ],
-    ),
-  );
-}
+                    SizedBox(height: 18.v),
 
- Widget _buildChipviewvisual(BuildContext context) {
-  final theme = Theme.of(context);
-  final data = controller.userData.value.data?.expertise;
-  final expertiseList = data?.expertise ?? [];
+                    // Show the divider only if there is more than one experience
+                    if (workExperience.length > 1 &&
+                        index < workExperience.length - 1)
+                      Divider(
+                        height: 1.v,
+                        thickness: 1,
+                        color: const Color(0XFFE9E9E9),
+                      ),
+                  ],
+                );
+              }),
+            );
+          }),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildChipviewvisual(BuildContext context) {
+    final theme = Theme.of(context);
+    final data = controller.userData.value.data?.expertise;
+    final expertiseList = data?.expertise ?? [];
 
   return Container(
     color: Colors.white, // Card-like appearance
@@ -481,8 +486,8 @@ class _UserProfilePageState extends State<UserProfilePage>
 }
 
 
- Widget _buildColumnEducation() {
-  final theme = Theme.of(context);
+  Widget _buildColumnEducation() {
+    final theme = Theme.of(context);
 
   return Container(
     color: Colors.white,
@@ -516,64 +521,64 @@ class _UserProfilePageState extends State<UserProfilePage>
             children: List.generate(educationList.length, (index) {
               var education = educationList[index];
 
-              // Format the dates
-              String formattedStartDate = education.startDate != null
-                  ? DateFormat('MMM yyyy').format(education.startDate!)
-                  : '';
-              String formattedEndDate = education.endDate != null
-                  ? DateFormat('MMM yyyy').format(education.endDate!)
-                  : 'Present';
+                // Format the dates
+                String formattedStartDate = education.startDate != null
+                    ? DateFormat('MMM yyyy').format(education.startDate!)
+                    : '';
+                String formattedEndDate = education.endDate != null
+                    ? DateFormat('MMM yyyy').format(education.endDate!)
+                    : 'Present';
 
-              // Calculate the total duration
-              String totalDuration = '';
-              if (education.startDate != null && education.endDate != null) {
-                Duration duration =
-                    education.endDate!.difference(education.startDate!);
-                int years = (duration.inDays / 365).floor();
-                int months = ((duration.inDays % 365) / 30).floor();
-                totalDuration = '$years years $months months';
-              }
+                // Calculate the total duration
+                String totalDuration = '';
+                if (education.startDate != null && education.endDate != null) {
+                  Duration duration =
+                      education.endDate!.difference(education.startDate!);
+                  int years = (duration.inDays / 365).floor();
+                  int months = ((duration.inDays % 365) / 30).floor();
+                  totalDuration = '$years years $months months';
+                }
 
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    education.degree ?? '',
-                    style: theme.textTheme.titleMedium!,
-                  ),
-                  SizedBox(height: 9.v),
-                  Text(
-                    education.schoolCollege ?? '',
-                    style: theme.textTheme.bodyMedium
-                        ?.copyWith(color: appTheme.gray900),
-                  ),
-                  SizedBox(height: 4.v),
-                  Text(
-                    "$formattedStartDate - $formattedEndDate · $totalDuration",
-                    style: theme.textTheme.bodyMedium!.copyWith(
-                      fontSize: 14.fSize,
-                      fontWeight: FontWeight.w500,
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      education.degree ?? '',
+                      style: theme.textTheme.titleMedium!,
                     ),
-                  ),
-                  SizedBox(height: 18.v),
-
-                  // Show the divider only if there is more than one education item
-                  if (educationList.length > 1 &&
-                      index < educationList.length - 1)
-                    Divider(
-                      height: 1.v,
-                      thickness: 1,
-                      color: const Color(0XFFE9E9E9),
+                    SizedBox(height: 9.v),
+                    Text(
+                      education.schoolCollege ?? '',
+                      style: theme.textTheme.bodyMedium
+                          ?.copyWith(color: appTheme.gray900),
                     ),
-                ],
-              );
-            }),
-          );
-        }),
-      ],
-    ),
-  );
-}
+                    SizedBox(height: 4.v),
+                    Text(
+                      "$formattedStartDate - $formattedEndDate · $totalDuration",
+                      style: theme.textTheme.bodyMedium!.copyWith(
+                        fontSize: 14.fSize,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    SizedBox(height: 18.v),
+
+                    // Show the divider only if there is more than one education item
+                    if (educationList.length > 1 &&
+                        index < educationList.length - 1)
+                      Divider(
+                        height: 1.v,
+                        thickness: 1,
+                        color: const Color(0XFFE9E9E9),
+                      ),
+                  ],
+                );
+              }),
+            );
+          }),
+        ],
+      ),
+    );
+  }
 
   Widget _buildColumnAchievements() {
     return Container(
@@ -608,8 +613,8 @@ class _UserProfilePageState extends State<UserProfilePage>
                             SizedBox(
                               height: 24.v,
                               width: 25.adaptSize,
-                              child: CustomImageView(imagePath: 
-                                  "assets/images/img_link_1.svg"),
+                              child: CustomImageView(
+                                  imagePath: "assets/images/img_link_1.svg"),
                             ),
                             SizedBox(width: 10.adaptSize),
                             Expanded(
@@ -644,10 +649,10 @@ class _UserProfilePageState extends State<UserProfilePage>
     );
   }
 
- Widget _buildColumnInterests() {
-  final theme = Theme.of(context);
-  final interest = controller.userData.value.data?.interest;
-  final interestList = interest?.interest ?? [];
+  Widget _buildColumnInterests() {
+    final theme = Theme.of(context);
+    final interest = controller.userData.value.data?.interest;
+    final interestList = interest?.interest ?? [];
 
   return Container(
     color: Colors.white,
@@ -969,7 +974,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                     })!
                         .then((value) {
                       Get.find<ProfileController>().fetchUserData(
-                          controller.address.toString(),  
+                          controller.address.toString(),
                           controller.address.toString());
                     });
                   },
@@ -1146,6 +1151,8 @@ class _UserProfilePageState extends State<UserProfilePage>
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.3,
                   child: Text(
+                    
+
                     "Reg no: ${controller.userData.value.data?.industryOccupation?.registrationNumber ?? " N/A"}",
                     textAlign: TextAlign.left,
                     style: theme.textTheme.bodyMedium!.copyWith(

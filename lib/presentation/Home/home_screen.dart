@@ -751,9 +751,10 @@ class UserProfileItemWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         _buildActionButton(
-                          CustomImageView(imagePath: ImageConstant.videocam),
+                          ImageConstant.videocam,
                           "${user.pricing.videoCallPrice}/min",
-                          Colors.red,
+                          appTheme.red500,
+                          (){}
                         ),
                         Container(
                           color: appTheme.gray300,
@@ -761,9 +762,10 @@ class UserProfileItemWidget extends StatelessWidget {
                           height: 50.adaptSize,
                         ),
                         _buildActionButton(
-                          CustomImageView(imagePath: ImageConstant.call),
+                          ImageConstant.call,
                           "${user.pricing.audioCallPrice}/min",
-                          Colors.green,
+                          appTheme.green100,
+                          (){}
                         ),
                         Container(
                           color: appTheme.gray300,
@@ -771,9 +773,10 @@ class UserProfileItemWidget extends StatelessWidget {
                           height: 50.adaptSize,
                         ),
                         _buildActionButton(
-                          CustomImageView(imagePath: ImageConstant.msg),
+                          ImageConstant.msg,
                           "${user.pricing.messagePrice}/min",
                           appTheme.yellow900,
+                          (){}
                         ),
                       ],
                     ),
@@ -836,17 +839,23 @@ Widget _buildChip(String label) {
   );
 } 
 
-Widget _buildActionButton(Widget iconWidget, String price, Color color) {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      iconWidget, // Use the widget directly
-       SizedBox(height: 8.fSize),
-      Text(
-        price,
-        style: TextStyle(color: color),
+Widget _buildActionButton(
+      String img, String label, Color color, VoidCallback? onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Row(
+        children: [
+          CustomImageView(imagePath: img),
+          const SizedBox(width: 4),
+          Text(
+            label,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
       ),
-    ],
-  );
-}
+    );
+  }
+
 

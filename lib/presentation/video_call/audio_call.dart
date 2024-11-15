@@ -46,7 +46,7 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
   bool isCameraSwitched = false;
   bool showVideo = true;
   bool isMuted = false;
-  bool isSpeakerOn = false;
+  bool isSpeakerOn = true;
   bool isRecording = false;
   bool isFrontCamera = true;
   String? remoteUserId;
