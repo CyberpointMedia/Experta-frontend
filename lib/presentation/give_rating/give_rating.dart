@@ -1,14 +1,88 @@
+import 'package:experta/core/app_export.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class RatingPage extends StatefulWidget {
-  const RatingPage({super.key});
+  final String bookingId;
+  final String userName;
+  final String profilePic;
+  const RatingPage(
+      {super.key,
+      required this.bookingId,
+      required this.userName,
+      required this.profilePic});
 
   @override
-  _RatingPageState createState() => _RatingPageState();
+  State<RatingPage> createState() => _RatingPageState();
 }
 
 class _RatingPageState extends State<RatingPage> {
-  double _textFieldHeight = 150.0; // Initial height of the text field
+  double _textFieldHeight = 150.0;
+  int _selectedRating = 0; // State variable for selected rating
+  final TextEditingController _reviewController = TextEditingController();
+
+  Future<void> _submitRating() async {
+    final url = Uri.parse('http://3.110.252.174:8080/api/video-rating');
+    final body = jsonEncode({
+      "bookingId": "6728c79404d87083dbd5b371",
+      "rating": _selectedRating,
+      "review": _reviewController.text,
+    });
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {'Content-Type': 'application/json'},
+        body: body,
+      );
+
+      final responseData = jsonDecode(response.body);
+      if (responseData['status'] == 'failed') {
+        _showErrorDialog(responseData['error']['errorMessage']);
+      } else {
+        _showSuccessDialog();
+      }
+    } catch (e) {
+      _showErrorDialog('An error occurred: $e');
+    }
+  }
+
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Error'),
+        content: Text(message),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Okay'),
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showSuccessDialog() {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: const Text('Success'),
+        content: const Text('Rating submitted successfully!'),
+        actions: <Widget>[
+          TextButton(
+            child: const Text('Okay'),
+            onPressed: () {
+              Navigator.of(ctx).pop();
+            },
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,27 +100,36 @@ class _RatingPageState extends State<RatingPage> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            const CircleAvatar(
-              radius: 40,
-              backgroundImage: AssetImage('assets/anjali_arora.png'), // Replace with your image asset
+            CustomImageView(
+              height: 40,
+              width: 40,
+              radius: BorderRadius.circular(20),
+              imagePath: widget.profilePic,
             ),
             const SizedBox(height: 10),
             const Text(
               'How was your experience with',
               style: TextStyle(color: Colors.grey),
             ),
-            const Text(
-              'Anjali Arora',
-              style: TextStyle(fontWeight: FontWeight.bold),
+            Text(
+              widget.userName,
+              style: const TextStyle(fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: List.generate(5, (index) {
-                return Icon(
-                  index < 4 ? Icons.star : Icons.star_border,
-                  color: Colors.yellow,
-                  size: 30,
+                return IconButton(
+                  icon: Icon(
+                    index < _selectedRating ? Icons.star : Icons.star_border,
+                    color: Colors.yellow,
+                    size: 30,
+                  ),
+                  onPressed: () {
+                    setState(() {
+                      _selectedRating = index + 1;
+                    });
+                  },
                 );
               }),
             ),
@@ -57,6 +140,7 @@ class _RatingPageState extends State<RatingPage> {
                   SizedBox(
                     height: _textFieldHeight,
                     child: TextField(
+                      controller: _reviewController,
                       maxLines: null,
                       expands: true,
                       decoration: InputDecoration(
@@ -99,9 +183,7 @@ class _RatingPageState extends State<RatingPage> {
                     borderRadius: BorderRadius.circular(30),
                   ),
                 ),
-                onPressed: () {
-                  // Submit rating action
-                },
+                onPressed: _submitRating,
                 child: const Text(
                   'Submit Rating',
                   style: TextStyle(color: Colors.black),
@@ -113,10 +195,4 @@ class _RatingPageState extends State<RatingPage> {
       ),
     );
   }
-}
-
-void main() {
-  runApp(const MaterialApp(
-    home: RatingPage(),
-  ));
 }

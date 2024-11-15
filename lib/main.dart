@@ -2,7 +2,6 @@ import 'package:experta/firebase_options.dart';
 import 'package:experta/notification_manager.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/services.dart';
 import 'core/app_export.dart';
 

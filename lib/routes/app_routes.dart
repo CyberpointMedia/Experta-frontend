@@ -1,6 +1,8 @@
 import 'package:experta/presentation/Aadhaar_Details/aadhar_details.dart';
 import 'package:experta/presentation/Aadhaar_Details/binding/aadhar_details_binding.dart';
 import 'package:experta/presentation/Basic_Info/basic_info.dart';
+import 'package:experta/presentation/Refferal/bindings/refferal_screen_bindings.dart';
+import 'package:experta/presentation/Refferal/refferal_screen.dart';
 import 'package:experta/presentation/about_us/about_us.dart';
 import 'package:experta/presentation/about_us/binding/about_us_binding.dart';
 import 'package:experta/presentation/account_setting/account_setting.dart';
@@ -236,25 +238,27 @@ class AppRoutes {
 
 // ignore: constant_identifier_names
 // <<<<<<< HEAD
-static const String Bookappointment= "/book_appointment";
+  static const String Bookappointment = "/book_appointment";
 
-static const String sUcessfuly= "/sucessfuly";
+  static const String sUcessfuly = "/sucessfuly";
 
-static const String genderchange= "/change_gender";
+  static const String genderchange = "/change_gender";
 
-static const String topup= "/top_up";
+  static const String topup = "/top_up";
 
-static const String widraw= "/withdraw";
+  static const String widraw = "/withdraw";
 
-static const String editexperties= "/edit_experties";
+  static const String editexperties = "/edit_experties";
 
-static const String Notificationseting= "/notification_setting";
+  static const String Notificationseting = "/notification_setting";
 
-static const String blocksearch= "/search_block";
+  static const String blocksearch = "/search_block";
 
-static const String qr = "/share_profile";
+  static const String qr = "/share_profile";
 
   static const String lottie = "/";
+
+  static const String reffer = "/Refferal";
 
   static List<GetPage> pages = [
     GetPage(
@@ -608,9 +612,7 @@ static const String qr = "/share_profile";
         bindings: [
           ProfileBinding(),
         ]),
-    GetPage(name: rating, page: () => const RatingPage(), bindings: [
-      RatingPageBinding(),
-    ]),
+
     GetPage(
         name: searchScreen,
         page: () => const SearchScreen(),
@@ -673,49 +675,51 @@ static const String qr = "/share_profile";
         page: () => const ChangeGender(),
         customTransition: CustomPageTransition(),
         bindings: [
-          ChangeGenderBinding(),    
-          
+          ChangeGenderBinding(),
         ]),
-         GetPage(
+    GetPage(
         name: topup,
-        page: () =>   const TopUpPage(),
+        page: () => const TopUpPage(),
         customTransition: CustomPageTransition(),
         bindings: [
           TopUpBinding(),
-          
         ]),
-        GetPage(
+    GetPage(
         name: widraw,
-        page: () =>   const WithdrawCreditsPage(),
+        page: () => const WithdrawCreditsPage(),
         customTransition: CustomPageTransition(),
         bindings: [
           WithdrawBinding(),
-          
         ]),
 
-        GetPage(
+    GetPage(
         name: editexperties,
-        page: () =>   const EditExpertisePage(),
+        page: () => const EditExpertisePage(),
         customTransition: CustomPageTransition(),
         bindings: [
           EditExpertiesBinding(),
-          
         ]),
-        GetPage(
+    GetPage(
         name: Notificationseting,
-        page: () =>   const NotificationsPage(),
+        page: () => const NotificationsPage(),
         customTransition: CustomPageTransition(),
         bindings: [
           NotificatinSettingBinding(),
-          
         ]),
-        GetPage(
+    GetPage(
         name: blocksearch,
-        page: () =>   ProfileBlockPage(),
+        page: () => ProfileBlockPage(),
         customTransition: CustomPageTransition(),
         bindings: [
           BlockSearchBinding(),
-          
         ]),
+
+    GetPage(
+      name: reffer,
+      page: () => ReferAndEarnPage(),
+      bindings: [
+        RefferalScreenBindings(),
+      ],
+    ),
   ];
 }

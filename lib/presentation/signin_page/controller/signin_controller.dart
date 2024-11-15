@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-import 'package:experta/data/apiClient/api_service.dart';
 import 'package:experta/data/models/request/login_request_model.dart';
 import 'package:experta/data/models/request/register_request_model.dart';
 import 'package:experta/data/models/response/login_response_model.dart';
@@ -9,7 +8,6 @@ import 'package:experta/widgets/custom_toast_message.dart';
 import '../../../core/app_export.dart';
 import 'package:country_pickers/country.dart';
 import 'package:country_pickers/utils/utils.dart';
-import 'package:flutter/material.dart';
 
 import '../../../core/utils/validation_functions.dart';
 
@@ -20,12 +18,14 @@ class SigninController extends GetxController {
   var passwordController = TextEditingController();
   var isEmailValid = false.obs;
   var isPasswordValid = false.obs;
+  var isTextValid = false.obs;
   var otpController = TextEditingController();
   var isShowPassword = false.obs;
   final FocusNode emailFocusNode = FocusNode();
   final FocusNode nameFocusNode = FocusNode();
   final FocusNode passwordFocusNode = FocusNode();
   final ApiService _apiService = ApiService();
+  PrefUtils prefUtils = PrefUtils();
   var isLoading = false.obs;
   var errorMessage = ''.obs;
   var isPhoneNumberValid =
@@ -35,13 +35,14 @@ class SigninController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+    nameController.addListener(_validateName);
     emailController.addListener(_validateEmail);
     passwordController.addListener(_validatePassword);
     phoneNumberController.addListener(_validatePhoneNumber);
   }
 
   void _validatePhoneNumber() {
-    if (phoneNumberController.text.length >= 10) {
+    if (phoneNumberController.text.length == 10) {
       isPhoneNumberValid.value = true;
     } else {
       isPhoneNumberValid.value = false;
@@ -52,12 +53,17 @@ class SigninController extends GetxController {
     isEmailValid.value = isValidEmail(emailController.text, isRequired: true);
   }
 
+  void _validateName() {
+    isTextValid.value = isText(nameController.text, isRequired: true);
+  }
+
   void _validatePassword() {
     isPasswordValid.value =
         isValidPassword(passwordController.text, isRequired: true);
   }
 
   void loginUser(context) async {
+    isLoading(true); // Start loading
     LoginRequestModel requestModel = LoginRequestModel(
       phoneNo: phoneNumberController.text,
     );
@@ -70,6 +76,7 @@ class SigninController extends GetxController {
           message: 'Otp Sent Sucessfully',
           isSuccess: true,
         );
+        await prefUtils.setEmail("${response.data.email}");
         log('hi the otp is ${response.data.otp}');
         var otp = response.data.otp;
         Get.toNamed(AppRoutes.verifynumberScreen,
@@ -79,30 +86,11 @@ class SigninController extends GetxController {
       }
     } catch (e) {
       print("Exception occurred: $e");
+    } finally {
+      isLoading(false); // Stop loading
     }
   }
 
-  // void registerUser() async {
-  //   RegisterRequestModel requestModel = RegisterRequestModel(
-  //     email: emailController.text,
-  //     firstName: nameController.text,
-  //     lastName: passwordController.text,
-  //     phoneNo: phoneNumberController.text,
-  //   );
-
-  //   try {
-  //     RegisterResponseModel? response =
-  //         await _apiService.registerUser(requestModel);
-
-  //     if (response != null && response.status == "success") {
-  //       Get.toNamed(AppRoutes.verifynumberScreen);
-  //     } else {
-  //       print("Registration failed");
-  //     }
-  //   } catch (e) {
-  //     print("Exception occurred: $e");
-  //   }
-  // }
   void registerUser(context) async {
     isLoading(true);
     try {
@@ -117,18 +105,17 @@ class SigninController extends GetxController {
       log('Response received: ${response.toString()}');
 
       if (response is RegisterResponseSuccess) {
-        
         log('Registration successful: ${response.data.toString()}');
         CustomToast().showToast(
           context: context,
           message: 'Otp Sent Sucessfully',
           isSuccess: true,
         );
-         log('hi the otp is ${response.data.otp}');
+        log('hi the otp is ${response.data.otp}');
         var otp = response.data.otp;
         Get.toNamed(
           AppRoutes.verifynumberScreen,
-           arguments: [phoneNumberController, otp],
+          arguments: [phoneNumberController, otp],
         );
       } else if (response is RegisterResponseError) {
         log("Registration failed: ${response.error.errorMessage}");
