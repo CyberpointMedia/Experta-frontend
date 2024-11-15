@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:developer';
 import 'package:experta/core/utils/size_utils.dart';
+import 'package:experta/presentation/give_rating/give_rating.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
@@ -589,7 +590,9 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
     // Navigate back if context is still valid
     if (mounted && Navigator.canPop(context)) {
-      Navigator.pop(context);
+      Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (_) => const RatingPage()));
+      // Navigator.pop(context);
     }
   }
 
