@@ -155,7 +155,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                     SizedBox(
                       height: 8.v,
                     ),
-                  _buildColumnaboutme(),
+                    _buildColumnaboutme(),
                     SizedBox(
                       height: 8.v,
                     ),
@@ -237,40 +237,39 @@ class _UserProfilePageState extends State<UserProfilePage>
     });
   }
 
- Widget _buildColumnaboutme() {
-  List<Map<String, dynamic>>? socialMediaLinks =
-      controller.userData.value.data?.basicInfo?.getSocialMediaLinks();
-  final theme = Theme.of(context);
+  Widget _buildColumnaboutme() {
+    List<Map<String, dynamic>>? socialMediaLinks =
+        controller.userData.value.data?.basicInfo?.getSocialMediaLinks();
+    final theme = Theme.of(context);
 
-  return Container(
-    color: Colors.white, // Card-like appearance
-    padding: const EdgeInsets.all(10), // Padding inside the card for spacing
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        // Row for "About me" title and edit icon
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _buildRowaboutme(aboutMeText: "About me"),
-            GestureDetector(
-              onTap: () {
-                // Add your edit functionality here
-              },
-              child: CustomImageView(
-                height: 19,
-                width: 19,
-                                imagePath: "assets/images/Frame.svg",
-                              )
-            ),
-          ],
-        ),
-        SizedBox(height: 18.v),
-        SizedBox(
-          width: 331.adaptSize,
-          child: Obx(() {
-           return ReadMoreText(
+    return Container(
+      color: Colors.white, // Card-like appearance
+      padding: const EdgeInsets.all(10), // Padding inside the card for spacing
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // Row for "About me" title and edit icon
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _buildRowaboutme(aboutMeText: "About me"),
+              GestureDetector(
+                  onTap: () {
+                    // Add your edit functionality here
+                  },
+                  child: CustomImageView(
+                    height: 19,
+                    width: 19,
+                    imagePath: "assets/images/Frame.svg",
+                  )),
+            ],
+          ),
+          SizedBox(height: 18.v),
+          SizedBox(
+            width: 331.adaptSize,
+            child: Obx(() {
+              return ReadMoreText(
                 controller.userData.value.data?.basicInfo?.bio ?? '',
                 trimLines: 3,
                 colorClickableText: appTheme.readmore,
@@ -328,252 +327,256 @@ class _UserProfilePageState extends State<UserProfilePage>
     );
   }
 
- Widget _buildColumnExperience() {
-  final theme = Theme.of(context);
+  Widget _buildColumnExperience() {
+    final theme = Theme.of(context);
 
-  return Container(
-    color: Colors.white,
-    padding: const EdgeInsets.all(10),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Row for the Experience title and edit icon
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 2),
-              child: _buildRoweducation(educationText: "Experience"),
-            ),
-            GestureDetector(
-              onTap: () {
-                // Add your edit functionality here
-              },
-              child: CustomImageView(
-                                imagePath: "assets/images/Frame.svg",
-                              )
-            ),
-          ],
-        ),
-        SizedBox(height: 19.v),
-        Obx(() {
-          var workExperience = controller.userData.value.data?.workExperience ?? [];
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: List.generate(workExperience.length, (index) {
-              var experience = workExperience[index];
-
-              // Format the dates
-              String formattedStartDate = experience.startDate != null
-                  ? DateFormat('MMM yyyy').format(experience.startDate!)
-                  : '';
-              String formattedEndDate = experience.endDate != null
-                  ? DateFormat('MMM yyyy').format(experience.endDate!)
-                  : 'Present';
-
-              // Calculate the total duration
-              String totalDuration = '';
-              if (experience.startDate != null && experience.endDate != null) {
-                Duration duration = experience.endDate!.difference(experience.startDate!);
-                int years = (duration.inDays / 365).floor();
-                int months = ((duration.inDays % 365) / 30).floor();
-                totalDuration = '$years years $months months';
-              }
-
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    experience.jobTitle ?? '',
-                    style: theme.textTheme.titleMedium!.copyWith(
-                      fontSize: 16.fSize,
-                      fontWeight: FontWeight.w400,
-                    ),
-                  ),
-                  SizedBox(height: 9.v),
-                  Text(
-                    experience.companyName ?? '',
-                    style: theme.textTheme.bodyMedium?.copyWith(color: appTheme.gray900,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 14.fSize,),
-                  ),
-                  SizedBox(height: 5.v),
-                  Text(
-                    "$formattedStartDate - $formattedEndDate · $totalDuration",
-                    style: theme.textTheme.bodyMedium!.copyWith(
-                      fontSize: 14.fSize,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  SizedBox(height: 18.v),
-
-                  // Show the divider only if there is more than one experience
-                  if (workExperience.length > 1 && index < workExperience.length - 1)
-                    Divider(
-                      height: 1.v,
-                      thickness: 1,
-                      color: const Color(0XFFE9E9E9),
-                    ),
-                ],
-              );
-            }),
-          );
-        }),
-      ],
-    ),
-  );
-}
-
- Widget _buildChipviewvisual(BuildContext context) {
-  final theme = Theme.of(context);
-  final data = controller.userData.value.data?.expertise;
-  final expertiseList = data?.expertise ?? [];
-
-  return Container(
-    color: Colors.white, // Card-like appearance
-    padding:  EdgeInsets.all(10), // Padding around the card content
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Row for "Expertise" label and edit icon
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _buildRowaboutme(aboutMeText: "Expertise"),
-            GestureDetector(
-              onTap: () {
-                // Add your edit function here
-              },
-             child: CustomImageView(
-                                imagePath: "assets/images/Frame.svg",
-                              )
-            ),
-          ],
-        ),
-        const SizedBox(height: 8.0), // Added space for better visual separation
-        Padding(
-          padding: const EdgeInsets.all(8.0), // Padding around the expertise chips
-          child: Wrap(
-            spacing: 4.0,
-            runSpacing: 0.0,
-            children: expertiseList.map((expertise) {
-              return Chip(
-                label: Text(
-                  expertise.name.toString(),
-                  style: theme.textTheme.titleSmall!.copyWith(
-                    color: Colors.black,
-                  ),
-                ),
-                backgroundColor: appTheme.gray200,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                  side: BorderSide(
-                    color: appTheme.gray300,
-                  ),
-                ),
-              );
-            }).toList(),
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Row for the Experience title and edit icon
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 2),
+                child: _buildRoweducation(educationText: "Experience"),
+              ),
+              GestureDetector(
+                  onTap: () {
+                    // Add your edit functionality here
+                  },
+                  child: CustomImageView(
+                    imagePath: "assets/images/Frame.svg",
+                  )),
+            ],
           ),
-        ),
-      ],
-    ),
-  );
-}
+          SizedBox(height: 19.v),
+          Obx(() {
+            var workExperience =
+                controller.userData.value.data?.workExperience ?? [];
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: List.generate(workExperience.length, (index) {
+                var experience = workExperience[index];
 
+                // Format the dates
+                String formattedStartDate = experience.startDate != null
+                    ? DateFormat('MMM yyyy').format(experience.startDate!)
+                    : '';
+                String formattedEndDate = experience.endDate != null
+                    ? DateFormat('MMM yyyy').format(experience.endDate!)
+                    : 'Present';
 
- Widget _buildColumnEducation() {
-  final theme = Theme.of(context);
+                // Calculate the total duration
+                String totalDuration = '';
+                if (experience.startDate != null &&
+                    experience.endDate != null) {
+                  Duration duration =
+                      experience.endDate!.difference(experience.startDate!);
+                  int years = (duration.inDays / 365).floor();
+                  int months = ((duration.inDays % 365) / 30).floor();
+                  totalDuration = '$years years $months months';
+                }
 
-  return Container(
-    color: Colors.white,
-    padding: const EdgeInsets.all(10),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Row for the Education title and edit icon
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 2),
-              child: _buildRoweducation(educationText: "Education"),
-            ),
-            GestureDetector(
-              onTap: () {
-                // Add your edit functionality here
-              },
-              child: CustomImageView(
-                                imagePath: "assets/images/Frame.svg",
-                              )
-            ),
-          ],
-        ),
-        SizedBox(height: 19.v),
-        Obx(() {
-          var educationList = controller.userData.value.data?.education ?? [];
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: List.generate(educationList.length, (index) {
-              var education = educationList[index];
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      experience.jobTitle ?? '',
+                      style: theme.textTheme.titleMedium!.copyWith(
+                        fontSize: 16.fSize,
+                        fontWeight: FontWeight.w400,
+                      ),
+                    ),
+                    SizedBox(height: 9.v),
+                    Text(
+                      experience.companyName ?? '',
+                      style: theme.textTheme.bodyMedium?.copyWith(
+                        color: appTheme.gray900,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 14.fSize,
+                      ),
+                    ),
+                    SizedBox(height: 5.v),
+                    Text(
+                      "$formattedStartDate - $formattedEndDate · $totalDuration",
+                      style: theme.textTheme.bodyMedium!.copyWith(
+                        fontSize: 14.fSize,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    SizedBox(height: 18.v),
 
-              // Format the dates
-              String formattedStartDate = education.startDate != null
-                  ? DateFormat('MMM yyyy').format(education.startDate!)
-                  : '';
-              String formattedEndDate = education.endDate != null
-                  ? DateFormat('MMM yyyy').format(education.endDate!)
-                  : 'Present';
+                    // Show the divider only if there is more than one experience
+                    if (workExperience.length > 1 &&
+                        index < workExperience.length - 1)
+                      Divider(
+                        height: 1.v,
+                        thickness: 1,
+                        color: const Color(0XFFE9E9E9),
+                      ),
+                  ],
+                );
+              }),
+            );
+          }),
+        ],
+      ),
+    );
+  }
 
-              // Calculate the total duration
-              String totalDuration = '';
-              if (education.startDate != null && education.endDate != null) {
-                Duration duration =
-                    education.endDate!.difference(education.startDate!);
-                int years = (duration.inDays / 365).floor();
-                int months = ((duration.inDays % 365) / 30).floor();
-                totalDuration = '$years years $months months';
-              }
+  Widget _buildChipviewvisual(BuildContext context) {
+    final theme = Theme.of(context);
+    final data = controller.userData.value.data?.expertise;
+    final expertiseList = data?.expertise ?? [];
 
-              return Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    education.degree ?? '',
-                    style: theme.textTheme.titleMedium!,
-                  ),
-                  SizedBox(height: 9.v),
-                  Text(
-                    education.schoolCollege ?? '',
-                    style: theme.textTheme.bodyMedium
-                        ?.copyWith(color: appTheme.gray900),
-                  ),
-                  SizedBox(height: 4.v),
-                  Text(
-                    "$formattedStartDate - $formattedEndDate · $totalDuration",
-                    style: theme.textTheme.bodyMedium!.copyWith(
-                      fontSize: 14.fSize,
-                      fontWeight: FontWeight.w500,
+    return Container(
+      color: Colors.white, // Card-like appearance
+      padding: EdgeInsets.all(10), // Padding around the card content
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Row for "Expertise" label and edit icon
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _buildRowaboutme(aboutMeText: "Expertise"),
+              GestureDetector(
+                  onTap: () {
+                    // Add your edit function here
+                  },
+                  child: CustomImageView(
+                    imagePath: "assets/images/Frame.svg",
+                  )),
+            ],
+          ),
+          const SizedBox(
+              height: 8.0), // Added space for better visual separation
+          Padding(
+            padding:
+                const EdgeInsets.all(8.0), // Padding around the expertise chips
+            child: Wrap(
+              spacing: 4.0,
+              runSpacing: 0.0,
+              children: expertiseList.map((expertise) {
+                return Chip(
+                  label: Text(
+                    expertise.name.toString(),
+                    style: theme.textTheme.titleSmall!.copyWith(
+                      color: Colors.black,
                     ),
                   ),
-                  SizedBox(height: 18.v),
-
-                  // Show the divider only if there is more than one education item
-                  if (educationList.length > 1 &&
-                      index < educationList.length - 1)
-                    Divider(
-                      height: 1.v,
-                      thickness: 1,
-                      color: const Color(0XFFE9E9E9),
+                  backgroundColor: appTheme.gray200,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                    side: BorderSide(
+                      color: appTheme.gray300,
                     ),
-                ],
-              );
-            }),
-          );
-        }),
-      ],
-    ),
-  );
-}
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildColumnEducation() {
+    final theme = Theme.of(context);
+
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Row for the Education title and edit icon
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 2),
+                child: _buildRoweducation(educationText: "Education"),
+              ),
+              GestureDetector(
+                  onTap: () {
+                    // Add your edit functionality here
+                  },
+                  child: CustomImageView(
+                    imagePath: "assets/images/Frame.svg",
+                  )),
+            ],
+          ),
+          SizedBox(height: 19.v),
+          Obx(() {
+            var educationList = controller.userData.value.data?.education ?? [];
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: List.generate(educationList.length, (index) {
+                var education = educationList[index];
+
+                // Format the dates
+                String formattedStartDate = education.startDate != null
+                    ? DateFormat('MMM yyyy').format(education.startDate!)
+                    : '';
+                String formattedEndDate = education.endDate != null
+                    ? DateFormat('MMM yyyy').format(education.endDate!)
+                    : 'Present';
+
+                // Calculate the total duration
+                String totalDuration = '';
+                if (education.startDate != null && education.endDate != null) {
+                  Duration duration =
+                      education.endDate!.difference(education.startDate!);
+                  int years = (duration.inDays / 365).floor();
+                  int months = ((duration.inDays % 365) / 30).floor();
+                  totalDuration = '$years years $months months';
+                }
+
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      education.degree ?? '',
+                      style: theme.textTheme.titleMedium!,
+                    ),
+                    SizedBox(height: 9.v),
+                    Text(
+                      education.schoolCollege ?? '',
+                      style: theme.textTheme.bodyMedium
+                          ?.copyWith(color: appTheme.gray900),
+                    ),
+                    SizedBox(height: 4.v),
+                    Text(
+                      "$formattedStartDate - $formattedEndDate · $totalDuration",
+                      style: theme.textTheme.bodyMedium!.copyWith(
+                        fontSize: 14.fSize,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                    SizedBox(height: 18.v),
+
+                    // Show the divider only if there is more than one education item
+                    if (educationList.length > 1 &&
+                        index < educationList.length - 1)
+                      Divider(
+                        height: 1.v,
+                        thickness: 1,
+                        color: const Color(0XFFE9E9E9),
+                      ),
+                  ],
+                );
+              }),
+            );
+          }),
+        ],
+      ),
+    );
+  }
 
   Widget _buildColumnAchievements() {
     return Container(
@@ -608,8 +611,8 @@ class _UserProfilePageState extends State<UserProfilePage>
                             SizedBox(
                               height: 24.v,
                               width: 25.adaptSize,
-                              child: CustomImageView(imagePath: 
-                                  "assets/images/img_link_1.svg"),
+                              child: CustomImageView(
+                                  imagePath: "assets/images/img_link_1.svg"),
                             ),
                             SizedBox(width: 10.adaptSize),
                             Expanded(
@@ -644,66 +647,64 @@ class _UserProfilePageState extends State<UserProfilePage>
     );
   }
 
- Widget _buildColumnInterests() {
-  final theme = Theme.of(context);
-  final interest = controller.userData.value.data?.interest;
-  final interestList = interest?.interest ?? [];
+  Widget _buildColumnInterests() {
+    final theme = Theme.of(context);
+    final interest = controller.userData.value.data?.interest;
+    final interestList = interest?.interest ?? [];
 
-  return Container(
-    color: Colors.white,
-    padding: const EdgeInsets.all(10),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(right: 2),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _buildRowaboutme(aboutMeText: "Interests"),
-              GestureDetector(
-                onTap: () {
-                  // Define the edit action here
-                },
-               child: CustomImageView(
-                                imagePath: "assets/images/Frame.svg",
-                              )
-              ),
-            ],
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(right: 2),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _buildRowaboutme(aboutMeText: "Interests"),
+                GestureDetector(
+                    onTap: () {
+                      // Define the edit action here
+                    },
+                    child: CustomImageView(
+                      imagePath: "assets/images/Frame.svg",
+                    )),
+              ],
+            ),
           ),
-        ),
-        SizedBox(height: 17.v),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Wrap(
-            spacing: 8.0, // Horizontal spacing between chips
-            runSpacing: 4.0, // Vertical spacing between lines of chips
-            children: interestList.map((interest) {
-              return Chip(
-                label: Text(
-                  interest.name ?? '',
-                  style: theme.textTheme.bodyMedium!.copyWith(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16.fSize,
+          SizedBox(height: 17.v),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Wrap(
+              spacing: 8.0, // Horizontal spacing between chips
+              runSpacing: 4.0, // Vertical spacing between lines of chips
+              children: interestList.map((interest) {
+                return Chip(
+                  label: Text(
+                    interest.name ?? '',
+                    style: theme.textTheme.bodyMedium!.copyWith(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16.fSize,
+                    ),
                   ),
-                ),
-                backgroundColor: appTheme.gray200,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                  side: BorderSide(
-                    color: appTheme.gray300,
+                  backgroundColor: appTheme.gray200,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                    side: BorderSide(
+                      color: appTheme.gray300,
+                    ),
                   ),
-                ),
-              );
-            }).toList(),
+                );
+              }).toList(),
+            ),
           ),
-        ),
-      ],
-    ),
-  );
-}
-
+        ],
+      ),
+    );
+  }
 
   Widget _buildColumnreviews() {
     return Container(
@@ -969,7 +970,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                     })!
                         .then((value) {
                       Get.find<ProfileController>().fetchUserData(
-                          controller.address.toString(),  
+                          controller.address.toString(),
                           controller.address.toString());
                     });
                   },

@@ -28,7 +28,8 @@ class VideoCallScreen extends StatefulWidget {
     required this.userId,
     required this.meetingId,
     required this.userName,
-    required this.bookingId, required this.profilePic,
+    required this.bookingId,
+    required this.profilePic,
   });
 
   @override
@@ -49,7 +50,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   bool isCameraSwitched = false;
   bool showVideo = true;
   bool isMuted = false;
-  bool isSpeakerOn = false;
+  bool isSpeakerOn = true;
   bool isRecording = false;
   MediaRecorder? _mediaRecorder;
   bool isFrontCamera = true;
@@ -97,7 +98,9 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
         context,
         MaterialPageRoute(
             builder: (_) => RatingPage(
-                  bookingId: widget.bookingId, userName: widget.userName, profilePic: widget.profilePic,
+                  bookingId: widget.bookingId,
+                  userName: widget.userName,
+                  profilePic: widget.profilePic,
                 )));
   }
 
@@ -765,25 +768,25 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
                       color: Colors.white, size: 32),
                   onPressed: toggleVideo,
                 ),
-                IconButton(
-                  icon: Icon(
-                      isRecording ? Icons.stop : Icons.fiber_manual_record,
-                      color: Colors.white,
-                      size: 32),
-                  onPressed: startScreenRecording,
-                ),
+                // IconButton(
+                //   icon: Icon(
+                //       isRecording ? Icons.stop : Icons.fiber_manual_record,
+                //       color: Colors.white,
+                //       size: 32),
+                //   onPressed: startScreenRecording,
+                // ),
                 IconButton(
                   icon: Icon(isSpeakerOn ? Icons.volume_up : Icons.volume_off,
                       color: Colors.white, size: 32),
                   onPressed: toggleSpeaker,
                 ),
-                IconButton(
-                  icon: Icon(
-                      !isSharing ? Icons.screen_share : Icons.stop_screen_share,
-                      color: Colors.white,
-                      size: 32),
-                  onPressed: toggleScreenShare,
-                ),
+                // IconButton(
+                //   icon: Icon(
+                //       !isSharing ? Icons.screen_share : Icons.stop_screen_share,
+                //       color: Colors.white,
+                //       size: 32),
+                //   onPressed: toggleScreenShare,
+                // ),
               ],
             ),
           ),

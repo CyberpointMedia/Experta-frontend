@@ -1,5 +1,4 @@
 import 'package:experta/core/app_export.dart';
-import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -76,6 +75,7 @@ class _RatingPageState extends State<RatingPage> {
           TextButton(
             child: const Text('Okay'),
             onPressed: () {
+              Navigator.of(ctx).pop();
               Navigator.of(ctx).pop();
             },
           ),
