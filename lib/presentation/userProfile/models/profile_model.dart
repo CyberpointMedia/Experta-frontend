@@ -285,28 +285,28 @@ class UserBasicInfo {
 
     if (facebook != null && facebook!.isNotEmpty) {
       socialMediaLinks.add({
-        'icon': FontAwesomeIcons.facebook,
+        'icon': "assets/images/social/facebook.svg",
         'link': facebook!,
         'name': "facebook"
       });
     }
     if (instagram != null && instagram!.isNotEmpty) {
       socialMediaLinks.add({
-        'icon': FontAwesomeIcons.instagram,
+        'icon': "assets/images/social/insta.svg",
         'link': instagram!,
         'name': "instagram",
       });
     }
     if (linkedin != null && linkedin!.isNotEmpty) {
       socialMediaLinks.add({
-        'icon': FontAwesomeIcons.linkedin,
+        'icon': "assets/images/social/linkedin.svg",
         'link': linkedin!,
         'name': "linkedin"
       });
     }
     if (twitter != null && twitter!.isNotEmpty) {
       socialMediaLinks.add({
-        'icon': FontAwesomeIcons.twitter,
+        'icon': "assets/images/social/twitter.svg",
         'link': twitter!,
         'name': "twitter",
       });
@@ -741,16 +741,16 @@ class UserLanguage {
 class UserPricing {
   final String? id;
   final int? v;
-  final int? audioCallPrice;
-  final int? messagePrice;
-  final int? videoCallPrice;
+  final int audioCallPrice;
+  final int messagePrice;
+  final int videoCallPrice;
 
   UserPricing({
     this.id,
     this.v,
-    this.audioCallPrice,
-    this.messagePrice,
-    this.videoCallPrice,
+    required this.audioCallPrice,
+    required this.messagePrice,
+    required this.videoCallPrice,
   });
 
   factory UserPricing.fromJson(Map<String, dynamic> json) => UserPricing(

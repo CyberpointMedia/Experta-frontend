@@ -3,15 +3,18 @@ import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
 import 'package:experta/core/utils/web_view/web_view.dart';
+import 'package:experta/data/apiClient/call_api_service.dart';
 import 'package:experta/presentation/all_review/all_review.dart';
 import 'package:experta/presentation/userProfile/post_details/post_details.dart';
 import 'package:experta/presentation/user_details/controller/details_controller.dart';
+import 'package:experta/presentation/video_call/audio_call.dart';
+import 'package:experta/presentation/video_call/video_call_screen.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
 import 'package:experta/widgets/custom_outlined_button.dart';
 import 'package:experta/widgets/custom_rating_bar.dart';
 import 'package:experta/widgets/report.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:lottie/lottie.dart';
 import 'package:readmore/readmore.dart';
@@ -25,17 +28,67 @@ class UserDetailsPage extends StatefulWidget {
 
 class _UserDetailsPageState extends State<UserDetailsPage>
     with SingleTickerProviderStateMixin {
-  final dynamic id = Get.arguments['user'];
   DetailsController controller = Get.put(DetailsController());
-
+  final currentUserId = PrefUtils().getaddress();
   late TabController _tabController;
 
   @override
   void initState() {
-    controller.fetchUserData(id.id);
-    controller.fetchFeeds(id.id);
     _tabController = TabController(length: 2, vsync: this);
+
     super.initState();
+  }
+
+  final CallApiService _apiService = CallApiService();
+
+  void _startCall(
+      String userId, String meetingId, String Type, String userName) async {
+    if (userId.isNotEmpty && meetingId.isNotEmpty) {
+      if (userId != currentUserId.toString()) {
+        final response = await _apiService.getMeeting(meetingId);
+        if (response.statusCode == 201) {
+          Type == 'video'
+              ? Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => VideoCallScreen(
+                      userId: userId,
+                      meetingId: meetingId,
+                      userName: userName,
+                    ),
+                  ),
+                )
+              : Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AudioCallScreen(
+                      userId: userId,
+                      meetingId: meetingId,
+                      userName: userName,
+                    ),
+                  ),
+                );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Failed to get meeting details')),
+          );
+        }
+      } else {
+        Fluttertoast.showToast(
+            msg: "You cannot call yourself",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: appTheme.red500,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('Please enter both User ID and Meeting ID')),
+      );
+    }
   }
 
   void _showBottomSheet(BuildContext context) {
@@ -68,7 +121,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                           showModalBottomSheet(
                             context: context,
                             builder: (context) => ReportReasonSheet(
-                              itemId: id.id,
+                              itemId: controller.id.id,
                               itemType: 'User',
                             ),
                           );
@@ -85,7 +138,8 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                         ),
                         onTap: () {
                           Navigator.pop(context);
-                          _showBlockUserDialog(context, id.id, controller);
+                          _showBlockUserDialog(
+                              context, controller.id.id, controller);
                         },
                       ),
                     ],
@@ -126,14 +180,12 @@ class _UserDetailsPageState extends State<UserDetailsPage>
       context: context,
       builder: (BuildContext context) {
         return Dialog(
-          backgroundColor:
-              Colors.transparent, // Make the dialog background transparent
+          backgroundColor: Colors.transparent,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(20.0),
           ),
           child: Obx(() {
             if (controller.isSucess.value) {
-              // If success, show success animation and dismiss after 3 seconds
               Future.delayed(const Duration(seconds: 2), () {
                 Navigator.of(context).pop();
               });
@@ -146,12 +198,10 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                 ),
               );
             } else if (controller.isBlocking.value) {
-              // If loading, show loading animation
               return Center(
                 child: Lottie.asset("assets/jsonfiles/Loader.json"),
               );
             } else {
-              // Default dialog content
               return Container(
                 color: Colors.white,
                 child: Padding(
@@ -210,149 +260,6 @@ class _UserDetailsPageState extends State<UserDetailsPage>
               );
             }
           }),
-        );
-      },
-    );
-  }
-
-  void _showBottomSheet2(BuildContext context) {
-    final data = controller.userData.value.data?.pricing;
-    showModalBottomSheet(
-      context: context,
-      builder: (context) {
-        return Padding(
-          padding: EdgeInsets.only(left: 20.adaptSize, right: 20.adaptSize),
-          child: Container(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: <Widget>[
-                ListTile(
-                  leading: CustomIconButton(
-                      height: 44.adaptSize,
-                      width: 44.adaptSize,
-                      padding: EdgeInsets.all(10.h),
-                      decoration: IconButtonStyleHelper.fillGreenTL24,
-                      child: CustomImageView(
-                        imagePath: ImageConstant.call,
-                      )),
-                  // leading: CircleAvatar(
-                  //   backgroundColor: Colors.green.shade100,
-                  //   child: const Icon(Icons.call, color: Colors.green),
-                  // ),
-                  title: Text(
-                    'Audio Call',
-                    style: CustomTextStyles.titleMedium18,
-                  ),
-                  subtitle: Text(
-                    'Call me up',
-                    style: CustomTextStyles
-                        .titleSmallGilroyff95a4b7, // Set the color to grey
-                  ),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox(
-                        height: 14.adaptSize,
-                        width: 14.adaptSize,
-                        child:
-                            CustomImageView(imagePath: ImageConstant.imgLayer1),
-                      ),
-                      const SizedBox(
-                          width:
-                              8.0), // Add some spacing between the image and text
-                      Text(
-                        "${data!.audioCallPrice}/min",
-                        style: CustomTextStyles.bodySmall0XFF171717,
-                      ),
-                    ],
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                const Divider(),
-                ListTile(
-                  leading: CustomIconButton(
-                      height: 44.adaptSize,
-                      width: 44.adaptSize,
-                      padding: EdgeInsets.all(10.h),
-                      decoration:
-                          IconButtonStyleHelper.fillPrimaryContainerT123,
-                      child:
-                          CustomImageView(imagePath: ImageConstant.videocam)),
-                  title: Text(
-                    'Video Call',
-                    style: CustomTextStyles.titleMedium18,
-                  ),
-                  subtitle: Text(
-                    'Call the profeesional directly.',
-                    style: CustomTextStyles.titleSmallGilroyff95a4b7,
-                  ),
-                  trailing: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      SizedBox(
-                        height: 14.0,
-                        width: 14.0,
-                        child:
-                            CustomImageView(imagePath: ImageConstant.imgLayer1),
-                      ),
-                      const SizedBox(width: 8.0),
-                      Text(
-                        "${data.videoCallPrice}/min",
-                        style: CustomTextStyles.bodySmall0XFF171717,
-                      ),
-                    ],
-                  ),
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                ),
-                const Divider(),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                    Get.toNamed(AppRoutes.Bookappointment, arguments: {
-                      'profile': controller
-                              .userData.value.data?.basicInfo?.profilePic ??
-                          '',
-                      'firstname': controller
-                              .userData.value.data?.basicInfo?.firstName ??
-                          '',
-                      'lastname':
-                          controller.userData.value.data?.basicInfo?.lastName ??
-                              '',
-                      'industry': controller.userData.value.data
-                              ?.industryOccupation?.industry?.name ??
-                          '',
-                      'occupation': controller.userData.value.data
-                              ?.industryOccupation?.occupation?.name ??
-                          '',
-                      'price': data.videoCallPrice.toString() ?? '',
-                      'id': id.id ?? '',
-                    });
-                  },
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      backgroundColor: Colors.yellow.shade100,
-                      child: const Icon(Icons.calendar_today,
-                          color: Colors.yellow),
-                    ),
-                    title: Text(
-                      'Schedule Call',
-                      style: CustomTextStyles.titleMedium18,
-                    ),
-                    subtitle: Text(
-                      'Book an Appointment with me',
-                      style: CustomTextStyles
-                          .titleSmallGilroyff95a4b7, // Set the color to grey
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
         );
       },
     );
@@ -509,57 +416,90 @@ class _UserDetailsPageState extends State<UserDetailsPage>
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
+                height: 50,
                 color: appTheme.whiteA700,
-                child: Padding(
-                  padding: EdgeInsets.only(
-                      bottom: 15.adaptSize,
-                      right: 10.adaptSize,
-                      left: 10.adaptSize,
-                      top: 30.adaptSize),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                child: Obx(() {
+                  final pricing = controller.userData.value.data?.pricing;
+
+                  if (pricing == null) {
+                    return const Center(child: CircularProgressIndicator());
+                  }
+
+                  return Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      CustomElevatedButton(
-                        width: MediaQuery.of(context).size.width * 0.75,
-                        text: "Make a call",
-                        onPressed: () {
-                          _showBottomSheet2(context);
-                        },
+                      _buildActionButton(
+                        ImageConstant.videocam,
+                        "${pricing.videoCallPrice}/min",
+                        Colors.red,
+                        () => _startCall(
+                            controller.id.id,
+                            "123456",
+                            'video',
+                            controller.userData.value.data?.basicInfo
+                                    ?.firstName ??
+                                ''),
                       ),
-                      const SizedBox(
-                        width: 10,
+                      _buildVerticalDivider(),
+                      _buildActionButton(
+                        ImageConstant.call,
+                        "${pricing.audioCallPrice}/min",
+                        Colors.green,
+                        () => _startCall(
+                            controller.id.id,
+                            "123456",
+                            'audio',
+                            controller.userData.value.data?.basicInfo
+                                    ?.firstName ??
+                                ''),
                       ),
-                      GestureDetector(
-                        onTap: () async {
-                          final chatData = await ApiService().fetchChat(id.id);
-                          log("this is chat Data  ===== $chatData");
-                          log("this is your id ${id.id} and chat is ${chatData!["_id"]}");
-                          Navigator.pushNamed(
-                            context,
-                            AppRoutes.chattingScreen,
-                            arguments: {'chat': chatData},
-                          );
-                        },
-                        child: CustomImageView(
-                          height: 50.adaptSize,
-                          width: 50.adaptSize,
-                          imagePath: ImageConstant.msg,
-                        ),
-                      )
+                      _buildVerticalDivider(),
+                      _buildActionButton(
+                        ImageConstant.msg,
+                        "${pricing.messagePrice}/msg",
+                        appTheme.yellow900,
+                        () {}, // Message action
+                      ),
                     ],
-                  ),
-                ),
+                  );
+                }),
               ),
-            )
+            ),
           ],
         ),
       ),
     );
   }
 
+  Widget _buildVerticalDivider() {
+    return Container(
+      color: appTheme.gray300,
+      width: 0.5,
+      height: 50,
+    );
+  }
+
+  Widget _buildActionButton(
+      String img, String label, Color color, VoidCallback? onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Row(
+        children: [
+          CustomImageView(imagePath: img),
+          const SizedBox(width: 4),
+          Text(
+            label,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   Widget _buildAboutMe() {
     return SizedBox(
-      // width: 430.adaptSize,
       child: Column(
         children: [
           SizedBox(
@@ -599,7 +539,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
             ),
           ),
           const SizedBox(
-            height: 100,
+            height: 50,
           )
         ],
       ),
@@ -654,7 +594,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                         MaterialPageRoute(
                           builder: (context) => PostDetailsPage(
                             initialIndex: reverseIndex,
-                            userId: id.id,
+                            userId: controller.id.id,
                           ),
                         ),
                       );
@@ -698,15 +638,22 @@ class _UserDetailsPageState extends State<UserDetailsPage>
               return ReadMoreText(
                 controller.userData.value.data?.basicInfo?.bio ?? '',
                 trimLines: 3,
-                colorClickableText: const Color(
-                  0XFFD45102,
-                ),
+                colorClickableText: appTheme.readmore,
                 trimMode: TrimMode.Line,
                 trimCollapsedText: "Read more",
-                moreStyle:
-                    theme.textTheme.bodyLarge?.copyWith(color: appTheme.red500),
-                lessStyle:
-                    theme.textTheme.bodyLarge?.copyWith(color: appTheme.red500),
+                trimExpandedText: "Read less",
+                style: theme.textTheme.titleSmall!
+                    .copyWith(color: appTheme.black900),
+                moreStyle: theme.textTheme.bodyMedium?.copyWith(
+                  color: appTheme.readmore, // Color for 'Read more'
+                  fontSize: theme.textTheme.bodyMedium
+                      ?.fontSize, // Same font size as paragraph
+                ),
+                lessStyle: theme.textTheme.bodyMedium?.copyWith(
+                  color: appTheme.readmore, // Color for 'Read less'
+                  fontSize: theme.textTheme.bodyMedium
+                      ?.fontSize, // Same font size as paragraph
+                ),
               );
             }),
           ),
@@ -731,11 +678,16 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                     print('Opening link: ${socialMedia['link']}');
                   },
                   child: Padding(
-                    padding: EdgeInsets.all(8.adaptSize),
-                    child: FaIcon(
-                      socialMedia['icon'],
-                      size: 24.adaptSize,
+                    padding: EdgeInsets.only(right: 8.adaptSize),
+                    child: CustomImageView(
+                      imagePath: socialMedia['icon'],
+                      height: 24.adaptSize,
+                      width: 24.adaptSize,
                     ),
+                    // child: FaIcon(
+                    //   socialMedia['icon'],
+                    //   size: 24.adaptSize,
+                    // ),
                   ),
                 );
               }).toList(),
@@ -850,8 +802,8 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                   expertise.name.toString(),
                   style: theme.textTheme.bodyMedium!.copyWith(
                     color: Colors.black,
-                    fontWeight: FontWeight.w500, // Set font weight to 600
-                    fontSize: 16.fSize, // Set font size to 16 pixels
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16.fSize,
                   ),
                 ),
                 backgroundColor: appTheme.gray200,
@@ -1264,8 +1216,8 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                 flex: 42,
               ),
               GestureDetector(
-                onTap: () =>
-                    Get.toNamed(AppRoutes.follower, arguments: {"id": id.id}),
+                onTap: () => Get.toNamed(AppRoutes.follower,
+                    arguments: {"id": controller.id.id}),
                 child: _buildColumnFourHundredFifty(
                   dynamicText: "$totalFollowers",
                   dynamicText1: "Followers",
@@ -1421,7 +1373,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                       } else {
                         return <Widget>[];
                       }
-                    })(), 
+                    })(),
                   ),
                 ),
               ],

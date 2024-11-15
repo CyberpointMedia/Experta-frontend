@@ -243,7 +243,7 @@
     },
     {
       "name": "file_selector_linux",
-      "rootUri": "file:///C:/Users/sanja/AppData/Local/Pub/Cache/hosted/pub.dev/file_selector_linux-0.9.3",
+      "rootUri": "file:///C:/Users/sanja/AppData/Local/Pub/Cache/hosted/pub.dev/file_selector_linux-0.9.3+1",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -399,7 +399,7 @@
     },
     {
       "name": "flutter_tts",
-      "rootUri": "file:///C:/Users/sanja/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_tts-4.1.0",
+      "rootUri": "file:///C:/Users/sanja/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_tts-4.2.0",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
@@ -465,7 +465,7 @@
     },
     {
       "name": "geolocator_apple",
-      "rootUri": "file:///C:/Users/sanja/AppData/Local/Pub/Cache/hosted/pub.dev/geolocator_apple-2.3.7",
+      "rootUri": "file:///C:/Users/sanja/AppData/Local/Pub/Cache/hosted/pub.dev/geolocator_apple-2.3.8+1",
       "packageUri": "lib/",
       "languageVersion": "2.15"
     },
@@ -1167,7 +1167,7 @@
     },
     {
       "name": "url_launcher_linux",
-      "rootUri": "file:///C:/Users/sanja/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_linux-3.2.0",
+      "rootUri": "file:///C:/Users/sanja/AppData/Local/Pub/Cache/hosted/pub.dev/url_launcher_linux-3.2.1",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -1287,7 +1287,7 @@
     },
     {
       "name": "webview_flutter_android",
-      "rootUri": "file:///C:/Users/sanja/AppData/Local/Pub/Cache/hosted/pub.dev/webview_flutter_android-4.0.1",
+      "rootUri": "file:///C:/Users/sanja/AppData/Local/Pub/Cache/hosted/pub.dev/webview_flutter_android-4.0.2",
       "packageUri": "lib/",
       "languageVersion": "3.5"
     },
@@ -1299,7 +1299,7 @@
     },
     {
       "name": "webview_flutter_wkwebview",
-      "rootUri": "file:///C:/Users/sanja/AppData/Local/Pub/Cache/hosted/pub.dev/webview_flutter_wkwebview-3.16.1",
+      "rootUri": "file:///C:/Users/sanja/AppData/Local/Pub/Cache/hosted/pub.dev/webview_flutter_wkwebview-3.16.2",
       "packageUri": "lib/",
       "languageVersion": "3.5"
     },
@@ -1334,7 +1334,7 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2024-11-15T05:41:28.310382Z",
+  "generated": "2024-11-15T06:29:06.291630Z",
   "generator": "pub",
   "generatorVersion": "3.5.4",
   "flutterRoot": "file:///C:/source/flutter",

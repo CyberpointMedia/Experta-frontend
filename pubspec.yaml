@@ -119,6 +119,8 @@ flutter:
   assets: 
     - assets/
     - assets/images/
+    - assets/images/social/
+    - assets/call/
     - assets/images/wallet/
     - assets/images/settings/
     - assets/images/bookings/
