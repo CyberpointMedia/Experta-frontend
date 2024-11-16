@@ -2,13 +2,9 @@ import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/work_experience/controller/experience_controller.dart';
-import 'package:experta/widgets/app_bar/appbar_leading_image.dart';
-import 'package:experta/widgets/app_bar/appbar_subtitle_six.dart';
 import 'package:experta/widgets/app_bar/appbar_trailing_image.dart';
-import 'package:experta/widgets/app_bar/custom_app_bar.dart';
 import 'package:experta/widgets/shimmer.dart';
 import 'package:experta/widgets/work_experience_widget.dart';
-import 'package:flutter/material.dart';
 
 class WorkExperiencePage extends StatefulWidget {
   const WorkExperiencePage({super.key});
@@ -71,7 +67,7 @@ class _WorkExperiencePageState extends State<WorkExperiencePage> {
           margin: const EdgeInsets.only(right: 20),
           imagePath: ImageConstant.plus,
           onTap: () {
-            // Get.toNamed(AppRoutes.editExperience);
+            Get.offAndToNamed(AppRoutes.editExperience);
           },
         ),
       ],
@@ -94,18 +90,12 @@ class _WorkExperiencePageState extends State<WorkExperiencePage> {
           ),
         );
       } else if (controller.workExperienceList.isEmpty) {
-        return Center(
+        return const Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('No work experience available.'),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  // Get.toNamed(AppRoutes.editExperience);
-                },
-                child: const Text('Add Work Experience'),
-              ),
+              Text('No work experience available.'),
+              SizedBox(height: 20),
             ],
           ),
         );
@@ -119,12 +109,12 @@ class _WorkExperiencePageState extends State<WorkExperiencePage> {
                 workExperience: workExperience,
                 edit: true,
                 onEdit: () {
-                  // var result = Get.toNamed(AppRoutes.editExperience,
-                  //     arguments: workExperience);
+                  var result = Get.offAndToNamed(AppRoutes.editExperience,
+                      arguments: workExperience);
 
-                  // if (result != null) {
-                  //   controller.fetchData();
-                  // }
+                  if (result != null) {
+                    controller.fetchData();
+                  }
                 },
               );
             },
@@ -135,6 +125,6 @@ class _WorkExperiencePageState extends State<WorkExperiencePage> {
   }
 
   void onTapArrowLeft() {
-    Get.back();
+    Get.offAndToNamed(AppRoutes.professionalInfo);
   }
 }

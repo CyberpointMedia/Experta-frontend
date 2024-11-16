@@ -62,7 +62,9 @@ class _EditWorkExperiencePageState extends State<EditWorkExperiencePage> {
       leading: AppbarLeadingImage(
         imagePath: ImageConstant.cross,
         margin: EdgeInsets.only(left: 16.h),
-        onTap: () => Get.back(),
+        onTap: () {
+          Get.offAndToNamed(AppRoutes.professionalInfo);
+        },
       ),
       centerTitle: true,
       title: AppbarSubtitleSix(
@@ -86,12 +88,11 @@ class _EditWorkExperiencePageState extends State<EditWorkExperiencePage> {
                 text: TextSpan(
                   children: [
                     TextSpan(
-                        text: 'Job Title',
-                        style: CustomTextStyles.bodyLargeBlack90001),
+                        text: 'Job Title', style: theme.textTheme.titleSmall),
                     const TextSpan(
                       text: '*',
                       style: TextStyle(
-                        color: Colors.red,
+                        color: Colors.grey,
                         fontSize: 16.0,
                       ),
                     ),
@@ -115,11 +116,11 @@ class _EditWorkExperiencePageState extends State<EditWorkExperiencePage> {
                   children: [
                     TextSpan(
                         text: 'Company Name',
-                        style: CustomTextStyles.bodyLargeBlack90001),
+                        style: theme.textTheme.titleSmall),
                     const TextSpan(
                       text: '*',
                       style: TextStyle(
-                        color: Colors.red,
+                        color: Colors.grey,
                         fontSize: 16.0,
                       ),
                     ),
@@ -142,12 +143,11 @@ class _EditWorkExperiencePageState extends State<EditWorkExperiencePage> {
                 text: TextSpan(
                   children: [
                     TextSpan(
-                        text: 'Start Date',
-                        style: CustomTextStyles.bodyLargeBlack90001),
+                        text: 'Start Date', style: theme.textTheme.titleSmall),
                     const TextSpan(
                       text: '*',
                       style: TextStyle(
-                        color: Colors.red,
+                        color: Colors.grey,
                         fontSize: 16.0,
                       ),
                     ),
@@ -163,6 +163,7 @@ class _EditWorkExperiencePageState extends State<EditWorkExperiencePage> {
               suffix: Padding(
                 padding: const EdgeInsets.only(right: 10),
                 child: CustomImageView(
+                  color: Colors.grey,
                   imagePath: ImageConstant.imgCalendarGray900,
                   onTap: () async {
                     FocusScope.of(context).requestFocus(FocusNode());
@@ -189,7 +190,8 @@ class _EditWorkExperiencePageState extends State<EditWorkExperiencePage> {
                       },
                     )),
                 Text('I am currently working in this role',
-                    style: CustomTextStyles.bodyLargeBlack90001),
+                    style: theme.textTheme.titleSmall!
+                        .copyWith(color: appTheme.black900)),
               ],
             ),
             Obx(() {
@@ -204,11 +206,11 @@ class _EditWorkExperiencePageState extends State<EditWorkExperiencePage> {
                           children: [
                             TextSpan(
                                 text: 'End Date',
-                                style: CustomTextStyles.bodyLargeBlack90001),
+                                style: theme.textTheme.titleSmall),
                             const TextSpan(
                               text: '*',
                               style: TextStyle(
-                                color: Colors.red,
+                                color: Colors.grey,
                                 fontSize: 16.0,
                               ),
                             ),
@@ -226,6 +228,7 @@ class _EditWorkExperiencePageState extends State<EditWorkExperiencePage> {
                       suffix: Padding(
                         padding: const EdgeInsets.only(right: 10),
                         child: CustomImageView(
+                          color: Colors.grey,
                           imagePath: ImageConstant.imgCalendarGray900,
                           onTap: () async {
                             FocusScope.of(context).requestFocus(FocusNode());

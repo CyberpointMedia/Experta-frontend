@@ -70,10 +70,23 @@ class BasicProfileInfoController extends GetxController {
             .trim();
     textField2.text = basicInfoModelObj.value.displayName;
     textField3.text = basicInfoModelObj.value.bio;
-    // Convert ISO date string to desired format
+    // Convert ISO date string to desired format (dd/mm/yyyy)
+    log(basicInfoModelObj.value.dateOfBirth);
+//     String dateString = basicInfoModelObj
+//         .value.dateOfBirth; // Example: "2024-01-11T00:00:00.000Z"
+
+// // Extract year, day, and month from the string.
+//     List<String> dateParts = dateString.split('T')[0].split('-');
+//     String year = dateParts[0];
+//     String day = dateParts[1];
+//     String month = dateParts[2];
+
+// // Format it as dd/MM/yyyy
+//     dateOfBirth.text = "$day/$month/$year"; // Output: "01/11/2024"
     DateTime parsedDate = DateTime.parse(basicInfoModelObj.value.dateOfBirth);
     dateOfBirth.text =
-        "${parsedDate.day.toString().padLeft(2, '0')}/${parsedDate.month.toString().padLeft(2, '0')}/${parsedDate.year}";
+        "${parsedDate.day.toString().padLeft(2, '0')}/${parsedDate.month.toString().padLeft(2, '0')}/${parsedDate.year.toString()}";
+
     log("Received gender: ${basicInfoModelObj.value.gender}");
     genderController.text = basicInfoModelObj.value.gender;
   }
@@ -139,19 +152,28 @@ class BasicProfileInfoController extends GetxController {
   Future<void> saveProfileInfo() async {
     try {
       // Function to format date to dd/MM/yyyy if possible
+
       String formatDate(String date) {
         try {
-          // Check if the date is already in the format yyyy/MM/dd
-          final originalFormat = RegExp(r'^\d{4}/\d{2}/\d{2}$');
+          // Check if the date is already in the format yyyy-MM-dd
+          final originalFormat = RegExp(r'^\d{4}-\d{2}-\d{2}$');
           if (originalFormat.hasMatch(date)) {
             return date;
           }
 
-          // Try parsing the date and reformatting it
-          final parsedDate = DateTime.parse(date);
-          return DateFormat('yyyy/MM/dd').format(parsedDate);
+          // Check if the date is in the format dd/MM/yyyy
+          final ddMMyyyyFormat = RegExp(r'^\d{2}/\d{2}/\d{4}$');
+          if (ddMMyyyyFormat.hasMatch(date)) {
+            // Parse the date using the specified format
+            DateTime parsedDate = DateFormat('dd/MM/yyyy').parse(date);
+            // Format it to the desired format: yyyy-MM-dd
+            return DateFormat('yyyy-MM-dd').format(parsedDate);
+          }
+
+          // If the input doesn't match any expected format, return as-is
+          return date;
         } catch (e) {
-          // If parsing fails, return the original date
+          log("date parsing failed");
           return date;
         }
       }

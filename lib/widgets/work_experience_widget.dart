@@ -19,7 +19,7 @@ class WorkExperienceWidget extends StatelessWidget {
     final experiencePeriod = formatExperiencePeriod(
         workExperience.startDate, workExperience.endDate ?? DateTime.now());
     return Padding(
-      padding: const EdgeInsets.only(left: 10, right: 10, top: 10),
+      padding: const EdgeInsets.only(left: 10, right: 10, top: 5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [

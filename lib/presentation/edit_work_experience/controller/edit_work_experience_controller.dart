@@ -64,7 +64,7 @@ class EditWorkExperienceController extends GetxController {
         final response =
             await apiService.createOrUpdateWorkExperience(workExperience);
         log("$response");
-        Get.back(result: response['data']);
+        Get.offAndToNamed(AppRoutes.professionalInfo);
       } catch (e) {
         Get.snackbar('Error', 'Failed to save work experience');
       }
