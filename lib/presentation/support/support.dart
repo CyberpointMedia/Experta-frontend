@@ -107,8 +107,6 @@ class RaiseTicketPage extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 16),
-
-                        // Upload File Section with Dashed Border
                         GestureDetector(
                           onTap: () async {
                             // Open file picker to select files
@@ -140,6 +138,7 @@ class RaiseTicketPage extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(10.0),
                                 color: Colors.white,
                               ),
+                              
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
@@ -154,6 +153,12 @@ class RaiseTicketPage extends StatelessWidget {
                                     "Upload your file",
                                     style: TextStyle(color: Colors.grey),
                                   ),
+                                  const SizedBox(height: 4),
+                                  // Display file types info
+                                  // const Text(
+                                  //   "(JPEG, PNG, PDF)",
+                                  //   style: TextStyle(color: Colors.grey),
+                                  // ),
                                   const SizedBox(height: 4),
                                   // Display file types info
                                   // const Text(

@@ -362,6 +362,154 @@ class _UserDetailsPageState extends State<UserDetailsPage>
     );
   }
 
+  void _showBottomSheet2(BuildContext context, String type) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.only(left: 20, right: 20),
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                ListTile(
+                  leading: type == 'video'
+                      ? CustomIconButton(
+                          height: 44.adaptSize,
+                          width: 44.adaptSize,
+                          padding: EdgeInsets.all(10.h),
+                          decoration:
+                              IconButtonStyleHelper.fillPrimaryContainerT123,
+                          child: CustomImageView(
+                            imagePath: ImageConstant.videocam,
+                          ))
+                      : CustomIconButton(
+                          height: 44.adaptSize,
+                          width: 44.adaptSize,
+                          padding: EdgeInsets.all(10.h),
+                          decoration: IconButtonStyleHelper.fillGreenTL24,
+                          child: CustomImageView(
+                            imagePath: ImageConstant.call,
+                          )),
+                  title: Text(
+                    'Connect Now',
+                    style: theme.textTheme.bodyMedium!
+                        .copyWith(color: Colors.black),
+                  ),
+                  subtitle: Text(
+                    'Reach out to ${controller.userData.value.data!.basicInfo!.firstName.toString()} right now',
+                    style: theme.textTheme.titleSmall!
+                        .copyWith(color: appTheme.gray400),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    _scheduleMeeting(type);
+                  },
+                ),
+                const Divider(),
+                ListTile(
+                  leading: type == 'video'
+                      ? CustomIconButton(
+                          height: 44.adaptSize,
+                          width: 44.adaptSize,
+                          padding: EdgeInsets.all(10.h),
+                          decoration:
+                              IconButtonStyleHelper.fillPrimaryContainerT123,
+                          child: CustomImageView(
+                            imagePath: ImageConstant.videocam,
+                          ))
+                      : CustomIconButton(
+                          height: 44.adaptSize,
+                          width: 44.adaptSize,
+                          padding: EdgeInsets.all(10.h),
+                          decoration: IconButtonStyleHelper.fillGreenTL24,
+                          child: CustomImageView(
+                            imagePath: ImageConstant.call,
+                          )),
+                  title: Text(
+                    'Schedule Call',
+                    style: theme.textTheme.bodyMedium!
+                        .copyWith(color: Colors.black),
+                  ),
+                  subtitle: Text(
+                    'Book and  block ${controller.userData.value.data!.basicInfo!.firstName.toString()} calendar',
+                    style: theme.textTheme.titleSmall!
+                        .copyWith(color: appTheme.gray400),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Get.toNamed(AppRoutes.Bookappointment, arguments: {
+                      'profile': controller
+                              .userData.value.data?.basicInfo?.profilePic ??
+                          '',
+                      'firstname': controller
+                              .userData.value.data?.basicInfo?.firstName ??
+                          '',
+                      'lastname':
+                          controller.userData.value.data?.basicInfo?.lastName ??
+                              '',
+                      'industry': controller.userData.value.data
+                              ?.industryOccupation?.industry?.name ??
+                          '',
+                      'occupation': controller.userData.value.data
+                              ?.industryOccupation?.occupation?.name ??
+                          '',
+                      'price': type == 'video'
+                          ? controller
+                                  .userData.value.data!.pricing?.videoCallPrice
+                                  .toString() ??
+                              ''
+                          : controller
+                                  .userData.value.data!.pricing?.audioCallPrice
+                                  .toString() ??
+                              '',
+                      'id': controller.id.id ?? '',
+                      'type': type,
+                    });
+                  },
+                ),
+                const Divider(),
+                ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: Colors.yellow.shade100,
+                    child:
+                        const Icon(Icons.calendar_today, color: Colors.yellow),
+                  ),
+                  title: Text(
+                    'Start Chat',
+                    style: theme.textTheme.bodyMedium!
+                        .copyWith(color: Colors.black),
+                  ),
+                  subtitle: Text(
+                    'Initiate chat with ${controller.userData.value.data!.basicInfo!.firstName.toString()}',
+                    style: theme.textTheme.titleSmall!
+                        .copyWith(color: appTheme.gray400),
+                  ),
+                  onTap: () async {
+                    final chatData =
+                        await ApiService().fetchChat(controller.id.id);
+                    log("this is chat Data  ===== $chatData");
+                    log("this is your id ${controller.id} and chat is ${chatData!["_id"]}");
+                    if (chatData != null) {
+                      Navigator.pushNamed(
+                        context,
+                        AppRoutes.chattingScreen,
+                        arguments: {'chat': chatData},
+                      );
+                    } else {
+                      print('Failed to load chat');
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return PopScope(
@@ -525,43 +673,45 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                   return Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      isLoading
-                          ? CircularProgressIndicator(
-                              color: theme.primaryColor,
-                            )
-                          : _buildActionButton(
-                              ImageConstant.videocam,
-                              "${pricing.videoCallPrice}/min",
-                              Colors.red,
-                              () {
-                                setState(() {
-                                  isLoading = true;
-                                });
-                                _scheduleMeeting('video');
-                              },
-                            ),
+                      _buildActionButton(
+                        ImageConstant.videocam,
+                        "${pricing.videoCallPrice}/min",
+                        Colors.red,
+                        () {
+                          _showBottomSheet2(context, 'video');
+                          // _scheduleMeeting('video');
+                        },
+                      ),
                       _buildVerticalDivider(),
-                      isLoading1
-                          ? CircularProgressIndicator(
-                              color: theme.primaryColor,
-                            )
-                          : _buildActionButton(
-                              ImageConstant.call,
-                              "${pricing.audioCallPrice}/min",
-                              Colors.green,
-                              () {
-                                setState(() {
-                                  isLoading1 = true;
-                                });
-                                _scheduleMeeting('audio');
-                              },
-                            ),
+                      _buildActionButton(
+                        ImageConstant.call,
+                        "${pricing.audioCallPrice}/min",
+                        Colors.green,
+                        () {
+                          _showBottomSheet2(context, 'audio');
+                          // _scheduleMeeting('audio');
+                        },
+                      ),
                       _buildVerticalDivider(),
                       _buildActionButton(
                         ImageConstant.msg,
                         "${pricing.messagePrice}/msg",
                         appTheme.yellow900,
-                        () {},
+                        () async {
+                          final chatData =
+                              await ApiService().fetchChat(controller.id.id);
+                          log("this is chat Data  ===== $chatData");
+                          log("this is your id ${controller.id} and chat is ${chatData!["_id"]}");
+                          if (chatData != null) {
+                            Navigator.pushNamed(
+                              context,
+                              AppRoutes.chattingScreen,
+                              arguments: {'chat': chatData},
+                            );
+                          } else {
+                            print('Failed to load chat');
+                          }
+                        },
                       ),
                     ],
                   );
@@ -758,7 +908,9 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                       ?.fontSize, // Same font size as paragraph
                 ),
               );
-            }),
+            
+            }
+            ),
           ),
           SizedBox(
             height: 17.v,
@@ -853,7 +1005,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                         ),
                         Text(
                           "$formattedStartDate - $formattedEndDate · $totalDuration",
-                          style: theme.textTheme.bodyMedium!,
+                          style: theme.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w500, fontSize: 14.fSize),
                         ),
                         SizedBox(
                           height: 18.v,
@@ -982,7 +1134,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                         ),
                         Text(
                           "$formattedStartDate - $formattedEndDate · $totalDuration",
-                          style: theme.textTheme.bodyMedium!,
+                          style: theme.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w500, fontSize: 14.fSize),
                         ),
                         SizedBox(
                           height: 18.v,
@@ -1132,7 +1284,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
               return Text(
                 "No reviews yet",
                 style: theme.textTheme.bodyMedium
-                    ?.copyWith(color: appTheme.gray900),
+                    ?.copyWith(color: appTheme.gray300),
               );
             } else {
               // Limit the number of reviews to 5
@@ -1207,13 +1359,13 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                           SizedBox(height: 8.v),
                           Container(
                             width: 304.adaptSize,
-                            margin: const EdgeInsets.only(right: 31),
+                            margin:  EdgeInsets.only( left: 8.adaptSize),
                             child: Text(
                               review.review.toString(),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
                               style: theme.textTheme.bodyMedium
-                                  ?.copyWith(color: appTheme.gray900),
+                                  ?.copyWith(color: appTheme.gray900, fontWeight: FontWeight.w500,fontSize: 14.adaptSize ),
                             ),
                           ),
                           SizedBox(height: 8.v), // Added SizedBox for spacing

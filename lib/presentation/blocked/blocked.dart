@@ -3,6 +3,7 @@ import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/blocked/controller/blocked_controller.dart';
 import 'package:experta/presentation/blocked/models/blocked_model.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter/material.dart';
 
 class BlockedPage extends StatefulWidget {
   const BlockedPage({super.key});
@@ -13,6 +14,30 @@ class BlockedPage extends StatefulWidget {
 
 class _BlockedPageState extends State<BlockedPage> {
   final BlockedController controller = Get.put(BlockedController());
+  final TextEditingController searchController = TextEditingController();
+  List<BlockedUser> filteredUsers = [];
+
+  @override
+  void initState() {
+    super.initState();
+    filteredUsers = controller.blockedUsers;
+    searchController.addListener(_filterUsers);
+  }
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+
+  void _filterUsers() {
+    final query = searchController.text.toLowerCase();
+    setState(() {
+      filteredUsers = controller.blockedUsers.where((user) {
+        return user.displayName.toLowerCase().contains(query);
+      }).toList();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -23,15 +48,15 @@ class _BlockedPageState extends State<BlockedPage> {
           Column(
             children: [
               _buildAppBar(),
-              // Add a gap of 70 between AppBar and Search Bar
               const SizedBox(height: 15),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 16.0), // Padding to match the AppBar
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Column(
                     children: [
-                      const CustomSearchView(
+                      CustomSearchView(
+                        width: 343.h,
+                        controller: searchController,
                         hintText: "Search user",
                       ),
                       Expanded(
@@ -40,18 +65,17 @@ class _BlockedPageState extends State<BlockedPage> {
                             return const Center(
                                 child: CircularProgressIndicator());
                           }
-                          if (controller.blockedUsers.isEmpty) {
+                          if (filteredUsers.isEmpty) {
                             return const Center(
                                 child: Text('No blocked users'));
                           }
                           return ListView.builder(
-                            itemCount: controller.blockedUsers.length,
+                            itemCount: filteredUsers.length,
                             itemBuilder: (context, index) {
-                              final user = controller.blockedUsers[index];
+                              final user = filteredUsers[index];
                               return Padding(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical:
-                                        8.0), // Optional vertical padding between items
+                                padding:
+                                    const EdgeInsets.symmetric(vertical: 8.0),
                                 child: UserTile(
                                   user: user,
                                   onUnblock: () {
@@ -90,7 +114,6 @@ class _BlockedPageState extends State<BlockedPage> {
           icon: const Icon(Icons.add, color: Colors.black),
           onPressed: () {
             Get.toNamed(AppRoutes.blocksearch);
-            // Define what should happen when the plus icon is pressed
             print("Plus icon pressed");
           },
         ),
@@ -139,11 +162,10 @@ class UserTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      contentPadding: const EdgeInsets.symmetric(
-          horizontal: 16.0), // Add padding to match the AppBar
+      contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
       leading: ClipOval(
         child: SizedBox(
-          width: 40.0, // Adjust the size as needed
+          width: 40.0,
           height: 40.0,
           child: _isSvg(user.profilePic)
               ? SvgPicture.network(
@@ -170,15 +192,15 @@ class UserTile extends StatelessWidget {
         onPressed: onUnblock,
         style: ElevatedButton.styleFrom(
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(4.0), // Rectangular shape
+            borderRadius: BorderRadius.circular(4.0),
           ),
           backgroundColor: Colors.white,
-          minimumSize: const Size(100, 50), // Set width and height
+          minimumSize: const Size(100, 50),
         ),
         child: const Text(
           'Unblock',
           style: TextStyle(
-            color: Colors.black, // Text color black
+            color: Colors.black,
           ),
         ),
       ),

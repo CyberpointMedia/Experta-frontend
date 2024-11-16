@@ -78,6 +78,10 @@ class CustomDropDown extends StatelessWidget {
   Widget get dropDownWidget => SizedBox(
         width: width ?? double.maxFinite,
         child: DropdownButtonFormField<SelectionPopupModel>(
+          hint: Text(
+            "Select",
+            style: CustomTextStyles.titleMediumSemiBold_1,
+          ),
           focusNode: focusNode ?? FocusNode(),
           icon: icon,
           autofocus: autofocus!,
@@ -94,6 +98,7 @@ class CustomDropDown extends StatelessWidget {
           }).toList(),
           decoration: decoration,
           validator: validator,
+          itemHeight: 50,
           onChanged: (value) {
             onChanged!(value!);
           },
@@ -101,7 +106,7 @@ class CustomDropDown extends StatelessWidget {
         ),
       );
   InputDecoration get decoration => InputDecoration(
-        hintText: hintText ?? "",
+        // hintText: hintText ?? "",
         hintStyle: hintStyle ?? CustomTextStyles.titleMediumSemiBold_1,
         prefixIcon: prefix,
         prefixIconConstraints: prefixConstraints,
@@ -110,7 +115,8 @@ class CustomDropDown extends StatelessWidget {
         isDense: true,
         contentPadding: contentPadding ??
             EdgeInsets.only(
-              left: 15.h,
+              left: 15.v,
+              right: 15.v,
               top: 16.v,
               bottom: 16.v,
             ),

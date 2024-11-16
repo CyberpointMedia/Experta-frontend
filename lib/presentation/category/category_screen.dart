@@ -53,50 +53,69 @@ class _CategoryScreenState extends State<CategoryScreen> {
               _buildAppBar(),
               Expanded(
                 child: Obx(() {
-                  return GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 3,
-                      mainAxisSpacing: 10.0,
-                      crossAxisSpacing: 10.0,
-                      childAspectRatio: 1.0,
-                    ),
-                    itemCount: controller.industries.length,
-                    itemBuilder: (context, index) {
-                      Industry industry = controller.industries[index];
-                      bool isSelected =
-                          selectedIndex == index; // Check if item is selected
+                  return Padding(
+                    padding: const EdgeInsets.only(left: 16, right: 16),
+                    child: GridView.builder(
+                      gridDelegate:
+                          const SliverGridDelegateWithFixedCrossAxisCount(
+                        crossAxisCount: 3,
+                        mainAxisSpacing: 10.0,
+                        crossAxisSpacing: 10.0,
+                        childAspectRatio: 1.0,
+                      ),
+                      itemCount: controller.industries.length,
+                      itemBuilder: (context, index) {
+                        Industry industry = controller.industries[index];
+                        bool isSelected =
+                            selectedIndex == index; // Check if item is selected
 
-                      return GestureDetector(
-                        onTap: () {
-                          setState(() {
-                            selectedIndex = index;
-                          });
-                          Get.to(
-                            () => CategoryDetailScreen(
-                              categoryName: industry.name,
+                        return GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              selectedIndex = index;
+                            });
+                            Get.to(
+                              () => CategoryDetailScreen(
+                                categoryName: industry.name,
+                              ),
+                              arguments: {'industry': industry},
+                            );
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                              color: const Color(0XFFFFFFFF),
+                              borderRadius: BorderRadius.circular(10),
+                              // Removed boxShadow
                             ),
-                            arguments: {'industry': industry},
-                          );
-                        },
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CustomImageView(
-                              imagePath: industry.icon,
-                              height: 36.v,
-                              width: 36.adaptSize,
+                            width: 80.adaptSize,
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                SizedBox(
+                                  height: 36.adaptSize,
+                                  width: 36.adaptSize,
+                                  child: CustomImageView(
+                                    imagePath: industry.icon,
+                                    color: theme.primaryColor,
+                                    placeHolder: ImageConstant.imageNotFound,
+                                  ),
+                                ),
+                                SizedBox(height: 5.v),
+                                Text(
+                                  industry.name,
+                                  maxLines: 2,
+                                  textAlign: TextAlign.center,
+                                  style: theme.textTheme.titleSmall!
+                                      .copyWith(color: Colors.black),
+                                ),
+                              ],
                             ),
-                            const SizedBox(height: 10),
-                            Text(
-                              industry.name,
-                              style: theme.textTheme.bodyMedium!
-                                  .copyWith(color: Colors.black),
-                            ),
-                          ],
-                        ),
-                      );
-                    },
+                          ),
+                        );
+                      },
+                    ),
                   );
                 }),
               ),

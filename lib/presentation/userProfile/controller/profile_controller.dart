@@ -27,6 +27,8 @@ class ProfileController extends GetxController {
           .setProfileImage('${userData.value.data?.basicInfo?.profilePic}');
       await PrefUtils().setProfileName(
           "${userData.value.data?.basicInfo?.firstName ?? ''} ${userData.value.data?.basicInfo?.lastName ?? ''}");
+      await PrefUtils()
+          .setUserName(userData.value.data?.basicInfo?.displayName ?? '');
     } catch (e) {
       // Handle error
       print("Error fetching user data: $e");

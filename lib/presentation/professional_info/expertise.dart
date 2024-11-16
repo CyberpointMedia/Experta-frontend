@@ -69,7 +69,8 @@ class ExpertiseView extends StatelessWidget {
                           final isSelected =
                               controller.selectedItems.contains(item);
                           return ListTile(
-                            title: Text(item.name),
+                            title: Text(item.name,
+                            style: theme.textTheme.titleMedium!.copyWith(fontSize: 16, fontWeight: FontWeight.w500),),
                             trailing: Checkbox(
                               value: isSelected,
                               onChanged: (bool? value) {

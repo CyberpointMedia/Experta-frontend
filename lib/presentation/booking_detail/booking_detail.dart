@@ -18,6 +18,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
   final ApiService apiService = ApiService();
   int? balance;
   bool isLoading = true;
+  bool isLoading2 = false;
   DateTime? selectedDate;
   String selectedDuration = "";
   String selectedSlot = "";
@@ -28,6 +29,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
   String occupation = '';
   String price = '';
   String id = '';
+  String type = '';
 
   @override
   void initState() {
@@ -44,6 +46,7 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
     occupation = arguments['occupation'] ?? '';
     price = arguments['price'] ?? '';
     id = arguments['id'] ?? '';
+    type = arguments['type'] ?? '';
   }
 
   Future<void> fetchWalletBalance() async {
@@ -119,15 +122,26 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
                                 ),
                                 const Divider(),
                                 _buildAppointmentType(
-                                  'Video Call',
-                                  leading: CustomIconButton(
-                                      height: 44.adaptSize,
-                                      width: 44.adaptSize,
-                                      padding: EdgeInsets.all(10.h),
-                                      decoration: IconButtonStyleHelper
-                                          .fillPrimaryContainerT123,
-                                      child: CustomImageView(
-                                          imagePath: ImageConstant.videocam)),
+                                  type,
+                                  leading: type == 'video'
+                                      ? CustomIconButton(
+                                          height: 44.adaptSize,
+                                          width: 44.adaptSize,
+                                          padding: EdgeInsets.all(10.h),
+                                          decoration: IconButtonStyleHelper
+                                              .fillPrimaryContainerT123,
+                                          child: CustomImageView(
+                                            imagePath: ImageConstant.videocam,
+                                          ))
+                                      : CustomIconButton(
+                                          height: 44.adaptSize,
+                                          width: 44.adaptSize,
+                                          padding: EdgeInsets.all(10.h),
+                                          decoration: IconButtonStyleHelper
+                                              .fillGreenTL24,
+                                          child: CustomImageView(
+                                            imagePath: ImageConstant.call,
+                                          )),
                                 ),
                                 const Divider(), // Divider added here
                                 _buildInfoRow(
@@ -163,13 +177,20 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
               // "Continue" button positioned at the bottom
               Padding(
                 padding: const EdgeInsets.only(left: 16, right: 16, bottom: 30),
-                child: CustomElevatedButton(
-                  text: "Book Now",
-                  onPressed: () {
-                    _createBooking(context);
-                    // Get.toNamed(AppRoutes.sUcessfuly);
-                  },
-                ),
+                child: isLoading2
+                    ? CircularProgressIndicator(
+                        color: theme.primaryColor,
+                      )
+                    : CustomElevatedButton(
+                        text: "Book Now",
+                        onPressed: () {
+                          setState(() {
+                            isLoading2 = true;
+                          });
+                          _createBooking(context);
+                          // Get.toNamed(AppRoutes.sUcessfuly);
+                        },
+                      ),
               ),
             ],
           ),
@@ -218,13 +239,16 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
       "expertId": id,
       "startTime": "${isoStartTime}Z",
       "endTime": "${isoEndTime}Z",
-      "type": "video"
+      "type": type
     };
     log("$bookingData");
     try {
       final response = await apiService.createBooking(bookingData);
 
       if (response['status'] == 'success') {
+        setState(() {
+          isLoading2 = false;
+        });
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(
               builder: (context) => const BookingConfirmationPage()),
@@ -234,10 +258,16 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
           Get.back();
         });
       } else {
+        setState(() {
+          isLoading2 = false;
+        });
         _showErrorDialog(
             context, "NO this is ${response['error']['errorMessage']}");
       }
     } catch (e) {
+      setState(() {
+        isLoading2 = false;
+      });
       _showErrorDialog(context, e.toString());
     }
   }

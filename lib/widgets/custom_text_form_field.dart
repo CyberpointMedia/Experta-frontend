@@ -11,6 +11,7 @@ class CustomTextFormField extends StatelessWidget {
     this.autofocus = false,
     this.textStyle,
     this.obscureText = false,
+     this.readOnly = false,
     this.textInputAction = TextInputAction.next,
     this.textInputType = TextInputType.text,
     this.maxLines,
@@ -37,6 +38,8 @@ class CustomTextFormField extends StatelessWidget {
   final void Function(String)? onChanged;
 
   final double? width;
+
+  final bool readOnly; 
 
   final TextEditingController? scrollPadding;
 
@@ -108,6 +111,7 @@ class CustomTextFormField extends StatelessWidget {
           decoration: decoration,
           validator: validator,
           onFieldSubmitted: onFieldSubmitted, // Add this line
+          readOnly: readOnly,
         ),
       );
 

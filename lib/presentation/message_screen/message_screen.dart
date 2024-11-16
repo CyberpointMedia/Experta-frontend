@@ -4,6 +4,7 @@ import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/message_screen/widgets/anjaliarora_item_widget.dart';
 import 'package:experta/widgets/app_bar/appbar_subtitle.dart';
 import 'package:experta/widgets/app_bar/appbar_trailing_iconbutton.dart';
+import 'package:experta/widgets/custom_icon_button.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'controller/message_controller.dart';
 
@@ -162,12 +163,33 @@ class _MessageScreenState extends State<MessageScreen> {
           title: AppbarSubtitle(
               text: "lbl_inbox".tr, margin: EdgeInsets.only(left: 15.h)),
           actions: [
-            AppbarTrailingIconbutton(
-                imagePath: ImageConstant.imgBell02,
-                margin: EdgeInsets.symmetric(horizontal: 16.h),
-                onTap: () {
-                  onTapBellTwo();
-                })
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              child: IconButton(
+                onPressed: () {
+                  Get.toNamed(AppRoutes.notification);
+                },
+                padding: const EdgeInsets.only(right: 5),
+                icon: Container(
+                  width: 35.0,
+                  height: 35.0,
+                  padding: const EdgeInsets.all(5),
+                  decoration: IconButtonStyleHelper.outline.copyWith(
+                    // color: appTheme.gray20002,
+                    color: appTheme.whiteA700.withOpacity(0.6),
+                    border: Border.all(
+                      color: Colors.white,
+                      width: 1.5, // Border width
+                    ),
+                  ),
+                  child: CustomImageView(
+                    imagePath: ImageConstant.imgBell02,
+                    height: 8.0, // Set the desired height
+                    width: 8.0, // Set the desired width
+                  ),
+                ),
+              ),
+            )
           ]),
       body: Stack(
         children: [
@@ -356,7 +378,8 @@ class _MessageScreenState extends State<MessageScreen> {
                                                 .titleMediumSemiBold),
                                         SizedBox(height: 2.v),
                                         Text(lastMessage,
-                                            style: theme.textTheme.bodyLarge!
+                                            textAlign: TextAlign.start,
+                                            style: theme.textTheme.titleSmall!
                                                 .copyWith(
                                                     overflow:
                                                         TextOverflow.ellipsis)),
