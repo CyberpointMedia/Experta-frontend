@@ -13,6 +13,8 @@ class BasicProfileInfoModel {
   final String linkedin;
   final String twitter;
   final String profilePic;
+  final String dateOfBirth;
+  final String gender;
 
   BasicProfileInfoModel({
     required this.id,
@@ -29,24 +31,28 @@ class BasicProfileInfoModel {
     required this.linkedin,
     required this.twitter,
     required this.profilePic,
+    required this.dateOfBirth,
+    required this.gender,
   });
 
   factory BasicProfileInfoModel.fromJson(Map<String, dynamic> json) {
     return BasicProfileInfoModel(
-      id: json['_id'],
-      firstName: json['firstName'],
-      lastName: json['lastName'],
-      posts: List<String>.from(json['posts']),
-      rating: json['rating'],
-      createdAt: json['createdAt'],
-      updatedAt: json['updatedAt'],
-      bio: json['bio'],
-      displayName: json['displayName'],
-      facebook: json['facebook'],
-      instagram: json['instagram'],
-      linkedin: json['linkedin'],
-      twitter: json['twitter'],
-      profilePic: json['profilePic'],
+      id: json['_id'] ?? '',
+      firstName: json['firstName'] ?? '',
+      lastName: json['lastName'] ?? '',
+      posts: List<String>.from(json['posts'] ?? []),
+      rating: json['rating'] ?? 0,
+      createdAt: json['createdAt'] ?? '',
+      updatedAt: json['updatedAt'] ?? '',
+      bio: json['bio'] ?? '',
+      displayName: json['displayName'] ?? '',
+      facebook: json['facebook'] ?? '',
+      instagram: json['instagram'] ?? '',
+      linkedin: json['linkedin'] ?? '',
+      twitter: json['twitter'] ?? '',
+      profilePic: json['profilePic'] ?? '',
+      dateOfBirth: json['dateOfBirth'] ?? '',
+      gender: json['gender'] ?? '',
     );
   }
 }
