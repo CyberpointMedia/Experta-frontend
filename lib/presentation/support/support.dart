@@ -1,5 +1,6 @@
 import 'dart:ui'; // Required for the ImageFilter.blur
 import 'package:experta/core/app_export.dart';
+import 'package:file_picker/file_picker.dart';
 
 class RaiseTicketPage extends StatelessWidget {
   const RaiseTicketPage({super.key});
@@ -109,8 +110,21 @@ class RaiseTicketPage extends StatelessWidget {
 
                         // Upload File Section with Dashed Border
                         GestureDetector(
-                          onTap: () {
-                            // Handle file upload
+                          onTap: () async {
+                            // Open file picker to select files
+                            FilePickerResult? result = await FilePicker.platform.pickFiles(
+                              allowMultiple: false,
+                              type: FileType.custom,
+                              allowedExtensions: ['jpg', 'png', 'pdf'],
+                            );
+
+                            if (result != null) {
+                              // Handle the picked file
+                              var pickedFile = result.files.single;
+                              // You can add logic to display the selected file
+                              // For now, just printing the file name
+                              print('Picked file: ${pickedFile.name}');
+                            }
                           },
                           child: CustomPaint(
                             painter: DashedBorderPainter(
@@ -126,16 +140,26 @@ class RaiseTicketPage extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(10.0),
                                 color: Colors.white,
                               ),
-                              child: const Column(
+                              child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Icon(Icons.cloud_upload,
-                                      size: 40, color: Colors.grey),
-                                  SizedBox(height: 8),
-                                  Text(
+                                  // Replace the icon with CustomImageView
+                                  CustomImageView(
+                                    imagePath: ImageConstant.uploadcloud,
+                                    width: 40,
+                                    height: 40,
+                                  ),
+                                  const SizedBox(height: 8),
+                                  const Text(
                                     "Upload your file",
                                     style: TextStyle(color: Colors.grey),
                                   ),
+                                  const SizedBox(height: 4),
+                                  // Display file types info
+                                  // const Text(
+                                  //   "(JPEG, PNG, PDF)",
+                                  //   style: TextStyle(color: Colors.grey),
+                                  // ),
                                 ],
                               ),
                             ),
@@ -223,7 +247,7 @@ class DashedBorderPainter extends CustomPainter {
       startX += dashWidth + dashSpace;
     }
 
-    // Right border
+    // Right borderb 
     double startY = 0;
     while (startY < size.height) {
       path.moveTo(size.width, startY);
