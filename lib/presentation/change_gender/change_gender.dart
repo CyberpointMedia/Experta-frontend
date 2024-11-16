@@ -117,7 +117,7 @@ class _ChangeGenderState extends State<ChangeGender> {
                           height: 50.0,
                         ),
                         const SizedBox(
-                            width: 8.0), // Adding space between image and text
+                            width: 8.0),
                         Text(
                           "Male",
                           style: TextStyle(

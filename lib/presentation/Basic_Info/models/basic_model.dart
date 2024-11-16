@@ -13,6 +13,8 @@ class BasicProfileInfoModel {
   final String linkedin;
   final String twitter;
   final String profilePic;
+  final String dateOfBirth;
+  final String gender;
 
   BasicProfileInfoModel({
     required this.id,
@@ -29,6 +31,8 @@ class BasicProfileInfoModel {
     required this.linkedin,
     required this.twitter,
     required this.profilePic,
+    required this.dateOfBirth,
+    required this.gender,
   });
 
   factory BasicProfileInfoModel.fromJson(Map<String, dynamic> json) {
@@ -47,6 +51,8 @@ class BasicProfileInfoModel {
       linkedin: json['linkedin'] ?? '',
       twitter: json['twitter'] ?? '',
       profilePic: json['profilePic'] ?? '',
+      dateOfBirth: json['dateOfBirth'] ?? '',
+      gender: json['gender'] ?? '',
     );
   }
 }
