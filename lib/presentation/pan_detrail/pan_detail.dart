@@ -5,41 +5,19 @@ import 'package:experta/presentation/add_upi/controller/add_upi_controller.dart'
 import 'package:experta/widgets/custom_text_form_field.dart';
 
 class PanDetail extends StatefulWidget {
- final String name;
- final String panno;
- final String dob;
- 
-  const PanDetail({super.key, required this.name, required this.panno, required this.dob});
+  final String name;
+  final String panno;
+  final String dob;
+
+  const PanDetail(
+      {super.key, required this.name, required this.panno, required this.dob});
 
   @override
   State<PanDetail> createState() => _PanDetailState();
 }
 
 class _PanDetailState extends State<PanDetail> {
-  // Define separate controllers for each field
-  final TextEditingController fullNameController = TextEditingController();
-  final TextEditingController panNumberController = TextEditingController();
-  final TextEditingController dateOfBirthController = TextEditingController();
-
-  // Define focus nodes for each field
-  final FocusNode fullNameFocusNode = FocusNode();
-  final FocusNode panNumberFocusNode = FocusNode();
-  final FocusNode dateOfBirthFocusNode = FocusNode();
-
   AddUpiController controller = Get.put(AddUpiController());
-
-  @override
-  void dispose() {
-    // Dispose controllers and focus nodes when the widget is disposed
-    fullNameController.clear();
-    panNumberController.clear();
-    dateOfBirthController.clear();
-    fullNameFocusNode.dispose();
-    panNumberFocusNode.dispose();
-    dateOfBirthFocusNode.dispose();
-
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -81,12 +59,10 @@ class _PanDetailState extends State<PanDetail> {
                     height: 6,
                   ),
                   CustomTextFormField(
-                    hintText: "Naveen Verma",
-                    hintStyle: CustomTextStyles.titleMediumBluegray300,
+                    initialValue: widget.name,
                     textInputType: TextInputType.name,
-                    controller: fullNameController,
-                    focusNode: fullNameFocusNode,
                     autofocus: false,
+                    readOnly: true,
                   ),
                   const SizedBox(height: 20),
                   const Text("PAN Number"),
@@ -94,49 +70,12 @@ class _PanDetailState extends State<PanDetail> {
                     height: 6,
                   ),
                   CustomTextFormField(
-                    hintText: "AMAPV8100G",
-                    hintStyle: CustomTextStyles.titleMediumBluegray300,
+                    initialValue: widget.panno,
                     textInputType: TextInputType.text,
-                    controller: panNumberController,
-                    focusNode: panNumberFocusNode,
                     autofocus: false,
+                    readOnly: true,
                   ),
-                  // const SizedBox(height: 20),
-                  // const Text("Date of Birth"),
-                  // const SizedBox(
-                  //   height: 6,
-                  // ),
-                  // CustomTextFormField(
-                  //   hintText: "25/11/1992",
-                  //   hintStyle: CustomTextStyles.titleMediumBluegray300,
-                  //   textInputType: TextInputType.datetime,
-                  //   controller: dateOfBirthController,
-                  //   focusNode: dateOfBirthFocusNode,
-                  //   autofocus: false,
-                  // ),
                   const Spacer(),
-                  //   CustomElevatedButton(
-                  //     text: "Save",
-                  //     onPressed: () {
-                  //       if (fullNameController.text.isNotEmpty &&
-                  //           panNumberController.text.isNotEmpty &&
-                  //           dateOfBirthController.text.isNotEmpty) {
-                  //         CustomToast().showToast(
-                  //           context: context,
-                  //           message: "Details saved successfully",
-                  //           isSuccess: true,
-                  //         );
-                  //         Get.toNamed(AppRoutes.accountSetting);
-                  //       } else {
-                  //         CustomToast().showToast(
-                  //           context: context,
-                  //           message: "Please fill in all the fields",
-                  //           isSuccess: false,
-                  //         );
-                  //       }
-                  //     },
-                  //     margin: const EdgeInsets.all(10),
-                  //   ),
                 ],
               ),
             ),

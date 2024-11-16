@@ -1028,7 +1028,7 @@ class ApiService {
     }
   }
 
-  Future<List<Transaction>> fetchTransactionHistory() async {
+Future<List<Transaction>> fetchTransactionHistory() async {
     final response = await http.get(
       Uri.parse('$_baseUrl/transaction-history'),
       headers: {
@@ -1051,6 +1051,7 @@ class ApiService {
       throw Exception('Failed to load transaction history');
     }
   }
+
 
   Future<Map<String, dynamic>> createBooking(
       Map<String, dynamic> bookingData) async {
