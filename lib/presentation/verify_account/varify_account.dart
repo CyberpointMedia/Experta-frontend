@@ -391,7 +391,8 @@ class _VerifyAccountState extends State<VerifyAccount> {
                                 height: 44.adaptSize,
                                 width: 44.adaptSize,
                                 padding: EdgeInsets.all(10.h),
-                                decoration: IconButtonStyleHelper.fillOnPrimaryContainer,
+                                decoration: IconButtonStyleHelper
+                                    .fillOnPrimaryContainer,
                                 child: CustomImageView(
                                     imagePath: ImageConstant.bank),
                               ),
@@ -624,18 +625,24 @@ class _VerifyAccountState extends State<VerifyAccount> {
                     ),
                   ),
                   GestureDetector(
-                   onTap: () {
-  if (kycData!.panVerification!.verificationStatus == false) {
-    _showPANVerificationDialog();
-  } else {
-    Navigator.push(
-      context,
-      MaterialPageRoute(
-        builder: (context) => const PanDetail(name: '', panno: '', dob: '',), // Replace NextPage with your actual page class
-      ),
-    );
-  }
-},
+                    onTap: () {
+                      if (kycData!.panVerification!.verificationStatus ==
+                          false) {
+                        _showPANVerificationDialog();
+                      } else {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (context) => PanDetail(
+                              name: kycData!
+                                  .panVerification!.panDetails!['full_name'],
+                              panno: '${kycData!.panVerification!.panNumber}',
+                              dob: '',
+                            ),
+                          ),
+                        );
+                      }
+                    },
                     child: Padding(
                       padding: const EdgeInsets.only(top: 1),
                       child: Container(
@@ -904,7 +911,6 @@ class _VerifyAccountState extends State<VerifyAccount> {
         ),
       ),
     );
-  
   }
 
   void _showPANVerificationDialog() {
