@@ -79,6 +79,21 @@ class PrefUtils {
     await _sharedPreferences!.remove('name');
   }
 
+  /// Save name to SharedPreferences
+  Future<void> setUserName(String name) async {
+    await _sharedPreferences!.setString('name', name);
+  }
+
+  /// Retrieve name from SharedPreferences
+  String? getUserName() {
+    return _sharedPreferences!.getString('name');
+  }
+
+  /// Remove name from SharedPreferences
+  Future<void> removeUserName() async {
+    await _sharedPreferences!.remove('name');
+  }
+
   /// Save email to SharedPreferences
   Future<void> setEmail(String email) async {
     await _sharedPreferences!.setString('email', email);
@@ -92,6 +107,21 @@ class PrefUtils {
   /// Remove name from SharedPreferences
   Future<void> removeEmail() async {
     await _sharedPreferences!.remove('email');
+  }
+
+  /// Save email to SharedPreferences
+  Future<void> setMob(String mob) async {
+    await _sharedPreferences!.setString('mob', mob);
+  }
+
+  /// Retrieve name from SharedPreferences
+  String? getmob() {
+    return _sharedPreferences!.getString('mob');
+  }
+
+  /// Remove name from SharedPreferences
+  Future<void> removemob() async {
+    await _sharedPreferences!.remove('mob');
   }
 
   /// Save address to SharedPreferences

@@ -1,12 +1,16 @@
 import 'dart:ui';
 import 'package:experta/core/app_export.dart';
+import 'package:experta/presentation/Home/controller/home_controller.dart';
+import 'package:experta/presentation/search_block/controller/search_block_controller.dart';
 import 'package:experta/widgets/animated_hint_searchview.dart'; // Your custom search view widget
 
 // ignore: unused_import
+import '../search_screen/models/search_model.dart';
 import '../search_screen/widgets/search_item_widget.dart';
 
 class ProfileBlockPage extends StatelessWidget {
   final TextEditingController searchController = TextEditingController();
+  HomeController controller = Get.put(HomeController());
 
   ProfileBlockPage({super.key});
 
@@ -50,7 +54,7 @@ class ProfileBlockPage extends StatelessWidget {
                       // Search Bar on the left side of Cancel Button
                       Expanded(
                         child: CustomAnimatedSearchView(
-                          // controller: searchController,
+                          controller: searchController,
                           hintTexts: const ['Search users'], // Example hints
                           onChanged: (value) {
                             // Logic to perform search, e.g. controller.fetchUsersBySearch(value);
@@ -122,28 +126,29 @@ class ProfileBlockPage extends StatelessWidget {
         child: Padding(
           padding: EdgeInsets.only(left: 16.h),
           // Uncomment and modify this to display search results
-          // child: Obx(
-          //   () {
-          //     if (controller.isLoading.value) {
-          //       return const Center(child: CircularProgressIndicator());
-          //     }
-          //     if (controller.searchResults.value.isEmpty) {
-          //       return const Center(child: Text("No results found"));
-          //     }
-          //     return ListView.separated(
-          //       physics: const BouncingScrollPhysics(),
-          //       shrinkWrap: true,
-          //       separatorBuilder: (context, index) {
-          //         return SizedBox(height: 1.v);
-          //       },
-          //       itemCount: controller.searchResults.value.length,
-          //       itemBuilder: (context, index) {
-          //         SearchResult model = controller.searchResults.value[index];
-          //         return SearchItemWidget(model);
-          //       },
-          //     );
-          //   },
-          // ),
+          child: Obx(
+            () {
+              if (controller.isLoading.value) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (controller.searchResults.value.isEmpty) {
+                return const Center(child: Text("No results found"));
+              }
+              return ListView.separated(
+                physics: const BouncingScrollPhysics(),
+                shrinkWrap: true,
+                separatorBuilder: (context, index) {
+                  return SizedBox(height: 1.v);
+                },
+                itemCount: controller.searchResults.value.length,
+                itemBuilder: (context, index) {
+                  SearchResult model =
+                      controller.searchResults.value[index] as SearchResult;
+                  return SearchItemWidget(model);
+                },
+              );
+            },
+          ),
         ),
       ),
     );

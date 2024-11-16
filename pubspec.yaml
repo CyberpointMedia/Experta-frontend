@@ -48,7 +48,6 @@ dependencies:
   sms_autofill: ^2.3.1
   http: ^1.2.1
   readmore: ^3.0.0
-  font_awesome_flutter: ^10.7.0
   file_picker: ^8.0.3
   meta: ^1.11.0
   page_transition: ^2.1.0

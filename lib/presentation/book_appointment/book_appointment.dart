@@ -32,6 +32,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
   String occupation = '';
   String price = '';
   String id = '';
+  String type = '';
 
   @override
   void initState() {
@@ -44,6 +45,8 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
     occupation = arguments['occupation'] ?? '';
     price = arguments['price'] ?? '';
     id = arguments['id'] ?? '';
+    type = arguments['type'] ?? '';
+
     fetchWalletBalance();
     fetchAvailabilityData();
     durationModels = durations.asMap().entries.map((entry) {
@@ -356,6 +359,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
                                 'occupation': occupation,
                                 'price': price,
                                 'id': id,
+                                'type': type,
                               });
                         },
                       ),

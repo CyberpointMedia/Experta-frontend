@@ -4,6 +4,9 @@ import 'package:http/http.dart' as http;
 
 
 class AccountDetailsController extends GetxController {
+   String? email = PrefUtils().getEmail();
+  String? name = PrefUtils().getProfileName();
+  String? mob = PrefUtils().getbasic();
   final TextEditingController textField1 = TextEditingController();
   final TextEditingController textField2 = TextEditingController();
   final TextEditingController textField3 = TextEditingController();

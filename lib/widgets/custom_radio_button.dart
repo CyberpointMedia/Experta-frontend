@@ -100,6 +100,12 @@ class CustomRadioButton extends StatelessWidget {
         width: iconSize ?? 24.h,
         child: Radio<String>(
           activeColor: theme.primaryColor,
+          fillColor: MaterialStateProperty.resolveWith<Color>((states) {
+            if (states.contains(MaterialState.selected)) {
+              return theme.primaryColor;
+            }
+            return Colors.grey; // This is your inactive color
+          }),
           visualDensity: const VisualDensity(
             vertical: -2,
             horizontal: -2,
@@ -111,6 +117,7 @@ class CustomRadioButton extends StatelessWidget {
           },
         ),
       );
+
   BoxDecoration get radioButtonDecoration =>
       BoxDecoration(color: backgroundColor);
 }

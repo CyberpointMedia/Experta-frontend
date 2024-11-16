@@ -1,5 +1,7 @@
 import 'dart:ui'; // Required for the ImageFilter.blur
 import 'package:experta/core/app_export.dart';
+import 'package:experta/widgets/dashed_border.dart';
+import 'package:file_picker/file_picker.dart';
 
 class RaiseTicketPage extends StatelessWidget {
   const RaiseTicketPage({super.key});
@@ -106,11 +108,19 @@ class RaiseTicketPage extends StatelessWidget {
                           ),
                         ),
                         const SizedBox(height: 16),
-
-                        // Upload File Section with Dashed Border
                         GestureDetector(
-                          onTap: () {
-                            // Handle file upload
+                          onTap: () async {
+                            FilePickerResult? result =
+                                await FilePicker.platform.pickFiles(
+                              allowMultiple: false,
+                              type: FileType.custom,
+                              allowedExtensions: ['jpg', 'png', 'pdf'],
+                            );
+
+                            if (result != null) {
+                              var pickedFile = result.files.single;
+                              print('Picked file: ${pickedFile.name}');
+                            }
                           },
                           child: CustomPaint(
                             painter: DashedBorderPainter(
@@ -126,16 +136,25 @@ class RaiseTicketPage extends StatelessWidget {
                                 borderRadius: BorderRadius.circular(10.0),
                                 color: Colors.white,
                               ),
-                              child: const Column(
+                              child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Icon(Icons.cloud_upload,
-                                      size: 40, color: Colors.grey),
-                                  SizedBox(height: 8),
-                                  Text(
+                                  CustomImageView(
+                                    imagePath: ImageConstant.uploadcloud,
+                                    width: 40,
+                                    height: 40,
+                                  ),
+                                  const SizedBox(height: 8),
+                                  const Text(
                                     "Upload your file",
                                     style: TextStyle(color: Colors.grey),
                                   ),
+                                  const SizedBox(height: 4),
+                                  // Display file types info
+                                  // const Text(
+                                  //   "(JPEG, PNG, PDF)",
+                                  //   style: TextStyle(color: Colors.grey),
+                                  // ),
                                 ],
                               ),
                             ),
@@ -186,72 +205,5 @@ class RaiseTicketPage extends StatelessWidget {
   // Function for back navigation
   void onTapArrowLeft() {
     Get.back();
-  }
-}
-
-class DashedBorderPainter extends CustomPainter {
-  final Color color;
-  final double strokeWidth;
-  final double dashWidth;
-  final double dashSpace;
-  final double? topGap;
-  final double? bottomGap;
-
-  DashedBorderPainter({
-    required this.color,
-    this.strokeWidth = 1.0,
-    this.dashWidth = 5.0,
-    this.dashSpace = 3.0,
-    this.topGap,
-    this.bottomGap,
-  });
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    final paint = Paint()
-      ..color = color
-      ..strokeWidth = strokeWidth
-      ..style = PaintingStyle.stroke;
-
-    double startX = 0;
-    final path = Path();
-
-    // Top border
-    while (startX < size.width) {
-      path.moveTo(startX, 0);
-      path.lineTo(startX + dashWidth, 0);
-      startX += dashWidth + dashSpace;
-    }
-
-    // Right border
-    double startY = 0;
-    while (startY < size.height) {
-      path.moveTo(size.width, startY);
-      path.lineTo(size.width, startY + dashWidth);
-      startY += dashWidth + dashSpace;
-    }
-
-    // Bottom border
-    startX = size.width;
-    while (startX > 0) {
-      path.moveTo(startX, size.height);
-      path.lineTo(startX - dashWidth, size.height);
-      startX -= dashWidth + dashSpace;
-    }
-
-    // Left border
-    startY = size.height;
-    while (startY > 0) {
-      path.moveTo(0, startY);
-      path.lineTo(0, startY - dashWidth);
-      startY -= dashWidth + dashSpace;
-    }
-
-    canvas.drawPath(path, paint);
-  }
-
-  @override
-  bool shouldRepaint(covariant CustomPainter oldDelegate) {
-    return false;
   }
 }

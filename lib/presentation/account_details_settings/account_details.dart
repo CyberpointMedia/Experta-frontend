@@ -16,6 +16,9 @@ class DynamicSettingsPage extends StatefulWidget {
 class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
   final String settingType = Get.arguments['keyword'] as String;
   final controller = Get.put(AccountDetailsController());
+  String? email = PrefUtils().getEmail();
+  String? name = PrefUtils().getUserName();
+  String? mob = PrefUtils().getmob();
 
   @override
   Widget build(BuildContext context) {
@@ -94,11 +97,11 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
         height: 6,
       ),
       CustomTextFormField(
-        // hintText: "navi_verma88",
+        initialValue: name,
         hintStyle: CustomTextStyles.titleMediumBluegray300,
         textInputType: TextInputType.name,
-        controller: controller.textField1,
         focusNode: controller.focus1,
+        readOnly: true,
       ),
       const Spacer(),
       _buildSaveButton(context, controller.textField1.text.isNotEmpty,
@@ -203,25 +206,26 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
       ),
       CustomTextFormField(
         // hintText: "john.doe@example.com",
+        initialValue: email,
         hintStyle: CustomTextStyles.titleMediumBluegray300,
         textInputType: TextInputType.emailAddress,
-        controller: controller.textField3,
         focusNode: controller.focus3,
+        readOnly: true,
       ),
-      const SizedBox(
-        height: 12,
-      ),
-      const Text("New Email"),
-      const SizedBox(
-        height: 6,
-      ),
-      CustomTextFormField(
-        // hintText: "john.doe@example.com",
-        hintStyle: CustomTextStyles.titleMediumBluegray300,
-        textInputType: TextInputType.emailAddress,
-        controller: controller.textField4,
-        focusNode: controller.focus4,
-      ),
+      // const SizedBox(
+      //   height: 12,
+      // ),
+      // const Text("New Email"),
+      // const SizedBox(
+      //   height: 6,
+      // ),
+      // CustomTextFormField(
+      //   // hintText: "john.doe@example.com",
+      //   hintStyle: CustomTextStyles.titleMediumBluegray300,
+      //   textInputType: TextInputType.emailAddress,
+      //   controller: controller.textField4,
+      //   focusNode: controller.focus4,
+      // ),
       const Spacer(),
       _buildSaveButton(
           context,
@@ -245,10 +249,11 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
       ),
       CustomTextFormField(
         // hintText: "+1 123 456 7890",
+        initialValue: mob,
         hintStyle: CustomTextStyles.titleMediumBluegray300,
         textInputType: TextInputType.phone,
-        controller: controller.textField5,
         focusNode: controller.focus5,
+        readOnly: true,
       ),
       // const Spacer(),
       // _buildSaveButton(context, controller.textField5.text.isNotEmpty, "Phone Number changed Successfully", "Please Fill the phone number"),
@@ -258,16 +263,22 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
   Widget _buildTitle(String text) {
     return Text(
       text,
-      style: theme.textTheme.headlineSmall!
-          .copyWith(color: Colors.black, fontWeight: FontWeight.w500, fontSize: 24.fSize),
+      style: theme.textTheme.headlineSmall!.copyWith(
+          color: Colors.black, fontWeight: FontWeight.w500, fontSize: 24.fSize),
     );
   }
 
   Widget _buildSubtitle(String text) {
     return Padding(
-      padding:  EdgeInsets.only(top: 5.adaptSize, bottom: 15.adaptSize),
-      child: Text(text, maxLines: 1, style: theme.textTheme.headlineSmall!
-          .copyWith(color: appTheme.blueGray300, fontWeight: FontWeight.w400, fontSize: 14.fSize),),
+      padding: EdgeInsets.only(top: 5.adaptSize, bottom: 15.adaptSize),
+      child: Text(
+        text,
+        maxLines: 1,
+        style: theme.textTheme.headlineSmall!.copyWith(
+            color: appTheme.blueGray300,
+            fontWeight: FontWeight.w400,
+            fontSize: 14.fSize),
+      ),
     );
   }
 

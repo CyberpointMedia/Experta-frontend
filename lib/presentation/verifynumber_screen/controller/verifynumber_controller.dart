@@ -1,6 +1,5 @@
 import 'dart:developer';
 
-
 import 'package:experta/data/models/request/verify_otp_request_model.dart';
 import 'package:experta/data/models/response/verify_otp_response_model.dart';
 
@@ -40,6 +39,8 @@ class VerifynumberController extends GetxController with CodeAutoFill {
         await prefUtils.setToken("${response.token}");
         await prefUtils.setbasic("${response.data!.basicInfo}");
         log("hey this is your id ${response.data!.basicInfo}");
+        await prefUtils.setMob("${response.data!.phoneNo}");
+        log("hey this is your id ${response.data!.phoneNo}");
         // Handle success response
         Get.toNamed(AppRoutes.dashboard);
         print("OTP Verified Successfully");
@@ -51,36 +52,34 @@ class VerifynumberController extends GetxController with CodeAutoFill {
     }
   }
 
-void resendOtp(String phoneNumber) async {
-  if (phoneNumber.isNotEmpty) {
-    try {
-      // Make the API call directly with phoneNumber as a string
-      dynamic responseData = await _apiService.resendOtp(phoneNumber);
-      print("Response JSON: $responseData");
+  void resendOtp(String phoneNumber) async {
+    if (phoneNumber.isNotEmpty) {
+      try {
+        // Make the API call directly with phoneNumber as a string
+        dynamic responseData = await _apiService.resendOtp(phoneNumber);
+        print("Response JSON: $responseData");
 
-      if (responseData is Map<String, dynamic>) {
-        // Directly access the data from response
-        String status = responseData['status'];
-        var data = responseData['data'];
-        if (status == "success") {
-          // Update UI based on response
-          String otp = data['otp'];
-          print("OTP Resent Successfully: $otp");
+        if (responseData is Map<String, dynamic>) {
+          // Directly access the data from response
+          String status = responseData['status'];
+          var data = responseData['data'];
+          if (status == "success") {
+            // Update UI based on response
+            String otp = data['otp'];
+            print("OTP Resent Successfully: $otp");
+          } else {
+            print("OTP Resend failed");
+          }
         } else {
-          print("OTP Resend failed");
+          print("Invalid response format");
         }
-      } else {
-        print("Invalid response format");
+      } catch (e) {
+        print("Exception occurred: $e");
       }
-    } catch (e) {
-      print("Exception occurred: $e");
+    } else {
+      print("Phone number is empty");
     }
-  } else {
-    print("Phone number is empty");
   }
-}
-
-
 
   @override
   void onInit() {

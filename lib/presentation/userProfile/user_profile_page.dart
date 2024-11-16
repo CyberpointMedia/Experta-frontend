@@ -65,7 +65,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                     SliverAppBar(
                       pinned: true,
                       automaticallyImplyLeading: false,
-                      expandedHeight: 450.0,
+                      expandedHeight: MediaQuery.of(context).size.height * 0.5,
                       backgroundColor: Colors.transparent,
                       primary: true,
                       title: Obx(() {
@@ -242,51 +242,50 @@ class _UserProfilePageState extends State<UserProfilePage>
         controller.userData.value.data?.basicInfo?.getSocialMediaLinks();
     final theme = Theme.of(context);
 
-  return Container(
-    color: Colors.white, // Card-like appearance
-    padding: const EdgeInsets.all(10), // Padding inside the card for spacing
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        // Row for "About me" title and edit icon
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _buildRowaboutme(aboutMeText: "About me"),
-            // GestureDetector(
-            //   onTap: () {
-            //     // Add your edit functionality here
-            //   },
-            //   child: CustomImageView(
-            //     height: 19,
-            //     width: 19,
-            //                     imagePath: "assets/images/Frame.svg",
-            //                   )
-            // ),
-          ],
-        ),
-        SizedBox(height: 18.v),
-        SizedBox(
-          width: 331.adaptSize,
-          child: Obx(() {
-           return ReadMoreText(
+    return Container(
+      color: Colors.white, // Card-like appearance
+      padding: const EdgeInsets.all(10), // Padding inside the card for spacing
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          // Row for "About me" title and edit icon
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _buildRowaboutme(aboutMeText: "About me"),
+              // GestureDetector(
+              //   onTap: () {
+              //     // Add your edit functionality here
+              //   },
+              //   child: CustomImageView(
+              //     height: 19,
+              //     width: 19,
+              //                     imagePath: "assets/images/Frame.svg",
+              //                   )
+              // ),
+            ],
+          ),
+          SizedBox(height: 18.v),
+          SizedBox(
+            width: 331.adaptSize,
+            child: Obx(() {
+              return ReadMoreText(
                 controller.userData.value.data?.basicInfo?.bio ?? '',
                 trimLines: 3,
                 colorClickableText: appTheme.readmore,
                 trimMode: TrimMode.Line,
                 trimCollapsedText: "Read more",
                 trimExpandedText: "Read less",
-                style: theme.textTheme.titleSmall!
-                    .copyWith(color: appTheme.black900),
-                moreStyle: theme.textTheme.bodyMedium?.copyWith(
+                style: theme.textTheme.titleMedium,
+                moreStyle: theme.textTheme.titleMedium?.copyWith(
                   color: appTheme.readmore, // Color for 'Read more'
-                  fontSize: theme.textTheme.bodyMedium
+                  fontSize: theme.textTheme.titleMedium
                       ?.fontSize, // Same font size as paragraph
                 ),
-                lessStyle: theme.textTheme.bodyMedium?.copyWith(
+                lessStyle: theme.textTheme.titleMedium?.copyWith(
                   color: appTheme.readmore, // Color for 'Read less'
-                  fontSize: theme.textTheme.bodyMedium
+                  fontSize: theme.textTheme.titleMedium
                       ?.fontSize, // Same font size as paragraph
                 ),
               );
@@ -331,37 +330,38 @@ class _UserProfilePageState extends State<UserProfilePage>
   Widget _buildColumnExperience() {
     final theme = Theme.of(context);
 
-  return Container(
-    color: Colors.white,
-    padding: const EdgeInsets.all(10),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Row for the Experience title and edit icon
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 2),
-              child: _buildRoweducation(educationText: "Experience"),
-            ),
-            // GestureDetector(
-            //   onTap: () {
-            //     // Add your edit functionality here
-            //   },
-            //   child: CustomImageView(
-            //                     imagePath: "assets/images/Frame.svg",
-            //                   )
-            // ),
-          ],
-        ),
-        SizedBox(height: 19.v),
-        Obx(() {
-          var workExperience = controller.userData.value.data?.workExperience ?? [];
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: List.generate(workExperience.length, (index) {
-              var experience = workExperience[index];
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Row for the Experience title and edit icon
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 2),
+                child: _buildRoweducation(educationText: "Experience"),
+              ),
+              // GestureDetector(
+              //   onTap: () {
+              //     // Add your edit functionality here
+              //   },
+              //   child: CustomImageView(
+              //                     imagePath: "assets/images/Frame.svg",
+              //                   )
+              // ),
+            ],
+          ),
+          SizedBox(height: 19.v),
+          Obx(() {
+            var workExperience =
+                controller.userData.value.data?.workExperience ?? [];
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: List.generate(workExperience.length, (index) {
+                var experience = workExperience[index];
 
                 // Format the dates
                 String formattedStartDate = experience.startDate != null
@@ -389,24 +389,21 @@ class _UserProfilePageState extends State<UserProfilePage>
                       experience.jobTitle ?? '',
                       style: theme.textTheme.titleMedium!.copyWith(
                         fontSize: 16.fSize,
-                        fontWeight: FontWeight.w400,
                       ),
                     ),
-                    SizedBox(height: 9.v),
+                    SizedBox(height: 1.v),
                     Text(
                       experience.companyName ?? '',
-                      style: theme.textTheme.bodyMedium?.copyWith(
+                      style: theme.textTheme.titleMedium?.copyWith(
                         color: appTheme.gray900,
-                        fontWeight: FontWeight.w500,
                         fontSize: 14.fSize,
                       ),
                     ),
-                    SizedBox(height: 5.v),
+                    SizedBox(height: 1.v),
                     Text(
                       "$formattedStartDate - $formattedEndDate · $totalDuration",
-                      style: theme.textTheme.bodyMedium!.copyWith(
+                      style: theme.textTheme.titleSmall!.copyWith(
                         fontSize: 14.fSize,
-                        fontWeight: FontWeight.w500,
                       ),
                     ),
                     SizedBox(height: 18.v),
@@ -434,92 +431,93 @@ class _UserProfilePageState extends State<UserProfilePage>
     final data = controller.userData.value.data?.expertise;
     final expertiseList = data?.expertise ?? [];
 
-  return Container(
-    color: Colors.white, // Card-like appearance
-    padding:  EdgeInsets.all(10), // Padding around the card content
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Row for "Expertise" label and edit icon
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _buildRowaboutme(aboutMeText: "Expertise"),
-            // GestureDetector(
-            //   onTap: () {
-            //     // Add your edit function here
-            //   },
-            //  child: CustomImageView(
-            //                     imagePath: "assets/images/Frame.svg",
-            //                   )
-            // ),
-          ],
-        ),
-        const SizedBox(height: 8.0), // Added space for better visual separation
-        Padding(
-          padding: const EdgeInsets.all(8.0), // Padding around the expertise chips
-          child: Wrap(
-            spacing: 4.0,
-            runSpacing: 0.0,
-            children: expertiseList.map((expertise) {
-              return Chip(
-                label: Text(
-                  expertise.name.toString(),
-                  style: theme.textTheme.titleSmall!.copyWith(
-                    color: Colors.black,
-                  ),
-                ),
-                backgroundColor: appTheme.gray200,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                  side: BorderSide(
-                    color: appTheme.gray300,
-                  ),
-                ),
-              );
-            }).toList(),
+    return Container(
+      color: Colors.white, // Card-like appearance
+      padding: EdgeInsets.all(10), // Padding around the card content
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Row for "Expertise" label and edit icon
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _buildRowaboutme(aboutMeText: "Expertise"),
+              // GestureDetector(
+              //   onTap: () {
+              //     // Add your edit function here
+              //   },
+              //  child: CustomImageView(
+              //                     imagePath: "assets/images/Frame.svg",
+              //                   )
+              // ),
+            ],
           ),
-        ),
-      ],
-    ),
-  );
-}
-
+          const SizedBox(
+              height: 8.0), // Added space for better visual separation
+          Padding(
+            padding:
+                const EdgeInsets.all(8.0), // Padding around the expertise chips
+            child: Wrap(
+              spacing: 4.0,
+              runSpacing: 0.0,
+              children: expertiseList.map((expertise) {
+                return Chip(
+                  label: Text(
+                    expertise.name.toString(),
+                    style: theme.textTheme.titleSmall!.copyWith(
+                      color: Colors.black,
+                    ),
+                  ),
+                  backgroundColor: appTheme.gray200,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                    side: BorderSide(
+                      color: appTheme.gray300,
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   Widget _buildColumnEducation() {
     final theme = Theme.of(context);
 
-  return Container(
-    color: Colors.white,
-    padding: const EdgeInsets.all(10),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        // Row for the Education title and edit icon
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Padding(
-              padding: const EdgeInsets.only(right: 2),
-              child: _buildRoweducation(educationText: "Education"),
-            ),
-            // GestureDetector(
-            //   onTap: () {
-            //     // Add your edit functionality here
-            //   },
-            //   child: CustomImageView(
-            //                     imagePath: "assets/images/Frame.svg",
-            //                   )
-            // ),
-          ],
-        ),
-        SizedBox(height: 19.v),
-        Obx(() {
-          var educationList = controller.userData.value.data?.education ?? [];
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: List.generate(educationList.length, (index) {
-              var education = educationList[index];
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Row for the Education title and edit icon
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Padding(
+                padding: const EdgeInsets.only(right: 2),
+                child: _buildRoweducation(educationText: "Education"),
+              ),
+              // GestureDetector(
+              //   onTap: () {
+              //     // Add your edit functionality here
+              //   },
+              //   child: CustomImageView(
+              //                     imagePath: "assets/images/Frame.svg",
+              //                   )
+              // ),
+            ],
+          ),
+          SizedBox(height: 19.v),
+          Obx(() {
+            var educationList = controller.userData.value.data?.education ?? [];
+            return Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: List.generate(educationList.length, (index) {
+                var education = educationList[index];
 
                 // Format the dates
                 String formattedStartDate = education.startDate != null
@@ -546,18 +544,17 @@ class _UserProfilePageState extends State<UserProfilePage>
                       education.degree ?? '',
                       style: theme.textTheme.titleMedium!,
                     ),
-                    SizedBox(height: 9.v),
+                    SizedBox(height: 1.v),
                     Text(
                       education.schoolCollege ?? '',
-                      style: theme.textTheme.bodyMedium
-                          ?.copyWith(color: appTheme.gray900),
+                      style: theme.textTheme.titleMedium!
+                          .copyWith(color: appTheme.gray900),
                     ),
-                    SizedBox(height: 4.v),
+                    SizedBox(height: 1.v),
                     Text(
                       "$formattedStartDate - $formattedEndDate · $totalDuration",
-                      style: theme.textTheme.bodyMedium!.copyWith(
+                      style: theme.textTheme.titleSmall!.copyWith(
                         fontSize: 14.fSize,
-                        fontWeight: FontWeight.w500,
                       ),
                     ),
                     SizedBox(height: 18.v),
@@ -622,7 +619,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                                 achievement,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
-                                style: theme.textTheme.bodyLarge?.copyWith(
+                                style: theme.textTheme.titleSmall!.copyWith(
                                   color: appTheme.gray900,
                                   decoration: TextDecoration.underline,
                                 ),
@@ -654,61 +651,60 @@ class _UserProfilePageState extends State<UserProfilePage>
     final interest = controller.userData.value.data?.interest;
     final interestList = interest?.interest ?? [];
 
-  return Container(
-    color: Colors.white,
-    padding: const EdgeInsets.all(10),
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(right: 2),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _buildRowaboutme(aboutMeText: "Interests"),
-              // GestureDetector(
-              //   onTap: () {
-              //     // Define the edit action here
-              //   },
-              //  child: CustomImageView(
-              //                   imagePath: "assets/images/Frame.svg",
-              //                 )
-              // ),
-            ],
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(right: 2),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                _buildRowaboutme(aboutMeText: "Interests"),
+                // GestureDetector(
+                //   onTap: () {
+                //     // Define the edit action here
+                //   },
+                //  child: CustomImageView(
+                //                   imagePath: "assets/images/Frame.svg",
+                //                 )
+                // ),
+              ],
+            ),
           ),
-        ),
-        SizedBox(height: 17.v),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Wrap(
-            spacing: 8.0, // Horizontal spacing between chips
-            runSpacing: 4.0, // Vertical spacing between lines of chips
-            children: interestList.map((interest) {
-              return Chip(
-                label: Text(
-                  interest.name ?? '',
-                  style: theme.textTheme.bodyMedium!.copyWith(
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500,
-                    fontSize: 16.fSize,
+          SizedBox(height: 17.v),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Wrap(
+              spacing: 8.0, // Horizontal spacing between chips
+              runSpacing: 4.0, // Vertical spacing between lines of chips
+              children: interestList.map((interest) {
+                return Chip(
+                  label: Text(
+                    interest.name ?? '',
+                    style: theme.textTheme.bodyMedium!.copyWith(
+                      color: Colors.black,
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16.fSize,
+                    ),
                   ),
-                ),
-                backgroundColor: appTheme.gray200,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20.0),
-                  side: BorderSide(
-                    color: appTheme.gray300,
+                  backgroundColor: appTheme.gray200,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                    side: BorderSide(
+                      color: appTheme.gray300,
+                    ),
                   ),
-                ),
-              );
-            }).toList(),
+                );
+              }).toList(),
+            ),
           ),
-        ),
-      ],
-    ),
-  );
-}
-
+        ],
+      ),
+    );
+  }
 
   Widget _buildColumnreviews() {
     return Container(
@@ -760,14 +756,14 @@ class _UserProfilePageState extends State<UserProfilePage>
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
                       padding: EdgeInsets.only(
-                          left: 16.adaptSize,
-                          right: 16.adaptSize,
+                          // left: 16.adaptSize,
+                          // right: 16.adaptSize,
                           top: 10.adaptSize,
                           bottom: 10.adaptSize),
                       decoration: BoxDecoration(
                         color: appTheme.gray100,
                         borderRadius: const BorderRadius.all(
-                          Radius.circular(20.0),
+                          Radius.circular(10.0),
                         ),
                       ),
                       child: Column(
@@ -778,6 +774,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                             children: [
                               CustomImageView(
                                 imagePath: review.profilePic,
+                                placeHolder: ImageConstant.imageNotFound,
                                 height: 50.v,
                                 width: 50.h,
                                 radius: BorderRadius.circular(50),
@@ -874,7 +871,8 @@ class _UserProfilePageState extends State<UserProfilePage>
       children: [
         Text(
           educationText,
-          style: theme.textTheme.headlineLarge?.copyWith(fontSize: 14.fSize),
+          style: theme.textTheme.bodyMedium
+              ?.copyWith(fontSize: 16.fSize, color: Colors.black),
         ),
       ],
     );
@@ -1151,8 +1149,6 @@ class _UserProfilePageState extends State<UserProfilePage>
                 SizedBox(
                   width: MediaQuery.of(context).size.width * 0.3,
                   child: Text(
-                    
-
                     "Reg no: ${controller.userData.value.data?.industryOccupation?.registrationNumber ?? " N/A"}",
                     textAlign: TextAlign.left,
                     style: theme.textTheme.bodyMedium!.copyWith(
