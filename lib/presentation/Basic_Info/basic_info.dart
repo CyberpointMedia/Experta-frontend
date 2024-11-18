@@ -24,20 +24,20 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
   void initState() {
     super.initState();
     controller.isLoading.listen((isLoading) {
-    if (!isLoading) {
-      _initializeGenderSelection();
-    }
-  });
+      if (!isLoading) {
+        _initializeGenderSelection();
+      }
+    });
   }
 
-void _initializeGenderSelection() {
-  String currentGender = controller.genderController.text.toLowerCase().trim();
-  setState(() {
-    isMaleSelected = currentGender == 'male';
-    isFemaleSelected = currentGender == 'female';
-  });
-}
-
+  void _initializeGenderSelection() {
+    String currentGender =
+        controller.genderController.text.toLowerCase().trim();
+    setState(() {
+      isMaleSelected = currentGender == 'male';
+      isFemaleSelected = currentGender == 'female';
+    });
+  }
 
   void _addSocialLink() {
     setState(() {

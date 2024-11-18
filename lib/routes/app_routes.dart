@@ -692,13 +692,13 @@ class AppRoutes {
           WithdrawBinding(),
         ]),
 
-    GetPage(
-        name: editexperties,
-        page: () => const EditExpertisePage(),
-        customTransition: CustomPageTransition(),
-        bindings: [
-          EditExpertiesBinding(),
-        ]),
+    // GetPage(
+    //     name: editexperties,
+    //     page: () => const EditExpertisePage(),
+    //     customTransition: CustomPageTransition(),
+    //     bindings: [
+    //       EditExpertiesBinding(),
+    //     ]),
     GetPage(
         name: Notificationseting,
         page: () => const NotificationsPage(),

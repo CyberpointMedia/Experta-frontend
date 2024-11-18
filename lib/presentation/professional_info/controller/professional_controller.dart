@@ -1,5 +1,6 @@
 import 'dart:developer';
 import 'package:experta/core/app_export.dart';
+import 'package:experta/presentation/edit_experties/edit_experties.dart';
 import 'package:experta/presentation/professional_info/expertise.dart';
 import 'package:experta/presentation/professional_info/model/professional_model.dart';
 import 'package:file_picker/file_picker.dart';
@@ -54,6 +55,10 @@ class EditProfessionalInfoController extends GetxController {
       controller.clear();
     }
     super.dispose();
+  }
+
+  Future<Map<String, dynamic>> fetchProfessionalInfo() {
+    return apiService.fetchProfessionalInfo();
   }
 
   Future<void> fetchIndustries() async {
@@ -141,15 +146,22 @@ class EditProfessionalInfoController extends GetxController {
   }
 
   Future<void> editExpertise(BuildContext context) async {
-    final result = await Navigator.push(
+    final result = await Navigator.pushReplacement(
       context,
       PageTransition(
-        child: ExpertiseView(
+        child: EditExpertisePage(
             selectedItems: convertToExpertiseItemList(expertiseList.toList())),
         type: PageTransitionType.leftToRight,
         duration: const Duration(milliseconds: 300),
         reverseDuration: const Duration(milliseconds: 300),
       ),
+      // PageTransition(
+      //   child: ExpertiseView(
+      //       selectedItems: convertToExpertiseItemList(expertiseList.toList())),
+      //   type: PageTransitionType.leftToRight,
+      //   duration: const Duration(milliseconds: 300),
+      //   reverseDuration: const Duration(milliseconds: 300),
+      // ),
     );
 
     if (result != null) {

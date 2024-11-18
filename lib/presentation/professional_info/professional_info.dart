@@ -463,8 +463,8 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
   Widget _buildEditWorkExperience() {
     return Column(
       children: [
-        _buildSectionHeader(
-            "Work Experience", (context) => Get.toNamed(AppRoutes.experience)),
+        _buildSectionHeader("Work Experience",
+            (context) => Get.offAndToNamed(AppRoutes.experience)),
         Obx(() {
           if (controller.isLoading.value) {
             return const Center(child: ShimmerLoadingEffect());
@@ -500,7 +500,7 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
             ),
             const Spacer(),
             TextButton(
-              onPressed: () => Get.toNamed(AppRoutes.education),
+              onPressed: () => Get.offAndToNamed(AppRoutes.education),
               child: Text(
                 "Edit",
                 style: theme.textTheme.titleMedium!

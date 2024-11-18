@@ -91,7 +91,7 @@ class ExpertiseController extends GetxController {
       var response = await apiService.saveExpertiseItems(expertiseIds);
       log("Saved IDs from API are: ${response['data']['_id']}");
       String savedId = response['data']['_id'];
-      Get.back(result: savedId);
+      Get.offAndToNamed(AppRoutes.professionalInfo);
     } catch (e) {
       log("Error saving expertise: $e");
     } finally {
