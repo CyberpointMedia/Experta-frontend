@@ -17,29 +17,29 @@ class PanDetail extends StatefulWidget {
 
 class _PanDetailState extends State<PanDetail> {
   // Define separate controllers for each field
-  final TextEditingController fullNameController = TextEditingController();
-  final TextEditingController panNumberController = TextEditingController();
-  final TextEditingController dateOfBirthController = TextEditingController();
+  // final TextEditingController fullNameController = TextEditingController();
+  // final TextEditingController panNumberController = TextEditingController();
+  // final TextEditingController dateOfBirthController = TextEditingController();
 
-  // Define focus nodes for each field
-  final FocusNode fullNameFocusNode = FocusNode();
-  final FocusNode panNumberFocusNode = FocusNode();
-  final FocusNode dateOfBirthFocusNode = FocusNode();
+  // // Define focus nodes for each field
+  // final FocusNode fullNameFocusNode = FocusNode();
+  // final FocusNode panNumberFocusNode = FocusNode();
+  // final FocusNode dateOfBirthFocusNode = FocusNode();
 
   AddUpiController controller = Get.put(AddUpiController());
 
-  @override
-  void dispose() {
-    // Dispose controllers and focus nodes when the widget is disposed
-    fullNameController.clear();
-    panNumberController.clear();
-    dateOfBirthController.clear();
-    fullNameFocusNode.dispose();
-    panNumberFocusNode.dispose();
-    dateOfBirthFocusNode.dispose();
+  // @override
+  // void dispose() {
+  //   // Dispose controllers and focus nodes when the widget is disposed
+  //   fullNameController.clear();
+  //   panNumberController.clear();
+  //   dateOfBirthController.clear();
+  //   fullNameFocusNode.dispose();
+  //   panNumberFocusNode.dispose();
+  //   dateOfBirthFocusNode.dispose();
 
-    super.dispose();
-  }
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -81,11 +81,12 @@ class _PanDetailState extends State<PanDetail> {
                     height: 6,
                   ),
                   CustomTextFormField(
-                    hintText: "Naveen Verma",
+                    readOnly: true,
+                    initialValue:widget.name,
                     hintStyle: CustomTextStyles.titleMediumBluegray300,
                     textInputType: TextInputType.name,
-                    controller: fullNameController,
-                    focusNode: fullNameFocusNode,
+                    // controller: fullNameController,
+                    // focusNode: fullNameFocusNode,
                     autofocus: false,
                   ),
                   const SizedBox(height: 20),
@@ -94,11 +95,12 @@ class _PanDetailState extends State<PanDetail> {
                     height: 6,
                   ),
                   CustomTextFormField(
-                    hintText: "AMAPV8100G",
+                    readOnly: true,
+                    initialValue:widget.panno,
                     hintStyle: CustomTextStyles.titleMediumBluegray300,
                     textInputType: TextInputType.text,
-                    controller: panNumberController,
-                    focusNode: panNumberFocusNode,
+                    // controller: panNumberController,
+                    // focusNode: panNumberFocusNode,
                     autofocus: false,
                   ),
                   // const SizedBox(height: 20),

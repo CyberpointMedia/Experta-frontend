@@ -74,8 +74,8 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
         return _buildChangeUserNameUI(context);
       // case 'Gender':
       //   return _buildChangeGenderUI(context);
-      case 'Birthday':
-        return _buildChangeDateOfBirthUI(context);
+      // case 'Birthday':
+      //   return _buildChangeDateOfBirthUI(context);
       case 'Change Email':
         return _buildChangeEmailUI(context);
       case 'Phone Number':
@@ -151,47 +151,47 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
   //   ];
   // }
 
-  List<Widget> _buildChangeDateOfBirthUI(BuildContext context) {
-    return [
-      _buildTitle("Change Date of birth"),
-      _buildSubtitle("Enter your email or phone number to reset the password."),
-      const SizedBox(
-        height: 12,
-      ),
-      const Text("Date of birth (DD/MM/YYYY)"),
-      const SizedBox(
-        height: 6,
-      ),
-      Row(
-        children: [
-          Expanded(
-            child: CustomTextFormField(
-              // hintText: "01/01/2024",
-              hintStyle: CustomTextStyles.titleMediumBluegray300,
-              textInputType: TextInputType.datetime,
-              controller: controller.textField2,
-              focusNode: FocusNode(),
-              suffix: CustomIconButton(
-                  decoration: const BoxDecoration(color: Colors.transparent),
-                  height: 24.0, // Adjust the size as needed
-                  width: 24.0,
-                  child: CustomImageView(
-                    imagePath: ImageConstant.imgCalendar,
-                    color: appTheme.blueGray300,
-                    onTap: () => _selectDate(context),
-                  )
+  // List<Widget> _buildChangeDateOfBirthUI(BuildContext context) {
+  //   return [
+  //     _buildTitle("Change Date of birth"),
+  //     _buildSubtitle("Enter your email or phone number to reset the password."),
+  //     const SizedBox(
+  //       height: 12,
+  //     ),
+  //     const Text("Date of birth (DD/MM/YYYY)"),
+  //     const SizedBox(
+  //       height: 6,
+  //     ),
+  //     Row(
+  //       children: [
+  //         Expanded(
+  //           child: CustomTextFormField(
+  //             // hintText: "01/01/2024",
+  //             hintStyle: CustomTextStyles.titleMediumBluegray300,
+  //             textInputType: TextInputType.datetime,
+  //             controller: controller.textField2,
+  //             focusNode: FocusNode(),
+  //             suffix: CustomIconButton(
+  //                 decoration: const BoxDecoration(color: Colors.transparent),
+  //                 height: 24.0, // Adjust the size as needed
+  //                 width: 24.0,
+  //                 // child: CustomImageView(
+  //                 //   imagePath: ImageConstant.imgCalendar,
+  //                 //   color: appTheme.blueGray300,
+  //                 //   onTap: () => _selectDate(context),
+  //                 // )
 
-                  // Adjust the size as needed
-                  ),
-            ),
-          ),
-        ],
-      ),
-      const Spacer(),
-      _buildSaveButton(context, controller.textField5.text.isNotEmpty,
-          "Phone Number changed Successfully", "Please Fill the phone number"),
-    ];
-  }
+  //                 // Adjust the size as needed
+  //                 ),
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //     const Spacer(),
+  //     _buildSaveButton(context, controller.textField5.text.isNotEmpty,
+  //         "Phone Number changed Successfully", "Please Fill the phone number"),
+  //   ];
+  // }
 
   List<Widget> _buildChangeEmailUI(BuildContext context) {
     return [
@@ -255,7 +255,7 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
         focusNode: controller.focus5,
         readOnly: true,
       ),
-      // const Spacer(),
+      //  Spacer(),
       // _buildSaveButton(context, controller.textField5.text.isNotEmpty, "Phone Number changed Successfully", "Please Fill the phone number"),
     ];
   }
@@ -297,9 +297,9 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
             case 'Gender':
               data = {'gender': controller.selectedGender.value};
               break;
-            case 'Birthday':
-              data = {'dateOfBirth': controller.textField2.text};
-              break;
+            // case 'Birthday':
+            //   data = {'dateOfBirth': controller.textField2.text};
+            //   break;
             case 'Change Email':
               data = {'email': controller.textField3.text};
               break;
@@ -327,43 +327,43 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
     );
   }
 
-  Widget _buildGenderSelection(String label, String selectedIcon,
-      String unselectedIcon, bool isSelected, VoidCallback onPressed) {
-    return InkWell(
-      onTap: onPressed,
-      child: Column(
-        children: [
-          SvgPicture.asset(
-            isSelected ? selectedIcon : unselectedIcon,
-            height: 120,
-          ),
-          Text(
-            label,
-            style: theme.textTheme.titleMedium!.copyWith(
-              color: isSelected ? appTheme.yellow6001e : appTheme.blueGray100,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  // Widget _buildGenderSelection(String label, String selectedIcon,
+  //     String unselectedIcon, bool isSelected, VoidCallback onPressed) {
+  //   return InkWell(
+  //     onTap: onPressed,
+  //     child: Column(
+  //       children: [
+  //         SvgPicture.asset(
+  //           isSelected ? selectedIcon : unselectedIcon,
+  //           height: 120,
+  //         ),
+  //         Text(
+  //           label,
+  //           style: theme.textTheme.titleMedium!.copyWith(
+  //             color: isSelected ? appTheme.yellow6001e : appTheme.blueGray100,
+  //             fontWeight: FontWeight.w500,
+  //           ),
+  //         ),
+  //       ],
+  //     ),
+  //   );
+  // }
 
-  void _selectDate(BuildContext context) async {
-    DateTime? pickedDate = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
-    );
+  // void _selectDate(BuildContext context) async {
+  //   DateTime? pickedDate = await showDatePicker(
+  //     context: context,
+  //     initialDate: DateTime.now(),
+  //     firstDate: DateTime(1900),
+  //     lastDate: DateTime.now(),
+  //   );
 
-    if (pickedDate != null) {
-      setState(() {
-        controller.textField2.text =
-            "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
-      });
-    }
-  }
+  //   if (pickedDate != null) {
+  //     setState(() {
+  //       controller.textField2.text =
+  //           "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
+  //     });
+  //   }
+  // }
 
   Widget _buildAppBar() {
     return CustomAppBar(

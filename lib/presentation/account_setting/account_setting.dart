@@ -127,90 +127,91 @@ class _AccountSettingsState extends State<AccountSettings> {
                     ),
                   ),
                 ),
-                GestureDetector(
-                  onTap: () {
-                    navigateToSettingsDetail('Birthday');
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 1),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 15.h, vertical: 16.v),
-                      decoration: AppDecoration.fillOnPrimaryContainer,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CustomIconButton(
-                            height: 44.adaptSize,
-                            width: 44.adaptSize,
-                            padding: EdgeInsets.all(6.h),
-                            decoration: IconButtonStyleHelper.fillDeepPurple,
-                            child: CustomImageView(
-                                imagePath: ImageConstant.birthday),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: 15.h, top: 13.v, bottom: 10.v),
-                            child: Text(
-                              "Birthday",
-                              style: theme.textTheme.titleMedium!
-                                  .copyWith(color: appTheme.gray900),
-                            ),
-                          ),
-                          const Spacer(),
-                          CustomImageView(
-                            imagePath: ImageConstant.imgArrowRightGray900,
-                            height: 24.adaptSize,
-                            width: 24.adaptSize,
-                            margin: EdgeInsets.symmetric(vertical: 10.v),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Get.toNamed(AppRoutes.changegender); // Navigate to raise ticket
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 1),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 15.h, vertical: 16.v),
-                      decoration: AppDecoration.fillOnPrimaryContainer,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CustomIconButton(
-                            height: 44.adaptSize,
-                            width: 44.adaptSize,
-                            padding: EdgeInsets.all(6.h),
-                            decoration: IconButtonStyleHelper.fillGreenTL24,
-                            child: CustomImageView(
-                                imagePath: ImageConstant.gender),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: 15.h, top: 13.v, bottom: 10.v),
-                            child: Text(
-                              "Gender",
-                              style: theme.textTheme.titleMedium!
-                                  .copyWith(color: appTheme.gray900),
-                            ),
-                          ),
-                          const Spacer(),
-                          CustomImageView(
-                            imagePath: ImageConstant.imgArrowRightGray900,
-                            height: 24.adaptSize,
-                            width: 24.adaptSize,
-                            margin: EdgeInsets.symmetric(vertical: 10.v),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
+                // GestureDetector(
+                //   onTap: () {
+                //     navigateToSettingsDetail('Birthday');
+                //   },
+                //   child: Padding(
+                //     padding: const EdgeInsets.only(top: 1),
+                //     child: Container(
+                //       padding: EdgeInsets.symmetric(
+                //           horizontal: 15.h, vertical: 16.v),
+                //       decoration: AppDecoration.fillOnPrimaryContainer,
+                //       child: Row(
+                //         mainAxisAlignment: MainAxisAlignment.center,
+                //         children: [
+                //           CustomIconButton(
+                //             height: 44.adaptSize,
+                //             width: 44.adaptSize,
+                //             padding: EdgeInsets.all(6.h),
+                //             decoration: IconButtonStyleHelper.fillDeepPurple,
+                //             child: CustomImageView(
+                //                 imagePath: ImageConstant.birthday),
+                //           ),
+                //           Padding(
+                //             padding: EdgeInsets.only(
+                //                 left: 15.h, top: 13.v, bottom: 10.v),
+                //             child: Text(
+                //               "Birthday",
+                //               style: theme.textTheme.titleMedium!
+                //                   .copyWith(color: appTheme.gray900),
+                //             ),
+                //           ),
+                //           const Spacer(),
+                //           CustomImageView(
+                //             imagePath: ImageConstant.imgArrowRightGray900,
+                //             height: 24.adaptSize,
+                //             width: 24.adaptSize,
+                //             margin: EdgeInsets.symmetric(vertical: 10.v),
+                //           ),
+                //         ],
+                //       ),
+                //     ),
+                //   ),
+                // ),
+                // GestureDetector(
+                //   onTap: () {
+                //     Get.toNamed(AppRoutes.changegender); // Navigate to raise ticket
+                //   },
+                //   child: Padding(
+                //     padding: const EdgeInsets.only(top: 1),
+                //     child: Container(
+                //       padding: EdgeInsets.symmetric(
+                //           horizontal: 15.h, vertical: 16.v),
+                //       decoration: AppDecoration.fillOnPrimaryContainer,
+                //       child: Row(
+                //         mainAxisAlignment: MainAxisAlignment.center,
+                //         children: [
+                //           CustomIconButton(
+                //             height: 44.adaptSize,
+                //             width: 44.adaptSize,
+                //             padding: EdgeInsets.all(6.h),
+                //             decoration: IconButtonStyleHelper.fillGreenTL24,
+                //             child: CustomImageView(
+                //                 imagePath: ImageConstant.gender),
+                //           ),
+                //           Padding(
+                //             padding: EdgeInsets.only(
+                //                 left: 15.h, top: 13.v, bottom: 10.v),
+                //             child: Text(
+                //               "Gender",
+                //               style: theme.textTheme.titleMedium!
+                //                   .copyWith(color: appTheme.gray900),
+                //             ),
+                //           ),
+                //           const Spacer(),
+                //           CustomImageView(
+                //             imagePath: ImageConstant.imgArrowRightGray900,
+                //             height: 24.adaptSize,
+                //             width: 24.adaptSize,
+                //             margin: EdgeInsets.symmetric(vertical: 10.v),
+                //           ),
+                //         ],
+                //       ),
+                //     ),
+                //   ),
+                // ),
+
                 GestureDetector(
                   onTap: () {
                     navigateToSettingsDetail('Change Email');

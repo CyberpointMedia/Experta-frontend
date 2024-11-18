@@ -2,6 +2,7 @@ import 'dart:developer';
 import 'dart:io';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/Basic_Info/models/basic_model.dart';
+import 'package:intl/intl.dart';
 
 class BasicProfileInfoController extends GetxController {
   final ApiService apiService = ApiService();
@@ -21,11 +22,15 @@ class BasicProfileInfoController extends GetxController {
     linkedin: '',
     twitter: '',
     profilePic: '',
+    dateOfBirth: '',
+    gender: '',
   ).obs;
   TextEditingController textField1 = TextEditingController();
   TextEditingController textField2 = TextEditingController();
   TextEditingController textField3 = TextEditingController();
   TextEditingController textField4 = TextEditingController();
+  TextEditingController dateOfBirth = TextEditingController();
+  TextEditingController genderController = TextEditingController();
   FocusNode focus1 = FocusNode();
   FocusNode focus2 = FocusNode();
   FocusNode focus3 = FocusNode();
@@ -59,11 +64,18 @@ class BasicProfileInfoController extends GetxController {
   }
 
   void updateTextFields() {
+    log(basicInfoModelObj.value.gender);
     textField1.text =
         '${basicInfoModelObj.value.firstName} ${basicInfoModelObj.value.lastName}'
             .trim();
     textField2.text = basicInfoModelObj.value.displayName;
     textField3.text = basicInfoModelObj.value.bio;
+    // Convert ISO date string to desired format
+    DateTime parsedDate = DateTime.parse(basicInfoModelObj.value.dateOfBirth);
+    dateOfBirth.text =
+        "${parsedDate.day.toString().padLeft(2, '0')}/${parsedDate.month.toString().padLeft(2, '0')}/${parsedDate.year}";
+    log("Received gender: ${basicInfoModelObj.value.gender}");
+    genderController.text = basicInfoModelObj.value.gender;
   }
 
   void updateSocialLinks() {
@@ -126,6 +138,24 @@ class BasicProfileInfoController extends GetxController {
 
   Future<void> saveProfileInfo() async {
     try {
+      // Function to format date to dd/MM/yyyy if possible
+      String formatDate(String date) {
+        try {
+          // Check if the date is already in the format yyyy/MM/dd
+          final originalFormat = RegExp(r'^\d{4}/\d{2}/\d{2}$');
+          if (originalFormat.hasMatch(date)) {
+            return date;
+          }
+
+          // Try parsing the date and reformatting it
+          final parsedDate = DateTime.parse(date);
+          return DateFormat('yyyy/MM/dd').format(parsedDate);
+        } catch (e) {
+          // If parsing fails, return the original date
+          return date;
+        }
+      }
+
       final data = {
         "firstName": textField1.text.split(' ').first.trim(),
         "lastName": textField1.text.split(' ').last.trim(),
@@ -133,25 +163,34 @@ class BasicProfileInfoController extends GetxController {
         "bio": textField3.text.trim(),
         "Social Links": textField4.text.trim(),
         "facebook": socialLinks.firstWhere(
-            (link) => link.contains('facebook.com'),
-            orElse: () => ''),
+          (link) => link.contains('facebook.com'),
+          orElse: () => '',
+        ),
         "instagram": socialLinks.firstWhere(
-            (link) => link.contains('instagram.com'),
-            orElse: () => ''),
+          (link) => link.contains('instagram.com'),
+          orElse: () => '',
+        ),
         "linkedin": socialLinks.firstWhere(
-            (link) => link.contains('linkedin.com'),
-            orElse: () => ''),
+          (link) => link.contains('linkedin.com'),
+          orElse: () => '',
+        ),
         "twitter": socialLinks.firstWhere(
-            (link) => link.contains('twitter.com'),
-            orElse: () => ''),
+          (link) => link.contains('twitter.com'),
+          orElse: () => '',
+        ),
+        "dateOfBirth": formatDate(dateOfBirth.text.trim()),
+        "gender": genderController.text.toLowerCase().trim(),
       };
+
+      log(formatDate(dateOfBirth.text.trim()));
+      log(
+        genderController.text.toLowerCase().trim(),
+      );
 
       await apiService.postBasicInfo(data, imageFile.value);
 
       Get.back();
       Get.snackbar('Success', 'Profile information saved successfully');
-
-      // Get.back();
     } catch (e) {
       Get.snackbar('Error', 'Failed to save profile information: $e');
     }
@@ -163,6 +202,8 @@ class BasicProfileInfoController extends GetxController {
     textField2.clear();
     textField3.clear();
     textField4.clear();
+    genderController.clear();
+    dateOfBirth.clear();
     focus1.dispose();
     focus2.dispose();
     focus3.dispose();

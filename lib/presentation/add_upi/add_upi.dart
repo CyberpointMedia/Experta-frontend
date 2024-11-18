@@ -50,13 +50,15 @@ class _AddUpiState extends State<AddUpi> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   //Text("Change User Name",style: theme.textTheme.headlineSmall!.copyWith(color: Colors.black,fontWeight: FontWeight.bold),),
-                  const Text("UPI ID"),
-                  SizedBox(
-                    height: 6.adaptSize,
-                  ),
+                   Text(
+                              "UPI ID",
+                              style: theme.textTheme.titleMedium!
+                                  .copyWith(color: appTheme.blueGray300, fontSize: 14.adaptSize, fontWeight: FontWeight.w400),
+                            ),
                   CustomTextFormField(
                     hintText: "Enter your UPI ID",
-                    hintStyle: CustomTextStyles.titleMediumBluegray300,
+                    hintStyle: theme.textTheme.titleMedium!.copyWith(color: appTheme.blueGray300, fontSize: 14.adaptSize, fontWeight: FontWeight.w400),
+                            
                     textInputType: TextInputType.name,
                     controller: controller.textField1,
                     focusNode: controller.focus1,
@@ -64,7 +66,8 @@ class _AddUpiState extends State<AddUpi> {
                   ),
                   const Padding(
                     padding: EdgeInsets.only(top: 6, bottom: 15),
-                    child: Text("Example: username@bankname", maxLines: 1),
+                    child: Text("Example: username@bankname", maxLines: 1,),
+                    
                   ),
                   const Spacer(),
                   CustomElevatedButton(
