@@ -84,7 +84,7 @@ class AllReviewsPage extends StatelessWidget {
                                               style: theme
                                                   .textTheme.headlineLarge
                                                   ?.copyWith(
-                                                      fontSize: 14.fSize),
+                                                      fontSize: 14.fSize,fontWeight: FontWeight.w600),
                                             ),
                                             SizedBox(height: 1.v),
                                             Text(
@@ -118,7 +118,7 @@ class AllReviewsPage extends StatelessWidget {
                                         Text(
                                           review.rating.toString(),
                                           style: theme.textTheme.headlineLarge
-                                              ?.copyWith(fontSize: 16.fSize),
+                                              ?.copyWith(fontSize: 16.fSize,fontWeight: FontWeight.w600),
                                         ),
                                       ],
                                     ),
@@ -131,7 +131,7 @@ class AllReviewsPage extends StatelessWidget {
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                         style: theme.textTheme.bodyMedium
-                                            ?.copyWith(color: appTheme.gray900),
+                                            ?.copyWith(color: appTheme.gray900, fontWeight: FontWeight.w500, fontSize: 14.fSize),
                                       ),
                                     ),
                                     SizedBox(height: 8.v),

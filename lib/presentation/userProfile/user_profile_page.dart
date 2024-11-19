@@ -3,6 +3,9 @@ import 'dart:ui';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/core/utils/web_view/web_view.dart';
 import 'package:experta/presentation/all_review/all_review.dart';
+import 'package:experta/presentation/edit_about/edit_about.dart';
+import 'package:experta/presentation/edit_experties/edit_experties.dart';
+import 'package:experta/presentation/professional_info/model/professional_model.dart';
 import 'package:experta/presentation/userProfile/controller/profile_controller.dart';
 import 'package:experta/presentation/userProfile/post_details/post_details.dart';
 import 'package:experta/widgets/custom_rating_bar.dart';
@@ -237,97 +240,104 @@ class _UserProfilePageState extends State<UserProfilePage>
     });
   }
 
-  Widget _buildColumnaboutme() {
-    List<Map<String, dynamic>>? socialMediaLinks =
-        controller.userData.value.data?.basicInfo?.getSocialMediaLinks();
-    final theme = Theme.of(context);
+ Widget _buildColumnaboutme() {
+  List<Map<String, dynamic>>? socialMediaLinks = 
+      controller.userData.value.data?.basicInfo?.getSocialMediaLinks();
+  final theme = Theme.of(context);
 
-    return Container(
-      color: Colors.white, // Card-like appearance
-      padding: const EdgeInsets.all(10), // Padding inside the card for spacing
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // Row for "About me" title and edit icon
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _buildRowaboutme(aboutMeText: "About me"),
-              GestureDetector(
-                onTap: () {
-                  // Add your edit functionality here
-                },
-                child: CustomImageView(
-                  height: 19,
-                  width: 19,
-                                  imagePath: "assets/images/Frame.svg",
-                                )
-              ),
-            ],
-          ),
-          SizedBox(height: 18.v),
-          SizedBox(
-            width: 331.adaptSize,
-           child: Obx(() {
-              return ReadMoreText(
-                controller.userData.value.data?.basicInfo?.bio ?? '',
-                trimLines: 3,
-                colorClickableText: appTheme.readmore,
-                trimMode: TrimMode.Line,
-                trimCollapsedText: "Read more",
-                trimExpandedText: "Read less",
-                style: theme.textTheme.titleSmall!
-                    .copyWith(color: appTheme.black900),
-                moreStyle: theme.textTheme.bodyMedium?.copyWith(
-                  color: appTheme.readmore, // Color for 'Read more'
-                  fontSize: theme.textTheme.bodyMedium
-                      ?.fontSize, // Same font size as paragraph
-                ),
-                lessStyle: theme.textTheme.bodyMedium?.copyWith(
-                  color: appTheme.readmore, // Color for 'Read less'
-                  fontSize: theme.textTheme.bodyMedium
-                      ?.fontSize, // Same font size as paragraph
-                ),
-              );
-            
-            }),
-          ),
-          SizedBox(
-            height: 17.v,
-          ),
-          if (socialMediaLinks != null && socialMediaLinks.isNotEmpty)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: socialMediaLinks.map((socialMedia) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ExpertaBrowser(
-                          url: socialMedia['link'],
-                          title: socialMedia['name'],
-                        ),
-                      ),
-                    );
-                    print('Opening link: ${socialMedia['link']}');
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.only(right: 8.adaptSize),
-                    child: CustomImageView(
-                      imagePath: socialMedia['icon'],
-                      height: 24.adaptSize,
-                      width: 24.adaptSize,
-                    ),
+  return Container(
+    color: Colors.white, // Card-like appearance
+    padding: const EdgeInsets.all(10), // Padding inside the card for spacing
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        // Row for "About me" title and edit icon
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _buildRowaboutme(aboutMeText: "About me"),
+            InkWell(
+              onTap: () {
+                // Pass the current bio to EditAboutPage
+                final bio = controller.userData.value.data?.basicInfo?.bio ?? '';
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditAboutPage(bio: bio),
                   ),
                 );
-              }).toList(),
+              },
+              child: CustomImageView(
+                height: 19,
+                width: 19,
+                imagePath: "assets/images/Frame.svg",
+              ),
             ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+        SizedBox(height: 18.v),
+        SizedBox(
+          width: 331.adaptSize,
+          child: Obx(() {
+            return ReadMoreText(
+              controller.userData.value.data?.basicInfo?.bio ?? '',
+              trimLines: 3,
+              colorClickableText: appTheme.readmore,
+              trimMode: TrimMode.Line,
+              trimCollapsedText: "Read more",
+              trimExpandedText: "Read less",
+              style: theme.textTheme.titleSmall!
+                  .copyWith(color: appTheme.black900),
+              moreStyle: theme.textTheme.bodyMedium?.copyWith(
+                color: appTheme.readmore, // Color for 'Read more'
+                fontSize: theme.textTheme.bodyMedium?.fontSize,
+              ),
+              lessStyle: theme.textTheme.bodyMedium?.copyWith(
+                color: appTheme.readmore, // Color for 'Read less'
+                fontSize: theme.textTheme.bodyMedium?.fontSize,
+              ),
+            );
+          }),
+        ),
+        SizedBox(
+          height: 17.v,
+        ),
+        if (socialMediaLinks != null && socialMediaLinks.isNotEmpty)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: socialMediaLinks.map((socialMedia) {
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ExpertaBrowser(
+                        url: socialMedia['link'],
+                        title: socialMedia['name'],
+                      ),
+                    ),
+                  );
+                  print('Opening link: ${socialMedia['link']}');
+                },
+                child: Padding(
+                  padding: EdgeInsets.only(right: 8.adaptSize),
+                  child: CustomImageView(
+                    imagePath: socialMedia['icon'],
+                    height: 24.adaptSize,
+                    width: 24.adaptSize,
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+      ],
+    ),
+  );
+}
+
+
+  
 
   Widget _buildColumnExperience() {
     final theme = Theme.of(context);
@@ -444,21 +454,30 @@ class _UserProfilePageState extends State<UserProfilePage>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _buildRowaboutme(aboutMeText: "Expertise"),
-              GestureDetector(
-                onTap: () {
-                   Get.toNamed(AppRoutes.editexperties);// Add your edit function here
-                },
-               child: CustomImageView(
-                                  imagePath: "assets/images/Frame.svg",
-                                )
-              ),
+            CustomImageView(
+  imagePath: "assets/images/Frame.svg",
+  onTap: () {
+    Get.to(() => EditExpertisePage(
+          selectedItems: expertiseList.map((userExpertise) {
+            // Convert UserExpertise to ExpertiseItem
+            return ExpertiseItem(
+              // Map fields from UserExpertise to ExpertiseItem
+              id: userExpertise.id.toString(),
+              name: userExpertise.name.toString(),
+              // Add other fields as necessary
+            );
+          }).toList(),
+        ));
+  },
+),
+
             ],
           ),
           const SizedBox(
-              height: 8.0), // Added space for better visual separation
+              height: 8.0), 
           Padding(
             padding:
-                const EdgeInsets.all(8.0), // Padding around the expertise chips
+                const EdgeInsets.all(8.0),
             child: Wrap(
               spacing: 4.0,
               runSpacing: 0.0,
