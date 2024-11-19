@@ -154,13 +154,14 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
             padding: const EdgeInsets.only(top: 10),
             child: Text(
               label,
-              style: CustomTextStyles.bodyMediumBlack90001,
+              style: theme.textTheme.titleSmall!.copyWith(color: appTheme.black900),
             ),
           ),
           Padding(
             padding: EdgeInsets.only(top: 6.v, bottom: 12.v),
             child: CustomDropDown(
               hintText: "Select",
+              hintStyle: theme.textTheme.titleSmall!.copyWith(color: appTheme.black900),
               width: double.infinity,
               icon: _buildDropdownIcon(),
               items: items,
@@ -212,6 +213,7 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
       padding: const EdgeInsets.only(top: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
             children: [
@@ -232,6 +234,7 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
     return Expanded(
       child: CustomRadioButton(
         value: value,
+        textStyle: theme.textTheme.titleSmall!.copyWith(color: appTheme.black900),
         groupValue: controller.selectedOption.value,
         onChange: (value) {
           setState(() {
@@ -394,6 +397,8 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
             return Padding(
               padding: const EdgeInsets.all(2.0),
               child: Wrap(
+                spacing: 10,
+                runSpacing: 1,
                 children: controller.expertiseList.map((expertise) {
                   return Chip(
                     label: Text(
@@ -460,38 +465,46 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
     );
   }
 
-  Widget _buildEditWorkExperience() {
-    return Column(
-      children: [
-        _buildSectionHeader("Work Experience",
-            (context) => Get.offAndToNamed(AppRoutes.experience)),
-        Obx(() {
-          if (controller.isLoading.value) {
-            return const Center(child: ShimmerLoadingEffect());
-          } else if (controller.workExperienceList.isEmpty) {
-            return const Center(child: Text('No work experience available'));
-          } else {
-            return ListView.builder(
-              shrinkWrap: true,
-              clipBehavior: Clip.antiAlias,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: controller.workExperienceList.length,
-              itemBuilder: (context, index) {
-                final workExperience = controller.workExperienceList[index];
-                return WorkExperienceWidget(workExperience: workExperience);
-              },
-            );
-          }
-        }),
-      ],
-    );
-  }
+Widget _buildEditWorkExperience() {
+  return Obx(() {
+    if (controller.isLoading.value) {
+      return const Center(child: ShimmerLoadingEffect());
+    } else if (controller.workExperienceList.isEmpty) {
+      return const Center(child: Text('No work experience available'));
+    } else {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _buildSectionHeader(
+            "Work Experience",
+            (context) => Get.offAndToNamed(AppRoutes.experience),
+          ),
+          ListView.separated(
+            shrinkWrap: true,
+            clipBehavior: Clip.antiAlias,
+            physics: const NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.zero,
+            itemCount: controller.workExperienceList.length,
+            itemBuilder: (context, index) {
+              final workExperience = controller.workExperienceList[index];
+              return WorkExperienceWidget(workExperience: workExperience);
+            },
+             separatorBuilder: (context, index) => const Divider(height: 1, color: Colors.grey),
+          ),
+        ],
+      );
+    }
+  });
+}
 
-  Widget _buildEducation() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start, // Align content to the left
-      children: [
-        Row(
+
+Widget _buildEducation() {
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Padding(
+        padding: const EdgeInsets.only(bottom: 8.0),
+        child: Row(
           children: [
             Text(
               "Education",
@@ -503,40 +516,41 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
               onPressed: () => Get.offAndToNamed(AppRoutes.education),
               child: Text(
                 "Edit",
-                style: theme.textTheme.titleMedium!
-                    .copyWith(color: appTheme.red500),
+                style: theme.textTheme.titleMedium!.copyWith(color: appTheme.red500),
                 textAlign: TextAlign.start,
               ),
             ),
           ],
         ),
-        Obx(() {
-          if (controller.isLoading.value) {
-            return const Center(child: ShimmerLoadingEffect());
-          } else if (controller.educationList.isEmpty) {
-            return const Center(child: Text('No education data available'));
-          } else {
-            return ListView.builder(
-              shrinkWrap: true,
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: controller.educationList.length,
-              itemBuilder: (context, index) {
-                final education = controller.educationList[index];
-                return Column(
+      ),
+      Obx(() {
+        if (controller.isLoading.value) {
+          return const Center(child: ShimmerLoadingEffect());
+        } else if (controller.educationList.isEmpty) {
+          return const Center(child: Text('No education data available'));
+        } else {
+          return ListView.builder(
+            shrinkWrap: true,
+            physics: const NeverScrollableScrollPhysics(),
+            padding: EdgeInsets.zero, // Remove default padding
+            itemCount: controller.educationList.length,
+            itemBuilder: (context, index) {
+              final education = controller.educationList[index];
+              return Padding(
+                padding: const EdgeInsets.only(bottom: 8.0), // Spacing between items
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
                       education.degree,
                       style: CustomTextStyles.titleMediumSFProTextBlack90001,
                     ),
-                    const SizedBox(height: 4.0), // Adjusted to control the gap
+                    const SizedBox(height: 4.0), // Spacing between lines
                     Text(
                       education.schoolCollege,
-                      style: theme.textTheme.titleMedium!
-                          .copyWith(color: Colors.black),
+                      style: theme.textTheme.titleMedium!.copyWith(color: Colors.black),
                     ),
-                    const SizedBox(
-                        height: 4.0), // Adjusted to create desired gap
+                    const SizedBox(height: 4.0), // Adjust spacing
                     Text(
                       '${education.startDate.year} - ${education.endDate.year}',
                       style: Theme.of(context)
@@ -544,18 +558,17 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
                           .bodyMedium
                           ?.copyWith(fontWeight: FontWeight.bold),
                     ),
-                    const Divider(),
-                    const SizedBox(
-                        height: 7), // This creates exactly 7px of space
+                    if (index != controller.educationList.length - 1) const Divider(), // Avoid extra divider at the end
                   ],
-                );
-              },
-            );
-          }
-        }),
-      ],
-    );
-  }
+                ),
+              );
+            },
+          );
+        }
+      }),
+    ],
+  );
+}
 
   Widget _buildAchievements() {
     return Column(

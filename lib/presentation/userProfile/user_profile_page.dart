@@ -3,6 +3,9 @@ import 'dart:ui';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/core/utils/web_view/web_view.dart';
 import 'package:experta/presentation/all_review/all_review.dart';
+import 'package:experta/presentation/edit_about/edit_about.dart';
+import 'package:experta/presentation/edit_experties/edit_experties.dart';
+import 'package:experta/presentation/professional_info/model/professional_model.dart';
 import 'package:experta/presentation/userProfile/controller/profile_controller.dart';
 import 'package:experta/presentation/userProfile/post_details/post_details.dart';
 import 'package:experta/widgets/custom_rating_bar.dart';
@@ -237,95 +240,104 @@ class _UserProfilePageState extends State<UserProfilePage>
     });
   }
 
-  Widget _buildColumnaboutme() {
-    List<Map<String, dynamic>>? socialMediaLinks =
-        controller.userData.value.data?.basicInfo?.getSocialMediaLinks();
-    final theme = Theme.of(context);
+ Widget _buildColumnaboutme() {
+  List<Map<String, dynamic>>? socialMediaLinks = 
+      controller.userData.value.data?.basicInfo?.getSocialMediaLinks();
+  final theme = Theme.of(context);
 
-    return Container(
-      color: Colors.white, // Card-like appearance
-      padding: const EdgeInsets.all(10), // Padding inside the card for spacing
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          // Row for "About me" title and edit icon
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _buildRowaboutme(aboutMeText: "About me"),
-              // GestureDetector(
-              //   onTap: () {
-              //     // Add your edit functionality here
-              //   },
-              //   child: CustomImageView(
-              //     height: 19,
-              //     width: 19,
-              //                     imagePath: "assets/images/Frame.svg",
-              //                   )
-              // ),
-            ],
-          ),
-          SizedBox(height: 18.v),
-          SizedBox(
-            width: 331.adaptSize,
-            child: Obx(() {
-              return ReadMoreText(
-                controller.userData.value.data?.basicInfo?.bio ?? '',
-                trimLines: 3,
-                colorClickableText: appTheme.readmore,
-                trimMode: TrimMode.Line,
-                trimCollapsedText: "Read more",
-                trimExpandedText: "Read less",
-                style: theme.textTheme.titleMedium,
-                moreStyle: theme.textTheme.titleMedium?.copyWith(
-                  color: appTheme.readmore, // Color for 'Read more'
-                  fontSize: theme.textTheme.titleMedium
-                      ?.fontSize, // Same font size as paragraph
-                ),
-                lessStyle: theme.textTheme.titleMedium?.copyWith(
-                  color: appTheme.readmore, // Color for 'Read less'
-                  fontSize: theme.textTheme.titleMedium
-                      ?.fontSize, // Same font size as paragraph
-                ),
-              );
-            }),
-          ),
-          SizedBox(
-            height: 17.v,
-          ),
-          if (socialMediaLinks != null && socialMediaLinks.isNotEmpty)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: socialMediaLinks.map((socialMedia) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ExpertaBrowser(
-                          url: socialMedia['link'],
-                          title: socialMedia['name'],
-                        ),
-                      ),
-                    );
-                    print('Opening link: ${socialMedia['link']}');
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.only(right: 8.adaptSize),
-                    child: CustomImageView(
-                      imagePath: socialMedia['icon'],
-                      height: 24.adaptSize,
-                      width: 24.adaptSize,
-                    ),
+  return Container(
+    color: Colors.white, // Card-like appearance
+    padding: const EdgeInsets.all(10), // Padding inside the card for spacing
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        // Row for "About me" title and edit icon
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            _buildRowaboutme(aboutMeText: "About me"),
+            InkWell(
+              onTap: () {
+                // Pass the current bio to EditAboutPage
+                final bio = controller.userData.value.data?.basicInfo?.bio ?? '';
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => EditAboutPage(bio: bio),
                   ),
                 );
-              }).toList(),
+              },
+              child: CustomImageView(
+                height: 19,
+                width: 19,
+                imagePath: "assets/images/Frame.svg",
+              ),
             ),
-        ],
-      ),
-    );
-  }
+          ],
+        ),
+        SizedBox(height: 18.v),
+        SizedBox(
+          width: 331.adaptSize,
+          child: Obx(() {
+            return ReadMoreText(
+              controller.userData.value.data?.basicInfo?.bio ?? '',
+              trimLines: 3,
+              colorClickableText: appTheme.readmore,
+              trimMode: TrimMode.Line,
+              trimCollapsedText: "Read more",
+              trimExpandedText: "Read less",
+              style: theme.textTheme.titleSmall!
+                  .copyWith(color: appTheme.black900),
+              moreStyle: theme.textTheme.bodyMedium?.copyWith(
+                color: appTheme.readmore, // Color for 'Read more'
+                fontSize: theme.textTheme.bodyMedium?.fontSize,
+              ),
+              lessStyle: theme.textTheme.bodyMedium?.copyWith(
+                color: appTheme.readmore, // Color for 'Read less'
+                fontSize: theme.textTheme.bodyMedium?.fontSize,
+              ),
+            );
+          }),
+        ),
+        SizedBox(
+          height: 17.v,
+        ),
+        if (socialMediaLinks != null && socialMediaLinks.isNotEmpty)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: socialMediaLinks.map((socialMedia) {
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ExpertaBrowser(
+                        url: socialMedia['link'],
+                        title: socialMedia['name'],
+                      ),
+                    ),
+                  );
+                  print('Opening link: ${socialMedia['link']}');
+                },
+                child: Padding(
+                  padding: EdgeInsets.only(right: 8.adaptSize),
+                  child: CustomImageView(
+                    imagePath: socialMedia['icon'],
+                    height: 24.adaptSize,
+                    width: 24.adaptSize,
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+      ],
+    ),
+  );
+}
+
+
+  
 
   Widget _buildColumnExperience() {
     final theme = Theme.of(context);
@@ -344,14 +356,14 @@ class _UserProfilePageState extends State<UserProfilePage>
                 padding: const EdgeInsets.only(right: 2),
                 child: _buildRoweducation(educationText: "Experience"),
               ),
-              // GestureDetector(
-              //   onTap: () {
-              //     // Add your edit functionality here
-              //   },
-              //   child: CustomImageView(
-              //                     imagePath: "assets/images/Frame.svg",
-              //                   )
-              // ),
+              GestureDetector(
+                onTap: () {
+                  // Add your edit functionality here
+                },
+                child: CustomImageView(
+                                  imagePath: "assets/images/Frame.svg",
+                                )
+              ),
             ],
           ),
           SizedBox(height: 19.v),
@@ -388,7 +400,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                     Text(
                       experience.jobTitle ?? '',
                       style: theme.textTheme.titleMedium!.copyWith(
-                        fontSize: 16.fSize,
+                        fontSize: 16.fSize, fontWeight: FontWeight.w400
                       ),
                     ),
                     SizedBox(height: 1.v),
@@ -396,7 +408,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                       experience.companyName ?? '',
                       style: theme.textTheme.titleMedium?.copyWith(
                         color: appTheme.gray900,
-                        fontSize: 14.fSize,
+                        fontSize: 14.fSize,fontWeight: FontWeight.w500
                       ),
                     ),
                     SizedBox(height: 1.v),
@@ -442,21 +454,30 @@ class _UserProfilePageState extends State<UserProfilePage>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _buildRowaboutme(aboutMeText: "Expertise"),
-              // GestureDetector(
-              //   onTap: () {
-              //     // Add your edit function here
-              //   },
-              //  child: CustomImageView(
-              //                     imagePath: "assets/images/Frame.svg",
-              //                   )
-              // ),
+            CustomImageView(
+  imagePath: "assets/images/Frame.svg",
+  onTap: () {
+    Get.to(() => EditExpertisePage(
+          selectedItems: expertiseList.map((userExpertise) {
+            // Convert UserExpertise to ExpertiseItem
+            return ExpertiseItem(
+              // Map fields from UserExpertise to ExpertiseItem
+              id: userExpertise.id.toString(),
+              name: userExpertise.name.toString(),
+              // Add other fields as necessary
+            );
+          }).toList(),
+        ));
+  },
+),
+
             ],
           ),
           const SizedBox(
-              height: 8.0), // Added space for better visual separation
+              height: 8.0), 
           Padding(
             padding:
-                const EdgeInsets.all(8.0), // Padding around the expertise chips
+                const EdgeInsets.all(8.0),
             child: Wrap(
               spacing: 4.0,
               runSpacing: 0.0,
@@ -501,14 +522,14 @@ class _UserProfilePageState extends State<UserProfilePage>
                 padding: const EdgeInsets.only(right: 2),
                 child: _buildRoweducation(educationText: "Education"),
               ),
-              // GestureDetector(
-              //   onTap: () {
-              //     // Add your edit functionality here
-              //   },
-              //   child: CustomImageView(
-              //                     imagePath: "assets/images/Frame.svg",
-              //                   )
-              // ),
+              GestureDetector(
+                onTap: () {
+                  // Add your edit functionality here
+                },
+                child: CustomImageView(
+                                  imagePath: "assets/images/Frame.svg",
+                                )
+              ),
             ],
           ),
           SizedBox(height: 19.v),
@@ -542,19 +563,19 @@ class _UserProfilePageState extends State<UserProfilePage>
                   children: [
                     Text(
                       education.degree ?? '',
-                      style: theme.textTheme.titleMedium!,
+                      style: theme.textTheme.titleMedium!.copyWith(fontSize: 16.adaptSize, fontWeight: FontWeight.w400),
                     ),
                     SizedBox(height: 1.v),
                     Text(
                       education.schoolCollege ?? '',
                       style: theme.textTheme.titleMedium!
-                          .copyWith(color: appTheme.gray900),
+                          .copyWith(color: appTheme.gray900, fontSize: 14.adaptSize, fontWeight: FontWeight.w500),
                     ),
                     SizedBox(height: 1.v),
                     Text(
                       "$formattedStartDate - $formattedEndDate · $totalDuration",
                       style: theme.textTheme.titleSmall!.copyWith(
-                        fontSize: 14.fSize,
+                        fontSize: 14.adaptSize, fontWeight: FontWeight.w500
                       ),
                     ),
                     SizedBox(height: 18.v),
@@ -663,14 +684,14 @@ class _UserProfilePageState extends State<UserProfilePage>
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 _buildRowaboutme(aboutMeText: "Interests"),
-                // GestureDetector(
-                //   onTap: () {
-                //     // Define the edit action here
-                //   },
-                //  child: CustomImageView(
-                //                   imagePath: "assets/images/Frame.svg",
-                //                 )
-                // ),
+                GestureDetector(
+                  onTap: () {
+                    // Define the edit action here
+                  },
+                 child: CustomImageView(
+                                  imagePath: "assets/images/Frame.svg",
+                                )
+                ),
               ],
             ),
           ),
@@ -706,146 +727,141 @@ class _UserProfilePageState extends State<UserProfilePage>
     );
   }
 
-  Widget _buildColumnreviews() {
-    return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "Reviews",
-                style:
-                    theme.textTheme.headlineLarge?.copyWith(fontSize: 16.fSize),
+ Widget _buildColumnreviews() {
+  return Container(
+    color: Colors.white,
+    padding: const EdgeInsets.all(10),
+    child: Column(
+      children: [
+        // Header Row
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "Reviews",
+              style: theme.textTheme.headlineLarge?.copyWith(fontSize: 16.fSize),
+            ),
+            GestureDetector(
+              onTap: () {
+                var reviews = controller.userData.value.data?.basicInfo?.reviews;
+                if (reviews != null && reviews.isNotEmpty) {
+                  Get.to(() => AllReviewsPage(reviews: reviews));
+                }
+              },
+              child: Text(
+                "See all",
+                style: theme.textTheme.titleMedium
+                    ?.copyWith(color: appTheme.deepOrangeA200),
               ),
-              GestureDetector(
-                onTap: () {
-                  var reviews =
-                      controller.userData.value.data?.basicInfo?.reviews;
-                  if (reviews != null && reviews.isNotEmpty) {
-                    Get.to(() => AllReviewsPage(reviews: reviews));
-                  }
-                },
-                child: Text(
-                  "See all",
-                  style: theme.textTheme.titleMedium
-                      ?.copyWith(color: appTheme.deepOrangeA200),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 19.v,
-          ),
-          Obx(() {
-            var reviews = controller.userData.value.data?.basicInfo?.reviews;
-            if (reviews == null || reviews.isEmpty) {
-              return Text(
-                "No reviews yet",
-                style: theme.textTheme.bodyMedium
-                    ?.copyWith(color: appTheme.gray900),
-              );
-            } else {
-              // Limit the number of reviews to 5
-              var limitedReviews = reviews.take(3).toList();
-              return Column(
-                children: limitedReviews.map((review) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      padding: EdgeInsets.only(
-                          // left: 16.adaptSize,
-                          // right: 16.adaptSize,
-                          top: 10.adaptSize,
-                          bottom: 10.adaptSize),
-                      decoration: BoxDecoration(
-                        color: appTheme.gray100,
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(10.0),
-                        ),
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              CustomImageView(
-                                imagePath: review.profilePic,
-                                placeHolder: ImageConstant.imageNotFound,
-                                height: 50.v,
-                                width: 50.h,
-                                radius: BorderRadius.circular(50),
-                              ),
-                              const SizedBox(width: 10),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    review.reviewer.toString(),
-                                    style: theme.textTheme.headlineLarge
-                                        ?.copyWith(fontSize: 14.fSize),
-                                  ),
-                                  SizedBox(height: 1.v),
-                                  Text(
-                                    review.formattedDate.toString(),
-                                    style: theme.textTheme.titleSmall!,
-                                  )
-                                ],
-                              )
-                            ],
-                          ),
-                          SizedBox(height: 9.v),
-                          Row(
-                            children: [
-                              CustomRatingBar(
-                                initialRating: review.rating!.toDouble(),
-                                itemCount: 5,
-                                itemSize: 22,
-                                onRatingUpdate: (rating) {},
-                                color: appTheme.deepYello,
-                                unselectedColor: appTheme.gray300,
-                              ),
+            ),
+          ],
+        ),
+        const SizedBox(height: 19),
 
-                              SizedBox(
-                                  width: 6.h), // Added SizedBox for spacing
+        // Reviews Section
+        Obx(() {
+          var reviews = controller.userData.value.data?.basicInfo?.reviews;
+          if (reviews == null || reviews.isEmpty) {
+            return Text(
+              "No reviews yet",
+              style: theme.textTheme.bodyMedium
+                  ?.copyWith(color: appTheme.gray300),
+            );
+          }
+
+          // Limit to 3 reviews for preview
+          var limitedReviews = reviews.take(3).toList();
+
+          return Column(
+            children: limitedReviews.map((review) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 8.0),
+                child: Container(
+                  padding: EdgeInsets.all(16.adaptSize),
+                  decoration: BoxDecoration(
+                    color: appTheme.gray100,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Reviewer Info Row
+                      Row(
+                        children: [
+                          CustomImageView(
+                            imagePath: review.profilePic,
+                            placeHolder: ImageConstant.imageNotFound,
+                            height: 50.v,
+                            width: 50.h,
+                            radius: BorderRadius.circular(50),
+                          ),
+                          const SizedBox(width: 10),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
                               Text(
-                                review.rating.toString(),
+                                review.reviewer ?? "null",
                                 style: theme.textTheme.headlineLarge
-                                    ?.copyWith(fontSize: 16.fSize),
-                              )
+                                    ?.copyWith(fontSize: 14.fSize),
+                              ),
+                              const SizedBox(height: 1),
+                              Text(
+                                review.formattedDate ?? "Unknown Date",
+                                style: theme.textTheme.titleSmall!,
+                              ),
                             ],
                           ),
-                          SizedBox(height: 8.v),
-                          Container(
-                            width: 304.adaptSize,
-                            margin: const EdgeInsets.only(right: 31),
-                            child: Text(
-                              review.review.toString(),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: theme.textTheme.bodyMedium
-                                  ?.copyWith(color: appTheme.gray900),
-                            ),
-                          ),
-                          SizedBox(height: 8.v),
                         ],
                       ),
-                    ),
-                  );
-                }).toList(),
+                      const SizedBox(height: 10),
+
+                      // Rating Row
+                      if (review.rating != null)
+                        Row(
+                          children: [
+                            CustomRatingBar(
+                              initialRating: review.rating!.toDouble(),
+                              itemCount: 5,
+                              itemSize: 22,
+                              onRatingUpdate: (rating) {},
+                              color: appTheme.deepYello,
+                              unselectedColor: appTheme.gray300,
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              review.rating.toString(),
+                              style: theme.textTheme.headlineLarge
+                                  ?.copyWith(fontSize: 16.fSize),
+                            ),
+                          ],
+                        ),
+
+                      // Review Comment
+                      const SizedBox(height: 8),
+                      Text(
+                        review.review ?? "No comments provided.",
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.bodyMedium?.copyWith(
+                          color: appTheme.gray900,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 14.adaptSize,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
               );
-            }
-          }),
-          SizedBox(
-            height: 19.v,
-          )
-        ],
-      ),
-    );
-  }
+            }).toList(),
+          );
+        }),
+
+        const SizedBox(height: 19),
+      ],
+    ),
+  );
+}
+
 
   Widget _buildRowaboutme({required String aboutMeText}) {
     return Row(
@@ -858,7 +874,7 @@ class _UserProfilePageState extends State<UserProfilePage>
           ),
           child: Text(
             aboutMeText,
-            style: theme.textTheme.headlineLarge?.copyWith(fontSize: 16.fSize),
+            style: theme.textTheme.headlineLarge?.copyWith(fontSize: 16.fSize, fontWeight: FontWeight.w600),
           ),
         ),
       ],
@@ -871,8 +887,8 @@ class _UserProfilePageState extends State<UserProfilePage>
       children: [
         Text(
           educationText,
-          style: theme.textTheme.bodyMedium
-              ?.copyWith(fontSize: 16.fSize, color: Colors.black),
+          style: theme.textTheme.bodyMedium!
+              ?.copyWith(fontSize: 16.fSize, color: Colors.black, fontWeight: FontWeight.w600),
         ),
       ],
     );

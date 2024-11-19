@@ -466,7 +466,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         const SizedBox(height: 10), // Standard spacing
         SizedBox(
-          height: MediaQuery.of(context).size.height * 1.8,
+          height: MediaQuery.of(context).size.height * 1.63,
           child: FutureBuilder<List<User>>(
             future: controller.fetchTrendingPeople(),
             builder: (context, snapshot) {
@@ -489,7 +489,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     return UserProfileItemWidget(user: users[index]);
                   },
                   separatorBuilder: (context, index) =>
-                      const SizedBox(height: 10), // Add space between items
+                      const SizedBox(height: 10), 
                 ),
               );
             },

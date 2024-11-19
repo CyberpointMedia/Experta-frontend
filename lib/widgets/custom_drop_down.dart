@@ -83,7 +83,7 @@ class CustomDropDown extends StatelessWidget {
         child: DropdownButtonFormField<SelectionPopupModel>(
           hint: Text(
             "Select",
-            style: CustomTextStyles.titleMediumSemiBold_1,
+            style:theme.textTheme.titleSmall!.copyWith(color: appTheme.black900),
           ),
           focusNode: focusNode ?? FocusNode(),
           icon: icon,
