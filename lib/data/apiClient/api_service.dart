@@ -1028,7 +1028,7 @@ class ApiService {
     }
   }
 
-Future<List<Transaction>> fetchTransactionHistory() async {
+  Future<List<Transaction>> fetchTransactionHistory() async {
     final response = await http.get(
       Uri.parse('$_baseUrl/transaction-history'),
       headers: {
@@ -1051,7 +1051,6 @@ Future<List<Transaction>> fetchTransactionHistory() async {
       throw Exception('Failed to load transaction history');
     }
   }
-
 
   Future<Map<String, dynamic>> createBooking(
       Map<String, dynamic> bookingData) async {
@@ -1245,6 +1244,86 @@ Future<List<Transaction>> fetchTransactionHistory() async {
         return json.decode(response.body);
       } else {
         throw Exception('Failed to verify bank details');
+      }
+    } catch (e) {
+      throw Exception('Error: $e');
+    }
+  }
+
+  Future<Map<String, dynamic>> getPaymentMethodsStatus() async {
+    final headers = {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    };
+    try {
+      final response = await http.get(
+          Uri.parse('$_baseUrl/kyc/payment-methods-status'),
+          headers: headers);
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      } else {
+        throw Exception('Failed to load payment methods status');
+      }
+    } catch (e) {
+      throw Exception('Error fetching payment methods status: $e');
+    }
+  }
+
+  Future<Map<String, dynamic>> getBankingDetails() async {
+    try {
+      final response =
+          await http.get(Uri.parse('$_baseUrl/kyc/banking-details'), headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      });
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        return data['data']['bankDetails'];
+      } else {
+        throw Exception('Failed to load banking details');
+      }
+    } catch (e) {
+      throw Exception('Error fetching banking details: $e');
+    }
+  }
+
+  Future<Map<String, dynamic>> getUpiDetails() async {
+    try {
+      final response =
+          await http.get(Uri.parse('$_baseUrl/kyc/banking-details'), headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      });
+
+      if (response.statusCode == 200) {
+        final data = json.decode(response.body);
+        return data['data']['upiDetails'];
+      } else {
+        throw Exception('Failed to load UPI details');
+      }
+    } catch (e) {
+      throw Exception('Error fetching UPI details: $e');
+    }
+  }
+
+  Future<Map<String, dynamic>> saveUpiId(String upiId) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$_baseUrl/kyc/save-upi'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode({
+          'upiId': upiId,
+        }),
+      );
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to save UPI ID');
       }
     } catch (e) {
       throw Exception('Error: $e');

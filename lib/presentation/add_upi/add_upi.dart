@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/add_upi/controller/add_upi_controller.dart';
 import 'package:experta/widgets/custom_text_form_field.dart';
-import 'package:experta/widgets/custom_toast_message.dart';
 
 class AddUpi extends StatefulWidget {
   const AddUpi({super.key});
@@ -13,6 +12,7 @@ class AddUpi extends StatefulWidget {
 }
 
 class _AddUpiState extends State<AddUpi> {
+  final _formKey = GlobalKey<FormState>();
   AddUpiController controller = Get.put(AddUpiController());
   @override
   Widget build(BuildContext context) {
@@ -46,49 +46,52 @@ class _AddUpiState extends State<AddUpi> {
             ),
             Padding(
               padding: const EdgeInsets.only(top: 15, left: 16, right: 16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  //Text("Change User Name",style: theme.textTheme.headlineSmall!.copyWith(color: Colors.black,fontWeight: FontWeight.bold),),
-                   Text(
-                              "UPI ID",
-                              style: theme.textTheme.titleMedium!
-                                  .copyWith(color: appTheme.blueGray300, fontSize: 14.adaptSize, fontWeight: FontWeight.w400),
-                            ),
-                  CustomTextFormField(
-                    hintText: "Enter your UPI ID",
-                    hintStyle: theme.textTheme.titleMedium!.copyWith(color: appTheme.blueGray300, fontSize: 14.adaptSize, fontWeight: FontWeight.w400),
-                            
-                    textInputType: TextInputType.name,
-                    controller: controller.textField1,
-                    focusNode: controller.focus1,
-                    autofocus: false,
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.only(top: 6, bottom: 15),
-                    child: Text("Example: username@bankname", maxLines: 1,),
-                    
-                  ),
-                  const Spacer(),
-                  CustomElevatedButton(
-                    text: "Save",
-                    onPressed: () {
-                      if (controller.textField1.text.isNotEmpty) {
-                        CustomToast().showToast(
-                            context: context,
-                            message: "User Name changed Sucessfully",
-                            isSuccess: true);
-                        Get.toNamed(AppRoutes.accountSetting);
-                      } else {
-                        CustomToast().showToast(
-                            context: context,
-                            message: "Please Fill the user name",
-                            isSuccess: false);
-                      }
-                    },
-                    margin: const EdgeInsets.all(10),
-                  )
-                ],
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      "UPI ID",
+                      style: theme.textTheme.titleMedium!.copyWith(
+                          color: appTheme.blueGray300,
+                          fontSize: 14.adaptSize,
+                          fontWeight: FontWeight.w400),
+                    ),
+                    CustomTextFormField(
+                      hintText: "Enter your UPI ID",
+                      hintStyle: theme.textTheme.titleSmall!.copyWith(
+                          color: appTheme.blueGray300,
+                          fontSize: 14.adaptSize,
+                          fontWeight: FontWeight.w500),
+                      textInputType: TextInputType.name,
+                      controller: controller.upiController,
+                      focusNode: controller.focus1,
+                      autofocus: false,
+                      validator: controller.validateUpiId,
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.only(top: 6, bottom: 15),
+                      child: Text(
+                        "Example: username@bankname",
+                        maxLines: 1,
+                      ),
+                    ),
+                    const Spacer(),
+                    Obx(() => CustomElevatedButton(
+                          text:
+                              controller.isLoading.value ? "Saving..." : "Save",
+                          onPressed: controller.isLoading.value
+                              ? null
+                              : () {
+                                  if (_formKey.currentState!.validate()) {
+                                    controller.saveUpiId();
+                                  }
+                                },
+                          margin: const EdgeInsets.all(10),
+                        ))
+                  ],
+                ),
               ),
             ),
           ],

@@ -1,6 +1,8 @@
 import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
+import 'package:experta/presentation/payment_method/display_bank.dart';
+import 'package:experta/presentation/payment_method/upi_details.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
 
 class PaymentMethod extends StatefulWidget {
@@ -11,6 +13,40 @@ class PaymentMethod extends StatefulWidget {
 }
 
 class _PaymentMethodState extends State<PaymentMethod> {
+  bool isUpiAdded = false;
+  bool isBankAdded = false;
+  bool isBankVerified = false;
+  String? upiDetails;
+  Map<String, String>? bankDetails;
+  ApiService apiService = ApiService();
+  @override
+  void initState() {
+    super.initState();
+    fetchPaymentMethodsStatus();
+  }
+
+  Future<void> fetchPaymentMethodsStatus() async {
+    try {
+      final data = await apiService.getPaymentMethodsStatus();
+      setState(() {
+        isUpiAdded = data['data']['upi']['isAdded'];
+        isBankAdded = data['data']['bank']['isAdded'];
+        isBankVerified = data['data']['bank']['isVerified'];
+        if (isUpiAdded) {
+          upiDetails = data['data']['upi']['details'];
+        }
+        if (isBankAdded) {
+          bankDetails = {
+            'accountNumber': data['data']['bank']['details']['accountNumber'],
+            'ifsc': data['data']['bank']['details']['ifsc'],
+          };
+        }
+      });
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,8 +114,15 @@ class _PaymentMethodState extends State<PaymentMethod> {
                           borderRadius: BorderRadiusStyle.roundedBorder20),
                       child: Column(mainAxisSize: MainAxisSize.min, children: [
                         GestureDetector(
-                          onTap: () { 
-                            Get.toNamed(AppRoutes.addupi);
+                          onTap: () {
+                            if (!isUpiAdded) {
+                              Get.toNamed(AppRoutes.addupi);
+                            } else {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => const UpiDetails()));
+                            }
                           },
                           child: Container(
                               padding: EdgeInsets.symmetric(
@@ -105,10 +148,69 @@ class _PaymentMethodState extends State<PaymentMethod> {
                                             left: 15.h,
                                             top: 13.v,
                                             bottom: 10.v),
-                                        child: Text("Add UPI",
-                                            style: theme.textTheme.titleMedium!
-                                                .copyWith(
-                                                    color: appTheme.gray900))),
+                                        child: Column(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.start,
+                                          children: [
+                                            Row(
+                                              children: [
+                                                Text(
+                                                    isUpiAdded
+                                                        ? "UPI"
+                                                        : "Add UPI",
+                                                    style: theme
+                                                        .textTheme.titleMedium!
+                                                        .copyWith(
+                                                            color: appTheme
+                                                                .gray900)),
+                                                (isUpiAdded)
+                                                    ? Padding(
+                                                        padding:
+                                                            const EdgeInsets
+                                                                .only(left: 5),
+                                                        child: Container(
+                                                          width: 45,
+                                                          height: 16,
+                                                          decoration: BoxDecoration(
+                                                              color: appTheme
+                                                                  .green100
+                                                                  .withOpacity(
+                                                                      0.5),
+                                                              borderRadius:
+                                                                  BorderRadius
+                                                                      .circular(
+                                                                          2)),
+                                                          child: Center(
+                                                            child: Text(
+                                                              "Verified",
+                                                              style: theme
+                                                                  .textTheme
+                                                                  .titleSmall!
+                                                                  .copyWith(
+                                                                      color: appTheme
+                                                                          .green500,
+                                                                      fontSize:
+                                                                          10),
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      )
+                                                    : const SizedBox.shrink(),
+                                              ],
+                                            ),
+                                            isUpiAdded
+                                                ? Text(
+                                                    upiDetails ?? ''.toString(),
+                                                    style: theme
+                                                        .textTheme.titleSmall!
+                                                        .copyWith(
+                                                            fontSize: 14,
+                                                            color: appTheme
+                                                                .black900),
+                                                  )
+                                                : const SizedBox.shrink(),
+                                          ],
+                                        )),
                                     const Spacer(),
                                     CustomImageView(
                                         imagePath:
@@ -121,7 +223,14 @@ class _PaymentMethodState extends State<PaymentMethod> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Get.toNamed(AppRoutes.addbankaccount);
+                            if (!isBankAdded) {
+                              Get.toNamed(AppRoutes.addbankaccount);
+                            } else {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (_) => const BankDetails()));
+                            }
                           },
                           child: Padding(
                             padding: const EdgeInsets.only(top: 1),
@@ -149,12 +258,71 @@ class _PaymentMethodState extends State<PaymentMethod> {
                                               left: 15.h,
                                               top: 13.v,
                                               bottom: 10.v),
-                                          child: Text("Add Bank Account",
-                                              style: theme
-                                                  .textTheme.titleMedium!
-                                                  .copyWith(
-                                                      color:
-                                                          appTheme.gray900))),
+                                          child: Column(
+                                            crossAxisAlignment:
+                                                CrossAxisAlignment.start,
+                                            children: [
+                                              Row(
+                                                children: [
+                                                  Text(
+                                                      isBankAdded
+                                                          ? "A/C - ${bankDetails?['ifsc']?.substring(0, 4) ?? ''} Bank"
+                                                          : "Add Bank Account",
+                                                      style: theme.textTheme
+                                                          .titleMedium!
+                                                          .copyWith(
+                                                              color: appTheme
+                                                                  .gray900)),
+                                                  (isBankAdded &&
+                                                          isBankVerified)
+                                                      ? Padding(
+                                                          padding:
+                                                              const EdgeInsets
+                                                                  .only(
+                                                                  left: 5),
+                                                          child: Container(
+                                                            width: 45,
+                                                            height: 16,
+                                                            decoration: BoxDecoration(
+                                                                color: appTheme
+                                                                    .green100
+                                                                    .withOpacity(
+                                                                        0.5),
+                                                                borderRadius:
+                                                                    BorderRadius
+                                                                        .circular(
+                                                                            2)),
+                                                            child: Center(
+                                                              child: Text(
+                                                                "Verified",
+                                                                style: theme
+                                                                    .textTheme
+                                                                    .titleSmall!
+                                                                    .copyWith(
+                                                                        color: appTheme
+                                                                            .green500,
+                                                                        fontSize:
+                                                                            10),
+                                                              ),
+                                                            ),
+                                                          ),
+                                                        )
+                                                      : const SizedBox.shrink(),
+                                                ],
+                                              ),
+                                              (isBankAdded && isBankVerified)
+                                                  ? Text(
+                                                      "xxxxxxxxxxxx${bankDetails?['accountNumber']?.substring((bankDetails?['accountNumber']?.length ?? 0) - 4) ?? ''}",
+                                                      style: theme
+                                                          .textTheme.titleSmall!
+                                                          .copyWith(
+                                                              fontSize: 14,
+                                                              color: appTheme
+                                                                  .black900),
+                                                    )
+                                                  : const SizedBox.shrink()
+                                            ],
+                                          )),
                                       const Spacer(),
                                       CustomImageView(
                                           imagePath: ImageConstant
