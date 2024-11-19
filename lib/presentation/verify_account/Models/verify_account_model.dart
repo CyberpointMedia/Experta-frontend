@@ -1,4 +1,5 @@
 class VerifyAccountModel {}
+
 class KYCResponse {
   final UserData? userData;
   final String? id;
@@ -7,6 +8,7 @@ class KYCResponse {
   final FaceLiveness? faceLiveness;
   final FaceMatch? faceMatch;
   final BankVerification? bankVerification;
+  final GstDetails? gstDetails;
   final DateTime? createdAt;
   final DateTime? updatedAt;
 
@@ -18,13 +20,15 @@ class KYCResponse {
     this.faceLiveness,
     this.faceMatch,
     this.bankVerification,
+    this.gstDetails,
     this.createdAt,
     this.updatedAt,
   });
 
   factory KYCResponse.fromJson(Map<String, dynamic> json) {
     return KYCResponse(
-      userData: json['userData'] != null ? UserData.fromJson(json['userData']) : null,
+      userData:
+          json['userData'] != null ? UserData.fromJson(json['userData']) : null,
       id: json['_id'],
       userId: json['userId'],
       panVerification: json['panVerification'] != null
@@ -39,8 +43,13 @@ class KYCResponse {
       bankVerification: json['bankVerification'] != null
           ? BankVerification.fromJson(json['bankVerification'])
           : null,
-      createdAt: json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
-      updatedAt: json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,
+      gstDetails: json['gstDetails'] != null
+          ? GstDetails.fromJson(json['gstDetails'])
+          : null,
+      createdAt:
+          json['createdAt'] != null ? DateTime.parse(json['createdAt']) : null,
+      updatedAt:
+          json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,
     );
   }
 }
@@ -82,7 +91,8 @@ class PanVerification {
     return PanVerification(
       panDetails: json['panDetails'],
       panNumber: json['panNumber'],
-      updatedAt: json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,
+      updatedAt:
+          json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,
       verificationStatus: json['verificationStatus'],
     );
   }
@@ -108,7 +118,8 @@ class FaceLiveness {
       status: json['status'],
       confidence: json['confidence'],
       imageUrl: json['imageUrl'],
-      updatedAt: json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,
+      updatedAt:
+          json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,
       id: json['_id'],
     );
   }
@@ -137,7 +148,8 @@ class FaceMatch {
       confidence: json['confidence'],
       selfieUrl: json['selfieUrl'],
       idCardUrl: json['idCardUrl'],
-      updatedAt: json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,
+      updatedAt:
+          json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,
       id: json['_id'],
     );
   }
@@ -163,8 +175,27 @@ class BankVerification {
       accountNumber: json['accountNumber'],
       bankDetails: json['bankDetails'],
       ifsc: json['ifsc'],
-      updatedAt: json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,
+      updatedAt:
+          json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,
       verificationStatus: json['verificationStatus'],
+    );
+  }
+}
+
+class GstDetails {
+  final String? gstNumber;
+  final DateTime? updatedAt;
+
+  GstDetails({
+    this.gstNumber,
+    this.updatedAt,
+  });
+
+  factory GstDetails.fromJson(Map<String, dynamic> json) {
+    return GstDetails(
+      gstNumber: json['gstNumber'],
+      updatedAt:
+          json['updatedAt'] != null ? DateTime.parse(json['updatedAt']) : null,
     );
   }
 }

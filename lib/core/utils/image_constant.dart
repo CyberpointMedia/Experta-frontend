@@ -526,4 +526,5 @@ class ImageConstant {
   static String pan = "assets/images/bookings/pan.svg";
   static String panset = "assets/images/bookings/panset.svg";
   static String pdf = "assets/images/bookings/pdf.svg";
+  static String gst = "assets/call/gst.svg";
 }
