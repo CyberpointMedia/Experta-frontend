@@ -8,23 +8,22 @@ import 'core/app_export.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Initialize Firebase
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
+  // Run heavy initializations concurrently
+  await Future.wait([
+    Firebase.initializeApp(
+      options: DefaultFirebaseOptions.currentPlatform,
+    ),
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]),
+    PrefUtils().init(),
+  ]);
 
-  // Initialize Notification Manager
+  // Initialize Notification Manager after Firebase
   await NotificationManager().init();
 
-  PrefUtils prefUtils = PrefUtils();
-  await prefUtils.init();
-
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-  ]).then((value) {
-    Logger.init(kReleaseMode ? LogMode.live : LogMode.debug);
-    runApp(const MyApp());
-  });
+  Logger.init(kReleaseMode ? LogMode.live : LogMode.debug);
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {

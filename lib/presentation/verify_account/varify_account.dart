@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/pan_detrail/pan_detail.dart';
+import 'package:experta/presentation/payment_method/payment_method.dart';
 import 'package:experta/presentation/verify_account/Models/verify_account_model.dart';
 import 'package:experta/presentation/verify_account/face_live.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
@@ -176,7 +177,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
                               padding: EdgeInsets.only(
                                   left: 15.h, top: 13.v, bottom: 10.v),
                               child: Text(
-                                "U9465288001",
+                                "Mobile Number",
                                 style: theme.textTheme.titleMedium!.copyWith(
                                   color: appTheme.gray900,
                                 ),
@@ -860,7 +861,10 @@ class _VerifyAccountState extends State<VerifyAccount> {
 
                   GestureDetector(
                     onTap: () {
-                      Get.toNamed(AppRoutes.paymentmethod);
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (_) => const PaymentMethod()));
                     },
                     child: Padding(
                       padding: const EdgeInsets.only(top: 1),

@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/message_screen/widgets/anjaliarora_item_widget.dart';
 import 'package:experta/widgets/app_bar/appbar_subtitle.dart';
-import 'package:experta/widgets/app_bar/appbar_trailing_iconbutton.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'controller/message_controller.dart';
@@ -145,7 +144,9 @@ class _MessageScreenState extends State<MessageScreen> {
 
   @override
   void dispose() {
-    controller.searchController.clear();
+    controller.searchController.removeListener(_filterChats);
+    controller.searchController.dispose();
+    // controller.searchController.clear();
     socket.dispose();
     super.dispose();
   }
