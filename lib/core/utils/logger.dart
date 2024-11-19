@@ -1,62 +1,45 @@
-import 'package:logger/logger.dart';
-
 enum LogMode { debug, live }
 
-class AppLogger {
-  static final Logger _logger = Logger(
-    printer: PrettyPrinter(
-      methodCount: 0,
-      errorMethodCount: 5,
-      lineLength: 50,
-      colors: true,
-      printEmojis: true,
-      printTime: true,
-    ),
-  );
-
+class Logger {
   static LogMode _logMode = LogMode.debug;
 
   static void init(LogMode mode) {
-    _logMode = mode;
+    Logger._logMode = mode;
   }
 
-  static void error(dynamic message, {dynamic error, StackTrace? stackTrace}) {
+  static void error(dynamic data, {StackTrace? stackTrace}) {
     if (_logMode == LogMode.debug) {
-      _logger.e(message, error: error, stackTrace: stackTrace);
+      print("ERROR: $data${stackTrace != null ? '\n$stackTrace' : ''}");
     }
   }
 
-  static void info(dynamic message) {
+  static void info(dynamic data) {
     if (_logMode == LogMode.debug) {
-      _logger.i(message);
+      print("INFO: $data");
     }
   }
 
-  static void debug(dynamic message) {
+  static void debug(dynamic data) {
     if (_logMode == LogMode.debug) {
-      _logger.d(message);
+      print("DEBUG: $data");
     }
   }
 
-  static void warning(dynamic message) {
+  static void request(String method, String url,
+      {dynamic body, dynamic headers}) {
     if (_logMode == LogMode.debug) {
-      _logger.w(message);
+      print("REQUEST[$method] $url");
+      if (headers != null) print("Headers: $headers");
+      if (body != null) print("Body: $body");
     }
   }
 
-  static void request(String method, String url, {dynamic body, dynamic headers}) {
+  static void response(
+      String method, String url, int statusCode, dynamic body) {
     if (_logMode == LogMode.debug) {
-      _logger.i('REQUEST[$method] $url');
-      if (headers != null) _logger.i('Headers: $headers');
-      if (body != null) _logger.i('Body: $body');
-    }
-  }
-
-  static void response(String method, String url, int statusCode, dynamic body) {
-    if (_logMode == LogMode.debug) {
-      _logger.i('RESPONSE[$method] $url');
-      _logger.i('Status Code: $statusCode');
-      _logger.i('Body: $body');
+      print("RESPONSE[$method] $url");
+      print("Status Code: $statusCode");
+      print("Body: $body");
     }
   }
 }
