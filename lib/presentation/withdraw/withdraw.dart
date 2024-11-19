@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/categoryDetails/category_details_screen.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
+import 'package:experta/widgets/custom_radio_button.dart';
 
 class WithdrawCreditsPage extends StatefulWidget {
   const WithdrawCreditsPage({super.key});
@@ -13,6 +14,40 @@ class WithdrawCreditsPage extends StatefulWidget {
 
 class _WithdrawCreditsPageState extends State<WithdrawCreditsPage> {
   final TextEditingController _amountController = TextEditingController();
+  bool isUpiAdded = false;
+  bool isBankAdded = false;
+  bool isBankVerified = false;
+  String? upiDetails;
+  Map<String, String>? bankDetails;
+  ApiService apiService = ApiService();
+  String selectedPaymentMethod = '';
+  @override
+  void initState() {
+    super.initState();
+    fetchPaymentMethodsStatus();
+  }
+
+  Future<void> fetchPaymentMethodsStatus() async {
+    try {
+      final data = await apiService.getPaymentMethodsStatus();
+      setState(() {
+        isUpiAdded = data['data']['upi']['isAdded'];
+        isBankAdded = data['data']['bank']['isAdded'];
+        isBankVerified = data['data']['bank']['isVerified'];
+        if (isUpiAdded) {
+          upiDetails = data['data']['upi']['details'];
+        }
+        if (isBankAdded) {
+          bankDetails = {
+            'accountNumber': data['data']['bank']['details']['accountNumber'],
+            'ifsc': data['data']['bank']['details']['ifsc'],
+          };
+        }
+      });
+    } catch (e) {
+      print('Error: $e');
+    }
+  }
 
   @override
   void dispose() {
@@ -24,7 +59,6 @@ class _WithdrawCreditsPageState extends State<WithdrawCreditsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      // appBar: _buildAppBar(),
       body: Stack(
         children: [
           Positioned(
@@ -100,11 +134,11 @@ class _WithdrawCreditsPageState extends State<WithdrawCreditsPage> {
       children: [
         Row(
           children: [
-            const Text(
+            Text(
               "Earn credits",
-              style: TextStyle(fontSize: 16, color: Colors.grey),
+              style: theme.textTheme.titleMedium,
             ),
-            const SizedBox(width: 5), // Add some space between text and icon
+            const SizedBox(width: 5),
             CustomImageView(
               imagePath: ImageConstant.imgInfoBlueGray300,
             ),
@@ -115,8 +149,7 @@ class _WithdrawCreditsPageState extends State<WithdrawCreditsPage> {
           children: [
             CustomImageView(
                 imagePath: ImageConstant.imgLayer1, height: 28, width: 28),
-            const SizedBox(
-                width: 8), // Add space between coin and entered amount
+            const SizedBox(width: 8),
             Expanded(
               child: TextFormField(
                 controller: _amountController,
@@ -126,9 +159,7 @@ class _WithdrawCreditsPageState extends State<WithdrawCreditsPage> {
                     color: Colors.black),
                 keyboardType: TextInputType.number,
                 onChanged: (value) {
-                  setState(() {
-                    // Trigger a rebuild to update the text near the equal sign
-                  });
+                  setState(() {});
                 },
                 decoration: const InputDecoration(
                   border: InputBorder.none,
@@ -176,23 +207,119 @@ class _WithdrawCreditsPageState extends State<WithdrawCreditsPage> {
                 ),
               ),
             ),
-            SizedBox(
-                height: 10.v), // Optional space between heading and container
+            SizedBox(height: 10.v),
             Container(
               decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
                 color: Colors.transparent,
                 borderRadius: BorderRadiusStyle.roundedBorder20,
               ),
               child: Column(mainAxisSize: MainAxisSize.min, children: [
-                GestureDetector(
-                  onTap: () {
-                    Get.toNamed(AppRoutes.addupi);
-                  },
+                Container(
+                  padding:
+                      EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
+                  decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
+                    borderRadius: BorderRadiusStyle.customBorderBL20,
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CustomIconButton(
+                        height: 44.adaptSize,
+                        width: 44.adaptSize,
+                        padding: EdgeInsets.all(10.h),
+                        decoration: IconButtonStyleHelper.fillPrimary,
+                        child: CustomImageView(
+                          imagePath: ImageConstant.upi,
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(
+                            left: 15.h, top: 13.v, bottom: 10.v),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Text(isUpiAdded ? "UPI" : "Add UPI",
+                                    style: theme.textTheme.titleMedium!
+                                        .copyWith(color: appTheme.gray900)),
+                                (isUpiAdded)
+                                    ? Padding(
+                                        padding: const EdgeInsets.only(left: 5),
+                                        child: Container(
+                                          width: 45,
+                                          height: 16,
+                                          decoration: BoxDecoration(
+                                              color: appTheme.green100
+                                                  .withOpacity(0.5),
+                                              borderRadius:
+                                                  BorderRadius.circular(2)),
+                                          child: Center(
+                                            child: Text(
+                                              "Verified",
+                                              style: theme.textTheme.titleSmall!
+                                                  .copyWith(
+                                                      color: appTheme.green500,
+                                                      fontSize: 10),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    : const SizedBox.shrink(),
+                              ],
+                            ),
+                            isUpiAdded
+                                ? Text(
+                                    upiDetails ?? ''.toString(),
+                                    style: theme.textTheme.titleSmall!.copyWith(
+                                        fontSize: 14, color: appTheme.black900),
+                                  )
+                                : const SizedBox.shrink(),
+                          ],
+                        ),
+                      ),
+                      const Spacer(),
+                      (!isUpiAdded)
+                          ? SizedBox(
+                              height: 33,
+                              width: 57,
+                              child: ElevatedButton(
+                                onPressed: () {
+                                  Get.toNamed(AppRoutes.addupi);
+                                },
+                                style: ElevatedButton.styleFrom(
+                                  backgroundColor: appTheme.whiteA700,
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(20),
+                                  ),
+                                  side: BorderSide(color: appTheme.gray300),
+                                ),
+                                child: const Text(
+                                  "link",
+                                  style: TextStyle(color: Colors.black),
+                                ),
+                              ),
+                            )
+                          : // For UPI section
+                          CustomRadioButton(
+                              value: 'upi', // Add this
+                              groupValue: selectedPaymentMethod,
+                              onChange: (value) {
+                                setState(() {
+                                  selectedPaymentMethod = value.toString();
+                                });
+                              },
+                            ),
+                    ],
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(top: 1),
                   child: Container(
                     padding:
                         EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
                     decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
-                      borderRadius: BorderRadiusStyle.customBorderBL20,
+                      borderRadius: BorderRadiusStyle.customBorderL20,
                     ),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
@@ -201,101 +328,97 @@ class _WithdrawCreditsPageState extends State<WithdrawCreditsPage> {
                           height: 44.adaptSize,
                           width: 44.adaptSize,
                           padding: EdgeInsets.all(10.h),
-                          decoration: IconButtonStyleHelper.fillPrimary,
+                          decoration: IconButtonStyleHelper.fillDeepPurple,
                           child: CustomImageView(
-                            imagePath: ImageConstant.upi,
+                            imagePath: ImageConstant.bank,
                           ),
                         ),
                         Padding(
                           padding: EdgeInsets.only(
                               left: 15.h, top: 13.v, bottom: 10.v),
-                          child: Text(
-                            "Add UPI",
-                            style: theme.textTheme.titleMedium!
-                                .copyWith(color: appTheme.gray900),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Row(
+                                children: [
+                                  Text(
+                                      isBankAdded
+                                          ? "A/C - ${bankDetails?['ifsc']?.substring(0, 4) ?? ''} Bank"
+                                          : "Add Bank Account",
+                                      style: theme.textTheme.titleMedium!
+                                          .copyWith(color: appTheme.gray900)),
+                                  (isBankAdded && isBankVerified)
+                                      ? Padding(
+                                          padding:
+                                              const EdgeInsets.only(left: 5),
+                                          child: Container(
+                                            width: 45,
+                                            height: 16,
+                                            decoration: BoxDecoration(
+                                                color: appTheme.green100
+                                                    .withOpacity(0.5),
+                                                borderRadius:
+                                                    BorderRadius.circular(2)),
+                                            child: Center(
+                                              child: Text(
+                                                "Verified",
+                                                style: theme
+                                                    .textTheme.titleSmall!
+                                                    .copyWith(
+                                                        color:
+                                                            appTheme.green500,
+                                                        fontSize: 10),
+                                              ),
+                                            ),
+                                          ),
+                                        )
+                                      : const SizedBox.shrink(),
+                                ],
+                              ),
+                              (isBankAdded && isBankVerified)
+                                  ? Text(
+                                      "xxxxxxxxxxxx${bankDetails?['accountNumber']?.substring((bankDetails?['accountNumber']?.length ?? 0) - 4) ?? ''}",
+                                      style: theme.textTheme.titleSmall!
+                                          .copyWith(
+                                              fontSize: 14,
+                                              color: appTheme.black900),
+                                    )
+                                  : const SizedBox.shrink()
+                            ],
                           ),
                         ),
                         const Spacer(),
-                        SizedBox(
-                          height: 33,
-                          width: 57,
-                          child: ElevatedButton(
-                            onPressed: () {
-                              Get.toNamed(AppRoutes.addupi);
-                            },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: appTheme.whiteA700,
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              side: BorderSide(color: appTheme.gray300),
-                            ),
-                            child: const Text(
-                              "link",
-                              style: TextStyle(color: Colors.black),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Get.toNamed(AppRoutes.addbankaccount);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 1),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 15.h, vertical: 16.v),
-                      decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
-                        borderRadius: BorderRadiusStyle.customBorderL20,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CustomIconButton(
-                            height: 44.adaptSize,
-                            width: 44.adaptSize,
-                            padding: EdgeInsets.all(10.h),
-                            decoration: IconButtonStyleHelper.fillDeepPurple,
-                            child: CustomImageView(
-                              imagePath: ImageConstant.bank,
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                left: 15.h, top: 13.v, bottom: 10.v),
-                            child: Text(
-                              "Add Bank Account",
-                              style: theme.textTheme.titleMedium!
-                                  .copyWith(color: appTheme.gray900),
-                            ),
-                          ),
-                          const Spacer(),
-                          SizedBox(
-                            height: 33,
-                            width: 57,
-                            child: ElevatedButton(
-                              onPressed: () {
-                                Get.toNamed(AppRoutes.addbankaccount);
-                              },
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: appTheme.whiteA700,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(20),
+                        !isBankAdded
+                            ? SizedBox(
+                                height: 33,
+                                width: 57,
+                                child: ElevatedButton(
+                                  onPressed: () {
+                                    Get.toNamed(AppRoutes.addbankaccount);
+                                  },
+                                  style: ElevatedButton.styleFrom(
+                                    backgroundColor: appTheme.whiteA700,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(20),
+                                    ),
+                                    side: BorderSide(color: appTheme.gray300),
+                                  ),
+                                  child: const Text(
+                                    "Add",
+                                    style: TextStyle(color: Colors.black),
+                                  ),
                                 ),
-                                side: BorderSide(color: appTheme.gray300),
+                              )
+                            : CustomRadioButton(
+                                value: 'bank',
+                                groupValue: selectedPaymentMethod,
+                                onChange: (value) {
+                                  setState(() {
+                                    selectedPaymentMethod = value.toString();
+                                  });
+                                },
                               ),
-                              child: const Text(
-                                "Add",
-                                style: TextStyle(color: Colors.black),
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
+                      ],
                     ),
                   ),
                 ),
@@ -308,9 +431,84 @@ class _WithdrawCreditsPageState extends State<WithdrawCreditsPage> {
   }
 
   Widget _buildSummitButton() {
-    return const Padding(
-      padding: EdgeInsets.only(top: 50, bottom: 20),
-      child: CustomElevatedButton(text: 'sumit'),
+    return Padding(
+      padding: const EdgeInsets.only(top: 50, bottom: 20),
+      child: CustomElevatedButton(
+        text: 'Submit',
+        onPressed: () {
+          if (_amountController.text.isEmpty) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Please enter an amount')),
+            );
+            return;
+          }
+
+          if (selectedPaymentMethod.isEmpty) {
+            ScaffoldMessenger.of(context).showSnackBar(
+              const SnackBar(content: Text('Please select a payment method')),
+            );
+            return;
+          }
+
+          // Process withdrawal based on selected payment method
+          processWithdrawal();
+        },
+      ),
     );
+  }
+
+  void processWithdrawal() {
+    final amount = double.tryParse(_amountController.text) ?? 0;
+
+    if (selectedPaymentMethod == 'upi') {
+      if (!isUpiAdded) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Please link your UPI first')),
+        );
+        return;
+      }
+      // Process UPI withdrawal
+      processUpiWithdrawal(amount);
+    } else if (selectedPaymentMethod == 'bank') {
+      if (!isBankAdded || !isBankVerified) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+              content: Text('Please add and verify your bank account first')),
+        );
+        return;
+      }
+      // Process Bank withdrawal
+      processBankWithdrawal(amount);
+    }
+  }
+
+  Future<void> processUpiWithdrawal(double amount) async {
+    try {
+      // Add your UPI withdrawal API call here
+      // Example:
+      // await apiService.processUpiWithdrawal(amount, upiDetails);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('UPI withdrawal initiated successfully')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error processing UPI withdrawal: $e')),
+      );
+    }
+  }
+
+  Future<void> processBankWithdrawal(double amount) async {
+    try {
+      // Add your Bank withdrawal API call here
+      // Example:
+      // await apiService.processBankWithdrawal(amount, bankDetails);
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Bank withdrawal initiated successfully')),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error processing bank withdrawal: $e')),
+      );
+    }
   }
 }
