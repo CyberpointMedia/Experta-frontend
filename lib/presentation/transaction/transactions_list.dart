@@ -57,7 +57,7 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
   Future<void> _fetchTransactions() async {
     try {
       final fetchedTransactions = await apiService.fetchTransactionHistory();
-      log('Fetched Transactions: $fetchedTransactions');
+      log('Fetched Transactions: ${fetchedTransactions.join(', ')}');
       setState(() {
         transactions = fetchedTransactions;
         filteredTransactions = fetchedTransactions;

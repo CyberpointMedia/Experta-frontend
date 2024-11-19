@@ -1999,6 +1999,36 @@ class ApiService {
       throw Exception('Error marking all notifications as read: $e');
     }
   }
+
+  Future<Map<String, dynamic>> saveGstNumber(String gstNumber) async {
+    final url = Uri.parse('$_baseUrl/kyc/save-gst');
+    final body = jsonEncode({'gstNumber': gstNumber});
+    Logger.request('POST', url.toString(), body: body, headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    });
+
+    try {
+      final response = await http.post(url,
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer $token',
+          },
+          body: body);
+
+      Logger.response(
+          'POST', url.toString(), response.statusCode, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to save GST number');
+      }
+    } catch (e, stackTrace) {
+      Logger.error('Error saving GST number', stackTrace: stackTrace);
+      throw Exception('Error saving GST number: $e');
+    }
+  }
 }
 
 class BadRequestException implements Exception {
