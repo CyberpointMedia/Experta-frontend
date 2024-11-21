@@ -53,117 +53,63 @@ class _NotificationsPageState extends State<NotificationsPage> {
                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: ListView(
                     children: [
-                      const SizedBox(height: 0.0),
+                      
+                      const SizedBox(height: 16.0),
 
-                      // "Push notification" text and "Pause all" switch in a single column
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          const Text(
-                            "Push notification",
-                            style: TextStyle(
-                              fontSize: 16,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.black,
-                            ),
-                          ),
-                          SwitchListTile(
-                            title: const Text("Pause all"),
-                            subtitle: const Text(
-                              "Temporarily pause notifications",
-                              style: TextStyle(
-                                fontSize: 16,
-                                color: Colors.grey,
-                              ),
-                            ),
-                            value: pauseAll,
-                            onChanged: (bool value) {
-                              setState(() {
-                                pauseAll = value;
-                              });
-                            },
-                            activeTrackColor:
-                                Colors.green, // Entire button color when active
-                            thumbColor:
-                                WidgetStateProperty.resolveWith<Color>(
-                                    (Set<WidgetState> states) {
-                              if (states.contains(WidgetState.selected)) {
-                                return Colors.white; // White thumb when active
-                              }
-                              return Colors.grey; // Grey thumb when inactive
-                            }),
-                          ),
-                        ],
+                      // Push Notification Section
+                      _buildToggleRow(
+                        title: "Pause all",
+                        subtitle: "Temporarily pause notifications",
+                        value: pauseAll,
+                        onChanged: (bool value) {
+                          setState(() {
+                            pauseAll = value;
+                          });
+                        },
                       ),
 
-                      // Remaining toggles
-                      SwitchListTile(
-                        title: const Text("Post, Like and Comment"),
+                      // Post, Like, and Comment
+                      _buildToggleRow(
+                        title: "Post, Like and Comment",
                         value: postLikeComment,
                         onChanged: (bool value) {
                           setState(() {
                             postLikeComment = value;
                           });
                         },
-                        activeTrackColor: Colors.green,
-                        thumbColor: WidgetStateProperty.resolveWith<Color>(
-                            (Set<WidgetState> states) {
-                          if (states.contains(WidgetState.selected)) {
-                            return Colors.white;
-                          }
-                          return Colors.grey;
-                        }),
                       ),
-                      SwitchListTile(
-                        title: const Text("Following and Followers"),
+
+                      // Following and Followers
+                      _buildToggleRow(
+                        title: "Following and Followers",
                         value: followingFollowers,
                         onChanged: (bool value) {
                           setState(() {
                             followingFollowers = value;
                           });
                         },
-                        activeTrackColor: Colors.green,
-                        thumbColor: WidgetStateProperty.resolveWith<Color>(
-                            (Set<WidgetState> states) {
-                          if (states.contains(WidgetState.selected)) {
-                            return Colors.white;
-                          }
-                          return Colors.grey;
-                        }),
                       ),
-                      SwitchListTile(
-                        title: const Text("Messages"),
+
+                      // Messages
+                      _buildToggleRow(
+                        title: "Messages",
                         value: messages,
                         onChanged: (bool value) {
                           setState(() {
                             messages = value;
                           });
                         },
-                        activeTrackColor: Colors.green,
-                        thumbColor: WidgetStateProperty.resolveWith<Color>(
-                            (Set<WidgetState> states) {
-                          if (states.contains(WidgetState.selected)) {
-                            return Colors.white;
-                          }
-                          return Colors.grey;
-                        }),
                       ),
-                      SwitchListTile(
-                        title: const Text("Calls"),
+
+                      // Calls
+                      _buildToggleRow(
+                        title: "Calls",
                         value: calls,
                         onChanged: (bool value) {
                           setState(() {
                             calls = value;
                           });
                         },
-                        activeTrackColor: Colors.green,
-                        thumbColor: WidgetStateProperty.resolveWith<Color>(
-                            (Set<WidgetState> states) {
-                          if (states.contains(WidgetState.selected)) {
-                            return Colors.white;
-                          }
-                          return Colors.grey;
-                        }),
                       ),
                     ],
                   ),
@@ -171,6 +117,57 @@ class _NotificationsPageState extends State<NotificationsPage> {
               ),
             ],
           ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildToggleRow({
+    required String title,
+    String? subtitle,
+    required bool value,
+    required ValueChanged<bool> onChanged,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black,
+                  ),
+                ),
+                if (subtitle != null)
+                  Padding(
+                    padding: const EdgeInsets.only(top: 4.0),
+                    child: Text(
+                      subtitle,
+                      style: const TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w400,
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+          ),
+         Switch(
+  value: value,
+  onChanged: onChanged,
+  activeColor: Colors.white, // White thumb when active
+  activeTrackColor: Colors.green, // Green track when active
+  inactiveThumbColor: Colors.grey, // Grey thumb when inactive
+  inactiveTrackColor: Colors.grey.shade300, // Light grey track when inactive
+),
         ],
       ),
     );
