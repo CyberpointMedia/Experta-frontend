@@ -2077,6 +2077,89 @@ class ApiService {
       throw Exception('Error processing withdrawal: $e');
     }
   }
+
+  Future<dynamic> uploadFile(
+    File file,
+    void Function(double progress)? onProgress,
+  ) async {
+    final url = Uri.parse('$_baseUrl/upload');
+
+    AppLogger.request('POST', url.toString(),
+        body: 'File upload: ${file.path}',
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          if (token != null) 'Authorization': 'Bearer $token',
+        });
+
+    try {
+      var request = http.MultipartRequest('POST', url);
+
+      // Add headers if needed
+      if (token != null) {
+        request.headers['Authorization'] = 'Bearer $token';
+      }
+
+      // Add file to request
+      request.files.add(await http.MultipartFile.fromPath('file', file.path));
+
+      // Send request and get response
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+
+      AppLogger.response(
+          'POST', url.toString(), response.statusCode, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to upload file: ${response.body}');
+      }
+    } catch (e, stackTrace) {
+      AppLogger.error('Error uploading file', stackTrace: stackTrace);
+      throw Exception('Error uploading file: $e');
+    }
+  }
+
+  Future<Map<String, dynamic>> raiseTicket({
+    required String subject,
+    required String description,
+    required String fileUrl,
+  }) async {
+    final url = Uri.parse('$_baseUrl/raise-ticket');
+    final body = jsonEncode({
+      'subject': subject,
+      'description': description,
+      'fileUrl': fileUrl,
+    });
+
+    AppLogger.request('POST', url.toString(), body: body, headers: {
+      'Content-Type': 'application/json',
+      if (token != null) 'Authorization': 'Bearer $token',
+    });
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          if (token != null) 'Authorization': 'Bearer $token',
+        },
+        body: body,
+      );
+
+      AppLogger.response(
+          'POST', url.toString(), response.statusCode, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to raise ticket: ${response.body}');
+      }
+    } catch (e, stackTrace) {
+      AppLogger.error('Error raising ticket', stackTrace: stackTrace);
+      throw Exception('Error raising ticket: $e');
+    }
+  }
 }
 
 class BadRequestException implements Exception {

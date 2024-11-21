@@ -421,7 +421,6 @@ class _HomeScreenState extends State<HomeScreen> {
                               width: 30.adaptSize,
                               child: CustomImageView(
                                 imagePath: industry.icon,
-                                color: theme.primaryColor,
                                 placeHolder: ImageConstant.imageNotFound,
                               ),
                             ),
@@ -489,7 +488,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     return UserProfileItemWidget(user: users[index]);
                   },
                   separatorBuilder: (context, index) =>
-                      const SizedBox(height: 10), 
+                      const SizedBox(height: 10),
                 ),
               );
             },
