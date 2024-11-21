@@ -197,7 +197,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           Stack(
                             children: [
                               CustomImageView(
-                                radius: BorderRadius.circular(29), // 58 / 2
+                                radius: BorderRadius.circular(29),
                                 imagePath: (user.profilePic.isEmpty)
                                     ? ImageConstant.imgImage3380x80
                                     : user.profilePic,

@@ -240,106 +240,9 @@ class _UserProfilePageState extends State<UserProfilePage>
     });
   }
 
- Widget _buildColumnaboutme() {
-  List<Map<String, dynamic>>? socialMediaLinks = 
-      controller.userData.value.data?.basicInfo?.getSocialMediaLinks();
-  final theme = Theme.of(context);
-
-  return Container(
-    color: Colors.white, // Card-like appearance
-    padding: const EdgeInsets.all(10), // Padding inside the card for spacing
-    child: Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: [
-        // Row for "About me" title and edit icon
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            _buildRowaboutme(aboutMeText: "About me"),
-            InkWell(
-              onTap: () {
-                // Pass the current bio to EditAboutPage
-                final bio = controller.userData.value.data?.basicInfo?.bio ?? '';
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => EditAboutPage(bio: bio),
-                  ),
-                );
-              },
-              child: CustomImageView(
-                height: 19,
-                width: 19,
-                imagePath: "assets/images/Frame.svg",
-              ),
-            ),
-          ],
-        ),
-        SizedBox(height: 18.v),
-        SizedBox(
-          width: 331.adaptSize,
-          child: Obx(() {
-            return ReadMoreText(
-              controller.userData.value.data?.basicInfo?.bio ?? '',
-              trimLines: 3,
-              colorClickableText: appTheme.readmore,
-              trimMode: TrimMode.Line,
-              trimCollapsedText: "Read more",
-              trimExpandedText: "Read less",
-              style: theme.textTheme.titleSmall!
-                  .copyWith(color: appTheme.black900),
-              moreStyle: theme.textTheme.bodyMedium?.copyWith(
-                color: appTheme.readmore, // Color for 'Read more'
-                fontSize: theme.textTheme.bodyMedium?.fontSize,
-              ),
-              lessStyle: theme.textTheme.bodyMedium?.copyWith(
-                color: appTheme.readmore, // Color for 'Read less'
-                fontSize: theme.textTheme.bodyMedium?.fontSize,
-              ),
-            );
-          }),
-        ),
-        SizedBox(
-          height: 17.v,
-        ),
-        if (socialMediaLinks != null && socialMediaLinks.isNotEmpty)
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: socialMediaLinks.map((socialMedia) {
-              return GestureDetector(
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => ExpertaBrowser(
-                        url: socialMedia['link'],
-                        title: socialMedia['name'],
-                      ),
-                    ),
-                  );
-                  print('Opening link: ${socialMedia['link']}');
-                },
-                child: Padding(
-                  padding: EdgeInsets.only(right: 8.adaptSize),
-                  child: CustomImageView(
-                    imagePath: socialMedia['icon'],
-                    height: 24.adaptSize,
-                    width: 24.adaptSize,
-                  ),
-                ),
-              );
-            }).toList(),
-          ),
-      ],
-    ),
-  );
-}
-
-
-  
-
-  Widget _buildColumnExperience() {
+  Widget _buildColumnaboutme() {
+    List<Map<String, dynamic>>? socialMediaLinks =
+        controller.userData.value.data?.basicInfo?.getSocialMediaLinks();
     final theme = Theme.of(context);
 
     return Container(
@@ -347,22 +250,117 @@ class _UserProfilePageState extends State<UserProfilePage>
       padding: const EdgeInsets.all(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Row for the Experience title and edit icon
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _buildRowaboutme(aboutMeText: "About me"),
+              InkWell(
+                onTap: () {
+                  final bio =
+                      controller.userData.value.data?.basicInfo?.bio ?? '';
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => EditAboutPage(bio: bio),
+                    ),
+                  );
+                },
+                child: CustomImageView(
+                  height: 19,
+                  width: 19,
+                  imagePath: "assets/images/Frame.svg",
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 18.v),
+          SizedBox(
+            width: 331.adaptSize,
+            child: Obx(() {
+              return ReadMoreText(
+                controller.userData.value.data?.basicInfo?.bio ?? '',
+                trimLines: 3,
+                colorClickableText: appTheme.readmore,
+                trimMode: TrimMode.Line,
+                trimCollapsedText: "Read more",
+                trimExpandedText: "Read less",
+                style: theme.textTheme.titleSmall!
+                    .copyWith(color: appTheme.black900),
+                moreStyle: theme.textTheme.bodyMedium?.copyWith(
+                  color: appTheme.readmore, // Color for 'Read more'
+                  fontSize: theme.textTheme.bodyMedium?.fontSize,
+                ),
+                lessStyle: theme.textTheme.bodyMedium?.copyWith(
+                  color: appTheme.readmore, // Color for 'Read less'
+                  fontSize: theme.textTheme.bodyMedium?.fontSize,
+                ),
+              );
+            }),
+          ),
+          SizedBox(
+            height: 17.v,
+          ),
+          if (socialMediaLinks != null && socialMediaLinks.isNotEmpty)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: socialMediaLinks.map((socialMedia) {
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ExpertaBrowser(
+                          url: socialMedia['link'],
+                          title: socialMedia['name'],
+                        ),
+                      ),
+                    );
+                    print('Opening link: ${socialMedia['link']}');
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.only(right: 8.adaptSize),
+                    child: CustomImageView(
+                      imagePath: socialMedia['icon'],
+                      height: 24.adaptSize,
+                      width: 24.adaptSize,
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildColumnExperience() {
+    final theme = Theme.of(context);
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Padding(
                 padding: const EdgeInsets.only(right: 2),
-                child: _buildRoweducation(educationText: "Experience"),
+                child: Text(
+                  "Experience",
+                  style: theme.textTheme.bodyMedium!?.copyWith(
+                      fontSize: 16.fSize,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600),
+                ),
               ),
-              GestureDetector(
+              CustomImageView(
+                imagePath: "assets/images/Frame.svg",
                 onTap: () {
-                  // Add your edit functionality here
+                  Get.toNamed(AppRoutes.experience);
                 },
-                child: CustomImageView(
-                                  imagePath: "assets/images/Frame.svg",
-                                )
               ),
             ],
           ),
@@ -400,16 +398,15 @@ class _UserProfilePageState extends State<UserProfilePage>
                     Text(
                       experience.jobTitle ?? '',
                       style: theme.textTheme.titleMedium!.copyWith(
-                        fontSize: 16.fSize, fontWeight: FontWeight.w400
-                      ),
+                          fontSize: 16.fSize, fontWeight: FontWeight.w400),
                     ),
                     SizedBox(height: 1.v),
                     Text(
                       experience.companyName ?? '',
                       style: theme.textTheme.titleMedium?.copyWith(
-                        color: appTheme.gray900,
-                        fontSize: 14.fSize,fontWeight: FontWeight.w500
-                      ),
+                          color: appTheme.gray900,
+                          fontSize: 14.fSize,
+                          fontWeight: FontWeight.w500),
                     ),
                     SizedBox(height: 1.v),
                     Text(
@@ -419,8 +416,6 @@ class _UserProfilePageState extends State<UserProfilePage>
                       ),
                     ),
                     SizedBox(height: 18.v),
-
-                    // Show the divider only if there is more than one experience
                     if (workExperience.length > 1 &&
                         index < workExperience.length - 1)
                       Divider(
@@ -444,40 +439,33 @@ class _UserProfilePageState extends State<UserProfilePage>
     final expertiseList = data?.expertise ?? [];
 
     return Container(
-      color: Colors.white, // Card-like appearance
-      padding: EdgeInsets.all(10), // Padding around the card content
+      color: Colors.white,
+      padding: const EdgeInsets.all(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Row for "Expertise" label and edit icon
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _buildRowaboutme(aboutMeText: "Expertise"),
-            CustomImageView(
-  imagePath: "assets/images/Frame.svg",
-  onTap: () {
-    Get.to(() => EditExpertisePage(
-          selectedItems: expertiseList.map((userExpertise) {
-            // Convert UserExpertise to ExpertiseItem
-            return ExpertiseItem(
-              // Map fields from UserExpertise to ExpertiseItem
-              id: userExpertise.id.toString(),
-              name: userExpertise.name.toString(),
-              // Add other fields as necessary
-            );
-          }).toList(),
-        ));
-  },
-),
-
+              CustomImageView(
+                imagePath: "assets/images/Frame.svg",
+                onTap: () {
+                  Get.to(() => EditExpertisePage(
+                        selectedItems: expertiseList.map((userExpertise) {
+                          return ExpertiseItem(
+                            id: userExpertise.id.toString(),
+                            name: userExpertise.name.toString(),
+                          );
+                        }).toList(),
+                      ));
+                },
+              ),
             ],
           ),
-          const SizedBox(
-              height: 8.0), 
+          const SizedBox(height: 8.0),
           Padding(
-            padding:
-                const EdgeInsets.all(8.0),
+            padding: const EdgeInsets.all(8.0),
             child: Wrap(
               spacing: 4.0,
               runSpacing: 0.0,
@@ -514,21 +502,24 @@ class _UserProfilePageState extends State<UserProfilePage>
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Row for the Education title and edit icon
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Padding(
                 padding: const EdgeInsets.only(right: 2),
-                child: _buildRoweducation(educationText: "Education"),
+                child: Text(
+                  "Education",
+                  style: theme.textTheme.bodyMedium!?.copyWith(
+                      fontSize: 16.fSize,
+                      color: Colors.black,
+                      fontWeight: FontWeight.w600),
+                ),
               ),
-              GestureDetector(
+              CustomImageView(
+                imagePath: "assets/images/Frame.svg",
                 onTap: () {
-                  // Add your edit functionality here
+                  Get.toNamed(AppRoutes.education);
                 },
-                child: CustomImageView(
-                                  imagePath: "assets/images/Frame.svg",
-                                )
               ),
             ],
           ),
@@ -539,16 +530,12 @@ class _UserProfilePageState extends State<UserProfilePage>
               crossAxisAlignment: CrossAxisAlignment.start,
               children: List.generate(educationList.length, (index) {
                 var education = educationList[index];
-
-                // Format the dates
                 String formattedStartDate = education.startDate != null
                     ? DateFormat('MMM yyyy').format(education.startDate!)
                     : '';
                 String formattedEndDate = education.endDate != null
                     ? DateFormat('MMM yyyy').format(education.endDate!)
                     : 'Present';
-
-                // Calculate the total duration
                 String totalDuration = '';
                 if (education.startDate != null && education.endDate != null) {
                   Duration duration =
@@ -563,24 +550,24 @@ class _UserProfilePageState extends State<UserProfilePage>
                   children: [
                     Text(
                       education.degree ?? '',
-                      style: theme.textTheme.titleMedium!.copyWith(fontSize: 16.adaptSize, fontWeight: FontWeight.w400),
+                      style: theme.textTheme.titleMedium!.copyWith(
+                          fontSize: 16.adaptSize, fontWeight: FontWeight.w400),
                     ),
                     SizedBox(height: 1.v),
                     Text(
                       education.schoolCollege ?? '',
-                      style: theme.textTheme.titleMedium!
-                          .copyWith(color: appTheme.gray900, fontSize: 14.adaptSize, fontWeight: FontWeight.w500),
+                      style: theme.textTheme.titleMedium!.copyWith(
+                          color: appTheme.gray900,
+                          fontSize: 14.adaptSize,
+                          fontWeight: FontWeight.w500),
                     ),
                     SizedBox(height: 1.v),
                     Text(
                       "$formattedStartDate - $formattedEndDate · $totalDuration",
                       style: theme.textTheme.titleSmall!.copyWith(
-                        fontSize: 14.adaptSize, fontWeight: FontWeight.w500
-                      ),
+                          fontSize: 14.adaptSize, fontWeight: FontWeight.w500),
                     ),
                     SizedBox(height: 18.v),
-
-                    // Show the divider only if there is more than one education item
                     if (educationList.length > 1 &&
                         index < educationList.length - 1)
                       Divider(
@@ -648,8 +635,6 @@ class _UserProfilePageState extends State<UserProfilePage>
                             ),
                           ],
                         )),
-
-                    // Show the divider only if there is more than one achievement
                     if (achievements.length > 1 &&
                         index < achievements.length - 1)
                       Divider(
@@ -684,13 +669,11 @@ class _UserProfilePageState extends State<UserProfilePage>
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 _buildRowaboutme(aboutMeText: "Interests"),
-                GestureDetector(
+                CustomImageView(
+                  imagePath: "assets/images/Frame.svg",
                   onTap: () {
-                    // Define the edit action here
+                    Get.toNamed(AppRoutes.additional);
                   },
-                 child: CustomImageView(
-                                  imagePath: "assets/images/Frame.svg",
-                                )
                 ),
               ],
             ),
@@ -699,8 +682,8 @@ class _UserProfilePageState extends State<UserProfilePage>
           Padding(
             padding: const EdgeInsets.all(8.0),
             child: Wrap(
-              spacing: 8.0, // Horizontal spacing between chips
-              runSpacing: 4.0, // Vertical spacing between lines of chips
+              spacing: 8.0,
+              runSpacing: 4.0,
               children: interestList.map((interest) {
                 return Chip(
                   label: Text(
@@ -727,141 +710,131 @@ class _UserProfilePageState extends State<UserProfilePage>
     );
   }
 
- Widget _buildColumnreviews() {
-  return Container(
-    color: Colors.white,
-    padding: const EdgeInsets.all(10),
-    child: Column(
-      children: [
-        // Header Row
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              "Reviews",
-              style: theme.textTheme.headlineLarge?.copyWith(fontSize: 16.fSize),
-            ),
-            GestureDetector(
-              onTap: () {
-                var reviews = controller.userData.value.data?.basicInfo?.reviews;
-                if (reviews != null && reviews.isNotEmpty) {
-                  Get.to(() => AllReviewsPage(reviews: reviews));
-                }
-              },
-              child: Text(
-                "See all",
-                style: theme.textTheme.titleMedium
-                    ?.copyWith(color: appTheme.deepOrangeA200),
+  Widget _buildColumnreviews() {
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                "Reviews",
+                style:
+                    theme.textTheme.headlineLarge?.copyWith(fontSize: 16.fSize),
               ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 19),
+              GestureDetector(
+                onTap: () {
+                  var reviews =
+                      controller.userData.value.data?.basicInfo?.reviews;
+                  if (reviews != null && reviews.isNotEmpty) {
+                    Get.to(() => AllReviewsPage(reviews: reviews));
+                  }
+                },
+                child: Text(
+                  "See all",
+                  style: theme.textTheme.titleMedium
+                      ?.copyWith(color: appTheme.deepOrangeA200),
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 19),
+          Obx(() {
+            var reviews = controller.userData.value.data?.basicInfo?.reviews;
+            if (reviews == null || reviews.isEmpty) {
+              return Text(
+                "No reviews yet",
+                style: theme.textTheme.bodyMedium
+                    ?.copyWith(color: appTheme.gray300),
+              );
+            }
+            var limitedReviews = reviews.take(3).toList();
 
-        // Reviews Section
-        Obx(() {
-          var reviews = controller.userData.value.data?.basicInfo?.reviews;
-          if (reviews == null || reviews.isEmpty) {
-            return Text(
-              "No reviews yet",
-              style: theme.textTheme.bodyMedium
-                  ?.copyWith(color: appTheme.gray300),
-            );
-          }
-
-          // Limit to 3 reviews for preview
-          var limitedReviews = reviews.take(3).toList();
-
-          return Column(
-            children: limitedReviews.map((review) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Container(
-                  padding: EdgeInsets.all(16.adaptSize),
-                  decoration: BoxDecoration(
-                    color: appTheme.gray100,
-                    borderRadius: BorderRadius.circular(20),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // Reviewer Info Row
-                      Row(
-                        children: [
-                          CustomImageView(
-                            imagePath: review.profilePic,
-                            placeHolder: ImageConstant.imageNotFound,
-                            height: 50.v,
-                            width: 50.h,
-                            radius: BorderRadius.circular(50),
-                          ),
-                          const SizedBox(width: 10),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                review.reviewer ?? "null",
-                                style: theme.textTheme.headlineLarge
-                                    ?.copyWith(fontSize: 14.fSize),
-                              ),
-                              const SizedBox(height: 1),
-                              Text(
-                                review.formattedDate ?? "Unknown Date",
-                                style: theme.textTheme.titleSmall!,
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 10),
-
-                      // Rating Row
-                      if (review.rating != null)
+            return Column(
+              children: limitedReviews.map((review) {
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Container(
+                    padding: EdgeInsets.all(16.adaptSize),
+                    decoration: BoxDecoration(
+                      color: appTheme.gray100,
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
                         Row(
                           children: [
-                            CustomRatingBar(
-                              initialRating: review.rating!.toDouble(),
-                              itemCount: 5,
-                              itemSize: 22,
-                              onRatingUpdate: (rating) {},
-                              color: appTheme.deepYello,
-                              unselectedColor: appTheme.gray300,
+                            CustomImageView(
+                              imagePath: review.profilePic,
+                              placeHolder: ImageConstant.imageNotFound,
+                              height: 50.v,
+                              width: 50.h,
+                              radius: BorderRadius.circular(50),
                             ),
-                            const SizedBox(width: 6),
-                            Text(
-                              review.rating.toString(),
-                              style: theme.textTheme.headlineLarge
-                                  ?.copyWith(fontSize: 16.fSize),
+                            const SizedBox(width: 10),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  review.reviewer ?? "null",
+                                  style: theme.textTheme.headlineLarge
+                                      ?.copyWith(fontSize: 14.fSize),
+                                ),
+                                const SizedBox(height: 1),
+                                Text(
+                                  review.formattedDate ?? "Unknown Date",
+                                  style: theme.textTheme.titleSmall!,
+                                ),
+                              ],
                             ),
                           ],
                         ),
-
-                      // Review Comment
-                      const SizedBox(height: 8),
-                      Text(
-                        review.review ?? "No comments provided.",
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        style: theme.textTheme.bodyMedium?.copyWith(
-                          color: appTheme.gray900,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 14.adaptSize,
+                        const SizedBox(height: 10),
+                        if (review.rating != null)
+                          Row(
+                            children: [
+                              CustomRatingBar(
+                                initialRating: review.rating!.toDouble(),
+                                itemCount: 5,
+                                itemSize: 22,
+                                onRatingUpdate: (rating) {},
+                                color: appTheme.deepYello,
+                                unselectedColor: appTheme.gray300,
+                              ),
+                              const SizedBox(width: 6),
+                              Text(
+                                review.rating.toString(),
+                                style: theme.textTheme.headlineLarge
+                                    ?.copyWith(fontSize: 16.fSize),
+                              ),
+                            ],
+                          ),
+                        const SizedBox(height: 8),
+                        Text(
+                          review.review ?? "No comments provided.",
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.bodyMedium?.copyWith(
+                            color: appTheme.gray900,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 14.adaptSize,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
-                ),
-              );
-            }).toList(),
-          );
-        }),
-
-        const SizedBox(height: 19),
-      ],
-    ),
-  );
-}
-
+                );
+              }).toList(),
+            );
+          }),
+          const SizedBox(height: 19),
+        ],
+      ),
+    );
+  }
 
   Widget _buildRowaboutme({required String aboutMeText}) {
     return Row(
@@ -874,21 +847,9 @@ class _UserProfilePageState extends State<UserProfilePage>
           ),
           child: Text(
             aboutMeText,
-            style: theme.textTheme.headlineLarge?.copyWith(fontSize: 16.fSize, fontWeight: FontWeight.w600),
+            style: theme.textTheme.headlineLarge
+                ?.copyWith(fontSize: 16.fSize, fontWeight: FontWeight.w600),
           ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildRoweducation({required String educationText}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          educationText,
-          style: theme.textTheme.bodyMedium!
-              ?.copyWith(fontSize: 16.fSize, color: Colors.black, fontWeight: FontWeight.w600),
         ),
       ],
     );
