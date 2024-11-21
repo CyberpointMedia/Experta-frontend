@@ -22,7 +22,7 @@ Future<void> main() async {
   // Initialize Notification Manager after Firebase
   await NotificationManager().init();
 
-  Logger.init(kReleaseMode ? LogMode.live : LogMode.debug);
+  AppLogger.init(kReleaseMode ? LogMode.live : LogMode.debug);
   runApp(const MyApp());
 }
 

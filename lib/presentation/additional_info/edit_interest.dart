@@ -101,8 +101,6 @@ class _EditInterestPageState extends State<EditInterestPage> {
             child: Text(
               "Pick your favorite interests to find groups and events related to them",
               style: CustomTextStyles.bodyMediumLight,
-              // "Pick your favorite interests to find groups and events related to them",
-              // style: CustomTextStyles.bodyMediumLight,
             ),
           ),
           CustomSearchView(

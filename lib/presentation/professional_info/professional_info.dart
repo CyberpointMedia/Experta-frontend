@@ -154,14 +154,16 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
             padding: const EdgeInsets.only(top: 10),
             child: Text(
               label,
-              style: theme.textTheme.titleSmall!.copyWith(color: appTheme.black900),
+              style: theme.textTheme.titleSmall!
+                  .copyWith(color: appTheme.black900),
             ),
           ),
           Padding(
             padding: EdgeInsets.only(top: 6.v, bottom: 12.v),
             child: CustomDropDown(
               hintText: "Select",
-              hintStyle: theme.textTheme.titleSmall!.copyWith(color: appTheme.black900),
+              hintStyle: theme.textTheme.titleSmall!
+                  .copyWith(color: appTheme.black900),
               width: double.infinity,
               icon: _buildDropdownIcon(),
               items: items,
@@ -234,7 +236,8 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
     return Expanded(
       child: CustomRadioButton(
         value: value,
-        textStyle: theme.textTheme.titleSmall!.copyWith(color: appTheme.black900),
+        textStyle:
+            theme.textTheme.titleSmall!.copyWith(color: appTheme.black900),
         groupValue: controller.selectedOption.value,
         onChange: (value) {
           setState(() {
@@ -465,110 +468,114 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
     );
   }
 
-Widget _buildEditWorkExperience() {
-  return Obx(() {
-    if (controller.isLoading.value) {
-      return const Center(child: ShimmerLoadingEffect());
-    } else if (controller.workExperienceList.isEmpty) {
-      return const Center(child: Text('No work experience available'));
-    } else {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildSectionHeader(
-            "Work Experience",
-            (context) => Get.offAndToNamed(AppRoutes.experience),
-          ),
-          ListView.separated(
-            shrinkWrap: true,
-            clipBehavior: Clip.antiAlias,
-            physics: const NeverScrollableScrollPhysics(),
-            padding: EdgeInsets.zero,
-            itemCount: controller.workExperienceList.length,
-            itemBuilder: (context, index) {
-              final workExperience = controller.workExperienceList[index];
-              return WorkExperienceWidget(workExperience: workExperience);
-            },
-             separatorBuilder: (context, index) => const Divider(height: 1, color: Colors.grey),
-          ),
-        ],
-      );
-    }
-  });
-}
-
-
-Widget _buildEducation() {
-  return Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-      Padding(
-        padding: const EdgeInsets.only(bottom: 8.0),
-        child: Row(
+  Widget _buildEditWorkExperience() {
+    return Obx(() {
+      if (controller.isLoading.value) {
+        return const Center(child: ShimmerLoadingEffect());
+      } else if (controller.workExperienceList.isEmpty) {
+        return const Center(child: Text('No work experience available'));
+      } else {
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            Text(
-              "Education",
-              style: CustomTextStyles.labelMediumBlack900,
-              textAlign: TextAlign.start,
+            _buildSectionHeader(
+              "Work Experience",
+              (context) => Get.offAndToNamed(AppRoutes.experience),
             ),
-            const Spacer(),
-            TextButton(
-              onPressed: () => Get.offAndToNamed(AppRoutes.education),
-              child: Text(
-                "Edit",
-                style: theme.textTheme.titleMedium!.copyWith(color: appTheme.red500),
-                textAlign: TextAlign.start,
-              ),
+            ListView.separated(
+              shrinkWrap: true,
+              clipBehavior: Clip.antiAlias,
+              physics: const NeverScrollableScrollPhysics(),
+              padding: EdgeInsets.zero,
+              itemCount: controller.workExperienceList.length,
+              itemBuilder: (context, index) {
+                final workExperience = controller.workExperienceList[index];
+                return WorkExperienceWidget(workExperience: workExperience);
+              },
+              separatorBuilder: (context, index) =>
+                  Divider(height: 1, color: Colors.transparent),
             ),
           ],
-        ),
-      ),
-      Obx(() {
-        if (controller.isLoading.value) {
-          return const Center(child: ShimmerLoadingEffect());
-        } else if (controller.educationList.isEmpty) {
-          return const Center(child: Text('No education data available'));
-        } else {
-          return ListView.builder(
-            shrinkWrap: true,
-            physics: const NeverScrollableScrollPhysics(),
-            padding: EdgeInsets.zero, // Remove default padding
-            itemCount: controller.educationList.length,
-            itemBuilder: (context, index) {
-              final education = controller.educationList[index];
-              return Padding(
-                padding: const EdgeInsets.only(bottom: 8.0), // Spacing between items
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      education.degree,
-                      style: CustomTextStyles.titleMediumSFProTextBlack90001,
-                    ),
-                    const SizedBox(height: 4.0), // Spacing between lines
-                    Text(
-                      education.schoolCollege,
-                      style: theme.textTheme.titleMedium!.copyWith(color: Colors.black),
-                    ),
-                    const SizedBox(height: 4.0), // Adjust spacing
-                    Text(
-                      '${education.startDate.year} - ${education.endDate.year}',
-                      style: Theme.of(context)
-                          .textTheme
-                          .bodyMedium
-                          ?.copyWith(fontWeight: FontWeight.bold),
-                    ),
-                    if (index != controller.educationList.length - 1) const Divider(), // Avoid extra divider at the end
-                  ],
+        );
+      }
+    });
+  }
+
+  Widget _buildEducation() {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8.0),
+          child: Row(
+            children: [
+              Text(
+                "Education",
+                style: CustomTextStyles.labelMediumBlack900,
+                textAlign: TextAlign.start,
+              ),
+              const Spacer(),
+              TextButton(
+                onPressed: () => Get.offAndToNamed(AppRoutes.education),
+                child: Text(
+                  "Edit",
+                  style: theme.textTheme.titleMedium!
+                      .copyWith(color: appTheme.red500),
+                  textAlign: TextAlign.start,
                 ),
-              );
-            },
-          );
-        }
-      }),
-    ],
-  );
-}
+              ),
+            ],
+          ),
+        ),
+        Obx(() {
+          if (controller.isLoading.value) {
+            return const Center(child: ShimmerLoadingEffect());
+          } else if (controller.educationList.isEmpty) {
+            return const Center(child: Text('No education data available'));
+          } else {
+            return ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              padding: EdgeInsets.zero, // Remove default padding
+              itemCount: controller.educationList.length,
+              itemBuilder: (context, index) {
+                final education = controller.educationList[index];
+                return Padding(
+                  padding: const EdgeInsets.only(
+                      bottom: 8.0), // Spacing between items
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        education.degree,
+                        style: CustomTextStyles.titleMediumSFProTextBlack90001,
+                      ),
+                      const SizedBox(height: 4.0), // Spacing between lines
+                      Text(
+                        education.schoolCollege,
+                        style: theme.textTheme.titleMedium!
+                            .copyWith(color: Colors.black),
+                      ),
+                      const SizedBox(height: 4.0), // Adjust spacing
+                      Text(
+                        '${education.startDate.year} - ${education.endDate.year}',
+                        style: Theme.of(context)
+                            .textTheme
+                            .bodyMedium
+                            ?.copyWith(fontWeight: FontWeight.bold),
+                      ),
+                      if (index != controller.educationList.length - 1)
+                        const Divider(), // Avoid extra divider at the end
+                    ],
+                  ),
+                );
+              },
+            );
+          }
+        }),
+      ],
+    );
+  }
 
   Widget _buildAchievements() {
     return Column(

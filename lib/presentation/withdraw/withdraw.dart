@@ -484,30 +484,254 @@ class _WithdrawCreditsPageState extends State<WithdrawCreditsPage> {
 
   Future<void> processUpiWithdrawal(double amount) async {
     try {
-      // Add your UPI withdrawal API call here
-      // Example:
-      // await apiService.processUpiWithdrawal(amount, upiDetails);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('UPI withdrawal initiated successfully')),
+      final paymentDetails = {
+        'vpa': upiDetails,
+      };
+
+      final response = await apiService.withdrawMoney(
+        amount: amount,
+        method: 'upi',
+        paymentDetails: paymentDetails,
+      );
+
+      // Show success bottom sheet
+      showModalBottomSheet(
+        context: context,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        builder: (context) => Container(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 120.h,
+                height: 120.v,
+                decoration: BoxDecoration(
+                  color: appTheme.green400.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: Container(
+                    width: 72.h,
+                    height: 72.v,
+                    decoration: BoxDecoration(
+                      color: appTheme.green400,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: CustomImageView(
+                        imagePath: ImageConstant.success,
+                        height: 20.v,
+                        width: 30.h,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Withdrawal Successful',
+                style: theme.textTheme.titleLarge,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Your UPI withdrawal for ₹$amount has been initiated successfully',
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 20),
+              CustomElevatedButton(
+                text: 'Done',
+                onPressed: () => Navigator.pop(context),
+              ),
+            ],
+          ),
+        ),
       );
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error processing UPI withdrawal: $e')),
+      showModalBottomSheet(
+        context: context,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        builder: (context) => Container(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 120.h,
+                height: 120.v,
+                decoration: BoxDecoration(
+                  color: appTheme.red500.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: Container(
+                    width: 72.h,
+                    height: 72.v,
+                    decoration: BoxDecoration(
+                      color: appTheme.red500,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: CustomImageView(
+                        imagePath: ImageConstant.cross,
+                        color: Colors.white,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Withdrawal Failed',
+                style: theme.textTheme.titleLarge,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Error processing UPI withdrawal: $e',
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 20),
+              CustomElevatedButton(
+                text: 'Close',
+                onPressed: () => Navigator.pop(context),
+              ),
+            ],
+          ),
+        ),
       );
     }
   }
 
   Future<void> processBankWithdrawal(double amount) async {
     try {
-      // Add your Bank withdrawal API call here
-      // Example:
-      // await apiService.processBankWithdrawal(amount, bankDetails);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Bank withdrawal initiated successfully')),
+      final paymentDetails = {
+        'accountNumber': bankDetails?['accountNumber'],
+        'ifsc': bankDetails?['ifsc'],
+        'accountName': 'Account Holder Name',
+      };
+
+      final response = await apiService.withdrawMoney(
+        amount: amount,
+        method: 'bank',
+        paymentDetails: paymentDetails,
+      );
+
+      // Show success bottom sheet
+      showModalBottomSheet(
+        context: context,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        builder: (context) => Container(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 120.h,
+                height: 120.v,
+                decoration: BoxDecoration(
+                  color: appTheme.green400.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: Container(
+                    width: 72.h,
+                    height: 72.v,
+                    decoration: BoxDecoration(
+                      color: appTheme.green400,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: CustomImageView(
+                        imagePath: ImageConstant.success,
+                        height: 20.v,
+                        width: 30.h,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Withdrawal Successful',
+                style: theme.textTheme.titleLarge,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Your bank withdrawal for ₹$amount has been initiated successfully',
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 20),
+              CustomElevatedButton(
+                text: 'Done',
+                onPressed: () => Navigator.pop(context),
+              ),
+            ],
+          ),
+        ),
       );
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error processing bank withdrawal: $e')),
+      showModalBottomSheet(
+        context: context,
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+        ),
+        builder: (context) => Container(
+          padding: const EdgeInsets.all(20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 120.h,
+                height: 120.v,
+                decoration: BoxDecoration(
+                  color: appTheme.red500.withOpacity(0.1),
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: Container(
+                    width: 72.h,
+                    height: 72.v,
+                    decoration: BoxDecoration(
+                      color: appTheme.red500,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: CustomImageView(
+                        imagePath: ImageConstant.cross,
+                        color: Colors.white,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Withdrawal Failed',
+                style: theme.textTheme.titleLarge,
+              ),
+              const SizedBox(height: 8),
+              Text(
+                'Error processing bank withdrawal: $e',
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 20),
+              CustomElevatedButton(
+                text: 'Close',
+                onPressed: () => Navigator.pop(context),
+              ),
+            ],
+          ),
+        ),
       );
     }
   }
