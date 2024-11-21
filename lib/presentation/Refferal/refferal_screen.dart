@@ -199,7 +199,7 @@ class _ReferAndEarnPageState extends State<ReferAndEarnPage> {
                     backgroundColor: appTheme.gray400.withOpacity(0.2),
                     child: Text(
                       stepNumber,
-                      style: TextStyle(color: appTheme.gray400, fontWeight: FontWeight.bold),
+                      style: TextStyle(color: appTheme.gray400, fontWeight: FontWeight.w500),
                     ),
                   ),
                 ),

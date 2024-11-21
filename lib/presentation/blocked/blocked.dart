@@ -67,7 +67,14 @@ class _BlockedPageState extends State<BlockedPage> {
                           }
                           if (filteredUsers.isEmpty) {
                             return const Center(
-                                child: Text('No blocked users'));
+                                child: Text(
+                  'No blocked users',
+                  style: TextStyle(
+                    fontSize: 16, // Set desired font size
+                    fontWeight: FontWeight.w500, // Set desired font weight
+                    color: Colors.blueGrey, // Optional: Set text color
+                  ),
+                ),);
                           }
                           return ListView.builder(
                             itemCount: filteredUsers.length,

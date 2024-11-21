@@ -295,7 +295,7 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
                     });
                   },
                   child: Container(
-                    width: 160.0,
+                    width: MediaQuery.of(context).size.width* 0.0,
                     height: 144.0,
                     padding: const EdgeInsets.symmetric(
                         vertical: 28.0, horizontal: 24.0),

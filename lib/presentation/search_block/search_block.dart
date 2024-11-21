@@ -132,7 +132,12 @@ class ProfileBlockPage extends StatelessWidget {
                 return const Center(child: CircularProgressIndicator());
               }
               if (controller.searchResults.value.isEmpty) {
-                return const Center(child: Text("No results found"));
+                return const Center(child: Text("No results found", style: TextStyle(
+                    fontSize: 16, // Set desired font size
+                    fontWeight: FontWeight.w500, // Set desired font weight
+                    color: Colors.blueGrey, // Optional: Set text color
+                  ),
+                ));
               }
               return ListView.separated(
                 physics: const BouncingScrollPhysics(),
