@@ -98,7 +98,6 @@ class _CategoryScreenState extends State<CategoryScreen> {
                                   width: 36.adaptSize,
                                   child: CustomImageView(
                                     imagePath: industry.icon,
-                                    color: theme.primaryColor,
                                     placeHolder: ImageConstant.imageNotFound,
                                   ),
                                 ),

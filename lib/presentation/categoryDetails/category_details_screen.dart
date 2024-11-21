@@ -200,10 +200,10 @@ Widget _buildEmptyContainer(BuildContext context){
                   Center(
                     child: CustomPaint(
                       painter: DashedDividerPainter(
-                        color: appTheme.gray200, // or your desired color
-                        dashWidth: 5.0, // length of each dash
-                        dashSpace: 3.0, // space between dashes
-                        strokeWidth: 1.0, // thickness of the line
+                        color: appTheme.gray200, 
+                        dashWidth: 5.0, 
+                        dashSpace: 3.0, 
+                        strokeWidth: 1.0, 
                       ),
                       size: Size(MediaQuery.of(context).size.width * 0.8, 1),
                     ),
