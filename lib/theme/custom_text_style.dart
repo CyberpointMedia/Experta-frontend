@@ -352,28 +352,24 @@ extension on TextStyle {
   TextStyle get inter {
     return copyWith(
       fontFamily: 'Roboto',
-      fontFeatures: const [FontFeature.enable('kern')],
     );
   }
 
   TextStyle get gilroy {
     return copyWith(
       fontFamily: 'Roboto',
-      fontFeatures: const [FontFeature.enable('kern')],
     );
   }
 
   TextStyle get sFProDisplay {
     return copyWith(
       fontFamily: 'Roboto',
-      fontFeatures: const [FontFeature.enable('kern')],
     );
   }
 
   TextStyle get sFProText {
     return copyWith(
       fontFamily: 'Roboto',
-      fontFeatures: const [FontFeature.enable('kern')],
     );
   }
 }
