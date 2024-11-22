@@ -145,8 +145,8 @@ class _MessageScreenState extends State<MessageScreen> {
   @override
   void dispose() {
     controller.searchController.removeListener(_filterChats);
-    controller.searchController.dispose();
-    // controller.searchController.clear();
+    // controller.searchController.dispose();
+    controller.searchController.clear();
     socket.dispose();
     super.dispose();
   }

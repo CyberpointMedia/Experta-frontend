@@ -7,6 +7,7 @@ import 'package:experta/presentation/verify_account/Models/verify_account_model.
 import 'package:experta/presentation/verify_account/face_live.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
 import 'package:experta/widgets/custom_text_form_field.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class VerifyAccount extends StatefulWidget {
   const VerifyAccount({super.key});
@@ -22,6 +23,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
   final TextEditingController AadharCardController = TextEditingController();
   KYCResponse? kycData;
   bool isLoading = true;
+  bool isLoading2 = false;
 
   @override
   void initState() {
@@ -858,6 +860,80 @@ class _VerifyAccountState extends State<VerifyAccount> {
                       ),
                     ),
                   ),
+                  GestureDetector(
+                    onTap: () {
+                      (kycData!.gstDetails!.gstNumber != null)
+                          ? null
+                          : gstVerificationDialog();
+                    },
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 1),
+                      child: Container(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 15.h, vertical: 16.v),
+                        decoration: AppDecoration.fillOnPrimaryContainer,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CustomIconButton(
+                              height: 44.adaptSize,
+                              width: 44.adaptSize,
+                              padding: EdgeInsets.all(10.h),
+                              decoration: IconButtonStyleHelper
+                                  .fillPrimaryContainerTL22,
+                              child:
+                                  CustomImageView(imagePath: ImageConstant.gst),
+                            ),
+                            Row(
+                              children: [
+                                Padding(
+                                  padding: EdgeInsets.only(
+                                      left: 15.h, top: 13.v, bottom: 10.v),
+                                  child: Text(
+                                    "GST Number",
+                                    style:
+                                        theme.textTheme.titleMedium!.copyWith(
+                                      color: appTheme.gray900,
+                                    ),
+                                  ),
+                                ),
+                                (kycData!.gstDetails!.gstNumber != null)
+                                    ? Padding(
+                                        padding: const EdgeInsets.only(left: 5),
+                                        child: Container(
+                                          width: 45,
+                                          height: 16,
+                                          decoration: BoxDecoration(
+                                              color: appTheme.green100
+                                                  .withOpacity(0.5),
+                                              borderRadius:
+                                                  BorderRadius.circular(2)),
+                                          child: Center(
+                                            child: Text(
+                                              "Verified",
+                                              style: theme.textTheme.titleSmall!
+                                                  .copyWith(
+                                                      color: appTheme.green500,
+                                                      fontSize: 10),
+                                            ),
+                                          ),
+                                        ),
+                                      )
+                                    : const SizedBox.shrink(),
+                              ],
+                            ),
+                            const Spacer(),
+                            CustomImageView(
+                              imagePath: ImageConstant.imgArrowRightGray900,
+                              height: 24.adaptSize,
+                              width: 24.adaptSize,
+                              margin: EdgeInsets.symmetric(vertical: 10.v),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
+                  ),
 
                   GestureDetector(
                     onTap: () {
@@ -1061,9 +1137,9 @@ class _VerifyAccountState extends State<VerifyAccount> {
     );
   }
 
-  void showAadhaarCardVerificationDialog() {
+  void gstVerificationDialog() {
     final formKey = GlobalKey<FormState>();
-    final TextEditingController aadhaarCardController = TextEditingController();
+    final TextEditingController gstController = TextEditingController();
 
     showDialog(
       context: context,
@@ -1077,30 +1153,34 @@ class _VerifyAccountState extends State<VerifyAccount> {
               key: formKey,
               child: Column(
                 mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Center(
-                    child: CircleAvatar(
-                      radius: 30,
-                      backgroundColor: Colors.green.shade100,
-                      child: const Icon(Icons.credit_card,
-                          color: Colors.green, size: 30),
+                    child: CustomIconButton(
+                      height: 64.adaptSize,
+                      width: 64.adaptSize,
+                      padding: EdgeInsets.all(15.h),
+                      decoration: BoxDecoration(
+                        color: theme.colorScheme.primaryContainer
+                            .withOpacity(0.12),
+                        borderRadius: BorderRadius.circular(32.h),
+                      ),
+                      child: CustomImageView(imagePath: ImageConstant.gst),
                     ),
                   ),
                   const SizedBox(height: 16),
                   const Center(
                     child: Text(
-                      "Aadhaar Verification",
+                      "GST Verification",
                       style: TextStyle(
                         fontSize: 22,
-                        fontWeight: FontWeight.bold,
                         color: Colors.black,
                       ),
                     ),
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    "As per regulations, it is mandatory to verify your Aadhaar details.",
+                    "As per regulations, it is mandatory to verify your GST details.",
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: Colors.grey.shade500,
@@ -1108,57 +1188,115 @@ class _VerifyAccountState extends State<VerifyAccount> {
                   ),
                   const SizedBox(height: 16),
                   Container(
-                    width: double.infinity,
-                    height: 40.0,
+                    width: 150,
+                    height: 32.0,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
-                      border: Border.all(
-                        color: Colors.amber,
-                        width: 1.0,
-                      ),
+                      border: Border.all(color: appTheme.panCol, width: 1.0),
                     ),
-                    child: const Row(
+                    child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.flash_on, color: Colors.yellow),
-                        SizedBox(
-                          width: 5,
+                        Icon(Icons.flash_on, color: appTheme.panCol, size: 14),
+                        const SizedBox(width: 5),
+                        Text(
+                          "Takes less than 5 secs",
+                          style: theme.textTheme.titleSmall!.copyWith(
+                            color: appTheme.panCol,
+                            fontSize: 12,
+                          ),
                         ),
-                        Text("Takes less than 5 secs"),
                       ],
                     ),
                   ),
                   const SizedBox(height: 16),
-                  const Text(
-                    "Enter Aadhaar number",
-                    style: TextStyle(
+                  Text(
+                    "Enter GST number",
+                    style: theme.textTheme.titleSmall!.copyWith(
+                      color: appTheme.blueGray300,
                       fontSize: 14,
                     ),
                   ),
                   const SizedBox(height: 8),
                   CustomTextFormField(
-                    controller: aadhaarCardController,
+                    controller: gstController,
                     autofocus: false,
-                    hintText: "Enter Your 12 Digit Aadhaar Number",
-                    hintStyle: CustomTextStyles.titleMediumGray400,
+                    hintText: "Enter Your 15 Digit GST Number",
+                    hintStyle: theme.textTheme.titleSmall!.copyWith(
+                      color: appTheme.blueGray300,
+                      fontSize: 14,
+                    ),
                     validator: (value) {
                       if (value == null || value.isEmpty) {
-                        return 'Please enter your PAN number';
+                        return 'Please enter your GST number';
                       }
-                      if (value.length != 12) {
-                        return 'PAN number must be 12characters';
+                      if (value.length != 15) {
+                        return 'GST number must be 15 characters';
                       }
                       return null;
                     },
                   ),
                   const SizedBox(height: 16),
                   CustomElevatedButton(
-                      onPressed: () {
-                        if (formKey.currentState!.validate()) {
-                          // Add your verification logic here
+                    onPressed: () async {
+                      setState(() {
+                        isLoading2 = true;
+                      });
+                      if (formKey.currentState!.validate()) {
+                        try {
+                          final apiService = ApiService();
+                          final response = await apiService
+                              .saveGstNumber(gstController.text);
+
+                          if (response['status'] == 'success') {
+                            setState(() {
+                              isLoading2 = false;
+                            });
+                            Fluttertoast.showToast(
+                              msg: "GST verification successful",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.green,
+                              textColor: Colors.white,
+                              fontSize: 16.0,
+                            );
+                          } else {
+                            setState(() {
+                              isLoading2 = false;
+                            });
+                            Fluttertoast.showToast(
+                              msg: "Error verifying GST number",
+                              toastLength: Toast.LENGTH_SHORT,
+                              gravity: ToastGravity.BOTTOM,
+                              timeInSecForIosWeb: 1,
+                              backgroundColor: Colors.red,
+                              textColor: Colors.white,
+                              fontSize: 16.0,
+                            );
+                          }
+                        } catch (e) {
+                          setState(() {
+                            isLoading2 = false;
+                          });
+                          // Show error toast message
+                          Fluttertoast.showToast(
+                            msg: "Error verifying GST: $e",
+                            toastLength: Toast.LENGTH_SHORT,
+                            gravity: ToastGravity.BOTTOM,
+                            timeInSecForIosWeb: 1,
+                            backgroundColor: Colors.red,
+                            textColor: Colors.white,
+                            fontSize: 16.0,
+                          );
+
+                          print('Error verifying GST: $e');
                         }
-                      },
-                      text: "Verify"),
+                      }
+                      Navigator.pop(context);
+                    },
+                    text: !isLoading2 ? "Verify" : "Verifying .... ",
+                  ),
                 ],
               ),
             ),

@@ -1552,10 +1552,15 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                           ),
                         ],
                       ),
-                      Text(
-                        "${controller.userData.value.data?.industryOccupation?.industry?.name ?? ''} | ${controller.userData.value.data?.industryOccupation?.occupation?.name ?? ''}",
-                        textAlign: TextAlign.left,
-                        style: CustomTextStyles.bodyMediumBlack90001,
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width*0.5,
+                  
+                        child: Text(
+                          
+                          "${controller.userData.value.data?.industryOccupation?.industry?.name ?? ''} | ${controller.userData.value.data?.industryOccupation?.occupation?.name ?? ''}",
+                          textAlign: TextAlign.left,
+                          style: theme.textTheme.titleSmall!.copyWith(color: appTheme.black900),
+                        ),
                       ),
                     ],
                   ),
@@ -1597,7 +1602,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                                         fontSize: 14,
                                         fontWeight: FontWeight.w500,
                                       ),
-                                    ))
+                                    )) 
                                 .toList(),
                             Text(
                               '+${languageNames.length - 3} more',
@@ -1621,7 +1626,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                               .toList();
                         }
                       } else {
-                        return <Widget>[];
+                                                     return <Widget>[];
                       }
                     })(),
                   ),

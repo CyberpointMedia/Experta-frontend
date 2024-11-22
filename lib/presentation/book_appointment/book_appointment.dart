@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/widgets/app_bar/appbar_trailing_button_one.dart';
 import 'package:experta/widgets/custom_drop_down.dart';
+import 'package:experta/widgets/custom_text_form_field.dart';
 import 'package:intl/intl.dart';
 
 class BookAppointmentPage extends StatefulWidget {
@@ -17,12 +18,12 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
   int? balance;
   bool isLoading = true;
   DateTime selectedDate = DateTime.now();
-  String selectedDuration = '30 minute';
+  String selectedDuration = '10 minutes';
   String selectedSlot = '';
   List<Map<String, dynamic>> availabilityData = [];
   List<String> availableSlots = [];
   ApiService apiServices = ApiService();
-  final List<String> durations = ['30 minute', '45 minute', '60 minute'];
+  final List<String> durations = ['10 minutes','20 minutes','30 minutes', '45 minutes', '60 minutes'];
   final ScrollController _scrollController = ScrollController();
   late List<SelectionPopupModel> durationModels;
   String profile = '';
@@ -33,6 +34,8 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
   String price = '';
   String id = '';
   String type = '';
+
+  String amount = '';
 
   @override
   void initState() {
@@ -49,9 +52,13 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
 
     fetchWalletBalance();
     fetchAvailabilityData();
-    durationModels = durations.asMap().entries.map((entry) {
-      return SelectionPopupModel(id: entry.key.toString(), title: entry.value);
-    }).toList();
+   durationModels = durations.asMap().entries.map((entry) {
+    return SelectionPopupModel(id: entry.key.toString(), title: entry.value);
+  }).toList();
+   if (!durations.contains(selectedDuration)) {
+    selectedDuration = durations.first;
+  }
+  amount=  (int.parse(selectedDuration.split(' ')[0]) * int.parse(price)).toString();
   }
 
   Future<void> fetchWalletBalance() async {
@@ -79,7 +86,6 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
     availableSlots.clear();
     String selectedDay = DateFormat.E().format(selectedDate).toLowerCase();
     int durationMinutes = int.parse(selectedDuration.split(' ')[0]);
-
     for (var availability in availabilityData) {
       if (availability['weeklyRepeat'].contains(selectedDay)) {
         DateTime startTime =
@@ -204,6 +210,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
 
   @override
   Widget build(BuildContext context) {
+  
     return Scaffold(
       // appBar: _buildAppBar(),
       body: Stack(
@@ -269,25 +276,64 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
                         ),
                       ),
                       SizedBox(height: 20.adaptSize),
-                      Align(
-                        alignment: Alignment.centerLeft,
-                        child: Text('Call Duration',
-                            style: CustomTextStyles
-                                .titleMediumSFProTextBlack90001),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text('Call Duration',
+                                    style: CustomTextStyles
+                                        .titleMediumSFProTextBlack90001),
+                              ),
+                           SizedBox(height: 10.fSize),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width*0.43,
+                            child:CustomDropDown(
+  value: durationModels.firstWhere(
+      (model) => model.title == selectedDuration),
+  items: durationModels,
+  onChanged: (newValue) {
+    setState(() {
+      selectedDuration = newValue.title; 
+      amount = (int.parse(selectedDuration.split(' ')[0]) * int.parse(price)).toString();
+      filterAvailableSlots();
+    });
+  },
+),
+
+                          ),
+                          
+                            ],
+                          ),
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                             Align(
+                                alignment: Alignment.centerLeft,
+                                child: Text('Amount',
+                                    style: CustomTextStyles
+                                        .titleMediumSFProTextBlack90001),
+                              ),
+                           SizedBox(height: 10.fSize),
+                           CustomTextFormField(
+                            width: MediaQuery.of(context).size.width*0.43,
+                            controller: TextEditingController(text: amount),
+                            prefix: Padding(
+                              padding: const EdgeInsets.only(left: 20,right: 5),
+                              child: CustomImageView(
+                                imagePath: ImageConstant.imgLayer1),
+                            ),
+                            readOnly: true,
+                            
+                           )
+                          ],
+                        )
+                        ],
                       ),
-                      SizedBox(height: 10.fSize),
-                      CustomDropDown(
-                        value: durationModels.firstWhere(
-                            (model) => model.title == selectedDuration),
-                        items: durationModels,
-                        onChanged: (newValue) {
-                          setState(() {
-                            selectedDuration = newValue
-                                .title; // Update selectedDuration with the title (String value)
-                            filterAvailableSlots();
-                          });
-                        },
-                      ),
+                     
                       SizedBox(height: 20.adaptSize),
                       Align(
                         alignment: Alignment.centerLeft,

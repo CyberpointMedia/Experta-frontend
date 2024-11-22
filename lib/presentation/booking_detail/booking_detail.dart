@@ -435,8 +435,8 @@ class _BookingDetailPageState extends State<BookingDetailPage> {
               child: CustomImageView(imagePath: ImageConstant.imgLayer1),
             ),
             const SizedBox(width: 8.0),
-            Text(
-              price,
+            Text( 
+              (int.parse(selectedDuration.split(' ')[0]) * int.parse(price)).toString(),
               style: theme.textTheme.bodyMedium!.copyWith(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,

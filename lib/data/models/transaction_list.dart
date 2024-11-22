@@ -131,4 +131,8 @@ class Transaction {
       updatedAt: DateTime.parse(json['updatedAt'] as String),
     );
   }
+  @override
+  String toString() {
+    return 'Transaction(id: $id, amount: $amount, date: $createdAt)';
+  }
 }
