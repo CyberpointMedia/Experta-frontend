@@ -17,130 +17,128 @@ class MessageScreen extends StatefulWidget {
 class _MessageScreenState extends State<MessageScreen> {
   final MessageController controller = Get.put(MessageController());
   late IO.Socket socket;
-  late ApiService apiServices;
-  List<Map<String, dynamic>> chats = [];
-  List<Map<String, dynamic>> filteredChats = [];
-  bool isFetchingChats = false;
-  final currentUserId = PrefUtils().getaddress();
-  Set<String> onlineUsers = {};
+  late final ApiService apiServices;
+  final String? currentUserId = PrefUtils().getaddress();
+
+  List<Map<String, dynamic>> _chats = [];
+  List<Map<String, dynamic>> _filteredChats = [];
+  final Set<String> _onlineUsers = {};
 
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      try {
-        apiServices = ApiService();
-        initSocket();
-        fetchChats(currentUserId!);
-      } catch (error) {
-        log('Error in initState: $error');
-      }
-    });
-
+    _initializeServices();
     controller.searchController.addListener(_filterChats);
   }
 
-  void initSocket() {
-    final currentUserId = PrefUtils().getaddress();
-
-    // Initialize the socket connection
-    socket = IO.io('http://3.110.252.174:8080', <String, dynamic>{
-      'transports': ['websocket'],
-      'autoConnect': false, // Prevents automatic connection
-    });
-
-    // Set up socket event listeners
-    socket.onConnect((_) {
-      log('Connected to socket');
-      socket.emit('init_user', currentUserId);
-      log('User ID emitted: $currentUserId');
-      fetchChats(currentUserId!);
-    });
-
-    socket.on('chats_fetched', (data) {
-      log('Chats fetched event received: $data');
-      // Ensure data is a list
-      if (data is List) {
-        setState(() {
-          chats = List<Map<String, dynamic>>.from(
-              data.map((chat) => Map<String, dynamic>.from(chat)));
-          isFetchingChats = false;
-          _filterChats(); // Filter chats after fetching
-        });
-      } else {
-        log('Invalid data format for chats_fetched');
+  void _initializeServices() async {
+    try {
+      apiServices = ApiService();
+      await _initSocket();
+      if (currentUserId != null) {
+        fetchChats(currentUserId!);
       }
+    } catch (error) {
+      log('Error in initialization: $error');
+    }
+  }
+
+  Future<void> _initSocket() async {
+    socket = IO.io('http://3.110.252.174:8080', {
+      'transports': ['websocket'],
+      'autoConnect': false,
     });
 
-    socket.on('update_unread_count', (data) {
-      log('Update unread count event received: $data');
-    });
+    _setupSocketListeners();
+    socket.connect();
+  }
 
-    socket.on('getUserOnline', (data) {
-      String userId = data['userId'];
-      log('User online event received: $userId');
-      setState(() {
-        onlineUsers.add(userId);
-      });
-    });
+  void _setupSocketListeners() {
+    socket
+      ..onConnect((_) {
+        log('Connected to socket');
+        socket.emit('init_user', currentUserId);
+        if (currentUserId != null) fetchChats(currentUserId!);
+      })
+      ..on('chats_fetched', _handleChatsFetched)
+      ..on('update_unread_count', (data) => log('Unread count updated: $data'))
+      ..on('getUserOnline', _handleUserOnline)
+      ..on('getUserOffline', _handleUserOffline)
+      ..onDisconnect((_) => log('Disconnected from socket'));
+  }
 
-    socket.on('getUserOffline', (data) {
-      String userId = data['userId'];
-      log('User offline event received: $userId');
-      setState(() {
-        onlineUsers.remove(userId);
-      });
-    });
+  void _handleChatsFetched(dynamic data) {
+    if (data is! List) {
+      log('Invalid data format for chats_fetched');
+      return;
+    }
 
-    socket.onDisconnect((_) {
-      log('Disconnected from socket');
+    setState(() {
+      _chats = List<Map<String, dynamic>>.from(
+        data.map((chat) => Map<String, dynamic>.from(chat)),
+      );
+      _filterChats();
     });
+  }
 
-    socket.connect(); 
+  void _handleUserOnline(dynamic data) {
+    final userId = data['userId'] as String?;
+    if (userId != null) {
+      setState(() => _onlineUsers.add(userId));
+    }
+  }
+
+  void _handleUserOffline(dynamic data) {
+    final userId = data['userId'] as String?;
+    if (userId != null) {
+      setState(() => _onlineUsers.remove(userId));
+    }
   }
 
   void fetchChats(String userId) {
-    setState(() {
-      isFetchingChats = true;
-    });
     socket.emit('fetch_chats', userId);
   }
+
   void markMessagesAsRead(String chatId, String userId) {
     socket.emit('mark_messages_read', {'chatId': chatId, 'userId': userId});
   }
 
   void _filterChats() {
     final query = controller.searchController.text.toLowerCase();
-    if (query.isEmpty) {
-      setState(() {
-        filteredChats = chats;
-      });
-    } else {
-      setState(() {
-        filteredChats = chats.where((chat) {
-          final otherUser = chat['users']?.firstWhere(
-            (u) => u['_id'] != PrefUtils().getaddress(),
-            orElse: () => null,
-          );
-          if (otherUser == null) return false;
+    setState(() {
+      _filteredChats = query.isEmpty
+          ? _chats
+          : _chats.where((chat) => _matchesSearchQuery(chat, query)).toList();
+    });
+  }
 
-          final displayName =
-              otherUser['basicInfo']?['displayName']?.toLowerCase() ??
-                  otherUser['email']?.toLowerCase() ??
-                  'unknown';
+  bool _matchesSearchQuery(Map<String, dynamic> chat, String query) {
+    final otherUser = _getOtherUser(chat);
+    if (otherUser == null) return false;
 
-          return displayName.contains(query);
-        }).toList();
-      });
-    }
-    log('Filtered Chats: $filteredChats');
+    final displayName = _getDisplayName(otherUser).toLowerCase();
+    return displayName.contains(query);
+  }
+
+  Map<String, dynamic>? _getOtherUser(Map<String, dynamic> chat) {
+    return chat['users']?.firstWhere(
+      (u) => u['_id'] != currentUserId,
+      orElse: () => null,
+    );
+  }
+
+  String _getDisplayName(Map<String, dynamic> user) {
+    final basicInfo = user['basicInfo'];
+    return basicInfo?['displayName'] ??
+        '${basicInfo?['firstName'] ?? ''} ${basicInfo?['lastName'] ?? ''}'
+            .trim() ??
+        'Unknown';
   }
 
   @override
   void dispose() {
     controller.searchController.removeListener(_filterChats);
-    controller.searchController.dispose();
-    // controller.searchController.clear();
+    controller.searchController.clear();
     socket.dispose();
     super.dispose();
   }
@@ -148,136 +146,154 @@ class _MessageScreenState extends State<MessageScreen> {
   @override
   Widget build(BuildContext context) {
     final currentUserId = PrefUtils().getaddress();
-
     return SafeArea(
-        child: Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: CustomAppBar(
-          centerTitle: true,
-          height: 48.v,
-          title: AppbarSubtitle(
-              text: "lbl_inbox".tr, margin: EdgeInsets.only(left: 15.h)),
-          actions: [
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 10),
-              child: IconButton(
-                onPressed: () {
-                  Get.toNamed(AppRoutes.notification);
-                },
-                padding: const EdgeInsets.only(right: 5),
-                icon: Container(
-                  width: 35.0,
-                  height: 35.0,
-                  padding: const EdgeInsets.all(5),
-                  decoration: IconButtonStyleHelper.outline.copyWith(
-                    color: appTheme.whiteA700.withOpacity(0.6),
-                    border: Border.all(
-                      color: Colors.white,
-                      width: 1.5,
-                    ),
-                  ),
-                  child: CustomImageView(
-                    imagePath: ImageConstant.imgBell02,
-                    height: 8.0,
-                    width: 8.0,
-                  ),
-                ),
-              ),
-            )
-          ]),
-      body: Stack(
-        children: [
-          Positioned(
-            left: 270,
-            top: 50,
-            child: ImageFiltered(
-              imageFilter: ImageFilter.blur(
-                tileMode: TileMode.decal,
-                sigmaX: 60,
-                sigmaY: 60,
-              ),
-              child: Align(
-                child: SizedBox(
-                  width: 252,
-                  height: 252,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(126),
-                      color: appTheme.deepOrangeA20.withOpacity(0.6),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+      child: Scaffold(
+        resizeToAvoidBottomInset: false,
+        appBar: _buildAppBar(),
+        body: Stack(
+          children: [
+            _buildBlurredBackground(),
+            _buildMessageContent(currentUserId!),
+          ],
+        ),
+      ),
+    );
+  }
+
+  PreferredSizeWidget _buildAppBar() {
+    return CustomAppBar(
+      centerTitle: true,
+      height: 48.v,
+      title: AppbarSubtitle(
+        text: "lbl_inbox".tr,
+        margin: EdgeInsets.only(left: 15.h),
+      ),
+      actions: [
+        IconButton(
+          onPressed: () => Get.toNamed(AppRoutes.notification),
+          padding: EdgeInsets.only(right: 5, left: 10),
+          icon: _buildNotificationIcon(),
+        ),
+      ],
+    );
+  }
+
+  Widget _buildNotificationIcon() {
+    return Container(
+      width: 35.0,
+      height: 35.0,
+      padding: const EdgeInsets.all(5),
+      decoration: IconButtonStyleHelper.outline.copyWith(
+        color: appTheme.whiteA700.withOpacity(0.6),
+        border: Border.all(color: Colors.white, width: 1.5),
+      ),
+      child: CustomImageView(
+        imagePath: ImageConstant.imgBell02,
+        height: 8.0,
+        width: 8.0,
+      ),
+    );
+  }
+
+  Widget _buildBlurredBackground() {
+    return Positioned(
+      left: 270,
+      top: 50,
+      child: ImageFiltered(
+        imageFilter:
+            ImageFilter.blur(sigmaX: 60, sigmaY: 60, tileMode: TileMode.decal),
+        child: Container(
+          width: 252,
+          height: 252,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(126),
+            color: appTheme.deepOrangeA20.withOpacity(0.6),
           ),
-          SizedBox(
-              width: double.maxFinite,
-              child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Padding(
-                        padding: EdgeInsets.only(top: 25.v),
-                        child: CustomSearchView(
-                          width: 343.h,
-                          controller: controller.searchController,
-                          hintText: "lbl_search".tr,
-                        )),
-                    SizedBox(height: 29.v),
-                    SizedBox(
-                      height: 100.v,
-                      child: ListView.separated(
-                        scrollDirection: Axis.horizontal,
-                        separatorBuilder: (context, index) {
-                          return SizedBox(width: 20.h);
-                        },
-                        itemCount: filteredChats.length,
-                        itemBuilder: (context, index) {
-                          final chat = filteredChats[index];
-                          final otherUser = chat['users']?.firstWhere(
-                            (u) => u['_id'] != currentUserId,
-                            orElse: () => null,
-                          );
+        ),
+      ),
+    );
+  }
 
-                          if (otherUser == null ||
-                              !(otherUser['online'] ?? false)) {
-                            return const SizedBox.shrink();
-                          }
-
-                          final basicInfo = otherUser['basicInfo'];
-                          final profilePic = basicInfo?['profilePic'] ?? '';
-                          final displayName = basicInfo?['displayName'] ??
-                              basicInfo?["firstName"] +
-                                  " " +
-                                  basicInfo?["lastName"] ??
-                              'Unknown';
-
-                          return Padding(
-                            padding:
-                                const EdgeInsets.symmetric(horizontal: 8.0),
-                            child: ChatItemWidget(
-                              profilePic: profilePic,
-                              displayName: displayName,
-                            ),
-                          );
-                        },
-                      ),
-                    ),
-                    SizedBox(height: 9.v),
-                    Expanded(
-                        child: Container(
-                            padding: EdgeInsets.symmetric(horizontal: 16.h),
-                            child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text("lbl_recent_messages".tr,
-                                      style: CustomTextStyles.titleMediumBold),
-                                  SizedBox(height: 17.v),
-                                  _buildChatList(currentUserId!)
-                                ])))
-                  ])),
+  Widget _buildMessageContent(String currentUserId) {
+    return SizedBox(
+      width: double.maxFinite,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          _buildSearchField(),
+          SizedBox(height: 29.v),
+          _buildOnlineUsers(currentUserId),
+          SizedBox(height: 9.v),
+          _buildMessagesList(currentUserId),
         ],
       ),
-    ));
+    );
+  }
+
+  Widget _buildSearchField() {
+    return Padding(
+      padding: EdgeInsets.only(top: 25.v),
+      child: CustomSearchView(
+        width: 343.h,
+        controller: controller.searchController,
+        hintText: "lbl_search".tr,
+      ),
+    );
+  }
+
+  Widget _buildOnlineUsers(String currentUserId) {
+    return SizedBox(
+      height: 100.v,
+      child: ListView.separated(
+        scrollDirection: Axis.horizontal,
+        itemCount: _filteredChats.length,
+        separatorBuilder: (_, __) => SizedBox(width: 20.h),
+        itemBuilder: (_, index) {
+          final chat = _filteredChats[index];
+          final otherUser = _getOtherUser(chat);
+
+          if (!_isUserOnline(otherUser)) return const SizedBox.shrink();
+
+          return Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8.0),
+            child: ChatItemWidget(
+              profilePic: otherUser!['basicInfo']?['profilePic'] ?? '',
+              displayName: _getUserDisplayName(otherUser),
+            ),
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildMessagesList(String currentUserId) {
+    return Expanded(
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: 16.h),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              "lbl_recent_messages".tr,
+              style: CustomTextStyles.titleMediumBold,
+            ),
+            SizedBox(height: 17.v),
+            _buildChatList(currentUserId),
+          ],
+        ),
+      ),
+    );
+  }
+
+  bool _isUserOnline(Map<String, dynamic>? user) {
+    return user != null && (user['online'] ?? false);
+  }
+
+  String _getUserDisplayName(Map<String, dynamic> user) {
+    final basicInfo = user['basicInfo'];
+    return basicInfo?['displayName'] ??
+        '${basicInfo?["firstName"] ?? ""} ${basicInfo?["lastName"] ?? ""}' ??
+        'Unknown';
   }
 
   Widget _buildChatList(String currentUserId) {
@@ -285,9 +301,9 @@ class _MessageScreenState extends State<MessageScreen> {
       child: ListView.builder(
         shrinkWrap: true,
         scrollDirection: Axis.vertical,
-        itemCount: filteredChats.length,
+        itemCount: _filteredChats.length,
         itemBuilder: (context, index) {
-          final chat = filteredChats[index];
+          final chat = _filteredChats[index];
           final otherUser = chat['users']?.firstWhere(
             (u) => u['_id'] != currentUserId,
             orElse: () => null,
