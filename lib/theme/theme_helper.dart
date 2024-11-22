@@ -117,84 +117,72 @@ class TextThemes {
           fontSize: 16.fSize,
           fontFamily: 'Roboto',
           fontWeight: FontWeight.w400,
-          fontFeatures: const [FontFeature.enable('kern')],
         ),
         bodyMedium: TextStyle(
           color: appTheme.blueGray300,
           fontSize: 14.fSize,
           fontFamily: 'Roboto',
           fontWeight: FontWeight.w400,
-          fontFeatures: const [FontFeature.enable('kern')],
         ),
         bodySmall: TextStyle(
           color: colorScheme.onPrimaryContainer.withOpacity(1),
           fontSize: 10.fSize,
           fontFamily: 'Roboto',
           fontWeight: FontWeight.w400,
-          fontFeatures: const [FontFeature.enable('kern')],
         ),
         displaySmall: TextStyle(
           color: appTheme.gray900,
           fontSize: 36.fSize,
           fontFamily: 'Roboto',
           fontWeight: FontWeight.w500,
-          fontFeatures: const [FontFeature.enable('kern')],
         ),
         headlineLarge: TextStyle(
           color: appTheme.gray900,
           fontSize: 32.fSize,
           fontFamily: 'Roboto',
           fontWeight: FontWeight.w600,
-          fontFeatures: const [FontFeature.enable('kern')],
         ),
         headlineMedium: TextStyle(
           color: appTheme.gray900,
           fontSize: 26.fSize,
           fontFamily: 'Roboto',
           fontWeight: FontWeight.w700,
-          fontFeatures: const [FontFeature.enable('kern')],
         ),
         headlineSmall: TextStyle(
           color: appTheme.gray900,
           fontSize: 24.fSize,
           fontFamily: 'Roboto',
           fontWeight: FontWeight.w500,
-          fontFeatures: const [FontFeature.enable('kern')],
         ),
         labelLarge: TextStyle(
           color: const Color(0XFFFFFFFF),
           fontSize: 12.fSize,
           fontFamily: 'Roboto',
           fontWeight: FontWeight.w600,
-          fontFeatures: const [FontFeature.enable('kern')],
         ),
         labelMedium: TextStyle(
           color: appTheme.blueGray300,
           fontSize: 10.fSize,
           fontFamily: 'Roboto',
           fontWeight: FontWeight.w600,
-          fontFeatures: const [FontFeature.enable('kern')],
         ),
         titleLarge: TextStyle(
           color: appTheme.gray900,
           fontSize: 22.fSize,
           fontFamily: 'Roboto',
           fontWeight: FontWeight.bold,
-          fontFeatures: const [FontFeature.enable('kern')],
         ),
         titleMedium: TextStyle(
           color: appTheme.gray900,
           fontSize: 16.fSize,
           fontFamily: 'Roboto',
           fontWeight: FontWeight.w500,
-          fontFeatures: const [FontFeature.enable('kern')],
         ),
         titleSmall: TextStyle(
           color: appTheme.blueGray300,
           fontSize: 14.fSize,
           fontFamily: 'Roboto',
           fontWeight: FontWeight.w500,
-          fontFeatures: const [FontFeature.enable('kern')],
         ),
       );
 }
@@ -240,7 +228,7 @@ class PrimaryColors {
   // DeepOrange
   Color get deepOrange500 => const Color(0XFFFF5117);
   Color get deepOrange50001 => const Color(0XFFFF4B26);
-  Color get deepOrangeA200 => const Color(0XFFFE7733); //FFCA9A
+  Color get deepOrangeA200 => const Color(0XFFFE7733); 
   Color get deepOrangeA20 => const Color(0XFFFFCA9A);
   Color get deepYello => const Color(0XFFFFDF68);
   Color get panCol => const Color(0XFFBDAD5E);

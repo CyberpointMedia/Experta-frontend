@@ -74,11 +74,9 @@ class _MessageScreenState extends State<MessageScreen> {
 
     socket.on('update_unread_count', (data) {
       log('Update unread count event received: $data');
-      // Implement your logic to update unread counts here
     });
 
     socket.on('getUserOnline', (data) {
-      // Extracting the 'userId' from the map
       String userId = data['userId'];
       log('User online event received: $userId');
       setState(() {
@@ -87,7 +85,6 @@ class _MessageScreenState extends State<MessageScreen> {
     });
 
     socket.on('getUserOffline', (data) {
-      // Extracting the 'userId' from the map
       String userId = data['userId'];
       log('User offline event received: $userId');
       setState(() {
@@ -99,18 +96,15 @@ class _MessageScreenState extends State<MessageScreen> {
       log('Disconnected from socket');
     });
 
-    socket.connect(); // Manually connect the socket
+    socket.connect(); 
   }
 
-  // Fetch chats for the given user ID
   void fetchChats(String userId) {
     setState(() {
       isFetchingChats = true;
     });
     socket.emit('fetch_chats', userId);
   }
-
-  // Mark messages as read
   void markMessagesAsRead(String chatId, String userId) {
     socket.emit('mark_messages_read', {'chatId': chatId, 'userId': userId});
   }
@@ -145,8 +139,8 @@ class _MessageScreenState extends State<MessageScreen> {
   @override
   void dispose() {
     controller.searchController.removeListener(_filterChats);
-    controller.searchController.dispose();
-    // controller.searchController.clear();
+    // controller.searchController.dispose();
+    controller.searchController.clear();
     socket.dispose();
     super.dispose();
   }
@@ -176,17 +170,16 @@ class _MessageScreenState extends State<MessageScreen> {
                   height: 35.0,
                   padding: const EdgeInsets.all(5),
                   decoration: IconButtonStyleHelper.outline.copyWith(
-                    // color: appTheme.gray20002,
                     color: appTheme.whiteA700.withOpacity(0.6),
                     border: Border.all(
                       color: Colors.white,
-                      width: 1.5, // Border width
+                      width: 1.5,
                     ),
                   ),
                   child: CustomImageView(
                     imagePath: ImageConstant.imgBell02,
-                    height: 8.0, // Set the desired height
-                    width: 8.0, // Set the desired width
+                    height: 8.0,
+                    width: 8.0,
                   ),
                 ),
               ),
