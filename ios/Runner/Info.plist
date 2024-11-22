@@ -75,5 +75,8 @@
 <string>We need access to motion data for fitness tracking.</string>
 <key>NSSpeechRecognitionUsageDescription</key>
 <string>We need access to speech recognition for voice commands.</string>
+<key>NSAppleMusicUsageDescription</key>
+<string>This app requires SMS permission for OTP auto-fill.</string>
+
 </dict>
 </plist>

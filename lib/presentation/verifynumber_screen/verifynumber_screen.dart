@@ -12,7 +12,7 @@ class VerifynumberScreen extends GetWidget<VerifynumberController> {
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        resizeToAvoidBottomInset: true, // Allows UI to resize when keyboard is shown
+        resizeToAvoidBottomInset: true,
         body: Stack(
           children: [
             Positioned(
@@ -43,8 +43,7 @@ class VerifynumberScreen extends GetWidget<VerifynumberController> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 _buildAppBar(),
-              
-                    _buildOtpView(),
+                _buildOtpView(),
               ],
             ),
           ],
@@ -101,14 +100,15 @@ class VerifynumberScreen extends GetWidget<VerifynumberController> {
                   text: TextSpan(
                     style: theme.textTheme.titleSmall,
                     children: [
-                      TextSpan(text: "${"msg_enter_the_security".tr} ",style:theme.textTheme.displayMedium!.copyWith(
-                          color: appTheme.gray400
-                        ),),
+                      TextSpan(
+                        text: "${"msg_enter_the_security".tr} ",
+                        style: theme.textTheme.displayMedium!
+                            .copyWith(color: appTheme.gray400),
+                      ),
                       TextSpan(
                         text: maskedNumber,
-                        style:theme.textTheme.displayMedium!.copyWith(
-                          color: appTheme.gray400
-                        ),
+                        style: theme.textTheme.displayMedium!
+                            .copyWith(color: appTheme.gray400),
                       ),
                     ],
                   ),
@@ -124,6 +124,7 @@ class VerifynumberScreen extends GetWidget<VerifynumberController> {
                   onChanged: (value) {
                     controller.complete.value = value.length == 6;
                   },
+                  enablePinAutofill: true,
                 )),
           ),
           Center(
@@ -132,9 +133,8 @@ class VerifynumberScreen extends GetWidget<VerifynumberController> {
                 children: [
                   TextSpan(
                     text: "msg_didn_t_receive_the2".tr,
-                    style:theme.textTheme.titleSmall!.copyWith(
-                          color: appTheme.gray400
-                        ),
+                    style: theme.textTheme.titleSmall!
+                        .copyWith(color: appTheme.gray400),
                   ),
                   const TextSpan(text: " "),
                   TextSpan(
@@ -142,7 +142,8 @@ class VerifynumberScreen extends GetWidget<VerifynumberController> {
                     style: CustomTextStyles.titleSmallGilroyff171717,
                     recognizer: TapGestureRecognizer()
                       ..onTap = () async {
-                        controller.resendOtp(controller.phoneNumberController.text);
+                        controller
+                            .resendOtp(controller.phoneNumberController.text);
                         Get.snackbar(
                           'OTP Resent',
                           'A new security code has been sent to your phone number.',

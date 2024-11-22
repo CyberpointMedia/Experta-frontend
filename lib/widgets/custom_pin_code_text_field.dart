@@ -12,6 +12,7 @@ class CustomPinCodeTextField extends StatelessWidget {
     this.textStyle,
     this.hintStyle,
     this.validator,
+    this.enablePinAutofill = false,
   });
 
   final Alignment? alignment;
@@ -27,6 +28,8 @@ class CustomPinCodeTextField extends StatelessWidget {
   final Function(String) onChanged;
 
   final FormFieldValidator<String>? validator;
+
+  final bool enablePinAutofill;
 
   @override
   Widget build(BuildContext context) {
@@ -65,5 +68,8 @@ class CustomPinCodeTextField extends StatelessWidget {
         ),
         onChanged: (value) => onChanged(value),
         validator: validator,
+        autovalidateMode: AutovalidateMode.onUserInteraction,
+        autoDismissKeyboard: true,
+        enablePinAutofill: enablePinAutofill,
       );
 }
