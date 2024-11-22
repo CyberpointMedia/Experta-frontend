@@ -79,14 +79,11 @@ class _ChattingPageState extends State<ChattingPage> {
     final displayName = basicInfo?['firstName'] ?? 'Unknown';
     DateTime currentTime = DateTime.now();
 
-    // Calculate the time 30 minutes from now
     DateTime timeAfter30Minutes = currentTime.add(const Duration(minutes: 1));
 
-    // Convert both times to ISO 8601 string format
     String isoStartTime = currentTime.toIso8601String();
     String isoEndTime = timeAfter30Minutes.toIso8601String();
 
-    // Create booking data
     final bookingData = {
       "expertId": otherUserId,
       "startTime": "${isoStartTime}Z",
@@ -105,9 +102,6 @@ class _ChattingPageState extends State<ChattingPage> {
             : setState(() {
                 isLoading1 = false;
               });
-        // final Map<String, dynamic> responseData = jsonDecode(response.body);
-
-        // Access the fields using the map
         final meetingId = responses['data']['_id'];
         _startCall(otherUserId, meetingId, type, displayName, '');
       } else {
@@ -116,28 +110,6 @@ class _ChattingPageState extends State<ChattingPage> {
     } catch (e) {
       _showErrorDialog(context, e.toString());
     }
-    // ScaffoldMessenger.of(context).showSnackBar(
-    //   const SnackBar(content: Text('Meeting scheduled successfully')),
-    // );
-    // final meetingData = {
-    //   'meetingName': "experta consultation",
-    //   'from': currentUserId,
-    //   'to': controller.id.id,
-    //   'date': DateTime.now().toIso8601String(),
-    //   'fromEmail': email,
-    //   'toEmail': email,
-    //   'duration': 30,
-    // };
-    // final response = await _apiService.scheduleMeeting(meetingData);
-    // if (response.statusCode == 201) {
-    //   // Convert to ISO 8601 format
-    //   // Get the current time
-
-    // } else {
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     const SnackBar(content: Text('Failed to schedule meeting')),
-    //   );
-    // }
   }
 
   void _showErrorDialog(BuildContext context, String message) {
@@ -231,7 +203,7 @@ class _ChattingPageState extends State<ChattingPage> {
     socket.on('connect', (_) {
       log('Connected to socket server');
       socket.emit('join', {'chatId': chat['_id'], 'userId': currentUserId});
-      fetchMessages(); // Fetch messages after joining the chat room
+      fetchMessages();
     });
 
     socket.on('connect_error', (error) {
@@ -825,6 +797,3 @@ void onTapThreeThousand() {
   Get.toNamed(AppRoutes.wallet);
 }
 
-void onTapVideo() {}
-
-void onTapPhone() {}
