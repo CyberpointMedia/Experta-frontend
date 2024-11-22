@@ -69,7 +69,8 @@ class SigninController extends GetxController {
     );
 
     try {
-      LoginResponseModel? response = await _apiService.loginUser(requestModel);
+      LoginResponseModel? response =
+          await _apiService.loginUser(requestModel, context);
       if (response != null && response.status == "success") {
         CustomToast().showToast(
           context: context,
@@ -77,10 +78,8 @@ class SigninController extends GetxController {
           isSuccess: true,
         );
         await prefUtils.setEmail("${response.data.email}");
-        log('hi the otp is ${response.data.otp}');
-        var otp = response.data.otp;
         Get.toNamed(AppRoutes.verifynumberScreen,
-            arguments: [phoneNumberController, otp]);
+            arguments: [phoneNumberController]);
       } else {
         print("Login failed");
       }
@@ -111,11 +110,9 @@ class SigninController extends GetxController {
           message: 'Otp Sent Sucessfully',
           isSuccess: true,
         );
-        log('hi the otp is ${response.data.otp}');
-        var otp = response.data.otp;
         Get.toNamed(
           AppRoutes.verifynumberScreen,
-          arguments: [phoneNumberController, otp],
+          arguments: [phoneNumberController],
         );
       } else if (response is RegisterResponseError) {
         log("Registration failed: ${response.error.errorMessage}");

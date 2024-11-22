@@ -1,6 +1,7 @@
-
 # Uncomment this line to define a global platform for your project
 platform :ios, '15.5'
+
+install! 'cocoapods', :warn_for_unused_master_specs_repo => false
 
 # CocoaPods analytics sends network stats synchronously affecting flutter build latency.
 ENV['COCOAPODS_DISABLE_STATS'] = 'true'
@@ -29,18 +30,16 @@ require File.expand_path(File.join('packages', 'flutter_tools', 'bin', 'podhelpe
 flutter_ios_podfile_setup
 
 target 'Runner' do
-  # use_frameworks!  # Consider removing this if you don't need dynamic frameworks
-  use_modular_headers!
+  use_frameworks!  # Enable this for Razorpay
+  use_modular_headers!  # Comment this out
 
   flutter_install_all_ios_pods File.dirname(File.realpath(__FILE__))
    
-  
-   # Firebase dependencies
-   pod 'Firebase/Core'
-   pod 'Firebase/Auth'
-   pod 'Firebase/Messaging'
+pod 'Firebase/Core'
+pod 'Firebase/Auth'
+pod 'Firebase/Messaging'
+pod 'razorpay-pod'
 
-   
   target 'RunnerTests' do
     inherit! :search_paths
   end

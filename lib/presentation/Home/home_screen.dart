@@ -596,8 +596,8 @@ class UserProfileItemWidget extends StatelessWidget {
                                 radius: 28.adaptSize,
                                 backgroundColor: Colors.white,
                                 child: CustomImageView(
-                                  height: 55,
-                                  width: 55,
+                                  height: 50,
+                                  width: 50,
                                   radius: BorderRadius.circular(25),
                                   imagePath: user.profilePic.isNotEmpty
                                       ? user.profilePic
@@ -723,10 +723,10 @@ class UserProfileItemWidget extends StatelessWidget {
                   Center(
                     child: CustomPaint(
                       painter: DashedDividerPainter(
-                        color: appTheme.gray200, // or your desired color
-                        dashWidth: 5.0, // length of each dash
-                        dashSpace: 3.0, // space between dashes
-                        strokeWidth: 1.0, // thickness of the line
+                        color: appTheme.gray200,
+                        dashWidth: 5.0,
+                        dashSpace: 3.0,
+                        strokeWidth: 1.0,
                       ),
                       size: Size(MediaQuery.of(context).size.width * 0.8, 1),
                     ),

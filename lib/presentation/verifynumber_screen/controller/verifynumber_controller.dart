@@ -19,11 +19,6 @@ class VerifynumberController extends GetxController with CodeAutoFill {
   Rx<bool> complete = false.obs;
   PrefUtils prefUtils = PrefUtils();
 
-  @override
-  void codeUpdated() {
-    otpController.value.text = code ?? '';
-  }
-
   void verifyOtp() async {
     VerifyOtpRequestModel requestModel = VerifyOtpRequestModel(
       phoneNo: phoneNumberController.text,
@@ -41,7 +36,6 @@ class VerifynumberController extends GetxController with CodeAutoFill {
         log("hey this is your id ${response.data!.basicInfo}");
         await prefUtils.setMob("${response.data!.phoneNo}");
         log("hey this is your id ${response.data!.phoneNo}");
-        // Handle success response
         Get.toNamed(AppRoutes.dashboard);
         print("OTP Verified Successfully");
       } else {
@@ -55,16 +49,13 @@ class VerifynumberController extends GetxController with CodeAutoFill {
   void resendOtp(String phoneNumber) async {
     if (phoneNumber.isNotEmpty) {
       try {
-        // Make the API call directly with phoneNumber as a string
         dynamic responseData = await _apiService.resendOtp(phoneNumber);
         print("Response JSON: $responseData");
 
         if (responseData is Map<String, dynamic>) {
-          // Directly access the data from response
           String status = responseData['status'];
           var data = responseData['data'];
           if (status == "success") {
-            // Update UI based on response
             String otp = data['otp'];
             print("OTP Resent Successfully: $otp");
           } else {
@@ -82,12 +73,41 @@ class VerifynumberController extends GetxController with CodeAutoFill {
   }
 
   @override
+  void codeUpdated() {
+    print("Code updated: $code"); // Debug print
+    if (code != null) {
+      print("Setting code: $code"); // Debug print
+      otpController.value.text = code!;
+      complete.value = code!.length == 6;
+      if (complete.value) {
+        verifyOtp();
+      }
+    }
+  }
+
+  @override
   void onInit() {
     super.onInit();
     prefUtils.init();
-    listenForCode();
+    initSmsListener();
     var arguments = Get.arguments as List;
     phoneNumberController = arguments[0] as TextEditingController;
-    otpController.value.text = arguments[1] as String;
+  }
+
+  Future<void> initSmsListener() async {
+    try {
+      listenForCode(smsCodeRegexPattern: r'\d{6}');
+
+      final String? signature = await SmsAutoFill().getAppSignature;
+      print("Signature: $signature");
+    } catch (e) {
+      print("Error initializing SMS listener: $e");
+    }
+  }
+
+  @override
+  void onClose() {
+    SmsAutoFill().unregisterListener();
+    super.onClose();
   }
 }
