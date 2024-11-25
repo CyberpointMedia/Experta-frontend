@@ -583,7 +583,7 @@ class UserProfileItemWidget extends StatelessWidget {
                     padding: EdgeInsets.only(
                         left: 30.adaptSize,
                         right: 30.adaptSize,
-                        top: 30.adaptSize),
+                        top: 40.adaptSize),
                     child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
@@ -798,26 +798,35 @@ class UserProfileItemWidget extends StatelessWidget {
 
             // "Top Rated" Ribbon
             Positioned(
-              top: 55.adaptSize,
-              left: -15.adaptSize,
+              top: 65.adaptSize,
+              left: -20.adaptSize,
               child: Transform.rotate(
                 angle: -45 * (3.141592653589793 / 180),
                 alignment: Alignment.topLeft,
                 child: Container(
-                  width: 100.adaptSize,
+                  width: 120.adaptSize,
                   padding: EdgeInsets.symmetric(
                       vertical: 3.adaptSize, horizontal: 8.adaptSize),
                   decoration: const BoxDecoration(
-                    color: Colors.orange,
+                    gradient: LinearGradient(
+                      colors: [
+                        Colors.orangeAccent, // #FD3A84
+                        Colors.orangeAccent, // #FFA68D
+                      ],
+                      begin: Alignment.topRight,
+                      end: Alignment.bottomRight,
+                    ),
                   ),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       CustomImageView(imagePath: "assets/images/verify.svg"),
                       SizedBox(width: 2.adaptSize),
-                      const Text(
+                      Text(
                         "Top Rated",
-                        style: TextStyle(color: Colors.white),
+                        style: theme.textTheme.titleSmall!
+                            .copyWith(color: appTheme.whiteA700),
                       ),
                     ],
                   ),

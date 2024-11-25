@@ -86,7 +86,6 @@ class _ReferAndEarnPageState extends State<ReferAndEarnPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Header for "How it works?"
                   Row(
                     children: [
                       Icon(Icons.info_outline, color: appTheme.gray400),
@@ -100,8 +99,6 @@ class _ReferAndEarnPageState extends State<ReferAndEarnPage> {
                     ],
                   ),
                   const SizedBox(height: 20),
-
-                  // Steps with dividers
                   buildStepWithDivider(
                     stepNumber: "1",
                     title: "Share Your Link",
@@ -121,8 +118,6 @@ class _ReferAndEarnPageState extends State<ReferAndEarnPage> {
                     theme: theme,
                   ),
                   const Spacer(),
-
-                  // Bottom Buttons
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
@@ -174,7 +169,6 @@ class _ReferAndEarnPageState extends State<ReferAndEarnPage> {
     Get.back();
   }
 
-  // Function to build each step with a divider
   Widget buildStepWithDivider({
     required String stepNumber,
     required String title,
@@ -189,25 +183,32 @@ class _ReferAndEarnPageState extends State<ReferAndEarnPage> {
             Column(
               children: [
                 Container(
-                  padding: const EdgeInsets.all(4), // Space between the border and CircleAvatar
+                  padding: const EdgeInsets.all(4),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    border: Border.all(color: Colors.grey, width: 2), // Grey border
+                    border: Border.all(color: Colors.grey, width: 1),
                   ),
                   child: CircleAvatar(
-                    radius: 25,
-                    backgroundColor: appTheme.gray400.withOpacity(0.2),
+                    radius: 20,
+                    backgroundColor: appTheme.whiteA700.withOpacity(0.2),
                     child: Text(
                       stepNumber,
                       style: TextStyle(color: appTheme.gray400, fontWeight: FontWeight.w500),
                     ),
                   ),
                 ),
-                if (stepNumber != "3") // Show line only for steps 1 and 2
-                  Container(
-                    height: 50, // Height of the vertical line
-                    width: 2, // Width of the vertical line
-                    color: appTheme.gray400, // Color of the line
+                if (stepNumber != "3")
+                  SizedBox(
+                    height: 50.v,
+                    width: 2.h,
+                    child: CustomPaint(
+                      painter: VerticalDashedDividerPainter(
+                        color: appTheme.gray400,
+                        strokeWidth: 2,
+                        dashHeight: 5,
+                        dashSpace: 3,
+                      ),
+                    ),
                   ),
               ],
             ),
@@ -237,8 +238,46 @@ class _ReferAndEarnPageState extends State<ReferAndEarnPage> {
             ),
           ],
         ),
-        const SizedBox(height: 20), // Add spacing between steps
+        // const SizedBox(height: 20),
       ],
     );
+  }
+}
+
+class VerticalDashedDividerPainter extends CustomPainter {
+  final Color color;
+  final double strokeWidth;
+  final double dashHeight;
+  final double dashSpace;
+
+  VerticalDashedDividerPainter({
+    required this.color,
+    this.strokeWidth = 1.0,
+    this.dashHeight = 5.0,
+    this.dashSpace = 3.0,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = strokeWidth
+      ..style = PaintingStyle.stroke;
+
+    double startY = 0;
+    final path = Path();
+
+    while (startY < size.height) {
+      path.moveTo(0, startY);
+      path.lineTo(0, startY + dashHeight);
+      startY += dashHeight + dashSpace;
+    }
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
   }
 }

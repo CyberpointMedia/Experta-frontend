@@ -843,7 +843,7 @@
     },
     {
       "name": "photo_manager",
-      "rootUri": "file:///C:/Users/sanja/AppData/Local/Pub/Cache/hosted/pub.dev/photo_manager-3.6.2",
+      "rootUri": "file:///C:/Users/sanja/AppData/Local/Pub/Cache/hosted/pub.dev/photo_manager-3.6.3",
       "packageUri": "lib/",
       "languageVersion": "2.13"
     },
@@ -1071,7 +1071,7 @@
     },
     {
       "name": "sqflite_common",
-      "rootUri": "file:///C:/Users/sanja/AppData/Local/Pub/Cache/hosted/pub.dev/sqflite_common-2.5.4+5",
+      "rootUri": "file:///C:/Users/sanja/AppData/Local/Pub/Cache/hosted/pub.dev/sqflite_common-2.5.4+6",
       "packageUri": "lib/",
       "languageVersion": "3.5"
     },
@@ -1125,19 +1125,19 @@
     },
     {
       "name": "syncfusion_flutter_core",
-      "rootUri": "file:///C:/Users/sanja/AppData/Local/Pub/Cache/hosted/pub.dev/syncfusion_flutter_core-27.2.2",
+      "rootUri": "file:///C:/Users/sanja/AppData/Local/Pub/Cache/hosted/pub.dev/syncfusion_flutter_core-27.2.3",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "syncfusion_flutter_xlsio",
-      "rootUri": "file:///C:/Users/sanja/AppData/Local/Pub/Cache/hosted/pub.dev/syncfusion_flutter_xlsio-27.2.2",
+      "rootUri": "file:///C:/Users/sanja/AppData/Local/Pub/Cache/hosted/pub.dev/syncfusion_flutter_xlsio-27.2.3",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
     {
       "name": "syncfusion_officecore",
-      "rootUri": "file:///C:/Users/sanja/AppData/Local/Pub/Cache/hosted/pub.dev/syncfusion_officecore-27.2.2",
+      "rootUri": "file:///C:/Users/sanja/AppData/Local/Pub/Cache/hosted/pub.dev/syncfusion_officecore-27.2.3",
       "packageUri": "lib/",
       "languageVersion": "2.17"
     },
@@ -1340,7 +1340,7 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2024-11-22T05:38:14.116460Z",
+  "generated": "2024-11-25T07:05:19.852922Z",
   "generator": "pub",
   "generatorVersion": "3.5.4",
   "flutterRoot": "file:///C:/source/flutter",

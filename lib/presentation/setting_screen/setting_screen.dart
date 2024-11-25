@@ -4,6 +4,7 @@ import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/settings_log_out_dialog/controller/settings_log_out_controller.dart';
 import 'package:experta/presentation/settings_log_out_dialog/settings_log_out_dialog.dart';
 import 'package:experta/presentation/share_profile/shareprofile%20.dart';
+import 'package:experta/presentation/support_ticket/support_ticket.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
 import 'controller/setting_controller.dart';
 
@@ -577,35 +578,44 @@ class SettingScreen extends GetWidget<SettingController> {
                         ])),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 1),
-                child: GestureDetector(
-                  onTap: () {
-                    Get.toNamed(
-                        AppRoutes.RaiseTicket); // Navigate to raise ticket
-                  },
-                  child: Container(
-                      padding: EdgeInsets.fromLTRB(16.h, 16.v, 16.h, 15.v),
-                      decoration: AppDecoration.outlineGray300011,
-                      child: Row(children: [
-                        Container(
-                            height: 44.adaptSize,
-                            width: 44.adaptSize,
-                            padding: EdgeInsets.all(10.h),
-                            decoration: AppDecoration.fillGreen400.copyWith(
-                                borderRadius: BorderRadiusStyle.circleBorder23),
-                            child: CustomImageView(
-                                imagePath: "assets/images/hour.svg",
-                                height: 24.adaptSize,
-                                width: 24.adaptSize,
-                                alignment: Alignment.center)),
-                        Padding(
-                            padding: EdgeInsets.only(
-                                left: 15.h, top: 13.v, bottom: 10.v),
-                            child: Text("lbl_support".tr,
-                                style: theme.textTheme.titleMedium))
-                      ])),
-                ),
-              ),
+  padding: const EdgeInsets.only(top: 1),
+  child: GestureDetector(
+    onTap: () {
+      // Navigate to SupportPage
+      Get.to(() => SupportPage());
+    },
+    child: Container(
+      padding: EdgeInsets.fromLTRB(16.h, 16.v, 16.h, 15.v),
+      decoration: AppDecoration.outlineGray300011,
+      child: Row(
+        children: [
+          Container(
+            height: 44.adaptSize,
+            width: 44.adaptSize,
+            padding: EdgeInsets.all(10.h),
+            decoration: AppDecoration.fillGreen400.copyWith(
+              borderRadius: BorderRadiusStyle.circleBorder23,
+            ),
+            child: CustomImageView(
+              imagePath: "assets/images/hour.svg",
+              height: 24.adaptSize,
+              width: 24.adaptSize,
+              alignment: Alignment.center,
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(left: 15.h, top: 13.v, bottom: 10.v),
+            child: Text(
+              "lbl_support".tr,
+              style: theme.textTheme.titleMedium,
+            ),
+          ),
+        ],
+      ),
+    ),
+  ),
+),
+
               GestureDetector(
                   onTap: () {
                     onTapPower();

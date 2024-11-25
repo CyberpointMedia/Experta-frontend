@@ -139,3 +139,43 @@ class DashedDividerPainter extends CustomPainter {
     return false;
   }
 }
+
+
+class VerticalDashedDividerPainter extends CustomPainter {
+  final Color color;
+  final double strokeWidth;
+  final double dashHeight;
+  final double dashSpace;
+
+  VerticalDashedDividerPainter({
+    required this.color,
+    this.strokeWidth = 1.0,
+    this.dashHeight = 5.0,
+    this.dashSpace = 3.0,
+  });
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final paint = Paint()
+      ..color = color
+      ..strokeWidth = strokeWidth
+      ..style = PaintingStyle.stroke;
+
+    double startY = 0;
+    final path = Path();
+
+    // Draw vertical dashes
+    while (startY < size.height) {
+      path.moveTo(0, startY);
+      path.lineTo(0, startY + dashHeight);
+      startY += dashHeight + dashSpace;
+    }
+
+    canvas.drawPath(path, paint);
+  }
+
+  @override
+  bool shouldRepaint(covariant CustomPainter oldDelegate) {
+    return false;
+  }
+}
