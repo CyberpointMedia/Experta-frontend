@@ -4,6 +4,7 @@ import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/categoryDetails/category_details_screen.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
 import 'package:experta/widgets/custom_radio_button.dart';
+import 'package:experta/widgets/custom_text_form_field.dart';
 
 class WithdrawCreditsPage extends StatefulWidget {
   const WithdrawCreditsPage({super.key});
@@ -17,6 +18,8 @@ class _WithdrawCreditsPageState extends State<WithdrawCreditsPage> {
   bool isUpiAdded = false;
   bool isBankAdded = false;
   bool isBankVerified = false;
+  bool isLoading = false;
+
   String? upiDetails;
   Map<String, String>? bankDetails;
   ApiService apiService = ApiService();
@@ -433,27 +436,225 @@ class _WithdrawCreditsPageState extends State<WithdrawCreditsPage> {
   Widget _buildSummitButton() {
     return Padding(
       padding: const EdgeInsets.only(top: 50, bottom: 20),
-      child: CustomElevatedButton(
-        text: 'Submit',
-        onPressed: () {
-          if (_amountController.text.isEmpty) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Please enter an amount')),
-            );
-            return;
-          }
+      child: isLoading
+          ? const CircularProgressIndicator()
+          : CustomElevatedButton(
+              text: 'Submit',
+              onPressed: () async {
+                if (_amountController.text.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(content: Text('Please enter an amount')),
+                  );
+                  return;
+                }
 
-          if (selectedPaymentMethod.isEmpty) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Please select a payment method')),
-            );
-            return;
-          }
+                if (selectedPaymentMethod.isEmpty) {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                        content: Text('Please select a payment method')),
+                  );
+                  return;
+                }
+                setState(() {
+                  isLoading = true;
+                });
+                try {
+                  final kycResponse = await apiService.getKYCStatus();
+                  if (kycResponse != null) {
+                    final panVerification = kycResponse.panVerification;
+                    if (panVerification == null ||
+                        panVerification.verificationStatus == false) {
+                      setState(() {
+                        isLoading = false;
+                      });
+                      _showPANVerificationDialog();
+                    } else {
+                      processWithdrawal();
+                      setState(() {
+                        isLoading = false; // Set loading to false
+                      });
+                    }
+                  } else {
+                    setState(() {
+                      isLoading = false; // Set loading to false
+                    });
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text('Failed to fetch KYC status.')),
+                    );
+                  }
+                } catch (e) {
+                  setState(() {
+                    isLoading = false; // Set loading to false
+                  });
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(content: Text('Error: $e')),
+                  );
+                }
+              },
+            ),
+    );
+  }
 
-          // Process withdrawal based on selected payment method
-          processWithdrawal();
-        },
-      ),
+  void _showPANVerificationDialog() {
+    final formKey = GlobalKey<FormState>();
+    final TextEditingController panController = TextEditingController();
+    final ApiService apiService = ApiService();
+
+    Future<void> verifyPAN() async {
+      final panNumber = panController.text.trim();
+      try {
+        final responseData =
+            await apiService.verifyPAN(panNumber.toUpperCase());
+
+        if (responseData['status'] == 'success') {
+          final clientData = responseData['data']['data'];
+          showDialog(
+            context: context,
+            builder: (BuildContext context) {
+              return AlertDialog(
+                title: const Text("Verification Successful"),
+                content: Text(
+                    "Hello ${clientData['full_name']}, your PAN has been verified successfully."),
+                actions: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop();
+                      Navigator.of(context).pop();
+                    },
+                    child: const Text("OK"),
+                  ),
+                ],
+              );
+            },
+          );
+        } else {
+          showErrorDialog("PAN verification failed. Please try again.");
+        }
+      } catch (e) {
+        showErrorDialog("An error occurred: ${e.toString()}");
+      }
+    }
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Form(
+              key: formKey,
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Center(
+                    child: CustomIconButton(
+                      height: 70,
+                      width: 70,
+                      padding: const EdgeInsets.all(10),
+                      decoration: IconButtonStyleHelper.fillGreenTL245,
+                      child: CustomImageView(imagePath: ImageConstant.pan),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  const Center(
+                    child: Text(
+                      "PAN Verification",
+                      style: TextStyle(fontSize: 22, color: Colors.black),
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    "As per regulations, it is mandatory to verify your PAN details.",
+                    textAlign: TextAlign.center,
+                    style: TextStyle(color: Colors.grey.shade600),
+                  ),
+                  const SizedBox(height: 16),
+                  Container(
+                    width: 150,
+                    height: 32.0,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(50),
+                      border: Border.all(color: appTheme.panCol, width: 1.0),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(Icons.flash_on, color: appTheme.panCol, size: 14),
+                        const SizedBox(width: 5),
+                        Text(
+                          "Takes less than 5 secs",
+                          style: theme.textTheme.titleSmall!.copyWith(
+                            color: appTheme.panCol,
+                            fontSize: 12,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    "Enter PAN number",
+                    style: theme.textTheme.titleSmall!.copyWith(
+                      color: appTheme.blueGray300,
+                      fontSize: 14,
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  CustomTextFormField(
+                    controller: panController,
+                    autofocus: false,
+                    hintText: "Enter Your 10 Digit PAN Number",
+                    hintStyle: theme.textTheme.titleSmall!.copyWith(
+                      color: appTheme.blueGray300,
+                      fontSize: 14,
+                    ),
+                    validator: (value) {
+                      if (value == null || value.isEmpty) {
+                        return 'Please enter your PAN number';
+                      }
+                      if (value.length != 10) {
+                        return 'PAN number must be 10 characters';
+                      }
+                      return null;
+                    },
+                  ),
+                  const SizedBox(height: 16),
+                  CustomElevatedButton(
+                    onPressed: () {
+                      if (formKey.currentState!.validate()) {
+                        verifyPAN();
+                      }
+                    },
+                    text: "Verify",
+                  ),
+                ],
+              ),
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Error"),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text("OK"),
+            ),
+          ],
+        );
+      },
     );
   }
 
@@ -467,7 +668,6 @@ class _WithdrawCreditsPageState extends State<WithdrawCreditsPage> {
         );
         return;
       }
-      // Process UPI withdrawal
       processUpiWithdrawal(amount);
     } else if (selectedPaymentMethod == 'bank') {
       if (!isBankAdded || !isBankVerified) {
@@ -477,12 +677,14 @@ class _WithdrawCreditsPageState extends State<WithdrawCreditsPage> {
         );
         return;
       }
-      // Process Bank withdrawal
       processBankWithdrawal(amount);
     }
   }
 
   Future<void> processUpiWithdrawal(double amount) async {
+    setState(() {
+      isLoading = true;
+    });
     try {
       final paymentDetails = {
         'vpa': upiDetails,
@@ -494,62 +696,65 @@ class _WithdrawCreditsPageState extends State<WithdrawCreditsPage> {
         paymentDetails: paymentDetails,
       );
 
-      // Show success bottom sheet
-      showModalBottomSheet(
-        context: context,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        builder: (context) => Container(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 120.h,
-                height: 120.v,
-                decoration: BoxDecoration(
-                  color: appTheme.green400.withOpacity(0.1),
-                  shape: BoxShape.circle,
-                ),
-                child: Center(
-                  child: Container(
-                    width: 72.h,
-                    height: 72.v,
-                    decoration: BoxDecoration(
-                      color: appTheme.green400,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: CustomImageView(
-                        imagePath: ImageConstant.success,
-                        height: 20.v,
-                        width: 30.h,
-                        fit: BoxFit.contain,
+      if (response['status'] == 'success') {
+        showModalBottomSheet(
+          context: context,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          builder: (context) => Container(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 120.h,
+                  height: 120.v,
+                  decoration: BoxDecoration(
+                    color: appTheme.green400.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Container(
+                      width: 72.h,
+                      height: 72.v,
+                      decoration: BoxDecoration(
+                        color: appTheme.green400,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Center(
+                        child: CustomImageView(
+                          imagePath: ImageConstant.success,
+                          height: 20.v,
+                          width: 30.h,
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'Withdrawal Successful',
-                style: theme.textTheme.titleLarge,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Your UPI withdrawal for ₹$amount has been initiated successfully',
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 20),
-              CustomElevatedButton(
-                text: 'Done',
-                onPressed: () => Navigator.pop(context),
-              ),
-            ],
+                const SizedBox(height: 16),
+                Text(
+                  'Withdrawal Successful',
+                  style: theme.textTheme.titleLarge,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Your UPI withdrawal for ₹$amount has been initiated successfully',
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 20),
+                CustomElevatedButton(
+                  text: 'Done',
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
+            ),
           ),
-        ),
-      );
+        );
+      } else {
+        throw Exception('Withdrawal failed: ${response['data']['message']}');
+      }
     } catch (e) {
       showModalBottomSheet(
         context: context,
@@ -605,10 +810,17 @@ class _WithdrawCreditsPageState extends State<WithdrawCreditsPage> {
           ),
         ),
       );
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 
   Future<void> processBankWithdrawal(double amount) async {
+    setState(() {
+      isLoading = true;
+    });
     try {
       final paymentDetails = {
         'accountNumber': bankDetails?['accountNumber'],
@@ -622,62 +834,77 @@ class _WithdrawCreditsPageState extends State<WithdrawCreditsPage> {
         paymentDetails: paymentDetails,
       );
 
-      // Show success bottom sheet
-      showModalBottomSheet(
-        context: context,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-        ),
-        builder: (context) => Container(
-          padding: const EdgeInsets.all(20),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Container(
-                width: 120.h,
-                height: 120.v,
-                decoration: BoxDecoration(
-                  color: appTheme.green400.withOpacity(0.1),
-                  shape: BoxShape.circle,
-                ),
-                child: Center(
-                  child: Container(
-                    width: 72.h,
-                    height: 72.v,
-                    decoration: BoxDecoration(
-                      color: appTheme.green400,
-                      shape: BoxShape.circle,
-                    ),
-                    child: Center(
-                      child: CustomImageView(
-                        imagePath: ImageConstant.success,
-                        height: 20.v,
-                        width: 30.h,
-                        fit: BoxFit.contain,
+      if (response['status'] == 'success') {
+        // Show success bottom sheet with message from response
+        final message =
+            response['data']['message'] ?? 'Withdrawal initiated successfully';
+
+        showModalBottomSheet(
+          context: context,
+          shape: const RoundedRectangleBorder(
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          builder: (context) => Container(
+            padding: const EdgeInsets.all(20),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 120.h,
+                  height: 120.v,
+                  decoration: BoxDecoration(
+                    color: appTheme.green400.withOpacity(0.1),
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Container(
+                      width: 72.h,
+                      height: 72.v,
+                      decoration: BoxDecoration(
+                        color: appTheme.green400,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Center(
+                        child: CustomImageView(
+                          imagePath: ImageConstant.success,
+                          height: 20.v,
+                          width: 30.h,
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 16),
-              Text(
-                'Withdrawal Successful',
-                style: theme.textTheme.titleLarge,
-              ),
-              const SizedBox(height: 8),
-              Text(
-                'Your bank withdrawal for ₹$amount has been initiated successfully',
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 20),
-              CustomElevatedButton(
-                text: 'Done',
-                onPressed: () => Navigator.pop(context),
-              ),
-            ],
+                const SizedBox(height: 16),
+                Text(
+                  'Withdrawal Successful',
+                  style: theme.textTheme.titleLarge,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  'Your bank withdrawal for ₹$amount has been initiated successfully.',
+                  textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                Text(
+                  message,
+                  textAlign: TextAlign.center,
+                  style: theme.textTheme.bodyLarge
+                      ?.copyWith(color: appTheme.green400),
+                ),
+                const SizedBox(height: 20),
+                CustomElevatedButton(
+                  text: 'Done',
+                  onPressed: () => Navigator.pop(context),
+                ),
+              ],
+            ),
           ),
-        ),
-      );
+        );
+      } else {
+        throw Exception(
+            'Failed to process withdrawal: ${response['data']['message']}');
+      }
     } catch (e) {
       showModalBottomSheet(
         context: context,
@@ -721,7 +948,7 @@ class _WithdrawCreditsPageState extends State<WithdrawCreditsPage> {
               ),
               const SizedBox(height: 8),
               Text(
-                'Error processing bank withdrawal: $e',
+                'Error processing bank withdrawal: ${e.toString()}',
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 20),
@@ -733,6 +960,10 @@ class _WithdrawCreditsPageState extends State<WithdrawCreditsPage> {
           ),
         ),
       );
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
     }
   }
 }

@@ -254,14 +254,12 @@ class _WalletState extends State<Wallet> {
                             ),
                           ),
                           onPressed: () {
-                            // Define your action here
                             Get.toNamed(AppRoutes.topup);
                             print("Top Up button pressed!");
                           },
                           text: 'Top Up'),
                     ),
                     SizedBox(width: 40.adaptSize),
-                    // Withdraw Button
                     SizedBox(
                       height: 55.adaptSize,
                       width: 135.adaptSize,

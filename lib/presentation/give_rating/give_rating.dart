@@ -18,14 +18,13 @@ class RatingPage extends StatefulWidget {
 }
 
 class _RatingPageState extends State<RatingPage> {
-  double _textFieldHeight = 150.0;
-  int _selectedRating = 0; // State variable for selected rating
+  int _selectedRating = 0;
   final TextEditingController _reviewController = TextEditingController();
 
   Future<void> _submitRating() async {
     final url = Uri.parse('http://3.110.252.174:8080/api/video-rating');
     final body = jsonEncode({
-      "bookingId": "6728c79404d87083dbd5b371",
+      "bookingId": widget.bookingId,
       "rating": _selectedRating,
       "review": _reviewController.text,
     });
@@ -84,7 +83,8 @@ class _RatingPageState extends State<RatingPage> {
       ),
     );
   }
-    PreferredSizeWidget _buildAppBar() {
+
+  PreferredSizeWidget _buildAppBar() {
     return CustomAppBar(
       height: 40.h,
       leadingWidth: 40.h,
@@ -107,11 +107,11 @@ class _RatingPageState extends State<RatingPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:_buildAppBar(),
+      appBar: _buildAppBar(),
       body: Padding(
-        padding: const EdgeInsets.only(left: 16,right: 16,top: 50,bottom: 20),
+        padding:
+            const EdgeInsets.only(left: 16, right: 16, top: 50, bottom: 20),
         child: Column(
-
           children: [
             CustomImageView(
               height: 100,
@@ -120,14 +120,12 @@ class _RatingPageState extends State<RatingPage> {
               imagePath: widget.profilePic,
             ),
             const SizedBox(height: 10),
-             Text(
-              'How was your experience with',
-              style: theme.textTheme.titleSmall!.copyWith(color: appTheme.gray600, fontSize: 14)
-            ),
-            Text(
-              widget.userName.toUpperCase(),
-              style: theme.textTheme.titleSmall!.copyWith(color: appTheme.black900, fontSize: 16)
-            ),
+            Text('How was your experience with',
+                style: theme.textTheme.titleSmall!
+                    .copyWith(color: appTheme.gray600, fontSize: 14)),
+            Text(widget.userName.toUpperCase(),
+                style: theme.textTheme.titleSmall!
+                    .copyWith(color: appTheme.black900, fontSize: 16)),
             const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -148,20 +146,28 @@ class _RatingPageState extends State<RatingPage> {
             ),
             const SizedBox(height: 20),
             Align(
-              alignment: Alignment.topLeft,
-              child: Text("Write your review", style: theme.textTheme.titleSmall!.copyWith(color: appTheme.gray600, fontSize: 14),textAlign: TextAlign.start,)),
-                  CustomBioTextFormField(
-                        controller: _reviewController,
-                        hintText:  "Write Your review",
-                                    hintStyle: CustomTextStyles.titleMediumBluegray300,
-                        textStyle:theme.textTheme.titleMedium!.copyWith(color: Colors.black, fontSize: 16.fSize, fontWeight: FontWeight.w500,),
-
-                  ),
+                alignment: Alignment.topLeft,
+                child: Text(
+                  "Write your review",
+                  style: theme.textTheme.titleSmall!
+                      .copyWith(color: appTheme.gray600, fontSize: 14),
+                  textAlign: TextAlign.start,
+                )),
+            CustomBioTextFormField(
+              controller: _reviewController,
+              hintText: "Write Your review",
+              hintStyle: CustomTextStyles.titleMediumBluegray300,
+              textStyle: theme.textTheme.titleMedium!.copyWith(
+                color: Colors.black,
+                fontSize: 16.fSize,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
             const Spacer(),
             CustomElevatedButton(
-                       height: 56.adaptSize,
+              height: 56.adaptSize,
               onPressed: _submitRating,
-              text:'Submit Rating',
+              text: 'Submit Rating',
             ),
           ],
         ),

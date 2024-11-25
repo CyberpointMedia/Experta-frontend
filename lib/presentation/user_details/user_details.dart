@@ -689,7 +689,6 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                         Colors.green,
                         () {
                           _showBottomSheet2(context, 'audio');
-                          // _scheduleMeeting('audio');
                         },
                       ),
                       _buildVerticalDivider(),
@@ -807,24 +806,22 @@ class _UserDetailsPageState extends State<UserDetailsPage>
           child: CircularProgressIndicator(),
         );
       } else if (posts.isEmpty) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            CustomImageView(
-              imagePath: ImageConstant.message,
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            const Text(
-              'Feeds Empty',
-              style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
-            ),
-          ],
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CustomImageView(
+                imagePath: ImageConstant.imgNoChat,
+                height: 70.h,
+                width: 70.h,
+              ),
+              SizedBox(height: 20.v),
+              Text(
+                "Expert's feeds is empty",
+                style: CustomTextStyles.titleMediumBold,
+              ),
+            ],
+          ),
         );
       } else {
         return Column(
@@ -908,9 +905,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                       ?.fontSize, // Same font size as paragraph
                 ),
               );
-            
-            }
-            ),
+            }),
           ),
           SizedBox(
             height: 17.v,
@@ -1005,7 +1000,8 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                         ),
                         Text(
                           "$formattedStartDate - $formattedEndDate · $totalDuration",
-                          style: theme.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w500, fontSize: 14.fSize),
+                          style: theme.textTheme.bodyMedium!.copyWith(
+                              fontWeight: FontWeight.w500, fontSize: 14.fSize),
                         ),
                         SizedBox(
                           height: 18.v,
@@ -1134,7 +1130,8 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                         ),
                         Text(
                           "$formattedStartDate - $formattedEndDate · $totalDuration",
-                          style: theme.textTheme.bodyMedium!.copyWith(fontWeight: FontWeight.w500, fontSize: 14.fSize),
+                          style: theme.textTheme.bodyMedium!.copyWith(
+                              fontWeight: FontWeight.w500, fontSize: 14.fSize),
                         ),
                         SizedBox(
                           height: 18.v,
@@ -1359,13 +1356,15 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                           SizedBox(height: 8.v),
                           Container(
                             width: 304.adaptSize,
-                            margin:  EdgeInsets.only( left: 8.adaptSize),
+                            margin: EdgeInsets.only(left: 8.adaptSize),
                             child: Text(
                               review.review.toString(),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
-                              style: theme.textTheme.bodyMedium
-                                  ?.copyWith(color: appTheme.gray900, fontWeight: FontWeight.w500,fontSize: 14.adaptSize ),
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                  color: appTheme.gray900,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14.adaptSize),
                             ),
                           ),
                           SizedBox(height: 8.v), // Added SizedBox for spacing
@@ -1553,13 +1552,12 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                         ],
                       ),
                       SizedBox(
-                        width: MediaQuery.of(context).size.width*0.5,
-                  
+                        width: MediaQuery.of(context).size.width * 0.5,
                         child: Text(
-                          
                           "${controller.userData.value.data?.industryOccupation?.industry?.name ?? ''} | ${controller.userData.value.data?.industryOccupation?.occupation?.name ?? ''}",
                           textAlign: TextAlign.left,
-                          style: theme.textTheme.titleSmall!.copyWith(color: appTheme.black900),
+                          style: theme.textTheme.titleSmall!
+                              .copyWith(color: appTheme.black900),
                         ),
                       ),
                     ],
@@ -1602,7 +1600,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                                         fontSize: 14,
                                         fontWeight: FontWeight.w500,
                                       ),
-                                    )) 
+                                    ))
                                 .toList(),
                             Text(
                               '+${languageNames.length - 3} more',
@@ -1626,7 +1624,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                               .toList();
                         }
                       } else {
-                                                     return <Widget>[];
+                        return <Widget>[];
                       }
                     })(),
                   ),
