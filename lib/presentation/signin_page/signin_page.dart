@@ -1,11 +1,10 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:experta/widgets/custom_outlined_button.dart';
 import 'package:experta/widgets/custom_phone_number.dart';
 import 'package:country_pickers/country.dart';
 import 'package:experta/core/app_export.dart';
-import '../../core/utils/validation_functions.dart';
-import '../../widgets/custom_text_form_field.dart';
 import 'controller/signin_controller.dart';
 
 class SigninPage extends StatefulWidget {
@@ -17,10 +16,8 @@ class SigninPage extends StatefulWidget {
 
 class _SigninPageState extends State<SigninPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final GlobalKey<FormState> _formKey1 = GlobalKey<FormState>();
 
   final SigninController controller = Get.put(SigninController());
-  bool isPhoneSelected = true;
 
   @override
   Widget build(BuildContext context) {
@@ -52,100 +49,11 @@ class _SigninPageState extends State<SigninPage> {
             ),
           ),
           SingleChildScrollView(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(10, 56, 10, 25),
-                  child: Container(
-                    width: 138.h,
-                    height: 31.v,
-                    decoration: BoxDecoration(
-                      border: Border.all(color: const Color(0xffe4e4e4)),
-                      color: const Color(0xffffffff),
-                      borderRadius: BorderRadius.circular(16),
-                    ),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                isPhoneSelected = true;
-                              });
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: isPhoneSelected
-                                    ? const Color(0xff171717)
-                                    : Colors.transparent,
-                                borderRadius: BorderRadius.circular(20),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'Log In',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                    fontSize: 14.fSize,
-                                    fontWeight: FontWeight.w500,
-                                    height: 1.5.v,
-                                    color: isPhoneSelected
-                                        ? const Color(0xffffffff)
-                                        : const Color(
-                                            0xff000000), // Dark black color
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                        Expanded(
-                          child: GestureDetector(
-                            onTap: () {
-                              setState(() {
-                                isPhoneSelected = false;
-                              });
-                            },
-                            child: Container(
-                              decoration: BoxDecoration(
-                                color: !isPhoneSelected
-                                    ? const Color(0xff171717)
-                                    : Colors.transparent,
-                                borderRadius: BorderRadius.circular(100),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  'Sign Up',
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 14.fSize,
-                                      fontWeight: FontWeight.w500,
-                                      height: 1.5.v,
-                                      color: !isPhoneSelected
-                                          ? appTheme.whiteA700
-                                          : appTheme
-                                              .black900 // Dark black color
-                                      ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-                Visibility(
-                  visible: isPhoneSelected,
-                  child: phoneTabContent(),
-                ),
-                Visibility(
-                  visible: !isPhoneSelected,
-                  child: emailTabContent(),
-                ),
-              ],
+            child: Padding(
+              padding: EdgeInsets.only(
+                top: MediaQuery.of(context).size.height * 0.15,
+              ),
+              child: phoneTabContent(),
             ),
           ),
         ],
@@ -157,10 +65,7 @@ class _SigninPageState extends State<SigninPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          "lbl_phone_number".tr,
-          style: theme.textTheme.titleMedium 
-        ),
+        Text("lbl_phone_number".tr, style: theme.textTheme.titleMedium),
         SizedBox(height: 3.v),
         Obx(
           () => CustomPhoneNumber(
@@ -176,49 +81,39 @@ class _SigninPageState extends State<SigninPage> {
   }
 
   Widget _buildTermsText() {
-    return RichText(
-      text: TextSpan(
-        children: [
-          TextSpan(
-            text: "msg_by_continuing_i2".tr,
-            style: theme.textTheme.titleSmall!.copyWith(
-        color: appTheme.gray400,
-                fontSize: 14.fSize,
-
-        fontWeight: FontWeight.w500,
-
-      ),
-          ),
-          TextSpan(
-            text: "msg_terms_conditions".tr,
-            style:theme.textTheme.titleSmall!.copyWith(
-        color: appTheme.black900,
-                fontSize: 14.fSize,
-
-        // fontWeight: FontWeight.w400,
-      ),
-          ),
-          TextSpan(
-            text: " and ".tr,
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 15),
+      child: RichText(
+        text: TextSpan(
+          children: [
+            TextSpan(
+              text: "msg_by_continuing_i2".tr,
               style: theme.textTheme.titleSmall!.copyWith(
-        color: appTheme.gray400,
-                fontSize: 14.fSize,
-
-        fontWeight: FontWeight.w500,
-
+                  color: appTheme.blueGray300,
+                  fontSize: 14.fSize,
+                  fontWeight: FontWeight.w300),
+            ),
+            TextSpan(
+              text: "msg_terms_conditions".tr,
+              style: theme.textTheme.titleSmall!.copyWith(
+                color: appTheme.black900,
+              ),
+            ),
+            TextSpan(
+              text: " and ".tr,
+              style: theme.textTheme.titleSmall!.copyWith(
+                  color: appTheme.blueGray300, fontWeight: FontWeight.w300),
+            ),
+            TextSpan(
+              text: "lbl_privacy_policy".tr,
+              style: theme.textTheme.titleSmall!.copyWith(
+                color: appTheme.black900,
+              ),
+            ),
+          ],
+        ),
+        textAlign: TextAlign.center,
       ),
-          ),
-          TextSpan(
-            text: "lbl_privacy_policy".tr,
-           style:theme.textTheme.titleSmall!.copyWith(
-        color: appTheme.black900,
-                fontSize: 14.fSize,
-        // fontWeight: FontWeight.w400,
-      ),
-          ),
-        ],
-      ),
-      textAlign: TextAlign.center,
     );
   }
 
@@ -232,7 +127,7 @@ class _SigninPageState extends State<SigninPage> {
         );
       } else {
         return CustomElevatedButton(
-          text: "lbl_continue".tr,
+          text: "Continue",
           buttonStyle: controller.isPhoneNumberValid.value
               ? CustomButtonStyles.fillPrimaryTL23
               : CustomButtonStyles.fillOnError,
@@ -265,14 +160,12 @@ class _SigninPageState extends State<SigninPage> {
                   margin: const EdgeInsets.fromLTRB(0, 0, 0, 7),
                   child: Text(
                     'Welcome Back!',
-                    style: theme.textTheme.titleMedium!.copyWith(
-                      fontSize: 24.fSize
-                    ),),
+                    style: theme.textTheme.titleMedium!
+                        .copyWith(fontSize: 24.fSize),
+                  ),
                 ),
-                Text(
-                  'Which part of country that you call home?',
-                  style: theme.textTheme.titleSmall
-                ),
+                Text('Which part of country that you call home?',
+                    style: theme.textTheme.titleSmall),
                 const SizedBox(height: 29),
                 _buildInputField(),
                 const SizedBox(height: 18),
@@ -291,175 +184,6 @@ class _SigninPageState extends State<SigninPage> {
       ),
     );
   }
-
-  Widget emailTabContent() {
-    return Container(
-      color: Colors.transparent,
-      width: MediaQuery.of(context).size.width,
-      height: MediaQuery.of(context).size.height * 0.85,
-      child: Form(
-        key: _formKey1,
-        child: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 16.adaptSize),
-          child: Column(
-            children: [
-              const SizedBox(height: 19),
-              _buildFirstName(),
-              SizedBox(height: 15.v),
-              _buildInputField2(),
-              SizedBox(height: 15.v),
-              _buildInputField1(),
-              const SizedBox(height: 18),
-              _buildContinueButton2(),
-              const SizedBox(height: 25),
-              _buildOrcontinuewithsocial(),
-              SizedBox(height: 15.v),
-              _buildLoginOption(),
-              const Spacer(),
-              _buildTermsText(),
-              SizedBox(height: 15.v),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildInputField2() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "lbl_email".tr,
-          style: theme.textTheme.titleMedium,  // Set text color to black
-        ),
-        SizedBox(height: 3.v),
-        CustomTextFormField(
-          controller: controller.emailController,
-          focusNode: controller.emailFocusNode,
-          hintText: "lbl_your_email".tr,
-          hintStyle: CustomTextStyles.titleMediumBluegray300,
-          textInputType: TextInputType.emailAddress,
-          validator: (value) {
-            if (value == null || (!isValidEmail(value, isRequired: true))) {
-              return "err_msg_please_enter_valid_email".tr;
-            }
-            return null;
-          },
-        ),
-      ],
-    );
-  }
-
-  Widget _buildInputField1() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "lbl_phone_number".tr,
-          style: theme.textTheme.titleMedium
-        ),
-        SizedBox(height: 3.v),
-        Obx(
-          () => CustomPhoneNumber(
-            country: controller.selectedCountry.value,
-            controller: controller.phoneNumberController,
-            onTap: (Country value) {
-              controller.selectedCountry.value = value;
-            },
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildContinueButton2() {
-    return Column(
-      children: [
-        Obx(() {
-          if (controller.isLoading.value) {
-            return const Center(
-              child: CircularProgressIndicator(
-                valueColor: AlwaysStoppedAnimation<Color>(Colors.black),
-              ),
-            );
-          } else {
-            return CustomElevatedButton(
-              text: "Sign Up".tr,
-              buttonStyle: (controller.isEmailValid.value &&
-                      controller.isPhoneNumberValid.value &&
-                      controller.isTextValid.value)
-                  ? CustomButtonStyles.fillPrimaryTL23
-                  : CustomButtonStyles.fillOnError,
-              buttonTextStyle: (controller.isEmailValid.value &&
-                      controller.isPhoneNumberValid.value &&
-                      controller.isTextValid.value)
-                  ? CustomTextStyles.bodySmall0XFF171717
-                  : CustomTextStyles.titleMediumGray400,
-              onPressed: (controller.isEmailValid.value &&
-                      controller.isPhoneNumberValid.value &&
-                      controller.isTextValid.value)
-                  ? () => controller.registerUser(context)
-                  : null,
-            );
-          }
-        }),
-        Obx(() {
-          if (controller.errorMessage.isNotEmpty) {
-            return Text(
-              controller.errorMessage.value,
-              style: const TextStyle(color: Colors.red),
-            );
-          }
-          return Container();
-        }),
-      ],
-    );
-  }
-
-  Widget _buildFirstName() {
-    return Row(
-      children: [
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "First Name".tr,
-              style: theme.textTheme.titleMedium
-            ),
-            SizedBox(height: 3.v),
-            CustomTextFormField(
-              width: 150.v,
-              controller: controller.nameController,
-              focusNode: controller.nameFocusNode,
-              hintText: "First name".tr,
-              hintStyle: CustomTextStyles.titleMediumBluegray300.copyWith(),
-              textInputType: TextInputType.name,
-            ),
-          ],
-        ),
-        SizedBox(width: 15.v),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              "Last Name".tr,
-              style: theme.textTheme.titleMedium
-            ),
-            SizedBox(height: 3.v),
-            CustomTextFormField(
-              width: 166.v,
-              controller: controller.passwordController,
-              focusNode: controller.passwordFocusNode,
-              hintText: "Last name".tr,
-              hintStyle: CustomTextStyles.titleMediumBluegray300.copyWith(),
-              textInputType: TextInputType.name,
-            ),
-          ],
-        ),
-      ],
-    );
-  }
 }
 
 Widget _buildOrcontinuewithsocial() {
@@ -467,22 +191,22 @@ Widget _buildOrcontinuewithsocial() {
     children: [
       const Expanded(
         child: Divider(
-          thickness: 2, // Adjust thickness as needed
+          thickness: 2,
         ),
       ),
-      SizedBox(width: 15.adaptSize), // Add space between divider and text
-       Text(
+      SizedBox(width: 15.adaptSize),
+      Text(
         'Or continue with social',
-       style:theme.textTheme.bodySmall!.copyWith(
-        fontSize: 12.fSize,
-        color: appTheme.black900,
-        fontWeight: FontWeight.w500,
+        style: theme.textTheme.bodySmall!.copyWith(
+          fontSize: 12.fSize,
+          color: appTheme.black900,
+          fontWeight: FontWeight.w500,
+        ),
       ),
-      ),
-      SizedBox(width: 15.adaptSize), // Add space between text and divider
+      SizedBox(width: 15.adaptSize),
       const Expanded(
         child: Divider(
-          thickness: 1, // Adjust thickness as needed
+          thickness: 1,
         ),
       ),
     ],
@@ -491,9 +215,8 @@ Widget _buildOrcontinuewithsocial() {
 
 Widget _buildContinueWithGoogle() {
   return SizedBox(
-    height: 52.v, // Match the height with the "Sign Up" button
-    width:
-        double.infinity, // Set width to fill the available space like "Sign Up"
+    height: 52.v,
+    width: double.infinity,
     child: CustomOutlinedButton(
       text: "msg_continue_with_google".tr,
       leftIcon: Container(
@@ -504,14 +227,13 @@ Widget _buildContinueWithGoogle() {
           width: 24.adaptSize,
         ),
       ),
-      buttonStyle: CustomButtonStyles.outlineGray, // Set button style
-      buttonTextStyle: CustomTextStyles.titleSmallGray900, // Set text style
+      buttonStyle: CustomButtonStyles.outlineGray,
+      buttonTextStyle: CustomTextStyles.titleSmallGray900,
       buttonColor: appTheme.googlee,
     ),
   );
 }
 
-/// Section Widget
 Widget _buildContinueWithFacebook() {
   return CustomOutlinedButton(
     height: 52.v,
@@ -530,7 +252,6 @@ Widget _buildContinueWithFacebook() {
   );
 }
 
-/// Section Widget
 Widget _buildContinueWithApple() {
   return CustomOutlinedButton(
     height: 52.v,
@@ -552,23 +273,16 @@ Widget _buildContinueWithApple() {
 Widget _buildLoginOption() {
   return Align(
     alignment: Alignment.bottomCenter,
-    child: Padding(
-      padding: EdgeInsets.only(
-        left: 0.h,
-        right: 0.h,
-        // bottom: 155.v,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          SizedBox(height: 10.v),
-          _buildContinueWithGoogle(),
-          SizedBox(height: 10.v),
-          _buildContinueWithFacebook(),
-          SizedBox(height: 10.v),
-          _buildContinueWithApple(),
-        ],
-      ),
+    child: Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        SizedBox(height: 10.v),
+        _buildContinueWithGoogle(),
+        SizedBox(height: 10.v),
+        _buildContinueWithFacebook(),
+        SizedBox(height: 10.v),
+        Platform.isIOS ? _buildContinueWithApple() : const SizedBox.shrink(),
+      ],
     ),
   );
 }

@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'dart:ui';
 
 import 'package:staggered_grid_view_flutter/widgets/staggered_grid_view.dart';
@@ -125,11 +126,10 @@ class OnboardingScreen extends GetWidget<OnboardingController> {
                   children: [
                     Text(
                       "msg_sign_up_or_log_in".tr,
-                      style:theme.textTheme.bodyMedium!.copyWith(
-                        fontSize: 16.fSize,
-                        fontWeight: FontWeight.w500,
-                        color: appTheme.black900
-                      ),
+                      style: theme.textTheme.bodyMedium!.copyWith(
+                          fontSize: 16.fSize,
+                          fontWeight: FontWeight.w500,
+                          color: appTheme.black900),
                     ),
                     SizedBox(height: 15.v),
                     _buildLoginOption(),
@@ -144,32 +144,30 @@ class OnboardingScreen extends GetWidget<OnboardingController> {
                             TextSpan(
                               text: "msg_by_clicking_the2".tr,
                               style: theme.textTheme.titleSmall!.copyWith(
-        color: appTheme.gray400,
-        fontWeight: FontWeight.w500,
-
-      ),
+                                color: appTheme.gray400,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                             TextSpan(
                               text: "msg_terms_of_service".tr,
-                              style:theme.textTheme.titleSmall!.copyWith(
-        color: appTheme.black900,
-        fontWeight: FontWeight.w400,
-      ),
+                              style: theme.textTheme.titleSmall!.copyWith(
+                                color: appTheme.black900,
+                                fontWeight: FontWeight.w400,
+                              ),
                             ),
                             TextSpan(
                               text: "msg_and_acknowledged".tr,
                               style: theme.textTheme.titleSmall!.copyWith(
-        color: appTheme.gray400,
-        fontWeight: FontWeight.w500,
-      ),
+                                color: appTheme.gray400,
+                                fontWeight: FontWeight.w500,
+                              ),
                             ),
                             TextSpan(
                               text: "lbl_privacy_policy".tr,
-                              style:theme.textTheme.titleSmall!.copyWith(
-        color: appTheme.black900,
-        fontWeight: FontWeight.w400,
-      ),
-             
+                              style: theme.textTheme.titleSmall!.copyWith(
+                                color: appTheme.black900,
+                                fontWeight: FontWeight.w400,
+                              ),
                             ),
                           ],
                         ),
@@ -322,7 +320,9 @@ class OnboardingScreen extends GetWidget<OnboardingController> {
             SizedBox(height: 10.v),
             _buildContinueWithFacebook(),
             SizedBox(height: 10.v),
-            _buildContinueWithApple(),
+            Platform.isIOS
+                ? _buildContinueWithApple()
+                : const SizedBox.shrink(),
           ],
         ),
       ),

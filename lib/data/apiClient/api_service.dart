@@ -17,6 +17,7 @@ import 'package:experta/presentation/additional_info/model/interest_model.dart';
 import 'package:experta/presentation/feeds_active_screen/models/feeds_active_model.dart';
 import 'package:experta/presentation/professional_info/model/professional_model.dart';
 import 'package:experta/presentation/share_profile/models/share_profile_model.dart';
+import 'package:experta/presentation/signin_page/signup_page.dart';
 import 'package:experta/presentation/verify_account/Models/verify_account_model.dart';
 import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
@@ -102,7 +103,8 @@ class ApiService {
     }
   }
 
-  Future<LoginResponseModel?> loginUser(LoginRequestModel requestModel) async {
+  Future<LoginResponseModel?> loginUser(
+      LoginRequestModel requestModel, BuildContext context) async {
     final url = Uri.parse('$_baseUrl/login');
     final body = jsonEncode(requestModel.toJson());
 
@@ -119,11 +121,24 @@ class ApiService {
       AppLogger.response(
           'POST', url.toString(), response.statusCode, response.body);
 
-      return _processResponse<LoginResponseModel>(response);
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> jsonResponse = json.decode(response.body);
+        return LoginResponseModel.fromJson(jsonResponse);
+      } else if (response.statusCode == 403) {
+        final Map<String, dynamic> jsonResponse = json.decode(response.body);
+        if (jsonResponse['code'] == 453) {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const SignupPage()),
+          );
+        }
+        return null;
+      }
     } catch (e, stackTrace) {
       AppLogger.error('Failed to login user', stackTrace: stackTrace);
       throw Exception('Failed to login user: $e');
     }
+    return null; // Ensure a return statement is present
   }
 
   Future<List<WorkExperience>> fetchWorkExperience() async {
@@ -2158,6 +2173,37 @@ class ApiService {
     } catch (e, stackTrace) {
       AppLogger.error('Error raising ticket', stackTrace: stackTrace);
       throw Exception('Error raising ticket: $e');
+    }
+  }
+
+  Future<Map<String, dynamic>> checkToken(String token) async {
+    final url = Uri.parse('$_baseUrl/check-token');
+
+    AppLogger.request('GET', url.toString(), headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    });
+
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+      );
+
+      AppLogger.response(
+          'GET', url.toString(), response.statusCode, response.body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception('Failed to validate token: ${response.body}');
+      }
+    } catch (e, stackTrace) {
+      AppLogger.error('Error validating token', stackTrace: stackTrace);
+      throw Exception('Error validating token: $e');
     }
   }
 }

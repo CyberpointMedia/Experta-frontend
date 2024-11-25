@@ -1,12 +1,13 @@
+import 'package:experta/widgets/custom_elevated_button.dart';
 import 'package:flutter/material.dart';
 
 class SupportPage extends StatelessWidget {
-  const SupportPage({Key? key}) : super(key: key);
+  const SupportPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 2,
+      length: 2, 
       child: Scaffold(
         appBar: AppBar(
           title: const Text("Support"),
@@ -24,14 +25,31 @@ class SupportPage extends StatelessWidget {
             fontSize: 18,
           ),
           iconTheme: const IconThemeData(color: Colors.black),
-          bottom: const TabBar(
-            indicatorColor: Colors.black,
-            labelColor: Colors.black,
-            unselectedLabelColor: Colors.grey,
-            tabs: [
-              Tab(text: "Active Tickets"),
-              Tab(text: "Closed Tickets"),
-            ],
+          bottom: PreferredSize(
+            preferredSize: const Size.fromHeight(50),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: TabBar(
+                indicator: BoxDecoration(
+                  color: Colors.black,
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                labelColor: Colors.white,
+                unselectedLabelColor: Colors.black,
+                labelStyle: const TextStyle(
+                  fontWeight: FontWeight.bold,
+                  fontSize: 14,
+                ),
+                unselectedLabelStyle: const TextStyle(
+                  fontWeight: FontWeight.w500,
+                  fontSize: 14,
+                ),
+                tabs: const [
+                  Tab(text: "Active Tickets"),
+                  Tab(text: "Closed Tickets"),
+                ],
+              ),
+            ),
           ),
         ),
         body: Column(
@@ -47,32 +65,38 @@ class SupportPage extends StatelessWidget {
               ),
             ),
             // Raise Ticket Button
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: SizedBox(
-                width: double.infinity,
-                child: ElevatedButton(
-                  onPressed: () {
-                    // Handle "Raise Ticket" action
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.yellow[700],
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                    padding: const EdgeInsets.symmetric(vertical: 16),
-                  ),
-                  child: const Text(
-                    "Raise Ticket",
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontWeight: FontWeight.bold,
-                      fontSize: 16,
-                    ),
-                  ),
-                ),
-              ),
-            ),
+            CustomElevatedButton(
+            text: "Raise Ticket",
+            onPressed: () {},
+            margin: const EdgeInsets.all(10),
+          )
+            // Padding(
+            //   padding: const EdgeInsets.all(16.0),
+            //   child: SizedBox(
+            //     width: double.infinity,
+            //     child: ElevatedButton(
+            //       onPressed: () {
+            //         // Handle "Raise Ticket" action
+            //       },
+            //       style: ElevatedButton.styleFrom(
+            //         backgroundColor: Colors.yellow[700],
+            //         shape: RoundedRectangleBorder(
+            //           borderRadius: BorderRadius.circular(10),
+            //         ),
+            //         padding: const EdgeInsets.symmetric(vertical: 16),
+            //       ),
+            //       child: const Text(
+            //         "Raise Ticket",
+            //         style: TextStyle(
+            //           color: Colors.black,
+            //           fontWeight: FontWeight.bold,
+            //           fontSize: 16,
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // ),
+          
           ],
         ),
       ),
