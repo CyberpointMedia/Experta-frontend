@@ -1,4 +1,5 @@
 import 'package:experta/core/app_export.dart';
+import 'package:experta/widgets/bio_textformfield.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -17,14 +18,13 @@ class RatingPage extends StatefulWidget {
 }
 
 class _RatingPageState extends State<RatingPage> {
-  double _textFieldHeight = 150.0;
-  int _selectedRating = 0; // State variable for selected rating
+  int _selectedRating = 0;
   final TextEditingController _reviewController = TextEditingController();
 
   Future<void> _submitRating() async {
     final url = Uri.parse('http://3.110.252.174:8080/api/video-rating');
     final body = jsonEncode({
-      "bookingId": "6728c79404d87083dbd5b371",
+      "bookingId": widget.bookingId,
       "rating": _selectedRating,
       "review": _reviewController.text,
     });
@@ -84,37 +84,48 @@ class _RatingPageState extends State<RatingPage> {
     );
   }
 
+  PreferredSizeWidget _buildAppBar() {
+    return CustomAppBar(
+      height: 40.h,
+      leadingWidth: 40.h,
+      leading: AppbarLeadingImage(
+        imagePath: ImageConstant.imgArrowLeftOnerrorcontainer,
+        margin: EdgeInsets.only(left: 16.h),
+        onTap: () {
+          onTapArrowLeft();
+        },
+      ),
+      centerTitle: true,
+      title: AppbarSubtitleSix(text: "Give Rating"),
+    );
+  }
+
+  void onTapArrowLeft() {
+    Get.back();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Give Rating'),
-        leading: IconButton(
-          icon: const Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
-        ),
-      ),
+      appBar: _buildAppBar(),
       body: Padding(
-        padding: const EdgeInsets.all(16.0),
+        padding:
+            const EdgeInsets.only(left: 16, right: 16, top: 50, bottom: 20),
         child: Column(
           children: [
             CustomImageView(
-              height: 40,
-              width: 40,
-              radius: BorderRadius.circular(20),
+              height: 100,
+              width: 100,
+              radius: BorderRadius.circular(50),
               imagePath: widget.profilePic,
             ),
             const SizedBox(height: 10),
-            const Text(
-              'How was your experience with',
-              style: TextStyle(color: Colors.grey),
-            ),
-            Text(
-              widget.userName,
-              style: const TextStyle(fontWeight: FontWeight.bold),
-            ),
+            Text('How was your experience with',
+                style: theme.textTheme.titleSmall!
+                    .copyWith(color: appTheme.gray600, fontSize: 14)),
+            Text(widget.userName.toUpperCase(),
+                style: theme.textTheme.titleSmall!
+                    .copyWith(color: appTheme.black900, fontSize: 16)),
             const SizedBox(height: 20),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -122,7 +133,7 @@ class _RatingPageState extends State<RatingPage> {
                 return IconButton(
                   icon: Icon(
                     index < _selectedRating ? Icons.star : Icons.star_border,
-                    color: Colors.yellow,
+                    color: theme.primaryColor,
                     size: 30,
                   ),
                   onPressed: () {
@@ -134,61 +145,29 @@ class _RatingPageState extends State<RatingPage> {
               }),
             ),
             const SizedBox(height: 20),
-            Flexible(
-              child: Stack(
-                children: [
-                  SizedBox(
-                    height: _textFieldHeight,
-                    child: TextField(
-                      controller: _reviewController,
-                      maxLines: null,
-                      expands: true,
-                      decoration: InputDecoration(
-                        hintText: 'Write your experience',
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(10),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
-                    child: GestureDetector(
-                      onPanUpdate: (details) {
-                        setState(() {
-                          _textFieldHeight += details.delta.dy;
-                          if (_textFieldHeight < 100) {
-                            _textFieldHeight = 100; // Minimum height
-                          }
-                        });
-                      },
-                      child: const Icon(
-                        Icons.drag_handle,
-                        color: Colors.grey,
-                      ),
-                    ),
-                  ),
-                ],
+            Align(
+                alignment: Alignment.topLeft,
+                child: Text(
+                  "Write your review",
+                  style: theme.textTheme.titleSmall!
+                      .copyWith(color: appTheme.gray600, fontSize: 14),
+                  textAlign: TextAlign.start,
+                )),
+            CustomBioTextFormField(
+              controller: _reviewController,
+              hintText: "Write Your review",
+              hintStyle: CustomTextStyles.titleMediumBluegray300,
+              textStyle: theme.textTheme.titleMedium!.copyWith(
+                color: Colors.black,
+                fontSize: 16.fSize,
+                fontWeight: FontWeight.w500,
               ),
             ),
             const Spacer(),
-            SizedBox(
-              width: double.infinity,
-              height: 50,
-              child: ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.yellow,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(30),
-                  ),
-                ),
-                onPressed: _submitRating,
-                child: const Text(
-                  'Submit Rating',
-                  style: TextStyle(color: Colors.black),
-                ),
-              ),
+            CustomElevatedButton(
+              height: 56.adaptSize,
+              onPressed: _submitRating,
+              text: 'Submit Rating',
             ),
           ],
         ),

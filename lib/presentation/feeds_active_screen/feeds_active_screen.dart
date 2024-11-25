@@ -4,6 +4,7 @@ import 'package:experta/core/app_export.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
 import 'package:experta/widgets/custom_text_form_field.dart';
 import 'package:experta/widgets/report.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:outline_gradient_button/outline_gradient_button.dart';
 import 'controller/feeds_active_controller.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -21,8 +22,8 @@ class _FeedsActiveScreenState extends State<FeedsActiveScreen> {
       RefreshController(initialRefresh: false);
 
   void _onRefresh() async {
-    await controller.fetchFeeds(); // Call the method as a function
-    _refreshController.refreshCompleted(); // Complete the refresh
+    await controller.fetchFeeds();
+    _refreshController.refreshCompleted();
   }
 
   @override
@@ -35,6 +36,28 @@ class _FeedsActiveScreenState extends State<FeedsActiveScreen> {
             return Padding(
               padding: const EdgeInsets.only(top: 10, left: 15, right: 15),
               child: _buildShimmerEffect(),
+            );
+          } else if (controller.feeds.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomImageView(
+                    imagePath: ImageConstant.feeds,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Follow your favorite',
+                    style: CustomTextStyles.titleMediumBold,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'To get access to exclusive content, deals, and more!',
+                    style: CustomTextStyles.bodyMediumLight,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
             );
           } else {
             return SmartRefresher(
@@ -272,48 +295,116 @@ Widget _buildBottomSheetContent(BuildContext context, Comment? comment) {
             context,
             icon: Icons.delete,
             label: 'Delete this comment',
+            onTap: () {
+              deleteCommentAction(context, feed!.id, comment!.id);
+            },
           ),
-        controller.isComment == false.obs
-            ? _buildBottomSheetOption(
-                context,
-                icon: Icons.flag_outlined,
-                label: 'Report this post',
-                onTap: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context) => ReportReasonSheet(
-                      itemId: feed!.id,
-                      itemType: 'Post',
-                    ),
-                  );
-                },
-              )
-            : _buildBottomSheetOption(
-                context,
-                icon: Icons.flag_outlined,
-                label: 'Report this comment',
-                onTap: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context) => ReportReasonSheet(
-                      itemId: comment?.id ?? '',
-                      itemType: 'Comment',
-                    ),
-                  );
-                },
-              ),
-        _buildBottomSheetOption(
-          context,
-          icon: Icons.block_outlined,
-          label: 'Block user',
-          onTap: () {
-            // Handle block user action
-          },
-        ),
+        if (comment != null && comment.user.id != userAddress ||
+            (feed != null && feed.postedBy.id != userAddress))
+          controller.isComment == false.obs
+              ? _buildBottomSheetOption(
+                  context,
+                  icon: Icons.flag_outlined,
+                  label: 'Report this post',
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) => ReportReasonSheet(
+                        itemId: feed!.id,
+                        itemType: 'Post',
+                      ),
+                    );
+                  },
+                )
+              : _buildBottomSheetOption(
+                  context,
+                  icon: Icons.flag_outlined,
+                  label: 'Report this comment',
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) => ReportReasonSheet(
+                        itemId: comment?.id ?? '',
+                        itemType: 'Comment',
+                      ),
+                    );
+                  },
+                ),
+        if (comment != null && comment.user.id != userAddress ||
+            (feed != null && feed.postedBy.id != userAddress))
+          _buildBottomSheetOption(
+            context,
+            icon: Icons.block_outlined,
+            label: 'Block user',
+            onTap: () {
+              blockUser(comment!.user.id);
+            },
+          ),
         const SizedBox(height: 10.0),
       ],
     ),
   );
+}
+
+void deleteCommentAction(
+    BuildContext context, String feedId, String commentId) async {
+  final apiService = ApiService();
+
+  try {
+    final response = await apiService.deleteComment(
+      feedId,
+      commentId,
+    );
+
+    if (response['status'] == 'success') {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Comment deleted successfully!')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to delete comment.')),
+      );
+    }
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('An error occurred: $e')),
+    );
+  }
+}
+
+void blockUser(String userToBlockId) async {
+  try {
+    // Simulate API call using your ApiService
+    bool success = await ApiService().blockUser(userToBlockId);
+    if (success) {
+      Fluttertoast.showToast(
+        msg: "User blocked successfully",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+    } else {
+      Fluttertoast.showToast(
+        msg: "Failed to block user",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+    }
+  } catch (e) {
+    Fluttertoast.showToast(
+      msg: "Error: $e",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
+  }
 }
 
 Widget _buildBottomSheetOption(BuildContext context,
@@ -716,7 +807,6 @@ class CommentsPage extends StatelessWidget {
   }
 }
 
-// Navigates to the notificationScreen when the action is triggered.
 onTapBtnBellTwo() {
   Get.toNamed(
     AppRoutes.notification,
@@ -726,14 +816,6 @@ onTapBtnBellTwo() {
 PreferredSizeWidget _buildAppBar() {
   return CustomAppBar(
     height: 60.h,
-    leadingWidth: 40.h,
-    leading: AppbarLeadingImage(
-      imagePath: ImageConstant.imgArrowLeftOnerrorcontainer,
-      margin: EdgeInsets.only(left: 16.h),
-      onTap: () {
-        onTapArrowLeft();
-      },
-    ),
     centerTitle: true,
     title: AppbarSubtitleSix(text: "lbl_feeds".tr),
     actions: [

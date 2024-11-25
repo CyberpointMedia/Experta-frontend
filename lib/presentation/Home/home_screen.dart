@@ -2,14 +2,18 @@
 import 'dart:developer';
 import 'dart:ui';
 import 'package:experta/core/app_export.dart';
+import 'package:experta/data/apiClient/call_api_service.dart';
 import 'package:experta/presentation/Home/model/home_model.dart';
 import 'package:experta/presentation/Trending%20Section/trending_section.dart';
 import 'package:experta/presentation/categoryDetails/category_details_screen.dart';
 import 'package:experta/presentation/dashboard/controller/dashboard_controller.dart';
+import 'package:experta/presentation/video_call/audio_call.dart';
+import 'package:experta/presentation/video_call/video_call_screen.dart';
 import 'package:experta/widgets/animated_hint_searchview.dart';
 import 'package:experta/widgets/dashed_border.dart';
 import 'package:experta/presentation/Home/controller/home_controller.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -556,16 +560,25 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 }
 
-class UserProfileItemWidget extends StatelessWidget {
+class UserProfileItemWidget extends StatefulWidget {
   final User user;
 
   const UserProfileItemWidget({super.key, required this.user});
 
   @override
+  State<UserProfileItemWidget> createState() => _UserProfileItemWidgetState();
+}
+
+class _UserProfileItemWidgetState extends State<UserProfileItemWidget> {
+  final CallApiService _apiService = CallApiService();
+  final ApiService apiService = ApiService();
+  bool isLoading = false;
+  bool isLoading1 = false;
+  @override
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.toNamed(AppRoutes.detailsPage, arguments: {"user": user});
+        Get.toNamed(AppRoutes.detailsPage, arguments: {"user": widget.user});
       },
       child: Padding(
         padding: EdgeInsets.only(right: 16.adaptSize, bottom: 10.adaptSize),
@@ -599,8 +612,8 @@ class UserProfileItemWidget extends StatelessWidget {
                                   height: 50,
                                   width: 50,
                                   radius: BorderRadius.circular(25),
-                                  imagePath: user.profilePic.isNotEmpty
-                                      ? user.profilePic
+                                  imagePath: widget.user.profilePic.isNotEmpty
+                                      ? widget.user.profilePic
                                       : ImageConstant.imageNotFound,
                                 ),
                               ),
@@ -629,8 +642,8 @@ class UserProfileItemWidget extends StatelessWidget {
                               Row(
                                 children: [
                                   Text(
-                                    user.displayName.isNotEmpty
-                                        ? user.displayName
+                                    widget.user.displayName.isNotEmpty
+                                        ? widget.user.displayName
                                         : "anonymous",
                                     style: TextStyle(
                                       fontSize: 16.fSize,
@@ -658,7 +671,7 @@ class UserProfileItemWidget extends StatelessWidget {
                                             color: Colors.orange, size: 14),
                                         SizedBox(width: 4.adaptSize),
                                         Text(
-                                          user.rating.toString(),
+                                          widget.user.rating.toString(),
                                           style: TextStyle(
                                               color: Colors.black,
                                               fontSize: 12.fSize),
@@ -669,8 +682,8 @@ class UserProfileItemWidget extends StatelessWidget {
                                 ],
                               ),
                               Text(
-                                user.industry.isNotEmpty
-                                    ? "${user.industry} | ${user.occupation}"
+                                widget.user.industry.isNotEmpty
+                                    ? "${widget.user.industry} | ${widget.user.occupation}"
                                     : "No data",
                                 style: TextStyle(
                                   fontSize: 12.fSize,
@@ -689,9 +702,10 @@ class UserProfileItemWidget extends StatelessWidget {
                                     padding: const EdgeInsets.only(left: 5),
                                     child: Text(
                                       (() {
-                                        if (user.language != null &&
-                                            user.language!.isNotEmpty) {
-                                          final languages = user.language!
+                                        if (widget.user.language != null &&
+                                            widget.user.language!.isNotEmpty) {
+                                          final languages = widget
+                                              .user.language!
                                               .map((l) => l.name)
                                               .toList();
 
@@ -740,18 +754,18 @@ class UserProfileItemWidget extends StatelessWidget {
                     child: Wrap(
                       spacing: 8.adaptSize,
                       runSpacing: 8.adaptSize,
-                      children:
-                          user.expertise == null || user.expertise!.isEmpty
-                              ? [_buildChip('No expertise')]
-                              : [
-                                  ...user.expertise!
-                                      .take(3)
-                                      .map((e) => _buildChip(e.name)),
-                                  if (user.expertise!.length > 3)
-                                    _buildChip(
-                                      '+${user.expertise!.length - 3}',
-                                    ),
-                                ],
+                      children: widget.user.expertise == null ||
+                              widget.user.expertise!.isEmpty
+                          ? [_buildChip('No expertise')]
+                          : [
+                              ...widget.user.expertise!
+                                  .take(3)
+                                  .map((e) => _buildChip(e.name)),
+                              if (widget.user.expertise!.length > 3)
+                                _buildChip(
+                                  '+${widget.user.expertise!.length - 3}',
+                                ),
+                            ],
                     ),
                   ),
                   SizedBox(height: 30.adaptSize),
@@ -766,9 +780,10 @@ class UserProfileItemWidget extends StatelessWidget {
                       children: [
                         _buildActionButton(
                             ImageConstant.videocam,
-                            "${user.pricing.videoCallPrice}/min",
-                            appTheme.red500,
-                            () {}),
+                            "${widget.user.pricing.videoCallPrice}/min",
+                            appTheme.red500, () {
+                          _showBottomSheet2(context, 'video', widget.user);
+                        }),
                         Container(
                           color: appTheme.gray300,
                           width: 0.5.adaptSize,
@@ -776,9 +791,10 @@ class UserProfileItemWidget extends StatelessWidget {
                         ),
                         _buildActionButton(
                             ImageConstant.call,
-                            "${user.pricing.audioCallPrice}/min",
-                            appTheme.green100,
-                            () {}),
+                            "${widget.user.pricing.audioCallPrice}/min",
+                            appTheme.green100, () {
+                          _showBottomSheet2(context, 'audio', widget.user);
+                        }),
                         Container(
                           color: appTheme.gray300,
                           width: 0.5.adaptSize,
@@ -786,9 +802,22 @@ class UserProfileItemWidget extends StatelessWidget {
                         ),
                         _buildActionButton(
                             ImageConstant.msg,
-                            "${user.pricing.messagePrice}/min",
-                            appTheme.yellow900,
-                            () {}),
+                            "${widget.user.pricing.messagePrice}/min",
+                            appTheme.yellow900, () async {
+                          final chatData =
+                              await ApiService().fetchChat(widget.user.id);
+                          log("this is chat Data  ===== $chatData");
+                          log("this is your id ${widget.user.id} and chat is ${chatData!["_id"]}");
+                          if (chatData != null) {
+                            Navigator.pushNamed(
+                              context,
+                              AppRoutes.chattingScreen,
+                              arguments: {'chat': chatData},
+                            );
+                          } else {
+                            print('Failed to load chat');
+                          }
+                        }),
                       ],
                     ),
                   ),
@@ -810,8 +839,8 @@ class UserProfileItemWidget extends StatelessWidget {
                   decoration: const BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        Colors.orangeAccent, // #FD3A84
-                        Colors.orangeAccent, // #FFA68D
+                        Colors.orangeAccent,
+                        Colors.orangeAccent,
                       ],
                       begin: Alignment.topRight,
                       end: Alignment.bottomRight,
@@ -837,6 +866,262 @@ class UserProfileItemWidget extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  void _showBottomSheet2(BuildContext context, String type, User user) {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        return Padding(
+          padding: const EdgeInsets.only(left: 20, right: 20),
+          child: Container(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: <Widget>[
+                ListTile(
+                  leading: type == 'video'
+                      ? CustomIconButton(
+                          height: 44.adaptSize,
+                          width: 44.adaptSize,
+                          padding: EdgeInsets.all(10.h),
+                          decoration:
+                              IconButtonStyleHelper.fillPrimaryContainerT123,
+                          child: CustomImageView(
+                            imagePath: ImageConstant.videocam,
+                          ))
+                      : CustomIconButton(
+                          height: 44.adaptSize,
+                          width: 44.adaptSize,
+                          padding: EdgeInsets.all(10.h),
+                          decoration: IconButtonStyleHelper.fillGreenTL24,
+                          child: CustomImageView(
+                            imagePath: ImageConstant.call,
+                          )),
+                  title: Text(
+                    'Connect Now',
+                    style: theme.textTheme.bodyMedium!
+                        .copyWith(color: Colors.black),
+                  ),
+                  subtitle: Text(
+                    'Reach out to ${user.displayName.isNotEmpty ? user.displayName : "anonymous"} right now',
+                    style: theme.textTheme.titleSmall!
+                        .copyWith(color: appTheme.gray400),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    _scheduleMeeting(type, user);
+                  },
+                ),
+                const Divider(),
+                ListTile(
+                  leading: type == 'video'
+                      ? CustomIconButton(
+                          height: 44.adaptSize,
+                          width: 44.adaptSize,
+                          padding: EdgeInsets.all(10.h),
+                          decoration:
+                              IconButtonStyleHelper.fillPrimaryContainerT123,
+                          child: CustomImageView(
+                            imagePath: ImageConstant.videocam,
+                          ))
+                      : CustomIconButton(
+                          height: 44.adaptSize,
+                          width: 44.adaptSize,
+                          padding: EdgeInsets.all(10.h),
+                          decoration: IconButtonStyleHelper.fillGreenTL24,
+                          child: CustomImageView(
+                            imagePath: ImageConstant.call,
+                          )),
+                  title: Text(
+                    'Schedule Call',
+                    style: theme.textTheme.bodyMedium!
+                        .copyWith(color: Colors.black),
+                  ),
+                  subtitle: Text(
+                    'Book and  block ${user.displayName.isNotEmpty ? user.displayName : "anonymous"} calendar',
+                    style: theme.textTheme.titleSmall!
+                        .copyWith(color: appTheme.gray400),
+                  ),
+                  onTap: () {
+                    Navigator.pop(context);
+                    Get.toNamed(AppRoutes.Bookappointment, arguments: {
+                      'profile':
+                          user.profilePic.isNotEmpty ? user.profilePic : "",
+                      'firstname': user.displayName.isNotEmpty
+                          ? user.displayName
+                          : "anonymous",
+                      'lastname': '',
+                      'industry': user.industry.isNotEmpty
+                          ? user.industry
+                          : "not mentioned",
+                      'occupation':
+                          user.occupation.isNotEmpty ? user.occupation : "N/A",
+                      'price': type == 'video'
+                          ? user.pricing.videoCallPrice
+                          : user.pricing.audioCallPrice,
+                      'id': user.id.isNotEmpty ? user.id : "",
+                      'type': type,
+                    });
+                  },
+                ),
+                const Divider(),
+                ListTile(
+                  leading: CircleAvatar(
+                    backgroundColor: Colors.yellow.shade100,
+                    child:
+                        const Icon(Icons.calendar_today, color: Colors.yellow),
+                  ),
+                  title: Text(
+                    'Start Chat',
+                    style: theme.textTheme.bodyMedium!
+                        .copyWith(color: Colors.black),
+                  ),
+                  subtitle: Text(
+                    'Initiate chat with ${user.displayName.isNotEmpty ? user.displayName : "anonymous"}',
+                    style: theme.textTheme.titleSmall!
+                        .copyWith(color: appTheme.gray400),
+                  ),
+                  onTap: () async {
+                    final chatData = await ApiService().fetchChat(user.id);
+                    log("this is chat Data  ===== $chatData");
+                    log("this is your id ${user.id} and chat is ${chatData!["_id"]}");
+                    if (chatData != null) {
+                      Navigator.pushNamed(
+                        context,
+                        AppRoutes.chattingScreen,
+                        arguments: {'chat': chatData},
+                      );
+                    } else {
+                      print('Failed to load chat');
+                    }
+                  },
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _scheduleMeeting(
+    String type,
+    User user,
+  ) async {
+    DateTime currentTime = DateTime.now();
+
+    DateTime timeAfter30Minutes = currentTime.add(const Duration(minutes: 1));
+
+    String isoStartTime = currentTime.toIso8601String();
+    String isoEndTime = timeAfter30Minutes.toIso8601String();
+
+    final bookingData = {
+      "expertId": user.id,
+      "startTime": "${isoStartTime}Z",
+      "endTime": "${isoEndTime}Z",
+      "type": type
+    };
+    log("$bookingData");
+    try {
+      final responses = await apiService.createBooking(bookingData);
+
+      if (responses['status'] == 'success') {
+        type == 'video'
+            ? setState(() {
+                isLoading = false;
+              })
+            : setState(() {
+                isLoading1 = false;
+              });
+        final meetingId = responses['data']['_id'];
+        _startCall(
+            user.id,
+            meetingId,
+            type,
+            user.displayName.isNotEmpty ? user.displayName : "",
+            user.profilePic.isNotEmpty ? user.profilePic : "");
+      } else {
+        _showErrorDialog(context, " ${responses['error']['errorMessage']}");
+      }
+    } catch (e) {
+      _showErrorDialog(context, e.toString());
+    }
+  }
+
+  void _showErrorDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _startCall(String userId, String meetingId, String Type, String userName,
+      String profilePic) async {
+    final currentUserId = PrefUtils().getaddress();
+    if (userId.isNotEmpty && meetingId.isNotEmpty) {
+      if (userId != currentUserId.toString()) {
+        final response = await _apiService.getMeeting(meetingId);
+        if (response.statusCode == 201) {
+          Type == 'video'
+              ? Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => VideoCallScreen(
+                      userId: userId,
+                      meetingId: meetingId,
+                      userName: userName,
+                      bookingId: meetingId,
+                      profilePic: profilePic,
+                    ),
+                  ),
+                )
+              : Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AudioCallScreen(
+                      userId: userId,
+                      meetingId: meetingId,
+                      userName: userName,
+                      bookingId: meetingId,
+                      profilePic: profilePic,
+                    ),
+                  ),
+                );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Failed to get meeting details')),
+          );
+        }
+      } else {
+        Fluttertoast.showToast(
+            msg: "You cannot call yourself",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: appTheme.red500,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('Please enter both User ID and Meeting ID')),
+      );
+    }
   }
 }
 

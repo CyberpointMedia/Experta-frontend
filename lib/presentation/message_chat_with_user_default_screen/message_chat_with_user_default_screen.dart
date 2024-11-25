@@ -486,10 +486,33 @@ class _ChattingPageState extends State<ChattingPage> {
                   child: isLoading
                       ? const MessageListShimmer()
                       : messages.isEmpty
-                          ? const Center(
-                              child: Text(
-                                "You have no conversation with this user. Say Hi to him!",
-                                style: TextStyle(fontSize: 16),
+                          ? Padding(
+                              padding:
+                                  const EdgeInsets.symmetric(horizontal: 16),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                children: [
+                                  Text(
+                                    "👋",
+                                    style: theme.textTheme.titleSmall!
+                                        .copyWith(fontSize: 70),
+                                  ),
+                                  Text(
+                                    "Say hi to $displayName",
+                                    style: theme.textTheme.titleSmall!.copyWith(
+                                        fontSize: 18, color: appTheme.black900),
+                                  ),
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 20, vertical: 8),
+                                    child: Text(
+                                      "You have 250 characters to ask a question get advice, or whatever. Remember, there’s no guarantee you’ll get a response.",
+                                      style: theme.textTheme.titleSmall!,
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ],
                               ),
                             )
                           : ListView.builder(
@@ -796,4 +819,3 @@ void onTapArrowLeft() {
 void onTapThreeThousand() {
   Get.toNamed(AppRoutes.wallet);
 }
-

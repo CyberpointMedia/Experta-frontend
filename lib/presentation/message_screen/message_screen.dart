@@ -215,6 +215,32 @@ class _MessageScreenState extends State<MessageScreen> {
   }
 
   Widget _buildMessageContent(String currentUserId) {
+    if (_filteredChats.isEmpty) {
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CustomImageView(
+              imagePath: ImageConstant.imgNoChat,
+              height: 70.h,
+              width: 70.h,
+            ),
+            SizedBox(height: 20.v),
+            Text(
+              "Chat with your Expert",
+              style: CustomTextStyles.titleMediumBold,
+            ),
+            SizedBox(height: 8.v),
+            Text(
+              "Start chatting with an expert now!",
+              style: CustomTextStyles.bodyMediumLight,
+              textAlign: TextAlign.center,
+            ),
+            SizedBox(height: 20.v),
+          ],
+        ),
+      );
+    }
     return SizedBox(
       width: double.maxFinite,
       child: Column(
@@ -438,7 +464,6 @@ class _MessageScreenState extends State<MessageScreen> {
     Get.back();
   }
 
-  /// Navigates to the notificationScreen when the action is triggered.
   onTapBellTwo() {
     Get.toNamed(
       AppRoutes.notification,

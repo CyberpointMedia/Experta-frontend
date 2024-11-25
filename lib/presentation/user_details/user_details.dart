@@ -1,4 +1,4 @@
-import 'dart:convert';
+// import 'dart:convert';
 import 'dart:developer';
 import 'dart:ui';
 
@@ -689,7 +689,6 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                         Colors.green,
                         () {
                           _showBottomSheet2(context, 'audio');
-                          // _scheduleMeeting('audio');
                         },
                       ),
                       _buildVerticalDivider(),
@@ -807,24 +806,22 @@ class _UserDetailsPageState extends State<UserDetailsPage>
           child: CircularProgressIndicator(),
         );
       } else if (posts.isEmpty) {
-        return Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            CustomImageView(
-              imagePath: ImageConstant.message,
-            ),
-            const SizedBox(
-              height: 15,
-            ),
-            const Text(
-              'Feeds Empty',
-              style: TextStyle(
-                  fontSize: 18,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black),
-            ),
-          ],
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CustomImageView(
+                imagePath: ImageConstant.imgNoChat,
+                height: 70.h,
+                width: 70.h,
+              ),
+              SizedBox(height: 20.v),
+              Text(
+                "Expert's feeds is empty",
+                style: CustomTextStyles.titleMediumBold,
+              ),
+            ],
+          ),
         );
       } else {
         return Column(
@@ -1003,7 +1000,8 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                         ),
                         Text(
                           "$formattedStartDate - $formattedEndDate · $totalDuration",
-                          style: theme.textTheme.bodyMedium!,
+                          style: theme.textTheme.bodyMedium!.copyWith(
+                              fontWeight: FontWeight.w500, fontSize: 14.fSize),
                         ),
                         SizedBox(
                           height: 18.v,
@@ -1132,7 +1130,8 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                         ),
                         Text(
                           "$formattedStartDate - $formattedEndDate · $totalDuration",
-                          style: theme.textTheme.bodyMedium!,
+                          style: theme.textTheme.bodyMedium!.copyWith(
+                              fontWeight: FontWeight.w500, fontSize: 14.fSize),
                         ),
                         SizedBox(
                           height: 18.v,
@@ -1282,7 +1281,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
               return Text(
                 "No reviews yet",
                 style: theme.textTheme.bodyMedium
-                    ?.copyWith(color: appTheme.gray900),
+                    ?.copyWith(color: appTheme.gray300),
               );
             } else {
               // Limit the number of reviews to 5
@@ -1357,13 +1356,15 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                           SizedBox(height: 8.v),
                           Container(
                             width: 304.adaptSize,
-                            margin: const EdgeInsets.only(right: 31),
+                            margin: EdgeInsets.only(left: 8.adaptSize),
                             child: Text(
                               review.review.toString(),
                               maxLines: 2,
                               overflow: TextOverflow.ellipsis,
-                              style: theme.textTheme.bodyMedium
-                                  ?.copyWith(color: appTheme.gray900),
+                              style: theme.textTheme.bodyMedium?.copyWith(
+                                  color: appTheme.gray900,
+                                  fontWeight: FontWeight.w500,
+                                  fontSize: 14.adaptSize),
                             ),
                           ),
                           SizedBox(height: 8.v), // Added SizedBox for spacing
@@ -1457,7 +1458,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                   ),
                   Text(
                     "Overall Ratings",
-                    style: theme.textTheme.bodyMedium!,
+                    style: theme.textTheme.titleSmall!,
                   )
                 ],
               ),
@@ -1502,7 +1503,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
         ),
         Text(
           dynamicText1,
-          style: theme.textTheme.bodyMedium!,
+          style: theme.textTheme.titleSmall!,
         )
       ],
     );
@@ -1550,10 +1551,14 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                           ),
                         ],
                       ),
-                      Text(
-                        "${controller.userData.value.data?.industryOccupation?.industry?.name ?? ''} | ${controller.userData.value.data?.industryOccupation?.occupation?.name ?? ''}",
-                        textAlign: TextAlign.left,
-                        style: CustomTextStyles.bodyMediumBlack90001,
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.5,
+                        child: Text(
+                          "${controller.userData.value.data?.industryOccupation?.industry?.name ?? ''} | ${controller.userData.value.data?.industryOccupation?.occupation?.name ?? ''}",
+                          textAlign: TextAlign.left,
+                          style: theme.textTheme.titleSmall!
+                              .copyWith(color: appTheme.black900),
+                        ),
                       ),
                     ],
                   ),
@@ -1643,7 +1648,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                   textAlign: TextAlign.left,
                   style: theme.textTheme.bodyMedium!.copyWith(
                       color: appTheme.black900,
-                      fontSize: 14,
+                      fontSize: 14.fSize,
                       fontWeight: FontWeight.w500),
                 ),
                 Container(
@@ -1664,7 +1669,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                   textAlign: TextAlign.left,
                   style: theme.textTheme.bodyMedium!.copyWith(
                       color: appTheme.black900,
-                      fontSize: 14,
+                      fontSize: 14.fSize,
                       fontWeight: FontWeight.w500),
                 ),
                 SizedBox(
