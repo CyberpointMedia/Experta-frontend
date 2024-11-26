@@ -19,6 +19,7 @@ import 'package:experta/presentation/professional_info/model/professional_model.
 import 'package:experta/presentation/share_profile/models/share_profile_model.dart';
 import 'package:experta/presentation/signin_page/signup_page.dart';
 import 'package:experta/presentation/verify_account/Models/verify_account_model.dart';
+import 'package:experta/widgets/custom_toast_message.dart';
 import 'package:http/http.dart' as http;
 import 'package:dio/dio.dart';
 import 'package:path/path.dart';
@@ -124,21 +125,19 @@ class ApiService {
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonResponse = json.decode(response.body);
         return LoginResponseModel.fromJson(jsonResponse);
-      } else if (response.statusCode == 403) {
-        final Map<String, dynamic> jsonResponse = json.decode(response.body);
-        if (jsonResponse['code'] == 453) {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const SignupPage()),
-          );
-        }
-        return null;
+      } else {
+        // Handle other status codes as needed
+        CustomToast().showToast(
+          context: context,
+          message: "Unexpected error occurred. Please try again.",
+          isSuccess: false,
+        );
       }
     } catch (e, stackTrace) {
       AppLogger.error('Failed to login user', stackTrace: stackTrace);
       throw Exception('Failed to login user: $e');
     }
-    return null; // Ensure a return statement is present
+    return null;
   }
 
   Future<List<WorkExperience>> fetchWorkExperience() async {

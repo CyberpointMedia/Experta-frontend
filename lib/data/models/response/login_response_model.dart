@@ -2,7 +2,10 @@ class LoginResponseModel {
   final String status;
   final UserData data;
 
-  LoginResponseModel({  required this.status,   required this.data});
+  LoginResponseModel({
+    required this.status,
+    required this.data,
+  });
 
   factory LoginResponseModel.fromJson(Map<String, dynamic> json) {
     return LoginResponseModel(
@@ -37,21 +40,21 @@ class UserData {
   final String id;
 
   UserData({
-      this.email,
-      this.phoneNo,
-      this.resendCount,
-      this.otp,
-      this.otpExpiry,
-      this.block,
-      this.isVerified,
-      this.basicInfo,
-      this.createdAt,
-      this.updatedAt,
-      this.pricing,
-      this.expertise,
-      this.education,
-      this.workExperience,
-     required this.id,
+    this.email,
+    this.phoneNo,
+    this.resendCount,
+    this.otp,
+    this.otpExpiry,
+    this.block,
+    this.isVerified,
+    this.basicInfo,
+    this.createdAt,
+    this.updatedAt,
+    this.pricing,
+    this.expertise,
+    this.education,
+    this.workExperience,
+    required this.id,
   });
 
   factory UserData.fromJson(Map<String, dynamic> json) {
@@ -60,16 +63,25 @@ class UserData {
       phoneNo: json['phoneNo'],
       resendCount: json['resendCount'],
       otp: json['otp'],
-      otpExpiry: DateTime.parse(json['otpExpiry']),
+      otpExpiry: json['otpExpiry'] != null
+          ? DateTime.tryParse(json['otpExpiry'])
+          : null,
       block: json['block'],
       isVerified: json['isVerified'],
       basicInfo: json['basicInfo'],
-      createdAt: DateTime.parse(json['createdAt']),
-      updatedAt: DateTime.parse(json['updatedAt']),
+      createdAt: json['createdAt'] != null
+          ? DateTime.tryParse(json['createdAt'])
+          : null,
+      updatedAt: json['updatedAt'] != null
+          ? DateTime.tryParse(json['updatedAt'])
+          : null,
       pricing: json['pricing'],
       expertise: json['expertise'],
-      education: List<String>.from(json['education']),
-      workExperience: List<String>.from(json['workExperience']),
+      education:
+          json['education'] != null ? List<String>.from(json['education']) : [],
+      workExperience: json['workExperience'] != null
+          ? List<String>.from(json['workExperience'])
+          : [],
       id: json['id'],
     );
   }
@@ -80,12 +92,12 @@ class UserData {
       'phoneNo': phoneNo,
       'resendCount': resendCount,
       'otp': otp,
-      'otpExpiry': otpExpiry!.toIso8601String(),
+      'otpExpiry': otpExpiry?.toIso8601String(),
       'block': block,
       'isVerified': isVerified,
       'basicInfo': basicInfo,
-      'createdAt': createdAt!.toIso8601String(),
-      'updatedAt': updatedAt!.toIso8601String(),
+      'createdAt': createdAt?.toIso8601String(),
+      'updatedAt': updatedAt?.toIso8601String(),
       'pricing': pricing,
       'expertise': expertise,
       'education': education,

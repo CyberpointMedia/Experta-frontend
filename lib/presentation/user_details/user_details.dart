@@ -13,6 +13,7 @@ import 'package:experta/presentation/video_call/video_call_screen.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
 import 'package:experta/widgets/custom_outlined_button.dart';
 import 'package:experta/widgets/custom_rating_bar.dart';
+import 'package:experta/widgets/custom_toast_message.dart';
 import 'package:experta/widgets/report.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
@@ -817,7 +818,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
               ),
               SizedBox(height: 20.v),
               Text(
-                "Expert's feeds is empty",
+                "${controller.userData.value.data?.basicInfo!.firstName?.toLowerCase().replaceFirst(RegExp(r'[a-z]'), controller.userData.value.data?.basicInfo!.firstName?[0].toUpperCase() ?? '') ?? ''}'s feeds is empty",
                 style: CustomTextStyles.titleMediumBold,
               ),
             ],
@@ -895,14 +896,14 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                 style: theme.textTheme.titleSmall!
                     .copyWith(color: appTheme.black900),
                 moreStyle: theme.textTheme.bodyMedium?.copyWith(
-                  color: appTheme.readmore, // Color for 'Read more'
+                  color: appTheme.readmore, 
                   fontSize: theme.textTheme.bodyMedium
-                      ?.fontSize, // Same font size as paragraph
+                      ?.fontSize, 
                 ),
                 lessStyle: theme.textTheme.bodyMedium?.copyWith(
-                  color: appTheme.readmore, // Color for 'Read less'
+                  color: appTheme.readmore, 
                   fontSize: theme.textTheme.bodyMedium
-                      ?.fontSize, // Same font size as paragraph
+                      ?.fontSize, 
                 ),
               );
             }),
@@ -1262,6 +1263,12 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                       controller.userData.value.data?.basicInfo?.reviews;
                   if (reviews != null && reviews.isNotEmpty) {
                     Get.to(() => AllReviewsPage(reviews: reviews));
+                  } else {
+                    CustomToast().showToast(
+                      context: context,
+                      message: "No Reviews Yet for this Expert",
+                      isSuccess: false,
+                    );
                   }
                 },
                 child: Text(
@@ -1343,9 +1350,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                                 color: appTheme.deepYello,
                                 unselectedColor: appTheme.gray300,
                               ),
-
-                              SizedBox(
-                                  width: 6.h), // Added SizedBox for spacing
+                              SizedBox(width: 6.h),
                               Text(
                                 review.rating.toString(),
                                 style: theme.textTheme.headlineLarge
@@ -1367,7 +1372,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                                   fontSize: 14.adaptSize),
                             ),
                           ),
-                          SizedBox(height: 8.v), // Added SizedBox for spacing
+                          SizedBox(height: 8.v),
                         ],
                       ),
                     ),
@@ -1510,6 +1515,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
   }
 
   Widget _profilepicBody() {
+    var language = controller.userData.value.data?.language?.language;
     return Obx(() {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1541,7 +1547,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            '${controller.userData.value.data?.basicInfo?.firstName ?? ''} ${controller.userData.value.data?.basicInfo?.lastName ?? ''}',
+                            '${controller.userData.value.data?.basicInfo!.firstName?.toLowerCase().replaceFirst(RegExp(r'[a-z]'), controller.userData.value.data?.basicInfo!.firstName?[0].toUpperCase() ?? '') ?? ''} ${controller.userData.value.data?.basicInfo?.lastName ?? ''}',
                             textAlign: TextAlign.left,
                             style: CustomTextStyles.titleLargeSemiBold,
                           ),
@@ -1554,7 +1560,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.5,
                         child: Text(
-                          "${controller.userData.value.data?.industryOccupation?.industry?.name ?? ''} | ${controller.userData.value.data?.industryOccupation?.occupation?.name ?? ''}",
+                          "${controller.userData.value.data?.industryOccupation?.industry?.name ?? 'No Industry'} | ${controller.userData.value.data?.industryOccupation?.occupation?.name ?? 'No occupation'}",
                           textAlign: TextAlign.left,
                           style: theme.textTheme.titleSmall!
                               .copyWith(color: appTheme.black900),
@@ -1577,58 +1583,69 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                 SizedBox(
                   width: 10.v,
                 ),
-                Expanded(
-                  child: Wrap(
-                    spacing: 8.0,
-                    runSpacing: 4.0,
-                    children: (() {
-                      final languages =
-                          controller.userData.value.data?.language?.language;
+                (language == null || language.isEmpty)
+                    ? Text(
+                        "Languages not selected",
+                        style: theme.textTheme.bodyMedium!.copyWith(
+                          color: appTheme.black900,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      )
+                    : Expanded(
+                        child: Wrap(
+                          spacing: 8.0,
+                          runSpacing: 4.0,
+                          children: (() {
+                            final languages = controller
+                                .userData.value.data?.language?.language;
 
-                      if (languages != null && languages.isNotEmpty) {
-                        final languageNames =
-                            languages.map((e) => e.name.toString()).toList();
-                        if (languageNames.length > 3) {
-                          return [
-                            ...languageNames
-                                .take(3)
-                                .map((name) => Text(
-                                      name,
-                                      style:
-                                          theme.textTheme.bodyMedium!.copyWith(
-                                        color: appTheme.black900,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ))
-                                .toList(),
-                            Text(
-                              '+${languageNames.length - 3} more',
-                              style: theme.textTheme.bodyMedium!.copyWith(
-                                color: appTheme.black900,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ];
-                        } else {
-                          return languageNames
-                              .map((name) => Text(
-                                    name,
+                            if (languages != null && languages.isNotEmpty) {
+                              final languageNames = languages
+                                  .map((e) => e.name.toString())
+                                  .toList();
+                              if (languageNames.length > 3) {
+                                return [
+                                  ...languageNames
+                                      .take(3)
+                                      .map((name) => Text(
+                                            name,
+                                            style: theme.textTheme.bodyMedium!
+                                                .copyWith(
+                                              color: appTheme.black900,
+                                              fontSize: 14,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ))
+                                      .toList(),
+                                  Text(
+                                    '+${languageNames.length - 3} more',
                                     style: theme.textTheme.bodyMedium!.copyWith(
                                       color: appTheme.black900,
                                       fontSize: 14,
                                       fontWeight: FontWeight.w500,
                                     ),
-                                  ))
-                              .toList();
-                        }
-                      } else {
-                        return <Widget>[];
-                      }
-                    })(),
-                  ),
-                ),
+                                  ),
+                                ];
+                              } else {
+                                return languageNames
+                                    .map((name) => Text(
+                                          name,
+                                          style: theme.textTheme.bodyMedium!
+                                              .copyWith(
+                                            color: appTheme.black900,
+                                            fontSize: 14,
+                                            fontWeight: FontWeight.w500,
+                                          ),
+                                        ))
+                                    .toList();
+                              }
+                            } else {
+                              return <Widget>[];
+                            }
+                          })(),
+                        ),
+                      ),
               ],
             ),
           ),

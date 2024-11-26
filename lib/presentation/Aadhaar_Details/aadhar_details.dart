@@ -202,11 +202,11 @@ class _AadharDetailsState extends State<AadharDetails> {
                     //       Get.toNamed(AppRoutes.accountSetting);
                     //     } else {
                     //       // Show error toast
-                    //       CustomToast().showToast(
-                    //         context: context,
-                    //         message: "Please fill in all the fields",
-                    //         isSuccess: false,
-                    //       );
+                          // CustomToast().showToast(
+                          //   context: context,
+                          //   message: "Please fill in all the fields",
+                          //   isSuccess: false,
+                          // );
                     //     }
                     //   },
                     //   margin: const EdgeInsets.all(10),
