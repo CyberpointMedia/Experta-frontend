@@ -57,19 +57,20 @@ class DefaultFirebaseOptions {
   );
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAImJvYzhOu_sCqqHOrVtEvvZX8hpAi5Bo',
-    appId: '1:651672354813:android:ecc8e892f789c8b2ee6394',
-    messagingSenderId: '651672354813',
-    projectId: 'experta-30f9e',
-    storageBucket: 'experta-30f9e.firebasestorage.app',
+    apiKey: 'AIzaSyBJy5htDMPDP_wCvYriTPA2gTV62vdw0Zk',
+    appId: '1:520464598981:android:24fed6e90fc3e7cbe82dac',
+    messagingSenderId: '520464598981',
+    projectId: 'eperta-notifications',
+    storageBucket: 'eperta-notifications.firebasestorage.app',
   );
 
   static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyDrv9lsiri0gt9BHHxzEK1w0tdG50r2UGk',
-    appId: '1:651672354813:ios:5faf51e2e6d53a2dee6394',
-    messagingSenderId: '651672354813',
-    projectId: 'experta-30f9e',
-    storageBucket: 'experta-30f9e.firebasestorage.app',
+    apiKey: 'AIzaSyDQy9AcBUmKKbQySofb9omnjVYw0pBD4is',
+    appId: '1:520464598981:ios:c3bfdd23447bbc10e82dac',
+    messagingSenderId: '520464598981',
+    projectId: 'eperta-notifications',
+    storageBucket: 'eperta-notifications.firebasestorage.app',
     iosBundleId: 'com.example.expert',
   );
+
 }

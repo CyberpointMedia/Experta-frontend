@@ -1,6 +1,7 @@
 // home_controller.dart
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/Home/model/home_model.dart';
+import 'package:experta/widgets/custom_toast_message.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
 
@@ -14,7 +15,7 @@ class HomeController extends GetxController {
   TextEditingController searchController = TextEditingController();
   final String? address = PrefUtils().getaddress();
 
-  Future<void> refreshData() async {
+  Future<void> refreshData(BuildContext context) async {
     try {
       isLoading.value = true;
 
@@ -29,11 +30,13 @@ class HomeController extends GetxController {
     } catch (e) {
       // Error handling
       debugPrint('Error refreshing data: $e');
-      Get.snackbar(
-        'Error',
-        'Failed to refresh data. Please try again.',
-        snackPosition: SnackPosition.BOTTOM,
+      
+      CustomToast().showToast(
+        context: context,
+        message: 'Failed to refresh data. Please try again.',
+        isSuccess: false,
       );
+      
     } finally {
       isLoading.value = false;
     }

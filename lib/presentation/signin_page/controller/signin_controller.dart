@@ -41,11 +41,8 @@ class SigninController extends GetxController {
   }
 
   void _validatePhoneNumber() {
-    if (phoneNumberController.text.length == 10) {
-      isPhoneNumberValid.value = true;
-    } else {
-      isPhoneNumberValid.value = false;
-    }
+    isPhoneNumberValid.value =
+        isValidPhone(phoneNumberController.text, isRequired: true);
   }
 
   void _validateEmail() {
@@ -63,8 +60,12 @@ class SigninController extends GetxController {
 
   void loginUser(BuildContext context) async {
     isLoading(true);
+    // Concatenate country code with phone number
+    String fullPhoneNumber = phoneNumberController.text;
+    // '+${selectedCountry.value.phoneCode}${phoneNumberController.text}';
+    log(fullPhoneNumber);
     LoginRequestModel requestModel = LoginRequestModel(
-      phoneNo: phoneNumberController.text,
+      phoneNo: fullPhoneNumber,
     );
 
     try {
@@ -82,8 +83,7 @@ class SigninController extends GetxController {
       } else {
         CustomToast().showToast(
           context: context,
-          message:
-              "Oops! Something didn't go as planned. Please try again later.",
+          message: "Please check the country code and phone number",
           isSuccess: false,
         );
         print("Login failed");

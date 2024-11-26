@@ -110,7 +110,7 @@ class _SetPricingState extends State<SetPricing> {
                               fontWeight: FontWeight.bold, color: Colors.grey),
                     ),
                     TextSpan(
-                      text: '(For 10 minute) ',
+                      text: '(For 1 minute) ',
                       style: CustomTextStyles.bodySmallSFProTextGray900
                           .copyWith(
                               fontWeight: FontWeight.bold, color: Colors.grey),
@@ -146,7 +146,7 @@ class _SetPricingState extends State<SetPricing> {
                               fontWeight: FontWeight.bold, color: Colors.grey),
                     ),
                     TextSpan(
-                      text: '(For 10 minute) ',
+                      text: '(For 1 minute) ',
                       style: CustomTextStyles.bodySmallSFProTextGray900
                           .copyWith(
                               fontWeight: FontWeight.bold, color: Colors.grey),

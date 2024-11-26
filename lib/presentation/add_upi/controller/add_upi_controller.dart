@@ -1,5 +1,6 @@
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/add_upi/model/add_upi_model.dart';
+import 'package:experta/widgets/custom_toast_message.dart';
 
 class AddUpiController extends GetxController {
   Rx<AddUpiModel> acountSettingModelObject = AddUpiModel().obs;
@@ -21,15 +22,16 @@ class AddUpiController extends GetxController {
     return null;
   }
 
-  Future<void> saveUpiId() async {
+  Future<void> saveUpiId(BuildContext context) async {
     final upiId = upiController.text.trim();
     final validation = validateUpiId(upiId);
 
     if (validation != null) {
-      Get.snackbar('Error', validation,
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white);
+      CustomToast().showToast(
+        context: context,
+        message: validation,
+        isSuccess: false,
+      );
       return;
     }
 
@@ -39,16 +41,19 @@ class AddUpiController extends GetxController {
 
       if (response['status'] == 'success') {
         Get.back();
-        Get.snackbar('Success', 'UPI ID saved successfully',
-            snackPosition: SnackPosition.BOTTOM,
-            backgroundColor: Colors.green,
-            colorText: Colors.white);
+
+        CustomToast().showToast(
+          context: context,
+          message: 'UPI ID saved successfully',
+          isSuccess: true,
+        );
       }
     } catch (e) {
-      Get.snackbar('Error', 'Failed to save UPI ID',
-          snackPosition: SnackPosition.BOTTOM,
-          backgroundColor: Colors.red,
-          colorText: Colors.white);
+      CustomToast().showToast(
+        context: context,
+        message: 'Failed to save UPI ID',
+        isSuccess: false,
+      );
     } finally {
       isLoading.value = false;
     }

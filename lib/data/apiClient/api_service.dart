@@ -80,7 +80,7 @@ class ApiService {
   }
 
   Future<VerifyOtpResponseModel?> verifyOtp(
-      VerifyOtpRequestModel requestModel) async {
+      VerifyOtpRequestModel requestModel, BuildContext context) async {
     final url = Uri.parse('$_baseUrl/verify-otp');
     final body = jsonEncode(requestModel.toJson());
 
@@ -99,6 +99,11 @@ class ApiService {
 
       return _processResponse<VerifyOtpResponseModel>(response);
     } catch (e, stackTrace) {
+      CustomToast().showToast(
+        context: context,
+        message: "Invalid or expired OTP.",
+        isSuccess: false,
+      );
       AppLogger.error('Failed to verify OTP', stackTrace: stackTrace);
       throw Exception('Failed to verify OTP: $e');
     }
