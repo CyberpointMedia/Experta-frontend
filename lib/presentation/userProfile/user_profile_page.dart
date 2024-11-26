@@ -9,6 +9,7 @@ import 'package:experta/presentation/professional_info/model/professional_model.
 import 'package:experta/presentation/userProfile/controller/profile_controller.dart';
 import 'package:experta/presentation/userProfile/post_details/post_details.dart';
 import 'package:experta/widgets/custom_rating_bar.dart';
+import 'package:experta/widgets/custom_toast_message.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:readmore/readmore.dart';
@@ -745,6 +746,12 @@ class _UserProfilePageState extends State<UserProfilePage>
                       controller.userData.value.data?.basicInfo?.reviews;
                   if (reviews != null && reviews.isNotEmpty) {
                     Get.to(() => AllReviewsPage(reviews: reviews));
+                  } else {
+                    CustomToast().showToast(
+                      context: context,
+                      message: "No Reviews Yet for this Expert",
+                      isSuccess: false,
+                    );
                   }
                 },
                 child: Text(

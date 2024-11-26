@@ -28,8 +28,7 @@ class SigninController extends GetxController {
   PrefUtils prefUtils = PrefUtils();
   var isLoading = false.obs;
   var errorMessage = ''.obs;
-  var isPhoneNumberValid =
-      false.obs; // Observable variable to track phone number validity
+  var isPhoneNumberValid = false.obs;
   Rx<Country> selectedCountry =
       CountryPickerUtils.getCountryByPhoneCode('91').obs;
   @override
@@ -62,8 +61,8 @@ class SigninController extends GetxController {
         isValidPassword(passwordController.text, isRequired: true);
   }
 
-  void loginUser(context) async {
-    isLoading(true); // Start loading
+  void loginUser(BuildContext context) async {
+    isLoading(true);
     LoginRequestModel requestModel = LoginRequestModel(
       phoneNo: phoneNumberController.text,
     );
@@ -74,19 +73,31 @@ class SigninController extends GetxController {
       if (response != null && response.status == "success") {
         CustomToast().showToast(
           context: context,
-          message: 'Otp Sent Sucessfully',
+          message: 'Otp Sent Successfully',
           isSuccess: true,
         );
-        await prefUtils.setEmail("${response.data.email}");
+        await prefUtils.setEmail(response.data.phoneNo ?? "");
         Get.toNamed(AppRoutes.verifynumberScreen,
             arguments: [phoneNumberController]);
       } else {
+        CustomToast().showToast(
+          context: context,
+          message:
+              "Oops! Something didn't go as planned. Please try again later.",
+          isSuccess: false,
+        );
         print("Login failed");
       }
     } catch (e) {
+      CustomToast().showToast(
+        context: context,
+        message:
+            "Oops! Something didn't go as planned. Please try again later.",
+        isSuccess: false,
+      );
       print("Exception occurred: $e");
     } finally {
-      isLoading(false); // Stop loading
+      isLoading(false);
     }
   }
 
