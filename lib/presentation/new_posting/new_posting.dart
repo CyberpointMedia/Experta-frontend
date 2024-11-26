@@ -109,6 +109,7 @@ class _PostingPageState extends State<PostingPage> {
                             Expanded(
                               child: TextField(
                                 controller: _captionController,
+                                style: theme.textTheme.bodyMedium,
                                 decoration: const InputDecoration(
                                   hintText: 'What\'s on your mind?',
                                   border: InputBorder.none,
@@ -146,7 +147,7 @@ class _PostingPageState extends State<PostingPage> {
                                       },
                                     ),
                                   ),
-                                );
+                                )   ;
                               },
                               child: Text(
                                 'Add',

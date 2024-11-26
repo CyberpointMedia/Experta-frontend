@@ -979,6 +979,41 @@ class ApiService {
     }
   }
 
+  Future<Map<String, dynamic>> deleteComment(
+      String postId, String commentId) async {
+    final url = Uri.parse('$_baseUrl/post/comment');
+    final body = json.encode({'postId': postId, 'commentId': commentId});
+
+    AppLogger.request('DELETE', url.toString(), body: body, headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer $token',
+    });
+
+    try {
+      final response = await http.delete(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: body,
+      );
+
+      AppLogger.response(
+          'DELETE', url.toString(), response.statusCode, response.body);
+
+      if (response.statusCode == 200) {
+        return json.decode(response.body);
+      } else {
+        throw Exception(
+            'Failed to delete comment. Status code: ${response.statusCode}');
+      }
+    } catch (e, stackTrace) {
+      AppLogger.error('Error deleting comment', stackTrace: stackTrace);
+      throw Exception('Error deleting comment: $e');
+    }
+  }
+
   Future<List<Reason>> fetchReasons() async {
     final url = Uri.parse('$_baseUrl/reasons');
     AppLogger.request('GET', url.toString(), headers: {

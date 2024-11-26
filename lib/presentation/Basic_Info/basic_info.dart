@@ -295,7 +295,7 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
                     });
                   },
                   child: Container(
-                    width: MediaQuery.of(context).size.width* 0.0,
+                    width: MediaQuery.of(context).size.width * 0.45,
                     height: 144.0,
                     padding: const EdgeInsets.symmetric(
                         vertical: 28.0, horizontal: 24.0),
@@ -341,7 +341,7 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
                     });
                   },
                   child: Container(
-                    width: 160.0,
+                    width: MediaQuery.of(context).size.width * 0.45,
                     height: 144.0,
                     padding: const EdgeInsets.symmetric(
                         vertical: 28.0, horizontal: 24.0),
@@ -401,17 +401,15 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
             controller: controller.dateOfBirth,
             focusNode: FocusNode(),
             suffix: CustomIconButton(
-                decoration: const BoxDecoration(color: Colors.transparent),
-                height: 24.0, // Adjust the size as needed
-                width: 24.0,
-                child: CustomImageView(
-                  imagePath: ImageConstant.imgCalendar,
-                  color: appTheme.blueGray300,
-                  onTap: () => _selectDate(context),
-                )
-
-                // Adjust the size as needed
-                ),
+              decoration: const BoxDecoration(color: Colors.transparent),
+              height: 24.0,
+              width: 24.0,
+              child: CustomImageView(
+                imagePath: ImageConstant.imgCalendar,
+                color: appTheme.blueGray300,
+                onTap: () => _selectDate(context),
+              ),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 5, top: 10),

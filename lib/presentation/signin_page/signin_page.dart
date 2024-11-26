@@ -159,7 +159,7 @@ class _SigninPageState extends State<SigninPage> {
                 Container(
                   margin: const EdgeInsets.fromLTRB(0, 0, 0, 7),
                   child: Text(
-                    'Welcome Back!',
+                    'Welcome',
                     style: theme.textTheme.titleMedium!
                         .copyWith(fontSize: 24.fSize),
                   ),

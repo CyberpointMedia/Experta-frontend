@@ -198,12 +198,27 @@ class _UserProfilePageState extends State<UserProfilePage>
         );
       } else if (posts.isEmpty) {
         return Center(
-          child: Text(
-            'No posts available',
-            style: TextStyle(
-              fontSize: 18.fSize,
-              fontWeight: FontWeight.w400,
-            ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CustomImageView(
+                imagePath: ImageConstant.imgNoChat,
+                height: 70.h,
+                width: 70.h,
+              ),
+              SizedBox(height: 20.v),
+              Text(
+                "Your feed is empty",
+                style: CustomTextStyles.titleMediumBold,
+              ),
+              SizedBox(height: 8.v),
+              Text(
+                "Let’s create your first post here.",
+                style: CustomTextStyles.bodyMediumLight,
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 20.v),
+            ],
           ),
         );
       } else {
@@ -350,7 +365,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                 padding: const EdgeInsets.only(right: 2),
                 child: Text(
                   "Experience",
-                  style: theme.textTheme.bodyMedium!?.copyWith(
+                  style: theme.textTheme.bodyMedium!.copyWith(
                       fontSize: 16.fSize,
                       color: Colors.black,
                       fontWeight: FontWeight.w600),
@@ -509,7 +524,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                 padding: const EdgeInsets.only(right: 2),
                 child: Text(
                   "Education",
-                  style: theme.textTheme.bodyMedium!?.copyWith(
+                  style: theme.textTheme.bodyMedium!.copyWith(
                       fontSize: 16.fSize,
                       color: Colors.black,
                       fontWeight: FontWeight.w600),
@@ -1034,10 +1049,14 @@ class _UserProfilePageState extends State<UserProfilePage>
                           ),
                         ],
                       ),
-                      Text(
-                        "${controller.userData.value.data?.industryOccupation?.industry?.name ?? ''} | ${controller.userData.value.data?.industryOccupation?.occupation?.name ?? ''}",
-                        textAlign: TextAlign.left,
-                        style: CustomTextStyles.bodyMediumBlack90001,
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.5,
+                        child: Text(
+                          "${controller.userData.value.data?.industryOccupation?.industry?.name ?? ''} | ${controller.userData.value.data?.industryOccupation?.occupation?.name ?? ''}",
+                          textAlign: TextAlign.left,
+                          style: theme.textTheme.titleSmall!
+                              .copyWith(color: appTheme.black900),
+                        ),
                       ),
                     ],
                   ),
