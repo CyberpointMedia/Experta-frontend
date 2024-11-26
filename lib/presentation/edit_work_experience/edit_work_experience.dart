@@ -2,12 +2,8 @@ import 'dart:ui';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/edit_work_experience/controller/edit_work_experience_controller.dart';
 import 'package:experta/presentation/professional_info/model/professional_model.dart';
-import 'package:experta/widgets/app_bar/appbar_leading_image.dart';
-import 'package:experta/widgets/app_bar/appbar_subtitle_six.dart';
-import 'package:experta/widgets/app_bar/custom_app_bar.dart';
-import 'package:experta/widgets/custom_elevated_button.dart';
 import 'package:experta/widgets/custom_text_form_field.dart';
-import 'package:flutter/material.dart';
+import 'package:experta/widgets/custom_toast_message.dart';
 
 class EditWorkExperiencePage extends StatefulWidget {
   const EditWorkExperiencePage({super.key});
@@ -24,6 +20,7 @@ class _EditWorkExperiencePageState extends State<EditWorkExperiencePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
           Positioned(
@@ -83,7 +80,7 @@ class _EditWorkExperiencePageState extends State<EditWorkExperiencePage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 10, bottom: 5),
+              padding: const EdgeInsets.only(top: 10, bottom: 6),
               child: RichText(
                 text: TextSpan(
                   children: [
@@ -102,6 +99,7 @@ class _EditWorkExperiencePageState extends State<EditWorkExperiencePage> {
             ),
             CustomTextFormField(
               controller: controller.jobTitleController,
+              focusNode: controller.jobTitleFocusNode,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter a job title';
@@ -110,7 +108,7 @@ class _EditWorkExperiencePageState extends State<EditWorkExperiencePage> {
               },
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 15, bottom: 5),
+              padding: const EdgeInsets.only(top: 15, bottom: 6),
               child: RichText(
                 text: TextSpan(
                   children: [
@@ -130,6 +128,7 @@ class _EditWorkExperiencePageState extends State<EditWorkExperiencePage> {
             ),
             CustomTextFormField(
               controller: controller.companyNameController,
+              focusNode: controller.companyNameFocusNode,
               validator: (value) {
                 if (value == null || value.isEmpty) {
                   return 'Please enter a company name';
@@ -138,7 +137,7 @@ class _EditWorkExperiencePageState extends State<EditWorkExperiencePage> {
               },
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 15, bottom: 5),
+              padding: const EdgeInsets.only(top: 15, bottom: 6),
               child: RichText(
                 text: TextSpan(
                   children: [
@@ -156,8 +155,10 @@ class _EditWorkExperiencePageState extends State<EditWorkExperiencePage> {
               ),
             ),
             CustomTextFormField(
+              readOnly: true,
               hintText: "yyyy-mm-dd",
               controller: controller.startDateController,
+              focusNode: controller.startDateFocusNode,
               suffixConstraints: const BoxConstraints(
                   maxHeight: 40, maxWidth: 40, minHeight: 30, minWidth: 30),
               suffix: Padding(
@@ -200,7 +201,7 @@ class _EditWorkExperiencePageState extends State<EditWorkExperiencePage> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding: const EdgeInsets.only(top: 15, bottom: 5),
+                      padding: const EdgeInsets.only(top: 15, bottom: 6),
                       child: RichText(
                         text: TextSpan(
                           children: [
@@ -219,7 +220,9 @@ class _EditWorkExperiencePageState extends State<EditWorkExperiencePage> {
                       ),
                     ),
                     CustomTextFormField(
+                      readOnly: true,
                       controller: controller.endDateController,
+                      focusNode: controller.endDateFocusNode,
                       suffixConstraints: const BoxConstraints(
                           maxHeight: 40,
                           maxWidth: 40,
@@ -255,10 +258,12 @@ class _EditWorkExperiencePageState extends State<EditWorkExperiencePage> {
             const SizedBox(height: 200),
             CustomElevatedButton(
               onPressed: () {
-                if (workExperience != null) {
-                  controller.saveWorkExperience(workExperience!.id);
-                } else {
-                  controller.saveWorkExperience(null);
+                if (_validateDates()) {
+                  if (workExperience != null) {
+                    controller.saveWorkExperience(workExperience!.id);
+                  } else {
+                    controller.saveWorkExperience(null);
+                  }
                 }
               },
               text: "Save",
@@ -267,5 +272,31 @@ class _EditWorkExperiencePageState extends State<EditWorkExperiencePage> {
         ),
       ),
     );
+  }
+
+  bool _validateDates() {
+    DateTime? startDate;
+    DateTime? endDate;
+
+    try {
+      startDate = DateTime.parse(controller.startDateController.text);
+      if (!controller.isCurrentlyWorking.value) {
+        endDate = DateTime.parse(controller.endDateController.text);
+      }
+    } catch (e) {
+      // Handle parsing error if needed
+      return false;
+    }
+
+    if (endDate != null && endDate.isBefore(startDate)) {
+      CustomToast().showToast(
+        context: context,
+        message: 'End date cannot be earlier than start date.',
+        isSuccess: false,
+      );
+      return false;
+    }
+
+    return true;
   }
 }

@@ -20,6 +20,7 @@ class _WorkExperiencePageState extends State<WorkExperiencePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
           Positioned(

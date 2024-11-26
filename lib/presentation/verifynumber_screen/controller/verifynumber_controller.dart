@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'dart:developer';
 
 import 'package:experta/data/models/request/verify_otp_request_model.dart';
 import 'package:experta/data/models/response/verify_otp_response_model.dart';
+import 'package:path/path.dart';
 
 import '../../../core/app_export.dart';
 import '../models/verifynumber_model.dart';
@@ -18,8 +20,27 @@ class VerifynumberController extends GetxController with CodeAutoFill {
   final ApiService _apiService = ApiService();
   Rx<bool> complete = false.obs;
   PrefUtils prefUtils = PrefUtils();
+  var timerText = '02:00'.obs;
+  var isResendButtonVisible = false.obs;
+  Timer? _timer;
+  int _start = 120;
 
-  void verifyOtp() async {
+  void startTimer() {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      if (_start == 0) {
+        isResendButtonVisible.value = true;
+        _timer?.cancel();
+      } else {
+        _start--;
+        int minutes = _start ~/ 60;
+        int seconds = _start % 60;
+        timerText.value =
+            '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+      }
+    });
+  }
+
+  void verifyOtp(BuildContext context) async {
     VerifyOtpRequestModel requestModel = VerifyOtpRequestModel(
       phoneNo: phoneNumberController.text,
       otp: otpController.value.text,
@@ -27,7 +48,7 @@ class VerifynumberController extends GetxController with CodeAutoFill {
 
     try {
       VerifyOtpResponseModel? response =
-          await _apiService.verifyOtp(requestModel);
+          await _apiService.verifyOtp(requestModel,context);
       if (response != null && response.status == "success") {
         await prefUtils.setaddress("${response.data!.id}");
         log("hey this is your id ${response.data!.id}");
@@ -79,15 +100,14 @@ class VerifynumberController extends GetxController with CodeAutoFill {
       print("Setting code: $code"); // Debug print
       otpController.value.text = code!;
       complete.value = code!.length == 6;
-      if (complete.value) {
-        verifyOtp();
-      }
+      
     }
   }
 
   @override
   void onInit() {
     super.onInit();
+    startTimer();
     prefUtils.init();
     initSmsListener();
     var arguments = Get.arguments as List;
@@ -108,6 +128,7 @@ class VerifynumberController extends GetxController with CodeAutoFill {
   @override
   void onClose() {
     SmsAutoFill().unregisterListener();
+    _timer?.cancel();
     super.onClose();
   }
 }

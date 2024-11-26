@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
 import 'package:experta/widgets/custom_pin_code_text_field.dart';
+import 'package:experta/widgets/custom_toast_message.dart';
 import 'package:flutter/gestures.dart';
 import 'controller/verifynumber_controller.dart';
 
@@ -43,7 +44,7 @@ class VerifynumberScreen extends GetWidget<VerifynumberController> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 _buildAppBar(),
-                _buildOtpView(),
+                _buildOtpView(context),
               ],
             ),
           ],
@@ -54,7 +55,7 @@ class VerifynumberScreen extends GetWidget<VerifynumberController> {
             right: 16.h,
             bottom: MediaQuery.of(context).viewInsets.bottom + 16.v,
           ),
-          child: _buildContinue(),
+          child: _buildContinue(context),
         ),
       ),
     );
@@ -73,7 +74,7 @@ class VerifynumberScreen extends GetWidget<VerifynumberController> {
     );
   }
 
-  Widget _buildOtpView() {
+  Widget _buildOtpView(BuildContext context) {
     return SizedBox(
       width: double.infinity,
       child: Column(
@@ -128,47 +129,70 @@ class VerifynumberScreen extends GetWidget<VerifynumberController> {
                 )),
           ),
           Center(
-            child: RichText(
-              text: TextSpan(
-                children: [
-                  TextSpan(
-                    text: "msg_didn_t_receive_the2".tr,
-                    style: theme.textTheme.titleSmall!
-                        .copyWith(color: appTheme.gray400),
-                  ),
-                  const TextSpan(text: " "),
-                  TextSpan(
-                    text: "lbl_resend_code".tr,
-                    style: CustomTextStyles.titleSmallGilroyff171717,
-                    recognizer: TapGestureRecognizer()
-                      ..onTap = () async {
-                        controller
-                            .resendOtp(controller.phoneNumberController.text);
-                        Get.snackbar(
-                          'OTP Resent',
-                          'A new security code has been sent to your phone number.',
-                          snackPosition: SnackPosition.BOTTOM,
-                        );
-                      },
-                  ),
-                ],
-              ),
-              textAlign: TextAlign.left,
-            ),
+            child: Obx(() {
+              return controller.isResendButtonVisible.value
+                  ? RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "msg_didn_t_receive_the2".tr,
+                            style: theme.textTheme.titleSmall!
+                                .copyWith(color: appTheme.gray400),
+                          ),
+                          const TextSpan(text: " "),
+                          TextSpan(
+                            text: "lbl_resend_code".tr,
+                            style: CustomTextStyles.titleSmallGilroyff171717,
+                            recognizer: TapGestureRecognizer()
+                              ..onTap = () async {
+                                controller.resendOtp(
+                                    controller.phoneNumberController.text);
+
+                                CustomToast().showToast(
+                                  context: context,
+                                  message:
+                                      'A new security code has been sent to your phone number.',
+                                  isSuccess: true,
+                                );
+                              },
+                          ),
+                        ],
+                      ),
+                      textAlign: TextAlign.left,
+                    )
+                  : RichText(
+                      text: TextSpan(
+                        children: [
+                          TextSpan(
+                            text: "msg_didn_t_receive_the2".tr,
+                            style: theme.textTheme.titleSmall!
+                                .copyWith(color: appTheme.gray400),
+                          ),
+                          const TextSpan(text: " "),
+                          TextSpan(
+                            text: controller.timerText.value,
+                            style: CustomTextStyles.titleSmallGilroyff171717,
+                          ),
+                        ],
+                      ),
+                      textAlign: TextAlign.left,
+                    );
+            }),
           ),
         ],
       ),
     );
   }
 
-  Widget _buildContinue() {
+  Widget _buildContinue(BuildContext context) {
     return Obx(() => CustomElevatedButton(
           isDisabled: !controller.complete.value,
           text: "lblcontinue".tr,
           buttonTextStyle: CustomTextStyles.bodySmall0XFF171717,
           onPressed: controller.complete.value
               ? () {
-                  controller.verifyOtp();
+                  FocusManager.instance.primaryFocus?.unfocus();
+                  controller.verifyOtp(context);
                 }
               : null,
         ));
