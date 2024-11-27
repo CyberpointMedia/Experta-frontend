@@ -36,7 +36,7 @@ class BasicProfileInfoController extends GetxController {
   FocusNode focus3 = FocusNode();
   FocusNode focus4 = FocusNode();
 
-  RxList<String> socialLinks = <String>[].obs;
+  RxList<Map<String, String>> socialLinks = <Map<String, String>>[].obs;
   Rx<File?> imageFile = Rx<File?>(null);
   RxString profileImageUrl = ''.obs;
 
@@ -81,22 +81,23 @@ class BasicProfileInfoController extends GetxController {
 
   void updateSocialLinks() {
     socialLinks.clear();
-    if (basicInfoModelObj.value.facebook.isNotEmpty &&
-        basicInfoModelObj.value.facebook.contains('facebook.com')) {
-      socialLinks.add(basicInfoModelObj.value.facebook);
+    if (basicInfoModelObj.value.facebook.isNotEmpty) {
+      socialLinks.add(
+          {'platform': 'Facebook', 'link': basicInfoModelObj.value.facebook});
     }
-    if (basicInfoModelObj.value.instagram.isNotEmpty &&
-        basicInfoModelObj.value.instagram.contains('instagram.com')) {
-      socialLinks.add(basicInfoModelObj.value.instagram);
+    if (basicInfoModelObj.value.instagram.isNotEmpty) {
+      socialLinks.add(
+          {'platform': 'Instagram', 'link': basicInfoModelObj.value.instagram});
     }
-    if (basicInfoModelObj.value.linkedin.isNotEmpty &&
-        basicInfoModelObj.value.linkedin.contains('linkedin.com')) {
-      socialLinks.add(basicInfoModelObj.value.linkedin);
+    if (basicInfoModelObj.value.linkedin.isNotEmpty) {
+      socialLinks.add(
+          {'platform': 'LinkedIn', 'link': basicInfoModelObj.value.linkedin});
     }
-    if (basicInfoModelObj.value.twitter.isNotEmpty &&
-            basicInfoModelObj.value.twitter.contains('twitter.com') ||
-        basicInfoModelObj.value.twitter.contains('x.com')) {
-      socialLinks.add(basicInfoModelObj.value.twitter);
+    if (basicInfoModelObj.value.twitter.isNotEmpty) {
+      socialLinks.add({
+        'platform': 'Twitter (now X)',
+        'link': basicInfoModelObj.value.twitter
+      });
     }
   }
 
@@ -157,36 +158,53 @@ class BasicProfileInfoController extends GetxController {
         }
       }
 
+      // Create a map to store all social links
+      Map<String, String> socialLinksMap = {};
+
+      // Extract specific platform links for the API
+      String facebook = '';
+      String instagram = '';
+      String linkedin = '';
+      String twitter = '';
+
+      // Process each social link
+      for (var link in socialLinks) {
+        String platform = link['platform'] ?? '';
+        String url = link['link'] ?? '';
+
+        // Map to specific platform variables for API compatibility
+        switch (platform) {
+          case 'Facebook':
+            facebook = url;
+            break;
+          case 'Instagram':
+            instagram = url;
+            break;
+          case 'LinkedIn':
+            linkedin = url;
+            break;
+          case 'Twitter (now X)':
+            twitter = url;
+            break;
+          default:
+            // Store other platforms in the general map
+            socialLinksMap[platform] = url;
+        }
+      }
+
       final data = {
         "firstName": textField1.text.split(' ').first.trim(),
         "lastName": textField1.text.split(' ').last.trim(),
         "displayName": textField2.text.trim(),
         "bio": textField3.text.trim(),
-        "Social Links": textField4.text.trim(),
-        "facebook": socialLinks.firstWhere(
-          (link) => link.contains('facebook.com'),
-          orElse: () => '',
-        ),
-        "instagram": socialLinks.firstWhere(
-          (link) => link.contains('instagram.com'),
-          orElse: () => '',
-        ),
-        "linkedin": socialLinks.firstWhere(
-          (link) => link.contains('linkedin.com'),
-          orElse: () => '',
-        ),
-        "twitter": socialLinks.firstWhere(
-          (link) => link.contains('twitter.com') || link.contains('x.com'),
-          orElse: () => '',
-        ),
+        "facebook": facebook,
+        "instagram": instagram,
+        "linkedin": linkedin,
+        "twitter": twitter,
+        "socialLinks": socialLinksMap, 
         "dateOfBirth": formatDate(dateOfBirth.text.trim()),
         "gender": genderController.text.toLowerCase().trim(),
       };
-
-      log(formatDate(dateOfBirth.text.trim()));
-      log(
-        genderController.text.toLowerCase().trim(),
-      );
 
       await apiService.postBasicInfo(data, imageFile.value);
 

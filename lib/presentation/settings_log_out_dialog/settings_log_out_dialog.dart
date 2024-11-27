@@ -100,6 +100,6 @@ class SettingsLogOutDialog extends StatelessWidget {
     await PrefUtils().clearPreferencesData();
 
     // Navigate to the onboarding screen
-    Get.offAllNamed(AppRoutes.onboardingScreen);
+    Get.offAllNamed(AppRoutes.signinPage);
   }
 }

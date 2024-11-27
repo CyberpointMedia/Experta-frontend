@@ -40,7 +40,7 @@ class _SocialPlatformInputState extends State<SocialPlatformInput> {
       "icon": "https://cdn.jsdelivr.net/npm/simple-icons@v8/icons/x.svg"
     },
     {
-      "name": "Linkedin",
+      "name": "LinkedIn",
       "icon": "https://cdn.jsdelivr.net/npm/simple-icons@v8/icons/linkedin.svg"
     },
     {
@@ -48,7 +48,7 @@ class _SocialPlatformInputState extends State<SocialPlatformInput> {
       "icon": "https://cdn.jsdelivr.net/npm/simple-icons@v8/icons/snapchat.svg"
     },
     {
-      "name": "Tiktok",
+      "name": "TikTok",
       "icon": "https://cdn.jsdelivr.net/npm/simple-icons@v8/icons/tiktok.svg"
     },
     {
@@ -72,7 +72,7 @@ class _SocialPlatformInputState extends State<SocialPlatformInput> {
       "icon": "https://cdn.jsdelivr.net/npm/simple-icons@v8/icons/telegram.svg"
     },
     {
-      "name": "Youtube",
+      "name": "YouTube",
       "icon": "https://cdn.jsdelivr.net/npm/simple-icons@v8/icons/youtube.svg"
     },
     {
@@ -109,7 +109,7 @@ class _SocialPlatformInputState extends State<SocialPlatformInput> {
       "icon": "https://cdn.jsdelivr.net/npm/simple-icons@v8/icons/substack.svg"
     },
     {
-      "name": "Wordpress",
+      "name": "WordPress",
       "icon": "https://cdn.jsdelivr.net/npm/simple-icons@v8/icons/wordpress.svg"
     },
     {
@@ -154,7 +154,7 @@ class _SocialPlatformInputState extends State<SocialPlatformInput> {
       "icon": "https://cdn.jsdelivr.net/npm/simple-icons@v8/icons/flickr.svg"
     },
     {
-      "name": "Deviantart",
+      "name": "DeviantArt",
       "icon":
           "https://cdn.jsdelivr.net/npm/simple-icons@v8/icons/deviantart.svg"
     },
@@ -164,10 +164,6 @@ class _SocialPlatformInputState extends State<SocialPlatformInput> {
     },
     {
       "name": "Amazon Spark",
-      "icon": "https://cdn.jsdelivr.net/npm/simple-icons@v8/icons/amazon.svg"
-    },
-    {
-      "name": "Github",
       "icon": "https://cdn.jsdelivr.net/npm/simple-icons@v8/icons/amazon.svg"
     }
   ];
