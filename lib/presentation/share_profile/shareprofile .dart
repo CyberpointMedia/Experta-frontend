@@ -22,8 +22,8 @@ class ShareProfilePage extends StatelessWidget {
           return const Center(child: CircularProgressIndicator());
         }
 
-        final profileData = controller.profileData.value?.data.profileData;
-        final qrCode = controller.profileData.value?.data.qrCode;
+        final profileData = controller.profileData.value?.data!.profileData;
+        final qrCode = controller.profileData.value!.data!.qrCode;
 
         if (profileData == null || qrCode == null) {
           return const Center(child: Text('No data available'));
@@ -80,7 +80,7 @@ class ShareProfilePage extends StatelessWidget {
                         children: [
                           SizedBox(height: 40.h),
                           Text(
-                            profileData.name,
+                            profileData.name.toString(),
                             style: theme.textTheme.titleLarge!.copyWith(
                               fontSize: 18.fSize,
                               fontWeight: FontWeight.w600,
@@ -88,7 +88,7 @@ class ShareProfilePage extends StatelessWidget {
                           ),
                           SizedBox(height: 5.h),
                           Text(
-                            profileData.occupation,
+                            profileData.occupation.toString(),
                             style: theme.textTheme.titleSmall!.copyWith(
                               fontSize: 16.fSize,
                               fontWeight: FontWeight.w500,
@@ -129,7 +129,8 @@ class ShareProfilePage extends StatelessWidget {
                     child: CircleAvatar(
                       backgroundColor: appTheme.whiteA700,
                       radius: 40.adaptSize,
-                      backgroundImage: NetworkImage(profileData.profilePic),
+                      backgroundImage:
+                          NetworkImage(profileData.profilePic.toString()),
                       onBackgroundImageError: (exception, stackTrace) {
                         print('Error loading profile image: $exception');
                       },
@@ -161,16 +162,15 @@ class ShareProfilePage extends StatelessWidget {
   Future<void> _shareProfile(BuildContext context) async {
     try {
       // Get profile data from controller
-      final profileData = controller.profileData.value?.data.profileData;
-      final qrCode = controller.profileData.value?.data.qrCode;
+      final profileData = controller.profileData.value!.data!.profileData;
+      final qrCode = controller.profileData.value!.data!.qrCode;
 
       if (profileData == null || qrCode == null) {
         Get.snackbar('Error', 'Profile data not available');
         return;
       }
 
-      final Uint8List imageBytes =
-          await screenshotController.captureFromWidget(
+      final Uint8List imageBytes = await screenshotController.captureFromWidget(
         Material(
           child: MediaQuery(
             data: const MediaQueryData(),
@@ -206,7 +206,7 @@ class ShareProfilePage extends StatelessWidget {
                             children: [
                               SizedBox(height: 40.h),
                               Text(
-                                profileData.name,
+                                profileData.name.toString(),
                                 style: theme.textTheme.titleLarge!.copyWith(
                                   fontSize: 18,
                                   fontWeight: FontWeight.w600,
@@ -214,7 +214,7 @@ class ShareProfilePage extends StatelessWidget {
                               ),
                               SizedBox(height: 5.h),
                               Text(
-                                profileData.occupation,
+                                profileData.occupation.toString(),
                                 style: theme.textTheme.titleSmall!.copyWith(
                                   fontSize: 16,
                                   fontWeight: FontWeight.w500,
@@ -252,7 +252,8 @@ class ShareProfilePage extends StatelessWidget {
                         child: CircleAvatar(
                           backgroundColor: appTheme.whiteA700,
                           radius: 40,
-                          backgroundImage: NetworkImage(profileData.profilePic),
+                          backgroundImage:
+                              NetworkImage(profileData.profilePic.toString()),
                           onBackgroundImageError: (_, __) {},
                         ),
                       ),
@@ -283,7 +284,7 @@ class ShareProfilePage extends StatelessWidget {
         [XFile(file.path)],
         text: 'Check out my profile: https://your-profile-link.com',
       );
-        } catch (e) {
+    } catch (e) {
       print('Error sharing profile: $e');
       Get.snackbar('Error', 'Failed to share profile');
     }

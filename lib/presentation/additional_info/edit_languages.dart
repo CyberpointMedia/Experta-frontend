@@ -101,33 +101,11 @@ class EditLanguagePage extends StatelessWidget {
     );
   }
 
-  // Widget _buildHeader() {
-  //   return Column(
-  //     crossAxisAlignment: CrossAxisAlignment.start,
-  //     children: [
-  //       Padding(
-  //         padding: const EdgeInsets.all(8.0),
-  //         child: Text(
-  //           "What’s your language?",
-  //           style: CustomTextStyles.titleMediumBlack90001,
-  //         ),
-  //       ),
-  //       Padding(
-  //         padding: const EdgeInsets.all(8.0),
-  //         child: Text(
-  //           "Pick your favorite languages to find groups and events related to them",
-  //           style: CustomTextStyles.bodyMediumLight,
-  //         ),
-  //       ),
-  //     ],
-  //   );
-  // }
-
   Widget _buildLanguageList(
       LanguageController controller, BuildContext context) {
     return Obx(() {
       return SizedBox(
-        height: MediaQuery.of(context).size.height * 0.55,
+        height: MediaQuery.of(context).size.height * 0.7,
         child: ListView.builder(
           itemCount: controller.filteredLanguages.length,
           itemBuilder: (context, index) {
