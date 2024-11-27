@@ -95,6 +95,7 @@ dependencies:
   firebase_auth: ^5.2.0
   device_info_plus: ^10.1.2
   logger: ^2.5.0
+  font_awesome_flutter: ^10.8.0
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -68,7 +68,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             RefreshIndicator(
-              onRefresh: () async => controller.refreshData(),
+              onRefresh: () async => controller.refreshData(context),
               child: CustomScrollView(
                 slivers: [
                   SliverToBoxAdapter(child: _buildStackaccentone()),

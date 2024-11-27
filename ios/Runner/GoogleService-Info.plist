@@ -3,17 +3,17 @@
 <plist version="1.0">
 <dict>
 	<key>API_KEY</key>
-	<string>AIzaSyDrv9lsiri0gt9BHHxzEK1w0tdG50r2UGk</string>
+	<string>AIzaSyDQy9AcBUmKKbQySofb9omnjVYw0pBD4is</string>
 	<key>GCM_SENDER_ID</key>
-	<string>651672354813</string>
+	<string>520464598981</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
 	<string>com.example.expert</string>
 	<key>PROJECT_ID</key>
-	<string>experta-30f9e</string>
+	<string>eperta-notifications</string>
 	<key>STORAGE_BUCKET</key>
-	<string>experta-30f9e.firebasestorage.app</string>
+	<string>eperta-notifications.firebasestorage.app</string>
 	<key>IS_ADS_ENABLED</key>
 	<false></false>
 	<key>IS_ANALYTICS_ENABLED</key>
@@ -25,6 +25,6 @@
 	<key>IS_SIGNIN_ENABLED</key>
 	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:651672354813:ios:5faf51e2e6d53a2dee6394</string>
+	<string>1:520464598981:ios:c3bfdd23447bbc10e82dac</string>
 </dict>
 </plist>

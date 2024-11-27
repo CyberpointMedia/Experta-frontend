@@ -135,7 +135,10 @@ class _SigninPageState extends State<SigninPage> {
               ? CustomTextStyles.bodySmall0XFF171717
               : CustomTextStyles.titleMediumGray400,
           onPressed: controller.isPhoneNumberValid.value
-              ? () => controller.loginUser(context)
+              ? () {
+                  FocusManager.instance.primaryFocus?.unfocus();
+                  controller.loginUser(context);
+                }
               : null,
         );
       }

@@ -101,7 +101,7 @@ class _CustomPhoneNumberState extends State<CustomPhoneNumber> {
               keyboardType: TextInputType.phone,
               focusNode: _focusNode,
               validator: (value) {
-                if (!isValidPhone(value)) {
+                if (!isValidPhone(value, isRequired: true)) {
                   return "err_msg_please_enter_valid_phone_number".tr;
                 }
                 return null;
