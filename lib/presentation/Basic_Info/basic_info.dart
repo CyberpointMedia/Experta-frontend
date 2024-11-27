@@ -1,11 +1,11 @@
 import 'dart:ui';
 import 'package:experta/widgets/custom_icon_button.dart';
+import 'package:experta/widgets/social_platform_input.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/Basic_Info/controller/basic_info_controller.dart';
 import 'package:experta/widgets/bio_textformfield.dart';
 import 'package:experta/widgets/custom_text_form_field.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class BasicProfileInfo extends StatefulWidget {
   const BasicProfileInfo({super.key});
@@ -41,7 +41,7 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
 
   void _addSocialLink() {
     setState(() {
-      controller.socialLinks.add('');
+      controller.socialLinks.add({'platform': '', 'link': ''});
     });
   }
 
@@ -488,57 +488,36 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
   }
 
   Widget _buildSocialLinkFormField(int index) {
-    return Row(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(right: 10, left: 10),
-          child: _getSocialMediaIcon(controller.socialLinks[index]),
-        ),
-        Expanded(
-          child: CustomTextFormField(
-            initialValue: controller.socialLinks[index],
-            onChanged: (value) {
-              if (value.contains('facebook.com') ||
-                  value.contains('instagram.com') ||
-                  value.contains('twitter.com') ||
-                  value.contains('x.com') ||
-                  value.contains('linkedin.com')) {
-                setState(() => controller.socialLinks[index] = value);
-              } else {
-                Get.snackbar(
-                    'Invalid Link', 'Please enter a valid social media link.');
-              }
-            },
-            hintText: "Social Link".tr,
-            hintStyle: CustomTextStyles.titleMediumBluegray300,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
-            suffix: IconButton(
-              icon: const Icon(Icons.close),
-              onPressed: () =>
-                  setState(() => controller.socialLinks.removeAt(index)),
+    return Padding(
+      padding: EdgeInsets.only(bottom: 16.h),
+      child: Row(
+        children: [
+          Expanded(
+            child: SocialPlatformInput(
+              initialPlatform: controller.socialLinks[index]['platform'],
+              initialLink: controller.socialLinks[index]['link'],
+              onChanged: (platform, link) {
+                setState(() {
+                  // Update both platform and link in the controller
+                  controller.socialLinks[index] = {
+                    'platform': platform,
+                    'link': link
+                  };
+                });
+              },
             ),
           ),
-        ),
-      ],
+          SizedBox(width: 8.h),
+          CustomImageView(
+            height: 20.v,
+            width: 20.h,
+            imagePath: ImageConstant.cross,
+            onTap: () => setState(() => controller.socialLinks.removeAt(index)),
+          ),
+          SizedBox(width: 8.h),
+        ],
+      ),
     );
-  }
-
-  Widget _getSocialMediaIcon(String link) {
-    if (link.contains('facebook.com')) {
-      return const Icon(FontAwesomeIcons.facebookF,
-          size: 20.0, color: Colors.blue);
-    } else if (link.contains('instagram.com')) {
-      return const Icon(FontAwesomeIcons.instagram,
-          size: 20.0, color: Colors.pink);
-    } else if (link.contains('twitter.com') || link.contains('x.com')) {
-      return const Icon(FontAwesomeIcons.twitter,
-          size: 20.0, color: Colors.lightBlue);
-    } else if (link.contains('linkedin.com')) {
-      return const Icon(FontAwesomeIcons.linkedin,
-          size: 20.0, color: Colors.blueAccent);
-    } else {
-      return const SizedBox();
-    }
   }
 
   void onTapArrowLeft() {

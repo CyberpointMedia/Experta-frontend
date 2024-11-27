@@ -20,22 +20,18 @@ class _AdditionalInfoPageState extends State<AdditionalInfoPage> {
       body: Stack(
         children: [
           _buildBackgroundBlur(),
-          Padding(
-            padding: const EdgeInsets.symmetric(
-                horizontal: 16.0), // Add padding here
-            child: CustomScrollView(
-              slivers: [
-                SliverToBoxAdapter(child: _buildAppBar()),
-                SliverToBoxAdapter(child: _buildInterestChips()),
-                const SliverToBoxAdapter(
-                  child: Padding(
-                    padding: EdgeInsets.only(top: 20, bottom: 20),
-                    child: Divider(),
-                  ),
+          CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(child: _buildAppBar()),
+              SliverToBoxAdapter(child: _buildInterestChips()),
+              const SliverToBoxAdapter(
+                child: Padding(
+                  padding: EdgeInsets.only(top: 20, bottom: 20),
+                  child: Divider(),
                 ),
-                SliverToBoxAdapter(child: _buildLanguageChips()),
-              ],
-            ),
+              ),
+              SliverToBoxAdapter(child: _buildLanguageChips()),
+            ],
           ),
         ],
       ),

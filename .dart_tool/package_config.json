@@ -387,7 +387,7 @@
     },
     {
       "name": "flutter_svg",
-      "rootUri": "file:///C:/Users/sanja/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_svg-2.0.15",
+      "rootUri": "file:///C:/Users/sanja/AppData/Local/Pub/Cache/hosted/pub.dev/flutter_svg-2.0.16",
       "packageUri": "lib/",
       "languageVersion": "3.4"
     },
@@ -1340,7 +1340,7 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2024-11-27T08:24:12.570707Z",
+  "generated": "2024-11-27T10:09:26.982950Z",
   "generator": "pub",
   "generatorVersion": "3.5.4",
   "flutterRoot": "file:///C:/source/flutter",
