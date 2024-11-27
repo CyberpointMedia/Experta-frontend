@@ -127,29 +127,33 @@ class _SearchItemWidgetState extends State<SearchItemWidget> {
                                 width: 14,
                                 imagePath: "assets/images/language.svg",
                               ),
-                              Padding(
-                                padding: const EdgeInsets.only(left: 5),
-                                child: Text(
-                                  (() {
-                                    if (user.language != null &&
-                                        user.language!.isNotEmpty) {
-                                      final languages = user.language!
-                                          .map((l) => l.name)
-                                          .toList();
-
-                                      if (languages.length > 3) {
-                                        return '${languages.take(3).join(', ')} +${languages.length - 3} more';
+                              SizedBox(
+                                width:
+                                        MediaQuery.of(context).size.width * 0.5,
+                                child: Padding(
+                                  padding: const EdgeInsets.only(left: 5),
+                                  child: Text(
+                                    (() {
+                                      if (user.language != null &&
+                                          user.language!.isNotEmpty) {
+                                        final languages = user.language!
+                                            .map((l) => l.name)
+                                            .toList();
+                                
+                                        if (languages.length > 3) {
+                                          return '${languages.take(3).join(', ')} +${languages.length - 3} more';
+                                        } else {
+                                          return languages.join(', ');
+                                        }
                                       } else {
-                                        return languages.join(', ');
+                                        return 'No languages';
                                       }
-                                    } else {
-                                      return 'No languages';
-                                    }
-                                  })(),
-                                  style: TextStyle(
-                                    fontSize: 12.fSize,
-                                    fontWeight: FontWeight.w500,
-                                    color: Colors.black,
+                                    })(),
+                                    style: TextStyle(
+                                      fontSize: 12.fSize,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.black,
+                                    ),
                                   ),
                                 ),
                               ),

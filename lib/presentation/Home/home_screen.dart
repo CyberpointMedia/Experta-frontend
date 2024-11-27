@@ -296,7 +296,6 @@ class _HomeScreenState extends State<HomeScreen> {
                     children: [
                       Text(
                         "Complete your Profile",
-                        // style: TextStyle(fontSize: 16.0, fontWeight: FontWeight.w500),
                         style: theme.textTheme.titleMedium!
                             .copyWith(fontWeight: FontWeight.bold),
                       ),
@@ -698,30 +697,35 @@ class _UserProfileItemWidgetState extends State<UserProfileItemWidget> {
                                     width: 14.adaptSize,
                                     imagePath: "assets/images/language.svg",
                                   ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 5),
-                                    child: Text(
-                                      (() {
-                                        if (widget.user.language != null &&
-                                            widget.user.language!.isNotEmpty) {
-                                          final languages = widget
-                                              .user.language!
-                                              .map((l) => l.name)
-                                              .toList();
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.5,
+                                    child: Padding(
+                                      padding: const EdgeInsets.only(left: 5),
+                                      child: Text(
+                                        (() {
+                                          if (widget.user.language != null &&
+                                              widget
+                                                  .user.language!.isNotEmpty) {
+                                            final languages = widget
+                                                .user.language!
+                                                .map((l) => l.name)
+                                                .toList();
 
-                                          if (languages.length > 3) {
-                                            return '${languages.take(3).join(', ')} +${languages.length - 3} more';
+                                            if (languages.length > 3) {
+                                              return '${languages.take(3).join(', ')} +${languages.length - 3} more';
+                                            } else {
+                                              return languages.join(', ');
+                                            }
                                           } else {
-                                            return languages.join(', ');
+                                            return 'No languages';
                                           }
-                                        } else {
-                                          return 'No languages';
-                                        }
-                                      })(),
-                                      style: TextStyle(
-                                        fontSize: 12.fSize,
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.black,
+                                        })(),
+                                        style: TextStyle(
+                                          fontSize: 12.fSize,
+                                          fontWeight: FontWeight.w500,
+                                          color: Colors.black,
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -802,7 +806,7 @@ class _UserProfileItemWidgetState extends State<UserProfileItemWidget> {
                         ),
                         _buildActionButton(
                             ImageConstant.msg,
-                            "${widget.user.pricing.messagePrice}/min",
+                            "${widget.user.pricing.messagePrice}/msg",
                             appTheme.yellow900, () async {
                           final chatData =
                               await ApiService().fetchChat(widget.user.id);
