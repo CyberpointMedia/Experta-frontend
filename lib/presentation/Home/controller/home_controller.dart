@@ -34,7 +34,7 @@ class HomeController extends GetxController {
       CustomToast().showToast(
         context: context,
         message: 'Failed to refresh data. Please try again.',
-        isSuccess: false,
+        isSuccess: false, 
       );
       
     } finally {
@@ -90,7 +90,7 @@ class HomeController extends GetxController {
   void fetchIndustries() async {
     isLoading.value = true;
     try {
-      final response =
+     final response =
           await http.get(Uri.parse('http://3.110.252.174:8080/api/industry'));
       if (response.statusCode == 200) {
         var data = json.decode(response.body)['data'] as List;

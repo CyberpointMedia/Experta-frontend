@@ -896,14 +896,12 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                 style: theme.textTheme.titleSmall!
                     .copyWith(color: appTheme.black900),
                 moreStyle: theme.textTheme.bodyMedium?.copyWith(
-                  color: appTheme.readmore, 
-                  fontSize: theme.textTheme.bodyMedium
-                      ?.fontSize, 
+                  color: appTheme.readmore,
+                  fontSize: theme.textTheme.bodyMedium?.fontSize,
                 ),
                 lessStyle: theme.textTheme.bodyMedium?.copyWith(
-                  color: appTheme.readmore, 
-                  fontSize: theme.textTheme.bodyMedium
-                      ?.fontSize, 
+                  color: appTheme.readmore,
+                  fontSize: theme.textTheme.bodyMedium?.fontSize,
                 ),
               );
             }),
@@ -1583,69 +1581,56 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                 SizedBox(
                   width: 10.v,
                 ),
-                (language == null || language.isEmpty)
-                    ? Text(
-                        "Languages not selected",
-                        style: theme.textTheme.bodyMedium!.copyWith(
-                          color: appTheme.black900,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      )
-                    : Expanded(
-                        child: Wrap(
-                          spacing: 8.0,
-                          runSpacing: 4.0,
-                          children: (() {
-                            final languages = controller
-                                .userData.value.data?.language?.language;
+                Expanded(
+                  child: Wrap(
+                    spacing: 8.0,
+                    runSpacing: 4.0,
+                    children: (() {
+                      final languages =
+                          controller.userData.value.data?.language?.language;
 
-                            if (languages != null && languages.isNotEmpty) {
-                              final languageNames = languages
-                                  .map((e) => e.name.toString())
-                                  .toList();
-                              if (languageNames.length > 3) {
-                                return [
-                                  ...languageNames
-                                      .take(3)
-                                      .map((name) => Text(
-                                            name,
-                                            style: theme.textTheme.bodyMedium!
-                                                .copyWith(
-                                              color: appTheme.black900,
-                                              fontSize: 14,
-                                              fontWeight: FontWeight.w500,
-                                            ),
-                                          ))
-                                      .toList(),
-                                  Text(
-                                    '+${languageNames.length - 3} more',
-                                    style: theme.textTheme.bodyMedium!.copyWith(
-                                      color: appTheme.black900,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ),
-                                ];
-                              } else {
-                                return languageNames
-                                    .map((name) => Text(
-                                          name,
-                                          style: theme.textTheme.bodyMedium!
-                                              .copyWith(
-                                            color: appTheme.black900,
-                                            fontSize: 14,
-                                            fontWeight: FontWeight.w500,
-                                          ),
-                                        ))
-                                    .toList();
-                              }
-                            } else {
-                              return <Widget>[];
-                            }
-                          })(),
-                        ),
-                      ),
+                      if (languages != null && languages.isNotEmpty) {
+                        final languageNames =
+                            languages.map((e) => e.name.toString()).toList();
+
+                        if (languageNames.length > 3) {
+                          return [
+                            Text(
+                              '${languageNames.take(3).join(', ')} +${languageNames.length - 3} more',
+                              style: theme.textTheme.bodyMedium!.copyWith(
+                                color: appTheme.black900,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            ),
+                          ];
+                        } else {
+                          return [
+                            Text(
+                              languageNames.join(', '),
+                              style: theme.textTheme.bodyMedium!.copyWith(
+                                color: appTheme.black900,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            )
+                          ];
+                        }
+                      } else {
+                        return <Widget>[
+                          Text(
+                            "No Lanuages found",
+                            style: theme.textTheme.bodyMedium!.copyWith(
+                              color: appTheme.black900,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          )
+                        ];
+                      }
+                    })(),
+                  ),
+                ),
               ],
             ),
           ),

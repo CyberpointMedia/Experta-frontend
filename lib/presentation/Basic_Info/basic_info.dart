@@ -27,7 +27,7 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
       if (!isLoading) {
         _initializeGenderSelection();
       }
-    });
+         });
   }
 
   void _initializeGenderSelection() {

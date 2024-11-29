@@ -1096,20 +1096,8 @@ class _UserProfilePageState extends State<UserProfilePage>
 
                         if (languageNames.length > 3) {
                           return [
-                            ...languageNames
-                                .take(3)
-                                .map((name) => Text(
-                                      name,
-                                      style:
-                                          theme.textTheme.bodyMedium!.copyWith(
-                                        color: appTheme.black900,
-                                        fontSize: 14,
-                                        fontWeight: FontWeight.w500,
-                                      ),
-                                    ))
-                                .toList(),
                             Text(
-                              '+${languageNames.length - 3} more',
+                              '${languageNames.take(3).join(', ')} +${languageNames.length - 3} more',
                               style: theme.textTheme.bodyMedium!.copyWith(
                                 color: appTheme.black900,
                                 fontSize: 14,
@@ -1118,19 +1106,28 @@ class _UserProfilePageState extends State<UserProfilePage>
                             ),
                           ];
                         } else {
-                          return languageNames
-                              .map((name) => Text(
-                                    name,
-                                    style: theme.textTheme.bodyMedium!.copyWith(
-                                      color: appTheme.black900,
-                                      fontSize: 14,
-                                      fontWeight: FontWeight.w500,
-                                    ),
-                                  ))
-                              .toList();
+                          return [
+                            Text(
+                              languageNames.join(', '),
+                              style: theme.textTheme.bodyMedium!.copyWith(
+                                color: appTheme.black900,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w500,
+                              ),
+                            )
+                          ];
                         }
                       } else {
-                        return <Widget>[];
+                        return <Widget>[
+                          Text(
+                            "No Lanuages found",
+                            style: theme.textTheme.bodyMedium!.copyWith(
+                              color: appTheme.black900,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          )
+                        ];
                       }
                     })(),
                   ),
