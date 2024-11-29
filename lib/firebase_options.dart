@@ -17,7 +17,10 @@ import 'package:flutter/foundation.dart'
 class DefaultFirebaseOptions {
   static FirebaseOptions get currentPlatform {
     if (kIsWeb) {
-      return web;
+      throw UnsupportedError(
+        'DefaultFirebaseOptions have not been configured for web - '
+        'you can reconfigure this by running the FlutterFire CLI again.',
+      );
     }
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
@@ -46,16 +49,6 @@ class DefaultFirebaseOptions {
     }
   }
 
-  static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'AIzaSyD4w9iIBnOpUFuro01jMBbwt03kyVJDj5A',
-    appId: '1:651672354813:web:16a7284446ac979cee6394',
-    messagingSenderId: '651672354813',
-    projectId: 'experta-30f9e',
-    authDomain: 'experta-30f9e.firebaseapp.com',
-    storageBucket: 'experta-30f9e.firebasestorage.app',
-    measurementId: 'G-SNL8941N2D',
-  );
-
   static const FirebaseOptions android = FirebaseOptions(
     apiKey: 'AIzaSyBJy5htDMPDP_wCvYriTPA2gTV62vdw0Zk',
     appId: '1:520464598981:android:24fed6e90fc3e7cbe82dac',
@@ -72,5 +65,4 @@ class DefaultFirebaseOptions {
     storageBucket: 'eperta-notifications.firebasestorage.app',
     iosBundleId: 'com.example.expert',
   );
-
 }

@@ -27,7 +27,7 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
       if (!isLoading) {
         _initializeGenderSelection();
       }
-         });
+    });
   }
 
   void _initializeGenderSelection() {
@@ -233,7 +233,7 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
           ),
           CustomTextFormField(
             width: MediaQuery.of(context).size.width,
-            controller: controller.textField1,
+            controller: controller.fullNameController,
             focusNode: controller.focus1,
             hintText: "Your Name".tr,
             hintStyle: CustomTextStyles.titleMediumBluegray300,
@@ -257,7 +257,7 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
             ),
           ),
           CustomTextFormField(
-            controller: controller.textField2,
+            controller: controller.displayNameController,
             focusNode: controller.focus2,
             width: MediaQuery.of(context).size.width,
             hintText: "Display Name".tr,
@@ -398,7 +398,7 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
             readOnly: true,
             hintStyle: CustomTextStyles.titleMediumBluegray300,
             textInputType: TextInputType.datetime,
-            controller: controller.dateOfBirth,
+            controller: controller.dateOfBirthController,
             focusNode: FocusNode(),
             suffix: CustomIconButton(
                 decoration: const BoxDecoration(color: Colors.transparent),
@@ -426,7 +426,7 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
             ),
           ),
           CustomBioTextFormField(
-            controller: controller.textField3,
+            controller: controller.bioController,
             focusNode: controller.focus3,
             hintText: "Write Your Bio",
             hintStyle: CustomTextStyles.titleMediumBluegray300,
@@ -550,7 +550,7 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
 
     if (pickedDate != null) {
       setState(() {
-        controller.dateOfBirth.text =
+        controller.dateOfBirthController.text =
             "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
       });
     }

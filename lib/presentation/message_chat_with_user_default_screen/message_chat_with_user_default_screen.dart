@@ -14,7 +14,6 @@ import 'package:experta/widgets/app_bar/appbar_trailing_image.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
 import 'package:experta/widgets/custom_text_form_field.dart';
 import 'package:file_picker/file_picker.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
@@ -744,12 +743,12 @@ class _ChattingPageState extends State<ChattingPage> {
                         EdgeInsets.only(top: 16.v, right: 30.h, bottom: 16.v),
                     borderDecoration: TextFormFieldStyleHelper.outlineGrayTL26,
                     fillColor: appTheme.gray20002,
-                    suffix: IconButton(
-                      icon: const Icon(CupertinoIcons.paperclip),
-                      onPressed: () {
-                        pickFiles();
-                      },
-                    ),
+                    // suffix: IconButton(
+                    //   icon: const Icon(CupertinoIcons.paperclip),
+                    //   onPressed: () {
+                    //     pickFiles();
+                    //   },
+                    // ),
                   ),
                 ),
                 Padding(

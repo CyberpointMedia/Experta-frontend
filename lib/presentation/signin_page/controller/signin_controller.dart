@@ -74,7 +74,7 @@ class SigninController extends GetxController {
       if (response != null && response.status == "success") {
         CustomToast().showToast(
           context: context,
-          message: 'Otp Sent Successfully',
+          message: 'OTP sent successfully to your phone number.',
           isSuccess: true,
         );
         await prefUtils.setEmail(response.data.phoneNo ?? "");
