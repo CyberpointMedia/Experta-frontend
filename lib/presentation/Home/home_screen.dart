@@ -120,13 +120,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: appTheme.whiteA700.withOpacity(0.6),
                 border: Border.all(
                   color: Colors.white,
-                  width: 1.5, // Border width
+                  width: 1.5, 
                 ),
               ),
               child: CustomImageView(
                 imagePath: ImageConstant.imgBell02,
-                height: 8.0, // Set the desired height
-                width: 8.0, // Set the desired width
+                height: 8.0,
+                width: 8.0, 
               ),
             ),
           ),

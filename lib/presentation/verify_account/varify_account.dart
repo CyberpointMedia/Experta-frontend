@@ -674,8 +674,8 @@ class _VerifyAccountState extends State<VerifyAccount> {
                                     children: [
                                       Text(
                                         "Pan Card",
-                                        style: (kycData!.panVerification
-                                                    ?.verificationStatus ==
+                                        style: (kycData!.panVerification!
+                                                    .verificationStatus ==
                                                 true)
                                             ? theme.textTheme.titleMedium!
                                                 .copyWith(
@@ -687,8 +687,8 @@ class _VerifyAccountState extends State<VerifyAccount> {
                                                 color: appTheme.black900,
                                               ),
                                       ),
-                                      (kycData!.panVerification
-                                                  ?.verificationStatus ==
+                                      (kycData!.panVerification!
+                                                  .verificationStatus ==
                                               true)
                                           ? Padding(
                                               padding: const EdgeInsets.only(

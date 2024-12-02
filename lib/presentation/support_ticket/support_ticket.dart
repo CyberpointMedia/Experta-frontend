@@ -1,109 +1,133 @@
-import 'package:experta/widgets/custom_elevated_button.dart';
+import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:experta/core/app_export.dart';
+import 'package:experta/widgets/custom_elevated_button.dart';
 
-class SupportPage extends StatelessWidget {
+class SupportPage extends StatefulWidget {
   const SupportPage({super.key});
 
   @override
+  State<SupportPage> createState() => _SupportPageState();
+}
+
+class _SupportPageState extends State<SupportPage> {
+  bool isActiveSelected = true;
+
+  @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2, 
-      child: Scaffold(
-        appBar: AppBar(
-          title: const Text("Support"),
-          leading: IconButton(
-            icon: const Icon(Icons.arrow_back),
-            onPressed: () {
-              Navigator.pop(context);
-            },
-          ),
-          backgroundColor: Colors.white,
-          elevation: 0,
-          titleTextStyle: const TextStyle(
-            color: Colors.black,
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
-          ),
-          iconTheme: const IconThemeData(color: Colors.black),
-          bottom: PreferredSize(
-            preferredSize: const Size.fromHeight(50),
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: TabBar(
-                indicator: BoxDecoration(
-                  color: Colors.black,
-                  borderRadius: BorderRadius.circular(30),
+    return Scaffold(
+      body: Stack(
+        children: [
+          // Background blur effect
+          Positioned(
+            left: 270,
+            top: 50,
+            child: ImageFiltered(
+              imageFilter: ImageFilter.blur(
+                tileMode: TileMode.decal,
+                sigmaX: 60,
+                sigmaY: 60,
+              ),
+              child: Align(
+                child: SizedBox(
+                  width: 252,
+                  height: 252,
+                  child: Container(
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(126),
+                      color: appTheme.deepOrangeA20.withOpacity(0.6),
+                    ),
+                  ),
                 ),
-                labelColor: Colors.white,
-                unselectedLabelColor: Colors.black,
-                labelStyle: const TextStyle(
-                  fontWeight: FontWeight.bold,
-                  fontSize: 14,
-                ),
-                unselectedLabelStyle: const TextStyle(
-                  fontWeight: FontWeight.w500,
-                  fontSize: 14,
-                ),
-                tabs: const [
-                  Tab(text: "Active Tickets"),
-                  Tab(text: "Closed Tickets"),
-                ],
               ),
             ),
           ),
-        ),
-        body: Column(
-          children: [
-            Expanded(
-              child: TabBarView(
-                children: [
-                  // Active Tickets Tab
-                  _buildTicketList(active: true),
-                  // Closed Tickets Tab
-                  _buildTicketList(active: false),
-                ],
+          Column(
+            children: [
+              _buildAppBar(),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Column(
+                  children: [
+                    // Tab selector
+                    Container(
+                      height: 48,
+                      decoration: BoxDecoration(
+                        border: Border.all(color: const Color(0xffe4e4e4)),
+                        color: const Color(0xffffffff),
+                        borderRadius: BorderRadius.circular(30),
+                      ),
+                      child: Row(
+                        children: [
+                          _buildTab(true, 'Active Tickets'),
+                          _buildTab(false, 'Closed Tickets'),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    // Ticket list
+                    Expanded(
+                      child: _buildTicketList(active: isActiveSelected),
+                    ),
+                  ],
+                ),
+              ),
+              // Raise Ticket Button
+              CustomElevatedButton(
+                text: "Raise Ticket",
+                onPressed: () {
+                  // Handle raise ticket action
+                },
+                margin: const EdgeInsets.all(16),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+
+  PreferredSizeWidget _buildAppBar() {
+    return CustomAppBar(
+      height: 56.v,
+      leadingWidth: 40.h,
+      leading: AppbarLeadingImage(
+        imagePath: ImageConstant.imgArrowLeftOnerrorcontainer,
+        margin: EdgeInsets.only(left: 16.h),
+        onTap: () {
+          Get.back();
+        },
+      ),
+      centerTitle: true,
+      title: AppbarSubtitleSix(text: "Support"),
+    );
+  }
+
+  Widget _buildTab(bool isActive, String text) {
+    return Expanded(
+      child: GestureDetector(
+        onTap: () => setState(() => isActiveSelected = isActive),
+        child: Container(
+          margin: const EdgeInsets.all(5),
+          decoration: BoxDecoration(
+            color: (isActiveSelected == isActive) ? Colors.black : Colors.transparent,
+            borderRadius: BorderRadius.circular(30),
+          ),
+          child: Center(
+            child: Text(
+              text,
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: (isActiveSelected == isActive) ? Colors.white : Colors.black,
               ),
             ),
-            // Raise Ticket Button
-            CustomElevatedButton(
-            text: "Raise Ticket",
-            onPressed: () {},
-            margin: const EdgeInsets.all(10),
-          )
-            // Padding(
-            //   padding: const EdgeInsets.all(16.0),
-            //   child: SizedBox(
-            //     width: double.infinity,
-            //     child: ElevatedButton(
-            //       onPressed: () {
-            //         // Handle "Raise Ticket" action
-            //       },
-            //       style: ElevatedButton.styleFrom(
-            //         backgroundColor: Colors.yellow[700],
-            //         shape: RoundedRectangleBorder(
-            //           borderRadius: BorderRadius.circular(10),
-            //         ),
-            //         padding: const EdgeInsets.symmetric(vertical: 16),
-            //       ),
-            //       child: const Text(
-            //         "Raise Ticket",
-            //         style: TextStyle(
-            //           color: Colors.black,
-            //           fontWeight: FontWeight.bold,
-            //           fontSize: 16,
-            //         ),
-            //       ),
-            //     ),
-            //   ),
-            // ),
-          
-          ],
+          ),
         ),
       ),
     );
   }
 
-  // Method to Build Ticket List Based on Status (Active or Closed)
   Widget _buildTicketList({required bool active}) {
     List<Map<String, String>> tickets = active
         ? [
@@ -126,7 +150,7 @@ class SupportPage extends StatelessWidget {
           ];
 
     return ListView.builder(
-      padding: const EdgeInsets.all(16.0),
+      padding: EdgeInsets.zero,
       itemCount: tickets.length,
       itemBuilder: (context, index) {
         final ticket = tickets[index];
@@ -141,7 +165,6 @@ class SupportPage extends StatelessWidget {
     );
   }
 
-  // Method to Build Ticket Card
   Widget _buildTicketCard({
     required String title,
     required String ticketId,
@@ -150,6 +173,7 @@ class SupportPage extends StatelessWidget {
     required String statusColor,
   }) {
     return Card(
+      margin: const EdgeInsets.only(bottom: 16),
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
       ),
@@ -164,16 +188,14 @@ class SupportPage extends StatelessWidget {
                 children: [
                   Text(
                     title,
-                    style: const TextStyle(
+                    style: theme.textTheme.titleMedium?.copyWith(
                       fontWeight: FontWeight.bold,
-                      fontSize: 16,
                     ),
                   ),
                   const SizedBox(height: 8),
                   Text(
                     "Ticket ID : $ticketId | Created date: $date",
-                    style: const TextStyle(
-                      fontSize: 14,
+                    style: theme.textTheme.bodySmall?.copyWith(
                       color: Colors.grey,
                     ),
                   ),
@@ -188,8 +210,7 @@ class SupportPage extends StatelessWidget {
                       const SizedBox(width: 4),
                       Text(
                         status,
-                        style: TextStyle(
-                          fontSize: 14,
+                        style: theme.textTheme.bodyMedium?.copyWith(
                           color: _getStatusColor(statusColor),
                           fontWeight: FontWeight.bold,
                         ),
@@ -199,15 +220,16 @@ class SupportPage extends StatelessWidget {
                 ],
               ),
             ),
-            const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey),
+            Icon(Icons.arrow_forward_ios, 
+                size: 16, 
+                color: theme.colorScheme.onSurface.withOpacity(0.5)),
           ],
         ),
       ),
     );
   }
 
-  // Helper Method to Get Status Color
-  Color _getStatusColor(String statusColor) {
+ Color _getStatusColor(String statusColor) {
     switch (statusColor) {
       case "orange":
         return Colors.orange;

@@ -127,6 +127,7 @@ class _SigninPageState extends State<SigninPage> {
         );
       } else {
         return CustomElevatedButton(
+          isDisabled: controller.isPhoneNumberValid.value ? false : true,
           text: "Continue",
           buttonStyle: controller.isPhoneNumberValid.value
               ? CustomButtonStyles.fillPrimaryTL23
