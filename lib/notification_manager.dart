@@ -1,6 +1,7 @@
-// notification_manager.dart
 import 'dart:developer';
+import 'dart:io';
 import 'package:experta/core/app_export.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:device_info_plus/device_info_plus.dart';
@@ -13,16 +14,13 @@ class NotificationManager {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   final FlutterLocalNotificationsPlugin _flutterLocalNotificationsPlugin =
       FlutterLocalNotificationsPlugin();
-  
+
   final DeviceInfoPlugin _deviceInfoPlugin = DeviceInfoPlugin();
   PrefUtils prefUtils = PrefUtils();
-
-  // Initialize notifications
   Future<void> init() async {
     log("Initializing NotificationManager...");
 
     try {
-      // Request permission for iOS devices
       log("Requesting notification permissions...");
       await _firebaseMessaging.requestPermission(
         alert: true,
@@ -31,7 +29,6 @@ class NotificationManager {
       );
       log("Notification permissions granted.");
 
-      // Initialize local notifications
       log("Initializing local notifications...");
       const AndroidInitializationSettings initializationSettingsAndroid =
           AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -49,31 +46,37 @@ class NotificationManager {
         initializationSettings,
         onDidReceiveNotificationResponse: _onSelectNotification,
       );
+      if (Platform.isAndroid) {
+        const AndroidNotificationChannel channel = AndroidNotificationChannel(
+          'high_importance_channel',
+          'High Importance Notifications',
+          importance: Importance.max,
+          enableVibration: true,
+          showBadge: true,
+          playSound: true,
+        );
 
+        await _flutterLocalNotificationsPlugin
+            .resolvePlatformSpecificImplementation<
+                AndroidFlutterLocalNotificationsPlugin>()
+            ?.createNotificationChannel(channel);
+      }
       if (initialized == true) {
         log("Local notifications initialized successfully.");
       } else {
         log("Failed to initialize local notifications.");
       }
-
-      // Handle background messages
       log("Setting up background message handler...");
       FirebaseMessaging.onBackgroundMessage(
           _firebaseMessagingBackgroundHandler);
 
-      // Handle foreground messages
       log("Setting up foreground message handler...");
       FirebaseMessaging.onMessage.listen(_handleForegroundMessage);
 
-      // Handle when notification is clicked while app is in background
       log("Setting up notification tap handler...");
       FirebaseMessaging.onMessageOpenedApp.listen(_handleNotificationTap);
-
-      // Fetch and log FCM token
       log("Fetching FCM token...");
       await getFCMToken();
-
-      // Get device information
       String deviceInfo = await _getDeviceInfo();
       log("Device info: $deviceInfo");
       await prefUtils.setDeviceInfo(deviceInfo);
@@ -82,7 +85,6 @@ class NotificationManager {
     }
   }
 
-  // Get FCM token
   Future<String?> getFCMToken() async {
     try {
       String? token = await _firebaseMessaging.getToken();
@@ -99,7 +101,6 @@ class NotificationManager {
     }
   }
 
-  // Get device info for Android or iOS
   Future<String> _getDeviceInfo() async {
     try {
       final deviceInfo = await _deviceInfoPlugin.deviceInfo;
@@ -116,19 +117,38 @@ class NotificationManager {
     }
   }
 
-  // Handle background messages
   static Future<void> _firebaseMessagingBackgroundHandler(
       RemoteMessage message) async {
+    await Firebase.initializeApp();
+
     try {
       log('Handling a background message: ${message.messageId}');
-      log('Message data: ${message.data}');
-      // Add your background message handling logic here
+      if (message.notification != null) {
+        final flutterLocalNotificationsPlugin =
+            FlutterLocalNotificationsPlugin();
+        const androidPlatformChannelSpecifics = AndroidNotificationDetails(
+          'high_importance_channel',
+          'High Importance Notifications',
+          importance: Importance.max,
+          priority: Priority.high,
+          showWhen: true,
+        );
+        const platformChannelSpecifics = NotificationDetails(
+          android: androidPlatformChannelSpecifics,
+        );
+
+        await flutterLocalNotificationsPlugin.show(
+          DateTime.now().millisecond,
+          message.notification?.title ?? '',
+          message.notification?.body ?? '',
+          platformChannelSpecifics,
+        );
+      }
     } catch (e) {
       log("Error handling background message: $e", error: e);
     }
   }
 
-  // Handle foreground messages
   Future<void> _handleForegroundMessage(RemoteMessage message) async {
     try {
       log('Received a message while in the foreground!');
@@ -150,53 +170,51 @@ class NotificationManager {
     }
   }
 
-  // Handle notification tap
   void _handleNotificationTap(RemoteMessage message) {
     try {
       log('Notification tapped: ${message.data}');
-      // Add your notification tap handling logic here
     } catch (e) {
       log("Error handling notification tap: $e", error: e);
     }
   }
 
-  // Show local notification
   Future<void> _showNotification({
     required String title,
     required String body,
     String? payload,
   }) async {
     try {
-      log('Showing local notification: Title: $title, Body: $body');
       const AndroidNotificationDetails androidPlatformChannelSpecifics =
           AndroidNotificationDetails(
-        'general_notifications',
-        'General Notifications',
+        'high_importance_channel',
+        'High Importance Notifications',
         importance: Importance.max,
         priority: Priority.high,
+        showWhen: true,
+        enableVibration: true,
+        playSound: true,
+        ticker: 'ticker',
+        visibility: NotificationVisibility.public,
       );
 
       const NotificationDetails platformChannelSpecifics =
           NotificationDetails(android: androidPlatformChannelSpecifics);
 
       await _flutterLocalNotificationsPlugin.show(
-        0,
+        DateTime.now().millisecond,
         title,
         body,
         platformChannelSpecifics,
         payload: payload,
       );
-      log('Local notification displayed successfully.');
     } catch (e) {
       log("Error displaying local notification: $e", error: e);
     }
   }
 
-  // Handle notification selection
   void _onSelectNotification(NotificationResponse response) {
     try {
       log('Notification selected: ${response.payload}');
-      // Add your notification selection handling logic here
     } catch (e) {
       log("Error handling notification selection: $e", error: e);
     }

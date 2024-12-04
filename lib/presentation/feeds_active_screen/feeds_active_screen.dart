@@ -428,7 +428,6 @@ class FeedItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final controller = Get.find<FeedsActiveController>();
-    // ignore: collection_methods_unrelated_type
     final isLiked = feed.likes.contains(address);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -437,7 +436,9 @@ class FeedItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             CustomImageView(
-              imagePath: feed.postedBy.profilePic,
+              imagePath: feed.postedBy.profilePic == ""
+                  ? ImageConstant.imageNotFound
+                  : feed.postedBy.profilePic,
               height: 48.adaptSize,
               width: 48.adaptSize,
               radius: BorderRadius.circular(48),

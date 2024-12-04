@@ -24,14 +24,12 @@ class _EditExpertisePageState extends State<EditExpertisePage> {
     expertise = List.from(widget.selectedItems);
   }
 
-  // Method to delete expertise
   void _deleteExpertise(ExpertiseItem item) {
     setState(() {
       expertise.remove(item);
     });
   }
 
-  // Method to add new expertise
   void _addExpertise() {
     Navigator.pushReplacement(
       context,
@@ -50,11 +48,9 @@ class _EditExpertisePageState extends State<EditExpertisePage> {
         isLoading = true;
       });
 
-      // First fetch all expertise items to get their IDs
       List<ExpertiseItem> allExpertiseItems =
           await apiService.fetchExpertiseItems();
 
-      // Match selected expertise names with fetched items to get their IDs
       List<String> expertiseIds = [];
       for (var selectedItem in expertise) {
         var matchingItem = allExpertiseItems.firstWhere(
@@ -65,14 +61,13 @@ class _EditExpertisePageState extends State<EditExpertisePage> {
         expertiseIds.add(matchingItem.id);
       }
 
-      // Save the expertise IDs
       await apiService.saveExpertiseItems(expertiseIds);
 
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Expertise saved successfully')),
       );
 
-      Get.offAndToNamed(AppRoutes.professionalInfo);
+      Get.back();
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Failed to save expertise: ${e.toString()}')),
@@ -99,52 +94,61 @@ class _EditExpertisePageState extends State<EditExpertisePage> {
             const SizedBox(height: 8),
             Text(
               "Show your top expertise - add up to 5 skills you want to be known for. They'll also appear in your expertise section.",
-              style: theme.textTheme.titleMedium!
-                  .copyWith(fontWeight: FontWeight.w500, fontSize: 16),
+              style: theme.textTheme.titleMedium,
             ),
             const SizedBox(height: 16),
-            Wrap(
-              children: expertise.map((item) {
-                return Chip(
-                  label: Text(
-                    item.name,
-                    style: theme.textTheme.titleMedium!
-                        .copyWith(fontWeight: FontWeight.w500, fontSize: 16),
-                  ),
-                  deleteIcon: const Icon(Icons.close),
-                  onDeleted: () {
-                    _deleteExpertise(item);
-                  },
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                    side: const BorderSide(color: Colors.transparent),
-                  ),
-                );
-              }).toList(),
-            ),
-            const SizedBox(height: 16),
-            GestureDetector(
-              onTap: _addExpertise,
-              child: Row(
-                children: [
-                  Container(
-                    padding:
-                        const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-                    decoration: BoxDecoration(
-                      color: theme.primaryColor,
-                      borderRadius: BorderRadius.circular(24),
+            SizedBox(
+              height: MediaQuery.of(context).size.height * 0.6,
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Wrap(
+                      children: expertise.map((item) {
+                        return Chip(
+                          label: Text(
+                            item.name,
+                            style: theme.textTheme.titleMedium!.copyWith(
+                                fontWeight: FontWeight.w500, fontSize: 16),
+                          ),
+                          deleteIcon: const Icon(Icons.close),
+                          onDeleted: () {
+                            _deleteExpertise(item);
+                          },
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(20.0),
+                            side: const BorderSide(color: Colors.transparent),
+                          ),
+                        );
+                      }).toList(),
                     ),
-                    child: const Row(
-                      children: [
-                        SizedBox(width: 8),
-                        Text(
-                          '+ Add Expertise',
-                          style: TextStyle(color: Colors.white),
-                        ),
-                      ],
+                    const SizedBox(height: 16),
+                    GestureDetector(
+                      onTap: _addExpertise,
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 16, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: theme.primaryColor,
+                              borderRadius: BorderRadius.circular(24),
+                            ),
+                            child: const Row(
+                              children: [
+                                SizedBox(width: 8),
+                                Text(
+                                  '+ Add Expertise',
+                                  style: TextStyle(color: Colors.white),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                  ),
-                ],
+                    const SizedBox(height: 16),
+                  ],
+                ),
               ),
             ),
             const Spacer(),

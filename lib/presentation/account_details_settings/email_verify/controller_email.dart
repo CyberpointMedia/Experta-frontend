@@ -1,5 +1,6 @@
 // Email Verification Controller
 import 'dart:async';
+import 'dart:developer';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/widgets/custom_toast_message.dart';
 import 'package:sms_autofill/sms_autofill.dart';
@@ -35,7 +36,7 @@ class VerifyEmailController extends GetxController with CodeAutoFill {
       Map<String, dynamic> response =
           await _apiService.verifyOtpChangeEmail(newEmail, otp);
 
-      if (response['status'] == "success") {
+      if (response != null && response['status'] == "success") {
         CustomToast().showToast(
           context: context,
           message: "Email Set Successfully",

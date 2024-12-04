@@ -1,3 +1,4 @@
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
@@ -349,19 +350,16 @@ class SettingScreen extends GetWidget<SettingController> {
         decoration: AppDecoration.fillOnPrimaryContainer
             .copyWith(borderRadius: BorderRadiusStyle.roundedBorder20),
         child: Row(children: [
-          (controller.imagePath != "")
-              ? CustomImageView(
-                  imagePath: controller.imagePath,
-                  height: 48.adaptSize,
-                  width: 48.adaptSize,
-                  radius: BorderRadius.circular(24.h),
-                  alignment: Alignment.center)
-              : CustomImageView(
-                  imagePath: 'assets/images/image_not_found.png',
-                  height: 48.adaptSize,
-                  width: 48.adaptSize,
-                  radius: BorderRadius.circular(24.h),
-                  alignment: Alignment.center),
+          CustomImageView(
+            imagePath: controller.profilepic.value.isEmpty
+                ? ImageConstant.imageNotFound
+                : controller.profilepic.value,
+            placeHolder: ImageConstant.imageNotFound,
+            height: 48.adaptSize,
+            width: 48.adaptSize,
+            radius: BorderRadius.circular(24.h),
+            alignment: Alignment.center,
+          ),
           Padding(
               padding: EdgeInsets.only(left: 15.h),
               child: Column(

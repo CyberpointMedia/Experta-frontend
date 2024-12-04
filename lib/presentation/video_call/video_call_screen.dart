@@ -83,7 +83,6 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     setState(() {});
   }
 
-  // Start call timer
   void startCallTimer() {
     callTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
       setState(() {
@@ -104,7 +103,6 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
                 )));
   }
 
-  // Format duration as MM:SS
   String formatDuration(int duration) {
     final minutes = (duration ~/ 60).toString().padLeft(2, '0');
     final seconds = (duration % 60).toString().padLeft(2, '0');
@@ -218,8 +216,8 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
   void _handleReconnection() {
     log('Attempting to reconnect peer...');
-    if (peer != null && peer.disconnected) {
-      peer.reconnect(); // Reconnect if the peer was disconnected
+    if (peer.destroyed && peer.disconnected) {
+      peer.reconnect();
     }
   }
 
@@ -233,7 +231,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
     socket.on('connect', (_) {
       log('Connected to signaling server.');
-      if (peer.id != null && widget.userId != null) {
+      if (peer.id != null && widget.userId.isNotEmpty) {
         _joinMeeting();
       } else {
         log('Error: peerId or userId is null');
@@ -297,15 +295,11 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
       if (localStream == null) {
         throw Exception('Local stream is not initialized');
       }
-
-      // Create media connection with local stream
       mediaConnection = peer.call(peerId, localStream!);
 
       if (mediaConnection == null) {
         throw Exception('Failed to create media connection');
       }
-
-      // Handle remote stream
       mediaConnection?.on<MediaStream>('stream').listen((stream) {
         log('Remote stream received.');
         if (!mounted) return;
@@ -317,7 +311,6 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
         });
       });
 
-      // Handle errors
       mediaConnection?.on('error').listen((error) {
         log('Media connection error: $error');
       });
@@ -362,8 +355,6 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
           log('Remote renderer updated with new stream');
         });
       });
-
-      // Add track event listener
       call.on('track').listen((event) {
         log('New track received');
         log('Track kind: ${event.track.kind}, enabled: ${event.track.enabled}, id: ${event.track.id}');
@@ -426,7 +417,6 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
   Future<void> _setSpeakerMode(bool speakerOn) async {
     try {
-      // Switch the audio output between speaker and earpiece
       await Helper.setSpeakerphoneOn(speakerOn);
       log(speakerOn ? 'Speaker on' : 'Speaker off');
     } catch (e) {
@@ -454,23 +444,14 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
       });
 
       if (mediaConnection != null) {
-        // Store old tracks to stop them later
         final oldTracks = localStream?.getTracks();
-
-        // Add the new screen share stream to existing connection
         log('Adding screen share stream to existing connection');
         mediaConnection!.addStream(screenStream);
-
-        // Update local stream reference
         localStream = screenStream;
-
-        // Update local renderer
         setState(() {
           log('Updating local renderer with screen stream');
           localRenderer.srcObject = screenStream;
         });
-
-        // Stop old tracks after successful switch
         oldTracks?.forEach((track) => track.stop());
 
         isSharing = true;
@@ -485,23 +466,16 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     try {
       if (isSharing) {
         log('Stopping screen share...');
-        // Store screen sharing tracks to stop them later
         final screenTracks = localStream?.getTracks();
-
-        // Reinitialize camera stream
         await _startLocalStream();
 
         if (mediaConnection != null && localStream != null) {
           log('Adding camera stream to existing connection');
           mediaConnection!.addStream(localStream!);
-
-          // Update local renderer
           setState(() {
             log('Updating local renderer with camera stream');
             localRenderer.srcObject = localStream;
           });
-
-          // Stop screen sharing tracks after successful switch
           screenTracks?.forEach((track) => track.stop());
         }
 
@@ -517,15 +491,10 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
   Future<void> startScreenRecording() async {
     _mediaRecorder ??= MediaRecorder();
-
-    // Check if we are already recording
     if (!isRecording) {
-      // Get a valid file path to save the video
       final directory = await getApplicationDocumentsDirectory();
       final filePath =
           '${directory.path}/screen_recording_${DateTime.now().millisecondsSinceEpoch}.mp4';
-
-      // Extract video and audio tracks
       MediaStreamTrack? videoTrack;
       RecorderAudioChannel? audioChannel;
 
@@ -548,7 +517,6 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
         log('Failed to start recording: $e');
       }
     } else {
-      // Stop the recording and save the file
       try {
         await _mediaRecorder?.stop();
         log('Recording stopped');
@@ -574,39 +542,25 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
   void endCall() {
     log('Ending call...');
-
-    // Stop timer
     stopCallTimer();
-
-    // Clean up media streams
     remoteStream?.getTracks().forEach((track) => track.stop());
     localStream?.getTracks().forEach((track) => track.stop());
-
-    // Clean up connections
     if (mediaConnection != null) {
       mediaConnection!.close();
       mediaConnection = null;
     }
-
-    // Clean up renderers
     if (mounted) {
       setState(() {
         remoteRenderer.srcObject = null;
         localRenderer.srcObject = null;
       });
     }
-
-    // Dispose resources
     remoteStream?.dispose();
     localStream?.dispose();
-
-    // Disconnect socket and peer
     socket.disconnect();
     peer.dispose();
-
-    // Navigate back if context is still valid
     if (mounted && Navigator.canPop(context)) {
-      // Navigator.pop(context);
+      Navigator.pop(context);
     }
   }
 
@@ -690,8 +644,8 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
                                   radius: 50,
                                   backgroundColor: Colors.grey[700],
                                   child: Text(
-                                    widget.userName != null
-                                        ? widget.userName![0]
+                                    widget.userName.isNotEmpty
+                                        ? widget.userName[0]
                                         : '',
                                     style: const TextStyle(
                                       fontSize: 40,
@@ -768,25 +722,25 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
                       color: Colors.white, size: 32),
                   onPressed: toggleVideo,
                 ),
-                // IconButton(
-                //   icon: Icon(
-                //       isRecording ? Icons.stop : Icons.fiber_manual_record,
-                //       color: Colors.white,
-                //       size: 32),
-                //   onPressed: startScreenRecording,
-                // ),
+                IconButton(
+                  icon: Icon(
+                      isRecording ? Icons.stop : Icons.fiber_manual_record,
+                      color: Colors.white,
+                      size: 32),
+                  onPressed: startScreenRecording,
+                ),
                 IconButton(
                   icon: Icon(isSpeakerOn ? Icons.volume_up : Icons.volume_off,
                       color: Colors.white, size: 32),
                   onPressed: toggleSpeaker,
                 ),
-                // IconButton(
-                //   icon: Icon(
-                //       !isSharing ? Icons.screen_share : Icons.stop_screen_share,
-                //       color: Colors.white,
-                //       size: 32),
-                //   onPressed: toggleScreenShare,
-                // ),
+                IconButton(
+                  icon: Icon(
+                      !isSharing ? Icons.screen_share : Icons.stop_screen_share,
+                      color: Colors.white,
+                      size: 32),
+                  onPressed: toggleScreenShare,
+                ),
               ],
             ),
           ),

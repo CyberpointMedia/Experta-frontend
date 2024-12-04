@@ -3,7 +3,6 @@ import 'dart:developer';
 
 import 'package:experta/data/models/request/verify_otp_request_model.dart';
 import 'package:experta/data/models/response/verify_otp_response_model.dart';
-import 'package:path/path.dart';
 
 import '../../../core/app_export.dart';
 import '../models/verifynumber_model.dart';
@@ -20,13 +19,13 @@ class VerifynumberController extends GetxController with CodeAutoFill {
   final ApiService _apiService = ApiService();
   Rx<bool> complete = false.obs;
   PrefUtils prefUtils = PrefUtils();
-  var timerText = '02:00'.obs;
+  var timerText = '05:00'.obs;
   var isResendButtonVisible = false.obs;
   Timer? _timer;
-  int _start = 120;
+  int _start = 300;
 
   void startTimer() {
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_start == 0) {
         isResendButtonVisible.value = true;
         _timer?.cancel();
@@ -48,7 +47,7 @@ class VerifynumberController extends GetxController with CodeAutoFill {
 
     try {
       VerifyOtpResponseModel? response =
-          await _apiService.verifyOtp(requestModel,context);
+          await _apiService.verifyOtp(requestModel, context);
       if (response != null && response.status == "success") {
         await prefUtils.setaddress("${response.data!.id}");
         log("hey this is your id ${response.data!.id}");
@@ -77,6 +76,8 @@ class VerifynumberController extends GetxController with CodeAutoFill {
           String status = responseData['status'];
           var data = responseData['data'];
           if (status == "success") {
+            isResendButtonVisible = false.obs;
+            startTimer();
             String otp = data['otp'];
             print("OTP Resent Successfully: $otp");
           } else {
@@ -95,12 +96,11 @@ class VerifynumberController extends GetxController with CodeAutoFill {
 
   @override
   void codeUpdated() {
-    print("Code updated: $code"); // Debug print
+    print("Code updated: $code");
     if (code != null) {
-      print("Setting code: $code"); // Debug print
+      print("Setting code: $code");
       otpController.value.text = code!;
       complete.value = code!.length == 6;
-      
     }
   }
 

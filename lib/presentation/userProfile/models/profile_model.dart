@@ -33,7 +33,7 @@ class Data {
   final int? resendCount;
   final dynamic otp;
   final dynamic otpExpiry;
-  final bool? block;
+  final String? block;
   final bool? isVerified;
   final UserBasicInfo? basicInfo;
   final DateTime? createdAt;
@@ -275,7 +275,6 @@ class UserBasicInfo {
     return followers?.length ?? 0;
   }
 
-  // Method to calculate total number of following
   int getTotalFollowing() {
     return following?.length ?? 0;
   }
@@ -327,7 +326,7 @@ class Post {
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final int? v;
-  final String? location; // Added location field
+  final String? location;
 
   Post({
     this.id,
@@ -340,7 +339,7 @@ class Post {
     this.createdAt,
     this.updatedAt,
     this.v,
-    this.location, // Added location field
+    this.location,
   });
 
   factory Post.fromJson(Map<String, dynamic> json) => Post(

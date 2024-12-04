@@ -120,13 +120,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 color: appTheme.whiteA700.withOpacity(0.6),
                 border: Border.all(
                   color: Colors.white,
-                  width: 1.5, 
+                  width: 1.5,
                 ),
               ),
               child: CustomImageView(
                 imagePath: ImageConstant.imgBell02,
                 height: 8.0,
-                width: 8.0, 
+                width: 8.0,
               ),
             ),
           ),
@@ -466,9 +466,9 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           ),
         ),
-        const SizedBox(height: 10), // Standard spacing
+        const SizedBox(height: 10),
         SizedBox(
-          height: MediaQuery.of(context).size.height * 1.63,
+          height: 5 * MediaQuery.of(context).size.height * 0.35,
           child: FutureBuilder<List<User>>(
             future: controller.fetchTrendingPeople(),
             builder: (context, snapshot) {
@@ -497,8 +497,7 @@ class _HomeScreenState extends State<HomeScreen> {
             },
           ),
         ),
-
-        const SizedBox(height: 30),
+        const SizedBox(height: 10),
       ],
     );
   }
