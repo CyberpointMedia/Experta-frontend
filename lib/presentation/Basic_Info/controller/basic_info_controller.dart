@@ -14,6 +14,7 @@ class BasicProfileInfoController extends GetxController {
   Rx<BasicProfileInfoModel?> userProfile = Rx<BasicProfileInfoModel?>(null);
 
   TextEditingController fullNameController = TextEditingController();
+
   TextEditingController displayNameController = TextEditingController();
   TextEditingController bioController = TextEditingController();
   TextEditingController dateOfBirthController = TextEditingController();
@@ -41,7 +42,7 @@ class BasicProfileInfoController extends GetxController {
       if (userProfile.value != null) {
         updateTextFields();
         updateSocialLinks();
-        profileImageUrl.value = userProfile.value?.data.profilePic ?? '';
+        profileImageUrl.value = userProfile.value?.data?.profilePic ?? '';
       }
     } catch (e) {
       log("Error fetching basic info: $e");
@@ -56,11 +57,12 @@ class BasicProfileInfoController extends GetxController {
       final data = userProfile.value?.data;
       if (data != null) {
         fullNameController.text = '${data.firstName} ${data.lastName}'.trim();
-        displayNameController.text = data.displayName;
-        bioController.text = data.bio;
-        dateOfBirthController.text =
-            DateFormat('dd/MM/yyyy').format(data.dateOfBirth);
-        genderController.text = data.gender;
+        displayNameController.text = data.displayName!;
+        bioController.text = data.bio!;
+        dateOfBirthController.text = data.dateOfBirth != null
+            ? DateFormat('dd/MM/yyyy').format(data.dateOfBirth!)
+            : DateFormat('dd/MM/yyyy').format(DateTime.now());
+        genderController.text = data.gender!;
       }
     } catch (e) {
       log("Error updating text fields: $e");
@@ -72,10 +74,9 @@ class BasicProfileInfoController extends GetxController {
       socialLinks.clear();
       final data = userProfile.value?.data;
       if (data != null) {
-        socialLinks.addAll(data.socialLinks.map((link) {
-          String platformName = link.name;
+        socialLinks.addAll(data.socialLinks!.map((link) {
+          String platformName = link.name.toString();
 
-          // Transform platform name
           if (platformName.toLowerCase() == 'twitter') {
             platformName = 'Twitter (now X)';
           } else {
@@ -89,7 +90,7 @@ class BasicProfileInfoController extends GetxController {
 
           return {
             'platform': platformName,
-            'link': link.link,
+            'link': link.link.toString(),
           };
         }));
       }
@@ -138,9 +139,10 @@ class BasicProfileInfoController extends GetxController {
       final names = fullNameController.text.split(' ');
       final data = {
         "firstName": names.first.trim(),
-        "lastName": names.length > 1 ? names.last.trim() : "",
+        "lastName": names.last.trim(),
         "displayName": displayNameController.text.trim(),
         "bio": bioController.text.trim(),
+        "username": displayNameController.text.trim(),
         "dateOfBirth": DateFormat('yyyy-MM-dd').format(
             DateFormat('dd/MM/yyyy').parse(dateOfBirthController.text.trim())),
         "gender": genderController.text.toLowerCase().trim(),
@@ -161,9 +163,9 @@ class BasicProfileInfoController extends GetxController {
       Get.back();
       Get.snackbar('Success', 'Profile information saved successfully');
     } catch (e, stacktrace) {
-      _logger.e('Exception occurred: $e');
-      Get.snackbar(
-          'Error', 'Failed to save profile information: ${e.toString()}');
+      _logger.e('Exception occurred: $e , $stacktrace');
+      Get.snackbar('Error',
+          'Failed to save profile information: ${e.toString()}, $stacktrace');
     }
   }
 

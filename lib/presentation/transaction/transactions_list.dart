@@ -70,7 +70,6 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
   void _filterTransactions() {
     setState(() {
       filteredTransactions = transactions.where((transaction) {
-        // Check if the transaction matches the search query
         final matchesSearchQuery = transaction.type
                 .toLowerCase()
                 .contains(searchQuery.toLowerCase()) ||
@@ -78,23 +77,15 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                     ?.toLowerCase()
                     .contains(searchQuery.toLowerCase()) ??
                 false);
-
-        // Check if the transaction matches the selected date range
         final matchesDateRange = (_selectedFromDate == null ||
                 transaction.createdAt.isAfter(_selectedFromDate!)) &&
             (_selectedToDate == null ||
                 transaction.createdAt
                     .isBefore(_selectedToDate!.add(const Duration(days: 1))));
-
-        // Check if the transaction matches the selected statuses
         final matchesStatus = selectedStatuses.isEmpty ||
             selectedStatuses.contains(transaction.status.toLowerCase());
-
-        // Check if the transaction matches the selected payment types
         final matchesPaymentType = selectedPaymentTypes.isEmpty ||
             selectedPaymentTypes.contains(transaction.type.toLowerCase());
-
-        // Check month
         final createdMonth =
             DateFormat('MMMM \'yy').format(transaction.createdAt);
         final matchesPaymentMonth =
@@ -114,19 +105,14 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
         await Permission.storage.request().isGranted) {
       final xlsio.Workbook workbook = xlsio.Workbook();
       final xlsio.Worksheet sheet = workbook.worksheets[0];
-
-      // Define styles
       final xlsio.Style headerStyle = workbook.styles.add('headerStyle');
       headerStyle.bold = true;
       headerStyle.hAlign = xlsio.HAlignType.center;
       headerStyle.vAlign = xlsio.VAlignType.center;
       headerStyle.fontName = 'Calibri';
-
       final xlsio.Style dataCellStyle = workbook.styles.add('dataCellStyle');
       dataCellStyle.hAlign = xlsio.HAlignType.center;
       dataCellStyle.vAlign = xlsio.VAlignType.center;
-
-      // Define headers
       final headerRow = [
         'Transaction ID',
         'Type',
@@ -140,15 +126,11 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
         'Booking Type',
         'Booking Status'
       ];
-
-      // Apply headers
       for (int col = 0; col < headerRow.length; col++) {
         final cell = sheet.getRangeByIndex(1, col + 1);
         cell.setText(headerRow[col]);
         cell.cellStyle = headerStyle;
       }
-
-      // Fill data rows
       for (int row = 0; row < filteredTransactions.length; row++) {
         var transaction = filteredTransactions[row];
         var rowData = [
@@ -171,33 +153,21 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
           cell.cellStyle = dataCellStyle;
         }
       }
-
-      // Auto-fit columns
       for (int i = 1; i <= headerRow.length; i++) {
         sheet.autoFitColumn(i);
       }
-
-      // Save the workbook
       final List<int> bytes = workbook.saveAsStream();
       workbook.dispose();
-
-      // Create directory if it doesn't exist
       final Directory downloadsDirectory =
           Directory('/storage/emulated/0/Download/MyExcelFiles');
       if (!await downloadsDirectory.exists()) {
         await downloadsDirectory.create(recursive: true);
       }
-
-      // Generate file path with timestamp
       final filePath =
           '${downloadsDirectory.path}/transactions_${DateTime.now().millisecondsSinceEpoch}.xlsx';
       final file = File(filePath);
       await file.writeAsBytes(bytes);
-
-      // Show notification
       await _showDownloadNotification(filePath);
-
-      // Show success message
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Excel file downloaded to $filePath')),
       );
@@ -269,7 +239,7 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
                           return _buildFilterSheet(
                             scrollController,
                             transactions,
-                            setModalState, // Pass the setState function
+                            setModalState,
                           );
                         },
                       );
@@ -320,6 +290,8 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
   }
 
   Widget _buildTransactionTile(Transaction transaction) {
+    final String? myUserId = PrefUtils().getaddress();
+
     String formattedTime = DateFormat('hh:mm a').format(transaction.createdAt);
     DateTime today = DateTime.now();
     DateTime yesterday = today.subtract(const Duration(days: 1));
@@ -339,41 +311,52 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
       displayText = '$formattedDate, $formattedTime';
     }
 
-    // Determine transaction type icon
     String transactionIcon;
     if (transaction.type == 'deposit') {
       transactionIcon = ImageConstant.topup;
     } else if (transaction.type == 'booking_payment') {
-      transactionIcon = ImageConstant.transact;
+      bool isPayment = transaction.sender?.id == myUserId;
+      transactionIcon =
+          isPayment ? ImageConstant.transact : ImageConstant.receive;
     } else if (transaction.type == 'refund') {
       transactionIcon = ImageConstant.deposit;
     } else {
       transactionIcon = ImageConstant.transact;
     }
 
-    // Format transaction type display text
     String typeDisplayText;
-    switch (transaction.type) {
-      case 'deposit':
-        typeDisplayText = 'Top up';
-        break;
-      case 'booking_payment':
-        typeDisplayText = 'Booking Payment';
-        break;
-      case 'refund':
-        typeDisplayText = 'Refund';
-        break;
-      default:
-        typeDisplayText = transaction.type;
+    if (transaction.type == 'booking_payment') {
+      // Check if the sender's ID matches your ID
+      bool isPayment = transaction.sender?.id == myUserId;
+      typeDisplayText = isPayment ? 'Transfer' : 'Received';
+    } else {
+      switch (transaction.type) {
+        case 'deposit':
+          typeDisplayText = 'Top up';
+          break;
+        case 'refund':
+          typeDisplayText = 'Refund';
+          break;
+        default:
+          typeDisplayText = transaction.type;
+      }
     }
+
+    // Determine if amount should show + or -
+    bool isPositiveTransaction = transaction.type == 'refund' ||
+        transaction.type == 'deposit' ||
+        (transaction.type == 'booking_payment' &&
+            transaction.receiver?.id == myUserId);
 
     return ListTile(
       leading: CustomIconButton(
-        height: 44.adaptSize,
-        width: 44.adaptSize,
+        height: 40.adaptSize,
+        width: 40.adaptSize,
         padding: EdgeInsets.all(10.h),
         decoration: IconButtonStyleHelper.outline2,
-        child: CustomImageView(imagePath: transactionIcon),
+        child: CustomImageView(
+          imagePath: transactionIcon,
+        ),
       ),
       title: Text(
         typeDisplayText,
@@ -391,16 +374,9 @@ class _TransactionHistoryPageState extends State<TransactionHistoryPage> {
             text: TextSpan(
               children: [
                 TextSpan(
-                  text: transaction.type == 'refund'
-                      ? '+ '
-                      : transaction.type == 'deposit'
-                          ? '+ '
-                          : '- ',
+                  text: isPositiveTransaction ? '+ ' : '- ',
                   style: TextStyle(
-                    color: transaction.type == 'refund' ||
-                            transaction.type == 'deposit'
-                        ? Colors.green
-                        : Colors.red,
+                    color: isPositiveTransaction ? Colors.green : Colors.red,
                     fontWeight: FontWeight.bold,
                   ),
                 ),

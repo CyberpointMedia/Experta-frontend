@@ -208,8 +208,6 @@ class AppRoutes {
 
   static const String recent = "/recents";
 
-  static const String changeDateOfBirth = "/change_date_of_birth";
-
   static const String changeEmail = "/change_email";
 
   static const String phoneNumber = "/phone_number";

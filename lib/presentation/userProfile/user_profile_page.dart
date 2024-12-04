@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:experta/core/app_export.dart';
 import 'package:experta/core/utils/web_view/web_view.dart';
 import 'package:experta/presentation/all_review/all_review.dart';
@@ -22,7 +21,7 @@ class UserProfilePage extends StatefulWidget {
 }
 
 class _UserProfilePageState extends State<UserProfilePage>
-    with SingleTickerProviderStateMixin {
+    with TickerProviderStateMixin {
   ProfileController controller = Get.put(ProfileController());
   late TabController _tabController;
 
@@ -36,7 +35,6 @@ class _UserProfilePageState extends State<UserProfilePage>
   Widget build(BuildContext context) {
     return SafeArea(
       child: Scaffold(
-        backgroundColor: Colors.white,
         body: Stack(
           children: [
             Positioned(
@@ -62,86 +60,485 @@ class _UserProfilePageState extends State<UserProfilePage>
                 ),
               ),
             ),
-            Obx(() {
-              return NestedScrollView(
-                headerSliverBuilder: (context, innerBoxIsScrolled) {
-                  return [
-                    SliverAppBar(
-                      pinned: true,
-                      automaticallyImplyLeading: false,
-                      expandedHeight: MediaQuery.of(context).size.height * 0.5,
-                      backgroundColor: Colors.transparent,
-                      primary: true,
-                      title: Obx(() {
-                        return Text(
-                          controller.userData.value.data?.basicInfo
-                                  ?.displayName ??
-                              '',
-                          style: theme.textTheme.titleMedium!.copyWith(
-                              color: appTheme.gray900,
-                              fontSize: 20.fSize,
-                              fontWeight: FontWeight.bold),
-                        );
-                      }),
-                      actions: [
-                        CustomImageView(
-                          margin: EdgeInsets.all(8.adaptSize),
-                          imagePath: "assets/images/settings.svg",
-                          onTap: () {
-                            Get.toNamed(AppRoutes.settingScreen);
-                          },
-                        )
-                      ],
-                      flexibleSpace: FlexibleSpaceBar(
-                        background: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            Padding(
-                              padding: EdgeInsets.only(top: 30.adaptSize),
-                              child: _profilepicBody(),
-                            ),
-                            _ratingSection(),
-                          ],
-                        ),
-                      ),
-                      bottom: PreferredSize(
-                        preferredSize: const Size.fromHeight(10),
-                        child: Material(
-                          color: Colors.white,
-                          child: TabBar(
-                            controller: _tabController,
-                            labelColor: Colors.black,
-                            dividerColor: Colors.black,
-                            unselectedLabelColor: Colors.grey,
-                            indicatorSize: TabBarIndicatorSize.tab,
-                            physics: const BouncingScrollPhysics(),
-                            tabs: const [
-                              Tab(text: 'About Me'),
-                              Tab(text: 'Posts'),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ];
-                },
-                body: TabBarView(
-                  controller: _tabController,
-                  children: [
-                    _buildAboutMe(),
-                    _buildPosts(),
-                  ],
-                ),
-              );
-            })
+            _buildMainContent(),
           ],
         ),
       ),
     );
   }
 
-  Widget _buildAboutMe() {
+  Widget _buildMainContent() {
+    return RefreshIndicator(
+      onRefresh: controller.refreshData,
+      child: NestedScrollView(
+        physics: const AlwaysScrollableScrollPhysics(),
+        headerSliverBuilder: (context, innerBoxIsScrolled) => [
+          ProfileHeader(controller: controller, tabController: _tabController),
+        ],
+        body:
+            ProfileTabs(controller: controller, tabController: _tabController),
+      ),
+    );
+  }
+}
+
+class ProfileHeader extends StatelessWidget {
+  final ProfileController controller;
+  final TabController tabController;
+
+  const ProfileHeader(
+      {super.key, required this.controller, required this.tabController});
+
+  @override
+  Widget build(BuildContext context) {
+    return SliverAppBar(
+      pinned: false,
+      automaticallyImplyLeading: false,
+      expandedHeight: MediaQuery.of(context).size.height * 0.52,
+      backgroundColor: Colors.transparent,
+      primary: true,
+      title: _buildAppBarTitle(context),
+      actions: [_buildSettingsButton()],
+      flexibleSpace: _buildFlexibleSpace(context),
+      bottom: _buildTabBar(context, tabController),
+    );
+  }
+
+  Widget _buildAppBarTitle(BuildContext context) {
+    return Obx(() => Text(
+          controller.userData.value.data?.basicInfo?.displayName ?? '',
+          style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                color: appTheme.black900,
+                fontSize: 20.fSize,
+                fontWeight: FontWeight.bold,
+              ),
+        ));
+  }
+
+  Widget _buildSettingsButton() {
+    return CustomImageView(
+      margin: EdgeInsets.all(8.adaptSize),
+      imagePath: "assets/images/settings.svg",
+      onTap: () async {
+        await Get.toNamed(AppRoutes.settingScreen,
+            arguments:
+                controller.userData.value.data?.basicInfo?.profilePic ?? '');
+        controller.refreshData();
+      },
+    );
+  }
+
+  Widget _buildFlexibleSpace(BuildContext context) {
+    return FlexibleSpaceBar(
+      background: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Padding(
+            padding: EdgeInsets.only(
+              top: 30.adaptSize,
+            ),
+            child: _profilepicBody(context),
+          ),
+          _ratingSection(context),
+        ],
+      ),
+    );
+  }
+
+  PreferredSize _buildTabBar(
+      BuildContext context, TabController tabController) {
+    return PreferredSize(
+      preferredSize: const Size.fromHeight(10),
+      child: Material(
+        color: Colors.white,
+        child: TabBar(
+          controller: tabController,
+          labelColor: Colors.black,
+          dividerColor: Colors.black,
+          unselectedLabelColor: Colors.grey,
+          indicatorSize: TabBarIndicatorSize.tab,
+          physics: const BouncingScrollPhysics(),
+          tabs: const [
+            Tab(text: 'About Me'),
+            Tab(text: 'Posts'),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _profilepicBody(BuildContext context) {
+    return Obx(() {
+      return Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(left: 15.v, top: 20.v),
+                child: CustomImageView(
+                  height: 70.v,
+                  width: 70.v,
+                  radius: BorderRadius.circular(50.v),
+                  imagePath:
+                      controller.userData.value.data?.basicInfo?.profilePic ??
+                          ImageConstant.imgImage3380x80,
+                ),
+              ),
+              SizedBox(
+                child: Padding(
+                  padding: EdgeInsets.only(left: 15.v),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      Row(
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Text(
+                            '${controller.userData.value.data?.basicInfo?.firstName ?? ''} ${controller.userData.value.data?.basicInfo?.lastName ?? ''}',
+                            textAlign: TextAlign.left,
+                            style: CustomTextStyles.titleLargeSemiBold,
+                          ),
+                          CustomImageView(
+                            margin: EdgeInsets.only(left: 5.v),
+                            imagePath: "assets/images/veifiedtick.svg",
+                          ),
+                        ],
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.5,
+                        child: Text(
+                          "${controller.userData.value.data?.industryOccupation?.industry?.name ?? ''} | ${controller.userData.value.data?.industryOccupation?.occupation?.name ?? ''}",
+                          textAlign: TextAlign.left,
+                          style: Theme.of(context)
+                              .textTheme
+                              .titleSmall!
+                              .copyWith(color: appTheme.black900),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ],
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 20.v, left: 10.v),
+            child: Row(
+              children: [
+                CustomImageView(
+                  margin: EdgeInsets.only(left: 5.v),
+                  imagePath: "assets/images/language.svg",
+                ),
+                SizedBox(
+                  width: 10.v,
+                ),
+                Expanded(
+                  child: Wrap(
+                    spacing: 8.0,
+                    runSpacing: 4.0,
+                    children: (() {
+                      final languages =
+                          controller.userData.value.data?.language?.language;
+
+                      if (languages != null && languages.isNotEmpty) {
+                        final languageNames =
+                            languages.map((e) => e.name.toString()).toList();
+
+                        if (languageNames.length > 3) {
+                          return [
+                            Text(
+                              '${languageNames.take(3).join(', ')} +${languageNames.length - 3} more',
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(
+                                    color: appTheme.black900,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                            ),
+                          ];
+                        } else {
+                          return [
+                            Text(
+                              languageNames.join(', '),
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .bodyMedium!
+                                  .copyWith(
+                                    color: appTheme.black900,
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                            )
+                          ];
+                        }
+                      } else {
+                        return <Widget>[
+                          Text(
+                            "No Languages found",
+                            style: Theme.of(context)
+                                .textTheme
+                                .bodyMedium!
+                                .copyWith(
+                                  color: appTheme.black900,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                          )
+                        ];
+                      }
+                    })(),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: EdgeInsets.only(top: 20.v, left: 10.v),
+            child: Row(
+              children: [
+                CustomImageView(
+                  margin: EdgeInsets.only(left: 5.v),
+                  imagePath: "assets/images/doctorverify.svg",
+                ),
+                SizedBox(
+                  width: 10.v,
+                ),
+                SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.3,
+                  child: Text(
+                    "Reg no: ${controller.userData.value.data?.industryOccupation?.registrationNumber ?? " N/A"}",
+                    textAlign: TextAlign.left,
+                    style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                        color: appTheme.black900,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500),
+                  ),
+                ),
+                Container(
+                  width: 1.v,
+                  height: 15.h,
+                  color: Colors.grey,
+                  margin: EdgeInsets.symmetric(horizontal: 10.adaptSize),
+                ),
+                CustomImageView(
+                  margin: EdgeInsets.only(left: 5.v),
+                  imagePath: "assets/images/chat.svg",
+                ),
+                SizedBox(
+                  width: 10.v,
+                ),
+                Text(
+                  controller.userData.value.data?.noOfBooking.toString() ?? "",
+                  textAlign: TextAlign.left,
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      color: appTheme.black900,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500),
+                ),
+                SizedBox(
+                  width: 5.v,
+                ),
+                Text(
+                  "Consultation",
+                  textAlign: TextAlign.left,
+                  style: Theme.of(context).textTheme.bodyMedium!.copyWith(
+                      color: appTheme.black900,
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500),
+                ),
+              ],
+            ),
+          ),
+        ],
+      );
+    });
+  }
+
+  Widget _ratingSection(BuildContext context) {
+    int? totalFollowers =
+        controller.userData.value.data?.basicInfo?.getTotalFollowers() ?? 0;
+    int? totalFollowing =
+        controller.userData.value.data?.basicInfo?.getTotalFollowing() ?? 0;
+
+    return Padding(
+      padding: EdgeInsets.only(
+          left: 13.adaptSize, right: 30.adaptSize, top: 30.adaptSize),
+      child: Column(
+        children: [
+          Obx(() {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(
+                            top: 1.adaptSize,
+                            bottom: 2.adaptSize,
+                          ),
+                          child: SizedBox(
+                            height: 18.v,
+                            width: 18.adaptSize,
+                            child:
+                                SvgPicture.asset("assets/images/img_star.svg"),
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(left: 2.adaptSize),
+                          child: Text(
+                            "${controller.userData.value.data?.basicInfo?.rating ?? "N/A"}",
+                            style: Theme.of(context)
+                                .textTheme
+                                .headlineLarge
+                                ?.copyWith(fontSize: 18.fSize),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 6.v,
+                    ),
+                    Text(
+                      "Overall Ratings",
+                      style: Theme.of(context).textTheme.titleSmall!,
+                    )
+                  ],
+                ),
+                const Spacer(
+                  flex: 42,
+                ),
+                GestureDetector(
+                  onTap: () async {
+                    await Get.toNamed(AppRoutes.follower, arguments: {
+                      "id": controller.userData.value.data?.id,
+                      "userProfile": "userProfile"
+                    })!
+                        .then((value) {
+                      Get.find<ProfileController>().fetchUserData(
+                          controller.address.toString(),
+                          controller.address.toString());
+                    });
+                    controller.refreshData();
+                  },
+                  child: Column(
+                    children: [
+                      Text(
+                        "$totalFollowers",
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineLarge
+                            ?.copyWith(fontSize: 18.fSize),
+                      ),
+                      SizedBox(
+                        height: 6.v,
+                      ),
+                      Text(
+                        "Followers",
+                        style: Theme.of(context).textTheme.titleSmall!,
+                      ),
+                    ],
+                  ),
+                ),
+                const Spacer(
+                  flex: 58,
+                ),
+                GestureDetector(
+                  onTap: () async {
+                    await Get.toNamed(AppRoutes.following, arguments: {
+                      "id": controller.userData.value.data?.id,
+                      "userProfile": "userProfile"
+                    })!
+                        .then((value) {
+                      Get.find<ProfileController>().fetchUserData(
+                          controller.address.toString(),
+                          controller.address.toString());
+                    });
+                    controller.refreshData();
+                  },
+                  child: Column(
+                    children: [
+                      Text(
+                        "$totalFollowing",
+                        style: Theme.of(context)
+                            .textTheme
+                            .headlineLarge
+                            ?.copyWith(fontSize: 18.fSize),
+                      ),
+                      SizedBox(
+                        height: 6.v,
+                      ),
+                      Text(
+                        "Following",
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            );
+          }),
+          SizedBox(
+            height: 16.v,
+          ),
+          CustomElevatedButton(
+            leftIcon: Icon(
+              Icons.add,
+              color: Colors.black,
+              size: 15.adaptSize,
+            ),
+            text: "Create Post",
+            onPressed: () async {
+              await Get.toNamed(AppRoutes.newPost);
+              controller.refreshData();
+            },
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class ProfileTabs extends StatelessWidget {
+  final ProfileController controller;
+  final TabController tabController;
+
+  const ProfileTabs({
+    super.key,
+    required this.controller,
+    required this.tabController,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return TabBarView(
+      physics: const AlwaysScrollableScrollPhysics(),
+      controller: tabController,
+      children: [
+        AboutMeSection(controller: controller),
+        PostsSection(controller: controller),
+      ],
+    );
+  }
+}
+
+class AboutMeSection extends StatelessWidget {
+  final ProfileController controller;
+
+  const AboutMeSection({super.key, required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
     return SizedBox(
       width: 430.adaptSize,
       child: Column(
@@ -159,27 +556,27 @@ class _UserProfilePageState extends State<UserProfilePage>
                     SizedBox(
                       height: 8.v,
                     ),
-                    _buildColumnaboutme(),
+                    _buildColumnaboutme(context),
                     SizedBox(
                       height: 8.v,
                     ),
-                    _buildColumnExperience(),
+                    ExperienceSection(controller: controller),
                     SizedBox(
                       height: 8.v,
                     ),
-                    _buildColumnEducation(),
+                    EducationSection(controller: controller),
                     SizedBox(
                       height: 8.v,
                     ),
-                    _buildColumnAchievements(),
+                    AchievementsSection(controller: controller),
                     SizedBox(
                       height: 8.v,
                     ),
-                    _buildColumnInterests(),
+                    InterestsSection(controller: controller),
                     SizedBox(
                       height: 8.v,
                     ),
-                    _buildColumnreviews()
+                    ReviewsSection(controller: controller),
                   ],
                 ),
               ),
@@ -190,7 +587,201 @@ class _UserProfilePageState extends State<UserProfilePage>
     );
   }
 
-  Widget _buildPosts() {
+  Widget _buildChipviewvisual(BuildContext context) {
+    final theme = Theme.of(context);
+
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _buildRowaboutme(context, aboutMeText: "Expertise"),
+              CustomImageView(
+                imagePath: "assets/images/Frame.svg",
+                onTap: () async {
+                  final expertiseList =
+                      controller.userData.value.data?.expertise?.expertise ??
+                          [];
+
+                  await Get.to(() => EditExpertisePage(
+                        selectedItems: expertiseList.map((userExpertise) {
+                          return ExpertiseItem(
+                            id: userExpertise.id.toString(),
+                            name: userExpertise.name.toString(),
+                          );
+                        }).toList(),
+                      ));
+                  controller.refreshData();
+                },
+              ),
+            ],
+          ),
+          const SizedBox(height: 8.0),
+          Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Obx(() {
+              final expertiseList =
+                  controller.userData.value.data?.expertise?.expertise ?? [];
+
+              return Wrap(
+                spacing: 4.0,
+                runSpacing: 0.0,
+                children: expertiseList.map((expertise) {
+                  return Chip(
+                    label: Text(
+                      expertise.name.toString(),
+                      style: theme.textTheme.titleSmall!.copyWith(
+                        color: Colors.black,
+                      ),
+                    ),
+                    backgroundColor: appTheme.gray200,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                      side: BorderSide(
+                        color: appTheme.gray300,
+                      ),
+                    ),
+                  );
+                }).toList(),
+              );
+            }),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildColumnaboutme(BuildContext context) {
+    List<Map<String, dynamic>>? socialMediaLinks =
+        controller.userData.value.data?.basicInfo?.getSocialMediaLinks();
+    final theme = Theme.of(context);
+
+    return Container(
+      color: Colors.white,
+      padding: const EdgeInsets.all(10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              _buildRowaboutme(context, aboutMeText: "About me"),
+              InkWell(
+                onTap: () async {
+                  final bio =
+                      controller.userData.value.data?.basicInfo?.bio ?? '';
+                  await Get.to(
+                    () => EditAboutPage(bio: bio),
+                    transition: Transition.rightToLeft,
+                    duration: const Duration(milliseconds: 300),
+                    curve: Curves.easeInOut,
+                  );
+
+                  controller.refreshData();
+                },
+                child: CustomImageView(
+                  height: 19,
+                  width: 19,
+                  imagePath: "assets/images/Frame.svg",
+                ),
+              ),
+            ],
+          ),
+          SizedBox(height: 18.v),
+          SizedBox(
+            width: 331.adaptSize,
+            child: Obx(() {
+              return ReadMoreText(
+                controller.userData.value.data?.basicInfo?.bio ?? '',
+                trimLines: 3,
+                colorClickableText: appTheme.readmore,
+                trimMode: TrimMode.Line,
+                trimCollapsedText: "Read more",
+                trimExpandedText: "Read less",
+                style: theme.textTheme.titleSmall!
+                    .copyWith(color: appTheme.black900),
+                moreStyle: theme.textTheme.bodyMedium?.copyWith(
+                  color: appTheme.readmore, // Color for 'Read more'
+                  fontSize: theme.textTheme.bodyMedium?.fontSize,
+                ),
+                lessStyle: theme.textTheme.bodyMedium?.copyWith(
+                  color: appTheme.readmore, // Color for 'Read less'
+                  fontSize: theme.textTheme.bodyMedium?.fontSize,
+                ),
+              );
+            }),
+          ),
+          SizedBox(
+            height: 17.v,
+          ),
+          if (socialMediaLinks != null && socialMediaLinks.isNotEmpty)
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: socialMediaLinks.map((socialMedia) {
+                return GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => ExpertaBrowser(
+                          url: socialMedia['link'],
+                          title: socialMedia['name'],
+                        ),
+                      ),
+                    );
+                    controller.refreshData();
+                    print('Opening link: ${socialMedia['link']}');
+                  },
+                  child: Padding(
+                    padding: EdgeInsets.only(right: 8.adaptSize),
+                    child: CustomImageView(
+                      imagePath: socialMedia['icon'],
+                      height: 24.adaptSize,
+                      width: 24.adaptSize,
+                    ),
+                  ),
+                );
+              }).toList(),
+            ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildRowaboutme(BuildContext context, {required String aboutMeText}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(
+            top: 1.adaptSize,
+            bottom: 2.adaptSize,
+          ),
+          child: Text(
+            aboutMeText,
+            style: Theme.of(context)
+                .textTheme
+                .headlineLarge
+                ?.copyWith(fontSize: 16.fSize, fontWeight: FontWeight.w600),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class PostsSection extends StatelessWidget {
+  final ProfileController controller;
+
+  const PostsSection({super.key, required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
     return Obx(() {
       var posts = controller.feeds;
       if (controller.isLoading.value) {
@@ -244,6 +835,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                     ),
                   ),
                 );
+                controller.refreshData();
               },
               child: CustomImageView(
                 imagePath: posts[reverseIndex].image ?? '',
@@ -255,103 +847,15 @@ class _UserProfilePageState extends State<UserProfilePage>
       }
     });
   }
+}
 
-  Widget _buildColumnaboutme() {
-    List<Map<String, dynamic>>? socialMediaLinks =
-        controller.userData.value.data?.basicInfo?.getSocialMediaLinks();
-    final theme = Theme.of(context);
+class ExperienceSection extends StatelessWidget {
+  final ProfileController controller;
 
-    return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _buildRowaboutme(aboutMeText: "About me"),
-              InkWell(
-                onTap: () {
-                  final bio =
-                      controller.userData.value.data?.basicInfo?.bio ?? '';
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => EditAboutPage(bio: bio),
-                    ),
-                  );
-                },
-                child: CustomImageView(
-                  height: 19,
-                  width: 19,
-                  imagePath: "assets/images/Frame.svg",
-                ),
-              ),
-            ],
-          ),
-          SizedBox(height: 18.v),
-          SizedBox(
-            width: 331.adaptSize,
-            child: Obx(() {
-              return ReadMoreText(
-                controller.userData.value.data?.basicInfo?.bio ?? '',
-                trimLines: 3,
-                colorClickableText: appTheme.readmore,
-                trimMode: TrimMode.Line,
-                trimCollapsedText: "Read more",
-                trimExpandedText: "Read less",
-                style: theme.textTheme.titleSmall!
-                    .copyWith(color: appTheme.black900),
-                moreStyle: theme.textTheme.bodyMedium?.copyWith(
-                  color: appTheme.readmore, // Color for 'Read more'
-                  fontSize: theme.textTheme.bodyMedium?.fontSize,
-                ),
-                lessStyle: theme.textTheme.bodyMedium?.copyWith(
-                  color: appTheme.readmore, // Color for 'Read less'
-                  fontSize: theme.textTheme.bodyMedium?.fontSize,
-                ),
-              );
-            }),
-          ),
-          SizedBox(
-            height: 17.v,
-          ),
-          if (socialMediaLinks != null && socialMediaLinks.isNotEmpty)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: socialMediaLinks.map((socialMedia) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ExpertaBrowser(
-                          url: socialMedia['link'],
-                          title: socialMedia['name'],
-                        ),
-                      ),
-                    );
-                    print('Opening link: ${socialMedia['link']}');
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.only(right: 8.adaptSize),
-                    child: CustomImageView(
-                      imagePath: socialMedia['icon'],
-                      height: 24.adaptSize,
-                      width: 24.adaptSize,
-                    ),
-                  ),
-                );
-              }).toList(),
-            ),
-        ],
-      ),
-    );
-  }
+  const ExperienceSection({super.key, required this.controller});
 
-  Widget _buildColumnExperience() {
+  @override
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Container(
       color: Colors.white,
@@ -374,8 +878,9 @@ class _UserProfilePageState extends State<UserProfilePage>
               ),
               CustomImageView(
                 imagePath: "assets/images/Frame.svg",
-                onTap: () {
-                  Get.toNamed(AppRoutes.experience);
+                onTap: () async {
+                  await Get.toNamed(AppRoutes.experience);
+                  controller.refreshData();
                 },
               ),
             ],
@@ -448,68 +953,15 @@ class _UserProfilePageState extends State<UserProfilePage>
       ),
     );
   }
+}
 
-  Widget _buildChipviewvisual(BuildContext context) {
-    final theme = Theme.of(context);
-    final data = controller.userData.value.data?.expertise;
-    final expertiseList = data?.expertise ?? [];
+class EducationSection extends StatelessWidget {
+  final ProfileController controller;
 
-    return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              _buildRowaboutme(aboutMeText: "Expertise"),
-              CustomImageView(
-                imagePath: "assets/images/Frame.svg",
-                onTap: () {
-                  Get.to(() => EditExpertisePage(
-                        selectedItems: expertiseList.map((userExpertise) {
-                          return ExpertiseItem(
-                            id: userExpertise.id.toString(),
-                            name: userExpertise.name.toString(),
-                          );
-                        }).toList(),
-                      ));
-                },
-              ),
-            ],
-          ),
-          const SizedBox(height: 8.0),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Wrap(
-              spacing: 4.0,
-              runSpacing: 0.0,
-              children: expertiseList.map((expertise) {
-                return Chip(
-                  label: Text(
-                    expertise.name.toString(),
-                    style: theme.textTheme.titleSmall!.copyWith(
-                      color: Colors.black,
-                    ),
-                  ),
-                  backgroundColor: appTheme.gray200,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                    side: BorderSide(
-                      color: appTheme.gray300,
-                    ),
-                  ),
-                );
-              }).toList(),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  const EducationSection({super.key, required this.controller});
 
-  Widget _buildColumnEducation() {
+  @override
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
 
     return Container(
@@ -533,8 +985,9 @@ class _UserProfilePageState extends State<UserProfilePage>
               ),
               CustomImageView(
                 imagePath: "assets/images/Frame.svg",
-                onTap: () {
-                  Get.toNamed(AppRoutes.education);
+                onTap: () async {
+                  await Get.toNamed(AppRoutes.education);
+                  controller.refreshData();
                 },
               ),
             ],
@@ -600,15 +1053,22 @@ class _UserProfilePageState extends State<UserProfilePage>
       ),
     );
   }
+}
 
-  Widget _buildColumnAchievements() {
+class AchievementsSection extends StatelessWidget {
+  final ProfileController controller;
+
+  const AchievementsSection({super.key, required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
       padding: const EdgeInsets.all(10),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildRowaboutme(aboutMeText: "Achievements"),
+          _buildRowaboutme(context, aboutMeText: "Achievements"),
           SizedBox(
             height: 17.v,
           ),
@@ -643,10 +1103,13 @@ class _UserProfilePageState extends State<UserProfilePage>
                                 achievement,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
-                                style: theme.textTheme.titleSmall!.copyWith(
-                                  color: appTheme.gray900,
-                                  decoration: TextDecoration.underline,
-                                ),
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall!
+                                    .copyWith(
+                                      color: appTheme.gray900,
+                                      decoration: TextDecoration.underline,
+                                    ),
                               ),
                             ),
                           ],
@@ -668,7 +1131,35 @@ class _UserProfilePageState extends State<UserProfilePage>
     );
   }
 
-  Widget _buildColumnInterests() {
+  Widget _buildRowaboutme(BuildContext context, {required String aboutMeText}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(
+            top: 1.adaptSize,
+            bottom: 2.adaptSize,
+          ),
+          child: Text(
+            aboutMeText,
+            style: Theme.of(context)
+                .textTheme
+                .headlineLarge
+                ?.copyWith(fontSize: 16.fSize, fontWeight: FontWeight.w600),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class InterestsSection extends StatelessWidget {
+  final ProfileController controller;
+
+  const InterestsSection({super.key, required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final interest = controller.userData.value.data?.interest;
     final interestList = interest?.interest ?? [];
@@ -684,11 +1175,12 @@ class _UserProfilePageState extends State<UserProfilePage>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                _buildRowaboutme(aboutMeText: "Interests"),
+                _buildRowaboutme(context, aboutMeText: "Interests"),
                 CustomImageView(
                   imagePath: "assets/images/Frame.svg",
-                  onTap: () {
-                    Get.toNamed(AppRoutes.additional);
+                  onTap: () async {
+                    await Get.toNamed(AppRoutes.additional);
+                    controller.refreshData();
                   },
                 ),
               ],
@@ -726,7 +1218,35 @@ class _UserProfilePageState extends State<UserProfilePage>
     );
   }
 
-  Widget _buildColumnreviews() {
+  Widget _buildRowaboutme(BuildContext context, {required String aboutMeText}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(
+            top: 1.adaptSize,
+            bottom: 2.adaptSize,
+          ),
+          child: Text(
+            aboutMeText,
+            style: Theme.of(context)
+                .textTheme
+                .headlineLarge
+                ?.copyWith(fontSize: 16.fSize, fontWeight: FontWeight.w600),
+          ),
+        ),
+      ],
+    );
+  }
+}
+
+class ReviewsSection extends StatelessWidget {
+  final ProfileController controller;
+
+  const ReviewsSection({super.key, required this.controller});
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       color: Colors.white,
       padding: const EdgeInsets.all(10),
@@ -737,15 +1257,20 @@ class _UserProfilePageState extends State<UserProfilePage>
             children: [
               Text(
                 "Reviews",
-                style:
-                    theme.textTheme.headlineLarge?.copyWith(fontSize: 16.fSize),
+                style: Theme.of(context)
+                    .textTheme
+                    .headlineLarge
+                    ?.copyWith(fontSize: 16.fSize),
               ),
               GestureDetector(
-                onTap: () {
+                onTap: () async {
                   var reviews =
                       controller.userData.value.data?.basicInfo?.reviews;
                   if (reviews != null && reviews.isNotEmpty) {
-                    Get.to(() => AllReviewsPage(reviews: reviews));
+                    await Get.to(() {
+                      AllReviewsPage(reviews: reviews);
+                      controller.refreshData();
+                    });
                   } else {
                     CustomToast().showToast(
                       context: context,
@@ -756,7 +1281,9 @@ class _UserProfilePageState extends State<UserProfilePage>
                 },
                 child: Text(
                   "See all",
-                  style: theme.textTheme.titleMedium
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleMedium
                       ?.copyWith(color: appTheme.deepOrangeA200),
                 ),
               ),
@@ -768,7 +1295,9 @@ class _UserProfilePageState extends State<UserProfilePage>
             if (reviews == null || reviews.isEmpty) {
               return Text(
                 "No reviews yet",
-                style: theme.textTheme.bodyMedium
+                style: Theme.of(context)
+                    .textTheme
+                    .bodyMedium
                     ?.copyWith(color: appTheme.gray300),
               );
             }
@@ -802,13 +1331,16 @@ class _UserProfilePageState extends State<UserProfilePage>
                               children: [
                                 Text(
                                   review.reviewer ?? "null",
-                                  style: theme.textTheme.headlineLarge
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .headlineLarge
                                       ?.copyWith(fontSize: 14.fSize),
                                 ),
                                 const SizedBox(height: 1),
                                 Text(
                                   review.formattedDate ?? "Unknown Date",
-                                  style: theme.textTheme.titleSmall!,
+                                  style:
+                                      Theme.of(context).textTheme.titleSmall!,
                                 ),
                               ],
                             ),
@@ -829,7 +1361,9 @@ class _UserProfilePageState extends State<UserProfilePage>
                               const SizedBox(width: 6),
                               Text(
                                 review.rating.toString(),
-                                style: theme.textTheme.headlineLarge
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineLarge
                                     ?.copyWith(fontSize: 16.fSize),
                               ),
                             ],
@@ -839,11 +1373,12 @@ class _UserProfilePageState extends State<UserProfilePage>
                           review.review ?? "No comments provided.",
                           maxLines: 2,
                           overflow: TextOverflow.ellipsis,
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                            color: appTheme.gray900,
-                            fontWeight: FontWeight.w500,
-                            fontSize: 14.adaptSize,
-                          ),
+                          style:
+                              Theme.of(context).textTheme.bodyMedium?.copyWith(
+                                    color: appTheme.gray900,
+                                    fontWeight: FontWeight.w500,
+                                    fontSize: 14.adaptSize,
+                                  ),
                         ),
                       ],
                     ),
@@ -856,344 +1391,5 @@ class _UserProfilePageState extends State<UserProfilePage>
         ],
       ),
     );
-  }
-
-  Widget _buildRowaboutme({required String aboutMeText}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Padding(
-          padding: EdgeInsets.only(
-            top: 1.adaptSize,
-            bottom: 2.adaptSize,
-          ),
-          child: Text(
-            aboutMeText,
-            style: theme.textTheme.headlineLarge
-                ?.copyWith(fontSize: 16.fSize, fontWeight: FontWeight.w600),
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _ratingSection() {
-    int? totalFollowers =
-        controller.userData.value.data?.basicInfo?.getTotalFollowers() ?? 0;
-    int? totalFollowing =
-        controller.userData.value.data?.basicInfo?.getTotalFollowing() ?? 0;
-
-    return Padding(
-      padding: EdgeInsets.only(
-          left: 13.adaptSize, right: 30.adaptSize, top: 30.adaptSize),
-      child: Column(
-        children: [
-          Obx(() {
-            return Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Padding(
-                          padding: EdgeInsets.only(
-                            top: 1.adaptSize,
-                            bottom: 2.adaptSize,
-                          ),
-                          child: SizedBox(
-                            height: 18.v,
-                            width: 18.adaptSize,
-                            child:
-                                SvgPicture.asset("assets/images/img_star.svg"),
-                          ),
-                        ),
-                        Padding(
-                          padding: EdgeInsets.only(left: 2.adaptSize),
-                          child: Text(
-                            "${controller.userData.value.data?.basicInfo?.rating ?? "N/A"}",
-                            style: theme.textTheme.headlineLarge
-                                ?.copyWith(fontSize: 18.fSize),
-                          ),
-                        ),
-                      ],
-                    ),
-                    SizedBox(
-                      height: 6.v,
-                    ),
-                    Text(
-                      "Overall Ratings",
-                      style: theme.textTheme.titleSmall!,
-                    )
-                  ],
-                ),
-                const Spacer(
-                  flex: 42,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Get.toNamed(AppRoutes.follower, arguments: {
-                      "id": controller.userData.value.data?.id,
-                      "userProfile": "userProfile"
-                    })!
-                        .then((value) {
-                      Get.find<ProfileController>().fetchUserData(
-                          controller.address.toString(),
-                          controller.address.toString());
-                    });
-                  },
-                  child: Column(
-                    children: [
-                      Text(
-                        "$totalFollowers",
-                        style: theme.textTheme.headlineLarge
-                            ?.copyWith(fontSize: 18.fSize),
-                      ),
-                      SizedBox(
-                        height: 6.v,
-                      ),
-                      Text(
-                        "Followers",
-                        style: theme.textTheme.titleSmall!,
-                      ),
-                    ],
-                  ),
-                ),
-                const Spacer(
-                  flex: 58,
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Get.toNamed(AppRoutes.following, arguments: {
-                      "id": controller.userData.value.data?.id,
-                      "userProfile": "userProfile"
-                    })!
-                        .then((value) {
-                      Get.find<ProfileController>().fetchUserData(
-                          controller.address.toString(),
-                          controller.address.toString());
-                    });
-                  },
-                  child: Column(
-                    children: [
-                      Text(
-                        "$totalFollowing",
-                        style: theme.textTheme.headlineLarge
-                            ?.copyWith(fontSize: 18.fSize),
-                      ),
-                      SizedBox(
-                        height: 6.v,
-                      ),
-                      Text(
-                        "Following",
-                        style: theme.textTheme.titleSmall,
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            );
-          }),
-          SizedBox(
-            height: 16.v,
-          ),
-          CustomElevatedButton(
-            leftIcon: Icon(
-              Icons.add,
-              color: Colors.black,
-              size: 15.adaptSize,
-            ),
-            text: "Create Post",
-            onPressed: () {
-              Get.toNamed(AppRoutes.newPost);
-            },
-          )
-        ],
-      ),
-    );
-  }
-
-  Widget _profilepicBody() {
-    return Obx(() {
-      return Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          Row(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(left: 15.v, top: 20.v),
-                child: CustomImageView(
-                  height: 70.v,
-                  width: 70.v,
-                  radius: BorderRadius.circular(50.v),
-                  imagePath:
-                      controller.userData.value.data?.basicInfo?.profilePic ??
-                          ImageConstant.imgImage3380x80,
-                ),
-              ),
-              SizedBox(
-                child: Padding(
-                  padding: EdgeInsets.only(left: 15.v),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text(
-                            '${controller.userData.value.data?.basicInfo?.firstName ?? ''} ${controller.userData.value.data?.basicInfo?.lastName ?? ''}',
-                            textAlign: TextAlign.left,
-                            style: CustomTextStyles.titleLargeSemiBold,
-                          ),
-                          CustomImageView(
-                            margin: EdgeInsets.only(left: 5.v),
-                            imagePath: "assets/images/veifiedtick.svg",
-                          ),
-                        ],
-                      ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.5,
-                        child: Text(
-                          "${controller.userData.value.data?.industryOccupation?.industry?.name ?? ''} | ${controller.userData.value.data?.industryOccupation?.occupation?.name ?? ''}",
-                          textAlign: TextAlign.left,
-                          style: theme.textTheme.titleSmall!
-                              .copyWith(color: appTheme.black900),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ],
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 20.v, left: 10.v),
-            child: Row(
-              children: [
-                CustomImageView(
-                  margin: EdgeInsets.only(left: 5.v),
-                  imagePath: "assets/images/language.svg",
-                ),
-                SizedBox(
-                  width: 10.v,
-                ),
-                Expanded(
-                  child: Wrap(
-                    spacing: 8.0,
-                    runSpacing: 4.0,
-                    children: (() {
-                      final languages =
-                          controller.userData.value.data?.language?.language;
-
-                      if (languages != null && languages.isNotEmpty) {
-                        final languageNames =
-                            languages.map((e) => e.name.toString()).toList();
-
-                        if (languageNames.length > 3) {
-                          return [
-                            Text(
-                              '${languageNames.take(3).join(', ')} +${languageNames.length - 3} more',
-                              style: theme.textTheme.bodyMedium!.copyWith(
-                                color: appTheme.black900,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ];
-                        } else {
-                          return [
-                            Text(
-                              languageNames.join(', '),
-                              style: theme.textTheme.bodyMedium!.copyWith(
-                                color: appTheme.black900,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            )
-                          ];
-                        }
-                      } else {
-                        return <Widget>[
-                          Text(
-                            "No Lanuages found",
-                            style: theme.textTheme.bodyMedium!.copyWith(
-                              color: appTheme.black900,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          )
-                        ];
-                      }
-                    })(),
-                  ),
-                ),
-              ],
-            ),
-          ),
-          Padding(
-            padding: EdgeInsets.only(top: 20.v, left: 10.v),
-            child: Row(
-              children: [
-                CustomImageView(
-                  margin: EdgeInsets.only(left: 5.v),
-                  imagePath: "assets/images/doctorverify.svg",
-                ),
-                SizedBox(
-                  width: 10.v,
-                ),
-                SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.3,
-                  child: Text(
-                    "Reg no: ${controller.userData.value.data?.industryOccupation?.registrationNumber ?? " N/A"}",
-                    textAlign: TextAlign.left,
-                    style: theme.textTheme.bodyMedium!.copyWith(
-                        color: appTheme.black900,
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500),
-                  ),
-                ),
-                Container(
-                  width: 1.v,
-                  height: 15.h,
-                  color: Colors.grey,
-                  margin: EdgeInsets.symmetric(horizontal: 10.adaptSize),
-                ),
-                CustomImageView(
-                  margin: EdgeInsets.only(left: 5.v),
-                  imagePath: "assets/images/chat.svg",
-                ),
-                SizedBox(
-                  width: 10.v,
-                ),
-                Text(
-                  controller.userData.value.data?.noOfBooking.toString() ?? "",
-                  textAlign: TextAlign.left,
-                  style: theme.textTheme.bodyMedium!.copyWith(
-                      color: appTheme.black900,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500),
-                ),
-                SizedBox(
-                  width: 5.v,
-                ),
-                Text(
-                  "Consultation",
-                  textAlign: TextAlign.left,
-                  style: theme.textTheme.bodyMedium!.copyWith(
-                      color: appTheme.black900,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500),
-                ),
-              ],
-            ),
-          ),
-        ],
-      );
-    });
   }
 }

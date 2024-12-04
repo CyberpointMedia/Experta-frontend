@@ -122,7 +122,7 @@ class _AboutUsState extends State<AboutUs> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Get.toNamed(AppRoutes.changeDateOfBirth);
+                            // Get.toNamed(AppRoutes.changeDateOfBirth);
                           },
                           child: Padding(
                             padding: const EdgeInsets.only(top: 1),

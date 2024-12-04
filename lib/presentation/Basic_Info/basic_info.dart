@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:experta/presentation/edit_about/edit_about.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
 import 'package:experta/widgets/social_platform_input.dart';
 import 'package:photo_view/photo_view.dart';
@@ -425,15 +426,31 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
               textAlign: TextAlign.start,
             ),
           ),
-          CustomBioTextFormField(
-            controller: controller.bioController,
-            focusNode: controller.focus3,
-            hintText: "Write Your Bio",
-            hintStyle: CustomTextStyles.titleMediumBluegray300,
-            textStyle: theme.textTheme.titleMedium!.copyWith(
-              color: Colors.black,
-              fontSize: 16.fSize,
-              fontWeight: FontWeight.w500,
+          GestureDetector(
+            onTap: () async {
+              final currentBio = controller.bioController.text;
+              final result = await Get.to(
+                () => EditAboutPage(bio: currentBio),
+                transition: Transition.rightToLeft,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+              );
+              if (result != null && result is String) {
+                controller.bioController.text = result;
+              }
+            },
+            child: AbsorbPointer(
+              child: CustomBioTextFormField(
+                controller: controller.bioController,
+                focusNode: controller.focus3,
+                hintText: "Write Your Bio",
+                hintStyle: CustomTextStyles.titleMediumBluegray300,
+                textStyle: theme.textTheme.titleMedium!.copyWith(
+                  color: Colors.black,
+                  fontSize: 16.fSize,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
             ),
           ),
           Padding(

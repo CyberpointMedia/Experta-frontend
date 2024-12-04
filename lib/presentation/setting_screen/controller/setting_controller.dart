@@ -10,6 +10,10 @@ class SettingController extends GetxController {
 
   String? imagePath = PrefUtils().getProfileImage();
   String? name = PrefUtils().getProfileName();
-  
-  
+  var profilepic = ''.obs;
+  @override
+  void onInit() {
+    super.onInit();
+    profilepic.value = Get.arguments ?? '';
+  }
 }

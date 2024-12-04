@@ -2,6 +2,7 @@ import 'package:country_pickers/country_pickers.dart';
 import 'package:country_pickers/country.dart';
 import 'package:experta/core/utils/validation_functions.dart';
 import 'package:experta/core/app_export.dart';
+import 'package:flutter/services.dart';
 
 // ignore: must_be_immutable
 class CustomPhoneNumber extends StatefulWidget {
@@ -100,6 +101,20 @@ class _CustomPhoneNumberState extends State<CustomPhoneNumber> {
               style: CustomTextStyles.titleMediumBluegray300,
               keyboardType: TextInputType.phone,
               focusNode: _focusNode,
+              enableInteractiveSelection: false,
+              contextMenuBuilder: (context, editableTextState) {
+                return Container();
+              },
+              inputFormatters: [
+                FilteringTextInputFormatter.allow(RegExp(r'[0-9]')),
+                LengthLimitingTextInputFormatter(10),
+                TextInputFormatter.withFunction((oldValue, newValue) {
+                  if ((newValue.text.length - oldValue.text.length) > 1) {
+                    return oldValue;
+                  }
+                  return newValue;
+                }),
+              ],
               validator: (value) {
                 if (!isValidPhone(value, isRequired: true)) {
                   return "err_msg_please_enter_valid_phone_number".tr;

@@ -17,6 +17,13 @@ class ProfileController extends GetxController {
     fetchFeeds(address.toString());
   }
 
+  Future<void> refreshData() async {
+    isLoading.value = true;
+    fetchUserData(address.toString(), address.toString());
+    fetchFeeds(address.toString());
+    isLoading.value = false;
+  }
+
   void fetchUserData(String userId, String ownUserId) async {
     try {
       isLoading(true);

@@ -3,8 +3,8 @@ import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/feeds_active_screen/models/feeds_active_model.dart';
 
 class FeedsActiveController extends GetxController {
-  var feeds = <Datum>[].obs; // Observable list of Datum
-  var isLoading = true.obs; // Observable boolean for loading state
+  var feeds = <Datum>[].obs; 
+  var isLoading = true.obs; 
   var isComment = false.obs; // Observable boolean for comment state
   ApiService apiServices = ApiService();
   final String? address = PrefUtils().getaddress(); // Fetching address

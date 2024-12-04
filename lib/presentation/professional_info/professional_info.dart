@@ -469,20 +469,20 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
   }
 
   Widget _buildEditWorkExperience() {
-    return Obx(() {
-      if (controller.isLoading.value) {
-        return const Center(child: ShimmerLoadingEffect());
-      } else if (controller.workExperienceList.isEmpty) {
-        return const Center(child: Text('No work experience available'));
-      } else {
-        return Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            _buildSectionHeader(
-              "Work Experience",
-              (context) => Get.offAndToNamed(AppRoutes.experience),
-            ),
-            ListView.separated(
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildSectionHeader(
+          "Work Experience",
+          (context) => Get.offAndToNamed(AppRoutes.experience),
+        ),
+        Obx(() {
+          if (controller.isLoading.value) {
+            return const Center(child: ShimmerLoadingEffect());
+          } else if (controller.workExperienceList.isEmpty) {
+            return const Center(child: Text('No work experience available'));
+          } else {
+            return ListView.separated(
               shrinkWrap: true,
               clipBehavior: Clip.antiAlias,
               physics: const NeverScrollableScrollPhysics(),
@@ -493,12 +493,12 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
                 return WorkExperienceWidget(workExperience: workExperience);
               },
               separatorBuilder: (context, index) =>
-                  Divider(height: 1, color: Colors.transparent),
-            ),
-          ],
-        );
-      }
-    });
+                  const Divider(height: 1, color: Colors.transparent),
+            );
+          }
+        }),
+      ],
+    );
   }
 
   Widget _buildEducation() {
@@ -533,41 +533,37 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
           } else if (controller.educationList.isEmpty) {
             return const Center(child: Text('No education data available'));
           } else {
-            return ListView.builder(
+            return ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
-              padding: EdgeInsets.zero, // Remove default padding
+              padding: EdgeInsets.zero,
               itemCount: controller.educationList.length,
+              separatorBuilder: (context, index) =>
+                  const Divider(height: 1, color: Colors.black),
               itemBuilder: (context, index) {
                 final education = controller.educationList[index];
-                return Padding(
-                  padding: const EdgeInsets.only(
-                      bottom: 8.0), // Spacing between items
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        education.degree,
-                        style: CustomTextStyles.titleMediumSFProTextBlack90001,
-                      ),
-                      const SizedBox(height: 4.0), // Spacing between lines
-                      Text(
-                        education.schoolCollege,
-                        style: theme.textTheme.titleMedium!
-                            .copyWith(color: Colors.black),
-                      ),
-                      const SizedBox(height: 4.0), // Adjust spacing
-                      Text(
-                        '${education.startDate.year} - ${education.endDate.year}',
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodyMedium
-                            ?.copyWith(fontWeight: FontWeight.bold),
-                      ),
-                      if (index != controller.educationList.length - 1)
-                        const Divider(), // Avoid extra divider at the end
-                    ],
-                  ),
+                return Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      education.degree,
+                      style: CustomTextStyles.titleMediumSFProTextBlack90001,
+                    ),
+                    const SizedBox(height: 4.0),
+                    Text(
+                      education.schoolCollege,
+                      style: theme.textTheme.titleMedium!
+                          .copyWith(color: Colors.black),
+                    ),
+                    const SizedBox(height: 4.0),
+                    Text(
+                      '${education.startDate.year} - ${education.endDate.year}',
+                      style: Theme.of(context)
+                          .textTheme
+                          .bodyMedium
+                          ?.copyWith(fontWeight: FontWeight.bold),
+                    ),
+                  ],
                 );
               },
             );
@@ -578,64 +574,67 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
   }
 
   Widget _buildAchievements() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          "Achievements",
-          style: CustomTextStyles.labelMediumBlack900,
-          textAlign: TextAlign.start,
-        ),
-        ...controller.linkControllers.asMap().entries.map((entry) {
-          final index = entry.key;
-          final textController = entry.value;
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text('Link ${index + 1}'),
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: CustomTextFormField(
-                        controller: textController,
-                        hintText: "Enter Url",
-                        hintStyle: CustomTextStyles.titleMediumBluegray300,
-                        textInputType: TextInputType.url,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter a URL';
-                          } else if (!controller.isValidUrl(value)) {
-                            return 'Please enter a valid URL';
-                          }
-                          return null;
+    return Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Achievements",
+            style: CustomTextStyles.labelMediumBlack900,
+            textAlign: TextAlign.start,
+          ),
+          ...controller.linkControllers.asMap().entries.map((entry) {
+            final index = entry.key;
+            final textController = entry.value;
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('Link ${index + 1}'),
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: CustomTextFormField(
+                          controller: textController,
+                          hintText: "Enter Url",
+                          hintStyle: CustomTextStyles.titleMediumBluegray300,
+                          textInputType: TextInputType.url,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter a URL';
+                            } else if (!controller.isValidUrl(value)) {
+                              return 'Please enter a valid URL';
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          setState(() {
+                            textController.clear();
+                          });
                         },
                       ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.clear),
-                      onPressed: () {
-                        setState(() {
-                          textController.clear();
-                        });
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          );
-        }),
-        CustomElevatedButton(
-          onPressed: controller.addNewLinkField,
-          text: '+ Add more links',
-          buttonStyle: CustomButtonStyles.fillWhite,
-        ),
-      ],
+                    ],
+                  ),
+                ],
+              ),
+            );
+          }),
+          CustomElevatedButton(
+            onPressed: controller.addNewLinkField,
+            text: '+ Add more links',
+            buttonStyle: CustomButtonStyles.fillWhite,
+          ),
+        ],
+      ),
     );
   }
 

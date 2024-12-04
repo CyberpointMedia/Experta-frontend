@@ -13,12 +13,12 @@ import 'package:experta/data/models/response/resend_otp_response_model.dart';
 import 'package:experta/data/models/response/verify_otp_response_model.dart';
 import 'package:experta/data/models/transaction_list.dart';
 import 'package:experta/presentation/Basic_Info/models/basic_model.dart';
+import 'package:experta/presentation/account_setting/controller/accont_controller.dart';
 import 'package:experta/presentation/additional_info/model/additional_model.dart';
 import 'package:experta/presentation/additional_info/model/interest_model.dart';
 import 'package:experta/presentation/feeds_active_screen/models/feeds_active_model.dart';
 import 'package:experta/presentation/professional_info/model/professional_model.dart';
 import 'package:experta/presentation/share_profile/models/share_profile_model.dart';
-import 'package:experta/presentation/signin_page/signup_page.dart';
 import 'package:experta/presentation/verify_account/Models/verify_account_model.dart';
 import 'package:experta/widgets/custom_toast_message.dart';
 import 'package:http/http.dart' as http;
@@ -1961,13 +1961,21 @@ class ApiService {
 
       if (response.statusCode == 200) {
         final Map<String, dynamic> jsonResponse = json.decode(response.body);
-        if (jsonResponse['status'] == 'success') {
-          return KYCResponse.fromJson(jsonResponse['data']);
+        if (jsonResponse['status'] == 'success' &&
+            jsonResponse['data'] != null) {
+          try {
+            final kycResponse = KYCResponse.fromJson(jsonResponse['data']);
+            return kycResponse;
+          } catch (parseError, parseStackTrace) {
+            AppLogger.error('Error parsing KYC response: $parseError',
+                stackTrace: parseStackTrace);
+            return null;
+          }
         }
       }
       return null;
     } catch (e, stackTrace) {
-      AppLogger.error('Error fetching KYC status', stackTrace: stackTrace);
+      AppLogger.error('Error fetching KYC status: $e', stackTrace: stackTrace);
       return null;
     }
   }
@@ -2256,6 +2264,170 @@ class ApiService {
     } catch (e, stackTrace) {
       AppLogger.error('Error validating token', stackTrace: stackTrace);
       throw Exception('Error validating token: $e');
+    }
+  }
+
+  Future<Map<String, dynamic>> verifyOtpChangeEmail(
+      String newEmail, String otp) async {
+    final String apiUrl = '$_baseUrl/verify-otp-change-email';
+
+    Map<String, String> requestBody = {
+      'newEmail': newEmail,
+      'otp': otp,
+    };
+
+    try {
+      final response = await http.post(
+        Uri.parse(apiUrl),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: json.encode(requestBody),
+      );
+      if (response.statusCode == 200) {
+        Map<String, dynamic> responseBody = json.decode(response.body);
+        return responseBody;
+      } else {
+        return {
+          'status': 'error',
+          'message': 'Failed to verify OTP and change email',
+        };
+      }
+    } catch (e) {
+      return {
+        'status': 'error',
+        'message': e.toString(),
+      };
+    }
+  }
+
+  Future<Map<String, dynamic>> changeUsername(String newUsername) async {
+    final url = Uri.parse('$_baseUrl/change-username');
+    final headers = {
+      "Content-Type": "application/json",
+      'Authorization': 'Bearer $token',
+    };
+    final body = jsonEncode({"newUsername": newUsername});
+
+    try {
+      final response = await http.post(url, headers: headers, body: body);
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = jsonDecode(response.body);
+        if (data["status"] == "success") {
+          return {"success": true, "data": data["data"]};
+        } else {
+          return {
+            "success": false,
+            "message": data["message"] ?? "Unknown error"
+          };
+        }
+      } else {
+        return {"success": false, "message": "Error: ${response.statusCode}"};
+      }
+    } catch (e) {
+      return {"success": false, "message": e.toString()};
+    }
+  }
+
+  Future<Map<String, dynamic>> initiateEmailChange(String newEmail) async {
+    final url = Uri.parse("$_baseUrl/initiate-email-change");
+    final body = jsonEncode({"newEmail": newEmail});
+    final headers = {
+      "Content-Type": "application/json",
+      'Authorization': 'Bearer $token',
+    };
+
+    try {
+      final response = await http.post(url, headers: headers, body: body);
+
+      if (response.statusCode == 200) {
+        return jsonDecode(response.body);
+      } else {
+        throw Exception("Failed to initiate email change: ${response.body}");
+      }
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<UserAccountResponse> fetchUserAccountData() async {
+    final response = await http.get(
+      Uri.parse('http://3.110.252.174:8080/api/check-useraccount-availability'),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+    );
+
+    if (response.statusCode == 200) {
+      return UserAccountResponse.fromJson(json.decode(response.body));
+    } else {
+      throw Exception('Failed to load user account data');
+    }
+  }
+
+  Future<List<String>> getBioSuggestions(String userInput) async {
+    final url = Uri.parse('$_baseUrl/bio-suggestions');
+
+    AppLogger.request(
+      'POST',
+      url.toString(),
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer $token',
+      },
+      body: jsonEncode({'userInput': userInput}),
+    );
+
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode({'userInput': userInput}),
+      );
+
+      AppLogger.response(
+        'POST',
+        url.toString(),
+        response.statusCode,
+        response.body,
+      );
+
+      if (response.statusCode == 200) {
+        final Map<String, dynamic> data = jsonDecode(response.body);
+        if (data['status'] == 'success') {
+          return List<String>.from(data['data']);
+        }
+      }
+      throw Exception('Failed to get bio suggestions: ${response.body}');
+    } catch (e, stackTrace) {
+      AppLogger.error('Error getting bio suggestions', stackTrace: stackTrace);
+      throw Exception('Error getting bio suggestions: $e');
+    }
+  }
+
+  Future<bool> updateBio(String bio) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$_baseUrl/user-bio'),
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode({
+          'bio': bio,
+        }),
+      );
+
+      final data = jsonDecode(response.body);
+      return data['status'] == 'success';
+    } catch (e) {
+      return false;
     }
   }
 }

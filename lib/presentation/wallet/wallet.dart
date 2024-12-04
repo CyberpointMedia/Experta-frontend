@@ -392,7 +392,7 @@ class _WalletState extends State<Wallet> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    Get.toNamed(AppRoutes.changeDateOfBirth);
+                    Get.toNamed(AppRoutes.reffer);
                   },
                   child: Padding(
                     padding: const EdgeInsets.only(top: 1),
@@ -452,7 +452,8 @@ class _WalletState extends State<Wallet> {
                             height: 44.adaptSize,
                             width: 44.adaptSize,
                             padding: EdgeInsets.all(10.h),
-                            decoration: IconButtonStyleHelper.fillPrimaryContainerTL22,
+                            decoration:
+                                IconButtonStyleHelper.fillPrimaryContainerTL22,
                             child: CustomImageView(
                               imagePath: "assets/images/24-hours.svg",
                             ),

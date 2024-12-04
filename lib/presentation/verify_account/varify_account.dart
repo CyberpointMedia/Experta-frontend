@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/pan_detrail/pan_detail.dart';
 import 'package:experta/presentation/payment_method/payment_method.dart';
@@ -19,8 +18,7 @@ class VerifyAccount extends StatefulWidget {
 class _VerifyAccountState extends State<VerifyAccount> {
   final formKey = GlobalKey<FormState>();
   final TextEditingController panController = TextEditingController();
-  // ignore: non_constant_identifier_names
-  final TextEditingController AadharCardController = TextEditingController();
+  final TextEditingController aadharCardController = TextEditingController();
   KYCResponse? kycData;
   bool isLoading = true;
   bool isLoading2 = false;
@@ -32,23 +30,17 @@ class _VerifyAccountState extends State<VerifyAccount> {
   }
 
   Future<void> fetchKYCData() async {
-    setState(() {
-      isLoading = true;
-    });
+    setState(() => isLoading = true);
 
     try {
       final response = await ApiService().getKYCStatus();
       if (response != null) {
-        setState(() {
-          kycData = response;
-        });
+        setState(() => kycData = response);
       }
     } catch (e) {
       print('Error fetching KYC data: $e');
     } finally {
-      setState(() {
-        isLoading = false;
-      });
+      setState(() => isLoading = false);
     }
   }
 
@@ -57,61 +49,40 @@ class _VerifyAccountState extends State<VerifyAccount> {
     return Scaffold(
       body: Stack(
         children: [
-          Positioned(
-            left: 270,
-            top: 50,
-            child: ImageFiltered(
-              imageFilter: ImageFilter.blur(
-                tileMode: TileMode.decal,
-                sigmaX: 60,
-                sigmaY: 60,
-              ),
-              child: Align(
-                child: SizedBox(
-                  width: 252,
-                  height: 252,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(126),
-                      color: appTheme.deepOrangeA20.withOpacity(0.6),
-                    ),
-                  ),
-                ),
-              ),
-            ),
-          ),
+          _buildBackground(),
           Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [_buildAppBar(), _buildVerifyAccount()],
-          )
+          ),
         ],
       ),
     );
   }
 
-  void showErrorDialog(String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Error"),
-          content: Text(message),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.of(context).pop(),
-              child: const Text("OK"),
+  Widget _buildBackground() {
+    return Positioned(
+      left: 270,
+      top: 50,
+      child: ImageFiltered(
+        imageFilter: ImageFilter.blur(
+          tileMode: TileMode.decal,
+          sigmaX: 60,
+          sigmaY: 60,
+        ),
+        child: Align(
+          child: SizedBox(
+            width: 252,
+            height: 252,
+            child: Container(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(126),
+                color: appTheme.deepOrangeA20.withOpacity(0.6),
+              ),
             ),
-          ],
-        );
-      },
+          ),
+        ),
+      ),
     );
-  }
-
-  String maskPanNumber(String panNumber) {
-    if (panNumber.length >= 10) {
-      return "XXXXXXXX${panNumber.substring(8)}";
-    }
-    return panNumber; // return the original if it's less than 10 characters
   }
 
   PreferredSizeWidget _buildAppBar() {
@@ -121,9 +92,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
       leading: AppbarLeadingImage(
         imagePath: ImageConstant.imgArrowLeftOnerrorcontainer,
         margin: EdgeInsets.only(left: 16.h),
-        onTap: () {
-          onTapArrowLeft();
-        },
+        onTap: onTapArrowLeft,
       ),
       centerTitle: true,
       title: AppbarSubtitleSix(text: "VerifyAccount"),
@@ -135,305 +104,14 @@ class _VerifyAccountState extends State<VerifyAccount> {
       return const CircularProgressIndicator();
     }
 
-    if (kycData == null) {
-      return Align(
-        alignment: Alignment.bottomCenter,
-        child: Padding(
-          padding: EdgeInsets.only(right: 16.h, left: 16, top: 15),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              SizedBox(height: 12.v),
-              Container(
-                decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
-                  color: Colors.transparent,
-                  borderRadius: BorderRadiusStyle.roundedBorder20,
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    GestureDetector(
-                      onTap: () {
-                        Get.toNamed(AppRoutes.changeUserName);
-                      },
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 15.h, vertical: 16.v),
-                        decoration:
-                            AppDecoration.fillOnPrimaryContainer.copyWith(
-                          borderRadius: BorderRadiusStyle.customBorderBL20,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CustomIconButton(
-                              height: 44.adaptSize,
-                              width: 44.adaptSize,
-                              padding: EdgeInsets.all(6.h),
-                              decoration: IconButtonStyleHelper.fillPrimary,
-                              child: CustomImageView(
-                                  imagePath: ImageConstant.user),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  left: 15.h, top: 13.v, bottom: 10.v),
-                              child: Text(
-                                "Mobile Number",
-                                style: theme.textTheme.titleMedium!.copyWith(
-                                  color: appTheme.gray900,
-                                ),
-                              ),
-                            ),
-                            const Spacer(),
-                            CustomImageView(
-                              imagePath: ImageConstant.imgArrowRightGray900,
-                              height: 24.adaptSize,
-                              width: 24.adaptSize,
-                              margin: EdgeInsets.symmetric(vertical: 10.v),
-                            )
-                          ],
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        Get.toNamed(AppRoutes.changeDateOfBirth);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 1),
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 15.h, vertical: 16.v),
-                          decoration: AppDecoration.fillOnPrimaryContainer,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              CustomIconButton(
-                                height: 44.adaptSize,
-                                width: 44.adaptSize,
-                                padding: EdgeInsets.all(6.h),
-                                decoration:
-                                    IconButtonStyleHelper.fillDeepPurple,
-                                child: CustomImageView(
-                                    imagePath: ImageConstant.birthday),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    left: 15.h, top: 13.v, bottom: 10.v),
-                                child: Text(
-                                  "Email Address",
-                                  style: theme.textTheme.titleMedium!.copyWith(
-                                    color: appTheme.gray900,
-                                  ),
-                                ),
-                              ),
-                              const Spacer(),
-                              CustomImageView(
-                                imagePath: ImageConstant.imgArrowRightGray900,
-                                height: 24.adaptSize,
-                                width: 24.adaptSize,
-                                margin: EdgeInsets.symmetric(vertical: 10.v),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    GestureDetector(
-                      onTap: () {
-                        _showPANVerificationDialog();
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 1),
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 15.h, vertical: 16.v),
-                          decoration: AppDecoration.fillOnPrimaryContainer,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              CustomIconButton(
-                                height: 44.adaptSize,
-                                width: 44.adaptSize,
-                                padding: EdgeInsets.all(6.h),
-                                decoration: IconButtonStyleHelper.fillGreenTL24,
-                                child: CustomImageView(
-                                    imagePath: ImageConstant.card),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    left: 15.h, top: 13.v, bottom: 10.v),
-                                child: Text(
-                                  "Pan Card",
-                                  style: theme.textTheme.titleMedium!.copyWith(
-                                    color: appTheme.gray900,
-                                  ),
-                                ),
-                              ),
-                              const Spacer(),
-                              CustomImageView(
-                                imagePath: ImageConstant.imgArrowRightGray900,
-                                height: 24.adaptSize,
-                                width: 24.adaptSize,
-                                margin: EdgeInsets.symmetric(vertical: 10.v),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                    // GestureDetector(
-                    //   onTap: () {
-                    //     //Get.toNamed(AppRoutes.adhardetail);
-                    //     showAadhaarCardVerificationDialog();
-                    //   },
-                    //   child: Padding(
-                    //     padding: const EdgeInsets.only(top: 1),
-                    //     child: Container(
-                    //       padding: EdgeInsets.symmetric(
-                    //           horizontal: 15.h, vertical: 16.v),
-                    //       decoration: AppDecoration.fillOnPrimaryContainer,
-                    //       child: Row(
-                    //         mainAxisAlignment: MainAxisAlignment.center,
-                    //         children: [
-                    //           CustomIconButton(
-                    //             height: 44.adaptSize,
-                    //             width: 44.adaptSize,
-                    //             padding: EdgeInsets.all(10.h),
-                    //             decoration: IconButtonStyleHelper.fillOrange,
-                    //             child: CustomImageView(
-                    //                 imagePath: ImageConstant.pancard),
-                    //           ),
-                    //           Padding(
-                    //             padding: EdgeInsets.only(
-                    //                 left: 15.h, top: 13.v, bottom: 10.v),
-                    //             child: Text(
-                    //               "Aadhaar Card",
-                    //               style: theme.textTheme.titleMedium!.copyWith(
-                    //                 color: appTheme.gray900,
-                    //               ),
-                    //             ),
-                    //           ),
-                    //           const Spacer(),
-                    //           CustomImageView(
-                    //             imagePath: ImageConstant.imgArrowRightGray900,
-                    //             height: 24.adaptSize,
-                    //             width: 24.adaptSize,
-                    //             margin: EdgeInsets.symmetric(vertical: 10.v),
-                    //           ),
-                    //         ],
-                    //       ),
-                    //     ),
-                    //   ),
-                    // ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (_) => const FaceDetectorView()));
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 1),
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 15.h, vertical: 16.v),
-                          decoration: AppDecoration.fillOnPrimaryContainer,
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              CustomIconButton(
-                                height: 44.adaptSize,
-                                width: 44.adaptSize,
-                                padding: EdgeInsets.all(10.h),
-                                decoration: IconButtonStyleHelper.fillOrange,
-                                child: CustomImageView(
-                                    imagePath: ImageConstant.pancard),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    left: 15.h, top: 13.v, bottom: 10.v),
-                                child: Text(
-                                  "Face Liveliness",
-                                  style: theme.textTheme.titleMedium!.copyWith(
-                                    color: appTheme.gray900,
-                                  ),
-                                ),
-                              ),
-                              const Spacer(),
-                              CustomImageView(
-                                imagePath: ImageConstant.imgArrowRightGray900,
-                                height: 24.adaptSize,
-                                width: 24.adaptSize,
-                                margin: EdgeInsets.symmetric(vertical: 10.v),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
+    return _buildUserDetails();
+  }
 
-                    GestureDetector(
-                      onTap: () {
-                        Get.toNamed(AppRoutes.paymentmethod);
-                      },
-                      child: Padding(
-                        padding: const EdgeInsets.only(top: 1),
-                        child: Container(
-                          padding: EdgeInsets.symmetric(
-                              horizontal: 15.h, vertical: 16.v),
-                          decoration:
-                              AppDecoration.fillOnPrimaryContainer.copyWith(
-                            borderRadius: BorderRadiusStyle.customBorderL20,
-                          ),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              CustomIconButton(
-                                height: 44.adaptSize,
-                                width: 44.adaptSize,
-                                padding: EdgeInsets.all(10.h),
-                                decoration: IconButtonStyleHelper
-                                    .fillOnPrimaryContainer,
-                                child: CustomImageView(
-                                    imagePath: ImageConstant.bank),
-                              ),
-                              Padding(
-                                padding: EdgeInsets.only(
-                                    left: 15.h, top: 13.v, bottom: 10.v),
-                                child: Text(
-                                  "Payment Method",
-                                  style: theme.textTheme.titleMedium!.copyWith(
-                                    color: appTheme.gray900,
-                                  ),
-                                ),
-                              ),
-                              const Spacer(),
-                              CustomImageView(
-                                imagePath: ImageConstant.imgArrowRightGray900,
-                                height: 24.adaptSize,
-                                width: 24.adaptSize,
-                                margin: EdgeInsets.symmetric(vertical: 10.v),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            ],
-          ),
-        ),
-      );
-    }
-    print(kycData!.userData!.phoneNo);
+  Widget _buildUserDetails() {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Padding(
-        padding: EdgeInsets.only(right: 16.h, left: 16, top: 15),
+        padding: EdgeInsets.symmetric(horizontal: 16.h, vertical: 15),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -447,547 +125,183 @@ class _VerifyAccountState extends State<VerifyAccount> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  GestureDetector(
-                    onTap: () {},
-                    child: Container(
-                      padding: EdgeInsets.symmetric(
-                          horizontal: 15.h, vertical: 16.v),
-                      decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
-                        borderRadius: BorderRadiusStyle.customBorderBL20,
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CustomIconButton(
-                            height: 44.adaptSize,
-                            width: 44.adaptSize,
-                            padding: EdgeInsets.all(10.h),
-                            decoration: IconButtonStyleHelper.fillGray,
-                            child:
-                                CustomImageView(imagePath: ImageConstant.phone),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 15.h),
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Row(
-                                  children: [
-                                    Text(
-                                      "Mobile Number",
-                                      style:
-                                          (kycData!.userData!.phoneNo != null)
-                                              ? theme.textTheme.titleMedium!
-                                                  .copyWith(
-                                                  fontSize: 12,
-                                                  color: appTheme.gray400,
-                                                )
-                                              : theme.textTheme.titleMedium!
-                                                  .copyWith(
-                                                  color: appTheme.black900,
-                                                ),
-                                    ),
-                                    (kycData!.userData!.phoneNo != null)
-                                        ? Padding(
-                                            padding:
-                                                const EdgeInsets.only(left: 5),
-                                            child: Container(
-                                              width: 45,
-                                              height: 16,
-                                              decoration: BoxDecoration(
-                                                  color: appTheme.green100
-                                                      .withOpacity(0.5),
-                                                  borderRadius:
-                                                      BorderRadius.circular(2)),
-                                              child: Center(
-                                                child: Text(
-                                                  "Verified",
-                                                  style: theme
-                                                      .textTheme.titleSmall!
-                                                      .copyWith(
-                                                          color:
-                                                              appTheme.green500,
-                                                          fontSize: 10),
-                                                ),
-                                              ),
-                                            ),
-                                          )
-                                        : const SizedBox.shrink(),
-                                  ],
-                                ),
-                                Text(
-                                  kycData!.userData!.phoneNo.toString(),
-                                  style: theme.textTheme.titleSmall!.copyWith(
-                                      fontSize: 14, color: appTheme.black900),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const Spacer(),
-                          CustomImageView(
-                            imagePath: ImageConstant.imgArrowRightGray900,
-                            height: 24.adaptSize,
-                            width: 24.adaptSize,
-                            margin: EdgeInsets.symmetric(vertical: 10.v),
-                          )
-                        ],
-                      ),
+                  _buildUserDetail(
+                    icon: ImageConstant.phone,
+                    label: "Mobile Number",
+                    value: kycData?.userData.phoneNo ?? '',
+                    isVerified: kycData?.userData.phoneNo.isNotEmpty ?? false,
+                    decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
+                      borderRadius: BorderRadiusStyle.customBorderBL20,
                     ),
                   ),
-                  GestureDetector(
-                    onTap: () {},
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 1),
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 15.h, vertical: 16.v),
-                        decoration: AppDecoration.fillOnPrimaryContainer,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CustomIconButton(
-                              height: 44.adaptSize,
-                              width: 44.adaptSize,
-                              padding: EdgeInsets.all(6.h),
-                              decoration: IconButtonStyleHelper.fillOrange,
-                              child: CustomImageView(
-                                  imagePath: ImageConstant.email),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                left: 15.h,
-                              ),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "Email Address",
-                                        style: (kycData!.userData!.email !=
-                                                null)
-                                            ? theme.textTheme.titleMedium!
-                                                .copyWith(
-                                                fontSize: 12,
-                                                color: appTheme.gray400,
-                                              )
-                                            : theme.textTheme.titleMedium!
-                                                .copyWith(
-                                                color: appTheme.black900,
-                                              ),
-                                      ),
-                                      (kycData!.userData!.email != null)
-                                          ? Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 5),
-                                              child: Container(
-                                                width: 45,
-                                                height: 16,
-                                                decoration: BoxDecoration(
-                                                    color: appTheme.green100
-                                                        .withOpacity(0.5),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            2)),
-                                                child: Center(
-                                                  child: Text(
-                                                    "Verified",
-                                                    style: theme
-                                                        .textTheme.titleSmall!
-                                                        .copyWith(
-                                                            color: appTheme
-                                                                .green500,
-                                                            fontSize: 10),
-                                                  ),
-                                                ),
-                                              ),
-                                            )
-                                          : const SizedBox.shrink(),
-                                    ],
-                                  ),
-                                  Text(
-                                    kycData!.userData!.email.toString(),
-                                    style: theme.textTheme.titleSmall!.copyWith(
-                                        fontSize: 14, color: appTheme.black900),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const Spacer(),
-                            CustomImageView(
-                              imagePath: ImageConstant.imgArrowRightGray900,
-                              height: 24.adaptSize,
-                              width: 24.adaptSize,
-                              margin: EdgeInsets.symmetric(vertical: 10.v),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
+                  _buildUserDetail(
+                    icon: ImageConstant.email,
+                    label: "Email Address",
+                    value: kycData?.userData.email ?? '',
+                    isVerified: kycData?.userData.email?.isNotEmpty ?? false,
                   ),
-                  GestureDetector(
+                  _buildUserDetail(
+                    icon: ImageConstant.panset,
+                    label: "Pan Card",
+                    value:
+                        maskPanNumber(kycData?.panVerification.panNumber ?? ''),
+                    isVerified:
+                        kycData?.kycStatus.steps.panVerification ?? false,
                     onTap: () {
-                      if (kycData!.panVerification!.verificationStatus ==
-                          false) {
+                      if (!(kycData?.kycStatus.steps.panVerification ??
+                          false)) {
                         _showPANVerificationDialog();
                       } else {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
                             builder: (context) => PanDetail(
-                              name: kycData!
-                                  .panVerification!.panDetails!['full_name'],
-                              panno: '${kycData!.panVerification!.panNumber}',
+                              name: kycData
+                                      ?.panVerification.panDetails.fullName ??
+                                  '',
+                              panno: kycData?.panVerification.panNumber ?? '',
                               dob: '',
                             ),
                           ),
                         );
                       }
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 1),
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 15.h, vertical: 16.v),
-                        decoration: AppDecoration.fillOnPrimaryContainer,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CustomIconButton(
-                              height: 44.adaptSize,
-                              width: 44.adaptSize,
-                              padding: EdgeInsets.all(10.h),
-                              decoration: IconButtonStyleHelper.fillGreenTL24,
-                              child: CustomImageView(
-                                  imagePath: ImageConstant.panset),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  left: 15.h, top: 13.v, bottom: 10.v),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Row(
-                                    children: [
-                                      Text(
-                                        "Pan Card",
-                                        style: (kycData!.panVerification!
-                                                    .verificationStatus ==
-                                                true)
-                                            ? theme.textTheme.titleMedium!
-                                                .copyWith(
-                                                fontSize: 12,
-                                                color: appTheme.gray400,
-                                              )
-                                            : theme.textTheme.titleMedium!
-                                                .copyWith(
-                                                color: appTheme.black900,
-                                              ),
-                                      ),
-                                      (kycData!.panVerification!
-                                                  .verificationStatus ==
-                                              true)
-                                          ? Padding(
-                                              padding: const EdgeInsets.only(
-                                                  left: 5),
-                                              child: Container(
-                                                width: 45,
-                                                height: 16,
-                                                decoration: BoxDecoration(
-                                                    color: appTheme.green100
-                                                        .withOpacity(0.5),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            2)),
-                                                child: Center(
-                                                  child: Text(
-                                                    "Verified",
-                                                    style: theme
-                                                        .textTheme.titleSmall!
-                                                        .copyWith(
-                                                            color: appTheme
-                                                                .green500,
-                                                            fontSize: 10),
-                                                  ),
-                                                ),
-                                              ),
-                                            )
-                                          : const SizedBox.shrink(),
-                                    ],
-                                  ),
-                                  Text(
-                                    maskPanNumber(kycData!
-                                        .panVerification!.panNumber
-                                        .toString()),
-                                    style: theme.textTheme.titleSmall!.copyWith(
-                                        fontSize: 14, color: appTheme.black900),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            const Spacer(),
-                            CustomImageView(
-                              imagePath: ImageConstant.imgArrowRightGray900,
-                              height: 24.adaptSize,
-                              width: 24.adaptSize,
-                              margin: EdgeInsets.symmetric(vertical: 10.v),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
                   ),
-                  // GestureDetector(
-                  //   onTap: () {
-                  //     //Get.toNamed(AppRoutes.adhardetail);
-                  //     showAadhaarCardVerificationDialog();
-                  //   },
-                  //   child: Padding(
-                  //     padding: const EdgeInsets.only(top: 1),
-                  //     child: Container(
-                  //       padding: EdgeInsets.symmetric(
-                  //           horizontal: 15.h, vertical: 16.v),
-                  //       decoration: AppDecoration.fillOnPrimaryContainer,
-                  //       child: Row(
-                  //         mainAxisAlignment: MainAxisAlignment.center,
-                  //         children: [
-                  //           CustomIconButton(
-                  //             height: 44.adaptSize,
-                  //             width: 44.adaptSize,
-                  //             padding: EdgeInsets.all(10.h),
-                  //             decoration: IconButtonStyleHelper.fillOrange,
-                  //             child: CustomImageView(
-                  //                 imagePath: ImageConstant.pancard),
-                  //           ),
-                  //           Padding(
-                  //             padding: EdgeInsets.only(
-                  //                 left: 15.h, top: 13.v, bottom: 10.v),
-                  //             child: Text(
-                  //               "Aadhaar Card",
-                  //               style: theme.textTheme.titleMedium!.copyWith(
-                  //                 color: appTheme.gray900,
-                  //               ),
-                  //             ),
-                  //           ),
-                  //           const Spacer(),
-                  //           CustomImageView(
-                  //             imagePath: ImageConstant.imgArrowRightGray900,
-                  //             height: 24.adaptSize,
-                  //             width: 24.adaptSize,
-                  //             margin: EdgeInsets.symmetric(vertical: 10.v),
-                  //           ),
-                  //         ],
-                  //       ),
-                  //     ),
-                  //   ),
-                  // ),
-                  GestureDetector(
+                  _buildUserDetail(
+                    icon: ImageConstant.pancard,
+                    label: "Face Liveliness",
+                    isVerified: kycData?.kycStatus.steps.faceLiveness ?? false,
                     onTap: () {
-                      (kycData!.faceLiveness!.status == true)
-                          ? null
-                          : Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (_) => const FaceDetectorView()));
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 1),
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 15.h, vertical: 16.v),
-                        decoration: AppDecoration.fillOnPrimaryContainer,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CustomIconButton(
-                              height: 44.adaptSize,
-                              width: 44.adaptSize,
-                              padding: EdgeInsets.all(10.h),
-                              decoration: IconButtonStyleHelper.fillOrange,
-                              child: CustomImageView(
-                                  imagePath: ImageConstant.pancard),
-                            ),
-                            Row(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      left: 15.h, top: 13.v, bottom: 10.v),
-                                  child: Text(
-                                    "Face Liveliness",
-                                    style:
-                                        theme.textTheme.titleMedium!.copyWith(
-                                      color: appTheme.gray900,
-                                    ),
-                                  ),
-                                ),
-                                (kycData!.faceLiveness!.status == true)
-                                    ? Padding(
-                                        padding: const EdgeInsets.only(left: 5),
-                                        child: Container(
-                                          width: 45,
-                                          height: 16,
-                                          decoration: BoxDecoration(
-                                              color: appTheme.green100
-                                                  .withOpacity(0.5),
-                                              borderRadius:
-                                                  BorderRadius.circular(2)),
-                                          child: Center(
-                                            child: Text(
-                                              "Verified",
-                                              style: theme.textTheme.titleSmall!
-                                                  .copyWith(
-                                                      color: appTheme.green500,
-                                                      fontSize: 10),
-                                            ),
-                                          ),
-                                        ),
-                                      )
-                                    : const SizedBox.shrink(),
-                              ],
-                            ),
-                            const Spacer(),
-                            CustomImageView(
-                              imagePath: ImageConstant.imgArrowRightGray900,
-                              height: 24.adaptSize,
-                              width: 24.adaptSize,
-                              margin: EdgeInsets.symmetric(vertical: 10.v),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      (kycData!.gstDetails!.gstNumber != null)
-                          ? null
-                          : gstVerificationDialog();
-                    },
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 1),
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 15.h, vertical: 16.v),
-                        decoration: AppDecoration.fillOnPrimaryContainer,
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CustomIconButton(
-                              height: 44.adaptSize,
-                              width: 44.adaptSize,
-                              padding: EdgeInsets.all(10.h),
-                              decoration: IconButtonStyleHelper
-                                  .fillPrimaryContainerTL22,
-                              child:
-                                  CustomImageView(imagePath: ImageConstant.gst),
-                            ),
-                            Row(
-                              children: [
-                                Padding(
-                                  padding: EdgeInsets.only(
-                                      left: 15.h, top: 13.v, bottom: 10.v),
-                                  child: Text(
-                                    "GST Number",
-                                    style:
-                                        theme.textTheme.titleMedium!.copyWith(
-                                      color: appTheme.gray900,
-                                    ),
-                                  ),
-                                ),
-                                (kycData!.gstDetails!.gstNumber != null)
-                                    ? Padding(
-                                        padding: const EdgeInsets.only(left: 5),
-                                        child: Container(
-                                          width: 45,
-                                          height: 16,
-                                          decoration: BoxDecoration(
-                                              color: appTheme.green100
-                                                  .withOpacity(0.5),
-                                              borderRadius:
-                                                  BorderRadius.circular(2)),
-                                          child: Center(
-                                            child: Text(
-                                              "Verified",
-                                              style: theme.textTheme.titleSmall!
-                                                  .copyWith(
-                                                      color: appTheme.green500,
-                                                      fontSize: 10),
-                                            ),
-                                          ),
-                                        ),
-                                      )
-                                    : const SizedBox.shrink(),
-                              ],
-                            ),
-                            const Spacer(),
-                            CustomImageView(
-                              imagePath: ImageConstant.imgArrowRightGray900,
-                              height: 24.adaptSize,
-                              width: 24.adaptSize,
-                              margin: EdgeInsets.symmetric(vertical: 10.v),
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  GestureDetector(
-                    onTap: () {
-                      Navigator.push(
+                      if (!(kycData?.kycStatus.steps.faceLiveness ?? false)) {
+                        Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (_) => const PaymentMethod()));
+                              builder: (_) => const FaceDetectorView()),
+                        );
+                      }
                     },
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 1),
-                      child: Container(
-                        padding: EdgeInsets.symmetric(
-                            horizontal: 15.h, vertical: 16.v),
-                        decoration:
-                            AppDecoration.fillOnPrimaryContainer.copyWith(
-                          borderRadius: BorderRadiusStyle.customBorderL20,
-                        ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            CustomIconButton(
-                              height: 44.adaptSize,
-                              width: 44.adaptSize,
-                              padding: EdgeInsets.all(10.h),
-                              decoration: IconButtonStyleHelper.fillGrayTL22,
-                              child: CustomImageView(
-                                  imagePath: ImageConstant.bank),
-                            ),
-                            Padding(
-                              padding: EdgeInsets.only(
-                                  left: 15.h, top: 13.v, bottom: 10.v),
-                              child: Text(
-                                "Payment Method",
-                                style: theme.textTheme.titleMedium!.copyWith(
-                                  color: appTheme.gray900,
-                                ),
-                              ),
-                            ),
-                            const Spacer(),
-                            CustomImageView(
-                              imagePath: ImageConstant.imgArrowRightGray900,
-                              height: 24.adaptSize,
-                              width: 24.adaptSize,
-                              margin: EdgeInsets.symmetric(vertical: 10.v),
-                            ),
-                          ],
-                        ),
-                      ),
+                  ),
+                  _buildUserDetail(
+                    icon: ImageConstant.gst,
+                    label: "GST Number",
+                    value: kycData?.gstDetails.gstNumber,
+                    isVerified:
+                        kycData?.gstDetails.gstNumber.isNotEmpty ?? false,
+                    onTap: () {
+                      if (kycData?.gstDetails.gstNumber.isEmpty ?? false) {
+                        gstVerificationDialog();
+                      }
+                    },
+                  ),
+                  _buildUserDetail(
+                    icon: ImageConstant.bank,
+                    label: "Payment Method",
+                    isVerified:
+                        kycData?.kycStatus.steps.bankVerification ?? false,
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (_) => const PaymentMethod()),
+                    ),
+                    decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
+                      borderRadius: BorderRadiusStyle.customBorderL20,
                     ),
                   ),
                 ],
               ),
-            )
+            ),
           ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildUserDetail({
+    required String icon,
+    required String label,
+    String? value,
+    bool isVerified = false,
+    VoidCallback? onTap,
+    Decoration? decoration,
+  }) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Padding(
+        padding: const EdgeInsets.only(top: 1),
+        child: Container(
+          padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
+          decoration: decoration ?? AppDecoration.fillOnPrimaryContainer,
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CustomIconButton(
+                height: 44.adaptSize,
+                width: 44.adaptSize,
+                padding: EdgeInsets.all(10.h),
+                decoration: IconButtonStyleHelper.fillGray,
+                child: CustomImageView(imagePath: icon),
+              ),
+              Padding(
+                padding: EdgeInsets.only(left: 15.h),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          label,
+                          style: isVerified
+                              ? theme.textTheme.titleMedium!.copyWith(
+                                  fontSize: 12,
+                                  color: appTheme.gray400,
+                                )
+                              : theme.textTheme.titleMedium!.copyWith(
+                                  color: appTheme.black900,
+                                ),
+                        ),
+                        if (isVerified)
+                          Padding(
+                            padding: const EdgeInsets.only(left: 5),
+                            child: Container(
+                              width: 45,
+                              height: 16,
+                              decoration: BoxDecoration(
+                                color: appTheme.green100.withOpacity(0.5),
+                                borderRadius: BorderRadius.circular(2),
+                              ),
+                              child: Center(
+                                child: Text(
+                                  "Verified",
+                                  style: theme.textTheme.titleSmall!.copyWith(
+                                    color: appTheme.green500,
+                                    fontSize: 10,
+                                  ),
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                    if (value != null)
+                      Text(
+                        value,
+                        style: theme.textTheme.titleSmall!.copyWith(
+                          fontSize: 14,
+                          color: appTheme.black900,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+              const Spacer(),
+              CustomImageView(
+                imagePath: ImageConstant.imgArrowRightGray900,
+                height: 24.adaptSize,
+                width: 24.adaptSize,
+                margin: EdgeInsets.symmetric(vertical: 10.v),
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -1124,6 +438,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
                     onPressed: () {
                       if (formKey.currentState!.validate()) {
                         verifyPAN();
+                        setState(() {});
                       }
                     },
                     text: "Verify",
@@ -1239,9 +554,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
                   const SizedBox(height: 16),
                   CustomElevatedButton(
                     onPressed: () async {
-                      setState(() {
-                        isLoading2 = true;
-                      });
+                      setState(() => isLoading2 = true);
                       if (formKey.currentState!.validate()) {
                         try {
                           final apiService = ApiService();
@@ -1249,9 +562,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
                               .saveGstNumber(gstController.text);
 
                           if (response['status'] == 'success') {
-                            setState(() {
-                              isLoading2 = false;
-                            });
+                            setState(() => isLoading2 = false);
                             Fluttertoast.showToast(
                               msg: "GST verification successful",
                               toastLength: Toast.LENGTH_SHORT,
@@ -1262,9 +573,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
                               fontSize: 16.0,
                             );
                           } else {
-                            setState(() {
-                              isLoading2 = false;
-                            });
+                            setState(() => isLoading2 = false);
                             Fluttertoast.showToast(
                               msg: "Error verifying GST number",
                               toastLength: Toast.LENGTH_SHORT,
@@ -1276,10 +585,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
                             );
                           }
                         } catch (e) {
-                          setState(() {
-                            isLoading2 = false;
-                          });
-                          // Show error toast message
+                          setState(() => isLoading2 = false);
                           Fluttertoast.showToast(
                             msg: "Error verifying GST: $e",
                             toastLength: Toast.LENGTH_SHORT,
@@ -1293,6 +599,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
                           print('Error verifying GST: $e');
                         }
                       }
+                      setState(() {});
                       Navigator.pop(context);
                     },
                     text: !isLoading2 ? "Verify" : "Verifying .... ",
@@ -1304,6 +611,34 @@ class _VerifyAccountState extends State<VerifyAccount> {
         );
       },
     );
+  }
+
+  void showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Error"),
+          content: Text(message),
+          actions: [
+            TextButton(
+              onPressed: () => Navigator.of(context).pop(),
+              child: const Text("OK"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  String maskPanNumber(String? panNumber) {
+    if (panNumber == null || panNumber.isEmpty) {
+      return '';
+    }
+    if (panNumber.length >= 10) {
+      return "XXXXXXXX${panNumber.substring(8)}";
+    }
+    return panNumber;
   }
 
   void onTapArrowLeft() {

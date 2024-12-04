@@ -514,12 +514,17 @@ class ImageConstant {
   static String topup = "assets/images/wallet/walletTransactions.svg";
   static String deposit = "assets/images/wallet/deposit.svg";
   static String transact = "assets/images/wallet/transact.svg";
+  static String receive = "assets/images/wallet/receive.svg";
   static String excel = "assets/images/wallet/Excel.svg";
   static String filtercross = "assets/images/wallet/filtercross.svg";
   static String calender = "assets/images/wallet/calender.svg";
   static String videocam = "assets/images/wallet/videocam.svg";
   static String call = "assets/images/wallet/call.svg";
   static String rate = "assets/images/wallet/verify.svg";
+  static String i = "assets/images/wallet/i.svg";
+  static String whatsapp = "assets/images/wallet/whatsapp.svg";
+  static String ai = "assets/images/wallet/ai.svg";
+  static String revert = "assets/images/wallet/revert.svg";
 
   //  Pan card
 
