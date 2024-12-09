@@ -118,7 +118,7 @@ class VerifynumberController extends GetxController with CodeAutoFill {
     try {
       listenForCode(smsCodeRegexPattern: r'\d{6}');
 
-      final String? signature = await SmsAutoFill().getAppSignature;
+      final String signature = await SmsAutoFill().getAppSignature;
       print("Signature: $signature");
     } catch (e) {
       print("Error initializing SMS listener: $e");

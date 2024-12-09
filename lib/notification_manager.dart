@@ -1,13 +1,16 @@
+import 'dart:convert';
 import 'dart:developer';
 import 'dart:io';
 import 'package:experta/core/app_export.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 
 class NotificationManager {
   static final NotificationManager _instance = NotificationManager._internal();
+  final FirebaseAnalytics _analytics = FirebaseAnalytics.instance;
   factory NotificationManager() => _instance;
   NotificationManager._internal();
 
@@ -132,6 +135,10 @@ class NotificationManager {
           importance: Importance.max,
           priority: Priority.high,
           showWhen: true,
+          enableVibration: true,
+          playSound: true,
+          ticker: 'ticker',
+          visibility: NotificationVisibility.public,
         );
         const platformChannelSpecifics = NotificationDetails(
           android: androidPlatformChannelSpecifics,
@@ -154,15 +161,22 @@ class NotificationManager {
       log('Received a message while in the foreground!');
       log('Message data: ${message.data}');
 
-      if (message.notification != null) {
-        log('Message contains a notification: '
-            'Title: ${message.notification?.title}, '
-            'Body: ${message.notification?.body}');
+      // Log notification received event
+      await _analytics.logEvent(
+        name: 'notification_received',
+        parameters: {
+          'type': message.data['type'] ?? 'unknown',
+          'notification_id': message.data['notificationId'] ?? '',
+          'booking_id': message.data['bookingId'] ?? '',
+        },
+      );
 
+      if (message.notification != null) {
+        String payload = jsonEncode(message.data);
         await _showNotification(
           title: message.notification?.title ?? 'No title',
           body: message.notification?.body ?? 'No body',
-          payload: message.data.toString(),
+          payload: payload,
         );
       }
     } catch (e) {
@@ -195,6 +209,8 @@ class NotificationManager {
         playSound: true,
         ticker: 'ticker',
         visibility: NotificationVisibility.public,
+        // icon: '@mipmap/ic_launcher',
+        // sound: RawResourceAndroidNotificationSound('notification_sound'),
       );
 
       const NotificationDetails platformChannelSpecifics =
@@ -215,6 +231,35 @@ class NotificationManager {
   void _onSelectNotification(NotificationResponse response) {
     try {
       log('Notification selected: ${response.payload}');
+      if (response.payload != null) {
+        Map<String, dynamic> data = jsonDecode(response.payload!);
+        _analytics.logEvent(
+          name: 'notification_clicked',
+          parameters: {
+            'type': data['type'] ?? 'unknown',
+            'notification_id': data['notificationId'] ?? '',
+            'booking_id': data['bookingId'] ?? '',
+          },
+        );
+        String? bookingId = data['bookingId'];
+        String? type = data['type'];
+        String? currentStatus = data['currentStatus'];
+        if (bookingId != null &&
+            type == 'video' &&
+            currentStatus == 'accepted') {
+          // Navigator.pushNamed(context, '/booking-details',
+          //     arguments: bookingId);
+          Get.toNamed(
+            AppRoutes.mybook,
+            // arguments: {
+            //   'initialTab': 'upcoming',
+            //   'bookingId': bookingId,
+            //   'type': type,
+            //   'currentStatus': currentStatus
+            // },
+          );
+        }
+      }
     } catch (e) {
       log("Error handling notification selection: $e", error: e);
     }

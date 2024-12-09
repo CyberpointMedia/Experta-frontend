@@ -213,7 +213,7 @@ class _ReferAndEarnPageState extends State<ReferAndEarnPage> {
                   ),
                 ),
                 if (stepNumber != "3")
-                  Container(
+                  SizedBox(
                     height: 25,
                     child: CustomPaint(
                       painter: DottedLinePainter(

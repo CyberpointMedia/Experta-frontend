@@ -462,8 +462,7 @@ class _WithdrawCreditsPageState extends State<WithdrawCreditsPage> {
                   final kycResponse = await apiService.getKYCStatus();
                   if (kycResponse != null) {
                     final panVerification = kycResponse.panVerification;
-                    if (panVerification == null ||
-                        panVerification.verificationStatus == false) {
+                    if (panVerification.verificationStatus == false) {
                       setState(() {
                         isLoading = false;
                       });

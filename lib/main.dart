@@ -1,5 +1,6 @@
 import 'package:experta/firebase_options.dart';
 import 'package:experta/notification_manager.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
@@ -8,18 +9,16 @@ import 'core/app_export.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Run heavy initializations concurrently
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   await Future.wait([
-    Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
-    ),
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
     ]),
     PrefUtils().init(),
+    FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true),
   ]);
-
-  // Initialize Notification Manager after Firebase
   await NotificationManager().init();
 
   AppLogger.init(kReleaseMode ? LogMode.live : LogMode.debug);

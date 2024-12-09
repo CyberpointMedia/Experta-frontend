@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
@@ -46,6 +47,23 @@ class MyBookingPage extends StatefulWidget {
 class _MyBookingPageState extends State<MyBookingPage> {
   bool isPhoneSelected = true;
   final ApiService apiService = ApiService();
+  Timer? _timer;
+
+  @override
+  void initState() {
+    super.initState();
+    _timer = Timer.periodic(const Duration(minutes: 1), (timer) {
+      if (mounted) {
+        setState(() {});
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
 
   Future<List<Booking>> fetchBookings() async {
     try {
@@ -367,6 +385,7 @@ class _BookingCardState extends State<BookingCard> {
   final ApiService apiService = ApiService();
   final CallApiService _apiService = CallApiService();
   final currentUserId = PrefUtils().getaddress();
+
   void _startCall(String userId, String meetingId, String Type, String userName,
       String profilePic) async {
     if (userId.isNotEmpty && meetingId.isNotEmpty) {
@@ -423,10 +442,27 @@ class _BookingCardState extends State<BookingCard> {
 
   bool _isWithinAppointmentTime() {
     final now = DateTime.now();
-    final appointmentStart = widget.booking.appointmentDate;
+    final appointmentStart = DateTime.parse(
+        widget.booking.appointmentDate.toString().replaceAll('Z', ''));
     final appointmentEnd = appointmentStart.add(
         Duration(minutes: int.parse(widget.booking.duration.split(' ')[0])));
-    return now.isAfter(appointmentStart) && now.isBefore(appointmentEnd);
+
+    bool isSameStartTime = now.year == appointmentStart.year &&
+        now.month == appointmentStart.month &&
+        now.day == appointmentStart.day &&
+        now.hour == appointmentStart.hour &&
+        now.minute == appointmentStart.minute;
+    bool isBetweenTime =
+        now.isAfter(appointmentStart) && now.isBefore(appointmentEnd);
+    bool isStatusValid = widget.booking.status.toLowerCase() == 'confirmed' ||
+        widget.booking.status.toLowerCase() == 'accepted';
+    print('Current time: $now');
+    print('Appointment start: $appointmentStart');
+    print('Appointment end: $appointmentEnd');
+    print('Is same start time: $isSameStartTime');
+    print('Is between time: $isBetweenTime');
+    print('Is status valid: $isStatusValid');
+    return (isSameStartTime || isBetweenTime) && isStatusValid;
   }
 
   @override
@@ -449,10 +485,13 @@ class _BookingCardState extends State<BookingCard> {
                   width: 55,
                   child: Stack(
                     children: [
-                      CircleAvatar(
-                        backgroundImage:
-                            NetworkImage(widget.booking.profileImageUrl),
-                        radius: 24,
+                      CustomImageView(
+                        height: 50.adaptSize,
+                        width: 50.adaptSize,
+                        imagePath: widget.booking.profileImageUrl.isEmpty
+                            ? ImageConstant.imageNotFound
+                            : widget.booking.profileImageUrl,
+                        radius: BorderRadius.circular(25),
                       ),
                       Positioned(
                         top: 24,
@@ -491,52 +530,6 @@ class _BookingCardState extends State<BookingCard> {
                           color: Colors.deepPurple,
                           size: 16.0,
                         ),
-                        const SizedBox(
-                          width: 100,
-                        ),
-                        Positioned(
-                          top: 24,
-                          left: 35,
-                          bottom: 0,
-                          child: Visibility(
-                            visible: showCallButton,
-                            child: widget.booking.appointmentType == 'video'
-                                ? CustomImageView(
-                                    height: 38.adaptSize,
-                                    width: 38.adaptSize,
-                                    imagePath:
-                                        'assets/images/bookings/video.svg',
-                                    onTap: showCallButton
-                                        ? () => _startCall(
-                                              widget.booking.id,
-                                              widget.booking.id,
-                                              widget.booking.appointmentType,
-                                              widget.booking.name,
-                                              widget.booking.profileImageUrl,
-                                            )
-                                        : null,
-                                  )
-                                : CustomIconButton(
-                                    height: 38.adaptSize,
-                                    width: 38.adaptSize,
-                                    padding: EdgeInsets.all(3.h),
-                                    decoration:
-                                        IconButtonStyleHelper.fillGreenTL24,
-                                    onTap: showCallButton
-                                        ? () => _startCall(
-                                              widget.booking.id,
-                                              widget.booking.id,
-                                              widget.booking.appointmentType,
-                                              widget.booking.name,
-                                              widget.booking.profileImageUrl,
-                                            )
-                                        : null,
-                                    child: CustomImageView(
-                                      imagePath: ImageConstant.call,
-                                    ),
-                                  ),
-                          ),
-                        ),
                       ],
                     ),
                     Text(widget.booking.role,
@@ -546,6 +539,37 @@ class _BookingCardState extends State<BookingCard> {
                             fontWeight: FontWeight.w400)),
                   ],
                 ),
+                Spacer(),
+                showCallButton
+                    ? widget.booking.appointmentType == 'video'
+                        ? CustomImageView(
+                            height: 25.adaptSize,
+                            width: 25.adaptSize,
+                            imagePath: 'assets/images/bookings/video.svg',
+                            onTap: () => _startCall(
+                                  widget.booking.id,
+                                  widget.booking.id,
+                                  widget.booking.appointmentType,
+                                  widget.booking.name,
+                                  widget.booking.profileImageUrl,
+                                ))
+                        : CustomIconButton(
+                            height: 25.adaptSize,
+                            width: 25.adaptSize,
+                            padding: EdgeInsets.all(6.h),
+                            decoration: IconButtonStyleHelper.fillGreenTL24,
+                            onTap: () => _startCall(
+                              widget.booking.id,
+                              widget.booking.id,
+                              widget.booking.appointmentType,
+                              widget.booking.name,
+                              widget.booking.profileImageUrl,
+                            ),
+                            child: CustomImageView(
+                              imagePath: ImageConstant.call,
+                            ),
+                          )
+                    : SizedBox.shrink(),
               ],
             ),
           ),
@@ -682,7 +706,13 @@ class _BookingCardState extends State<BookingCard> {
                           print("Accept button pressed!");
                           apiService.updateBookingStatus(
                               widget.booking.id, "accepted");
-                          setState(() {});
+                          if (mounted) {
+                            final myBookingState = context
+                                .findAncestorStateOfType<_MyBookingPageState>();
+                            if (myBookingState != null) {
+                              myBookingState.setState(() {});
+                            }
+                          }
                         },
                         text: 'Accept'),
                   ),
@@ -702,7 +732,13 @@ class _BookingCardState extends State<BookingCard> {
                         print("Reject button pressed!");
                         apiService.updateBookingStatus(
                             widget.booking.id, "rejected");
-                        setState(() {});
+                        if (mounted) {
+                          final myBookingState = context
+                              .findAncestorStateOfType<_MyBookingPageState>();
+                          if (myBookingState != null) {
+                            myBookingState.setState(() {});
+                          }
+                        }
                       },
                       text: "Reject",
                     ),
