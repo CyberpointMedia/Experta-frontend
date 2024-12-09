@@ -811,16 +811,12 @@ class _UserProfileItemWidgetState extends State<UserProfileItemWidget> {
                               await ApiService().fetchChat(widget.user.id);
                           log("this is chat Data  ===== $chatData");
                           log("this is your id ${widget.user.id} and chat is ${chatData!["_id"]}");
-                          if (chatData != null) {
-                            Navigator.pushNamed(
-                              context,
-                              AppRoutes.chattingScreen,
-                              arguments: {'chat': chatData},
-                            );
-                          } else {
-                            print('Failed to load chat');
-                          }
-                        }),
+                          Navigator.pushNamed(
+                            context,
+                            AppRoutes.chattingScreen,
+                            arguments: {'chat': chatData},
+                          );
+                                                }),
                       ],
                     ),
                   ),
@@ -961,8 +957,8 @@ class _UserProfileItemWidgetState extends State<UserProfileItemWidget> {
                       'occupation':
                           user.occupation.isNotEmpty ? user.occupation : "N/A",
                       'price': type == 'video'
-                          ? user.pricing.videoCallPrice
-                          : user.pricing.audioCallPrice,
+                          ? user.pricing.videoCallPrice.toString()
+                          : user.pricing.audioCallPrice.toString(),
                       'id': user.id.isNotEmpty ? user.id : "",
                       'type': type,
                     });
@@ -989,16 +985,12 @@ class _UserProfileItemWidgetState extends State<UserProfileItemWidget> {
                     final chatData = await ApiService().fetchChat(user.id);
                     log("this is chat Data  ===== $chatData");
                     log("this is your id ${user.id} and chat is ${chatData!["_id"]}");
-                    if (chatData != null) {
-                      Navigator.pushNamed(
-                        context,
-                        AppRoutes.chattingScreen,
-                        arguments: {'chat': chatData},
-                      );
-                    } else {
-                      print('Failed to load chat');
-                    }
-                  },
+                    Navigator.pushNamed(
+                      context,
+                      AppRoutes.chattingScreen,
+                      arguments: {'chat': chatData},
+                    );
+                                    },
                 ),
               ],
             ),

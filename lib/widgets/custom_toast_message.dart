@@ -1,5 +1,4 @@
 import 'package:experta/core/app_export.dart';
-import 'package:flutter/material.dart';
 
 class CustomToast {
   static final CustomToast _instance = CustomToast._internal();

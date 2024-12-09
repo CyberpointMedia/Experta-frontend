@@ -1,7 +1,6 @@
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/professional_info/expertise.dart';
 import 'package:experta/presentation/professional_info/model/professional_model.dart';
-import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 
 class EditExpertisePage extends StatefulWidget {

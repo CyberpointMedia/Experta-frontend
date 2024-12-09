@@ -3,8 +3,6 @@ import 'dart:ui';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/account_details_settings/email_verify/controller_email.dart';
 import 'package:experta/widgets/custom_pin_code_text_field.dart';
-import 'package:experta/widgets/custom_toast_message.dart';
-import 'package:flutter/gestures.dart';
 
 class VerifyEmailScreen extends GetWidget<VerifyEmailController> {
   const VerifyEmailScreen({super.key});

@@ -191,10 +191,10 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
                   backgroundImage: controller.imageFile.value != null
                       ? FileImage(controller.imageFile.value!)
                       : (controller.profileImageUrl.value.isNotEmpty
-                              ? NetworkImage(controller.profileImageUrl.value)
-                              : const AssetImage(
-                                  "assets/images/settings/profile.jpeg"))
-                          as ImageProvider,
+                          ? NetworkImage(controller.profileImageUrl.value)
+                          : CustomImageView(
+                              imagePath: ImageConstant.imageNotFound,
+                            )) as ImageProvider,
                 ),
               );
             }),

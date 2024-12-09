@@ -492,16 +492,12 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                         await ApiService().fetchChat(controller.id.id);
                     log("this is chat Data  ===== $chatData");
                     log("this is your id ${controller.id} and chat is ${chatData!["_id"]}");
-                    if (chatData != null) {
-                      Navigator.pushNamed(
-                        context,
-                        AppRoutes.chattingScreen,
-                        arguments: {'chat': chatData},
-                      );
-                    } else {
-                      print('Failed to load chat');
-                    }
-                  },
+                    Navigator.pushNamed(
+                      context,
+                      AppRoutes.chattingScreen,
+                      arguments: {'chat': chatData},
+                    );
+                                    },
                 ),
               ],
             ),
@@ -702,16 +698,12 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                               await ApiService().fetchChat(controller.id.id);
                           log("this is chat Data  ===== $chatData");
                           log("this is your id ${controller.id} and chat is ${chatData!["_id"]}");
-                          if (chatData != null) {
-                            Navigator.pushNamed(
-                              context,
-                              AppRoutes.chattingScreen,
-                              arguments: {'chat': chatData},
-                            );
-                          } else {
-                            print('Failed to load chat');
-                          }
-                        },
+                          Navigator.pushNamed(
+                            context,
+                            AppRoutes.chattingScreen,
+                            arguments: {'chat': chatData},
+                          );
+                                                },
                       ),
                     ],
                   );

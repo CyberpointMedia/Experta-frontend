@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 ProfileModel profileModelFromJson(String str) =>
     ProfileModel.fromJson(json.decode(str));

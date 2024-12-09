@@ -196,7 +196,7 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
 
   void _handleReconnection() {
     log('Attempting to reconnect peer...');
-    if (peer != null && peer.disconnected) {
+    if (peer.disconnected) {
       peer.reconnect(); // Reconnect if the peer was disconnected
     }
   }
@@ -211,7 +211,7 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
 
     socket.on('connect', (_) {
       log('Connected to signaling server.');
-      if (peer.id != null && widget.userId != null) {
+      if (peer.id != null) {
         _joinMeeting();
       } else {
         log('Error: peerId or userId is null');
@@ -483,7 +483,7 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
                                 backgroundColor: Colors.grey[700],
                                 child: Text(
                                   widget.userName != null
-                                      ? widget.userName![0]
+                                      ? widget.userName[0]
                                       : '',
                                   style: const TextStyle(
                                     fontSize: 40,

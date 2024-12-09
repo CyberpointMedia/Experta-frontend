@@ -36,7 +36,7 @@ class VerifyEmailController extends GetxController with CodeAutoFill {
       Map<String, dynamic> response =
           await _apiService.verifyOtpChangeEmail(newEmail, otp);
 
-      if (response != null && response['status'] == "success") {
+      if (response['status'] == "success") {
         CustomToast().showToast(
           context: context,
           message: "Email Set Successfully",

@@ -336,7 +336,12 @@ class ProfileHeader extends StatelessWidget {
                   width: 10.v,
                 ),
                 Text(
-                  controller.userData.value.data?.noOfBooking.toString() ?? "",
+                  (controller.userData.value.data?.noOfBooking != null &&
+                          controller.userData.value.data!.noOfBooking
+                              .toString()
+                              .isNotEmpty)
+                      ? controller.userData.value.data!.noOfBooking.toString()
+                      : "0",
                   textAlign: TextAlign.left,
                   style: Theme.of(context).textTheme.bodyMedium!.copyWith(
                       color: appTheme.black900,

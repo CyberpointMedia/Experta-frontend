@@ -33,8 +33,6 @@ import 'package:experta/presentation/dashboard/binding/dashboard_binding.dart';
 import 'package:experta/presentation/dashboard/dashboard.dart';
 import 'package:experta/presentation/edit_education/binding/edit_education_list_binding.dart';
 import 'package:experta/presentation/edit_education/edit_education.dart';
-import 'package:experta/presentation/edit_experties/binding/edit_experties_binding.dart';
-import 'package:experta/presentation/edit_experties/edit_experties.dart';
 import 'package:experta/presentation/edit_profile/edit_profile_binding/edit_profile_binding.dart';
 import 'package:experta/presentation/edit_profile/edit_profile_setting.dart';
 import 'package:experta/presentation/edit_work_experience/binding/edit_work_experience_binding.dart';
@@ -46,8 +44,6 @@ import 'package:experta/presentation/feeds_active_screen/feeds_active_screen.dar
 import 'package:experta/presentation/followers/binding/followers_binding.dart';
 import 'package:experta/presentation/followers/followers.dart';
 import 'package:experta/presentation/following/following.dart';
-import 'package:experta/presentation/give_rating/binding/give_rating_binding.dart';
-import 'package:experta/presentation/give_rating/give_rating.dart';
 import 'package:experta/presentation/message_chat_with_user_default_screen/binding/message_chat_with_user_default_binding.dart';
 import 'package:experta/presentation/message_chat_with_user_default_screen/message_chat_with_user_default_screen.dart';
 import 'package:experta/presentation/my_booking/binding/my_booking_binding.dart';
@@ -60,8 +56,6 @@ import 'package:experta/presentation/notification_settings/binding/notificatin_s
 import 'package:experta/presentation/notification_settings/notification_settings.dart';
 import 'package:experta/presentation/onboarding_screen/binding/onboarding_binding.dart';
 import 'package:experta/presentation/onboarding_screen/onboarding_screen.dart';
-import 'package:experta/presentation/pan_detrail/binding/pan_detail_binding.dart';
-import 'package:experta/presentation/pan_detrail/pan_detail.dart';
 import 'package:experta/presentation/payment/binding/payment_binding.dart';
 import 'package:experta/presentation/payment/payment.dart';
 import 'package:experta/presentation/payment_method/binding/payment_method_binding.dart';
