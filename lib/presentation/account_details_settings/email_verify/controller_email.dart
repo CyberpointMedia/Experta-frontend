@@ -1,6 +1,5 @@
 // Email Verification Controller
 import 'dart:async';
-import 'dart:developer';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/widgets/custom_toast_message.dart';
 import 'package:sms_autofill/sms_autofill.dart';

@@ -1,7 +1,6 @@
 // ScreenCaptureService.java
 package com.example.expert;
 
-
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -34,10 +33,17 @@ public class ScreenCaptureService extends Service {
             Notification notification = new Notification.Builder(this, channelId)
                 .setContentTitle("Screen Capture")
                 .setContentText("Screen capture is running")
-                // .setSmallIcon(R.drawable.ic_notification)
+                .setSmallIcon(R.drawable.ic_notification) 
                 .build();
 
-            startForeground(1, notification);
+            try {
+                int foregroundServiceType = (int) Class.forName("android.app.ServiceInfo")
+                    .getDeclaredField("FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION")
+                    .get(null);
+                startForeground(1, notification, foregroundServiceType);
+            } catch (Exception e) {
+                startForeground(1, notification);
+            }
         }
         return START_NOT_STICKY;
     }

@@ -97,7 +97,7 @@ class _EditExpertisePageState extends State<EditExpertisePage> {
             ),
             const SizedBox(height: 16),
             SizedBox(
-              height: MediaQuery.of(context).size.height * 0.6,
+              height: MediaQuery.of(context).size.height * 0.55,
               child: SingleChildScrollView(
                 child: Column(
                   children: [
