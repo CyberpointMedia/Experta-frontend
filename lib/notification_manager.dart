@@ -32,6 +32,16 @@ class NotificationManager {
       );
       log("Notification permissions granted.");
 
+      // Call getAPNSToken for iOS devices
+      if (Platform.isIOS) {
+        String? apnsToken = await _firebaseMessaging.getAPNSToken();
+        if (apnsToken != null) {
+          log("APNS Token successfully retrieved: $apnsToken");
+        } else {
+          log("Failed to retrieve APNS Token.");
+        }
+      }
+
       log("Initializing local notifications...");
       const AndroidInitializationSettings initializationSettingsAndroid =
           AndroidInitializationSettings('@mipmap/ic_launcher');
@@ -89,20 +99,34 @@ class NotificationManager {
   }
 
   Future<String?> getFCMToken() async {
-    try {
-      String? token = await _firebaseMessaging.getToken();
-      if (token != null) {
-        await prefUtils.setFcmToken(token);
-        log("FCM Token successfully retrieved: $token");
+  try {
+    String? token;
+    if (Platform.isIOS) {
+      // For iOS, ensure the APNS token is retrieved
+      String? apnsToken = await _firebaseMessaging.getAPNSToken();
+      if (apnsToken != null) {
+        log("APNS Token successfully retrieved: $apnsToken");
+        // Optionally, you can use the APNS token directly or log it
       } else {
-        log("Failed to retrieve FCM Token.");
+        log("Failed to retrieve APNS Token.");
       }
-      return token;
-    } catch (e) {
-      log("Error retrieving FCM Token: $e", error: e);
-      return null;
     }
+
+    // Retrieve the FCM token
+    token = await _firebaseMessaging.getToken();
+    if (token != null) {
+      await prefUtils.setFcmToken(token);
+      log("FCM Token successfully retrieved: $token");
+    } else {
+      log("Failed to retrieve FCM Token.");
+    }
+    return token;
+  } catch (e) {
+    log("Error retrieving FCM Token: $e", error: e);
+    return null;
   }
+}
+
 
   Future<String> _getDeviceInfo() async {
     try {

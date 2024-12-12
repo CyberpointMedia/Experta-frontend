@@ -105,9 +105,9 @@
     },
     {
       "name": "collection",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/collection-1.19.0",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/collection-1.18.0",
       "packageUri": "lib/",
-      "languageVersion": "3.4"
+      "languageVersion": "2.18"
     },
     {
       "name": "colorfilter_generator",
@@ -194,12 +194,6 @@
       "languageVersion": "3.3"
     },
     {
-      "name": "equatable",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/equatable-2.0.7",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
-    },
-    {
       "name": "eventify",
       "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/eventify-1.0.1",
       "packageUri": "lib/",
@@ -210,12 +204,6 @@
       "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/events_emitter-0.5.2",
       "packageUri": "lib/",
       "languageVersion": "2.17"
-    },
-    {
-      "name": "excel",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/excel-4.0.6",
-      "packageUri": "lib/",
-      "languageVersion": "3.0"
     },
     {
       "name": "extended_image",
@@ -669,13 +657,13 @@
     },
     {
       "name": "leak_tracker",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/leak_tracker-10.0.7",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/leak_tracker-10.0.5",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
     {
       "name": "leak_tracker_flutter_testing",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/leak_tracker_flutter_testing-3.0.8",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/leak_tracker_flutter_testing-3.0.5",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -705,7 +693,7 @@
     },
     {
       "name": "lottie",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/lottie-3.1.3",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/lottie-3.2.0",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -1119,9 +1107,9 @@
     },
     {
       "name": "stack_trace",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/stack_trace-1.12.0",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/stack_trace-1.11.1",
       "packageUri": "lib/",
-      "languageVersion": "3.4"
+      "languageVersion": "2.18"
     },
     {
       "name": "staggered_grid_view_flutter",
@@ -1143,9 +1131,9 @@
     },
     {
       "name": "string_scanner",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/string_scanner-1.3.0",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/string_scanner-1.2.0",
       "packageUri": "lib/",
-      "languageVersion": "3.1"
+      "languageVersion": "2.18"
     },
     {
       "name": "stylish_pull_to_refresh",
@@ -1185,9 +1173,9 @@
     },
     {
       "name": "test_api",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/test_api-0.7.3",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/test_api-0.7.2",
       "packageUri": "lib/",
-      "languageVersion": "3.4"
+      "languageVersion": "3.2"
     },
     {
       "name": "timezone",
@@ -1287,7 +1275,7 @@
     },
     {
       "name": "vm_service",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/vm_service-14.3.0",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/vm_service-14.2.5",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -1370,10 +1358,10 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2025-01-17T10:37:37.436873Z",
+  "generated": "2024-12-12T06:01:03.732700Z",
   "generator": "pub",
-  "generatorVersion": "3.6.0",
+  "generatorVersion": "3.5.4",
   "flutterRoot": "file:///usr/local/Caskroom/flutter/3.19.1/flutter",
-  "flutterVersion": "3.27.1",
+  "flutterVersion": "3.24.5",
   "pubCache": "file:///Users/apple/.pub-cache"
 }

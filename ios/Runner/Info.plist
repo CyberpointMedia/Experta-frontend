@@ -47,8 +47,6 @@
 	<true/>
 	 <key>NSCameraUsageDescription</key>
 <string>We need access to your camera for video calls.</string>
-<key>NSMicrophoneUsageDescription</key>
-<string>We need access to your microphone for audio in video calls.</string>
 <key>NSLocationWhenInUseUsageDescription</key>
 <string>We need access to your location for better service.</string>
 <key>NSLocationAlwaysUsageDescription</key>
@@ -76,7 +74,11 @@
 <key>NSSpeechRecognitionUsageDescription</key>
 <string>We need access to speech recognition for voice commands.</string>
 <key>NSAppleMusicUsageDescription</key>
-<string>This app requires SMS permission for OTP auto-fill.</string>
+<string>We need access to your Apple Music library to enhance your music experience.</string>
+<key>NSMicrophoneUsageDescription</key>
+<string>Required for screen recording with audio</string>
+<key>NSScreenCaptureUsageDescription</key>
+<string>Required for screen sharing functionality</string>
 
 </dict>
 </plist>

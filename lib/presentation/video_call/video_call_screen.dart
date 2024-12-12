@@ -1,20 +1,13 @@
 import 'dart:async';
 import 'dart:developer';
-import 'package:experta/core/utils/size_utils.dart';
+import 'package:experta/core/app_export.dart' hide navigator;
 import 'package:experta/presentation/give_rating/give_rating.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:peerdart/peerdart.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import 'package:path_provider/path_provider.dart';
-import '../../core/utils/image_constant.dart';
-import '../../core/utils/pref_utils.dart';
-import '../../theme/theme_helper.dart';
-import '../../widgets/app_bar/appbar_leading_image.dart';
-import '../../widgets/app_bar/appbar_subtitle_six.dart';
-import '../../widgets/app_bar/custom_app_bar.dart';
-import '../../widgets/custom_image_view.dart';
+import 'dart:io';
 
 class VideoCallScreen extends StatefulWidget {
   final String userId;
@@ -41,8 +34,6 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   final RTCVideoRenderer remoteRenderer = RTCVideoRenderer();
   final RTCVideoRenderer screenRenderer = RTCVideoRenderer();
 
-  String? imagePath = PrefUtils().getProfileImage();
-  String? name = PrefUtils().getProfileName();
   late IO.Socket socket;
   late Peer peer;
   MediaConnection? mediaConnection;
@@ -72,10 +63,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   @override
   void dispose() {
     isConnectionActive = false;
-    if (mediaConnection != null) {
-      mediaConnection!.close();
-      mediaConnection = null;
-    }
+    mediaConnection?.close();
     stopCallTimer();
     localStream?.getTracks().forEach((track) => track.stop());
     localStream?.dispose();
@@ -168,7 +156,12 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     final Map<String, dynamic> config = {
       'iceServers': [
         {
-          'urls': 'stun:stun.l.google.com:19302',
+          'urls': [
+            'stun:stun1.l.google.com:19302',
+            'stun:stun2.l.google.com:19302',
+            'stun:stun3.l.google.com:19302',
+            'stun:stun4.l.google.com:19302',
+          ],
         },
         {
           'urls': [
@@ -185,7 +178,15 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
       'iceTransportPolicy': 'all',
       'bundlePolicy': 'max-bundle',
       'rtcpMuxPolicy': 'require',
-      'iceCandidatePoolSize': 1
+      'iceCandidatePoolSize': 1,
+      'enableDtlsSrtp': true,
+      'enableRtpDataChannels': false,
+      'sdpConstraints': {
+        'mandatory': {
+          'OfferToReceiveAudio': true,
+          'OfferToReceiveVideo': true,
+        },
+      },
     };
 
     peer = Peer(
@@ -195,13 +196,6 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
         secure: true,
         config: config,
         debug: LogLevel.All,
-        // constraints: {
-        //   'mandatory': {
-        //     'OfferToReceiveAudio': true,
-        //     'OfferToReceiveVideo': true,
-        //   },
-        //   'optional': []
-        // },
       ),
     );
 
@@ -222,6 +216,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
     peer.on('error').listen((error) {
       log('Peer connection error: $error');
+      _showSnackBar('Peer connection error: $error');
     });
   }
 
@@ -268,34 +263,16 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
           remoteStream = null;
           remoteRenderer.srcObject = null;
           stopCallTimer();
-          if (mediaConnection != null) {
-            mediaConnection!.close();
-            mediaConnection = null;
-          }
+          mediaConnection?.close();
+          mediaConnection = null;
         });
         Navigator.of(context).pop();
       }
     });
 
-    socket.on('screen-share-started', (data) {
-      if (mounted) {
-        setState(() {
-          isSharing = true;
-        });
-      }
-    });
-
-    socket.on('screen-share-stopped', (data) {
-      if (mounted) {
-        setState(() {
-          isSharing = false;
-          screenRenderer.srcObject = null;
-        });
-      }
-    });
-
     socket.on('error', (error) {
       log('Socket connection error: $error');
+      _showSnackBar('Socket connection error: $error');
     });
   }
 
@@ -315,11 +292,8 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
         throw Exception('Local stream is not initialized');
       }
 
-      // Check if there's an existing connection
-      if (mediaConnection != null) {
-        mediaConnection?.close();
-        mediaConnection = null;
-      }
+      mediaConnection?.close();
+      mediaConnection = null;
 
       mediaConnection = peer.call(peerId, localStream!);
       isConnectionActive = true;
@@ -354,40 +328,25 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
         throw Exception('Local stream is not initialized');
       }
 
-      log('Local stream tracks before answering:');
-      localStream!.getTracks().forEach((track) {
-        log('Track kind: ${track.kind}, enabled: ${track.enabled}, id: ${track.id}');
-      });
-
       call.answer(localStream!);
       log('Call answered with local stream');
 
       call.on<MediaStream>('stream').listen((stream) {
         log('Remote stream received in answer');
-        log('Remote stream tracks: ${stream.getTracks().length}');
-        stream.getTracks().forEach((track) {
-          log('Remote track kind: ${track.kind}, enabled: ${track.enabled}, id: ${track.id}');
-        });
-
-        if (!mounted) {
-          log('Widget not mounted, returning');
-          return;
-        }
+        if (!mounted) return;
 
         setState(() {
           remoteStream = stream;
           remoteRenderer.srcObject = stream;
           startCallTimer();
-          log('Remote renderer updated with new stream');
         });
       });
+
       call.on('track').listen((event) {
         log('New track received: ${event.track.kind}');
-
         if (event.track.kind == 'video') {
           setState(() {
             if (event.streams.isNotEmpty) {
-              // Check if this is a screen share stream
               if (event.track.id.contains('screen')) {
                 screenRenderer.srcObject = event.streams[0];
                 isSharing = true;
@@ -401,10 +360,10 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
       call.on('error').listen((error) {
         log('Call answer error: $error');
+        _showSnackBar('Call answer error: $error');
       });
 
       mediaConnection = call;
-      log('Media connection stored');
     } catch (e) {
       log('Error answering call: $e');
       _showSnackBar('Failed to answer call: $e');
@@ -452,33 +411,87 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     }
   }
 
+  Future<void> _startForegroundService() async {
+    if (Platform.isAndroid) {
+      var methodChannel = MethodChannel('com.example.expert/foreground_service');
+      try {
+        await methodChannel.invokeMethod('startForegroundService');
+      } catch (e) {
+        log('Failed to start foreground service: $e');
+        _showSnackBar('Failed to start foreground service: $e');
+      }
+    }
+  }
+
   Future<void> startScreenShare() async {
     if (!isConnectionActive) return;
 
     try {
       log('Starting screen share...');
+      await _startForegroundService(); // Start the foreground service
 
-      MediaStream? screenStream = await navigator.mediaDevices
-          .getDisplayMedia({'video': true, 'audio': true});
-
-      if (screenStream == null || !isConnectionActive) {
-        throw Exception('Failed to get screen stream');
+      MediaStream? screenStream;
+      if (Platform.isAndroid) {
+        screenStream = await navigator.mediaDevices.getDisplayMedia({
+          'video': {
+            'mandatory': {
+              'minWidth': 1280,
+              'minHeight': 720,
+              'maxWidth': 1920,
+              'maxHeight': 1080,
+              'minFrameRate': 30,
+              'maxFrameRate': 60
+            },
+            'facingMode': 'user',
+          },
+          'audio': false,
+        });
+      } else if (Platform.isIOS) {
+        screenStream = await navigator.mediaDevices.getDisplayMedia({
+          'video': {
+            'mandatory': {
+              'minWidth': '1280',
+              'minHeight': '720',
+              'maxWidth': '1920',
+              'maxHeight': '1080',
+              'minFrameRate': '30',
+              'maxFrameRate': '60'
+            },
+            'facingMode': 'user',
+          },
+          'audio': false,
+        });
       }
 
-      if (mediaConnection != null) {
-        // Remove existing video tracks
-        screenStream.getVideoTracks().forEach((track) {
-          mediaConnection!.peerConnection?.addTrack(track, screenStream);
-        });
+      if (mediaConnection != null &&
+          screenStream != null &&
+          screenStream.getVideoTracks().isNotEmpty) {
+        final screenTrack = screenStream.getVideoTracks().first;
+        final senders = await mediaConnection!.peerConnection?.getSenders();
+        if (senders != null) {
+          for (var sender in senders) {
+            if (sender.track?.kind == 'video') {
+              await sender.replaceTrack(screenTrack);
+            }
+          }
+        }
+
+        screenTrack.onEnded = () {
+          stopScreenShare();
+        };
 
         setState(() {
           screenRenderer.srcObject = screenStream;
           isSharing = true;
         });
-        socket.emit('screen-share-started', {
-          'roomId': widget.meetingId,
-          'peerId': peer.id,
-        });
+
+        if (mediaConnection?.peerConnection != null) {
+          final offer = await mediaConnection!.peerConnection!.createOffer({
+            'offerToReceiveVideo': 1,
+            'offerToReceiveAudio': 1,
+          });
+          await mediaConnection!.peerConnection!.setLocalDescription(offer);
+        }
       }
     } catch (e) {
       isSharing = false;
@@ -488,40 +501,31 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   }
 
   Future<void> stopScreenShare() async {
-    try {
-      if (isSharing) {
-        log('Stopping screen share...');
+    if (!isSharing) return;
 
-        final screenStream = screenRenderer.srcObject;
-        if (screenStream != null) {
-          screenStream.getTracks().forEach((track) {
-            track.stop();
-          });
-          if (mediaConnection?.peerConnection != null) {
-            final senders = await mediaConnection!.peerConnection!.getSenders();
-            for (var sender in senders) {
-              if (sender.track != null &&
-                  screenStream
-                      .getTracks()
-                      .any((track) => track.id == sender.track!.id)) {
-                await mediaConnection!.peerConnection!.removeTrack(sender);
-              }
-            }
+    try {
+      final senders = await mediaConnection!.peerConnection?.getSenders();
+      if (senders != null) {
+        for (var sender in senders) {
+          if (sender.track?.kind == 'video') {
+            await sender.replaceTrack(localStream?.getVideoTracks().first);
           }
         }
+      }
 
-        setState(() {
-          screenRenderer.srcObject = null;
-          isSharing = false;
+      screenRenderer.srcObject = null;
+      setState(() {
+        isSharing = false;
+      });
+      if (mediaConnection?.peerConnection != null) {
+        final offer = await mediaConnection!.peerConnection!.createOffer({
+          'offerToReceiveVideo': 1,
+          'offerToReceiveAudio': 1,
         });
-        socket.emit('screen-share-stopped', {
-          'roomId': widget.meetingId,
-          'peerId': peer.id,
-        });
+        await mediaConnection!.peerConnection!.setLocalDescription(offer);
       }
     } catch (e) {
-      _showSnackBar('Failed to stop screen sharing: $e');
-      log('Error stopping screen share: $e');
+      log("Error stopping screen share: $e");
     }
   }
 
@@ -576,7 +580,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
         ),
       );
     }
-    log(message); // Always log the message
+    log(message);
   }
 
   void endCall() {
@@ -584,10 +588,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     stopCallTimer();
     remoteStream?.getTracks().forEach((track) => track.stop());
     localStream?.getTracks().forEach((track) => track.stop());
-    if (mediaConnection != null) {
-      mediaConnection!.close();
-      mediaConnection = null;
-    }
+    mediaConnection?.close();
     if (mounted) {
       setState(() {
         remoteRenderer.srcObject = null;
@@ -633,9 +634,6 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
-
     return Scaffold(
       backgroundColor: Colors.black,
       appBar: _buildAppBar(),
@@ -644,62 +642,9 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
           Expanded(
             child: Stack(
               children: [
-                // Main Video Container
-                Container(
-                  height: MediaQuery.of(context).size.height * 0.78,
-                  width: double.infinity,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(20),
-                    color: appTheme.blackCall,
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(20),
-                    child: isSharing
-                        ? _buildScreenShareLayout()
-                        : _buildNormalCallLayout(),
-                  ),
-                ),
-
-                // Screen Sharing Indicator
-                if (isSharing)
-                  Positioned(
-                    top: 10,
-                    left: 0,
-                    right: 0,
-                    child: Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 8,
-                      ),
-                      color: Colors.black54,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Icon(
-                            Icons.screen_share,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            'Screen sharing active',
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-
-                // Small Video Container (PiP)
-                if (!isSharing)
-                  Positioned(
-                    top: 0.02 * screenHeight,
-                    right: 0.03 * screenWidth,
-                    child: _buildPiPView(),
-                  ),
+                _buildMainVideoContainer(),
+                if (isSharing) _buildScreenSharingIndicator(),
+                if (!isSharing) _buildPiPViewPositioned(),
               ],
             ),
           ),
@@ -709,24 +654,66 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     );
   }
 
+  Widget _buildMainVideoContainer() {
+    return Container(
+      height: MediaQuery.of(context).size.height * 0.78,
+      width: double.infinity,
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(20),
+        color: Colors.black,
+      ),
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(20),
+        child: isSharing ? _buildScreenShareLayout() : _buildNormalCallLayout(),
+      ),
+    );
+  }
+
+  Widget _buildScreenSharingIndicator() {
+    return Positioned(
+      top: 10,
+      left: 0,
+      right: 0,
+      child: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        color: Colors.black54,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.screen_share, color: Colors.white, size: 20),
+            const SizedBox(width: 8),
+            const Text(
+              'Screen sharing active',
+              style:
+                  TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildPiPViewPositioned() {
+    return Positioned(
+      top: 0.02 * MediaQuery.of(context).size.height,
+      right: 0.03 * MediaQuery.of(context).size.width,
+      child: _buildPiPView(),
+    );
+  }
+
   Widget _buildScreenShareLayout() {
     return Column(
       children: [
         Expanded(
           flex: 3,
           child: Container(
-            decoration: BoxDecoration(
-              border: Border.all(color: Colors.white24),
-            ),
+            decoration:
+                BoxDecoration(border: Border.all(color: Colors.white24)),
             child: screenRenderer.srcObject != null
-                ? RTCVideoView(
-                    screenRenderer,
+                ? RTCVideoView(screenRenderer,
                     objectFit:
-                        RTCVideoViewObjectFit.RTCVideoViewObjectFitContain,
-                  )
-                : const Center(
-                    child: CircularProgressIndicator(),
-                  ),
+                        RTCVideoViewObjectFit.RTCVideoViewObjectFitContain)
+                : const Center(child: CircularProgressIndicator()),
           ),
         ),
         Expanded(
@@ -735,53 +722,9 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
             color: Colors.black54,
             child: Row(
               children: [
-                Expanded(
-                  child: Container(
-                    margin: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.white24),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: localRenderer.srcObject != null
-                          ? RTCVideoView(
-                              localRenderer,
-                              mirror: isFrontCamera,
-                              objectFit: RTCVideoViewObjectFit
-                                  .RTCVideoViewObjectFitCover,
-                            )
-                          : _buildParticipantTile(
-                              isLocal: true,
-                              name: name ?? '',
-                              imagePath: imagePath,
-                            ),
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    margin: const EdgeInsets.all(4),
-                    decoration: BoxDecoration(
-                      border: Border.all(color: Colors.white24),
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: remoteRenderer.srcObject != null
-                          ? RTCVideoView(
-                              remoteRenderer,
-                              objectFit: RTCVideoViewObjectFit
-                                  .RTCVideoViewObjectFitCover,
-                            )
-                          : _buildParticipantTile(
-                              isLocal: false,
-                              name: widget.userName,
-                              imagePath: widget.profilePic,
-                            ),
-                    ),
-                  ),
-                ),
+                _buildVideoContainer(localRenderer, isFrontCamera, 'You', null),
+                _buildVideoContainer(
+                    remoteRenderer, false, widget.userName, widget.profilePic),
               ],
             ),
           ),
@@ -790,11 +733,30 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     );
   }
 
-  Widget _buildParticipantTile({
-    required bool isLocal,
-    required String name,
-    String? imagePath,
-  }) {
+  Widget _buildVideoContainer(
+      RTCVideoRenderer renderer, bool mirror, String name, String? imagePath) {
+    return Expanded(
+      child: Container(
+        margin: const EdgeInsets.all(4),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.white24),
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(8),
+          child: renderer.srcObject != null
+              ? RTCVideoView(renderer,
+                  mirror: mirror,
+                  objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitCover)
+              : _buildParticipantTile(
+                  isLocal: name == 'You', name: name, imagePath: imagePath),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildParticipantTile(
+      {required bool isLocal, required String name, String? imagePath}) {
     return Container(
       padding: const EdgeInsets.all(8),
       child: Column(
@@ -806,14 +768,9 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
             child: imagePath == null ? Text(name[0]) : null,
           ),
           const SizedBox(height: 4),
-          Text(
-            name,
-            style: const TextStyle(color: Colors.white, fontSize: 12),
-          ),
-          Text(
-            isLocal ? 'You' : 'Remote',
-            style: const TextStyle(color: Colors.white70, fontSize: 10),
-          ),
+          Text(name, style: const TextStyle(color: Colors.white, fontSize: 12)),
+          Text(isLocal ? 'You' : 'Remote',
+              style: const TextStyle(color: Colors.white70, fontSize: 10)),
         ],
       ),
     );
@@ -822,10 +779,8 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   Widget _buildNormalCallLayout() {
     return remoteRenderer.srcObject == null
         ? _buildWaitingView()
-        : RTCVideoView(
-            remoteRenderer,
-            objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
-          );
+        : RTCVideoView(remoteRenderer,
+            objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitCover);
   }
 
   Widget _buildWaitingView() {
@@ -836,16 +791,12 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
           CircleAvatar(
             radius: 50,
             backgroundColor: Colors.grey[700],
-            child: Text(
-              widget.userName[0],
-              style: const TextStyle(fontSize: 40, color: Colors.white),
-            ),
+            child: Text(widget.userName[0],
+                style: const TextStyle(fontSize: 40, color: Colors.white)),
           ),
           const SizedBox(height: 16),
-          Text(
-            "Waiting for ${widget.userName}...",
-            style: const TextStyle(color: Colors.white),
-          ),
+          Text("Waiting for ${widget.userName}...",
+              style: const TextStyle(color: Colors.white)),
         ],
       ),
     );
@@ -877,11 +828,9 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
                   (localStream?.getVideoTracks().isEmpty ?? true) ||
                   !showVideo
               ? _buildLocalAvatarView()
-              : RTCVideoView(
-                  localRenderer,
+              : RTCVideoView(localRenderer,
                   mirror: isFrontCamera,
-                  objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitCover,
-                ),
+                  objectFit: RTCVideoViewObjectFit.RTCVideoViewObjectFitCover),
         ),
       ),
     );
@@ -892,61 +841,50 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
       child: CircleAvatar(
         radius: 20,
         backgroundColor: Colors.grey[700],
-        child: Text(
-          widget.userId[0],
-          style: const TextStyle(fontSize: 20, color: Colors.white),
-        ),
+        child: Text(widget.userId[0],
+            style: const TextStyle(fontSize: 20, color: Colors.white)),
       ),
     );
   }
 
   Widget _buildControlBar() {
     return Container(
-        color: Colors.black.withOpacity(0.8),
-        padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
-        child: Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+      color: Colors.black.withOpacity(0.8),
+      padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 8),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
           _buildControlButton(
-            icon: Icons.call_end,
-            color: Colors.red,
-            onPressed: endCall,
-          ),
+              icon: Icons.call_end, color: Colors.red, onPressed: endCall),
           _buildControlButton(
-            icon: isMuted ? Icons.mic_off : Icons.mic,
-            onPressed: toggleAudio,
-          ),
+              icon: isMuted ? Icons.mic_off : Icons.mic,
+              onPressed: toggleAudio),
           _buildControlButton(
-            icon: showVideo ? Icons.videocam : Icons.videocam_off,
-            onPressed: toggleVideo,
-          ),
+              icon: showVideo ? Icons.videocam : Icons.videocam_off,
+              onPressed: toggleVideo),
           _buildControlButton(
-            icon: isRecording ? Icons.stop : Icons.fiber_manual_record,
-            onPressed: startScreenRecording,
-          ),
+              icon: isRecording ? Icons.stop : Icons.fiber_manual_record,
+              onPressed: startScreenRecording),
           _buildControlButton(
-            icon: isSpeakerOn ? Icons.volume_up : Icons.volume_off,
-            onPressed: toggleSpeaker,
-          ),
+              icon: isSpeakerOn ? Icons.volume_up : Icons.volume_off,
+              onPressed: toggleSpeaker),
           _buildControlButton(
-            icon: !isSharing ? Icons.screen_share : Icons.stop_screen_share,
-            onPressed: toggleScreenShare,
-          )
-        ]));
+              icon: !isSharing ? Icons.screen_share : Icons.stop_screen_share,
+              onPressed: toggleScreenShare),
+        ],
+      ),
+    );
   }
 
-  Widget _buildControlButton({
-    required IconData icon,
-    Color color = Colors.white,
-    required VoidCallback onPressed,
-  }) {
+  Widget _buildControlButton(
+      {required IconData icon,
+      Color color = Colors.white,
+      required VoidCallback onPressed}) {
     return Container(
       decoration: BoxDecoration(
-        shape: BoxShape.circle,
-        color: Colors.white.withOpacity(0.1),
-      ),
+          shape: BoxShape.circle, color: Colors.white.withOpacity(0.1)),
       child: IconButton(
-        icon: Icon(icon, color: color, size: 32),
-        onPressed: onPressed,
-      ),
+          icon: Icon(icon, color: color, size: 32), onPressed: onPressed),
     );
   }
 

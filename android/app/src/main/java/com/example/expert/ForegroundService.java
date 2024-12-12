@@ -9,42 +9,30 @@ import android.os.Build;
 import android.os.IBinder;
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
-import android.os.Environment;
-import android.provider.Settings;
-import java.util.logging.Logger; 
 
-
-public class ForegroundService extends Service { 
-    private static final Logger logger = Logger.getLogger(ForegroundService.class.getName());
+public class ForegroundService extends Service {
     private static final String CHANNEL_ID = "ForegroundServiceChannel";
-    private static final int NOTIFICATION_ID = 1;
-
-    // @authou by koushal rathor
 
     @Override
     public void onCreate() {
         super.onCreate();
         createNotificationChannel();
+        Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
+                .setContentTitle("Screen Sharing")
+                .setContentText("Screen sharing is active")
+                .setSmallIcon(R.mipmap.ic_launcher) 
+                .build();
+        startForeground(1, notification);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R && !Environment.isExternalStorageManager()) {
-            Intent permissionIntent = new Intent(Settings.ACTION_MANAGE_ALL_FILES_ACCESS_PERMISSION);
-            permissionIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            startActivity(permissionIntent);
-            logger.info("Requesting storage permission for Android 11+");
-        }
-        createNotificationChannel();
-        Notification notification = new NotificationCompat.Builder(this, CHANNEL_ID)
-                .setContentTitle("Foreground Service")
-                .setContentText("Foreground service is running")
-                .setSmallIcon(R.drawable.ic_notification)
-                .build();
-
-        startForeground(1, notification);
-
         return START_NOT_STICKY;
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
 
     @Nullable
@@ -56,20 +44,14 @@ public class ForegroundService extends Service {
     private void createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             NotificationChannel serviceChannel = new NotificationChannel(
-                CHANNEL_ID,
-                "Foreground Service",
-                NotificationManager.IMPORTANCE_HIGH
+                    CHANNEL_ID,
+                    "Foreground Service Channel",
+                    NotificationManager.IMPORTANCE_DEFAULT
             );
-            serviceChannel.setDescription("Used for foreground service");
-            serviceChannel.enableVibration(true);
-            serviceChannel.setShowBadge(true);
-
             NotificationManager manager = getSystemService(NotificationManager.class);
             if (manager != null) {
                 manager.createNotificationChannel(serviceChannel);
             }
-            logger.info("Notification channel created");
         }
     }
 }
-

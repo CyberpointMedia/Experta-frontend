@@ -2,12 +2,6 @@ import 'dart:ui';
 
 import 'package:experta/presentation/professional_info/controller/expertise_controller.dart';
 import 'package:experta/presentation/professional_info/model/professional_model.dart';
-import 'package:experta/widgets/app_bar/appbar_leading_image.dart';
-import 'package:experta/widgets/app_bar/appbar_subtitle_six.dart';
-import 'package:experta/widgets/app_bar/custom_app_bar.dart';
-import 'package:experta/widgets/custom_elevated_button.dart';
-import 'package:experta/widgets/custom_search_view.dart';
-import 'package:flutter/material.dart';
 
 import '../../core/app_export.dart';
 
@@ -75,7 +69,11 @@ class ExpertiseView extends StatelessWidget {
                           final isSelected =
                               controller.selectedItems.contains(item);
                           return ListTile(
-                            title: Text(item.name),
+                            title: Text(
+                              item.name,
+                              style: theme.textTheme.titleMedium!.copyWith(
+                                  fontSize: 16, fontWeight: FontWeight.w500),
+                            ),
                             trailing: Checkbox(
                               value: isSelected,
                               onChanged: (bool? value) {
@@ -97,6 +95,9 @@ class ExpertiseView extends StatelessWidget {
                   },
                   text: "Save",
                 ),
+              ),
+              SizedBox(
+                height: 20,
               ),
             ],
           ),
