@@ -1,7 +1,7 @@
 #!/bin/sh
 # This is a generated file; do not edit or check into version control.
-export "FLUTTER_ROOT=/usr/local/Caskroom/flutter/3.19.1/flutter"
-export "FLUTTER_APPLICATION_PATH=/Users/apple/Desktop/expert/Experta-frontend"
+export "FLUTTER_ROOT=/opt/homebrew/Caskroom/flutter/3.24.5/flutter"
+export "FLUTTER_APPLICATION_PATH=/Users/cittu/Desktop/Experta-frontend"
 export "COCOAPODS_PARALLEL_CODE_SIGN=true"
 export "FLUTTER_BUILD_DIR=build"
 export "FLUTTER_BUILD_NAME=1.0.0"
