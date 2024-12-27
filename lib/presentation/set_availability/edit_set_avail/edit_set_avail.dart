@@ -41,7 +41,34 @@ class _EditSetAvailabilityState extends State<EditSetAvailability> {
       body: Stack(
         children: [
           _buildBackgroundBlur(),
-          isLoading ? _buildShimmerEffect() : _buildContent(),
+          isLoading
+              ? _buildShimmerEffect()
+              : Column(
+                  children: [
+                    _buildAppBar(),
+                    Expanded(
+                      child: SingleChildScrollView(
+                        child: _buildBody(),
+                      ),
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.only(
+                          bottom: 30, left: 16, right: 16),
+                      child: CustomElevatedButton(
+                        text: "Save",
+                        onPressed: () async {
+                          setState(() {
+                            isSaving = true;
+                          });
+                          await controller.saveAvailability(availability);
+                          setState(() {
+                            isSaving = false;
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
           if (isSaving) _buildCircularProgressIndicator(),
         ],
       ),
@@ -86,30 +113,29 @@ class _EditSetAvailabilityState extends State<EditSetAvailability> {
   }
 
   Widget _buildContent() {
-    return Expanded(
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildAppBar(),
-          _buildBody(),
-          const Spacer(),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 30, left: 16, right: 16),
-            child: CustomElevatedButton(
-              text: "Save",
-              onPressed: () async {
-                setState(() {
-                  isSaving = true;
-                });
-                await controller.saveAvailability(availability);
-                setState(() {
-                  isSaving = false;
-                });
-              },
-            ),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildAppBar(),
+        Expanded(
+          child: _buildBody(),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 30, left: 16, right: 16),
+          child: CustomElevatedButton(
+            text: "Save",
+            onPressed: () async {
+              setState(() {
+                isSaving = true;
+              });
+              await controller.saveAvailability(availability);
+              setState(() {
+                isSaving = false;
+              });
+            },
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 

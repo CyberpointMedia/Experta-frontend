@@ -9,7 +9,7 @@ class SplashController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    Future.delayed(const Duration(milliseconds: 3000), () async {
+    Future.delayed(const Duration(seconds: 5), () async {
       if (token != null && token!.isNotEmpty) {
         try {
           final response = await apiService.checkToken(token!);
