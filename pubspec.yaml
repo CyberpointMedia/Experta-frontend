@@ -74,7 +74,7 @@ dependencies:
   stylish_pull_to_refresh: ^1.1.0
   pull_to_refresh: ^2.0.0
 
-  
+
 dev_dependencies:
   flutter_test:
     sdk: flutter

@@ -63,9 +63,9 @@
     },
     {
       "name": "collection",
-      "rootUri": "file:///Users/cittu/.pub-cache/hosted/pub.dev/collection-1.18.0",
+      "rootUri": "file:///Users/cittu/.pub-cache/hosted/pub.dev/collection-1.19.0",
       "packageUri": "lib/",
-      "languageVersion": "2.18"
+      "languageVersion": "3.4"
     },
     {
       "name": "colorfilter_generator",
@@ -165,7 +165,7 @@
     },
     {
       "name": "file_picker",
-      "rootUri": "file:///Users/cittu/.pub-cache/hosted/pub.dev/file_picker-8.0.5",
+      "rootUri": "file:///Users/cittu/.pub-cache/hosted/pub.dev/file_picker-8.0.7",
       "packageUri": "lib/",
       "languageVersion": "2.19"
     },
@@ -489,13 +489,13 @@
     },
     {
       "name": "leak_tracker",
-      "rootUri": "file:///Users/cittu/.pub-cache/hosted/pub.dev/leak_tracker-10.0.5",
+      "rootUri": "file:///Users/cittu/.pub-cache/hosted/pub.dev/leak_tracker-10.0.7",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
     {
       "name": "leak_tracker_flutter_testing",
-      "rootUri": "file:///Users/cittu/.pub-cache/hosted/pub.dev/leak_tracker_flutter_testing-3.0.5",
+      "rootUri": "file:///Users/cittu/.pub-cache/hosted/pub.dev/leak_tracker_flutter_testing-3.0.8",
       "packageUri": "lib/",
       "languageVersion": "3.2"
     },
@@ -807,9 +807,9 @@
     },
     {
       "name": "stack_trace",
-      "rootUri": "file:///Users/cittu/.pub-cache/hosted/pub.dev/stack_trace-1.11.1",
+      "rootUri": "file:///Users/cittu/.pub-cache/hosted/pub.dev/stack_trace-1.12.0",
       "packageUri": "lib/",
-      "languageVersion": "2.18"
+      "languageVersion": "3.4"
     },
     {
       "name": "staggered_grid_view_flutter",
@@ -825,9 +825,9 @@
     },
     {
       "name": "string_scanner",
-      "rootUri": "file:///Users/cittu/.pub-cache/hosted/pub.dev/string_scanner-1.2.0",
+      "rootUri": "file:///Users/cittu/.pub-cache/hosted/pub.dev/string_scanner-1.3.0",
       "packageUri": "lib/",
-      "languageVersion": "2.18"
+      "languageVersion": "3.1"
     },
     {
       "name": "stylish_pull_to_refresh",
@@ -849,9 +849,9 @@
     },
     {
       "name": "test_api",
-      "rootUri": "file:///Users/cittu/.pub-cache/hosted/pub.dev/test_api-0.7.2",
+      "rootUri": "file:///Users/cittu/.pub-cache/hosted/pub.dev/test_api-0.7.3",
       "packageUri": "lib/",
-      "languageVersion": "3.2"
+      "languageVersion": "3.4"
     },
     {
       "name": "typed_data",
@@ -921,7 +921,7 @@
     },
     {
       "name": "vm_service",
-      "rootUri": "file:///Users/cittu/.pub-cache/hosted/pub.dev/vm_service-14.2.5",
+      "rootUri": "file:///Users/cittu/.pub-cache/hosted/pub.dev/vm_service-14.3.0",
       "packageUri": "lib/",
       "languageVersion": "3.3"
     },
@@ -957,9 +957,9 @@
     },
     {
       "name": "win32",
-      "rootUri": "file:///Users/cittu/.pub-cache/hosted/pub.dev/win32-5.5.0",
+      "rootUri": "file:///Users/cittu/.pub-cache/hosted/pub.dev/win32-5.9.0",
       "packageUri": "lib/",
-      "languageVersion": "3.3"
+      "languageVersion": "3.5"
     },
     {
       "name": "xdg_directories",
@@ -980,10 +980,10 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2024-12-26T09:57:46.656883Z",
+  "generated": "2024-12-27T04:55:16.871555Z",
   "generator": "pub",
-  "generatorVersion": "3.5.4",
+  "generatorVersion": "3.6.0",
   "flutterRoot": "file:///opt/homebrew/Caskroom/flutter/3.24.5/flutter",
-  "flutterVersion": "3.24.5",
+  "flutterVersion": "3.27.1",
   "pubCache": "file:///Users/cittu/.pub-cache"
 }
