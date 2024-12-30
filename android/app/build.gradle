@@ -31,13 +31,12 @@ android {
     ndkVersion flutter.ndkVersion
 
     compileOptions {
-        // Update to Java 17 compatibility
-        sourceCompatibility JavaVersion.VERSION_17
-        targetCompatibility JavaVersion.VERSION_17
+        sourceCompatibility JavaVersion.VERSION_1_8
+        targetCompatibility JavaVersion.VERSION_1_8
     }
 
     kotlinOptions {
-        jvmTarget = "17"  // Ensure JVM target is set to 17 for compatibility
+        jvmTarget = "1.8"
     }
 
     sourceSets {
@@ -48,7 +47,7 @@ android {
         applicationId "com.example.expert"
         multiDexEnabled true
         minSdkVersion 23
-        targetSdkVersion flutter.targetSdkVersion
+        targetSdkVersion 34
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
@@ -71,7 +70,7 @@ flutter {
 
 dependencies {
     // Ensure that Kotlin version is included and compatible
-    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"  // Uncomment if necessary
+    // implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"  // Uncomment if necessary
 
     implementation 'com.google.mlkit:face-detection:16.1.7'
     implementation 'androidx.core:core-ktx:1.7.0'
@@ -87,9 +86,3 @@ dependencies {
     implementation 'com.google.android.gms:play-services-mlkit-face-detection:17.1.0'
 }
 
-buildscript {
-    ext.kotlin_version = '1.8.0'  // Use a stable version of Kotlin
-    dependencies {
-        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-    }
-}
