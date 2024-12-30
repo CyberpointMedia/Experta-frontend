@@ -1,41 +1,4 @@
-// import 'package:experta/core/app_export.dart';
-// import 'package:experta/presentation/dashboard/models/dashboard_model.dart';
-
-// class DashboardController extends GetxController {
-//   final PageController pageController = PageController();
-//   Rx<DashboardModel> dashboardModelObj = DashboardModel().obs;
-//   RxInt selectedIndex = 0.obs;
-//   RxMap<String, dynamic> pageArguments = <String, dynamic>{}.obs;
-//   void onPageChanged(int index) {
-//     selectedIndex.value = index;
-//   }
-
-//   void onBottomNavTapped(int index) {
-//     pageController.animateToPage(
-//       index,
-//       duration: const Duration(milliseconds: 300),
-//       curve: Curves.ease,
-//     );
-//     selectedIndex.value = index;
-//   }
-
-//   void navigateToPage(int index, dynamic arguments) {
-//     pageArguments.value = arguments;
-//     pageController.jumpToPage(index);
-//     selectedIndex.value = index;
-//   }
-
-//   void navigateToPage2(int index) {
-//     pageController.jumpToPage(index);
-//     selectedIndex.value = index;
-//   }
-
-//   @override
-//   void onClose() {
-//     super.onClose();
-//     pageController.dispose();
-//   }
-// }
+import 'dart:developer';
 
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/Home/controller/home_controller.dart';
@@ -50,17 +13,31 @@ class DashboardController extends GetxController {
   Rx<DashboardModel> dashboardModelObj = DashboardModel().obs;
   RxMap<String, dynamic> pageArguments = <String, dynamic>{}.obs;
   RxInt selectedIndex = 0.obs;
-
+  final String? fcmtoken = PrefUtils().getFcmToken();
+  final String? deviceInfo = PrefUtils().getDeviceInfo();
+  final ApiService _apiService = ApiService();
   @override
   void onInit() {
     super.onInit();
-
+    _fetchAndRegisterDevice();
     // Lazy load the controllers
     Get.lazyPut(() => HomeController(), fenix: true);
     Get.lazyPut(() => SearchPageController(), fenix: true);
     Get.lazyPut(() => MessageController(), fenix: true);
     Get.lazyPut(() => FeedsActiveController(), fenix: true);
     Get.lazyPut(() => ProfileController(), fenix: true);
+  }
+
+  // Get FCM token and register the device
+  Future<void> _fetchAndRegisterDevice() async {
+    try {
+      await _apiService.registerDevice(
+        fcmToken: fcmtoken.toString(),
+        deviceInfo: deviceInfo.toString(),
+      );
+    } catch (e) {
+      log("Error fetching FCM Token or device info: $e", error: e);
+    }
   }
 
   void onPageChanged(int index) {
@@ -93,7 +70,11 @@ class DashboardController extends GetxController {
   }
 
   void navigateToPage2(int index) {
-    pageController.jumpToPage(index);
+    pageController.animateToPage(
+      index,
+      duration: const Duration(milliseconds: 300),
+      curve: Curves.ease,
+    );
     selectedIndex.value = index;
   }
 

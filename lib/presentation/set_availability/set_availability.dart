@@ -82,7 +82,8 @@ class _SetAvailabilityState extends State<SetAvailability> {
       left: 270,
       top: 50,
       child: ImageFiltered(
-        imageFilter: ImageFilter.blur(sigmaX: 60, sigmaY: 60),
+        imageFilter:
+            ImageFilter.blur(tileMode: TileMode.decal, sigmaX: 60, sigmaY: 60),
         child: Align(
           child: SizedBox(
             width: 252,
@@ -142,32 +143,62 @@ class _SetAvailabilityState extends State<SetAvailability> {
         controller.deleteAvailability(availability.id);
       },
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
+        padding: const EdgeInsets.symmetric(
+          vertical: 6.0,
+          horizontal: 16.0,
+        ),
         child: SizedBox(
           width: double.infinity,
           child: Card(
             elevation: 0,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.0),
+              borderRadius: BorderRadius.circular(10.0),
             ),
             child: Padding(
               padding: const EdgeInsets.all(16.0),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text('Slot $index',
-                      style: CustomTextStyles.bodyLargeBlack90001),
-                  const SizedBox(height: 8.0),
+                  // Slot number with grey color
                   Text(
-                    '${convertTo12HourFormat(availability.startTime)} - ${convertTo12HourFormat(availability.endTime)}',
-                    style: CustomTextStyles.labelBigBlack900,
+                    'Slot $index',
+                    style: CustomTextStyles.bodyLargeBlack90001.copyWith(
+                      color: Colors.grey, // Change slot text to grey
+                    ),
                   ),
-                  const SizedBox(height: 10.0),
+                  const SizedBox(height: 8.0),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        '${convertTo12HourFormat(availability.startTime)} - ${convertTo12HourFormat(availability.endTime)}',
+                        style: CustomTextStyles.labelBigBlack900.copyWith(
+                          color: Colors
+                              .black, // Change the time text to dark black
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () {
+                          Get.toNamed(AppRoutes.editSetAvail,
+                              arguments: availability);
+                        },
+                        child: const Text(
+                          'Edit',
+                          // Optionally: you can add a custom style for Edit text here
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 18.0),
+                  // Selected day text with grey color
                   Text(
                     availability.isEveryday
                         ? 'Everyday'
-                        : availability.weeklyRepeat.join('  '),
-                    style: CustomTextStyles.bodyLargeBlack90001,
+                        : availability.weeklyRepeat
+                            .join('  '), // Joining the days with spaces
+                    style: CustomTextStyles.bodyLargeBlack90001.copyWith(
+                      color: Colors.grey, // Change day text to grey
+                    ),
                   ),
                 ],
               ),

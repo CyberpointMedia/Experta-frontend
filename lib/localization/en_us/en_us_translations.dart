@@ -16,7 +16,7 @@ final Map<String, String> enUs = {
   "lbl_resend_code": "Resend code",
   "msg_didn_t_receive_the": "Didn’t receive the code? Resend code",
   "msg_didn_t_receive_the2": "Didn’t receive the code?",
-  "msg_enter_the_security": "Enter the security code we sent to +91*******001",
+  "msg_enter_the_security": "Enter the security code we sent to ",
   "msg_we_just_sent_you": "We just sent you an SMS",
 
   // Signinemail Screen
@@ -39,7 +39,7 @@ final Map<String, String> enUs = {
   // Registration1 Screen
   "lbl_step_1_of_8": "Step 1 of 8",
   "msg_please_enter_your":
-      "Please enter your legal first and last name exactly as they appear on your id.",
+  "Please enter your legal first and last name exactly as they appear on your id.",
   "msg_tell_us_about_yourself": "Tell us about yourself",
 
   // Registration step2 Screen
@@ -580,6 +580,7 @@ final Map<String, String> enUs = {
   "lbl_comedians": "Comedians",
   "lbl_congratulations": "Congratulations",
   "lbl_continue": "Continue to Sign In",
+  "lblcontinue": "Continue",
   "lbl_creators": "Creators",
   "lbl_cricket": "🏏 Cricket",
   "lbl_date_of_birth": "Date of Birth",

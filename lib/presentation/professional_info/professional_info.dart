@@ -2,8 +2,10 @@ import 'dart:ui';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/professional_info/controller/professional_controller.dart';
 import 'package:experta/widgets/custom_drop_down.dart';
+import 'package:experta/widgets/custom_icon_button.dart';
 import 'package:experta/widgets/custom_radio_button.dart';
 import 'package:experta/widgets/custom_text_form_field.dart';
+import 'package:experta/widgets/dashed_border.dart';
 import 'package:experta/widgets/shimmer.dart';
 import 'package:experta/widgets/work_experience_widget.dart';
 import 'package:file_picker/file_picker.dart';
@@ -41,7 +43,8 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
       left: 270,
       top: 50,
       child: ImageFiltered(
-        imageFilter: ImageFilter.blur(sigmaX: 60, sigmaY: 60),
+        imageFilter:
+            ImageFilter.blur(tileMode: TileMode.decal, sigmaX: 60, sigmaY: 60),
         child: Align(
           child: SizedBox(
             width: 252,
@@ -74,7 +77,7 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
 
   Widget _buildBody() {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 10.v),
+      padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 16.v),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -151,16 +154,21 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
             padding: const EdgeInsets.only(top: 10),
             child: Text(
               label,
-              style: CustomTextStyles.bodyMediumBlack90001,
+              style: theme.textTheme.titleSmall!
+                  .copyWith(color: appTheme.black900),
             ),
           ),
           Padding(
             padding: EdgeInsets.only(top: 6.v, bottom: 12.v),
             child: CustomDropDown(
               hintText: "Select",
+              hintStyle: theme.textTheme.titleSmall!
+                  .copyWith(color: appTheme.black900),
               width: double.infinity,
               icon: _buildDropdownIcon(),
               items: items,
+              focusNode: FocusNode(),
+              autofocus: false,
               onChanged: (SelectionPopupModel? newValue) {
                 if (newValue != null) {
                   selectedValue.value = newValue;
@@ -196,8 +204,8 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
       margin: EdgeInsets.only(right: 6.h),
       child: CustomImageView(
         imagePath: ImageConstant.imgCheckmark,
-        height: 30.adaptSize,
-        width: 30.adaptSize,
+        height: 15.adaptSize,
+        width: 15.adaptSize,
       ),
     );
   }
@@ -207,6 +215,7 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
       padding: const EdgeInsets.only(top: 16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Row(
             children: [
@@ -227,6 +236,8 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
     return Expanded(
       child: CustomRadioButton(
         value: value,
+        textStyle:
+            theme.textTheme.titleSmall!.copyWith(color: appTheme.black900),
         groupValue: controller.selectedOption.value,
         onChange: (value) {
           setState(() {
@@ -259,28 +270,38 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
         children: [
           GestureDetector(
             onTap: _pickFile,
-            child: Container(
-              height: 150,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: Colors.grey.shade200),
-                borderRadius: BorderRadius.circular(8),
+            child: CustomPaint(
+              painter: DashedBorderPainter(
+                color: Colors.grey,
+                strokeWidth: 1.0,
+                dashWidth: 5.0,
+                dashSpace: 3.0,
+                isCircular: true, // Set to false for rectangular border
+                radius: 8.0,
               ),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CustomImageView(imagePath: ImageConstant.uploadcloud),
-                    const SizedBox(height: 8),
-                    const Text('(JPEG, PNG, PDF)',
-                        style: TextStyle(color: Colors.grey)),
-                    Text(
-                      'click to browse files',
-                      style: theme.textTheme.bodyMedium!
-                          .copyWith(color: Colors.black),
-                    ),
-                    const SizedBox(height: 4),
-                  ],
+              child: Container(
+                height: 150,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: Colors.grey.shade200),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CustomImageView(imagePath: ImageConstant.uploadcloud),
+                      const SizedBox(height: 8),
+                      Text('(JPEG, PNG, PDF)',
+                          style: theme.textTheme.titleSmall),
+                      Text(
+                        'click to browse files',
+                        style: theme.textTheme.titleMedium!
+                            .copyWith(color: Colors.black),
+                      ),
+                      const SizedBox(height: 4),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -313,26 +334,55 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
   Widget _buildFileUploadProgress() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16.0),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              const Icon(Icons.picture_as_pdf, color: Colors.red),
-              const SizedBox(width: 8),
-              Expanded(child: Text(controller.pickedFile!.name)),
-              Text(
-                  '${(controller.pickedFile!.size / 1024).toStringAsFixed(2)} KB'),
-            ],
-          ),
-          const SizedBox(height: 8),
-          LinearProgressIndicator(
-            value: controller.uploadProgress.value,
-            color: appTheme.green400,
-          ),
-          const SizedBox(height: 8),
-          Text(
-              '${(controller.uploadProgress.value * 100).toStringAsFixed(0)}% uploaded'),
-        ],
+      child: Container(
+        height: 100.v,
+        decoration: BoxDecoration(
+            color: Colors.white, borderRadius: BorderRadius.circular(10)),
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                // const Icon(Icons.picture_as_pdf, color: Colors.red),
+                CustomIconButton(
+                    height: 44.adaptSize,
+                    width: 44.adaptSize,
+                    padding: EdgeInsets.all(10.h),
+                    decoration: IconButtonStyleHelper.fillGrayTL22,
+                    child: CustomImageView(
+                      imagePath: ImageConstant.pdf,
+                    )),
+                const SizedBox(width: 8),
+                Expanded(
+                    child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      controller.pickedFile!.name,
+                      style: theme.textTheme.bodyMedium!
+                          .copyWith(color: appTheme.black900),
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                            '${(controller.pickedFile!.size / 1024).toStringAsFixed(2)} KB  •  '),
+                        Text(
+                            '${(controller.uploadProgress.value * 100).toStringAsFixed(0)}% uploaded'),
+                      ],
+                    ),
+                  ],
+                )),
+              ],
+            ),
+            const SizedBox(height: 8),
+            LinearProgressIndicator(
+              value: controller.uploadProgress.value,
+              color: appTheme.green400,
+              backgroundColor: appTheme.gray200,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -347,25 +397,34 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
           if (controller.isLoading.value) {
             return const Center(child: ShimmerLoadingEffect());
           } else {
-            return Wrap(
-              spacing: 8.0,
-              runSpacing: 4.0,
-              children: controller.expertiseList.map((expertise) {
-                return Chip(
-                  label: Text(
-                    expertise.name,
-                    style: theme.textTheme.bodyMedium!.copyWith(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16,
+            return Padding(
+              padding: const EdgeInsets.all(2.0),
+              child: Wrap(
+                spacing: 10,
+                runSpacing: 1,
+                children: controller.expertiseList.map((expertise) {
+                  return Chip(
+                    label: Text(
+                      expertise.name,
+                      style: theme.textTheme.bodyMedium!.copyWith(
+                        color: Colors.black,
+                        fontWeight: FontWeight.w500,
+                        fontSize: 16,
+                      ),
                     ),
-                  ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                    side: const BorderSide(color: Colors.transparent),
-                  ),
-                );
-              }).toList(),
+                    deleteIcon: const Icon(Icons.close),
+                    onDeleted: () {
+                      setState(() {
+                        controller.expertiseList.remove(expertise);
+                      });
+                    },
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(20.0),
+                      side: const BorderSide(color: Colors.transparent),
+                    ),
+                  );
+                }).toList(),
+              ),
             );
           }
         }),
@@ -388,22 +447,21 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
 
   Widget _buildSectionHeader(String title, Function(BuildContext) onEdit) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           title,
           style: CustomTextStyles.labelMediumBlack900,
           textAlign: TextAlign.start,
         ),
-        Padding(
-          padding: const EdgeInsets.only(right: 10),
-          child: TextButton(
-            onPressed: () => onEdit(context),
-            child: Text(
-              "Edit",
-              style: theme.textTheme.bodyLarge!.copyWith(color: Colors.red),
-              textAlign: TextAlign.start,
+        const Spacer(),
+        TextButton(
+          onPressed: () => onEdit(context),
+          child: Text(
+            "Edit",
+            style: theme.textTheme.titleMedium!.copyWith(
+              color: appTheme.red500,
             ),
+            textAlign: TextAlign.end,
           ),
         ),
       ],
@@ -412,23 +470,30 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
 
   Widget _buildEditWorkExperience() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         _buildSectionHeader(
-            "Work Experience", (context) => Get.toNamed(AppRoutes.experience)),
+          "Work Experience",
+          (context) => Get.offAndToNamed(AppRoutes.experience),
+        ),
         Obx(() {
           if (controller.isLoading.value) {
             return const Center(child: ShimmerLoadingEffect());
           } else if (controller.workExperienceList.isEmpty) {
             return const Center(child: Text('No work experience available'));
           } else {
-            return ListView.builder(
+            return ListView.separated(
               shrinkWrap: true,
+              clipBehavior: Clip.antiAlias,
               physics: const NeverScrollableScrollPhysics(),
+              padding: EdgeInsets.zero,
               itemCount: controller.workExperienceList.length,
               itemBuilder: (context, index) {
                 final workExperience = controller.workExperienceList[index];
                 return WorkExperienceWidget(workExperience: workExperience);
               },
+              separatorBuilder: (context, index) =>
+                  const Divider(height: 1, color: Colors.transparent),
             );
           }
         }),
@@ -438,27 +503,29 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
 
   Widget _buildEducation() {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            Text(
-              "Education",
-              style: CustomTextStyles.labelMediumBlack900,
-              textAlign: TextAlign.start,
-            ),
-            Padding(
-              padding: const EdgeInsets.only(right: 10),
-              child: TextButton(
-                onPressed: () => Get.toNamed(AppRoutes.education),
+        Padding(
+          padding: const EdgeInsets.only(bottom: 8.0),
+          child: Row(
+            children: [
+              Text(
+                "Education",
+                style: CustomTextStyles.labelMediumBlack900,
+                textAlign: TextAlign.start,
+              ),
+              const Spacer(),
+              TextButton(
+                onPressed: () => Get.offAndToNamed(AppRoutes.education),
                 child: Text(
                   "Edit",
-                  style: theme.textTheme.bodyLarge!.copyWith(color: Colors.red),
+                  style: theme.textTheme.titleMedium!
+                      .copyWith(color: appTheme.red500),
                   textAlign: TextAlign.start,
                 ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
         Obx(() {
           if (controller.isLoading.value) {
@@ -466,10 +533,13 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
           } else if (controller.educationList.isEmpty) {
             return const Center(child: Text('No education data available'));
           } else {
-            return ListView.builder(
+            return ListView.separated(
               shrinkWrap: true,
               physics: const NeverScrollableScrollPhysics(),
+              padding: EdgeInsets.zero,
               itemCount: controller.educationList.length,
+              separatorBuilder: (context, index) =>
+                  const Divider(height: 1, color: Colors.black),
               itemBuilder: (context, index) {
                 final education = controller.educationList[index];
                 return Column(
@@ -479,13 +549,13 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
                       education.degree,
                       style: CustomTextStyles.titleMediumSFProTextBlack90001,
                     ),
-                    const SizedBox(height: 1.0),
+                    const SizedBox(height: 4.0),
                     Text(
                       education.schoolCollege,
-                      style: theme.textTheme.bodyLarge!
+                      style: theme.textTheme.titleMedium!
                           .copyWith(color: Colors.black),
                     ),
-                    const SizedBox(height: 1.0),
+                    const SizedBox(height: 4.0),
                     Text(
                       '${education.startDate.year} - ${education.endDate.year}',
                       style: Theme.of(context)
@@ -493,8 +563,6 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
                           .bodyMedium
                           ?.copyWith(fontWeight: FontWeight.bold),
                     ),
-                    const Divider(),
-                    const SizedBox(height: 5),
                   ],
                 );
               },
@@ -506,59 +574,67 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
   }
 
   Widget _buildAchievements() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        ...controller.linkControllers.asMap().entries.map((entry) {
-          final index = entry.key;
-          final textController = entry.value;
-          return Padding(
-            padding: const EdgeInsets.symmetric(vertical: 8.0),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Text('Link ${index + 1}'),
-                ),
-                Row(
-                  children: [
-                    Expanded(
-                      child: CustomTextFormField(
-                        controller: textController,
-                        hintText: "Enter Url",
-                        hintStyle: CustomTextStyles.titleMediumBluegray300,
-                        textInputType: TextInputType.url,
-                        validator: (value) {
-                          if (value == null || value.isEmpty) {
-                            return 'Please enter a URL';
-                          } else if (!controller.isValidUrl(value)) {
-                            return 'Please enter a valid URL';
-                          }
-                          return null;
+    return Padding(
+      padding: const EdgeInsets.only(top: 10),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Text(
+            "Achievements",
+            style: CustomTextStyles.labelMediumBlack900,
+            textAlign: TextAlign.start,
+          ),
+          ...controller.linkControllers.asMap().entries.map((entry) {
+            final index = entry.key;
+            final textController = entry.value;
+            return Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Text('Link ${index + 1}'),
+                  ),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: CustomTextFormField(
+                          controller: textController,
+                          hintText: "Enter Url",
+                          hintStyle: CustomTextStyles.titleMediumBluegray300,
+                          textInputType: TextInputType.url,
+                          validator: (value) {
+                            if (value == null || value.isEmpty) {
+                              return 'Please enter a URL';
+                            } else if (!controller.isValidUrl(value)) {
+                              return 'Please enter a valid URL';
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      IconButton(
+                        icon: const Icon(Icons.clear),
+                        onPressed: () {
+                          setState(() {
+                            textController.clear();
+                          });
                         },
                       ),
-                    ),
-                    IconButton(
-                      icon: const Icon(Icons.clear),
-                      onPressed: () {
-                        setState(() {
-                          textController.clear();
-                        });
-                      },
-                    ),
-                  ],
-                ),
-              ],
-            ),
-          );
-        }),
-        CustomElevatedButton(
-          onPressed: controller.addNewLinkField,
-          text: '+ Add more links',
-          buttonStyle: CustomButtonStyles.fillWhite,
-        ),
-      ],
+                    ],
+                  ),
+                ],
+              ),
+            );
+          }),
+          CustomElevatedButton(
+            onPressed: controller.addNewLinkField,
+            text: '+ Add more links',
+            buttonStyle: CustomButtonStyles.fillWhite,
+          ),
+        ],
+      ),
     );
   }
 

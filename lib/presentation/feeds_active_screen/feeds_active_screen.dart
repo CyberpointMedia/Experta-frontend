@@ -4,6 +4,7 @@ import 'package:experta/core/app_export.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
 import 'package:experta/widgets/custom_text_form_field.dart';
 import 'package:experta/widgets/report.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:outline_gradient_button/outline_gradient_button.dart';
 import 'controller/feeds_active_controller.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
@@ -21,8 +22,8 @@ class _FeedsActiveScreenState extends State<FeedsActiveScreen> {
       RefreshController(initialRefresh: false);
 
   void _onRefresh() async {
-    await controller.fetchFeeds(); // Call the method as a function
-    _refreshController.refreshCompleted(); // Complete the refresh
+    await controller.fetchFeeds();
+    _refreshController.refreshCompleted();
   }
 
   @override
@@ -35,6 +36,28 @@ class _FeedsActiveScreenState extends State<FeedsActiveScreen> {
             return Padding(
               padding: const EdgeInsets.only(top: 10, left: 15, right: 15),
               child: _buildShimmerEffect(),
+            );
+          } else if (controller.feeds.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomImageView(
+                    imagePath: ImageConstant.feeds,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    'Follow your favorite',
+                    style: CustomTextStyles.titleMediumBold,
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'To get access to exclusive content, deals, and more!',
+                    style: CustomTextStyles.bodyMediumLight,
+                    textAlign: TextAlign.center,
+                  ),
+                ],
+              ),
             );
           } else {
             return SmartRefresher(
@@ -95,7 +118,7 @@ Widget _buildShimmerEffect() {
     child: ListView.builder(
       itemCount: 10,
       itemBuilder: (context, index) {
-        return Container(
+        return SizedBox(
           width: MediaQuery.of(context).size.width,
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -251,8 +274,8 @@ Widget _buildBottomSheetContent(BuildContext context, Comment? comment) {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         Container(
-          height: 5,
-          width: 20,
+          height: 5.v,
+          width: 20.h,
           decoration: BoxDecoration(
               color: Colors.grey, borderRadius: BorderRadius.circular(20)),
         ),
@@ -267,53 +290,121 @@ Widget _buildBottomSheetContent(BuildContext context, Comment? comment) {
           ),
         ),
         if (comment != null && comment.user.id == userAddress ||
-            feed!.postedBy.id == userAddress)
+            (feed != null && feed.postedBy.id == userAddress))
           _buildBottomSheetOption(
             context,
             icon: Icons.delete,
             label: 'Delete this comment',
+            onTap: () {
+              deleteCommentAction(context, feed!.id, comment!.id);
+            },
           ),
-        controller.isComment == false.obs
-            ? _buildBottomSheetOption(
-                context,
-                icon: Icons.flag_outlined,
-                label: 'Report this post',
-                onTap: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context) => ReportReasonSheet(
-                      itemId: comment?.id ?? '',
-                      itemType: 'Post',
-                    ),
-                  );
-                },
-              )
-            : _buildBottomSheetOption(
-                context,
-                icon: Icons.flag_outlined,
-                label: 'Report this comment',
-                onTap: () {
-                  showModalBottomSheet(
-                    context: context,
-                    builder: (context) => ReportReasonSheet(
-                      itemId: comment?.id ?? '',
-                      itemType: 'Comment',
-                    ),
-                  );
-                },
-              ),
-        _buildBottomSheetOption(
-          context,
-          icon: Icons.block_outlined,
-          label: 'Block user',
-          onTap: () {
-            // Handle block user action
-          },
-        ),
+        if (comment != null && comment.user.id != userAddress ||
+            (feed != null && feed.postedBy.id != userAddress))
+          controller.isComment == false.obs
+              ? _buildBottomSheetOption(
+                  context,
+                  icon: Icons.flag_outlined,
+                  label: 'Report this post',
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) => ReportReasonSheet(
+                        itemId: feed!.id,
+                        itemType: 'Post',
+                      ),
+                    );
+                  },
+                )
+              : _buildBottomSheetOption(
+                  context,
+                  icon: Icons.flag_outlined,
+                  label: 'Report this comment',
+                  onTap: () {
+                    showModalBottomSheet(
+                      context: context,
+                      builder: (context) => ReportReasonSheet(
+                        itemId: comment?.id ?? '',
+                        itemType: 'Comment',
+                      ),
+                    );
+                  },
+                ),
+        if (comment != null && comment.user.id != userAddress ||
+            (feed != null && feed.postedBy.id != userAddress))
+          _buildBottomSheetOption(
+            context,
+            icon: Icons.block_outlined,
+            label: 'Block user',
+            onTap: () {
+              blockUser(comment!.user.id);
+            },
+          ),
         const SizedBox(height: 10.0),
       ],
     ),
   );
+}
+
+void deleteCommentAction(
+    BuildContext context, String feedId, String commentId) async {
+  final apiService = ApiService();
+
+  try {
+    final response = await apiService.deleteComment(
+      feedId,
+      commentId,
+    );
+
+    if (response['status'] == 'success') {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Comment deleted successfully!')),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to delete comment.')),
+      );
+    }
+  } catch (e) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(content: Text('An error occurred: $e')),
+    );
+  }
+}
+
+void blockUser(String userToBlockId) async {
+  try {
+    // Simulate API call using your ApiService
+    bool success = await ApiService().blockUser(userToBlockId);
+    if (success) {
+      Fluttertoast.showToast(
+        msg: "User blocked successfully",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.green,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+    } else {
+      Fluttertoast.showToast(
+        msg: "Failed to block user",
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Colors.red,
+        textColor: Colors.white,
+        fontSize: 16.0,
+      );
+    }
+  } catch (e) {
+    Fluttertoast.showToast(
+      msg: "Error: $e",
+      toastLength: Toast.LENGTH_SHORT,
+      gravity: ToastGravity.BOTTOM,
+      backgroundColor: Colors.red,
+      textColor: Colors.white,
+      fontSize: 16.0,
+    );
+  }
 }
 
 Widget _buildBottomSheetOption(BuildContext context,
@@ -345,7 +436,9 @@ class FeedItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.end,
           children: [
             CustomImageView(
-              imagePath: feed.postedBy.profilePic,
+              imagePath: feed.postedBy.profilePic == ""
+                  ? ImageConstant.imageNotFound
+                  : feed.postedBy.profilePic,
               height: 48.adaptSize,
               width: 48.adaptSize,
               radius: BorderRadius.circular(48),
@@ -448,7 +541,8 @@ class FeedItem extends StatelessWidget {
                             height: 24.adaptSize,
                             width: 24.adaptSize,
                             onTap: () async {
-                              await controller.likeUnlikePost(feed.id);
+                              await controller
+                                  .likeUnlikePost(feed.id.toString());
                             },
                           ),
                           Padding(
@@ -509,7 +603,8 @@ class FeedItem extends StatelessWidget {
                                           Row(
                                             children: [
                                               Text(
-                                                comment.user.displayName,
+                                                comment.user.displayName
+                                                    .toString(),
                                                 style: theme
                                                     .textTheme.bodyMedium!
                                                     .copyWith(
@@ -530,7 +625,8 @@ class FeedItem extends StatelessWidget {
                                                   top: 4.v,
                                                 ),
                                                 child: Text(
-                                                  comment.formattedDate,
+                                                  comment.formattedDate
+                                                      .toString(),
                                                   style: CustomTextStyles
                                                       .bodySmallBluegray300,
                                                 ),
@@ -568,7 +664,7 @@ class FeedItem extends StatelessWidget {
                                             ],
                                           ),
                                           Text(
-                                            comment.comment,
+                                            comment.comment.toString(),
                                             style: theme.textTheme.titleMedium!
                                                 .copyWith(
                                                     color: appTheme.black90001,
@@ -581,7 +677,7 @@ class FeedItem extends StatelessWidget {
                                   ],
                                 ),
                               );
-                            }).toList(),
+                            }),
                             if (feed.comments.length > 2)
                               TextButton(
                                 onPressed: () {
@@ -664,7 +760,8 @@ class CommentsPage extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   CircleAvatar(
-                    backgroundImage: NetworkImage(comment.user.profilePic),
+                    backgroundImage:
+                        NetworkImage(comment.user.profilePic.toString()),
                     radius: 15,
                   ),
                   const SizedBox(width: 10),
@@ -673,12 +770,12 @@ class CommentsPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          comment.user.displayName,
+                          comment.user.displayName.toString(),
                           style: const TextStyle(fontWeight: FontWeight.bold),
                         ),
-                        Text(comment.comment),
+                        Text(comment.comment.toString()),
                         Text(
-                          comment.formattedDate,
+                          comment.formattedDate.toString(),
                           style:
                               const TextStyle(color: Colors.grey, fontSize: 12),
                         ),
@@ -711,7 +808,6 @@ class CommentsPage extends StatelessWidget {
   }
 }
 
-/// Navigates to the notificationScreen when the action is triggered.
 onTapBtnBellTwo() {
   Get.toNamed(
     AppRoutes.notification,
@@ -721,14 +817,6 @@ onTapBtnBellTwo() {
 PreferredSizeWidget _buildAppBar() {
   return CustomAppBar(
     height: 60.h,
-    leadingWidth: 40.h,
-    leading: AppbarLeadingImage(
-      imagePath: ImageConstant.imgArrowLeftOnerrorcontainer,
-      margin: EdgeInsets.only(left: 16.h),
-      onTap: () {
-        onTapArrowLeft();
-      },
-    ),
     centerTitle: true,
     title: AppbarSubtitleSix(text: "lbl_feeds".tr),
     actions: [
@@ -792,7 +880,7 @@ class _CommentInputFieldState extends State<CommentInputField> {
   @override
   void dispose() {
     _commentController.removeListener(_onTextChanged);
-    _commentController.dispose();
+    _commentController.clear();
     _isButtonEnabled.dispose();
     super.dispose();
   }
@@ -833,8 +921,10 @@ class _CommentInputFieldState extends State<CommentInputField> {
                   onPressed: isEnabled
                       ? () async {
                           await _controller.postComment(
-                              widget.feed.id, _commentController.text);
+                              widget.feed.id.toString(),
+                              _commentController.text);
                           _commentController.clear();
+                          // ignore: use_build_context_synchronously
                           Navigator.pop(context); // Close the bottom sheet
                         }
                       : null,

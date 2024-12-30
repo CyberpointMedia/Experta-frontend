@@ -20,13 +20,15 @@ class _WorkExperiencePageState extends State<WorkExperiencePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: Stack(
         children: [
           Positioned(
             left: 270,
             top: 50,
             child: ImageFiltered(
-              imageFilter: ImageFilter.blur(sigmaX: 60, sigmaY: 60),
+              imageFilter: ImageFilter.blur(
+                  tileMode: TileMode.decal, sigmaX: 60, sigmaY: 60),
               child: Align(
                 child: SizedBox(
                   width: 252,
@@ -66,7 +68,7 @@ class _WorkExperiencePageState extends State<WorkExperiencePage> {
           margin: const EdgeInsets.only(right: 20),
           imagePath: ImageConstant.plus,
           onTap: () {
-            Get.toNamed(AppRoutes.editExperience);
+            Get.offAndToNamed(AppRoutes.editExperience);
           },
         ),
       ],
@@ -89,18 +91,12 @@ class _WorkExperiencePageState extends State<WorkExperiencePage> {
           ),
         );
       } else if (controller.workExperienceList.isEmpty) {
-        return Center(
+        return const Center(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Text('No work experience available.'),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                onPressed: () {
-                  // Get.toNamed(AppRoutes.editExperience);
-                },
-                child: const Text('Add Work Experience'),
-              ),
+              Text('No work experience available.'),
+              SizedBox(height: 20),
             ],
           ),
         );
@@ -114,12 +110,12 @@ class _WorkExperiencePageState extends State<WorkExperiencePage> {
                 workExperience: workExperience,
                 edit: true,
                 onEdit: () {
-                  // var result = Get.toNamed(AppRoutes.editExperience,
-                  //     arguments: workExperience);
+                  var result = Get.offAndToNamed(AppRoutes.editExperience,
+                      arguments: workExperience);
 
-                  // if (result != null) {
-                  //   controller.fetchData();
-                  // }
+                  if (result != null) {
+                    controller.fetchData();
+                  }
                 },
               );
             },
@@ -130,6 +126,6 @@ class _WorkExperiencePageState extends State<WorkExperiencePage> {
   }
 
   void onTapArrowLeft() {
-    Get.back();
+    Get.offAndToNamed(AppRoutes.professionalInfo);
   }
 }

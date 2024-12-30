@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:experta/core/app_export.dart';
 
 class BookingConfirmationPage extends StatelessWidget {
   const BookingConfirmationPage({super.key});
@@ -9,6 +9,7 @@ class BookingConfirmationPage extends StatelessWidget {
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
+        automaticallyImplyLeading: false, // Prevent back button
       ),
       body: Center(
         child: Padding(
@@ -18,37 +19,45 @@ class BookingConfirmationPage extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Container(
-                width: 100,
-                height: 100,
+                width: 140.h,
+                height: 140.v,
                 decoration: BoxDecoration(
-                  color: Colors.green.withOpacity(0.1),
+                  color: appTheme.green400.withOpacity(0.1),
                   shape: BoxShape.circle,
                 ),
-                child: const Center(
-                  child: Icon(
-                    Icons.check_circle,
-                    color: Colors.green,
-                    size: 80,
+                child: Center(
+                  child: Container(
+                    width: 92.h,
+                    height: 92.v,
+                    decoration: BoxDecoration(
+                      color: appTheme.green400,
+                      shape: BoxShape.circle,
+                    ),
+                    child: Center(
+                      child: CustomImageView(
+                        imagePath: ImageConstant.success,
+                        height: 20.v,
+                        width: 30.h,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
                   ),
                 ),
               ),
               const SizedBox(height: 20),
-              const Text(
+              Text(
                 'Successfully',
-                style: TextStyle(
-                  fontSize: 24,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.black, // Set the color to dark black
-                ),
+                style: theme.textTheme.bodyMedium!.copyWith(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w700,
+                    color: appTheme.black900),
               ),
               const SizedBox(height: 8),
-              const Text(
+              Text(
                 'Your appointment booking confirmed.',
                 textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 16,
-                  color: Colors.grey,
-                ),
+                style: theme.textTheme.bodyMedium!
+                    .copyWith(fontSize: 14, fontWeight: FontWeight.w500),
               ),
             ],
           ),

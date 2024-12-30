@@ -25,7 +25,8 @@ class _EditEducationPageState extends State<EditEducationPage> {
             left: 270,
             top: 50,
             child: ImageFiltered(
-              imageFilter: ImageFilter.blur(sigmaX: 60, sigmaY: 60),
+              imageFilter: ImageFilter.blur(
+                  tileMode: TileMode.decal, sigmaX: 60, sigmaY: 60),
               child: Align(
                 child: SizedBox(
                   width: 252,
@@ -75,18 +76,18 @@ class _EditEducationPageState extends State<EditEducationPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Padding(
-              padding: const EdgeInsets.only(top: 10, bottom: 5),
+              padding: const EdgeInsets.only(top: 10, bottom: 6),
               child: RichText(
                 text: TextSpan(
                   children: [
                     TextSpan(
-                        text: 'Degree',
+                        text: 'School',
                         style: CustomTextStyles.bodyLargeBlack90001),
                     const TextSpan(
                       text: '*',
                       style: TextStyle(
                         color: Colors.red,
-                        fontSize: 16.0,
+                        fontSize: 14.0,
                       ),
                     ),
                   ],
@@ -103,18 +104,18 @@ class _EditEducationPageState extends State<EditEducationPage> {
               },
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 15, bottom: 5),
+              padding: const EdgeInsets.only(top: 15, bottom: 6),
               child: RichText(
                 text: TextSpan(
                   children: [
                     TextSpan(
-                        text: 'School/College',
+                        text: 'Degree',
                         style: CustomTextStyles.bodyLargeBlack90001),
                     const TextSpan(
                       text: '*',
                       style: TextStyle(
                         color: Colors.red,
-                        fontSize: 16.0,
+                        fontSize: 14.0,
                       ),
                     ),
                   ],
@@ -131,7 +132,7 @@ class _EditEducationPageState extends State<EditEducationPage> {
               },
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 15, bottom: 5),
+              padding: const EdgeInsets.only(top: 15, bottom: 6),
               child: RichText(
                 text: TextSpan(
                   children: [
@@ -142,7 +143,7 @@ class _EditEducationPageState extends State<EditEducationPage> {
                       text: '*',
                       style: TextStyle(
                         color: Colors.red,
-                        fontSize: 16.0,
+                        fontSize: 14.0,
                       ),
                     ),
                   ],
@@ -177,7 +178,7 @@ class _EditEducationPageState extends State<EditEducationPage> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.only(top: 15, bottom: 5),
+              padding: const EdgeInsets.only(top: 15, bottom: 6),
               child: RichText(
                 text: TextSpan(
                   children: [
@@ -188,7 +189,7 @@ class _EditEducationPageState extends State<EditEducationPage> {
                       text: '*',
                       style: TextStyle(
                         color: Colors.red,
-                        fontSize: 16.0,
+                        fontSize: 14.0,
                       ),
                     ),
                   ],

@@ -1,24 +1,33 @@
-
 import '../../../core/app_export.dart';
 import '../models/splash_model.dart';
 
-/// A controller class for the SplashScreen.
-///
-/// This class manages the state of the SplashScreen, including the
-/// current splashModelObj
 class SplashController extends GetxController {
   Rx<SplashModel> splashModelObj = SplashModel().obs;
+  final String? token = PrefUtils().getToken();
+  final ApiService apiService = ApiService();
 
   @override
   void onReady() {
-    Future.delayed(const Duration(milliseconds: 3000), () {
-      Get.offNamed(
-        AppRoutes.onboardingScreen,
-        //AppRoutes.Bookappointment,
-        //AppRoutes.sucessfuly,
-        //AppRoutes.newpost,
-        //AppRoutes.rating,
-      );
+    super.onReady();
+    Future.delayed(const Duration(seconds: 5), () async {
+      if (token != null && token!.isNotEmpty) {
+        try {
+          final response = await apiService.checkToken(token!);
+          if (response.containsKey('_id')) {
+            // Token is valid, navigate to dashboard
+            Get.offNamed(AppRoutes.dashboard);
+          } else {
+            // Token is invalid, navigate to sign-in page
+            Get.offNamed(AppRoutes.signinPage);
+          }
+        } catch (e) {
+          // Handle error, navigate to sign-in page
+          Get.offNamed(AppRoutes.signinPage);
+        }
+      } else {
+        // Navigate to onboarding screen if no token is found
+        Get.offNamed(AppRoutes.signinPage);
+      }
     });
   }
 }

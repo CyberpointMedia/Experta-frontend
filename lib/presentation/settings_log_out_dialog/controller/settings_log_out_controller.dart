@@ -7,4 +7,10 @@ import '../models/settings_log_out_model.dart';
 /// current settingsLogOutModelObj
 class SettingsLogOutController extends GetxController {
   Rx<SettingsLogOutModel> settingsLogOutModelObj = SettingsLogOutModel().obs;
+  Future<void> logoutUser() async {
+    // Clear user data, tokens, etc.
+    // For example:
+    // await authService.logout();
+    // await storageService.clearUserData();
+  }
 }

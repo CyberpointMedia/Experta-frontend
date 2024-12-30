@@ -1,13 +1,9 @@
+import 'dart:developer';
 import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/Home/home_screen.dart';
 import 'package:experta/presentation/Home/model/home_model.dart';
-import 'package:experta/widgets/app_bar/appbar_leading_image.dart';
-import 'package:experta/widgets/app_bar/appbar_subtitle_six.dart';
-import 'package:experta/widgets/app_bar/custom_app_bar.dart';
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 
 class TrendingPeoplePage extends StatelessWidget {
   final List<User> trendingPeople;
@@ -16,6 +12,7 @@ class TrendingPeoplePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    log("$trendingPeople");
     return Scaffold(
       body: Stack(
         children: [
@@ -24,6 +21,7 @@ class TrendingPeoplePage extends StatelessWidget {
             top: 50,
             child: ImageFiltered(
               imageFilter: ImageFilter.blur(
+                tileMode: TileMode.decal,
                 sigmaX: 60,
                 sigmaY: 60,
               ),
@@ -46,15 +44,9 @@ class TrendingPeoplePage extends StatelessWidget {
               _buildAppBar(),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: GridView.builder(
-                    gridDelegate:
-                        const SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: 2,
-                      crossAxisSpacing: 10.0,
-                      mainAxisSpacing: 10.0,
-                      childAspectRatio: 0.75,
-                    ),
+                  padding: EdgeInsets.only(
+                      left: 16.adaptSize, right: 0.adaptSize, top: 0),
+                  child: ListView.builder(
                     itemCount: trendingPeople.length,
                     itemBuilder: (context, index) {
                       User user = trendingPeople[index];
@@ -81,10 +73,11 @@ class TrendingPeoplePage extends StatelessWidget {
               onTapArrowLeft();
             }),
         centerTitle: true,
-        title: AppbarSubtitleSix(text: "Trending People"));
+        title: AppbarSubtitleSix(text: "Trending"));
   }
 
   onTapArrowLeft() {
     Get.back();
   }
 }
+      

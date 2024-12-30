@@ -1,24 +1,35 @@
+import 'package:experta/firebase_options.dart';
+import 'package:experta/notification_manager.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
-
+import 'package:hive_flutter/hive_flutter.dart';
 import 'core/app_export.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  PrefUtils prefUtils = PrefUtils();
-  await prefUtils.init();
-  SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-  ]).then((value) {
-    Logger.init(kReleaseMode ? LogMode.live : LogMode.debug);
-    runApp(const MyApp());
-  });
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+  await Future.wait([
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+    ]),
+    PrefUtils().init(),
+    FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true),
+  ]);
+  await NotificationManager().init();
+  await Hive.initFlutter(); // Initialize Hive for Flutter
+  await Hive.openBox('recordings'); // Open the Hive box
+  AppLogger.init(kReleaseMode ? LogMode.live : LogMode.debug);
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return Sizer(builder: (context, orientation, deviceType) {

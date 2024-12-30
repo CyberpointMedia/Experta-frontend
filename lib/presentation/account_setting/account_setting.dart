@@ -1,6 +1,7 @@
 import 'dart:ui';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/account_details_settings/account_details.dart';
+import 'package:experta/presentation/account_setting/controller/accont_controller.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
 
 class AccountSettings extends StatefulWidget {
@@ -11,8 +12,30 @@ class AccountSettings extends StatefulWidget {
 }
 
 class _AccountSettingsState extends State<AccountSettings> {
-  void navigateToSettingsDetail(String keyword) {
-    Get.to(()=>DynamicSettingsPage(), arguments: {'keyword': keyword});
+  late Future<UserAccountResponse> userAccountFuture;
+  ApiService apiService = ApiService();
+
+  @override
+  void initState() {
+    super.initState();
+    userAccountFuture = apiService.fetchUserAccountData();
+  }
+
+  void navigateToSettingsDetail(
+      String keyword, bool canNavigate, UserAccountData userData) {
+    Get.to(() => const DynamicSettingsPage(), arguments: {
+      'keyword': keyword,
+      'userData': {
+        'email': userData.email,
+        'phoneNo': userData.phoneNo,
+        'username': userData.username
+      }
+    })!
+        .then((_) {
+      setState(() {
+        userAccountFuture = apiService.fetchUserAccountData();
+      });
+    });
   }
 
   @override
@@ -25,6 +48,7 @@ class _AccountSettingsState extends State<AccountSettings> {
             top: 50,
             child: ImageFiltered(
               imageFilter: ImageFilter.blur(
+                tileMode: TileMode.decal,
                 sigmaX: 60,
                 sigmaY: 60,
               ),
@@ -42,10 +66,33 @@ class _AccountSettingsState extends State<AccountSettings> {
               ),
             ),
           ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [_buildAppBar(), _buildAccountSettings()],
-          )
+          FutureBuilder<UserAccountResponse>(
+            future: userAccountFuture,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (snapshot.hasError) {
+                return Center(child: Text('Error: ${snapshot.error}'));
+              }
+              if (!snapshot.hasData) {
+                return const Center(child: Text('No data available'));
+              }
+
+              final userData = snapshot.data!.data;
+              return Stack(
+                children: [
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      _buildAppBar(),
+                      _buildAccountSettings(userData),
+                    ],
+                  )
+                ],
+              );
+            },
+          ),
         ],
       ),
     );
@@ -57,7 +104,9 @@ class _AccountSettingsState extends State<AccountSettings> {
       leadingWidth: 40.h,
       leading: AppbarLeadingImage(
         imagePath: ImageConstant.imgArrowLeftOnerrorcontainer,
-        margin: EdgeInsets.only(left: 16.h),
+        margin: EdgeInsets.only(
+          left: 16.h,
+        ),
         onTap: () {
           onTapArrowLeft();
         },
@@ -67,11 +116,11 @@ class _AccountSettingsState extends State<AccountSettings> {
     );
   }
 
-  Widget _buildAccountSettings() {
+  Widget _buildAccountSettings(UserAccountData userData) {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Padding(
-        padding: EdgeInsets.only(right: 16.h, left: 16, top: 50),
+        padding: EdgeInsets.only(right: 16.h, left: 16, top: 7),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -85,10 +134,11 @@ class _AccountSettingsState extends State<AccountSettings> {
               child: Column(mainAxisSize: MainAxisSize.min, children: [
                 GestureDetector(
                   onTap: () {
-                    navigateToSettingsDetail('Username');
+                    navigateToSettingsDetail('Username', true, userData);
                   },
                   child: Container(
-                    padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
                     decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
                       borderRadius: BorderRadiusStyle.customBorderBL20,
                     ),
@@ -103,9 +153,12 @@ class _AccountSettingsState extends State<AccountSettings> {
                           child: CustomImageView(imagePath: ImageConstant.user),
                         ),
                         Padding(
-                          padding: EdgeInsets.only(left: 15.h, top: 13.v, bottom: 10.v),
-                          child: Text("Username",
-                            style: theme.textTheme.titleMedium!.copyWith(color: appTheme.gray900),
+                          padding: EdgeInsets.only(
+                              left: 15.h, top: 13.v, bottom: 10.v),
+                          child: Text(
+                            "Username",
+                            style: theme.textTheme.titleMedium!
+                                .copyWith(color: appTheme.gray900),
                           ),
                         ),
                         const Spacer(),
@@ -121,86 +174,13 @@ class _AccountSettingsState extends State<AccountSettings> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    navigateToSettingsDetail('Birthday');
+                    navigateToSettingsDetail('Email', true, userData);
                   },
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 3),
+                    padding: const EdgeInsets.only(top: 1),
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
-                      decoration: AppDecoration.fillOnPrimaryContainer,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CustomIconButton(
-                            height: 44.adaptSize,
-                            width: 44.adaptSize,
-                            padding: EdgeInsets.all(6.h),
-                            decoration: IconButtonStyleHelper.fillDeepPurple,
-                            child: CustomImageView(imagePath: ImageConstant.birthday),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 15.h, top: 13.v, bottom: 10.v),
-                            child: Text("Birthday",
-                              style: theme.textTheme.titleMedium!.copyWith(color: appTheme.gray900),
-                            ),
-                          ),
-                          const Spacer(),
-                          CustomImageView(
-                            imagePath: ImageConstant.imgArrowRightGray900,
-                            height: 24.adaptSize,
-                            width: 24.adaptSize,
-                            margin: EdgeInsets.symmetric(vertical: 10.v),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    navigateToSettingsDetail('Gender');
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 3),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
-                      decoration: AppDecoration.fillOnPrimaryContainer,
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CustomIconButton(
-                            height: 44.adaptSize,
-                            width: 44.adaptSize,
-                            padding: EdgeInsets.all(6.h),
-                            decoration: IconButtonStyleHelper.fillGreenTL24,
-                            child: CustomImageView(imagePath: ImageConstant.gender),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(left: 15.h, top: 13.v, bottom: 10.v),
-                            child: Text("Gender",
-                              style: theme.textTheme.titleMedium!.copyWith(color: appTheme.gray900),
-                            ),
-                          ),
-                          const Spacer(),
-                          CustomImageView(
-                            imagePath: ImageConstant.imgArrowRightGray900,
-                            height: 24.adaptSize,
-                            width: 24.adaptSize,
-                            margin: EdgeInsets.symmetric(vertical: 10.v),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    navigateToSettingsDetail('Change Email');
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 3),
-                    child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 15.h, vertical: 16.v),
                       decoration: AppDecoration.fillOnPrimaryContainer,
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -210,12 +190,16 @@ class _AccountSettingsState extends State<AccountSettings> {
                             width: 44.adaptSize,
                             padding: EdgeInsets.all(10.h),
                             decoration: IconButtonStyleHelper.fillOrange,
-                            child: CustomImageView(imagePath: ImageConstant.email),
+                            child:
+                                CustomImageView(imagePath: ImageConstant.email),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(left: 15.h, top: 13.v, bottom: 10.v),
-                            child: Text("Change Email",
-                              style: theme.textTheme.titleMedium!.copyWith(color: appTheme.gray900),
+                            padding: EdgeInsets.only(
+                                left: 15.h, top: 13.v, bottom: 10.v),
+                            child: Text(
+                              "Email",
+                              style: theme.textTheme.titleMedium!
+                                  .copyWith(color: appTheme.gray900),
                             ),
                           ),
                           const Spacer(),
@@ -232,12 +216,13 @@ class _AccountSettingsState extends State<AccountSettings> {
                 ),
                 GestureDetector(
                   onTap: () {
-                    navigateToSettingsDetail('Phone Number');
+                    navigateToSettingsDetail('Phone Number', true, userData);
                   },
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 3),
+                    padding: const EdgeInsets.only(top: 1),
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 15.h, vertical: 16.v),
                       decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
                         borderRadius: BorderRadiusStyle.customBorderL20,
                       ),
@@ -249,12 +234,16 @@ class _AccountSettingsState extends State<AccountSettings> {
                             width: 44.adaptSize,
                             padding: EdgeInsets.all(10.h),
                             decoration: IconButtonStyleHelper.fillGrayTL22,
-                            child: CustomImageView(imagePath: ImageConstant.phone),
+                            child:
+                                CustomImageView(imagePath: ImageConstant.phone),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(left: 15.h, top: 13.v, bottom: 10.v),
-                            child: Text("Phone Number",
-                              style: theme.textTheme.titleMedium!.copyWith(color: appTheme.gray900),
+                            padding: EdgeInsets.only(
+                                left: 15.h, top: 13.v, bottom: 10.v),
+                            child: Text(
+                              "Phone Number",
+                              style: theme.textTheme.titleMedium!
+                                  .copyWith(color: appTheme.gray900),
                             ),
                           ),
                           const Spacer(),
@@ -281,4 +270,3 @@ class _AccountSettingsState extends State<AccountSettings> {
     Get.back();
   }
 }
-

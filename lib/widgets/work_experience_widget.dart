@@ -18,7 +18,7 @@ class WorkExperienceWidget extends StatelessWidget {
     final experiencePeriod = formatExperiencePeriod(
         workExperience.startDate, workExperience.endDate ?? DateTime.now());
     return Padding(
-      padding: const EdgeInsets.only(left: 10, right: 10),
+      padding: const EdgeInsets.only(left: 10, right: 0, top: 5),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -27,7 +27,8 @@ class WorkExperienceWidget extends StatelessWidget {
             children: [
               Text(
                 workExperience.jobTitle,
-                style: CustomTextStyles.titleMediumSFProTextBlack90001,
+                style:
+                    theme.textTheme.titleMedium!.copyWith(color: Colors.black),
               ),
               if (edit)
                 IconButton(
@@ -39,7 +40,7 @@ class WorkExperienceWidget extends StatelessWidget {
           const SizedBox(height: 3.0),
           Text(
             workExperience.companyName,
-            style: theme.textTheme.bodyLarge!.copyWith(color: Colors.black),
+            style: theme.textTheme.titleMedium!.copyWith(color: Colors.black),
           ),
           const SizedBox(height: 3.0),
           Text(
@@ -49,7 +50,7 @@ class WorkExperienceWidget extends StatelessWidget {
                 .bodyMedium
                 ?.copyWith(fontWeight: FontWeight.bold),
           ),
-          const SizedBox(height: 3.0),
+          const SizedBox(height: 8.0),
           const Divider(),
         ],
       ),

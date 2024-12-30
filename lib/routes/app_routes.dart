@@ -1,6 +1,8 @@
 import 'package:experta/presentation/Aadhaar_Details/aadhar_details.dart';
 import 'package:experta/presentation/Aadhaar_Details/binding/aadhar_details_binding.dart';
 import 'package:experta/presentation/Basic_Info/basic_info.dart';
+import 'package:experta/presentation/Refferal/bindings/refferal_screen_bindings.dart';
+import 'package:experta/presentation/Refferal/refferal_screen.dart';
 import 'package:experta/presentation/about_us/about_us.dart';
 import 'package:experta/presentation/about_us/binding/about_us_binding.dart';
 import 'package:experta/presentation/account_setting/account_setting.dart';
@@ -15,19 +17,16 @@ import 'package:experta/presentation/additional_info/binding/edit_interest_bindi
 import 'package:experta/presentation/additional_info/edit_interest.dart';
 import 'package:experta/presentation/blocked/binding/blocked_binding.dart';
 import 'package:experta/presentation/blocked/blocked.dart';
+import 'package:experta/presentation/book_appointment/binding/book_appointment_binding.dart';
+import 'package:experta/presentation/book_appointment/book_appointment.dart';
 import 'package:experta/presentation/booking_detail/binding/booking_detail_binding.dart';
 import 'package:experta/presentation/booking_detail/booking_detail.dart';
 import 'package:experta/presentation/call_settings/bindings/call_setting_bindings.dart';
 import 'package:experta/presentation/call_settings/call_settings.dart';
 import 'package:experta/presentation/category/category_controller.dart';
 import 'package:experta/presentation/category/category_screen.dart';
-import 'package:experta/presentation/change_date_of_birth/binding/change_date_of_birth_binding.dart';
-import 'package:experta/presentation/change_date_of_birth/change_date_of_birth.dart';
-import 'package:experta/presentation/change_email/binding/change_email_binding.dart';
-import 'package:experta/presentation/change_email/change_email.dart';
 import 'package:experta/presentation/change_gender/binding/change_gender_binding.dart';
 import 'package:experta/presentation/change_gender/change_gender.dart';
-import 'package:experta/presentation/change_user_name/change_user_name.dart';
 import 'package:experta/presentation/createPost/binding/create_post_binding.dart';
 import 'package:experta/presentation/createPost/create_post.dart';
 import 'package:experta/presentation/dashboard/binding/dashboard_binding.dart';
@@ -45,8 +44,6 @@ import 'package:experta/presentation/feeds_active_screen/feeds_active_screen.dar
 import 'package:experta/presentation/followers/binding/followers_binding.dart';
 import 'package:experta/presentation/followers/followers.dart';
 import 'package:experta/presentation/following/following.dart';
-import 'package:experta/presentation/give_rating/binding/give_rating_binding.dart';
-import 'package:experta/presentation/give_rating/give_rating.dart';
 import 'package:experta/presentation/message_chat_with_user_default_screen/binding/message_chat_with_user_default_binding.dart';
 import 'package:experta/presentation/message_chat_with_user_default_screen/message_chat_with_user_default_screen.dart';
 import 'package:experta/presentation/my_booking/binding/my_booking_binding.dart';
@@ -55,20 +52,22 @@ import 'package:experta/presentation/new_post/binding/new_post_bindings.dart';
 import 'package:experta/presentation/new_post/new_post.dart';
 import 'package:experta/presentation/notification/notification_controller.dart';
 import 'package:experta/presentation/notification/notification_screen.dart';
+import 'package:experta/presentation/notification_settings/binding/notificatin_setting_binding.dart';
+import 'package:experta/presentation/notification_settings/notification_settings.dart';
 import 'package:experta/presentation/onboarding_screen/binding/onboarding_binding.dart';
 import 'package:experta/presentation/onboarding_screen/onboarding_screen.dart';
-import 'package:experta/presentation/pan_detrail/binding/pan_detail_binding.dart';
-import 'package:experta/presentation/pan_detrail/pan_detail.dart';
 import 'package:experta/presentation/payment/binding/payment_binding.dart';
 import 'package:experta/presentation/payment/payment.dart';
 import 'package:experta/presentation/payment_method/binding/payment_method_binding.dart';
 import 'package:experta/presentation/payment_method/payment_method.dart';
-import 'package:experta/presentation/phone_number/binding/phone_number_binding.dart';
-import 'package:experta/presentation/phone_number/phone_number.dart';
 import 'package:experta/presentation/professional_info/binding/professional_binding.dart';
 import 'package:experta/presentation/professional_info/professional_info.dart';
 import 'package:experta/presentation/recents/binding/recents_binding.dart';
 import 'package:experta/presentation/recents/recent.dart';
+import 'package:experta/presentation/recorded_session/binding/recorded_session_binding.dart';
+import 'package:experta/presentation/recorded_session/recorded_session.dart';
+import 'package:experta/presentation/search_block/binding/search_block_binding.dart';
+import 'package:experta/presentation/search_block/search_block.dart';
 import 'package:experta/presentation/search_screen/binding/search_binding.dart';
 import 'package:experta/presentation/search_screen/search_screen.dart';
 import 'package:experta/presentation/security_privacy/binding/security_privacy_binding.dart';
@@ -83,24 +82,36 @@ import 'package:experta/presentation/set_pricing/bindings/set_pricing_bindings.d
 import 'package:experta/presentation/set_pricing/set_pricing.dart';
 import 'package:experta/presentation/setting_screen/binding/setting_binding.dart';
 import 'package:experta/presentation/setting_screen/setting_screen.dart';
+import 'package:experta/presentation/share_profile/binding/share_profile_binding.dart';
+import 'package:experta/presentation/share_profile/shareprofile%20.dart';
 import 'package:experta/presentation/signin_page/signin_binding/signin_binding.dart';
 import 'package:experta/presentation/signin_page/signin_page.dart';
 import 'package:experta/presentation/splash_screen/binding/splash_binding.dart';
 import 'package:experta/presentation/splash_screen/splash_screen.dart';
+import 'package:experta/presentation/sucessfully/bindings/sucessfully_bindings.dart';
+import 'package:experta/presentation/sucessfully/sucessfully.dart';
+import 'package:experta/presentation/support/bindings/support_binding.dart';
+import 'package:experta/presentation/support/support.dart';
+import 'package:experta/presentation/top_up/binding/top_up_binding.dart';
+import 'package:experta/presentation/top_up/top_up.dart';
+import 'package:experta/presentation/transaction/transactions_list.dart';
 import 'package:experta/presentation/userProfile/binding/profile_binding.dart';
 import 'package:experta/presentation/userProfile/user_profile_page.dart';
 import 'package:experta/presentation/user_details/binding/details_binding.dart';
 import 'package:experta/presentation/user_details/user_details.dart';
+import 'package:experta/presentation/verify_account/binding/verify_account_binding.dart';
+import 'package:experta/presentation/verify_account/varify_account.dart';
 import 'package:experta/presentation/verifynumber_screen/binding/verifynumber_binding.dart';
 import 'package:experta/presentation/verifynumber_screen/verifynumber_screen.dart';
 import 'package:experta/presentation/wallet/binding/wallet_binding.dart';
 import 'package:experta/presentation/wallet/wallet.dart';
+import 'package:experta/presentation/withdraw/binding/withdraw_binding.dart';
+import 'package:experta/presentation/withdraw/withdraw.dart';
 import 'package:experta/presentation/work_experience/binding/experience_binding.dart';
 import 'package:experta/presentation/work_experience/work_experience.dart';
+
 import 'package:experta/widgets/custom_page_transition.dart';
 import 'package:get/get.dart';
-
-import '../presentation/change_user_name/binding/change_user_name_binding.dart';
 
 class AppRoutes {
   static const String onboardingScreen = '/onboarding_screen';
@@ -114,7 +125,7 @@ class AppRoutes {
 
   static const String homePage = '/home_screen';
 
-  static const String searchPage = '/search_screen';
+  static const String searchScreen = '/search_screen';
 
   static const String profile = "/user_profile_page";
 
@@ -124,8 +135,7 @@ class AppRoutes {
 
   static const String dashboard = '/dashboard';
 
-  static const String messageChatWithUserDefaultScreen =
-      '/message_chat_with_user_default_screen';
+  static const String chattingScreen = '/message_chat_with_user_default_screen';
 
   static const String feeds = '/feeds_active_screen';
 
@@ -192,8 +202,6 @@ class AppRoutes {
 
   static const String recent = "/recents";
 
-  static const String changeDateOfBirth = "/change_date_of_birth";
-
   static const String changeEmail = "/change_email";
 
   static const String phoneNumber = "/phone_number";
@@ -204,15 +212,45 @@ class AppRoutes {
 
   static const String detailsPage = "/user_details";
 
-  static const String Bookindeetail = "/booking_detail";
+  static const String bookindeetail = "/booking_detail";
 
   static const String rating = "/give_rating";
 
+  static const String reviewall = "/all_review";
+
   static const String mybook = "/my_booking";
 
-  static const String searchScreen = "/search_screen";
+// ignore: constant_identifier_names
+  static const String Transaction = "/transection";
 
-  static const String allReviews = "/";
+// ignore: constant_identifier_names
+  static const String RaiseTicket = "/support";
+
+  static const String recordedsession = "/recorded_session";
+
+// ignore: constant_identifier_names
+// <<<<<<< HEAD
+  static const String Bookappointment = "/book_appointment";
+
+  static const String sUcessfuly = "/sucessfuly";
+
+  static const String genderchange = "/change_gender";
+
+  static const String topup = "/top_up";
+
+  static const String widraw = "/withdraw";
+
+  static const String editexperties = "/edit_experties";
+
+  static const String Notificationseting = "/notification_setting";
+
+  static const String blocksearch = "/search_block";
+
+  static const String qr = "/share_profile";
+
+  static const String lottie = "/";
+
+  static const String reffer = "/Refferal";
 
   static List<GetPage> pages = [
     GetPage(
@@ -237,26 +275,19 @@ class AppRoutes {
       ],
     ),
     GetPage(
-      name: changegender,
-      page: () => const ChangeGender(),
-      bindings: [
-        ChangeGenderBinding(),
-      ],
-    ),
-    GetPage(
       name: addbankaccount,
       page: () => const AddBankAccount(),
       bindings: [
         AddBankAccountBinding(),
       ],
     ),
-    GetPage(
-      name: pandetail,
-      page: () => const PanDetail(),
-      bindings: [
-        PanDetailBinding(),
-      ],
-    ),
+    // GetPage(
+    //   name: pandetail,
+    //   page: () => const PanDetail(),
+    //   bindings: [
+    //     PanDetailBinding(),
+    //   ],
+    // ),
     GetPage(
       name: paymentmethod,
       page: () => const PaymentMethod(),
@@ -294,14 +325,14 @@ class AppRoutes {
     ),
     GetPage(
       name: follower,
-      page: () => FollowersPage(),
+      page: () => const FollowersPage(),
       bindings: [
         FollowersBinding(),
       ],
     ),
     GetPage(
       name: block,
-      page: () => BlockedPage(),
+      page: () => const BlockedPage(),
       bindings: [
         BlockedBinding(),
       ],
@@ -320,6 +351,13 @@ class AppRoutes {
       ],
     ),
     GetPage(
+      name: bank,
+      page: () => const VerifyAccount(),
+      bindings: [
+        VerifyAccountBinding(),
+      ],
+    ),
+    GetPage(
       name: verifynumberScreen,
       page: () => const VerifynumberScreen(),
       bindings: [
@@ -334,20 +372,6 @@ class AppRoutes {
       ],
     ),
     GetPage(
-      name: changeEmail,
-      page: () => const ChangeEmail(),
-      bindings: [
-        ChangeEmailBinding(),
-      ],
-    ),
-    GetPage(
-      name: phoneNumber,
-      page: () => const PhoneNumber(),
-      bindings: [
-        PhoneNumberBinding(),
-      ],
-    ),
-    GetPage(
       name: payment,
       page: () => const Payment(),
       bindings: [
@@ -355,24 +379,10 @@ class AppRoutes {
       ],
     ),
     GetPage(
-      name: changeDateOfBirth,
-      page: () => const ChangeDateOfBirth(),
-      bindings: [
-        ChangeDateOfBirthBinding(),
-      ],
-    ),
-    GetPage(
       name: wallet,
       page: () => const Wallet(),
       bindings: [
         WalletBinding(),
-      ],
-    ),
-    GetPage(
-      name: changeUserName,
-      page: () => const ChangeUserName(),
-      bindings: [
-        ChangeUserNameBinding(),
       ],
     ),
     GetPage(
@@ -402,12 +412,9 @@ class AppRoutes {
     GetPage(name: dashboard, page: () => DashboardPage(), bindings: [
       DashboardBinding(),
     ]),
-    GetPage(
-        name: messageChatWithUserDefaultScreen,
-        page: () => const MessageChatWithUserDefaultScreen(),
-        bindings: [
-          MessageChatWithUserDefaultBinding(),
-        ]),
+    GetPage(name: chattingScreen, page: () => const ChattingPage(), bindings: [
+      MessageChatWithUserDefaultBinding(),
+    ]),
     GetPage(
         name: professionalInfo,
         page: () => const EditProfessionalInfo(),
@@ -483,7 +490,7 @@ class AppRoutes {
         bindings: [
           SetPricingBindings(),
         ]),
-    GetPage(name: category, page: () => CategoryScreen(), bindings: [
+    GetPage(name: category, page: () => const CategoryScreen(), bindings: [
       CategoryBinding(),
     ]),
     GetPage(
@@ -501,13 +508,6 @@ class AppRoutes {
       ],
     ),
     GetPage(
-      name: changegender,
-      page: () => const ChangeGender(),
-      bindings: [
-        ChangeGenderBinding(),
-      ],
-    ),
-    GetPage(
       name: addbankaccount,
       page: () => const AddBankAccount(),
       bindings: [
@@ -516,18 +516,18 @@ class AppRoutes {
     ),
     GetPage(
       name: following,
-      page: () => FollowingPage(),
+      page: () => const FollowingPage(),
       bindings: [
         FollowersBinding(),
       ],
     ),
-    GetPage(
-      name: pandetail,
-      page: () => const PanDetail(),
-      bindings: [
-        PanDetailBinding(),
-      ],
-    ),
+    // GetPage(
+    //   name: pandetail,
+    //   page: () => const PanDetail(),
+    //   bindings: [
+    //     PanDetailBinding(),
+    //   ],
+    // ),
     GetPage(
       name: paymentmethod,
       page: () => const PaymentMethod(),
@@ -549,41 +549,33 @@ class AppRoutes {
         SecuritryPrivacyBinding(),
       ],
     ),
-    GetPage(
-      name: adhardetail,
-      page: () => const AadharDetails(),
-      bindings: [
-        AadharDetailBinding(),
-      ],
-    ),
+    // GetPage(
+    //   name: adhardetail,
+    //   page: () => const AadharDetails(),
+    //   bindings: [
+    //     AadharDetailBinding(),
+    //   ],
+    // ),
     GetPage(
       name: follower,
-      page: () => FollowersPage(),
+      page: () => const FollowersPage(),
       bindings: [
         FollowersBinding(),
       ],
     ),
     GetPage(
       name: block,
-      page: () => BlockedPage(),
+      page: () => const BlockedPage(),
       bindings: [
         BlockedBinding(),
       ],
     ),
-    GetPage(
-        name: createPost,
-        page: () => const CreatePost(),
-        customTransition: CustomPageTransition(),
-        bindings: [
-          CreatePostBindings(),
-        ]),
-    GetPage(
-        name: newPost,
-        page: () => const NewPostPage(),
-        customTransition: CustomPageTransition(),
-        bindings: [
-          NewPostBindings(),
-        ]),
+    GetPage(name: createPost, page: () => const CreatePost(), bindings: [
+      CreatePostBindings(),
+    ]),
+    GetPage(name: newPost, page: () => const NewPostPage(), bindings: [
+      NewPostBindings(),
+    ]),
     GetPage(
         name: detailsPage,
         page: () => const UserDetailsPage(),
@@ -592,7 +584,7 @@ class AppRoutes {
           DetailsBinding(),
         ]),
     GetPage(
-        name: Bookindeetail,
+        name: bookindeetail,
         page: () => const BookingDetailPage(),
         customTransition: CustomPageTransition(),
         bindings: [
@@ -600,7 +592,7 @@ class AppRoutes {
         ]),
     GetPage(
         name: mybook,
-        page: () => MyBookingPage(),
+        page: () => const MyBookingPage(),
         customTransition: CustomPageTransition(),
         bindings: [
           MyBookingBinding(),
@@ -612,9 +604,7 @@ class AppRoutes {
         bindings: [
           ProfileBinding(),
         ]),
-    GetPage(name: rating, page: () => RatingPage(), bindings: [
-      RatingPageBinding(),
-    ]),
+
     GetPage(
         name: searchScreen,
         page: () => const SearchScreen(),
@@ -623,11 +613,105 @@ class AppRoutes {
           SearchBinding(),
         ]),
     GetPage(
-        name: allReviews,
+        name: reviewall,
         page: () => const AllReviews(),
         customTransition: CustomPageTransition(),
         bindings: [
           AllReviewsBindings(),
         ]),
+    GetPage(
+        name: Transaction,
+        page: () => const TransactionHistoryPage(),
+        customTransition: CustomPageTransition(),
+        bindings: [
+          AllReviewsBindings(),
+        ]),
+
+    GetPage(
+        name: RaiseTicket,
+        page: () => const RaiseTicketPage(),
+        customTransition: CustomPageTransition(),
+        bindings: [
+          SupportBinding(),
+        ]),
+    GetPage(
+        name: recordedsession,
+        page: () => const RecordedSessionsPage(),
+        customTransition: CustomPageTransition(),
+        bindings: [
+          RecordedSessionBinding(),
+        ]),
+    GetPage(
+        name: qr,
+        page: () => ShareProfilePage(),
+        customTransition: CustomPageTransition(),
+        bindings: [
+          ShareProfileBinding(),
+        ]),
+    GetPage(
+        name: Bookappointment,
+        page: () => const BookAppointmentPage(),
+        customTransition: CustomPageTransition(),
+        bindings: [
+          BookAppointmentBinding(),
+        ]),
+    GetPage(
+        name: sUcessfuly,
+        page: () => const BookingConfirmationPage(),
+        customTransition: CustomPageTransition(),
+        bindings: [
+          BookingConfirmationPageBindings(),
+        ]),
+    GetPage(
+        name: genderchange,
+        page: () => const ChangeGender(),
+        customTransition: CustomPageTransition(),
+        bindings: [
+          ChangeGenderBinding(),
+        ]),
+    GetPage(
+        name: topup,
+        page: () => const TopUpPage(),
+        customTransition: CustomPageTransition(),
+        bindings: [
+          TopUpBinding(),
+        ]),
+    GetPage(
+        name: widraw,
+        page: () => const WithdrawCreditsPage(),
+        customTransition: CustomPageTransition(),
+        bindings: [
+          WithdrawBinding(),
+        ]),
+
+    // GetPage(
+    //     name: editexperties,
+    //     page: () => const EditExpertisePage(),
+    //     customTransition: CustomPageTransition(),
+    //     bindings: [
+    //       EditExpertiesBinding(),
+    //     ]),
+    GetPage(
+        name: Notificationseting,
+        page: () => const NotificationsPage(),
+        customTransition: CustomPageTransition(),
+        bindings: [
+          NotificatinSettingBinding(),
+        ]),
+    GetPage(
+        name: blocksearch,
+        page: () => ProfileBlockPage(),
+        customTransition: CustomPageTransition(),
+        bindings: [
+          BlockSearchBinding(),
+        ]),
+
+    GetPage(
+      name: reffer,
+      page: () => ReferAndEarnPage(),
+      bindings: [
+        RefferalScreenBindings(),
+      ],
+    ),
   ];
 }

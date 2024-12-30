@@ -11,3 +11,4 @@ class VerifyOtpRequestModel {
     return data;
   }
 }
+ 

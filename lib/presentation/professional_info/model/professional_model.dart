@@ -105,6 +105,7 @@ class WorkExperience {
             : 0);
   }
 }
+
 // Expertise Model
 
 class Expertise {

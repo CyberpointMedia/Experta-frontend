@@ -73,12 +73,12 @@ class CustomTextStyles {
       theme.textTheme.bodySmall!.sFProText.copyWith(
         color: appTheme.gray900,
         fontSize: 12.fSize,
-        fontWeight: FontWeight.w300,
+        fontWeight: FontWeight.w100,
       );
   static get bodySmallffffffff => theme.textTheme.titleMedium!.copyWith(
-        color: const Color(0XFFFFFFFF),
-        fontSize: 16.fSize,
-      );
+      color: const Color(0XFFFFFFFF),
+      fontSize: 16.fSize,
+      fontWeight: FontWeight.w500);
   // Display text style
   static get displaySmallff171717 => theme.textTheme.displaySmall!.copyWith(
         color: const Color(0XFF171717),
@@ -103,6 +103,10 @@ class CustomTextStyles {
         color: appTheme.blueGray300.withOpacity(0.56),
         fontWeight: FontWeight.w700,
       );
+  static get labelLargeBluegray3000 => theme.textTheme.bodyLarge!.copyWith(
+      color: appTheme.blueGray300.withOpacity(0.56),
+      fontWeight: FontWeight.w300,
+      fontSize: 38);
   static get labelLargeBluegray300Medium =>
       theme.textTheme.labelLarge!.copyWith(
         color: appTheme.blueGray300,
@@ -131,7 +135,7 @@ class CustomTextStyles {
       theme.textTheme.labelLarge!.sFProText.copyWith(
         color: appTheme.black90001,
         fontSize: 13.fSize,
-        fontWeight: FontWeight.w500,
+        fontWeight: FontWeight.w400,
       );
 
   static get textButton => theme.textTheme.labelLarge!.sFProText.copyWith(
@@ -259,7 +263,7 @@ class CustomTextStyles {
       );
   static get titleMediumSemiBold => theme.textTheme.titleMedium!.copyWith(
         fontSize: 18.fSize,
-        fontWeight: FontWeight.w600,
+        fontWeight: FontWeight.w500,
       );
   static get titleMediumSemiBold_1 => theme.textTheme.titleMedium!.copyWith(
         fontWeight: FontWeight.w600,
@@ -268,6 +272,11 @@ class CustomTextStyles {
         color: const Color(0XFF171717),
         fontWeight: FontWeight.w600,
       );
+  static get bodySmall0XFF171717 => theme.textTheme.titleMedium!.copyWith(
+        color: Colors.black,
+        fontSize: 16.fSize,
+      );
+
   static get titleMediumff171717_1 => theme.textTheme.titleMedium!.copyWith(
         color: const Color(0XFF171717),
       );
@@ -324,6 +333,7 @@ class CustomTextStyles {
   static get titleSmallff171717 => theme.textTheme.titleSmall!.copyWith(
         color: const Color(0XFF171717),
       );
+      
   static get titleSmallff171717SemiBold => theme.textTheme.titleSmall!.copyWith(
         color: const Color(0XFF171717),
         fontWeight: FontWeight.w600,
@@ -341,25 +351,25 @@ class CustomTextStyles {
 extension on TextStyle {
   TextStyle get inter {
     return copyWith(
-      fontFamily: 'Inter',
+      fontFamily: 'Roboto',
     );
   }
 
   TextStyle get gilroy {
     return copyWith(
-      fontFamily: 'Gilroy',
+      fontFamily: 'Roboto',
     );
   }
 
   TextStyle get sFProDisplay {
     return copyWith(
-      fontFamily: 'SF Pro Display',
+      fontFamily: 'Roboto',
     );
   }
 
   TextStyle get sFProText {
     return copyWith(
-      fontFamily: 'SF Pro Text',
+      fontFamily: 'Roboto',
     );
   }
 }

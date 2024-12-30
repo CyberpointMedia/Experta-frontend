@@ -18,7 +18,10 @@ class EditWorkExperienceController extends GetxController {
   final TextEditingController companyNameController = TextEditingController();
   final TextEditingController startDateController = TextEditingController();
   final TextEditingController endDateController = TextEditingController();
-
+  final FocusNode jobTitleFocusNode = FocusNode();
+  final FocusNode companyNameFocusNode = FocusNode();
+  final FocusNode startDateFocusNode = FocusNode();
+  final FocusNode endDateFocusNode = FocusNode();
   // Observable boolean for current working status
   RxBool isCurrentlyWorking = false.obs;
 
@@ -61,10 +64,25 @@ class EditWorkExperienceController extends GetxController {
         final response =
             await apiService.createOrUpdateWorkExperience(workExperience);
         log("$response");
-        Get.back(result: response['data']);
+        Get.offAndToNamed(AppRoutes.professionalInfo);
       } catch (e) {
         Get.snackbar('Error', 'Failed to save work experience');
       }
     }
+  }
+
+  @override
+  void dispose() {
+    jobTitleController.dispose();
+    companyNameController.dispose();
+    startDateController.dispose();
+    endDateController.dispose();
+
+    jobTitleFocusNode.dispose();
+    companyNameFocusNode.dispose();
+    startDateFocusNode.dispose();
+    endDateFocusNode.dispose();
+
+    super.dispose();
   }
 }

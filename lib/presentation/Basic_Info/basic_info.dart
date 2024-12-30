@@ -1,10 +1,12 @@
 import 'dart:ui';
+import 'package:experta/presentation/edit_about/edit_about.dart';
+import 'package:experta/widgets/custom_icon_button.dart';
+import 'package:experta/widgets/social_platform_input.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/Basic_Info/controller/basic_info_controller.dart';
 import 'package:experta/widgets/bio_textformfield.dart';
 import 'package:experta/widgets/custom_text_form_field.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 class BasicProfileInfo extends StatefulWidget {
   const BasicProfileInfo({super.key});
@@ -16,9 +18,31 @@ class BasicProfileInfo extends StatefulWidget {
 class _BasicProfileInfoState extends State<BasicProfileInfo> {
   BasicProfileInfoController controller = Get.put(BasicProfileInfoController());
 
+  bool isMaleSelected = false;
+  bool isFemaleSelected = false;
+
+  @override
+  void initState() {
+    super.initState();
+    controller.isLoading.listen((isLoading) {
+      if (!isLoading) {
+        _initializeGenderSelection();
+      }
+    });
+  }
+
+  void _initializeGenderSelection() {
+    String currentGender =
+        controller.genderController.text.toLowerCase().trim();
+    setState(() {
+      isMaleSelected = currentGender == 'male';
+      isFemaleSelected = currentGender == 'female';
+    });
+  }
+
   void _addSocialLink() {
     setState(() {
-      controller.socialLinks.add('');
+      controller.socialLinks.add({'platform': '', 'link': ''});
     });
   }
 
@@ -88,6 +112,7 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
             top: 50,
             child: ImageFiltered(
               imageFilter: ImageFilter.blur(
+                tileMode: TileMode.decal,
                 sigmaX: 60,
                 sigmaY: 60,
               ),
@@ -166,10 +191,10 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
                   backgroundImage: controller.imageFile.value != null
                       ? FileImage(controller.imageFile.value!)
                       : (controller.profileImageUrl.value.isNotEmpty
-                              ? NetworkImage(controller.profileImageUrl.value)
-                              : const AssetImage(
-                                  "assets/images/settings/profile.jpeg"))
-                          as ImageProvider,
+                          ? NetworkImage(controller.profileImageUrl.value)
+                          : CustomImageView(
+                              imagePath: ImageConstant.imageNotFound,
+                            )) as ImageProvider,
                 ),
               );
             }),
@@ -177,7 +202,13 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
         ),
         TextButton(
           onPressed: _showImagePickerOptions,
-          child: const Text("Change Profile Picture"),
+          child: const Text(
+            "Change Profile Picture",
+            style: TextStyle(
+              fontSize: 14,
+              color: Colors.grey,
+            ),
+          ),
         ),
       ],
     );
@@ -193,53 +224,244 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
             padding: const EdgeInsets.only(bottom: 5),
             child: Text(
               "Your Name",
-              style: CustomTextStyles.bodyLargeBlack90001,
+              style: theme.textTheme.titleMedium!.copyWith(
+                color: Colors.black,
+                fontSize: 14.fSize,
+                fontWeight: FontWeight.w500,
+              ),
               textAlign: TextAlign.start,
             ),
           ),
           CustomTextFormField(
             width: MediaQuery.of(context).size.width,
-            controller: controller.textField1,
+            controller: controller.fullNameController,
             focusNode: controller.focus1,
             hintText: "Your Name".tr,
             hintStyle: CustomTextStyles.titleMediumBluegray300,
+            textStyle: theme.textTheme.titleMedium!.copyWith(
+              color: Colors.black,
+              fontSize: 16.fSize,
+              fontWeight: FontWeight.w500,
+            ),
             textInputType: TextInputType.name,
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 5, top: 10),
             child: Text(
               "Display Name",
-              style: CustomTextStyles.bodyLargeBlack90001,
+              style: theme.textTheme.titleMedium!.copyWith(
+                color: Colors.black,
+                fontSize: 14.fSize,
+                fontWeight: FontWeight.w500,
+              ),
               textAlign: TextAlign.start,
             ),
           ),
           CustomTextFormField(
-            controller: controller.textField2,
+            controller: controller.displayNameController,
             focusNode: controller.focus2,
             width: MediaQuery.of(context).size.width,
             hintText: "Display Name".tr,
             hintStyle: CustomTextStyles.titleMediumBluegray300,
+            textStyle: theme.textTheme.titleMedium!.copyWith(
+              color: Colors.black,
+              fontSize: 16.fSize,
+              fontWeight: FontWeight.w500,
+            ),
             textInputType: TextInputType.name,
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 5, top: 10),
             child: Text(
-              "Bio",
-              style: CustomTextStyles.bodyLargeBlack90001,
+              "What’s your gender?",
+              style: theme.textTheme.titleMedium!.copyWith(
+                color: Colors.black,
+                fontSize: 14.fSize,
+                fontWeight: FontWeight.w500,
+              ),
               textAlign: TextAlign.start,
             ),
           ),
-          CustomBioTextFormField(
-            controller: controller.textField3,
-            focusNode: controller.focus3,
-            hintText: "Write Your Bio",
+          Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      isMaleSelected = true;
+                      isFemaleSelected = false;
+                      controller.genderController.text = 'Male';
+                    });
+                  },
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.43,
+                    height: 144.0,
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 28.0, horizontal: 24.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10.0),
+                      border: Border.all(
+                        color: isMaleSelected
+                            ? theme.primaryColor
+                            : Colors.transparent,
+                        width: 2.0,
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        CustomImageView(
+                          imagePath: isMaleSelected
+                              ? ImageConstant.male
+                              : ImageConstant.maleunselected,
+                          width: 50.0,
+                          height: 50.0,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Male",
+                            style: theme.textTheme.titleSmall!.copyWith(
+                                color: isMaleSelected
+                                    ? appTheme.black900
+                                    : appTheme.gray400),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      isMaleSelected = false;
+                      isFemaleSelected = true;
+                      controller.genderController.text = 'Female';
+                    });
+                  },
+                  child: Container(
+                    width: MediaQuery.of(context).size.width * 0.43,
+                    height: 144.0,
+                    padding: const EdgeInsets.symmetric(
+                        vertical: 28.0, horizontal: 24.0),
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10.0),
+                      border: Border.all(
+                        color: isFemaleSelected
+                            ? theme.primaryColor
+                            : Colors.transparent,
+                        width: 2.0,
+                      ),
+                    ),
+                    child: Column(
+                      children: [
+                        CustomImageView(
+                          imagePath: isFemaleSelected
+                              ? ImageConstant.female
+                              : ImageConstant.femele,
+                          width: 50.0,
+                          height: 50.0,
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Text(
+                            "Female",
+                            style: theme.textTheme.titleSmall!.copyWith(
+                                color: isFemaleSelected
+                                    ? appTheme.black900
+                                    : appTheme.gray400),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 5, top: 10),
+            child: Text(
+              "Date of birth (DD/MM/YYYY)",
+              style: theme.textTheme.titleMedium!.copyWith(
+                color: Colors.black,
+                fontSize: 14.fSize,
+                fontWeight: FontWeight.w500,
+              ),
+              textAlign: TextAlign.start,
+            ),
+          ),
+          CustomTextFormField(
+            hintText: "01/01/2024",
+            readOnly: true,
             hintStyle: CustomTextStyles.titleMediumBluegray300,
+            textInputType: TextInputType.datetime,
+            controller: controller.dateOfBirthController,
+            focusNode: FocusNode(),
+            suffix: CustomIconButton(
+                decoration: const BoxDecoration(color: Colors.transparent),
+                height: 24.0, // Adjust the size as needed
+                width: 24.0,
+                child: CustomImageView(
+                  imagePath: ImageConstant.imgCalendar,
+                  color: appTheme.blueGray300,
+                  onTap: () => _selectDate(context),
+                )
+
+                // Adjust the size as needed
+                ),
+          ),
+          Padding(
+            padding: const EdgeInsets.only(bottom: 5, top: 10),
+            child: Text(
+              "Bio",
+              style: theme.textTheme.titleMedium!.copyWith(
+                color: Colors.black,
+                fontSize: 14.fSize,
+                fontWeight: FontWeight.w500,
+              ),
+              textAlign: TextAlign.start,
+            ),
+          ),
+          GestureDetector(
+            onTap: () async {
+              final currentBio = controller.bioController.text;
+              final result = await Get.to(
+                () => EditAboutPage(bio: currentBio),
+                transition: Transition.rightToLeft,
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+              );
+              if (result != null && result is String) {
+                controller.bioController.text = result;
+              }
+            },
+            child: AbsorbPointer(
+              child: CustomBioTextFormField(
+                controller: controller.bioController,
+                focusNode: controller.focus3,
+                hintText: "Write Your Bio",
+                hintStyle: CustomTextStyles.titleMediumBluegray300,
+                textStyle: theme.textTheme.titleMedium!.copyWith(
+                  color: Colors.black,
+                  fontSize: 16.fSize,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 5, top: 10),
             child: Text(
               "Social Links",
-              style: CustomTextStyles.bodyLargeBlack90001,
+              style: theme.textTheme.titleMedium!.copyWith(
+                color: Colors.black,
+                fontSize: 14.fSize,
+                fontWeight: FontWeight.w500,
+              ),
               textAlign: TextAlign.start,
             ),
           ),
@@ -283,53 +505,36 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
   }
 
   Widget _buildSocialLinkFormField(int index) {
-    return Row(
-      children: [
-        Padding(
-          padding: const EdgeInsets.only(right: 10, left: 10),
-          child: _getSocialMediaIcon(controller.socialLinks[index]),
-        ),
-        Expanded(
-          child: CustomTextFormField(
-            initialValue: controller.socialLinks[index],
-            onChanged: (value) =>
-                setState(() => controller.socialLinks[index] = value),
-            hintText: "Social Link".tr,
-            hintStyle: CustomTextStyles.titleMediumBluegray300,
-            contentPadding: const EdgeInsets.symmetric(horizontal: 16.0),
-            suffix: IconButton(
-              icon: const Icon(Icons.close),
-              onPressed: () =>
-                  setState(() => controller.socialLinks.removeAt(index)),
+    return Padding(
+      padding: EdgeInsets.only(bottom: 16.h),
+      child: Row(
+        children: [
+          Expanded(
+            child: SocialPlatformInput(
+              initialPlatform: controller.socialLinks[index]['platform'],
+              initialLink: controller.socialLinks[index]['link'],
+              onChanged: (platform, link) {
+                setState(() {
+                  // Update both platform and link in the controller
+                  controller.socialLinks[index] = {
+                    'platform': platform,
+                    'link': link
+                  };
+                });
+              },
             ),
           ),
-        ),
-      ],
+          SizedBox(width: 8.h),
+          CustomImageView(
+            height: 20.v,
+            width: 20.h,
+            imagePath: ImageConstant.cross,
+            onTap: () => setState(() => controller.socialLinks.removeAt(index)),
+          ),
+          SizedBox(width: 8.h),
+        ],
+      ),
     );
-  }
-
-  Widget _getSocialMediaIcon(String link) {
-    if (link.contains('facebook.com')) {
-      return const Icon(FontAwesomeIcons.facebookF,
-          size: 20.0, color: Colors.blue);
-    } else if (link.contains('instagram.com')) {
-      return const Icon(FontAwesomeIcons.instagram,
-          size: 20.0, color: Colors.pink);
-    } else if (link.contains('twitter.com')) {
-      return const Icon(FontAwesomeIcons.twitter,
-          size: 20.0, color: Colors.lightBlue);
-    } else if (link.contains('linkedin.com')) {
-      return const Icon(FontAwesomeIcons.linkedin,
-          size: 20.0, color: Colors.blueAccent);
-    } else if (link.contains('youtube.com')) {
-      return const Icon(FontAwesomeIcons.youtube,
-          size: 20.0, color: Colors.red);
-    } else if (link.contains('github.com')) {
-      return const Icon(FontAwesomeIcons.github,
-          size: 20.0, color: Colors.black);
-    } else {
-      return const SizedBox();
-    }
   }
 
   void onTapArrowLeft() {
@@ -350,5 +555,21 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
         ),
       ),
     );
+  }
+
+  void _selectDate(BuildContext context) async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
+    );
+
+    if (pickedDate != null) {
+      setState(() {
+        controller.dateOfBirthController.text =
+            "${pickedDate.day}/${pickedDate.month}/${pickedDate.year}";
+      });
+    }
   }
 }

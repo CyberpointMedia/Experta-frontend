@@ -38,7 +38,7 @@ class CustomButtonStyles {
         backgroundColor: appTheme.yellow900,
         shape: RoundedRectangleBorder(
           //yellow900
-          borderRadius: BorderRadius.circular(17.h),
+          borderRadius: BorderRadius.circular(28.h),
         ),
       );
   static ButtonStyle get fillOnError => ElevatedButton.styleFrom(
@@ -61,6 +61,7 @@ class CustomButtonStyles {
           borderRadius: BorderRadius.circular(14.h),
         ),
       );
+
   static ButtonStyle get fillOnPrimaryContainer1 => ElevatedButton.styleFrom(
         backgroundColor: theme.colorScheme.onPrimaryContainer.withOpacity(1),
       );
@@ -73,7 +74,7 @@ class CustomButtonStyles {
   static ButtonStyle get fillPrimaryTL23 => ElevatedButton.styleFrom(
         backgroundColor: theme.colorScheme.primary,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(23.h),
+          borderRadius: BorderRadius.circular(30.h),
         ),
       );
 

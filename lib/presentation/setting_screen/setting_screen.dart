@@ -3,6 +3,7 @@ import 'dart:ui';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/settings_log_out_dialog/controller/settings_log_out_controller.dart';
 import 'package:experta/presentation/settings_log_out_dialog/settings_log_out_dialog.dart';
+import 'package:experta/presentation/share_profile/shareprofile%20.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
 import 'controller/setting_controller.dart';
 
@@ -12,7 +13,32 @@ class SettingScreen extends GetWidget<SettingController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: SizedBox(
+        body: Stack(
+      children: [
+        Positioned(
+          left: 270,
+          top: 50,
+          child: ImageFiltered(
+            imageFilter: ImageFilter.blur(
+              tileMode: TileMode.decal,
+              sigmaX: 60,
+              sigmaY: 60,
+            ),
+            child: Align(
+              child: SizedBox(
+                width: 252,
+                height: 252,
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(126),
+                    color: appTheme.deepOrangeA20.withOpacity(0.6),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ),
+        SizedBox(
             width: SizeUtils.width,
             child: SingleChildScrollView(
                 child: Padding(
@@ -22,10 +48,14 @@ class SettingScreen extends GetWidget<SettingController> {
                         children: [
                           SizedBox(height: 12.v),
                           _buildAppBar(),
-                          _buildShareProfile(),
+                          _buildShareProfile(context),
+                          Padding(
+                            padding: const EdgeInsets.only(left: 10),
+                            child: _buildBasicSettings(),
+                          ),
                           SizedBox(height: 16.v),
                           Padding(
-                              padding: EdgeInsets.only(left: 16.h),
+                              padding: const EdgeInsets.only(left: 10),
                               child: Text("lbl_basic_settings".tr,
                                   style: CustomTextStyles
                                       .titleMediumBluegray30018)),
@@ -39,7 +69,9 @@ class SettingScreen extends GetWidget<SettingController> {
                                       .titleMediumBluegray30018)),
                           SizedBox(height: 12.v),
                           _buildInfo1()
-                        ])))));
+                        ])))),
+      ],
+    ));
   }
 
   /// Section Widget
@@ -62,7 +94,7 @@ class SettingScreen extends GetWidget<SettingController> {
     return Align(
         alignment: Alignment.bottomLeft,
         child: Padding(
-            padding: EdgeInsets.only(right: 16.h, top: 10.v),
+            padding: EdgeInsets.only(right: 16.h, top: 10.v, left: 5.h),
             child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -122,7 +154,7 @@ class SettingScreen extends GetWidget<SettingController> {
                             onTapmybooking();
                           },
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 3),
+                            padding: const EdgeInsets.only(top: 1),
                             child: Container(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 15.h, vertical: 16.v),
@@ -168,7 +200,7 @@ class SettingScreen extends GetWidget<SettingController> {
                             Get.toNamed(AppRoutes.payment);
                           },
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 3),
+                            padding: const EdgeInsets.only(top: 1),
                             child: Container(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 15.h, vertical: 16.v),
@@ -209,48 +241,59 @@ class SettingScreen extends GetWidget<SettingController> {
                           ),
                         ),
                         Padding(
-                          padding: const EdgeInsets.only(top: 3),
-                          child: Container(
+                          padding: EdgeInsets.only(top: 1.adaptSize),
+                          child: GestureDetector(
+                            onTap: () {
+                              // Use GetX to navigate to the RecordedSessionsPage
+                              Get.toNamed(AppRoutes
+                                  .recordedsession); // Assuming you've set the route in your app
+                            },
+                            child: Container(
                               padding: EdgeInsets.symmetric(
                                   horizontal: 15.h, vertical: 16.v),
                               decoration: AppDecoration.fillOnPrimaryContainer,
                               child: Row(
-                                  mainAxisAlignment: MainAxisAlignment.center,
-                                  children: [
-                                    CustomIconButton(
-                                        height: 44.adaptSize,
-                                        width: 44.adaptSize,
-                                        padding: EdgeInsets.all(10.h),
-                                        decoration:
-                                            IconButtonStyleHelper.fillOrange,
-                                        child: CustomImageView(
-                                          imagePath: "assets/images/camera.svg",
-                                        )),
-                                    Padding(
-                                        padding: EdgeInsets.only(
-                                            left: 15.h,
-                                            top: 13.v,
-                                            bottom: 10.v),
-                                        child: Text("msg_recorded_sessions".tr,
-                                            style: theme.textTheme.titleMedium!
-                                                .copyWith(
-                                                    color: appTheme.gray900))),
-                                    const Spacer(),
-                                    CustomImageView(
-                                        imagePath:
-                                            ImageConstant.imgArrowRightGray900,
-                                        height: 24.adaptSize,
-                                        width: 24.adaptSize,
-                                        margin: EdgeInsets.symmetric(
-                                            vertical: 10.v))
-                                  ])),
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  CustomIconButton(
+                                    height: 44.adaptSize,
+                                    width: 44.adaptSize,
+                                    padding: EdgeInsets.all(10.h),
+                                    decoration:
+                                        IconButtonStyleHelper.fillOrange,
+                                    child: CustomImageView(
+                                      imagePath: "assets/images/camera.svg",
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsets.only(
+                                        left: 15.h, top: 13.v, bottom: 10.v),
+                                    child: Text(
+                                      "msg_recorded_sessions".tr,
+                                      style: theme.textTheme.titleMedium!
+                                          .copyWith(color: appTheme.gray900),
+                                    ),
+                                  ),
+                                  const Spacer(),
+                                  CustomImageView(
+                                    imagePath:
+                                        ImageConstant.imgArrowRightGray900,
+                                    height: 24.adaptSize,
+                                    width: 24.adaptSize,
+                                    margin:
+                                        EdgeInsets.symmetric(vertical: 10.v),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
                         ),
                         GestureDetector(
                           onTap: () {
                             Get.toNamed(AppRoutes.bank);
                           },
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 3),
+                            padding: const EdgeInsets.only(top: 1),
                             child: Container(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 15.h, vertical: 16.v),
@@ -298,94 +341,63 @@ class SettingScreen extends GetWidget<SettingController> {
   }
 
   /// Section Widget
-  Widget _buildShareProfile() {
+  Widget _buildShareProfile(BuildContext context) {
     return Container(
-        height: 595.v,
-        width: 359.h,
-        margin: EdgeInsets.only(left: 16.h),
-        child: Stack(alignment: Alignment.topLeft, children: [
-          Positioned(
-            left: 270,
-            top: 50,
-            child: ImageFiltered(
-              imageFilter: ImageFilter.blur(
-                sigmaX: 60,
-                sigmaY: 60,
-              ),
-              child: Align(
-                child: SizedBox(
-                  width: 252,
-                  height: 252,
-                  child: Container(
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(126),
-                      color: appTheme.deepOrangeA20.withOpacity(0.6),
-                    ),
-                  ),
-                ),
-              ),
-            ),
+        margin: EdgeInsets.only(top: 20.v, right: 16.h, left: 16.v),
+        padding: EdgeInsets.symmetric(horizontal: 16.h, vertical: 17.v),
+        decoration: AppDecoration.fillOnPrimaryContainer
+            .copyWith(borderRadius: BorderRadiusStyle.roundedBorder20),
+        child: Row(children: [
+          CustomImageView(
+            imagePath: controller.profilepic.value.isEmpty
+                ? ImageConstant.imageNotFound
+                : controller.profilepic.value,
+            placeHolder: ImageConstant.imageNotFound,
+            height: 48.adaptSize,
+            width: 48.adaptSize,
+            radius: BorderRadius.circular(24.h),
+            alignment: Alignment.center,
           ),
-          Align(
-              alignment: Alignment.topLeft,
-              child: Container(
-                  margin:
-                      EdgeInsets.only(top: 71.v, right: 16.h, bottom: 436.v),
-                  padding:
-                      EdgeInsets.symmetric(horizontal: 16.h, vertical: 17.v),
-                  decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
-                      borderRadius: BorderRadiusStyle.roundedBorder20),
-                  child: Row(children: [
-                    (controller.imagePath != "")
-                        ? CustomImageView(
-                            imagePath: controller.imagePath,
-                            height: 48.adaptSize,
-                            width: 48.adaptSize,
-                            radius: BorderRadius.circular(24.h),
-                            alignment: Alignment.center)
-                        : CustomImageView(
-                            imagePath: 'assets/images/image_not_found.png',
-                            height: 48.adaptSize,
-                            width: 48.adaptSize,
-                            radius: BorderRadius.circular(24.h),
-                            alignment: Alignment.center),
-                    Padding(
-                        padding: EdgeInsets.only(left: 15.h),
-                        child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(controller.name.toString(),
-                                  style: CustomTextStyles.titleMediumSemiBold),
-                              SizedBox(height: 4.v),
-                              GestureDetector(
-                                  onTap: () {
-                                    // onTapEditProfile();
-                                    Get.toNamed(
-                                      AppRoutes.editProfileSetting,
-                                    );
-                                  },
-                                  child: Row(children: [
-                                    Padding(
-                                        padding: EdgeInsets.only(bottom: 1.v),
-                                        child: Text("lbl_edit_profile".tr,
-                                            style: theme.textTheme.bodyMedium)),
-                                    CustomImageView(
-                                        imagePath: ImageConstant.imgArrowRight,
-                                        height: 18.adaptSize,
-                                        width: 18.adaptSize,
-                                        margin: EdgeInsets.only(left: 3.h))
-                                  ]))
-                            ])),
-                    const Spacer(),
-                    CustomElevatedButton(
-                        height: 34.v,
-                        width: 84.h,
-                        text: "lbl_share_profile".tr,
-                        margin: EdgeInsets.symmetric(vertical: 7.v),
-                        buttonStyle: CustomButtonStyles.fillGreen,
-                        buttonTextStyle: CustomTextStyles.labelLargeGray900)
-                  ]))),
-          _buildBasicSettings()
+          Padding(
+              padding: EdgeInsets.only(left: 15.h),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(controller.name.toString(),
+                        style: CustomTextStyles.titleMediumSemiBold),
+                    SizedBox(height: 4.v),
+                    GestureDetector(
+                        onTap: () {
+                          // onTapEditProfile();
+                          Get.toNamed(
+                            AppRoutes.editProfileSetting,
+                          );
+                        },
+                        child: Row(children: [
+                          Padding(
+                              padding: EdgeInsets.only(bottom: 1.v),
+                              child: Text("lbl_edit_profile".tr,
+                                  style: theme.textTheme.bodyMedium)),
+                          CustomImageView(
+                              imagePath: ImageConstant.imgArrowRight,
+                              height: 18.adaptSize,
+                              width: 18.adaptSize,
+                              margin: EdgeInsets.only(left: 3.h))
+                        ]))
+                  ])),
+          const Spacer(),
+          CustomElevatedButton(
+            height: 34.v,
+            width: 84.h,
+            text: "lbl_share_profile".tr,
+            margin: EdgeInsets.symmetric(vertical: 7.v),
+            buttonStyle: CustomButtonStyles.fillGreen,
+            buttonTextStyle: CustomTextStyles.labelLargeGray900,
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (_) => ShareProfilePage()));
+            },
+          )
         ]));
   }
 
@@ -433,68 +445,85 @@ class SettingScreen extends GetWidget<SettingController> {
                         ])),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 3),
-                child: Container(
+                padding: const EdgeInsets.only(top: 1),
+                child: GestureDetector(
+                  onTap: () {
+                    // Add your tap functionality here
+                    Get.toNamed(AppRoutes.Notificationseting);
+                    // You can navigate to a new page or perform any action here.
+                  },
+                  child: Container(
                     padding:
                         EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
                     decoration: AppDecoration.fillOnPrimaryContainer,
                     child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CustomIconButton(
-                              height: 44.adaptSize,
-                              width: 44.adaptSize,
-                              padding: EdgeInsets.all(6.h),
-                              decoration: IconButtonStyleHelper
-                                  .fillPrimaryContainerTL22,
-                              child: CustomImageView(
-                                imagePath: "assets/images/Ringing.svg",
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 15.h, top: 13.v, bottom: 10.v),
-                              child: Text("msg_notification_settings".tr,
-                                  style: theme.textTheme.titleMedium!
-                                      .copyWith(color: appTheme.gray900))),
-                          const Spacer(),
-                          CustomImageView(
-                              imagePath: ImageConstant.imgArrowRightGray900,
-                              height: 24.adaptSize,
-                              width: 24.adaptSize,
-                              margin: EdgeInsets.symmetric(vertical: 10.v))
-                        ])),
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        CustomIconButton(
+                          height: 44.adaptSize,
+                          width: 44.adaptSize,
+                          padding: EdgeInsets.all(6.h),
+                          decoration:
+                              IconButtonStyleHelper.fillPrimaryContainerTL22,
+                          child: CustomImageView(
+                            imagePath: "assets/images/Ringing.svg",
+                          ),
+                        ),
+                        Padding(
+                          padding: EdgeInsets.only(
+                              left: 15.h, top: 13.v, bottom: 10.v),
+                          child: Text(
+                            "msg_notification_settings".tr,
+                            style: theme.textTheme.titleMedium!
+                                .copyWith(color: appTheme.gray900),
+                          ),
+                        ),
+                        const Spacer(),
+                        CustomImageView(
+                          imagePath: ImageConstant.imgArrowRightGray900,
+                          height: 24.adaptSize,
+                          width: 24.adaptSize,
+                          margin: EdgeInsets.symmetric(vertical: 10.v),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
               ),
-              Padding(
-                padding: const EdgeInsets.only(top: 3),
-                child: Container(
-                    padding:
-                        EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
-                    decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
-                        borderRadius: BorderRadiusStyle.customBorderL20),
-                    child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CustomIconButton(
-                              height: 44.adaptSize,
-                              width: 44.adaptSize,
-                              padding: EdgeInsets.all(6.h),
-                              decoration: IconButtonStyleHelper.fillYellowE,
-                              child: CustomImageView(
-                                imagePath: "assets/images/Star.svg",
-                              )),
-                          Padding(
-                              padding: EdgeInsets.only(
-                                  left: 15.h, top: 13.v, bottom: 10.v),
-                              child: Text("msg_referral_program".tr,
-                                  style: theme.textTheme.titleMedium!
-                                      .copyWith(color: appTheme.gray900))),
-                          const Spacer(),
-                          CustomImageView(
-                              imagePath: ImageConstant.imgArrowRightGray900,
-                              height: 24.adaptSize,
-                              width: 24.adaptSize,
-                              margin: EdgeInsets.symmetric(vertical: 10.v))
-                        ])),
+              GestureDetector(
+                onTap: () => Get.toNamed(AppRoutes.reffer),
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 1),
+                  child: Container(
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 15.h, vertical: 16.v),
+                      decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
+                          borderRadius: BorderRadiusStyle.customBorderL20),
+                      child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            CustomIconButton(
+                                height: 44.adaptSize,
+                                width: 44.adaptSize,
+                                padding: EdgeInsets.all(6.h),
+                                decoration: IconButtonStyleHelper.fillYellowE,
+                                child: CustomImageView(
+                                  imagePath: "assets/images/Star.svg",
+                                )),
+                            Padding(
+                                padding: EdgeInsets.only(
+                                    left: 15.h, top: 13.v, bottom: 10.v),
+                                child: Text("msg_referral_program".tr,
+                                    style: theme.textTheme.titleMedium!
+                                        .copyWith(color: appTheme.gray900))),
+                            const Spacer(),
+                            CustomImageView(
+                                imagePath: ImageConstant.imgArrowRightGray900,
+                                height: 24.adaptSize,
+                                width: 24.adaptSize,
+                                margin: EdgeInsets.symmetric(vertical: 10.v))
+                          ])),
+                ),
               ),
             ])));
   }
@@ -544,28 +573,34 @@ class SettingScreen extends GetWidget<SettingController> {
                         ])),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 3),
-                child: Container(
-                    padding: EdgeInsets.fromLTRB(16.h, 16.v, 16.h, 15.v),
-                    decoration: AppDecoration.outlineGray300011,
-                    child: Row(children: [
-                      Container(
-                          height: 44.adaptSize,
-                          width: 44.adaptSize,
-                          padding: EdgeInsets.all(10.h),
-                          decoration: AppDecoration.fillGreen400.copyWith(
-                              borderRadius: BorderRadiusStyle.circleBorder23),
-                          child: CustomImageView(
-                              imagePath: "assets/images/hour.svg",
-                              height: 24.adaptSize,
-                              width: 24.adaptSize,
-                              alignment: Alignment.center)),
-                      Padding(
-                          padding: EdgeInsets.only(
-                              left: 15.h, top: 13.v, bottom: 10.v),
-                          child: Text("lbl_support".tr,
-                              style: theme.textTheme.titleMedium))
-                    ])),
+                padding: const EdgeInsets.only(top: 1),
+                child: GestureDetector(
+                  onTap: () {
+                    Get.toNamed(
+                        AppRoutes.RaiseTicket); // Navigate to raise ticket
+                  },
+                  child: Container(
+                      padding: EdgeInsets.fromLTRB(16.h, 16.v, 16.h, 15.v),
+                      decoration: AppDecoration.outlineGray300011,
+                      child: Row(children: [
+                        Container(
+                            height: 44.adaptSize,
+                            width: 44.adaptSize,
+                            padding: EdgeInsets.all(10.h),
+                            decoration: AppDecoration.fillGreen400.copyWith(
+                                borderRadius: BorderRadiusStyle.circleBorder23),
+                            child: CustomImageView(
+                                imagePath: "assets/images/hour.svg",
+                                height: 24.adaptSize,
+                                width: 24.adaptSize,
+                                alignment: Alignment.center)),
+                        Padding(
+                            padding: EdgeInsets.only(
+                                left: 15.h, top: 13.v, bottom: 10.v),
+                            child: Text("lbl_support".tr,
+                                style: theme.textTheme.titleMedium))
+                      ])),
+                ),
               ),
               GestureDetector(
                   onTap: () {
@@ -626,9 +661,9 @@ class SettingScreen extends GetWidget<SettingController> {
 
   /// Navigates to the settingsNotificationsScreen when the action is triggered.
   onTapReferralProgram() {
-    // Get.toNamed(
-    //   AppRoutes.settingsNotificationsScreen,
-    // );
+    Get.toNamed(
+      AppRoutes.Notificationseting,
+    );
   }
 
   /// Navigates to the settingAboutUsScreen when the action is triggered.

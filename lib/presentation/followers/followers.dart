@@ -1,13 +1,13 @@
-import 'dart:ui';
+// followers_page.dart
 
+import 'dart:ui';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/followers/controller/followers_controller.dart';
 import 'package:experta/presentation/followers/models/followers_model.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 class FollowersPage extends StatefulWidget {
-
-  FollowersPage({super.key});
+  const FollowersPage({super.key});
 
   @override
   State<FollowersPage> createState() => _FollowersPageState();
@@ -15,16 +15,9 @@ class FollowersPage extends StatefulWidget {
 
 class _FollowersPageState extends State<FollowersPage> {
   final String id = Get.arguments['id'];
-
+  final String userProfile = Get.arguments["userProfile"];
   final FollowersAndFollowingController controller =
       Get.put(FollowersAndFollowingController());
-
-
-@override
-  void initState() {
-    super.initState();
-    controller.id = id;
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,9 +28,10 @@ class _FollowersPageState extends State<FollowersPage> {
           Column(
             children: [
               _buildAppBar(),
+              const SizedBox(height: 15),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
                   child: Column(
                     children: [
                       const CustomSearchView(
@@ -92,7 +86,8 @@ class _FollowersPageState extends State<FollowersPage> {
       left: 270,
       top: 50,
       child: ImageFiltered(
-        imageFilter: ImageFilter.blur(sigmaX: 60, sigmaY: 60),
+        imageFilter:
+            ImageFilter.blur(tileMode: TileMode.decal, sigmaX: 60, sigmaY: 60),
         child: Align(
           child: SizedBox(
             width: 252,
@@ -140,24 +135,27 @@ class FollowerTile extends StatelessWidget {
       ),
       title: Text(follower.displayName),
       subtitle: Text("${follower.industry} | ${follower.occupation}"),
-      trailing: ElevatedButton(
-        onPressed: () async {
-          await controller.removeConnection(follower.id, "removeFollower");
-        },
-        style: ElevatedButton.styleFrom(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(4.0), // Rectangular shape
-          ),
-          backgroundColor: Colors.white,
-          minimumSize: const Size(100, 50), // Set width and height
-        ),
-        child: const Text(
-          'Remove',
-          style: TextStyle(
-            color: Colors.black, // Text color black
-          ),
-        ),
-      ),
+      trailing: (controller.userProfile == "userProfile")
+          ? ElevatedButton(
+              onPressed: () async {
+                await controller.removeConnection(
+                    follower.id, "removeFollower");
+              },
+              style: ElevatedButton.styleFrom(
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(4.0), // Rectangular shape
+                ),
+                backgroundColor: Colors.white,
+                minimumSize: const Size(100, 50), // Set width and height
+              ),
+              child: const Text(
+                'Remove',
+                style: TextStyle(
+                  color: Colors.black, // Text color black
+                ),
+              ),
+            )
+          : const SizedBox.shrink(),
     );
   }
 }

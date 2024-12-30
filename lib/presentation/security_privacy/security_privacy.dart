@@ -24,6 +24,7 @@ class _SecurityPrivacyState extends State<SecurityPrivacy> {
             top: 50,
             child: ImageFiltered(
               imageFilter: ImageFilter.blur(
+                tileMode: TileMode.decal,
                 sigmaX: 60,
                 sigmaY: 60,
               ),
@@ -89,7 +90,8 @@ class _SecurityPrivacyState extends State<SecurityPrivacy> {
                       Get.toNamed(AppRoutes.block);
                     },
                     child: Container(
-                      padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 15.h, vertical: 16.v),
                       decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
                         borderRadius: BorderRadiusStyle.customBorderBL20,
                       ),
@@ -101,13 +103,16 @@ class _SecurityPrivacyState extends State<SecurityPrivacy> {
                             width: 44.adaptSize,
                             padding: EdgeInsets.all(10.h),
                             decoration: IconButtonStyleHelper.fillPrimary,
-                            child: CustomImageView(imagePath: ImageConstant.block),
+                            child:
+                                CustomImageView(imagePath: "assets/images/bookings/block.svg"),
                           ),
                           Padding(
-                            padding: EdgeInsets.only(left: 15.h, top: 13.v, bottom: 10.v),
+                            padding: EdgeInsets.only(
+                                left: 15.h, top: 13.v, bottom: 10.v),
                             child: Text(
                               "Blocked",
-                              style: theme.textTheme.titleMedium!.copyWith(color: appTheme.gray900),
+                              style: theme.textTheme.titleMedium!
+                                  .copyWith(color: appTheme.gray900),
                             ),
                           ),
                           const Spacer(),
@@ -126,10 +131,12 @@ class _SecurityPrivacyState extends State<SecurityPrivacy> {
                       _showDeleteAccountDialog();
                     },
                     child: Padding(
-                      padding: const EdgeInsets.only(top: 3),
+                      padding: const EdgeInsets.only(top: 1),
                       child: Container(
-                        padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
-                        decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
+                        padding: EdgeInsets.symmetric(
+                            horizontal: 15.h, vertical: 16.v),
+                        decoration:
+                            AppDecoration.fillOnPrimaryContainer.copyWith(
                           borderRadius: BorderRadiusStyle.customBorderL20,
                         ),
                         child: Row(
@@ -139,14 +146,18 @@ class _SecurityPrivacyState extends State<SecurityPrivacy> {
                               height: 44.adaptSize,
                               width: 44.adaptSize,
                               padding: EdgeInsets.all(10.h),
-                              decoration: IconButtonStyleHelper.fillGreenTL24,
-                              child: CustomImageView(imagePath: ImageConstant.delete),
+                              decoration: IconButtonStyleHelper
+                                  .fillPrimaryContainerTL22,
+                              child: CustomImageView(
+                                  imagePath: ImageConstant.delete),
                             ),
                             Padding(
-                              padding: EdgeInsets.only(left: 15.h, top: 13.v, bottom: 10.v),
+                              padding: EdgeInsets.only(
+                                  left: 15.h, top: 13.v, bottom: 10.v),
                               child: Text(
                                 "Delete Account",
-                                style: theme.textTheme.titleMedium!.copyWith(color: appTheme.gray900),
+                                style: theme.textTheme.titleMedium!
+                                    .copyWith(color: appTheme.gray900),
                               ),
                             ),
                             const Spacer(),
@@ -170,73 +181,70 @@ class _SecurityPrivacyState extends State<SecurityPrivacy> {
     );
   }
 
- void _showDeleteAccountDialog() {
-  showDialog(
-    context: context,
-    builder: (BuildContext context) {
-      return Dialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20.0),
-        ),
-        child: Padding(
-          padding: const EdgeInsets.all(16.0),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              // Add SVG image above the text
-              CustomIconButton(
-                                        height: 88.adaptSize,
-                                        width: 88.adaptSize,
-                                        padding: EdgeInsets.all(20.h),
-                                        decoration:
-                                            IconButtonStyleHelper.fillGreenTL245,
-                                        child: CustomImageView(
-                                          imagePath: ImageConstant.popup,
-                                         
-                                        )),
-              const SizedBox(height: 20.0),
-              Text(
-                "Delete your account",
-                style: theme.textTheme.headlineSmall!.copyWith(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 10.0),
-                child: Text(
-                  'You will lose all of your data by deleting your account. This action cannot be undone.',
-                  style: CustomTextStyles.bodyMediumLight,
-                  textAlign: TextAlign.center,
-                ),
-              ),
-              const SizedBox(height: 24.0), // Increased padding between text and buttons
-              CustomElevatedButton(
-                onPressed: () {
-                  // Handle account deletion logic here
-                },
-                text: "Delete",
-              ),
-              const SizedBox(height: 12.0), // Padding between the buttons
-              CustomOutlinedButton(
-                height: 56.v,
-                buttonStyle: CustomButtonStyles.outlineGrayTL23,
-                onPressed: () {
-                  Navigator.of(context).pop();
-                },
-                text: "Cancel",
-              ),
-              const SizedBox(height: 16.0), // Padding after the buttons
-            ],
+  void _showDeleteAccountDialog() {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
           ),
-        ),
-      );
-    },
-  );
-}
-
-
+          child: Padding(
+            padding: const EdgeInsets.all(16.0),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Add SVG image above the text
+                CustomIconButton(
+                    height: 88.adaptSize,
+                    width: 88.adaptSize,
+                    padding: EdgeInsets.all(20.h),
+                    decoration: IconButtonStyleHelper.fillGreenTL245,
+                    child: CustomImageView(
+                      imagePath: ImageConstant.popup,
+                    )),
+                const SizedBox(height: 20.0),
+                Text(
+                  "Delete your account",
+                  style: theme.textTheme.headlineSmall!.copyWith(
+                    color: Colors.black,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 10.0),
+                  child: Text(
+                    'You will lose all of your data by deleting your account. This action cannot be undone.',
+                    style: CustomTextStyles.bodyMediumLight,
+                    textAlign: TextAlign.center,
+                  ),
+                ),
+                const SizedBox(
+                    height: 24.0), // Increased padding between text and buttons
+                CustomElevatedButton(
+                  onPressed: () {
+                    // Handle account deletion logic here
+                  },
+                  text: "Delete",
+                ),
+                const SizedBox(height: 12.0), // Padding between the buttons
+                CustomOutlinedButton(
+                  height: 56.v,
+                  buttonStyle: CustomButtonStyles.outlineGrayTL23,
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  text: "Cancel",
+                ),
+                const SizedBox(height: 16.0), // Padding after the buttons
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
 
   void onTapArrowLeft() {
     Get.back();

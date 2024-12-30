@@ -25,7 +25,8 @@ class ExpertiseView extends StatelessWidget {
             left: 270,
             top: 50,
             child: ImageFiltered(
-              imageFilter: ImageFilter.blur(sigmaX: 60, sigmaY: 60),
+              imageFilter: ImageFilter.blur(
+                  tileMode: TileMode.decal, sigmaX: 60, sigmaY: 60),
               child: Align(
                 child: SizedBox(
                   width: 252,
@@ -68,7 +69,11 @@ class ExpertiseView extends StatelessWidget {
                           final isSelected =
                               controller.selectedItems.contains(item);
                           return ListTile(
-                            title: Text(item.name),
+                            title: Text(
+                              item.name,
+                              style: theme.textTheme.titleMedium!.copyWith(
+                                  fontSize: 16, fontWeight: FontWeight.w500),
+                            ),
                             trailing: Checkbox(
                               value: isSelected,
                               onChanged: (bool? value) {
@@ -90,6 +95,9 @@ class ExpertiseView extends StatelessWidget {
                   },
                   text: "Save",
                 ),
+              ),
+              SizedBox(
+                height: 20,
               ),
             ],
           ),

@@ -1,17 +1,31 @@
 import 'dart:ui';
 import 'package:experta/core/app_export.dart';
-import 'package:experta/presentation/change_date_of_birth/controller/change_date_of_birth_controller.dart';
-import 'package:experta/presentation/change_email/controller/change_email_controller.dart';
-import 'package:experta/presentation/change_gender/controller/change_gender_controller.dart';
-import 'package:experta/presentation/change_user_name/controller/change_user_name_controller.dart';
-import 'package:experta/presentation/phone_number/controller/phone_number_controller.dart';
+import 'package:experta/presentation/account_details_settings/controller/account_detail_controller.dart';
 import 'package:experta/widgets/custom_text_form_field.dart';
 import 'package:experta/widgets/custom_toast_message.dart';
 
-class DynamicSettingsPage extends StatelessWidget {
-  final String settingType = Get.arguments['keyword'] as String;
+class DynamicSettingsPage extends StatefulWidget {
+  const DynamicSettingsPage({super.key});
 
-  DynamicSettingsPage({super.key});
+  @override
+  State<DynamicSettingsPage> createState() => _DynamicSettingsPageState();
+}
+
+class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
+  late final Map<String, dynamic> arguments;
+  late final String keyword;
+  late final Map<String, dynamic> userData;
+  final controller = Get.put(AccountDetailsController());
+
+  @override
+  void initState() {
+    super.initState();
+    arguments = Get.arguments as Map<String, dynamic>;
+    keyword = arguments['keyword'] as String;
+    userData = arguments['userData'] as Map<String, dynamic>;
+    controller.textField1.text = userData['username']?.toString().trim() ?? '';
+    controller.textField3.text = userData['email']?.toString().trim() ?? '';
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -24,7 +38,7 @@ class DynamicSettingsPage extends StatelessWidget {
               _buildAppBar(),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.only(top: 30, left: 15, right: 15),
+                  padding: const EdgeInsets.only(top: 10, left: 16, right: 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: _buildSettingUI(context),
@@ -43,7 +57,8 @@ class DynamicSettingsPage extends StatelessWidget {
       left: 270,
       top: 50,
       child: ImageFiltered(
-        imageFilter: ImageFilter.blur(sigmaX: 60, sigmaY: 60),
+        imageFilter:
+            ImageFilter.blur(tileMode: TileMode.decal, sigmaX: 60, sigmaY: 60),
         child: Align(
           child: SizedBox(
             width: 252,
@@ -61,14 +76,10 @@ class DynamicSettingsPage extends StatelessWidget {
   }
 
   List<Widget> _buildSettingUI(BuildContext context) {
-    switch (settingType) {
+    switch (keyword) {
       case 'Username':
         return _buildChangeUserNameUI(context);
-      case 'Gender':
-        return _buildChangeGenderUI(context);
-      case 'Birthday':
-        return _buildChangeDateOfBirthUI(context);
-      case 'Change Email':
+      case 'Email':
         return _buildChangeEmailUI(context);
       case 'Phone Number':
         return _buildChangePhoneNumberUI(context);
@@ -78,213 +89,170 @@ class DynamicSettingsPage extends StatelessWidget {
   }
 
   List<Widget> _buildChangeUserNameUI(BuildContext context) {
-    final controller = Get.put(ChangeUserNameController());
     return [
       _buildTitle("Change User Name"),
-      _buildSubtitle("Enter your user name."),
+      _buildSubtitle("Enter your email or phone number to reset the password."),
+      const SizedBox(
+        height: 12,
+      ),
       const Text("User name"),
+      const SizedBox(
+        height: 6,
+      ),
       CustomTextFormField(
-        hintText: "navi_verma88",
+        controller: controller.textField1,
         hintStyle: CustomTextStyles.titleMediumBluegray300,
         textInputType: TextInputType.name,
-        controller: controller.textField1,
+        focusNode: controller.focus1,
       ),
       const Spacer(),
-      _buildSaveButton(context, controller.textField1.text.isNotEmpty, "User Name changed Successfully", "Please Fill the user name"),
-    ];
-  }
-
-  List<Widget> _buildChangeGenderUI(BuildContext context) {
-    // Initialize the controller if not already present
-    final controller = Get.find<ChangeGenderController>();
-
-    return [
-      _buildTitle("Change Gender"),
-      _buildSubtitle("This helps us find more relevant content. We won’t show it on your profile."),
-      Center(
-        child: Obx(() {
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              _buildGenderSelection(
-                "Male",
-                ImageConstant.male,
-                ImageConstant.maleunselected,
-                controller.selectedGender.value == "Male",
-                () {
-                  controller.selectedGender("Male");
-                },
-              ),
-              const SizedBox(width: 16.0),
-              _buildGenderSelection(
-                "Female",
-                ImageConstant.female,
-                ImageConstant.femele,
-                controller.selectedGender.value == "Female",
-                () {
-                  controller.selectedGender("Female");
-                },
-              ),
-            ],
-          );
-        }),
-      ),
-      const Spacer(),
-      _buildSaveButton(context, true, "Gender changed Successfully", ""),
-    ];
-  }
-
-  List<Widget> _buildChangeDateOfBirthUI(BuildContext context) {
-    final controller = Get.put(ChangeDateOfBirthController());
-
-    return [
-      _buildTitle("Change Date of Birth"),
-      _buildSubtitle("Enter your date of birth."),
-      const Text("Date of birth (DD/MM/YYYY)"),
-      Row(
-        children: [
-          Expanded(
-            child: CustomTextFormField(
-              hintText: "01/01/2024",
-              hintStyle: CustomTextStyles.titleMediumBluegray300,
-              textInputType: TextInputType.datetime,
-              controller: controller.textField1,
-            ),
-          ),
-          IconButton(
-            icon: const Icon(Icons.calendar_today),
-            onPressed: () => _selectDate(context, controller),
-          ),
-        ],
-      ),
-      const Spacer(),
-      _buildSaveButton(context, controller.textField1.text.isNotEmpty, "Date of Birth changed Successfully", "Please Fill the Date of Birth"),
+      _buildSaveButton(context, controller.textField1.text.isNotEmpty,
+          "User Name changed Successfully", "Please Fill the user name"),
     ];
   }
 
   List<Widget> _buildChangeEmailUI(BuildContext context) {
-    final controller = Get.put(ChangeEmailController());
     return [
       _buildTitle("Change Email"),
-      _buildSubtitle("Enter your new email address."),
-      const Text("Email"),
+      _buildSubtitle("Enter your email or phone number to reset the password."),
+      const SizedBox(
+        height: 12,
+      ),
+      const SizedBox(
+        height: 6,
+      ),
       CustomTextFormField(
-        hintText: "john.doe@example.com",
+        controller: controller.textField3,
         hintStyle: CustomTextStyles.titleMediumBluegray300,
         textInputType: TextInputType.emailAddress,
-        controller: controller.textField1,
+        focusNode: controller.focus3,
       ),
       const Spacer(),
-      _buildSaveButton(context, controller.textField1.text.isNotEmpty, "Email changed Successfully", "Please Fill the email"),
+      _buildSaveButton(
+          context,
+          controller.textField3.text.isNotEmpty ||
+              controller.textField4.text.isNotEmpty,
+          "otp sent to your requested email",
+          "Please Fill the email"),
     ];
   }
 
   List<Widget> _buildChangePhoneNumberUI(BuildContext context) {
-    final controller = Get.put(PhoneNumberController());
     return [
       _buildTitle("Change Phone Number"),
-      _buildSubtitle("Enter your phone number."),
+      _buildSubtitle("Enter your phone number to update it."),
+      const SizedBox(
+        height: 12,
+      ),
       const Text("Phone Number"),
+      const SizedBox(
+        height: 6,
+      ),
       CustomTextFormField(
-        hintText: "+1 123 456 7890",
+        initialValue: userData['phoneNo'] ?? '',
         hintStyle: CustomTextStyles.titleMediumBluegray300,
         textInputType: TextInputType.phone,
-        controller: controller.textField1,
+        focusNode: controller.focus5,
+        readOnly: true,
       ),
-      const Spacer(),
-      _buildSaveButton(context, controller.textField1.text.isNotEmpty, "Phone Number changed Successfully", "Please Fill the phone number"),
     ];
   }
 
   Widget _buildTitle(String text) {
     return Text(
       text,
-      style: theme.textTheme.headlineSmall!.copyWith(color: Colors.black, fontWeight: FontWeight.bold),
+      style: theme.textTheme.headlineSmall!.copyWith(
+          color: Colors.black, fontWeight: FontWeight.w500, fontSize: 24.fSize),
     );
   }
 
   Widget _buildSubtitle(String text) {
     return Padding(
-      padding: const EdgeInsets.only(top: 5, bottom: 15),
-      child: Text(text, maxLines: 1),
+      padding: EdgeInsets.only(top: 5.adaptSize, bottom: 15.adaptSize),
+      child: Text(
+        text,
+        maxLines: 1,
+        style: theme.textTheme.headlineSmall!.copyWith(
+            color: appTheme.blueGray300,
+            fontWeight: FontWeight.w400,
+            fontSize: 14.fSize),
+      ),
     );
   }
 
-  Widget _buildSaveButton(BuildContext context, bool isValid, String successMessage, String errorMessage) {
+  Widget _buildSaveButton(BuildContext context, bool isValid,
+      String successMessage, String errorMessage) {
     return CustomElevatedButton(
       text: "Save",
-      onPressed: () {
-        if (isValid) {
-          CustomToast().showToast(context: context, message: successMessage, isSuccess: true);
-          Get.toNamed(AppRoutes.accountSetting);
-        } else {
-          CustomToast().showToast(context: context, message: errorMessage, isSuccess: false);
+      onPressed: () async {
+        String? validationError;
+
+        switch (keyword) {
+          case 'Username':
+            if (controller.textField1.text.trim().isEmpty) {
+              validationError = "Username cannot be empty";
+            }
+            break;
+          case 'Email':
+            if (controller.textField3.text.trim().isEmpty) {
+              validationError = "Email cannot be empty";
+            } else if (!isValidEmail(controller.textField3.text.trim())) {
+              validationError = "Please enter a valid email address";
+            }
+            break;
+        }
+
+        if (validationError != null) {
+          CustomToast().showToast(
+            context: context,
+            message: validationError,
+            isSuccess: false,
+          );
+          return;
+        }
+
+        try {
+          switch (keyword) {
+            case 'Username':
+              await controller.changeUsername(
+                  controller.textField1.text.trim(), context);
+              CustomToast().showToast(
+                  context: context, message: successMessage, isSuccess: true);
+              Get.toNamed(AppRoutes.accountSetting);
+              break;
+
+            case 'Email':
+              await controller.initiateEmailChange(
+                  controller.textField3.text.trim(), context);
+              break;
+          }
+        } catch (e) {
+          CustomToast().showToast(
+              context: context,
+              message: "An error occurred. Please try again.",
+              isSuccess: false);
         }
       },
       margin: const EdgeInsets.all(10),
     );
   }
 
-  Widget _buildGenderSelection(
-    String label,
-    String selectedImagePath,
-    String unselectedImagePath,
-    bool isSelected,
-    VoidCallback onTap,
-  ) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Container(
-        width: 144.0,
-        height: 144.0,
-        padding: const EdgeInsets.symmetric(vertical: 28.0, horizontal: 24.0),
-        decoration: BoxDecoration(
-          color: isSelected ? Colors.yellow : Colors.white,
-          borderRadius: BorderRadius.circular(10.0),
-        ),
-        child: Column(
-          children: [
-            CustomImageView(
-              imagePath: isSelected ? selectedImagePath : unselectedImagePath,
-              width: 50.0,
-              height: 50.0,
-            ),
-            const SizedBox(width: 8.0),
-            Text(
-              label,
-              style: TextStyle(color: Colors.black, fontWeight: isSelected ? FontWeight.bold : FontWeight.normal),
-            ),
-          ],
-        ),
-      ),
-    );
+  bool isValidEmail(String email) {
+    return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
   }
 
-  Future<void> _selectDate(BuildContext context, ChangeDateOfBirthController controller) async {
-    final DateTime? picked = await showDatePicker(
-      context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: DateTime(2100),
-    );
-    if (picked != null) {
-      controller.textField1.text = "${picked.day}/${picked.month}/${picked.year}";
-    }
-  }
-
-  PreferredSizeWidget _buildAppBar() {
+  Widget _buildAppBar() {
     return CustomAppBar(
-      height: 40.h,
-      leadingWidth: 40.h,
-      leading: AppbarLeadingImage(
-        imagePath: ImageConstant.imgArrowLeftOnerrorcontainer,
-        margin: EdgeInsets.only(left: 16.h),
-        onTap: () => Get.back(),
-      ),
       centerTitle: true,
-      title: AppbarSubtitleSix(
-        text: settingType,
+      height: 65,
+      leadingWidth: 45,
+      leading: IconButton(
+        onPressed: () {
+          Get.back();
+        },
+        icon: const Icon(Icons.arrow_back, color: Colors.black),
       ),
+      title: AppbarSubtitleSix(text: keyword),
     );
   }
 }

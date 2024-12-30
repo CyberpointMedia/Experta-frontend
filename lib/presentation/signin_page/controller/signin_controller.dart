@@ -18,36 +18,56 @@ class SigninController extends GetxController {
   var passwordController = TextEditingController();
   var isEmailValid = false.obs;
   var isPasswordValid = false.obs;
+  var isTextValid = false.obs;
   var otpController = TextEditingController();
   var isShowPassword = false.obs;
   final FocusNode emailFocusNode = FocusNode();
   final FocusNode nameFocusNode = FocusNode();
   final FocusNode passwordFocusNode = FocusNode();
   final ApiService _apiService = ApiService();
+  PrefUtils prefUtils = PrefUtils();
   var isLoading = false.obs;
   var errorMessage = ''.obs;
-  var isPhoneNumberValid =
-      false.obs; // Observable variable to track phone number validity
+  var isPhoneNumberValid = false.obs;
   Rx<Country> selectedCountry =
       CountryPickerUtils.getCountryByPhoneCode('91').obs;
+
+  RxBool isInternetConnected=true.obs;
+
+
+
+  void checkInternetConnection(){
+    Connectivity().onConnectivityChanged.listen((event) {
+      if(event==ConnectivityResult.none){
+        isInternetConnected.value=false;
+      }else{
+        isInternetConnected.value=true;
+      }
+    });
+  }
+
+
   @override
   void onInit() {
     super.onInit();
+    checkInternetConnection();
+    nameController.addListener(_validateName);
     emailController.addListener(_validateEmail);
     passwordController.addListener(_validatePassword);
     phoneNumberController.addListener(_validatePhoneNumber);
   }
 
   void _validatePhoneNumber() {
-    if (phoneNumberController.text.length >= 10) {
-      isPhoneNumberValid.value = true;
-    } else {
-      isPhoneNumberValid.value = false;
-    }
+    isPhoneNumberValid.value =
+        isValidPhone(phoneNumberController.text, isRequired: true);
   }
 
   void _validateEmail() {
     isEmailValid.value = isValidEmail(emailController.text, isRequired: true);
+  }
+
+  void _validateName() {
+    isTextValid.value = isText(nameController.text, isRequired: true);
   }
 
   void _validatePassword() {
@@ -55,52 +75,49 @@ class SigninController extends GetxController {
         isValidPassword(passwordController.text, isRequired: true);
   }
 
-  void loginUser(context) async {
+  void loginUser(BuildContext context) async {
+    isLoading(true);
+    // Concatenate country code with phone number
+    String fullPhoneNumber = phoneNumberController.text;
+    // '+${selectedCountry.value.phoneCode}${phoneNumberController.text}';
+    log(fullPhoneNumber);
     LoginRequestModel requestModel = LoginRequestModel(
-      phoneNo: phoneNumberController.text,
+      phoneNo: fullPhoneNumber,
     );
 
     try {
-      LoginResponseModel? response = await _apiService.loginUser(requestModel);
+      LoginResponseModel? response =
+          await _apiService.loginUser(requestModel, context);
       if (response != null && response.status == "success") {
         CustomToast().showToast(
           context: context,
-          message: 'Otp Sent Sucessfully',
+          message: 'OTP sent successfully to your phone number.',
           isSuccess: true,
         );
-        log('hi the otp is ${response.data.otp}');
-        var otp = response.data.otp;
+        await prefUtils.setEmail(response.data.phoneNo ?? "");
         Get.toNamed(AppRoutes.verifynumberScreen,
-            arguments: [phoneNumberController, otp]);
+            arguments: [phoneNumberController]);
       } else {
+        CustomToast().showToast(
+          context: context,
+          message: "Please check the country code and phone number",
+          isSuccess: false,
+        );
         print("Login failed");
       }
     } catch (e) {
+      CustomToast().showToast(
+        context: context,
+        message:
+            "Oops! Something didn't go as planned. Please try again later.",
+        isSuccess: false,
+      );
       print("Exception occurred: $e");
+    } finally {
+      isLoading(false);
     }
   }
 
-  // void registerUser() async {
-  //   RegisterRequestModel requestModel = RegisterRequestModel(
-  //     email: emailController.text,
-  //     firstName: nameController.text,
-  //     lastName: passwordController.text,
-  //     phoneNo: phoneNumberController.text,
-  //   );
-
-  //   try {
-  //     RegisterResponseModel? response =
-  //         await _apiService.registerUser(requestModel);
-
-  //     if (response != null && response.status == "success") {
-  //       Get.toNamed(AppRoutes.verifynumberScreen);
-  //     } else {
-  //       print("Registration failed");
-  //     }
-  //   } catch (e) {
-  //     print("Exception occurred: $e");
-  //   }
-  // }
   void registerUser(context) async {
     isLoading(true);
     try {
@@ -123,7 +140,7 @@ class SigninController extends GetxController {
         );
         Get.toNamed(
           AppRoutes.verifynumberScreen,
-          arguments: phoneNumberController,
+          arguments: [phoneNumberController],
         );
       } else if (response is RegisterResponseError) {
         log("Registration failed: ${response.error.errorMessage}");
@@ -157,9 +174,9 @@ class SigninController extends GetxController {
 
   @override
   void onClose() {
-    emailController.dispose();
-    passwordController.dispose();
-    phoneNumberController.dispose();
+    emailController.clear();
+    passwordController.clear();
+    phoneNumberController.clear();
     emailFocusNode.dispose();
     passwordFocusNode.dispose();
     super.onClose();

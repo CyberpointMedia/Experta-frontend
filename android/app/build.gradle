@@ -1,5 +1,8 @@
 plugins {
     id "com.android.application"
+    // START: FlutterFire Configuration
+    id 'com.google.gms.google-services'
+    // END: FlutterFire Configuration
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
 }
@@ -23,17 +26,18 @@ if (flutterVersionName == null) {
 }
 
 android {
-    namespace "com.example.experta"
+    namespace "com.example.expert"
     compileSdk flutter.compileSdkVersion
     ndkVersion flutter.ndkVersion
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        // Update to Java 17 compatibility
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
     }
 
     kotlinOptions {
-        jvmTarget = '1.8'
+        jvmTarget = "17"  // Ensure JVM target is set to 17 for compatibility
     }
 
     sourceSets {
@@ -41,22 +45,22 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId "com.example.experta"
+        applicationId "com.example.expert"
         multiDexEnabled true
-        // You can update the following values to match your application needs.
-        // For more information, see: https://docs.flutter.dev/deployment/android#reviewing-the-gradle-build-configuration.
-        minSdkVersion 21
+        minSdkVersion 23
         targetSdkVersion flutter.targetSdkVersion
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
 
     buildTypes {
-
         release {
-            minifyEnabled true
+            shrinkResources false
+            minifyEnabled false
+            debuggable false
+            crunchPngs true
             signingConfig signingConfigs.debug
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt')
         }
     }
 }
@@ -66,8 +70,11 @@ flutter {
 }
 
 dependencies {
-    // implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
-        implementation 'androidx.core:core-ktx:1.7.0'
+    // Ensure that Kotlin version is included and compatible
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"  // Uncomment if necessary
+
+    implementation 'com.google.mlkit:face-detection:16.1.7'
+    implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'com.android.support:multidex:2.0.1'
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.5.0'
@@ -77,4 +84,12 @@ dependencies {
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation 'com.github.bumptech.glide:glide:4.12.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+    implementation 'com.google.android.gms:play-services-mlkit-face-detection:17.1.0'
+}
+
+buildscript {
+    ext.kotlin_version = '1.8.0'  // Use a stable version of Kotlin
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
 }

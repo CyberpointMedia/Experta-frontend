@@ -1,6 +1,5 @@
 import 'dart:convert';
 
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 ProfileModel profileModelFromJson(String str) =>
     ProfileModel.fromJson(json.decode(str));
@@ -33,7 +32,7 @@ class Data {
   final int? resendCount;
   final dynamic otp;
   final dynamic otpExpiry;
-  final bool? block;
+  final String? block;
   final bool? isVerified;
   final UserBasicInfo? basicInfo;
   final DateTime? createdAt;
@@ -174,7 +173,7 @@ class UserBasicInfo {
   final String? lastName;
   final List<dynamic>? followers;
   final List<dynamic>? following;
-  final List<Post>? posts; // Changed from List<String> to List<Post>
+  late final List<Post>? posts; // Changed from List<String> to List<Post>
   final int? rating;
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -275,7 +274,6 @@ class UserBasicInfo {
     return followers?.length ?? 0;
   }
 
-  // Method to calculate total number of following
   int getTotalFollowing() {
     return following?.length ?? 0;
   }
@@ -285,28 +283,28 @@ class UserBasicInfo {
 
     if (facebook != null && facebook!.isNotEmpty) {
       socialMediaLinks.add({
-        'icon': FontAwesomeIcons.facebook,
+        'icon': "assets/images/social/facebook.svg",
         'link': facebook!,
         'name': "facebook"
       });
     }
     if (instagram != null && instagram!.isNotEmpty) {
       socialMediaLinks.add({
-        'icon': FontAwesomeIcons.instagram,
+        'icon': "assets/images/social/insta.svg",
         'link': instagram!,
         'name': "instagram",
       });
     }
     if (linkedin != null && linkedin!.isNotEmpty) {
       socialMediaLinks.add({
-        'icon': FontAwesomeIcons.linkedin,
+        'icon': "assets/images/social/linkedin.svg",
         'link': linkedin!,
         'name': "linkedin"
       });
     }
     if (twitter != null && twitter!.isNotEmpty) {
       socialMediaLinks.add({
-        'icon': FontAwesomeIcons.twitter,
+        'icon': "assets/images/social/twitter.svg",
         'link': twitter!,
         'name': "twitter",
       });
@@ -327,7 +325,7 @@ class Post {
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final int? v;
-  final String? location; // Added location field
+  final String? location;
 
   Post({
     this.id,
@@ -340,7 +338,7 @@ class Post {
     this.createdAt,
     this.updatedAt,
     this.v,
-    this.location, // Added location field
+    this.location,
   });
 
   factory Post.fromJson(Map<String, dynamic> json) => Post(
@@ -741,16 +739,16 @@ class UserLanguage {
 class UserPricing {
   final String? id;
   final int? v;
-  final int? audioCallPrice;
-  final int? messagePrice;
-  final int? videoCallPrice;
+  final int audioCallPrice;
+  final int messagePrice;
+  final int videoCallPrice;
 
   UserPricing({
     this.id,
     this.v,
-    this.audioCallPrice,
-    this.messagePrice,
-    this.videoCallPrice,
+    required this.audioCallPrice,
+    required this.messagePrice,
+    required this.videoCallPrice,
   });
 
   factory UserPricing.fromJson(Map<String, dynamic> json) => UserPricing(

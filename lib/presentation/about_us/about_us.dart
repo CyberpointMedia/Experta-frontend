@@ -21,6 +21,7 @@ class _AboutUsState extends State<AboutUs> {
             top: 50,
             child: ImageFiltered(
               imageFilter: ImageFilter.blur(
+                tileMode: TileMode.decal,
                 sigmaX: 60,
                 sigmaY: 60,
               ),
@@ -66,7 +67,7 @@ class _AboutUsState extends State<AboutUs> {
     return Align(
         alignment: Alignment.bottomCenter,
         child: Padding(
-            padding: EdgeInsets.only(right: 16.h, left: 16, top: 50),
+            padding: EdgeInsets.only(right: 16.h, left: 16, top: 15),
             child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -92,7 +93,7 @@ class _AboutUsState extends State<AboutUs> {
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     CustomIconButton(
-                                        height: 44.adaptSize,
+                                        height: Get.height * 0.03,
                                         width: 44.adaptSize,
                                         padding: EdgeInsets.all(6.h),
                                         decoration:
@@ -121,10 +122,10 @@ class _AboutUsState extends State<AboutUs> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Get.toNamed(AppRoutes.changeDateOfBirth);
+                            // Get.toNamed(AppRoutes.changeDateOfBirth);
                           },
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 3),
+                            padding: const EdgeInsets.only(top: 1),
                             child: Container(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 15.h, vertical: 16.v),
@@ -165,11 +166,8 @@ class _AboutUsState extends State<AboutUs> {
                           ),
                         ),
                         GestureDetector(
-                          onTap: () {
-                            Get.toNamed(AppRoutes.paymentmethod);
-                          },
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 3),
+                            padding: const EdgeInsets.only(top: 1),
                             child: Container(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 15.h, vertical: 16.v),

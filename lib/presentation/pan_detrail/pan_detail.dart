@@ -3,40 +3,21 @@ import 'dart:ui';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/add_upi/controller/add_upi_controller.dart';
 import 'package:experta/widgets/custom_text_form_field.dart';
-import 'package:experta/widgets/custom_toast_message.dart';
 
 class PanDetail extends StatefulWidget {
-  const PanDetail({super.key});
+  final String name;
+  final String panno;
+  final String dob;
+
+  const PanDetail(
+      {super.key, required this.name, required this.panno, required this.dob});
 
   @override
   State<PanDetail> createState() => _PanDetailState();
 }
 
 class _PanDetailState extends State<PanDetail> {
-  // Define separate controllers for each field
-  final TextEditingController fullNameController = TextEditingController();
-  final TextEditingController panNumberController = TextEditingController();
-  final TextEditingController dateOfBirthController = TextEditingController();
-
-  // Define focus nodes for each field
-  final FocusNode fullNameFocusNode = FocusNode();
-  final FocusNode panNumberFocusNode = FocusNode();
-  final FocusNode dateOfBirthFocusNode = FocusNode();
-
   AddUpiController controller = Get.put(AddUpiController());
-
-  @override
-  void dispose() {
-    // Dispose controllers and focus nodes when the widget is disposed
-    fullNameController.dispose();
-    panNumberController.dispose();
-    dateOfBirthController.dispose();
-    fullNameFocusNode.dispose();
-    panNumberFocusNode.dispose();
-    dateOfBirthFocusNode.dispose();
-
-    super.dispose();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,6 +31,7 @@ class _PanDetailState extends State<PanDetail> {
               top: 50,
               child: ImageFiltered(
                 imageFilter: ImageFilter.blur(
+                  tileMode: TileMode.decal,
                   sigmaX: 60,
                   sigmaY: 60,
                 ),
@@ -73,57 +55,27 @@ class _PanDetailState extends State<PanDetail> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   const Text("Full Name"),
+                  const SizedBox(
+                    height: 6,
+                  ),
                   CustomTextFormField(
-                    hintText: "Naveen Verma",
-                    hintStyle: CustomTextStyles.titleMediumBluegray300,
+                    initialValue: widget.name,
                     textInputType: TextInputType.name,
-                    controller: fullNameController,
-                    focusNode: fullNameFocusNode,
                     autofocus: false,
+                    readOnly: true,
                   ),
                   const SizedBox(height: 20),
                   const Text("PAN Number"),
-                  CustomTextFormField(
-                    hintText: "AMAPV8100G",
-                    hintStyle: CustomTextStyles.titleMediumBluegray300,
-                    textInputType: TextInputType.text,
-                    controller: panNumberController,
-                    focusNode: panNumberFocusNode,
-                    autofocus: false,
+                  const SizedBox(
+                    height: 6,
                   ),
-                  const SizedBox(height: 20),
-                  const Text("Date of Birth"),
                   CustomTextFormField(
-                    hintText: "25/11/1992",
-                    hintStyle: CustomTextStyles.titleMediumBluegray300,
-                    textInputType: TextInputType.datetime,
-                    controller: dateOfBirthController,
-                    focusNode: dateOfBirthFocusNode,
+                    initialValue: widget.panno,
+                    textInputType: TextInputType.text,
                     autofocus: false,
+                    readOnly: true,
                   ),
                   const Spacer(),
-                  CustomElevatedButton(
-                    text: "Save",
-                    onPressed: () {
-                      if (fullNameController.text.isNotEmpty &&
-                          panNumberController.text.isNotEmpty &&
-                          dateOfBirthController.text.isNotEmpty) {
-                        CustomToast().showToast(
-                          context: context,
-                          message: "Details saved successfully",
-                          isSuccess: true,
-                        );
-                        Get.toNamed(AppRoutes.accountSetting);
-                      } else {
-                        CustomToast().showToast(
-                          context: context,
-                          message: "Please fill in all the fields",
-                          isSuccess: false,
-                        );
-                      }
-                    },
-                    margin: const EdgeInsets.all(10),
-                  ),
                 ],
               ),
             ),

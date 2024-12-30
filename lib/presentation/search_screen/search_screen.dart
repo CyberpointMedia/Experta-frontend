@@ -57,6 +57,7 @@ class _SearchScreenState extends State<SearchScreen> {
               top: 50,
               child: ImageFiltered(
                 imageFilter: ImageFilter.blur(
+                  tileMode: TileMode.decal,
                   sigmaX: 60,
                   sigmaY: 60,
                 ),
@@ -81,9 +82,9 @@ class _SearchScreenState extends State<SearchScreen> {
                   child: Row(
                     children: [
                       CustomAnimatedSearchView(
-                        width: 279.h,
+                        width: MediaQuery.of(context).size.width * 0.73,
                         controller: controller.searchPageController,
-                        hintTextDuration: Duration(seconds: 2),
+                        hintTextDuration: const Duration(seconds: 2),
                         hintTexts: hintTexts,
                         onChanged: (value) {
                           controller.fetchUsersBySearch(value);
@@ -110,13 +111,6 @@ class _SearchScreenState extends State<SearchScreen> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      // Padding(
-                      //   padding: EdgeInsets.only(left: 16.h, top: 29.v),
-                      //   child: Text(
-                      //     "lbl_recommended".tr,
-                      //     style: CustomTextStyles.titleMediumBold,
-                      //   ),
-                      // ),
                       _buildSearch(),
                     ],
                   ),
@@ -138,10 +132,12 @@ class _SearchScreenState extends State<SearchScreen> {
           child: Obx(
             () {
               if (controller.isLoading.value) {
-                return Center(child: CircularProgressIndicator());
+                return const Center(child: CircularProgressIndicator());
               }
+              // ignore: invalid_use_of_protected_member
               if (controller.searchResults.value.isEmpty) {
-                return Center(child: Text("No results found"));
+                return const Center(child: Text("No results found"
+                ));
               }
               return ListView.separated(
                 physics: const BouncingScrollPhysics(),
@@ -149,8 +145,10 @@ class _SearchScreenState extends State<SearchScreen> {
                 separatorBuilder: (context, index) {
                   return SizedBox(height: 1.v);
                 },
+                // ignore: invalid_use_of_protected_member
                 itemCount: controller.searchResults.value.length,
                 itemBuilder: (context, index) {
+                  // ignore: invalid_use_of_protected_member
                   SearchResult model = controller.searchResults.value[index];
                   return SearchItemWidget(model);
                 },

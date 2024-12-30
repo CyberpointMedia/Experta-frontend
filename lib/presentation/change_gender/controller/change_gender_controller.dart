@@ -1,5 +1,5 @@
 import 'package:experta/core/app_export.dart';
-import 'package:experta/presentation/change_gender/models/change_gender_model.dart';
+import 'package:experta/presentation/change_gender/model/change_gender_model.dart';
 
 class ChangeGenderController extends GetxController{
 
