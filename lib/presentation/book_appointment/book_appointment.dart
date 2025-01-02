@@ -336,7 +336,7 @@ class _BookAppointmentPageState extends State<BookAppointmentPage> {
                                   child: CustomImageView(
                                       imagePath: ImageConstant.imgLayer1),
                                 ),
-                                readOnly: true,
+                                readOnly: true, inputFormatters: [],
                               )
                             ],
                           )

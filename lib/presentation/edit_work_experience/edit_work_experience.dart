@@ -105,7 +105,7 @@ class _EditWorkExperiencePageState extends State<EditWorkExperiencePage> {
                   return 'Please enter a job title';
                 }
                 return null;
-              },
+              }, inputFormatters: [],
             ),
             Padding(
               padding: const EdgeInsets.only(top: 15, bottom: 6),
@@ -134,7 +134,7 @@ class _EditWorkExperiencePageState extends State<EditWorkExperiencePage> {
                   return 'Please enter a company name';
                 }
                 return null;
-              },
+              }, inputFormatters: [],
             ),
             Padding(
               padding: const EdgeInsets.only(top: 15, bottom: 6),
@@ -180,7 +180,7 @@ class _EditWorkExperiencePageState extends State<EditWorkExperiencePage> {
                     }
                   },
                 ),
-              ),
+              ), inputFormatters: [],
             ),
             Row(
               children: [
@@ -247,7 +247,7 @@ class _EditWorkExperiencePageState extends State<EditWorkExperiencePage> {
                             }
                           },
                         ),
-                      ),
+                      ), inputFormatters: [],
                     ),
                   ],
                 );

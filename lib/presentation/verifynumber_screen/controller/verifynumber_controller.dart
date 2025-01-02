@@ -11,7 +11,7 @@ import 'package:sms_autofill/sms_autofill.dart';
 /// A controller class for the VerifynumberScreen.
 ///
 /// This class manages the state of the VerifynumberScreen, including the
-/// current verifynumberModelObj
+/// current verifynumberModelObj.
 class VerifynumberController extends GetxController with CodeAutoFill {
   Rx<TextEditingController> otpController = TextEditingController().obs;
   late TextEditingController phoneNumberController;
@@ -22,9 +22,17 @@ class VerifynumberController extends GetxController with CodeAutoFill {
   var timerText = '05:00'.obs;
   var isResendButtonVisible = false.obs;
   Timer? _timer;
-  int _start = 300;
+  int _start = 300; // Initial countdown time in seconds (5 minutes)
 
+  /// Starts or restarts the countdown timer for OTP.
   void startTimer() {
+    // Cancel the existing timer if any
+    _timer?.cancel();
+
+    // Reset the start time (in seconds)
+    _start = 300; // You can change this to any time you want (e.g., 60 for 1 minute)
+    
+    // Start the new timer
     _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (_start == 0) {
         isResendButtonVisible.value = true;
@@ -39,6 +47,7 @@ class VerifynumberController extends GetxController with CodeAutoFill {
     });
   }
 
+  /// Verifies the OTP entered by the user.
   void verifyOtp(BuildContext context) async {
     VerifyOtpRequestModel requestModel = VerifyOtpRequestModel(
       phoneNo: phoneNumberController.text,
@@ -50,12 +59,12 @@ class VerifynumberController extends GetxController with CodeAutoFill {
           await _apiService.verifyOtp(requestModel, context);
       if (response != null && response.status == "success") {
         await prefUtils.setaddress("${response.data!.id}");
-        log("hey this is your id ${response.data!.id}");
+        log("User ID: ${response.data!.id}");
         await prefUtils.setToken("${response.token}");
         await prefUtils.setbasic("${response.data!.basicInfo}");
-        log("hey this is your id ${response.data!.basicInfo}");
+        log("Basic Info: ${response.data!.basicInfo}");
         await prefUtils.setMob("${response.data!.phoneNo}");
-        log("hey this is your id ${response.data!.phoneNo}");
+        log("Phone Number: ${response.data!.phoneNo}");
         Get.toNamed(AppRoutes.dashboard);
         print("OTP Verified Successfully");
       } else {
@@ -66,27 +75,23 @@ class VerifynumberController extends GetxController with CodeAutoFill {
     }
   }
 
+  /// Resends the OTP to the user's phone number.
   void resendOtp(String phoneNumber) async {
     if (phoneNumber.isNotEmpty) {
       try {
         dynamic responseData = await _apiService.resendOtp(phoneNumber);
         print("Response JSON: $responseData");
 
-        
-          String status = responseData.status;
-          var data = responseData.data;
-          if (status == "success") {
-            isResendButtonVisible = false.obs;
-            _start=60;
-            startTimer();
-            String otp = data['otp'];
-            print("OTP Resent Successfully: $otp");
-          
-
-          } else {
-            print("OTP Resend failed");
-          }
-        
+        String status = responseData.status;
+        var data = responseData.data;
+        if (status == "success") {
+          isResendButtonVisible.value = false;
+          startTimer(); // Restart the timer when OTP is resent
+          String otp = data['otp'];
+          print("OTP sent successfully to your phone number: $otp");
+        } else {
+          print("OTP Resend failed");
+        }
       } catch (e) {
         print("Exception occurred: $e");
       }
@@ -108,17 +113,21 @@ class VerifynumberController extends GetxController with CodeAutoFill {
   @override
   void onInit() {
     super.onInit();
-    startTimer();
     prefUtils.init();
     initSmsListener();
+
+    // Fetch arguments and initialize phone number controller.
     var arguments = Get.arguments as List;
     phoneNumberController = arguments[0] as TextEditingController;
+
+    // Start the timer after initialization.
+    startTimer();
   }
 
+  /// Initializes the SMS listener.
   Future<void> initSmsListener() async {
     try {
       listenForCode(smsCodeRegexPattern: r'\d{6}');
-
       final String signature = await SmsAutoFill().getAppSignature;
       print("Signature: $signature");
     } catch (e) {

@@ -130,7 +130,7 @@ class _SetPricingState extends State<SetPricing> {
             focusNode: controller.focus1,
             hintText: "Enter your price".tr,
             hintStyle: CustomTextStyles.titleMediumBluegray300,
-            textInputType: TextInputType.number,
+            textInputType: TextInputType.number, inputFormatters: [],
           ),
           Padding(
               padding: const EdgeInsets.only(top: 15, bottom: 6),
@@ -166,7 +166,7 @@ class _SetPricingState extends State<SetPricing> {
             focusNode: controller.focus2,
             hintText: " Enter your price".tr,
             hintStyle: CustomTextStyles.titleMediumBluegray300,
-            textInputType: TextInputType.number,
+            textInputType: TextInputType.number, inputFormatters: [],
           ),
           Padding(
             padding: const EdgeInsets.only(
@@ -212,7 +212,7 @@ class _SetPricingState extends State<SetPricing> {
                             focusNode: controller.focus3,
                             hintText: " Enter your price".tr,
                             hintStyle: CustomTextStyles.titleMediumBluegray300,
-                            textInputType: TextInputType.number,
+                            textInputType: TextInputType.number, inputFormatters: [],
                           ),
                         ))
                     .toList(),

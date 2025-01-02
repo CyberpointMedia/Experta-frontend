@@ -619,7 +619,7 @@ class _WithdrawCreditsPageState extends State<WithdrawCreditsPage> {
                         return 'PAN number must be 10 characters';
                       }
                       return null;
-                    },
+                    }, inputFormatters: [],
                   ),
                   const SizedBox(height: 16),
                   CustomElevatedButton(

@@ -64,7 +64,7 @@ class _UpiDetailsState extends State<UpiDetails> {
               readOnly: true,
               hintStyle: theme.textTheme.titleSmall!.copyWith(fontSize: 14),
               textInputType: TextInputType.number,
-              autofocus: false,
+              autofocus: false, inputFormatters: [],
             ),
           ],
         ),
@@ -123,7 +123,7 @@ class _UpiDetailsState extends State<UpiDetails> {
                             hintStyle: theme.textTheme.titleSmall!
                                 .copyWith(fontSize: 14),
                             textInputType: TextInputType.number,
-                            autofocus: false,
+                            autofocus: false, inputFormatters: [],
                           ),
                         ],
                       ),

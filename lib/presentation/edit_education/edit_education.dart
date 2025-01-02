@@ -101,7 +101,7 @@ class _EditEducationPageState extends State<EditEducationPage> {
                   return 'Please enter a degree';
                 }
                 return null;
-              },
+              }, inputFormatters: [],
             ),
             Padding(
               padding: const EdgeInsets.only(top: 15, bottom: 6),
@@ -129,7 +129,7 @@ class _EditEducationPageState extends State<EditEducationPage> {
                   return 'Please enter a school/college';
                 }
                 return null;
-              },
+              }, inputFormatters: [],
             ),
             Padding(
               padding: const EdgeInsets.only(top: 15, bottom: 6),
@@ -175,7 +175,7 @@ class _EditEducationPageState extends State<EditEducationPage> {
                     }
                   },
                 ),
-              ),
+              ), inputFormatters: [],
             ),
             Padding(
               padding: const EdgeInsets.only(top: 15, bottom: 6),
@@ -221,7 +221,7 @@ class _EditEducationPageState extends State<EditEducationPage> {
                     }
                   },
                 ),
-              ),
+              ), inputFormatters: [],
             ),
             const SizedBox(height: 200),
             CustomElevatedButton(

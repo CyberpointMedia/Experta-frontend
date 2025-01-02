@@ -2,9 +2,8 @@ import 'package:experta/core/app_export.dart';
 
 class CustomToast {
   static final CustomToast _instance = CustomToast._internal();
-  factory CustomToast() {
-    return _instance;
-  }
+
+  factory CustomToast() => _instance;
 
   CustomToast._internal();
 
@@ -14,8 +13,12 @@ class CustomToast {
     required BuildContext context,
     required String message,
     required bool isSuccess,
-    Duration duration = const Duration(seconds: 3),
+    Duration duration = const Duration(seconds: 4),
+    Color? backgroundColor,
+    TextStyle? textStyle,
+    IconData? icon,
   }) {
+    // If a toast is already active, update the message and reset duration
     if (_overlayEntry != null) {
       _overlayEntry?.remove();
       _overlayEntry = null;
@@ -30,13 +33,21 @@ class CustomToast {
           message: message,
           isSuccess: isSuccess,
           duration: duration,
+          backgroundColor: backgroundColor,
+          textStyle: textStyle,
+          icon: icon,
         ),
       ),
     );
 
     final overlay = Overlay.of(context);
+    if (overlay == null) {
+      debugPrint("Overlay is not available in this context.");
+      return;
+    }
     overlay.insert(_overlayEntry!);
 
+    // Remove the toast after the specified duration
     Future.delayed(duration, () {
       _overlayEntry?.remove();
       _overlayEntry = null;
@@ -48,11 +59,17 @@ class _ToastWidget extends StatefulWidget {
   final String message;
   final bool isSuccess;
   final Duration duration;
+  final Color? backgroundColor;
+  final TextStyle? textStyle;
+  final IconData? icon;
 
   const _ToastWidget({
     required this.message,
     required this.isSuccess,
     required this.duration,
+    this.backgroundColor,
+    this.textStyle,
+    this.icon,
   });
 
   @override
@@ -66,14 +83,13 @@ class _ToastWidgetState extends State<_ToastWidget>
   late Animation<Offset> _slideAnimation;
   late Animation<double> _iconRotationAnimation;
   late Animation<double> _iconScaleAnimation;
-  late AnimationController _timerController; // Added for timer
+  late AnimationController _timerController;
   late Animation<double> _timerAnimation;
 
   @override
   void initState() {
     super.initState();
 
-    // Main animation controller for fade, slide, icon, etc.
     _animationController = AnimationController(
       vsync: this,
       duration: const Duration(milliseconds: 750),
@@ -89,7 +105,7 @@ class _ToastWidgetState extends State<_ToastWidget>
     ));
 
     _slideAnimation = Tween<Offset>(
-      begin: const Offset(0.0, -1.0),
+      begin: const Offset(0.0, 1.0),
       end: Offset.zero,
     ).animate(CurvedAnimation(
       parent: _animationController,
@@ -113,7 +129,6 @@ class _ToastWidgetState extends State<_ToastWidget>
       curve: Curves.easeOut,
     ));
 
-    // Timer animation controller
     _timerController = AnimationController(
       vsync: this,
       duration: widget.duration,
@@ -124,7 +139,7 @@ class _ToastWidgetState extends State<_ToastWidget>
       end: 0.0,
     ).animate(CurvedAnimation(
       parent: _timerController,
-      curve: Curves.bounceIn,
+      curve: Curves.linear,
     ));
 
     _animationController.forward();
@@ -137,6 +152,18 @@ class _ToastWidgetState extends State<_ToastWidget>
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final bgColor = widget.backgroundColor ??
+        (widget.isSuccess ? Colors.green.shade700 : Colors.red.shade700);
+    final txtStyle = widget.textStyle ??
+        const TextStyle(
+          color: Colors.white,
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+        );
+    final toastIcon =
+        widget.icon ?? (widget.isSuccess ? Icons.check_circle : Icons.error);
+
     return SlideTransition(
       position: _slideAnimation,
       child: FadeTransition(
@@ -150,13 +177,10 @@ class _ToastWidgetState extends State<_ToastWidget>
                     horizontal: 16.0, vertical: 12.0),
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12.0),
-                  color: widget.isSuccess
-                      ? Colors.green.shade700
-                      : Colors.red.shade700,
+                  color: bgColor,
                   boxShadow: [
                     BoxShadow(
-                      color: (widget.isSuccess ? Colors.green : Colors.red)
-                          .withOpacity(0.3),
+                      color: bgColor.withOpacity(0.3),
                       blurRadius: 8.0,
                       offset: const Offset(0, 2),
                     ),
@@ -171,9 +195,7 @@ class _ToastWidgetState extends State<_ToastWidget>
                           child: RotationTransition(
                             turns: _iconRotationAnimation,
                             child: Icon(
-                              widget.isSuccess
-                                  ? Icons.check_circle
-                                  : Icons.error,
+                              toastIcon,
                               color: Colors.white,
                               size: 24,
                             ),
@@ -183,11 +205,7 @@ class _ToastWidgetState extends State<_ToastWidget>
                         Expanded(
                           child: Text(
                             widget.message,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
+                            style: txtStyle,
                           ),
                         ),
                       ],
@@ -202,7 +220,7 @@ class _ToastWidgetState extends State<_ToastWidget>
                             value: _timerAnimation.value,
                             backgroundColor: Colors.white.withOpacity(0.1),
                             valueColor: AlwaysStoppedAnimation<Color>(
-                                appTheme.whiteA700.withOpacity(0.2)),
+                                Colors.white),
                             minHeight: 2,
                           ),
                         );
@@ -221,7 +239,7 @@ class _ToastWidgetState extends State<_ToastWidget>
   @override
   void dispose() {
     _animationController.dispose();
-    _timerController.dispose(); // Added timer controller disposal
+    _timerController.dispose();
     super.dispose();
   }
 }

@@ -36,7 +36,7 @@ class MessageInput extends StatelessWidget {
               prefixConstraints: BoxConstraints(maxHeight: 52.v),
               contentPadding: EdgeInsets.only(top: 16.v, right: 30.h, bottom: 16.v),
               borderDecoration: TextFormFieldStyleHelper.outlineGrayTL26,
-              fillColor: appTheme.gray20002,
+              fillColor: appTheme.gray20002, inputFormatters: [],
             ),
           ),
           Padding(

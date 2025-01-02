@@ -32,16 +32,16 @@ class SigninController extends GetxController {
   Rx<Country> selectedCountry =
       CountryPickerUtils.getCountryByPhoneCode('91').obs;
 
-  RxBool isInternetConnected=true.obs;
+  RxBool isInternetConnected=true.obs;   //false on real device
 
 
 
   void checkInternetConnection(){
     Connectivity().onConnectivityChanged.listen((event) {
       if(event==ConnectivityResult.none){
-        isInternetConnected.value=false;
+        isInternetConnected.value= true;    // do false  if on real device.
       }else{
-        isInternetConnected.value=true;
+        isInternetConnected.value=false;    // do false  if on real device.
       }
     });
   }

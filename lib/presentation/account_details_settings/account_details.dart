@@ -103,7 +103,7 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
         controller: controller.textField1,
         hintStyle: CustomTextStyles.titleMediumBluegray300,
         textInputType: TextInputType.name,
-        focusNode: controller.focus1,
+        focusNode: controller.focus1, inputFormatters: [],
       ),
       const Spacer(),
       _buildSaveButton(context, controller.textField1.text.isNotEmpty,
@@ -125,7 +125,7 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
         controller: controller.textField3,
         hintStyle: CustomTextStyles.titleMediumBluegray300,
         textInputType: TextInputType.emailAddress,
-        focusNode: controller.focus3,
+        focusNode: controller.focus3, inputFormatters: [],
       ),
       const Spacer(),
       _buildSaveButton(
@@ -153,7 +153,7 @@ class _DynamicSettingsPageState extends State<DynamicSettingsPage> {
         hintStyle: CustomTextStyles.titleMediumBluegray300,
         textInputType: TextInputType.phone,
         focusNode: controller.focus5,
-        readOnly: true,
+        readOnly: true, inputFormatters: [],
       ),
     ];
   }

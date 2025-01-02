@@ -179,7 +179,7 @@ class _AddBankAccountState extends State<AddBankAccount> {
                     textInputType: TextInputType.number,
                     controller: accountNumberController,
                     focusNode: accountNumberFocusNode,
-                    autofocus: false,
+                    autofocus: false, inputFormatters: [],
                   ),
                   const SizedBox(height: 10),
                   Text(
@@ -194,7 +194,7 @@ class _AddBankAccountState extends State<AddBankAccount> {
                     textInputType: TextInputType.number,
                     controller: reEnterAccountNumberController,
                     focusNode: reEnterAccountNumberFocusNode,
-                    autofocus: false,
+                    autofocus: false, inputFormatters: [],
                   ),
                   const SizedBox(),
                   Text(
@@ -209,7 +209,7 @@ class _AddBankAccountState extends State<AddBankAccount> {
                     textInputType: TextInputType.text,
                     controller: ifscCodeController,
                     focusNode: ifscCodeFocusNode,
-                    autofocus: false,
+                    autofocus: false, inputFormatters: [],
                   ),
                   const SizedBox(height: 10),
                   Text(
@@ -224,7 +224,7 @@ class _AddBankAccountState extends State<AddBankAccount> {
                     textInputType: TextInputType.name,
                     controller: accountHolderNameController,
                     focusNode: accountHolderNameFocusNode,
-                    autofocus: false,
+                    autofocus: false, inputFormatters: [],
                   ),
                   const SizedBox(height: 20),
                   Text(

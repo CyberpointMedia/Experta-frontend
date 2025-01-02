@@ -243,7 +243,7 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
               fontSize: 16.fSize,
               fontWeight: FontWeight.w500,
             ),
-            textInputType: TextInputType.name,
+            textInputType: TextInputType.name, inputFormatters: [],
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 5, top: 10),
@@ -268,7 +268,7 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
               fontSize: 16.fSize,
               fontWeight: FontWeight.w500,
             ),
-            textInputType: TextInputType.name,
+            textInputType: TextInputType.name, inputFormatters: [],
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 5, top: 10),
@@ -412,7 +412,7 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
                 )
 
                 // Adjust the size as needed
-                ),
+                ), inputFormatters: [],
           ),
           Padding(
             padding: const EdgeInsets.only(bottom: 5, top: 10),

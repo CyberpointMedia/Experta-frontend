@@ -116,7 +116,7 @@ class _BankDetailsState extends State<BankDetails> {
               readOnly: true,
               hintStyle: theme.textTheme.titleSmall!.copyWith(fontSize: 14),
               textInputType: TextInputType.name,
-              autofocus: false,
+              autofocus: false, inputFormatters: [],
             ),
           ],
         ),
@@ -176,7 +176,7 @@ class _BankDetailsState extends State<BankDetails> {
                               hintStyle: theme.textTheme.titleSmall!
                                   .copyWith(fontSize: 14),
                               textInputType: TextInputType.number,
-                              autofocus: false,
+                              autofocus: false, inputFormatters: [],
                             ),
                             const SizedBox(height: 10),
                             Text(
@@ -190,7 +190,7 @@ class _BankDetailsState extends State<BankDetails> {
                               hintStyle: theme.textTheme.titleSmall!
                                   .copyWith(fontSize: 14),
                               textInputType: TextInputType.number,
-                              autofocus: false,
+                              autofocus: false, inputFormatters: [],
                             ),
                             const SizedBox(),
                             Text(
@@ -206,7 +206,7 @@ class _BankDetailsState extends State<BankDetails> {
                               hintStyle: theme.textTheme.titleSmall!
                                   .copyWith(fontSize: 14),
                               textInputType: TextInputType.text,
-                              autofocus: false,
+                              autofocus: false, inputFormatters: [],
                             ),
                             const SizedBox(height: 10),
                             Text(
@@ -222,7 +222,7 @@ class _BankDetailsState extends State<BankDetails> {
                               hintStyle: theme.textTheme.titleSmall!
                                   .copyWith(fontSize: 14),
                               textInputType: TextInputType.name,
-                              autofocus: false,
+                              autofocus: false, inputFormatters: [],
                             ),
                             Text(
                               "State",
@@ -237,7 +237,7 @@ class _BankDetailsState extends State<BankDetails> {
                               hintStyle: theme.textTheme.titleSmall!
                                   .copyWith(fontSize: 14),
                               textInputType: TextInputType.name,
-                              autofocus: false,
+                              autofocus: false, inputFormatters: [],
                             ),
                           ],
                         ),

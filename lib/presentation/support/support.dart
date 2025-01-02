@@ -79,7 +79,7 @@ class _RaiseTicketPageState extends State<RaiseTicketPage> {
                           hintStyle: CustomTextStyles.titleMediumBluegray300,
                           textInputType: TextInputType.text,
                           focusNode: subjectFocusNode,
-                          autofocus: false,
+                          autofocus: false, inputFormatters: [],
                         ),
                         const SizedBox(height: 16),
                         Text("Description", style: theme.textTheme.titleSmall),
@@ -91,7 +91,7 @@ class _RaiseTicketPageState extends State<RaiseTicketPage> {
                           hintStyle: CustomTextStyles.titleMediumBluegray300,
                           textInputType: TextInputType.text,
                           focusNode: descriptionFocusNode,
-                          autofocus: false,
+                          autofocus: false, inputFormatters: [],
                         ),
                         const SizedBox(height: 16),
                         (_uploadResponse != null)

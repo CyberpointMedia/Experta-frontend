@@ -906,7 +906,7 @@ class _CommentInputFieldState extends State<CommentInputField> {
                 hintStyle: CustomTextStyles.titleMediumBluegray300,
                 textInputType: TextInputType.text,
                 focusNode: FocusNode(),
-                autofocus: false,
+                autofocus: false, inputFormatters: [],
               ),
             ),
             ValueListenableBuilder<bool>(

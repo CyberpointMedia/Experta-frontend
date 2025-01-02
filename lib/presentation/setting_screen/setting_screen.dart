@@ -312,7 +312,7 @@ class SettingScreen extends GetWidget<SettingController> {
                                               .fillGrayTL22,
                                           child: CustomImageView(
                                             imagePath:
-                                                "assets/images/verifyaccount.svg",
+                                                "assets/images/verifyaccount.svg",color: Colors.green,
                                           )),
                                       Padding(
                                           padding: EdgeInsets.only(

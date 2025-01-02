@@ -265,19 +265,19 @@ class _VerifyAccountState extends State<VerifyAccount> {
                             child: Container(
                               width: 45,
                               height: 16,
-                              decoration: BoxDecoration(
-                                color: appTheme.green100.withOpacity(0.5),
-                                borderRadius: BorderRadius.circular(2),
-                              ),
-                              child: Center(
-                                child: Text(
-                                  "Verified",
-                                  style: theme.textTheme.titleSmall!.copyWith(
-                                    color: appTheme.green500,
-                                    fontSize: 10,
-                                  ),
-                                ),
-                              ),
+                              // decoration: BoxDecoration(
+                              //   color: appTheme.green100.withOpacity(0.5),
+                              //   borderRadius: BorderRadius.circular(2),
+                              // ),
+                              // child: Center(
+                              //   child: Text(
+                              //     "Verified",
+                              //     style: theme.textTheme.titleSmall!.copyWith(
+                              //       color: appTheme.green500,
+                              //       fontSize: 10,
+                              //     ),
+                              //   ),
+                              // ),
                             ),
                           ),
                       ],
@@ -310,6 +310,8 @@ class _VerifyAccountState extends State<VerifyAccount> {
   void _showPANVerificationDialog() {
     final formKey = GlobalKey<FormState>();
     final TextEditingController panController = TextEditingController();
+    final TextEditingController birthdayController = TextEditingController();
+
     final ApiService apiService = ApiService();
 
     Future<void> verifyPAN() async {
@@ -430,8 +432,14 @@ class _VerifyAccountState extends State<VerifyAccount> {
                       if (value.length != 10) {
                         return 'PAN number must be 10 characters';
                       }
+                      // PAN regex pattern: 5 uppercase letters, 4 digits, 1 uppercase letter
+                      final panRegex = RegExp(r'^[A-Z]{5}[0-9]{4}[A-Z]{1}$');
+                      if (!panRegex.hasMatch(value)) {
+                        return 'Please enter a valid PAN number';
+                      }
                       return null;
                     },
+                    inputFormatters: [],
                   ),
                   const SizedBox(height: 16),
                   CustomElevatedButton(
@@ -501,9 +509,9 @@ class _VerifyAccountState extends State<VerifyAccount> {
                       color: Colors.grey.shade500,
                     ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 19),
                   Container(
-                    width: 150,
+                    width: 160,
                     height: 32.0,
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(50),
@@ -512,7 +520,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Icon(Icons.flash_on, color: appTheme.panCol, size: 14),
+                        Icon(Icons.flash_on, color: appTheme.panCol, size: 10),
                         const SizedBox(width: 5),
                         Text(
                           "Takes less than 5 secs",
@@ -550,6 +558,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
                       }
                       return null;
                     },
+                    inputFormatters: [],
                   ),
                   const SizedBox(height: 16),
                   CustomElevatedButton(

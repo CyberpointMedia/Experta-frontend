@@ -1,8 +1,6 @@
 plugins {
     id "com.android.application"
-    // START: FlutterFire Configuration
-    id 'com.google.gms.google-services'
-    // END: FlutterFire Configuration
+    id 'com.google.gms.google-services' // FlutterFire Configuration
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
 }
@@ -15,19 +13,12 @@ if (localPropertiesFile.exists()) {
     }
 }
 
-def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
-if (flutterVersionCode == null) {
-    flutterVersionCode = '1'
-}
-
-def flutterVersionName = localProperties.getProperty('flutter.versionName')
-if (flutterVersionName == null) {
-    flutterVersionName = '1.0'
-}
+def flutterVersionCode = localProperties.getProperty('flutter.versionCode', '1')
+def flutterVersionName = localProperties.getProperty('flutter.versionName', '1.0')
 
 android {
     namespace "com.example.expert"
-    compileSdk flutter.compileSdkVersion
+    compileSdkVersion 35
     ndkVersion flutter.ndkVersion
 
     compileOptions {
@@ -36,11 +27,12 @@ android {
     }
 
     kotlinOptions {
-        jvmTarget = "1.8"
+        jvmTarget = '1.8' // Ensure valid JVM target
     }
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
+        
     }
 
     defaultConfig {
@@ -68,21 +60,36 @@ flutter {
     source '../..'
 }
 
-dependencies {
-    // Ensure that Kotlin version is included and compatible
-    // implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"  // Uncomment if necessary
+// Force Kotlin JVM target for all subprojects to fix compatibility issues
+subprojects {
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).configureEach {
+        kotlinOptions {
+            jvmTarget = "1.8" // Force all subprojects to use the correct JVM target
+        }
+    }
+}
 
+dependencies {
+    // Kotlin Standard Library (optional, already included in Flutter projects)
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:1.8.22" // Ensure compatibility with the latest Kotlin version
+
+    // ML Kit Face Detection
     implementation 'com.google.mlkit:face-detection:16.1.7'
+    implementation 'com.google.android.gms:play-services-mlkit-face-detection:17.1.0'
+
+    // Android Support Libraries
     implementation 'androidx.core:core-ktx:1.7.0'
     implementation 'com.android.support:multidex:2.0.1'
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'com.google.android.material:material:1.5.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.1.3'
+
+    // Testing Dependencies
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.3'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
+
+    // Glide for Image Loading
     implementation 'com.github.bumptech.glide:glide:4.12.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
-    implementation 'com.google.android.gms:play-services-mlkit-face-detection:17.1.0'
 }
-

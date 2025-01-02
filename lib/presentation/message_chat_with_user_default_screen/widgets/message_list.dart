@@ -352,7 +352,7 @@ class MessageListShimmer extends StatelessWidget {
                             top: 16.v, right: 30.h, bottom: 16.v),
                         borderDecoration:
                             TextFormFieldStyleHelper.outlineGrayTL26,
-                        fillColor: appTheme.gray20002)),
+                        fillColor: appTheme.gray20002, inputFormatters: [],)),
                 Padding(
                     padding: EdgeInsets.only(left: 6.h),
                     child: CustomIconButton(

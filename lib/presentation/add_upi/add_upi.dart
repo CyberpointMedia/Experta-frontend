@@ -68,7 +68,7 @@ class _AddUpiState extends State<AddUpi> {
                       controller: controller.upiController,
                       focusNode: controller.focus1,
                       autofocus: false,
-                      validator: controller.validateUpiId,
+                      validator: controller.validateUpiId, inputFormatters: [],
                     ),
                     const Padding(
                       padding: EdgeInsets.only(top: 6, bottom: 15),
