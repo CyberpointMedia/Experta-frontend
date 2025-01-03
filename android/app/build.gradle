@@ -19,11 +19,12 @@ def flutterVersionName = localProperties.getProperty('flutter.versionName', '1.0
 android {
     namespace "com.example.expert"
     compileSdkVersion 35
-    ndkVersion flutter.ndkVersion
+    ndkVersion "28.0.12874087"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
+        coreLibraryDesugaringEnabled true
     }
 
     kotlinOptions {
@@ -92,4 +93,6 @@ dependencies {
     // Glide for Image Loading
     implementation 'com.github.bumptech.glide:glide:4.12.0'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.12.0'
+
+    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
 }

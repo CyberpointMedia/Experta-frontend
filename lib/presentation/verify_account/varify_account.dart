@@ -310,7 +310,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
   void _showPANVerificationDialog() {
     final formKey = GlobalKey<FormState>();
     final TextEditingController panController = TextEditingController();
-    final TextEditingController birthdayController = TextEditingController();
+   
 
     final ApiService apiService = ApiService();
 

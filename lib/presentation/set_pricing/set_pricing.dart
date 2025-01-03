@@ -187,7 +187,7 @@ class _SetPricingState extends State<SetPricing> {
                           controller.showAddButton.value = false;
                         },
                         child: Text(
-                          "+SetPrice",
+                          "+Set Price",
                           style: CustomTextStyles.titleSmallffec1313,
                         ),
                       )
@@ -199,7 +199,8 @@ class _SetPricingState extends State<SetPricing> {
             padding: const EdgeInsets.only(top: 10),
             child: Text(
               "All users can send messages for free. If you want to charge for messages, please include the price/message.",
-              style: CustomTextStyles.bodySmallSFProTextGray900,
+              style: theme.textTheme.bodyMedium
+                
             ),
           ),
           Obx(() => Column(

@@ -244,7 +244,7 @@ class _AddBankAccountState extends State<AddBankAccount> {
                   ),
                   const SizedBox(height: 30),
                   CustomElevatedButton(
-                    text: _isLoading ? "Verifying..." : "Proceed",
+                    text: _isLoading ? "Verifying..." : "Save",
                     onPressed: _isLoading ? null : verifyAndProceed,
                     margin: const EdgeInsets.all(10),
                   ),

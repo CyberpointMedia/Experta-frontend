@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
+import 'package:experta/presentation/add_upi/add_upi.dart';
 import 'package:experta/presentation/payment_method/display_bank.dart';
-import 'package:experta/presentation/payment_method/upi_details.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
 
 class PaymentMethod extends StatefulWidget {
@@ -121,7 +121,7 @@ class _PaymentMethodState extends State<PaymentMethod> {
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
-                                      builder: (_) => const UpiDetails()));
+                                      builder: (_) => const AddUpi()));
                             }
                           },
                           child: Container(
