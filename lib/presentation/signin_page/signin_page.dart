@@ -30,7 +30,7 @@ class _SigninPageState extends State<SigninPage> {
         builder: (controller) {
           return 
           
-          controller.isInternetConnected.value?
+          controller.isInternetConnected?
           
           Stack(
             children: [
