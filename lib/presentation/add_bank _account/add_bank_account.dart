@@ -24,12 +24,12 @@ class _AddBankAccountState extends State<AddBankAccount> {
   final FocusNode accountHolderNameFocusNode = FocusNode();
 
   bool _isLoading = false;
-  String maskAccountNumber(String accountNumber) {
-  if (accountNumber.length > 4) {
-    return "****" + accountNumber.substring(accountNumber.length - 4);
-  }
-  return accountNumber; // If too short, return as is
-}
+//   String maskAccountNumber(String accountNumber) {
+//   if (accountNumber.length > 4) {
+//     return "****" + accountNumber.substring(accountNumber.length - 4);
+//   }
+//   return accountNumber; // If too short, return as is
+// }
 
 
   @override
@@ -181,7 +181,7 @@ class _AddBankAccountState extends State<AddBankAccount> {
                   const SizedBox(height: 6),
                   CustomTextFormField(
                     hintText: "Bank account number",
-                    obscureText: true,
+                    //obscureText: true,
                     hintStyle:
                         theme.textTheme.titleSmall!.copyWith(fontSize: 14),
                     textInputType: TextInputType.number,
@@ -204,18 +204,18 @@ CustomTextFormField(
   focusNode: reEnterAccountNumberFocusNode,
   autofocus: false,
   inputFormatters: [], // You can add any input formatters here if needed
-  onChanged: (value) {
-    // Mask the account number to show only the last 4 digits
-    if (value.isNotEmpty) {
-      final maskedValue = maskAccountNumber(value);
-      reEnterAccountNumberController.value = TextEditingValue(
-        text: maskedValue,
-        selection: TextSelection.fromPosition(
-          TextPosition(offset: maskedValue.length),
-        ),
-      );
-    }
-  },
+  // onChanged: (value) {
+  //   // Mask the account number to show only the last 4 digits
+  //   if (value.isNotEmpty) {
+  //     final maskedValue = maskAccountNumber(value);
+  //     reEnterAccountNumberController.value = TextEditingValue(
+  //       text: maskedValue,
+  //       selection: TextSelection.fromPosition(
+  //         TextPosition(offset: maskedValue.length),
+  //       ),
+  //     );
+  //   }
+  // },
 ),
 
                   const SizedBox(),
