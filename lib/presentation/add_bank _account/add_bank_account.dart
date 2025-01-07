@@ -24,6 +24,13 @@ class _AddBankAccountState extends State<AddBankAccount> {
   final FocusNode accountHolderNameFocusNode = FocusNode();
 
   bool _isLoading = false;
+  String maskAccountNumber(String accountNumber) {
+  if (accountNumber.length > 4) {
+    return "****" + accountNumber.substring(accountNumber.length - 4);
+  }
+  return accountNumber; // If too short, return as is
+}
+
 
   @override
   void dispose() {
@@ -116,7 +123,7 @@ class _AddBankAccountState extends State<AddBankAccount> {
       } else {
         CustomToast().showToast(
           context: context,
-          message: "Bank verification failed",
+          message: "Bank verification failed. Please check the account number and IFSC code and try again.",
           isSuccess: false,
         );
       }
@@ -174,6 +181,7 @@ class _AddBankAccountState extends State<AddBankAccount> {
                   const SizedBox(height: 6),
                   CustomTextFormField(
                     hintText: "Bank account number",
+                    obscureText: true,
                     hintStyle:
                         theme.textTheme.titleSmall!.copyWith(fontSize: 14),
                     textInputType: TextInputType.number,
@@ -181,21 +189,35 @@ class _AddBankAccountState extends State<AddBankAccount> {
                     focusNode: accountNumberFocusNode,
                     autofocus: false, inputFormatters: [],
                   ),
-                  const SizedBox(height: 10),
-                  Text(
-                    "Re-enter Account Number",
-                    style: theme.textTheme.titleSmall,
-                  ),
+                 const SizedBox(height: 10),
+                   Text(
+                     "Re-enter Account Number",
+                     style: theme.textTheme.titleSmall,
+                   ),
                   const SizedBox(height: 6),
-                  CustomTextFormField(
-                    hintText: "Re-enter bank account number",
-                    hintStyle:
-                        theme.textTheme.titleSmall!.copyWith(fontSize: 14),
-                    textInputType: TextInputType.number,
-                    controller: reEnterAccountNumberController,
-                    focusNode: reEnterAccountNumberFocusNode,
-                    autofocus: false, inputFormatters: [],
-                  ),
+CustomTextFormField(
+  hintText: "Re-enter bank account number",
+  hintStyle: theme.textTheme.titleSmall!.copyWith(fontSize: 14),
+  //obscureText: true, // This will hide the text behind asterisks
+  textInputType: TextInputType.number,
+  controller: reEnterAccountNumberController,
+  focusNode: reEnterAccountNumberFocusNode,
+  autofocus: false,
+  inputFormatters: [], // You can add any input formatters here if needed
+  onChanged: (value) {
+    // Mask the account number to show only the last 4 digits
+    if (value.isNotEmpty) {
+      final maskedValue = maskAccountNumber(value);
+      reEnterAccountNumberController.value = TextEditingValue(
+        text: maskedValue,
+        selection: TextSelection.fromPosition(
+          TextPosition(offset: maskedValue.length),
+        ),
+      );
+    }
+  },
+),
+
                   const SizedBox(),
                   Text(
                     "IFSC Code",
@@ -236,6 +258,7 @@ class _AddBankAccountState extends State<AddBankAccount> {
                   Text(
                     "• Your full name on bank account, Aadhaar card and \n   PAN card should match.",
                     style: theme.textTheme.titleSmall!.copyWith(fontSize: 14),
+                     
                   ),
                   const SizedBox(height: 6),
                   Text(

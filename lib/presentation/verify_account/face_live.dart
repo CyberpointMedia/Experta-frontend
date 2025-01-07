@@ -78,7 +78,7 @@ class _FaceDetectorViewState extends State<FaceDetectorView> {
           // _showSnackbar("Verification complete", Colors.green);
         } else if (result.finalResult) {
           _showSnackbar(
-              "Speech did not match the required sentence", Colors.red);
+              "Verification failed. Ensure you clearly speak the given sentence ", Colors.red);
         }
       });
     }

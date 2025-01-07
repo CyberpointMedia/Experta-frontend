@@ -38,7 +38,7 @@ class _CameraViewState extends State<CameraView> {
   double _currentExposureOffset = 0.0;
   bool _changingCameraLens = false;
   final FlutterTts _flutterTts = FlutterTts();
-  String targetSentence = "I am the Boss";
+  String targetSentence = "Verification Complete: Your face has been successfully verified";
 
   @override
   void initState() {

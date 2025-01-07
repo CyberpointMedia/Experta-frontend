@@ -6,6 +6,7 @@ import 'package:experta/presentation/verify_account/Models/verify_account_model.
 import 'package:experta/presentation/verify_account/face_live.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
 import 'package:experta/widgets/custom_text_form_field.dart';
+import 'package:flutter/services.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class VerifyAccount extends StatefulWidget {
@@ -133,7 +134,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
                     decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
                       borderRadius: BorderRadiusStyle.customBorderBL20,
                     ),
-                  ),
+                  ), 
                   _buildUserDetail(
                     icon: ImageConstant.email,
                     label: "Email Address",
@@ -243,7 +244,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
               Padding(
                 padding: EdgeInsets.only(left: 15.h),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Row(
@@ -251,9 +252,9 @@ class _VerifyAccountState extends State<VerifyAccount> {
                         Text(
                           label,
                           style: isVerified
-                              ? theme.textTheme.titleMedium!.copyWith(
-                                  fontSize: 12,
-                                  color: appTheme.gray400,
+                              ? theme.textTheme.titleLarge!.copyWith(
+                                  fontSize: 16,
+                                  color: appTheme.black900,
                                 )
                               : theme.textTheme.titleMedium!.copyWith(
                                   color: appTheme.black900,
@@ -286,7 +287,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
                       Text(
                         value,
                         style: theme.textTheme.titleSmall!.copyWith(
-                          fontSize: 14,
+                          fontSize: 16,
                           color: appTheme.black900,
                         ),
                       ),
@@ -328,7 +329,7 @@ class _VerifyAccountState extends State<VerifyAccount> {
               return AlertDialog(
                 title: const Text("Verification Successful"),
                 content: Text(
-                    "Hello ${clientData['full_name']}, your PAN has been verified successfully."),
+                    "Hello ${clientData['full_name']}, Your PAN has been successfully verified and linked to your account"),
                 actions: [
                   TextButton(
                     onPressed: () {
@@ -417,40 +418,45 @@ class _VerifyAccountState extends State<VerifyAccount> {
                     ),
                   ),
                   const SizedBox(height: 8),
-                  CustomTextFormField(
-                    controller: panController,
-                    autofocus: false,
-                    hintText: "Enter Your 10 Digit PAN Number",
-                    hintStyle: theme.textTheme.titleSmall!.copyWith(
-                      color: appTheme.blueGray300,
-                      fontSize: 14,
-                    ),
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your PAN number';
-                      }
-                      if (value.length != 10) {
-                        return 'PAN number must be 10 characters';
-                      }
-                      // PAN regex pattern: 5 uppercase letters, 4 digits, 1 uppercase letter
-                      final panRegex = RegExp(r'^[A-Z]{5}[0-9]{4}[A-Z]{1}$');
-                      if (!panRegex.hasMatch(value)) {
-                        return 'Please enter a valid PAN number';
-                      }
-                      return null;
-                    },
-                    inputFormatters: [],
-                  ),
-                  const SizedBox(height: 16),
-                  CustomElevatedButton(
-                    onPressed: () {
-                      if (formKey.currentState!.validate()) {
-                        verifyPAN();
-                        setState(() {});
-                      }
-                    },
-                    text: "Verify",
-                  ),
+CustomTextFormField(
+  controller: panController,
+  autofocus: false,
+  hintText: "Enter Your 10 Digit PAN Number",
+  hintStyle: theme.textTheme.titleSmall!.copyWith(
+    color: appTheme.blueGray300,
+    fontSize: 14,
+  ),
+  validator: (value) {
+    if (value == null || value.isEmpty) {
+      return 'Please enter your PAN number';
+    }
+    if (value.length != 10) {
+      return 'PAN number must be 10 characters';
+    }
+    // PAN regex pattern: 5 uppercase letters, 4 digits, 1 uppercase letter
+    final panRegex = RegExp(r'^[A-Z]{5}[0-9]{4}[A-Z]{1}$');
+    if (!panRegex.hasMatch(value)) {
+      return 'Please enter a valid PAN number';
+    }
+    return null;
+  },
+  inputFormatters: [
+    // Ensures only uppercase letters and digits are entered
+    FilteringTextInputFormatter.allow(RegExp(r'[A-Z0-9]')),
+    //UpperCaseTextFormatter(),
+  ],
+),
+const SizedBox(height: 16),
+CustomElevatedButton(
+  onPressed: () {
+    if (formKey.currentState!.validate()) {
+      verifyPAN();
+      // No need for setState unless there's a specific reason
+    }
+  },
+  text: "Verify",
+),
+
                 ],
               ),
             ),
@@ -465,51 +471,110 @@ class _VerifyAccountState extends State<VerifyAccount> {
     final TextEditingController gstController = TextEditingController();
 
     showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          shape:
-              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20.0)),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Form(
-              key: formKey,
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  Center(
-                    child: CustomIconButton(
-                      height: 64.adaptSize,
-                      width: 64.adaptSize,
-                      padding: EdgeInsets.all(15.h),
-                      decoration: BoxDecoration(
-                        color: theme.colorScheme.primaryContainer
-                            .withOpacity(0.12),
-                        borderRadius: BorderRadius.circular(32.h),
-                      ),
-                      child: CustomImageView(imagePath: ImageConstant.gst),
+  context: context,
+  builder: (BuildContext context) {
+    return Dialog(
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(20.0),
+      ),
+      child: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: formKey,
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                // Icon or Image at the top
+                Center(
+                  child: CustomIconButton(
+                    height: 64.adaptSize,
+                    width: 64.adaptSize,
+                    padding: EdgeInsets.all(15.h),
+                    decoration: BoxDecoration(
+                      color: theme.colorScheme.primaryContainer.withOpacity(0.12),
+                      borderRadius: BorderRadius.circular(32.h),
                     ),
+                    child: CustomImageView(imagePath: ImageConstant.gst),
                   ),
-                  const SizedBox(height: 16),
-                  const Center(
-                    child: Text(
-                      "GST Verification",
-                      style: TextStyle(
-                        fontSize: 22,
-                        color: Colors.black,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    "As per regulations, it is mandatory to verify your GST details.",
-                    textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 16),
+                // Dialog Title
+                const Center(
+                  child: Text(
+                    "GST Verification",
                     style: TextStyle(
-                      color: Colors.grey.shade500,
+                      fontSize: 22,
+                      color: Colors.black,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
-                  const SizedBox(height: 19),
+                ),
+                const SizedBox(height: 16),
+                // Description Text
+                Text(
+                  "As per regulations, it is mandatory to verify your GST details.",
+                  textAlign: TextAlign.center,
+                  style: TextStyle(
+                    color: Colors.grey.shade500,
+                    fontSize: 14,
+                  ),
+                ),
+                const SizedBox(height: 16),
+                // GST Input Field
+                CustomTextFormField(
+                  controller: gstController,
+                  autofocus: false,
+                  hintText: "Enter Your GST Number",
+                  hintStyle: theme.textTheme.titleSmall!.copyWith(
+                    color: appTheme.blueGray300,
+                    fontSize: 14,
+                  ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your GST number';
+                    }
+                    // GST number should match the regex pattern
+                    final gstRegex = RegExp(r'^[A-Z]{2}[0-9]{10}[A-Z]{1}[0-9]{1}[Z]{1}[A-Z0-9]{1}$');
+                    if (!gstRegex.hasMatch(value)) {
+                      return 'Please enter a valid GST number (e.g., 12ABCDE1234F1Z5)';
+                    }
+                    return null;
+                  },
+                ),
+                const SizedBox(height: 16),
+                // Submit Button
+                CustomElevatedButton(
+                  onPressed: () {
+                    if (formKey.currentState!.validate()) {
+                      // Perform GST verification logic here
+                      Navigator.pop(context); // Close the dialog
+                    }
+                  },
+                  text: "Verify",
+                ),
+                const SizedBox(height: 8),
+                // Cancel Button
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context); // Close the dialog
+                  },
+                  child: const Text(
+                    "Cancel",
+                    style: TextStyle(color: Colors.red),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  },
+);
+
+                  const SizedBox(height: 19);
                   Container(
                     width: 160,
                     height: 32.0,
@@ -531,16 +596,16 @@ class _VerifyAccountState extends State<VerifyAccount> {
                         ),
                       ],
                     ),
-                  ),
-                  const SizedBox(height: 16),
+                  );
+                  const SizedBox(height: 16);
                   Text(
                     "Enter GST number",
                     style: theme.textTheme.titleSmall!.copyWith(
                       color: appTheme.blueGray300,
                       fontSize: 14,
                     ),
-                  ),
-                  const SizedBox(height: 8),
+                  );
+                  const SizedBox(height: 8);
                   CustomTextFormField(
                     controller: gstController,
                     autofocus: false,
@@ -559,8 +624,8 @@ class _VerifyAccountState extends State<VerifyAccount> {
                       return null;
                     },
                     inputFormatters: [],
-                  ),
-                  const SizedBox(height: 16),
+                  );
+                  const SizedBox(height: 16);
                   CustomElevatedButton(
                     onPressed: () async {
                       setState(() => isLoading2 = true);
@@ -612,17 +677,14 @@ class _VerifyAccountState extends State<VerifyAccount> {
                       Navigator.pop(context);
                     },
                     text: !isLoading2 ? "Verify" : "Verifying .... ",
-                  ),
-                ],
-              ),
-            ),
-          ),
-        );
-      },
-    );
+                  );
+              
+      }
+    
   }
 
   void showErrorDialog(String message) {
+    var context;
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -653,4 +715,4 @@ class _VerifyAccountState extends State<VerifyAccount> {
   void onTapArrowLeft() {
     Get.back();
   }
-}
+
