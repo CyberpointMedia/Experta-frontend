@@ -81,34 +81,58 @@ class ApiService {
   }
 
   Future<VerifyOtpResponseModel?> verifyOtp(
-      VerifyOtpRequestModel requestModel, BuildContext context) async {
-    final url = Uri.parse('$_baseUrl/verify-otp');
-    final body = jsonEncode(requestModel.toJson());
-
-    AppLogger.request('POST', url.toString(),
-        body: body, headers: {'Content-Type': 'application/json'});
-
-    try {
-      final response = await http.post(
-        url,
-        headers: {'Content-Type': 'application/json'},
-        body: body,
-      );
-
-      AppLogger.response(
-          'POST', url.toString(), response.statusCode, response.body);
-
-      return _processResponse<VerifyOtpResponseModel>(response);
-    } catch (e, stackTrace) {
+    VerifyOtpRequestModel requestModel, BuildContext context) async {
+  final url = Uri.parse('$_baseUrl/verify-otp');
+  final body = jsonEncode(requestModel.toJson());
+  AppLogger.request('POST', url.toString(),
+      body: body, headers: {'Content-Type': 'application/json'});
+  try {
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: body,
+    );
+    AppLogger.response(
+        'POST', url.toString(), response.statusCode, response.body);
+    if (response.statusCode == 200) {
+      final responseData = jsonDecode(response.body);
+      // Handle both success and error cases
+      if (responseData['status'] == 'success') {
+        // OTP is valid, show success message
+        CustomToast().showToast(
+          context: context,
+          message: "OTP Verified Successfully.",
+          isSuccess: true,
+        );
+        return VerifyOtpResponseModel.fromJson(responseData);
+      } else if (responseData['status'] == 'authentication_failed') {
+        // OTP is invalid or expired, show error message
+        CustomToast().showToast(
+          context: context,
+          message: responseData['detailMessage'] ?? "Invalid or expired OTP.",
+          isSuccess: false,
+        );
+      }
+    } else {
+      // If the response is not 200, handle it as an error
       CustomToast().showToast(
         context: context,
-        message: "The OTP is no longer valid. Generate a new OTP to proceed.",
+        message: "Something went wrong. Please try again.",
         isSuccess: false,
       );
-      AppLogger.error('Failed to verify OTP', stackTrace: stackTrace);
-      throw Exception('Failed to verify OTP: $e');
     }
+  } catch (e, stackTrace) {
+    // Handle the exception and log error
+    CustomToast().showToast(
+      context: context,
+      message: "Failed to verify OTP.",
+      isSuccess: false,
+    );
+    AppLogger.error('Failed to verify OTP', stackTrace: stackTrace);
+    throw Exception('Failed to verify OTP: $e');
   }
+  return null;
+}
 
   Future<LoginResponseModel?> loginUser(
       LoginRequestModel requestModel, BuildContext context) async {
