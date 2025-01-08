@@ -102,7 +102,7 @@ class ApiService {
     } catch (e, stackTrace) {
       CustomToast().showToast(
         context: context,
-        message: "Invalid or expired OTP.",
+        message: "The OTP is no longer valid. Generate a new OTP to proceed.",
         isSuccess: false,
       );
       AppLogger.error('Failed to verify OTP', stackTrace: stackTrace);
