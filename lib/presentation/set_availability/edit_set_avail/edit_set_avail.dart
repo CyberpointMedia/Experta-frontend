@@ -4,6 +4,7 @@ import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/set_availability/edit_set_avail/controller/edit_set_avail_controller.dart';
 import 'package:experta/presentation/set_availability/model/set_availability_model.dart';
 import 'package:experta/widgets/custom_text_form_field.dart';
+import 'package:experta/widgets/custom_toast_message.dart';
 
 class EditSetAvailability extends StatefulWidget {
   const EditSetAvailability({super.key});
@@ -14,19 +15,22 @@ class EditSetAvailability extends StatefulWidget {
 
 class _EditSetAvailabilityState extends State<EditSetAvailability> {
   SetAvailabilityModel? availability;
-  EditSetAvailableController controller = Get.put(EditSetAvailableController());
+  late final EditSetAvailableController controller;
   bool isLoading = true;
   bool isSaving = false;
 
   @override
   void initState() {
     super.initState();
+    controller = Get.put(EditSetAvailableController());
     availability = Get.arguments as SetAvailabilityModel?;
+
     if (availability != null) {
       controller.textField1.text = availability!.startTime;
       controller.textField2.text = availability!.endTime;
       controller.setInitialSelectedDays(availability!.weeklyRepeat);
     }
+
     // Simulate a delay for loading
     Future.delayed(const Duration(seconds: 2), () {
       setState(() {
@@ -53,18 +57,13 @@ class _EditSetAvailabilityState extends State<EditSetAvailability> {
                     ),
                     Padding(
                       padding: const EdgeInsets.only(
-                          bottom: 30, left: 16, right: 16),
+                        bottom: 30,
+                        left: 16,
+                        right: 16,
+                      ),
                       child: CustomElevatedButton(
                         text: "Save",
-                        onPressed: () async {
-                          setState(() {
-                            isSaving = true;
-                          });
-                          await controller.saveAvailability(availability);
-                          setState(() {
-                            isSaving = false;
-                          });
-                        },
+                        onPressed: _onSavePressed,
                       ),
                     ),
                   ],
@@ -112,43 +111,7 @@ class _EditSetAvailabilityState extends State<EditSetAvailability> {
     );
   }
 
-  Widget _buildContent() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        _buildAppBar(),
-        Expanded(
-          child: _buildBody(),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(bottom: 30, left: 16, right: 16),
-          child: CustomElevatedButton(
-            text: "Save",
-            onPressed: () async {
-              setState(() {
-                isSaving = true;
-              });
-              await controller.saveAvailability(availability);
-              setState(() {
-                isSaving = false;
-              });
-            },
-          ),
-        ),
-      ],
-    );
-  }
-
-  Widget _buildCircularProgressIndicator() {
-    return Container(
-      color: Colors.black.withOpacity(0.5),
-      child: const Center(
-        child: CircularProgressIndicator(),
-      ),
-    );
-  }
-
-  PreferredSizeWidget _buildAppBar() {
+  Widget _buildAppBar() {
     return CustomAppBar(
       height: 40.h,
       leadingWidth: 40.h,
@@ -166,9 +129,8 @@ class _EditSetAvailabilityState extends State<EditSetAvailability> {
 
   Widget _buildBody() {
     return Padding(
-      padding: const EdgeInsets.only(left: 16, right: 16, top: 30),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 30),
       child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
@@ -191,66 +153,52 @@ class _EditSetAvailabilityState extends State<EditSetAvailability> {
 
   Widget _formFields() {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 0.v),
+      padding: EdgeInsets.symmetric(vertical: 20.h),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 5),
-            child: Text(
-              "Start Time",
-              style: CustomTextStyles.labelMediumGray900,
-              textAlign: TextAlign.start,
-            ),
-          ),
-          GestureDetector(
-            onTap: () => controller.selectTime(context, controller.textField1),
-            child: AbsorbPointer(
-              child: CustomTextFormField(
-                width: MediaQuery.of(context).size.width,
-                controller: controller.textField1,
-                focusNode: controller.focus1,
-                hintText: "Select Time".tr,
-                hintStyle: CustomTextStyles.titleMediumBluegray300,
-                textInputType: TextInputType.datetime,
-                suffix: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: CustomImageView(
-                    imagePath: ImageConstant.clock,
-                  ),
-                ),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(bottom: 5, top: 10),
-            child: Text(
-              "End Time",
-              style: CustomTextStyles.labelMediumGray900,
-              textAlign: TextAlign.start,
-            ),
-          ),
-          GestureDetector(
-            onTap: () => controller.selectTime(context, controller.textField2),
-            child: AbsorbPointer(
-              child: CustomTextFormField(
-                controller: controller.textField2,
-                focusNode: controller.focus2,
-                width: MediaQuery.of(context).size.width,
-                hintText: "Select Time".tr,
-                hintStyle: CustomTextStyles.titleMediumBluegray300,
-                textInputType: TextInputType.datetime,
-                suffix: Padding(
-                  padding: const EdgeInsets.all(15.0),
-                  child: CustomImageView(
-                    imagePath: ImageConstant.clock,
-                  ),
-                ),
-              ),
-            ),
-          ),
+          _buildTimeField("Start Time", controller.textField1,
+              controller.focus1, controller.selectTime),
+          const SizedBox(height: 10),
+          _buildTimeField("End Time", controller.textField2,
+              controller.focus2, controller.selectTime),
         ],
       ),
+    );
+  }
+
+  Widget _buildTimeField(String label, TextEditingController textController,
+      FocusNode focusNode, Function onTap) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(bottom: 5),
+          child: Text(
+            label,
+            style: CustomTextStyles.labelMediumGray900,
+          ),
+        ),
+        GestureDetector(
+          onTap: () => onTap(context, textController),
+          child: AbsorbPointer(
+            child: CustomTextFormField(
+              controller: textController,
+              focusNode: focusNode,
+              hintText: "Select Time".tr,
+              width: MediaQuery.of(context).size.width,
+              hintStyle: CustomTextStyles.titleMediumBluegray300,
+              textInputType: TextInputType.datetime,
+              suffix: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: CustomImageView(
+                  imagePath: ImageConstant.clock,
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
@@ -273,9 +221,10 @@ class _EditSetAvailabilityState extends State<EditSetAvailability> {
                   color: appTheme.whiteA700,
                   shape: BoxShape.circle,
                   border: Border.all(
-                      color: controller.selectedDays[idx]
-                          ? Colors.yellow
-                          : Colors.grey),
+                    color: controller.selectedDays[idx]
+                        ? Colors.yellow
+                        : Colors.grey,
+                  ),
                 ),
                 child: Center(
                   child: Text(
@@ -292,6 +241,47 @@ class _EditSetAvailabilityState extends State<EditSetAvailability> {
             );
           }).toList(),
         ));
+  }
+
+  Widget _buildCircularProgressIndicator() {
+    return Container(
+      color: Colors.black.withOpacity(0.5),
+      child: const Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
+
+  void _onSavePressed() async {
+    bool isAnyDaySelected =
+        controller.selectedDays.any((isSelected) => isSelected);
+
+    if (!isAnyDaySelected) {
+       CustomToast().showToast(
+          context: context,
+          message: "At least one day must be selected!",
+          isSuccess: false,
+          
+  
+        );
+      // ScaffoldMessenger.of(context).showSnackBar(
+      //   const SnackBar(
+      //     content: Text("At least one day must be selected!"),
+      //     backgroundColor: Colors.red,
+      //   ),
+      // );
+      return;
+    }
+
+    setState(() {
+      isSaving = true;
+    });
+
+    await controller.saveAvailability(availability);
+
+    setState(() {
+      isSaving = false;
+    });
   }
 
   void onTapArrowLeft() {

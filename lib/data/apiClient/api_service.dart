@@ -133,11 +133,11 @@ class ApiService {
         return LoginResponseModel.fromJson(jsonResponse);
       } else {
         // Handle other status codes as needed
-        CustomToast().showToast(
-          context: context,
-          message: "Unexpected error occurred. Please try again.",
-          isSuccess: false,
-        );
+          CustomToast().showToast(
+            context: context,
+            message: "Unexpected error occurred. Please try again.",
+            isSuccess: false,
+          );
       }
     } catch (e, stackTrace) {
       AppLogger.error('Failed to login user', stackTrace: stackTrace);
