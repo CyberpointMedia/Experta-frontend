@@ -338,21 +338,22 @@ class MessageListShimmer extends StatelessWidget {
                   Row(mainAxisAlignment: MainAxisAlignment.center, children: [
                 Expanded(
                     child: CustomTextFormField(
-                        hintText: "msg_write_a_message".tr,
-                        hintStyle: CustomTextStyles.titleMediumBluegray300,
-                        textInputAction: TextInputAction.done,
-                        prefix: Container(
-                            margin: EdgeInsets.fromLTRB(15.h, 14.v, 10.h, 14.v),
-                            child: CustomImageView(
-                                imagePath: ImageConstant.imgSmile,
-                                height: 24.adaptSize,
-                                width: 24.adaptSize)),
-                        prefixConstraints: BoxConstraints(maxHeight: 52.v),
-                        contentPadding: EdgeInsets.only(
-                            top: 16.v, right: 30.h, bottom: 16.v),
-                        borderDecoration:
-                            TextFormFieldStyleHelper.outlineGrayTL26,
-                        fillColor: appTheme.gray20002, inputFormatters: [],)),
+                  hintText: "msg_write_a_message".tr,
+                  hintStyle: CustomTextStyles.titleMediumBluegray300,
+                  textInputAction: TextInputAction.done,
+                  prefix: Container(
+                      margin: EdgeInsets.fromLTRB(15.h, 14.v, 10.h, 14.v),
+                      child: CustomImageView(
+                          imagePath: ImageConstant.imgSmile,
+                          height: 24.adaptSize,
+                          width: 24.adaptSize)),
+                  prefixConstraints: BoxConstraints(maxHeight: 52.v),
+                  contentPadding:
+                      EdgeInsets.only(top: 16.v, right: 30.h, bottom: 16.v),
+                  borderDecoration: TextFormFieldStyleHelper.outlineGrayTL26,
+                  fillColor: appTheme.gray20002,
+                  inputFormatters: [],
+                )),
                 Padding(
                     padding: EdgeInsets.only(left: 6.h),
                     child: CustomIconButton(
@@ -381,3 +382,4 @@ class MessageListShimmer extends StatelessWidget {
     ]);
   }
 }
+ 
