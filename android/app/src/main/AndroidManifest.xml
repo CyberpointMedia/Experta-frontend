@@ -76,6 +76,11 @@
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <intent-filter>
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <data android:mimeType="video/*" />
+    </intent-filter>
         </activity>
 
         <!-- UCropActivity Declaration -->
@@ -106,6 +111,16 @@
             android:foregroundServiceType="mediaProjection"
             android:permission="android.permission.FOREGROUND_SERVICE" />
         
+        <service
+            android:name=".ScreenRecordingService"
+            android:foregroundServiceType="mediaProjection"
+            android:permission="android.permission.FOREGROUND_SERVICE"
+            android:enabled="true"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.example.expert.SCREEN_CAPTURE" />
+            </intent-filter>
+        </service>
         <meta-data
             android:name="com.google.mlkit.vision.DEPENDENCIES"
             android:value="face" />

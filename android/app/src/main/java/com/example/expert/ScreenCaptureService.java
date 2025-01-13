@@ -36,16 +36,9 @@ public class ScreenCaptureService extends Service {
                 .setSmallIcon(R.drawable.ic_notification) 
                 .build();
 
-            try {
-                int foregroundServiceType = (int) Class.forName("android.app.ServiceInfo")
-                    .getDeclaredField("FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION")
-                    .get(null);
-                startForeground(1, notification, foregroundServiceType);
-            } catch (Exception e) {
-                startForeground(1, notification);
-            }
+            startForeground(1, notification);
         }
-        return START_NOT_STICKY;
+        return START_STICKY;
     }
 
     @Override

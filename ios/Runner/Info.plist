@@ -45,40 +45,39 @@
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
-	 <key>NSCameraUsageDescription</key>
-<string>We need access to your camera for video calls.</string>
-<key>NSLocationWhenInUseUsageDescription</key>
-<string>We need access to your location for better service.</string>
-<key>NSLocationAlwaysUsageDescription</key>
-<string>We need access to your location for better service.</string>
-<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
-<string>We need access to your location for better service.</string>
-<key>NSPhotoLibraryUsageDescription</key>
-<string>We need access to your photo library to save video call snapshots.</string>
-<key>NSPhotoLibraryAddUsageDescription</key>
-<string>We need access to add photos to your library.</string>
-<key>NSBluetoothAlwaysUsageDescription</key>
-<string>We need access to Bluetooth for connecting to external devices.</string>
-<key>NSContactsUsageDescription</key>
-<string>We need access to your contacts to connect with friends.</string>
-<key>NSCalendarsUsageDescription</key>
-<string>We need access to your calendar to schedule events.</string>
-<key>NSRemindersUsageDescription</key>
-<string>We need access to your reminders to help you stay organized.</string>
-<key>NSHealthShareUsageDescription</key>
-<string>We need access to your health data to provide better services.</string>
-<key>NSHealthUpdateUsageDescription</key>
-<string>We need to update your health data for accurate tracking.</string>
-<key>NSMotionUsageDescription</key>
-<string>We need access to motion data for fitness tracking.</string>
-<key>NSSpeechRecognitionUsageDescription</key>
-<string>We need access to speech recognition for voice commands.</string>
-<key>NSAppleMusicUsageDescription</key>
-<string>We need access to your Apple Music library to enhance your music experience.</string>
-<key>NSMicrophoneUsageDescription</key>
-<string>Required for screen recording with audio</string>
-<key>NSScreenCaptureUsageDescription</key>
-<string>Required for screen sharing functionality</string>
-
+	<key>NSCameraUsageDescription</key>
+	<string>We need access to your camera for video calls.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We need access to your location for better service.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>We need access to your location for better service.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>We need access to your location for better service.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need access to your photo library to save video call snapshots.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>We need access to add photos to your library.</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>We need access to Bluetooth for connecting to external devices.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>We need access to your contacts to connect with friends.</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>We need access to your calendar to schedule events.</string>
+	<key>NSRemindersUsageDescription</key>
+	<string>We need access to your reminders to help you stay organized.</string>
+	<key>NSHealthShareUsageDescription</key>
+	<string>We need access to your health data to provide better services.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>We need to update your health data for accurate tracking.</string>
+	<key>NSMotionUsageDescription</key>
+	<string>We need access to motion data for fitness tracking.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>We need access to speech recognition for voice commands.</string>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>We need access to your Apple Music library to enhance your music experience.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>We need access to your microphone for screen recording.</string>
+	<key>NSScreenCaptureUsageDescription</key>
+	<string>Required for screen sharing functionality</string>
 </dict>
 </plist>
