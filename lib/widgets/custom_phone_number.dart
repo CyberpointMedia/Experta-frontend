@@ -75,12 +75,16 @@ class _CustomPhoneNumberState extends State<CustomPhoneNumber> {
               child: Row(
                 children: [
                   CountryPickerUtils.getDefaultFlagImage(widget.country),
-                  CustomImageView(
-                    imagePath: ImageConstant.imgArrowDown,
-                    height: 18.adaptSize,
-                    width: 18.adaptSize,
-                    margin: EdgeInsets.fromLTRB(10.h, 3.v, 11.h, 3.v),
-                  ),
+                    Text(
+                '  +91',
+                style:CustomTextStyles.titleMediumBluegray300,
+              ),
+                  // CustomImageView(
+                  //   imagePath: ImageConstant.imgArrowDown,
+                  //   height: 18.adaptSize,
+                  //   width: 18.adaptSize,
+                  //   margin: EdgeInsets.fromLTRB(10.h, 3.v, 11.h, 3.v),
+                  // ),
                 ],
               ),
             ),
