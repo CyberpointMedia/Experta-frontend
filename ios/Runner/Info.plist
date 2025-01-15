@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CFBundleDevelopmentRegion</key>
+	<string>$(DEVELOPMENT_LANGUAGE)</string>
+	<key>CFBundleDisplayName</key>
+	<string>Experta</string>
+	<key>CFBundleExecutable</key>
+	<string>$(EXECUTABLE_NAME)</string>
+	<key>CFBundleIdentifier</key>
+	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
+	<key>CFBundleInfoDictionaryVersion</key>
+	<string>6.0</string>
+	<key>CFBundleName</key>
+	<string>experta</string>
+	<key>CFBundlePackageType</key>
+	<string>APPL</string>
+	<key>CFBundleShortVersionString</key>
+	<string>$(FLUTTER_BUILD_NAME)</string>
+	<key>CFBundleSignature</key>
+	<string>????</string>
+	<key>CFBundleVersion</key>
+	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<key>LSRequiresIPhoneOS</key>
+	<true/>
+	<key>UILaunchStoryboardName</key>
+	<string>LaunchScreen</string>
+	<key>UIMainStoryboardFile</key>
+	<string>Main</string>
+	<key>UISupportedInterfaceOrientations</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>UISupportedInterfaceOrientations~ipad</key>
+	<array>
+		<string>UIInterfaceOrientationPortrait</string>
+		<string>UIInterfaceOrientationPortraitUpsideDown</string>
+		<string>UIInterfaceOrientationLandscapeLeft</string>
+		<string>UIInterfaceOrientationLandscapeRight</string>
+	</array>
+	<key>CADisableMinimumFrameDurationOnPhone</key>
+	<true/>
+	<key>UIApplicationSupportsIndirectInputEvents</key>
+	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>We need access to your camera for video calls.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>We need access to your location for better service.</string>
+	<key>NSLocationAlwaysUsageDescription</key>
+	<string>We need access to your location for better service.</string>
+	<key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+	<string>We need access to your location for better service.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>We need access to your photo library to save video call snapshots.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>We need access to add photos to your library.</string>
+	<key>NSBluetoothAlwaysUsageDescription</key>
+	<string>We need access to Bluetooth for connecting to external devices.</string>
+	<key>NSContactsUsageDescription</key>
+	<string>We need access to your contacts to connect with friends.</string>
+	<key>NSCalendarsUsageDescription</key>
+	<string>We need access to your calendar to schedule events.</string>
+	<key>NSRemindersUsageDescription</key>
+	<string>We need access to your reminders to help you stay organized.</string>
+	<key>NSHealthShareUsageDescription</key>
+	<string>We need access to your health data to provide better services.</string>
+	<key>NSHealthUpdateUsageDescription</key>
+	<string>We need to update your health data for accurate tracking.</string>
+	<key>NSMotionUsageDescription</key>
+	<string>We need access to motion data for fitness tracking.</string>
+	<key>NSSpeechRecognitionUsageDescription</key>
+	<string>We need access to speech recognition for voice commands.</string>
+	<key>NSAppleMusicUsageDescription</key>
+	<string>We need access to your Apple Music library to enhance your music experience.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>We need access to your microphone for screen recording.</string>
+	<key>NSScreenCaptureUsageDescription</key>
+	<string>Required for screen sharing functionality</string>
+</dict>
+</plist>
