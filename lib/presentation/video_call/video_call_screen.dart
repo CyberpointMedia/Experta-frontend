@@ -580,6 +580,9 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   }
 
   Future<void> stopScreenRecording() async {
+
+     _showSnackBar('Recording ...$isRecording');
+
     if (!isRecording) return;
 
     try {
@@ -705,10 +708,14 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
   void endCall() {
     log('Ending call...');
+
+    stopScreenRecording();
     stopCallTimer();
     remoteStream?.getTracks().forEach((track) => track.stop());
     localStream?.getTracks().forEach((track) => track.stop());
     mediaConnection?.close();
+
+
     if (mounted) {
       setState(() {
         remoteRenderer.srcObject = null;

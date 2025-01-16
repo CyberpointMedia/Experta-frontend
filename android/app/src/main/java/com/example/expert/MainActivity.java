@@ -73,11 +73,10 @@ public class MainActivity extends FlutterActivity {
                         break;
                     case "stopScreenCapture":
                       //  stopScreenCapture(result);
-
-                       String filepath= ScreenRecordingService.stopRecording();
-                       Log.d("ScreenRecordingService55",""+filepath);
+                        String filepath= ScreenRecordingService.stopRecording();
+                         Log.d("ScreenRecordingService55",""+filepath);
                         result.success(filepath);
-                         Log.d("ScreenRecordingService88",""+filepath);
+                        Log.d("ScreenRecordingService88",""+filepath);
                         break;
                     case "saveRecordingPath":
                         String filePath = call.argument("filePath");
@@ -366,6 +365,7 @@ public class MainActivity extends FlutterActivity {
 
     @Override
     protected void onDestroy() {
+        Log.d("onDestroy","Ondestroy");
         if (recordingReceiver != null) {
             unregisterReceiver(recordingReceiver);
         }

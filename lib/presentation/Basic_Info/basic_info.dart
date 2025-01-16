@@ -220,31 +220,79 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Padding(
-            padding: const EdgeInsets.only(bottom: 5),
-            child: Text(
-              "Your Name",
-              style: theme.textTheme.titleMedium!.copyWith(
-                color: Colors.black,
-                fontSize: 14.fSize,
-                fontWeight: FontWeight.w500,
+          Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 5,left: 5),
+                    child: Text(
+                      "First Name",
+                      style: theme.textTheme.titleMedium!.copyWith(
+                        color: Colors.black,
+                        fontSize: 14.fSize,
+                        fontWeight: FontWeight.w500,
+                      ),
+                      textAlign: TextAlign.start,
+                    ),
+                  ),
+                   CustomTextFormField(
+                    
+                width: MediaQuery.of(context).size.width/2.45,
+                controller: controller.firstnameController,
+                focusNode: controller.focus1,
+                hintText: "Enter your First name".tr,
+                hintStyle: CustomTextStyles.titleMediumBluegray300,
+                textStyle: theme.textTheme.titleMedium!.copyWith(
+                  color: Colors.black,
+                  fontSize: 16.fSize,
+                  fontWeight: FontWeight.w500,
+                ),
+                textInputType: TextInputType.name,
               ),
-              textAlign: TextAlign.start,
-            ),
+                       
+                ],
+              ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 15),
+                  child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                             children: [
+                               Padding(
+                  padding: const EdgeInsets.only(bottom: 5,left: 5),
+                  child: Text(
+                    "Last Name",
+                    style: theme.textTheme.titleMedium!.copyWith(
+                      color: Colors.black,
+                      fontSize: 14.fSize,
+                      fontWeight: FontWeight.w500,
+                    ),
+                    textAlign: TextAlign.start,
+                  ),
+                                ),
+                   CustomTextFormField(
+                              width: MediaQuery.of(context).size.width/2.45,
+                              controller: controller.lastnameController,
+                              focusNode: controller.lastnamefocus,
+                              hintText: "Enter your Last name".tr,
+                              hintStyle: CustomTextStyles.titleMediumBluegray300,
+                              textStyle: theme.textTheme.titleMedium!.copyWith(
+                                color: Colors.black,
+                                fontSize: 16.fSize,
+                                fontWeight: FontWeight.w500,
+                              ),
+                              textInputType: TextInputType.name,
+                            ),
+                             ],
+                           ),
+                ),
+            ],
           ),
-          CustomTextFormField(
-            width: MediaQuery.of(context).size.width,
-            controller: controller.fullNameController,
-            focusNode: controller.focus1,
-            hintText: "Your Name".tr,
-            hintStyle: CustomTextStyles.titleMediumBluegray300,
-            textStyle: theme.textTheme.titleMedium!.copyWith(
-              color: Colors.black,
-              fontSize: 16.fSize,
-              fontWeight: FontWeight.w500,
-            ),
-            textInputType: TextInputType.name,
-          ),
+       
+        
           Padding(
             padding: const EdgeInsets.only(bottom: 5, top: 10),
             child: Text(
@@ -261,7 +309,7 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
             controller: controller.displayNameController,
             focusNode: controller.focus2,
             width: MediaQuery.of(context).size.width,
-            hintText: "Display Name".tr,
+            hintText: "Name to display publicly".tr,
             hintStyle: CustomTextStyles.titleMediumBluegray300,
             textStyle: theme.textTheme.titleMedium!.copyWith(
               color: Colors.black,
@@ -529,7 +577,12 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
             height: 20.v,
             width: 20.h,
             imagePath: ImageConstant.cross,
-            onTap: () => setState(() => controller.socialLinks.removeAt(index)),
+            onTap:() {
+              setState(() {
+                  print("tab value= $index");
+                  controller.socialLinks.removeAt(index);
+              });
+            },
           ),
           SizedBox(width: 8.h),
         ],

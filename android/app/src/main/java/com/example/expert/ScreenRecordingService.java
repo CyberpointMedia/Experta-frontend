@@ -102,7 +102,7 @@ public class ScreenRecordingService extends Service {
 
         try {
             mediaRecorder.setOutputFile(filePath); 
-            mediaRecorder.setVideoSize(1280, 720);
+            mediaRecorder.setVideoSize(720,1280);
             mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
             mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
             mediaRecorder.setVideoEncodingBitRate(5 * 1024 * 1024);
@@ -169,8 +169,7 @@ public class ScreenRecordingService extends Service {
 public void onDestroy() {
     super.onDestroy();
     stopRecording();
-       
- if (filePath != null) { 
+    if (filePath != null) { 
             new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), CHANNEL)
                 .invokeMethod("saveRecordingPath", filePath);
             Log.d("ScreenRecordingService", "File path sent to Flutter: " + filePath);
