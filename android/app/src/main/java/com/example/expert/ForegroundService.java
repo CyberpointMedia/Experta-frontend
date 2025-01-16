@@ -11,12 +11,15 @@ import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
 import android.os.Environment;
 import android.provider.Settings;
-import java.util.logging.Logger;
+import java.util.logging.Logger; 
+
 
 public class ForegroundService extends Service { 
     private static final Logger logger = Logger.getLogger(ForegroundService.class.getName());
     private static final String CHANNEL_ID = "ForegroundServiceChannel";
     private static final int NOTIFICATION_ID = 1;
+
+    // @authou by koushal rathor
 
     @Override
     public void onCreate() {
