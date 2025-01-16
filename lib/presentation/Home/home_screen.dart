@@ -305,8 +305,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                   Container(
-                    width: MediaQuery.of(Get.context!).size.width * 0.3,
-                    height: 36.v,
+                    width: MediaQuery.of(Get.context!).size.width * 0.32,
+                    height: 40.v,
                     margin: EdgeInsets.only(bottom: 2.adaptSize),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -324,10 +324,15 @@ class _HomeScreenState extends State<HomeScreen> {
                         Get.toNamed(AppRoutes.editProfileSetting,
                             arguments: controller.profileCompletion.value);
                       },
-                      child: Text(
-                        "Edit Profile",
-                        style: theme.textTheme.displaySmall
-                            ?.copyWith(fontSize: 14.fSize),
+                      child: Flexible(
+                        child: Padding(
+                          padding: const EdgeInsets.all(1.0),
+                          child: Text(
+                            "Edit Profile",
+                            style: theme.textTheme.displaySmall
+                                ?.copyWith(fontSize: 14.fSize),
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -468,7 +473,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         const SizedBox(height: 10),
         SizedBox(
-          height: 5 * MediaQuery.of(context).size.height * 0.35,
+          height: 5 * MediaQuery.of(context).size.height * 0.35+60,
           child: FutureBuilder<List<User>>(
             future: controller.fetchTrendingPeople(),
             builder: (context, snapshot) {
@@ -479,9 +484,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Text('Error: ${snapshot.error}'),
                 );
               }
-
               final users = snapshot.data ?? [];
-
               return Padding(
                 padding: const EdgeInsets.only(left: 16),
                 child: ListView.separated(
@@ -639,16 +642,14 @@ class _UserProfileItemWidgetState extends State<UserProfileItemWidget> {
                             children: [
                               Row(
                                 children: [
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.3,
+                                  Flexible(
+                                    flex: 2,
                                     child: Text(
                                       widget.user.displayName.isNotEmpty
                                           ? widget.user.displayName
                                           : "anonymous",
-                                      overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
-                                        fontSize: 16.fSize,
+                                        fontSize: 15.fSize,
                                         fontWeight: FontWeight.w600,
                                         color: Colors.black,
                                       ),
@@ -821,7 +822,7 @@ class _UserProfileItemWidgetState extends State<UserProfileItemWidget> {
                             AppRoutes.chattingScreen,
                             arguments: {'chat': chatData},
                           );
-                        }),
+                                                }),
                       ],
                     ),
                   ),
@@ -854,12 +855,17 @@ class _UserProfileItemWidgetState extends State<UserProfileItemWidget> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CustomImageView(imagePath: "assets/images/verify.svg"),
+                      Padding(
+                        padding: const EdgeInsets.only(top:2),
+                        child: CustomImageView(imagePath: "assets/images/verify.svg"),
+                      ),
+
+
                       SizedBox(width: 2.adaptSize),
                       Text(
                         "Top Rated",
                         style: theme.textTheme.titleSmall!
-                            .copyWith(color: appTheme.whiteA700),
+                            .copyWith(color: appTheme.whiteA700,fontSize: 11.fSize),
                       ),
                     ],
                   ),
@@ -995,7 +1001,7 @@ class _UserProfileItemWidgetState extends State<UserProfileItemWidget> {
                       AppRoutes.chattingScreen,
                       arguments: {'chat': chatData},
                     );
-                  },
+                                    },
                 ),
               ],
             ),
