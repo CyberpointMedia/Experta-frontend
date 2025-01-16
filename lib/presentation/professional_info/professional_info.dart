@@ -332,59 +332,73 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
   }
 
   Widget _buildFileUploadProgress() {
-    return Padding(
+
+     return Obx(() => Padding(
       padding: const EdgeInsets.symmetric(vertical: 16.0),
-      child: Container(
-        height: 100.v,
-        decoration: BoxDecoration(
-            color: Colors.white, borderRadius: BorderRadius.circular(10)),
-        padding: const EdgeInsets.all(8),
-        child: Column(
-          children: [
-            Row(
-              children: [
-                // const Icon(Icons.picture_as_pdf, color: Colors.red),
-                CustomIconButton(
-                    height: 44.adaptSize,
-                    width: 44.adaptSize,
-                    padding: EdgeInsets.all(10.h),
-                    decoration: IconButtonStyleHelper.fillGrayTL22,
-                    child: CustomImageView(
-                      imagePath: ImageConstant.pdf,
-                    )),
-                const SizedBox(width: 8),
-                Expanded(
-                    child: Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      controller.pickedFile!.name,
-                      style: theme.textTheme.bodyMedium!
-                          .copyWith(color: appTheme.black900),
-                    ),
-                    Row(
-                      children: [
-                        Text(
-                            '${(controller.pickedFile!.size / 1024).toStringAsFixed(2)} KB  •  '),
-                        Text(
-                            '${(controller.uploadProgress.value * 100).toStringAsFixed(0)}% uploaded'),
-                      ],
-                    ),
-                  ],
-                )),
-              ],
-            ),
-            const SizedBox(height: 8),
-            LinearProgressIndicator(
-              value: controller.uploadProgress.value,
-              color: appTheme.green400,
-              backgroundColor: appTheme.gray200,
-            ),
-          ],
+      child: Visibility(
+        visible: controller.pickedFile != null,
+        child: Container(
+          height: 100.v,
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(10)),
+          padding: const EdgeInsets.all(8),
+          child: Column(
+            children: [
+              Row(
+                children: [
+                  // const Icon(Icons.picture_as_pdf, color: Colors.red),
+                  CustomIconButton(
+                      height: 44.adaptSize,
+                      width: 44.adaptSize,
+                      padding: EdgeInsets.all(10.h),
+                      decoration: IconButtonStyleHelper.fillGrayTL22,
+                      child: CustomImageView(
+                        imagePath: ImageConstant.pdf,
+                      )),
+                  const SizedBox(width: 8),
+                  Expanded(
+                      child: Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        controller.pickedFile!.name,
+                        style: theme.textTheme.bodyMedium!
+                            .copyWith(color: appTheme.black900),
+                      ),
+                      Row(
+                        children: [
+                          Text(
+                              '${(controller.pickedFile!.size / 1024).toStringAsFixed(2)} KB  •  '),
+                          Text(
+                              '${(controller.uploadProgress.value * 100).toStringAsFixed(0)}% uploaded'),
+                        ],
+                      ),
+                    ],
+                  )),
+                
+                Padding(
+                  padding: const EdgeInsets.only(top: 5,bottom: 20,right: 10,),
+                  child: CustomImageView(
+                          imagePath: ImageConstant.filtercross,
+                          onTap: () {
+                            controller.pickedFile =null;
+                          },
+                        ),
+                ),
+                ],
+              ),
+              const SizedBox(height: 8),
+              LinearProgressIndicator(
+                value: controller.uploadProgress.value,
+                color: appTheme.green400,
+                backgroundColor: appTheme.gray200,
+              ),
+            ],
+          ),
         ),
       ),
-    );
+    ));
   }
 
   Widget _buildExpertiseSection() {

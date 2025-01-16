@@ -21,10 +21,14 @@ class _EditAboutPageState extends State<EditAboutPage> {
   bool loaded = false;
   int? selectedSuggestionIndex;
 
+  var lastchangetext="";
+
   @override
   void initState() {
     super.initState();
     bioController = TextEditingController(text: widget.bio);
+
+    lastchangetext=bioController.text;
   }
 
   @override
@@ -38,6 +42,7 @@ class _EditAboutPageState extends State<EditAboutPage> {
       bioController.clear();
       bioSuggestions.clear();
       selectedSuggestionIndex = null;
+      bioController.text=lastchangetext;
     });
   }
 
@@ -251,7 +256,17 @@ class _EditAboutPageState extends State<EditAboutPage> {
                             isSuccess: false,
                           );
                         }
+                      }else{
+                           setState(() {
+                              loaded = false;
+                            });
+                           CustomToast().showToast(
+                              context: context,
+                              message: "Please enter bio!",
+                              isSuccess: false,
+                            );
                       }
+
                     },
                   ),
                 ),
