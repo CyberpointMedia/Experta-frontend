@@ -586,7 +586,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     if (!isRecording) return;
 
     try {
-     String filepath= await platform
+     String filepath= await platform 
           .invokeMethod('stopScreenCapture'); // This stops the service.
       setState(() async {
         isRecording = false;

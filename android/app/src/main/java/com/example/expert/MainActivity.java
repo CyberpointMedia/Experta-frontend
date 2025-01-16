@@ -72,7 +72,7 @@ public class MainActivity extends FlutterActivity {
                         startScreenCapture(result);
                         break;
                     case "stopScreenCapture":
-                      //  stopScreenCapture(result);
+                      //  stopScreenCapture(result); 
                         String filepath= ScreenRecordingService.stopRecording();
                          Log.d("ScreenRecordingService55",""+filepath);
                         result.success(filepath);

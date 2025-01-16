@@ -99,7 +99,7 @@ public class ScreenRecordingService extends Service {
         File cacheDir = getCacheDir();
         File outputFile = new File(cacheDir, fileName);
         filePath = outputFile.getAbsolutePath(); // Store the file path
-
+ 
         try {
             mediaRecorder.setOutputFile(filePath); 
             mediaRecorder.setVideoSize(720,1280);
