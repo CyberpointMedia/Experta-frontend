@@ -1,10 +1,7 @@
 import 'dart:ui';
 import 'package:experta/core/app_export.dart';
-import 'package:experta/widgets/app_bar/appbar_leading_image.dart';
-import 'package:experta/widgets/app_bar/appbar_subtitle_six.dart';
-import 'package:experta/widgets/app_bar/custom_app_bar.dart';
+import 'package:experta/presentation/edit_profile/edit_profile_controller/edit_profile_controller.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
-import 'package:flutter/material.dart';
 
 class EditProfileSettings extends StatefulWidget {
   const EditProfileSettings({super.key});
@@ -14,6 +11,8 @@ class EditProfileSettings extends StatefulWidget {
 }
 
 class _EditProfileSettingsState extends State<EditProfileSettings> {
+  final EditSettingController controller = Get.find();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -92,6 +91,9 @@ class _EditProfileSettingsState extends State<EditProfileSettings> {
                     iconDecoration: IconButtonStyleHelper.fillPrimary,
                     decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
                         borderRadius: BorderRadiusStyle.customBorderBL20),
+                    completion: controller
+                            .profileCompletion?.sectionCompletions.basicInfo ??
+                        0,
                     onTap: () => Get.toNamed(AppRoutes.basicProfile),
                   ),
                   _buildSettingsOption(
@@ -99,6 +101,9 @@ class _EditProfileSettingsState extends State<EditProfileSettings> {
                     iconPath: ImageConstant.brief,
                     iconDecoration: IconButtonStyleHelper.fillDeepPurple,
                     decoration: AppDecoration.fillOnPrimaryContainer,
+                    completion: controller.profileCompletion?.sectionCompletions
+                            .industryOccupation ??
+                        0,
                     onTap: () => Get.toNamed(AppRoutes.professionalInfo),
                   ),
                   _buildSettingsOption(
@@ -106,6 +111,9 @@ class _EditProfileSettingsState extends State<EditProfileSettings> {
                     iconPath: ImageConstant.vector,
                     iconDecoration: IconButtonStyleHelper.fillOrange,
                     decoration: AppDecoration.fillOnPrimaryContainer,
+                    completion: controller
+                            .profileCompletion?.sectionCompletions.interest ??
+                        0,
                     onTap: () => Get.toNamed(AppRoutes.additional),
                   ),
                   _buildSettingsOption(
@@ -114,6 +122,9 @@ class _EditProfileSettingsState extends State<EditProfileSettings> {
                     iconDecoration: IconButtonStyleHelper.fillGreenTL24,
                     decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
                         borderRadius: BorderRadiusStyle.customBorderL20),
+                    completion: controller.profileCompletion?.sectionCompletions
+                            .availability ??
+                        0,
                     onTap: () => Get.toNamed(AppRoutes.callSettings),
                   ),
                 ],
@@ -130,6 +141,7 @@ class _EditProfileSettingsState extends State<EditProfileSettings> {
     required String iconPath,
     required BoxDecoration iconDecoration,
     required Decoration decoration,
+    required int completion,
     VoidCallback? onTap,
   }) {
     return GestureDetector(
@@ -159,6 +171,12 @@ class _EditProfileSettingsState extends State<EditProfileSettings> {
                 ),
               ),
               const Spacer(),
+              if (completion == 100)
+                CustomImageView(
+                  imagePath: ImageConstant.complete,
+                  height: 20,
+                  width: 20,
+                ),
               CustomImageView(
                 imagePath: ImageConstant.imgArrowRightGray900,
                 height: 24.adaptSize,

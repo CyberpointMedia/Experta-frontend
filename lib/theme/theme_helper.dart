@@ -83,8 +83,8 @@ class ThemeHelper {
         ),
       ),
       radioTheme: RadioThemeData(
-        fillColor: WidgetStateProperty.resolveWith((states) {
-          if (states.contains(WidgetState.selected)) {
+        fillColor: MaterialStateProperty.resolveWith((states) {
+          if (states.contains(MaterialState.selected)) {
             return colorScheme.onPrimaryContainer.withOpacity(1);
           }
           return colorScheme.onSurface;
@@ -115,73 +115,73 @@ class TextThemes {
         bodyLarge: TextStyle(
           color: appTheme.blueGray300,
           fontSize: 16.fSize,
-          fontFamily: 'Roboto',
+          fontFamily: 'SF Pro Display',
           fontWeight: FontWeight.w400,
         ),
         bodyMedium: TextStyle(
           color: appTheme.blueGray300,
           fontSize: 14.fSize,
-          fontFamily: 'Roboto',
+          fontFamily: 'SF Pro Display',
           fontWeight: FontWeight.w400,
         ),
         bodySmall: TextStyle(
           color: colorScheme.onPrimaryContainer.withOpacity(1),
           fontSize: 10.fSize,
-          fontFamily: 'Roboto',
+          fontFamily: 'SF Pro Display',
           fontWeight: FontWeight.w400,
         ),
         displaySmall: TextStyle(
           color: appTheme.gray900,
           fontSize: 36.fSize,
-          fontFamily: 'Roboto',
+          fontFamily: 'SF Pro Display',
           fontWeight: FontWeight.w500,
         ),
         headlineLarge: TextStyle(
           color: appTheme.gray900,
           fontSize: 32.fSize,
-          fontFamily: 'Roboto',
+          fontFamily: 'SF Pro Display',
           fontWeight: FontWeight.w600,
         ),
         headlineMedium: TextStyle(
           color: appTheme.gray900,
           fontSize: 26.fSize,
-          fontFamily: 'Roboto',
+          fontFamily: 'SF Pro Display',
           fontWeight: FontWeight.w700,
         ),
         headlineSmall: TextStyle(
           color: appTheme.gray900,
           fontSize: 24.fSize,
-          fontFamily: 'Roboto',
+          fontFamily: 'SF Pro Display',
           fontWeight: FontWeight.w500,
         ),
         labelLarge: TextStyle(
           color: const Color(0XFFFFFFFF),
           fontSize: 12.fSize,
-          fontFamily: 'Roboto',
+          fontFamily: 'SF Pro Display',
           fontWeight: FontWeight.w600,
         ),
         labelMedium: TextStyle(
           color: appTheme.blueGray300,
           fontSize: 10.fSize,
-          fontFamily: 'Roboto',
+          fontFamily: 'SF Pro Display',
           fontWeight: FontWeight.w600,
         ),
         titleLarge: TextStyle(
           color: appTheme.gray900,
           fontSize: 22.fSize,
-          fontFamily: 'Roboto',
-          fontWeight: FontWeight.bold,
+          fontFamily: 'SF Pro Display',
+          fontWeight: FontWeight.w700,
         ),
         titleMedium: TextStyle(
           color: appTheme.gray900,
           fontSize: 16.fSize,
-          fontFamily: 'Roboto',
+          fontFamily: 'SF Pro Display',
           fontWeight: FontWeight.w500,
         ),
         titleSmall: TextStyle(
           color: appTheme.blueGray300,
           fontSize: 14.fSize,
-          fontFamily: 'Roboto',
+          fontFamily: 'SF Pro Display',
           fontWeight: FontWeight.w500,
         ),
       );
@@ -211,7 +211,6 @@ class PrimaryColors {
   // Black
   Color get black900 => const Color(0XFF0A0A0B);
   Color get black90001 => const Color(0XFF000000);
-  Color get blackCall => const Color(0XFF2F3034);
 
   // Blacke
   Color get black9001e => const Color(0X1E060B14);
@@ -228,10 +227,9 @@ class PrimaryColors {
   // DeepOrange
   Color get deepOrange500 => const Color(0XFFFF5117);
   Color get deepOrange50001 => const Color(0XFFFF4B26);
-  Color get deepOrangeA200 => const Color(0XFFFE7733); 
+  Color get deepOrangeA200 => const Color(0XFFFE7733); //FFCA9A
   Color get deepOrangeA20 => const Color(0XFFFFCA9A);
   Color get deepYello => const Color(0XFFFFDF68);
-  Color get panCol => const Color(0XFFBDAD5E);
 
   // DeepPurple
   Color get deepPurple300 => const Color(0XFF9270D8);
@@ -277,9 +275,6 @@ class PrimaryColors {
 
   // Red
   Color get red500 => const Color(0XFFEB4335);
-  Color get readmore => const Color(0XFFD45102);
-
-  // Color get readmore => const Color(0XFFD45102);
 
   // White
   Color get whiteA700 => const Color(0XFFFCFCFE);

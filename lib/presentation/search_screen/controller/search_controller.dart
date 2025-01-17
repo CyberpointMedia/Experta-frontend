@@ -8,11 +8,12 @@ class SearchPageController extends GetxController {
   TextEditingController searchPageController = TextEditingController();
   RxList<SearchResult> searchResults = <SearchResult>[].obs;
   var isLoading = false.obs;
+  
 
   @override
   void onInit() {
     super.onInit();
-
+   
     searchPageController.addListener(_onSearchChanged);
   }
 
@@ -45,7 +46,7 @@ class SearchPageController extends GetxController {
 
   @override
   void onClose() {
-    searchPageController.clear();
+    searchPageController.dispose();
     super.onClose();
   }
 }

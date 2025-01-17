@@ -1,10 +1,7 @@
+import 'dart:developer';
 import 'dart:io';
 import 'package:experta/core/app_export.dart';
-import 'package:experta/data/apiClient/api_service.dart';
 import 'package:experta/presentation/Basic_Info/models/basic_model.dart';
-import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:image_cropper/image_cropper.dart';
 
 class BasicProfileInfoController extends GetxController {
   final ApiService apiService = ApiService();
@@ -47,15 +44,12 @@ class BasicProfileInfoController extends GetxController {
   Future<void> fetchBasicInfo() async {
     try {
       final basicInfoJson = await apiService.fetchBasicInfo();
-      if (basicInfoJson != null) {
-        basicInfoModelObj.value = BasicProfileInfoModel.fromJson(basicInfoJson);
-        updateTextFields();
-        updateSocialLinks();
-        profileImageUrl.value = basicInfoModelObj.value.profilePic;
-      } else {
-        Get.snackbar('Error', 'Failed to load basic info: Data is null');
-      }
+      basicInfoModelObj.value = BasicProfileInfoModel.fromJson(basicInfoJson);
+      updateTextFields();
+      updateSocialLinks();
+      profileImageUrl.value = basicInfoModelObj.value.profilePic;
     } catch (e) {
+      log("the error log is $e");
       Get.snackbar('Error', 'Failed to load basic info: $e');
     } finally {
       isLoading.value = false;
@@ -64,10 +58,10 @@ class BasicProfileInfoController extends GetxController {
 
   void updateTextFields() {
     textField1.text =
-        '${basicInfoModelObj.value.firstName ?? ''} ${basicInfoModelObj.value.lastName ?? ''}'
+        '${basicInfoModelObj.value.firstName} ${basicInfoModelObj.value.lastName}'
             .trim();
-    textField2.text = basicInfoModelObj.value.displayName ?? '';
-    textField3.text = basicInfoModelObj.value.bio ?? '';
+    textField2.text = basicInfoModelObj.value.displayName;
+    textField3.text = basicInfoModelObj.value.bio;
   }
 
   void updateSocialLinks() {
@@ -90,6 +84,9 @@ class BasicProfileInfoController extends GetxController {
     try {
       final pickedFile = await _picker.pickImage(source: source);
       if (pickedFile != null) {
+        // Log the picked file path
+        log("Picked file path: ${pickedFile.path}");
+
         CroppedFile? croppedFile = await ImageCropper().cropImage(
           sourcePath: pickedFile.path,
           aspectRatio: const CropAspectRatio(ratioX: 1.0, ratioY: 1.0),
@@ -100,19 +97,18 @@ class BasicProfileInfoController extends GetxController {
               toolbarTitle: 'Crop Image',
               toolbarColor: theme.primaryColor,
               toolbarWidgetColor: Colors.white,
-              initAspectRatio: CropAspectRatioPreset.original,
-              lockAspectRatio: false,
+              initAspectRatio: CropAspectRatioPreset.square,
+              lockAspectRatio: true,
             ),
             IOSUiSettings(
               title: 'Crop Image',
-              // aspectRatioPresets: [
-              //   CropAspectRatioPreset.original,
-              //   CropAspectRatioPreset.square,
-              // ],
             ),
           ],
         );
         if (croppedFile != null) {
+          // Log the cropped file path
+          log("Cropped file path: ${croppedFile.path}");
+
           imageFile.value = File(croppedFile.path);
         } else {
           Get.snackbar('Error', 'Image cropping was cancelled or failed');
@@ -121,6 +117,7 @@ class BasicProfileInfoController extends GetxController {
         Get.snackbar('Error', 'Image picking was cancelled or failed');
       }
     } catch (e) {
+      log("Image picking/cropping error: $e");
       Get.snackbar('Error', 'An error occurred while picking the image: $e');
     }
   }
@@ -147,7 +144,10 @@ class BasicProfileInfoController extends GetxController {
       };
 
       await apiService.postBasicInfo(data, imageFile.value);
+      Get.back();
       Get.snackbar('Success', 'Profile information saved successfully');
+
+      // Get.back();
     } catch (e) {
       Get.snackbar('Error', 'Failed to save profile information: $e');
     }

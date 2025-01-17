@@ -1,18 +1,10 @@
 import 'dart:ui';
-
+import 'package:photo_view/photo_view.dart';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/Basic_Info/controller/basic_info_controller.dart';
-import 'package:experta/widgets/app_bar/appbar_leading_image.dart';
-import 'package:experta/widgets/app_bar/appbar_subtitle_six.dart';
-import 'package:experta/widgets/app_bar/custom_app_bar.dart';
 import 'package:experta/widgets/bio_textformfield.dart';
-import 'package:experta/widgets/custom_elevated_button.dart';
 import 'package:experta/widgets/custom_text_form_field.dart';
-import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:photo_view/photo_view.dart';
-import 'package:shimmer/shimmer.dart';
 
 class BasicProfileInfo extends StatefulWidget {
   const BasicProfileInfo({super.key});
@@ -65,13 +57,22 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
       context,
       MaterialPageRoute(
         builder: (context) => Scaffold(
-          appBar: AppBar(),
-          body: Obx(() => PhotoView(
-                imageProvider: controller.imageFile.value != null
-                    ? FileImage(controller.imageFile.value!)
-                    : const AssetImage("assets/images/settings/profile.jpeg")
-                        as ImageProvider,
-              )),
+          appBar: AppBar(
+            title: const Text('View Image'),
+          ),
+          body: Obx(() {
+            return PhotoView(
+              imageProvider: controller.imageFile.value != null
+                  ? FileImage(controller.imageFile.value!)
+                  : (controller.profileImageUrl.value.isNotEmpty
+                          ? NetworkImage(controller.profileImageUrl.value)
+                          : const AssetImage(
+                              "assets/images/settings/profile.jpeg"))
+                      as ImageProvider,
+              minScale: PhotoViewComputedScale.contained,
+              maxScale: PhotoViewComputedScale.covered * 2,
+            );
+          }),
         ),
       ),
     );
@@ -331,7 +332,7 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
     }
   }
 
-  onTapArrowLeft() {
+  void onTapArrowLeft() {
     Get.back();
   }
 

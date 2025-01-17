@@ -100,7 +100,9 @@ class SettingScreen extends GetWidget<SettingController> {
                                                 "assets/images/account.svg")),
                                     Padding(
                                         padding: EdgeInsets.only(
-                                            left: 15.h, top: 13.v, bottom: 10.v),
+                                            left: 15.h,
+                                            top: 13.v,
+                                            bottom: 10.v),
                                         child: Text("msg_account_settings".tr,
                                             style: theme.textTheme.titleMedium!
                                                 .copyWith(
@@ -111,8 +113,8 @@ class SettingScreen extends GetWidget<SettingController> {
                                             ImageConstant.imgArrowRightGray900,
                                         height: 24.adaptSize,
                                         width: 24.adaptSize,
-                                        margin:
-                                            EdgeInsets.symmetric(vertical: 10.v))
+                                        margin: EdgeInsets.symmetric(
+                                            vertical: 10.v))
                                   ])),
                         ),
                         GestureDetector(
@@ -124,7 +126,8 @@ class SettingScreen extends GetWidget<SettingController> {
                             child: Container(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 15.h, vertical: 16.v),
-                                decoration: AppDecoration.fillOnPrimaryContainer,
+                                decoration:
+                                    AppDecoration.fillOnPrimaryContainer,
                                 child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -144,13 +147,15 @@ class SettingScreen extends GetWidget<SettingController> {
                                               top: 13.v,
                                               bottom: 10.v),
                                           child: Text("lbl_my_booking".tr,
-                                              style: theme.textTheme.titleMedium!
+                                              style: theme
+                                                  .textTheme.titleMedium!
                                                   .copyWith(
-                                                      color: appTheme.gray900))),
+                                                      color:
+                                                          appTheme.gray900))),
                                       const Spacer(),
                                       CustomImageView(
-                                          imagePath:
-                                              ImageConstant.imgArrowRightGray900,
+                                          imagePath: ImageConstant
+                                              .imgArrowRightGray900,
                                           height: 24.adaptSize,
                                           width: 24.adaptSize,
                                           margin: EdgeInsets.symmetric(
@@ -167,7 +172,8 @@ class SettingScreen extends GetWidget<SettingController> {
                             child: Container(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 15.h, vertical: 16.v),
-                                decoration: AppDecoration.fillOnPrimaryContainer,
+                                decoration:
+                                    AppDecoration.fillOnPrimaryContainer,
                                 child: Row(
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
@@ -175,8 +181,8 @@ class SettingScreen extends GetWidget<SettingController> {
                                           height: 44.adaptSize,
                                           width: 44.adaptSize,
                                           padding: EdgeInsets.all(8.h),
-                                          decoration:
-                                              IconButtonStyleHelper.fillGreenTL24,
+                                          decoration: IconButtonStyleHelper
+                                              .fillGreenTL24,
                                           child: CustomImageView(
                                             imagePath: ImageConstant.wallet,
                                           )),
@@ -186,13 +192,15 @@ class SettingScreen extends GetWidget<SettingController> {
                                               top: 13.v,
                                               bottom: 10.v),
                                           child: Text("lbl_payment".tr,
-                                              style: theme.textTheme.titleMedium!
+                                              style: theme
+                                                  .textTheme.titleMedium!
                                                   .copyWith(
-                                                      color: appTheme.gray900))),
+                                                      color:
+                                                          appTheme.gray900))),
                                       const Spacer(),
                                       CustomImageView(
-                                          imagePath:
-                                              ImageConstant.imgArrowRightGray900,
+                                          imagePath: ImageConstant
+                                              .imgArrowRightGray900,
                                           height: 24.adaptSize,
                                           width: 24.adaptSize,
                                           margin: EdgeInsets.symmetric(
@@ -257,8 +265,8 @@ class SettingScreen extends GetWidget<SettingController> {
                                           height: 44.adaptSize,
                                           width: 44.adaptSize,
                                           padding: EdgeInsets.all(6.h),
-                                          decoration:
-                                              IconButtonStyleHelper.fillGrayTL22,
+                                          decoration: IconButtonStyleHelper
+                                              .fillGrayTL22,
                                           child: CustomImageView(
                                             imagePath:
                                                 "assets/images/verifyaccount.svg",
@@ -269,13 +277,15 @@ class SettingScreen extends GetWidget<SettingController> {
                                               top: 13.v,
                                               bottom: 10.v),
                                           child: Text("lbl_verify_account".tr,
-                                              style: theme.textTheme.titleMedium!
+                                              style: theme
+                                                  .textTheme.titleMedium!
                                                   .copyWith(
-                                                      color: appTheme.gray900))),
+                                                      color:
+                                                          appTheme.gray900))),
                                       const Spacer(),
                                       CustomImageView(
-                                          imagePath:
-                                              ImageConstant.imgArrowRightGray900,
+                                          imagePath: ImageConstant
+                                              .imgArrowRightGray900,
                                           height: 24.adaptSize,
                                           width: 24.adaptSize,
                                           margin: EdgeInsets.symmetric(
@@ -326,17 +336,19 @@ class SettingScreen extends GetWidget<SettingController> {
                   decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
                       borderRadius: BorderRadiusStyle.roundedBorder20),
                   child: Row(children: [
-                    (controller.imagePath != "")? CustomImageView(
-                              imagePath: controller.imagePath,
-                              height: 48.adaptSize,
-                              width: 48.adaptSize,
-                              radius: BorderRadius.circular(24.h),
-                              alignment: Alignment.center):CustomImageView(
-                              imagePath: 'assets/images/image_not_found.png',
-                              height: 48.adaptSize,
-                              width: 48.adaptSize,
-                              radius: BorderRadius.circular(24.h),
-                              alignment: Alignment.center),
+                    (controller.imagePath != "")
+                        ? CustomImageView(
+                            imagePath: controller.imagePath,
+                            height: 48.adaptSize,
+                            width: 48.adaptSize,
+                            radius: BorderRadius.circular(24.h),
+                            alignment: Alignment.center)
+                        : CustomImageView(
+                            imagePath: 'assets/images/image_not_found.png',
+                            height: 48.adaptSize,
+                            width: 48.adaptSize,
+                            radius: BorderRadius.circular(24.h),
+                            alignment: Alignment.center),
                     Padding(
                         padding: EdgeInsets.only(left: 15.h),
                         child: Column(
@@ -347,7 +359,10 @@ class SettingScreen extends GetWidget<SettingController> {
                               SizedBox(height: 4.v),
                               GestureDetector(
                                   onTap: () {
-                                    onTapEditProfile();
+                                    // onTapEditProfile();
+                                    Get.toNamed(
+                                      AppRoutes.editProfileSetting,
+                                    );
                                   },
                                   child: Row(children: [
                                     Padding(
@@ -383,11 +398,10 @@ class SettingScreen extends GetWidget<SettingController> {
             decoration: AppDecoration.fillOnPrimaryContainer
                 .copyWith(color: Colors.transparent),
             child: Column(mainAxisSize: MainAxisSize.min, children: [
-           
               GestureDetector(
-                          onTap: () {
-                            Get.toNamed(AppRoutes.security);
-                          },
+                onTap: () {
+                  Get.toNamed(AppRoutes.security);
+                },
                 child: Container(
                     padding:
                         EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
@@ -495,7 +509,6 @@ class SettingScreen extends GetWidget<SettingController> {
                 color: Colors.transparent,
                 borderRadius: BorderRadiusStyle.roundedBorder20),
             child: Column(mainAxisSize: MainAxisSize.min, children: [
-             
               GestureDetector(
                 onTap: () {
                   Get.toNamed(AppRoutes.aboutus);
@@ -594,12 +607,12 @@ class SettingScreen extends GetWidget<SettingController> {
 
   /// Navigates to the settingsMyBookingUpcomingScreen when the action is triggered.
   onTapmybooking() {
-     Get.toNamed(AppRoutes.mybook);
+    Get.toNamed(AppRoutes.mybook);
   }
 
   /// Navigates to the settingsVerifyAccountDefaultScreen when the action is triggered.
   onTapVerifiedUserTwo() {
-     Get.toNamed(
+    Get.toNamed(
       AppRoutes.bank,
     );
   }

@@ -1,5 +1,6 @@
 import '../core/app_export.dart';
 import 'dart:async';
+import 'package:flutter/material.dart';
 
 class CustomAnimatedSearchView extends StatefulWidget {
   const CustomAnimatedSearchView({

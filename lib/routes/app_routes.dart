@@ -21,6 +21,13 @@ import 'package:experta/presentation/call_settings/bindings/call_setting_binding
 import 'package:experta/presentation/call_settings/call_settings.dart';
 import 'package:experta/presentation/category/category_controller.dart';
 import 'package:experta/presentation/category/category_screen.dart';
+import 'package:experta/presentation/change_date_of_birth/binding/change_date_of_birth_binding.dart';
+import 'package:experta/presentation/change_date_of_birth/change_date_of_birth.dart';
+import 'package:experta/presentation/change_email/binding/change_email_binding.dart';
+import 'package:experta/presentation/change_email/change_email.dart';
+import 'package:experta/presentation/change_gender/binding/change_gender_binding.dart';
+import 'package:experta/presentation/change_gender/change_gender.dart';
+import 'package:experta/presentation/change_user_name/change_user_name.dart';
 import 'package:experta/presentation/createPost/binding/create_post_binding.dart';
 import 'package:experta/presentation/createPost/create_post.dart';
 import 'package:experta/presentation/dashboard/binding/dashboard_binding.dart';
@@ -56,6 +63,8 @@ import 'package:experta/presentation/payment/binding/payment_binding.dart';
 import 'package:experta/presentation/payment/payment.dart';
 import 'package:experta/presentation/payment_method/binding/payment_method_binding.dart';
 import 'package:experta/presentation/payment_method/payment_method.dart';
+import 'package:experta/presentation/phone_number/binding/phone_number_binding.dart';
+import 'package:experta/presentation/phone_number/phone_number.dart';
 import 'package:experta/presentation/professional_info/binding/professional_binding.dart';
 import 'package:experta/presentation/professional_info/professional_info.dart';
 import 'package:experta/presentation/recents/binding/recents_binding.dart';
@@ -64,6 +73,8 @@ import 'package:experta/presentation/search_screen/binding/search_binding.dart';
 import 'package:experta/presentation/search_screen/search_screen.dart';
 import 'package:experta/presentation/security_privacy/binding/security_privacy_binding.dart';
 import 'package:experta/presentation/security_privacy/security_privacy.dart';
+import 'package:experta/presentation/see_all_review/bindings/bindings.dart';
+import 'package:experta/presentation/see_all_review/see_all_review.dart';
 import 'package:experta/presentation/set_availability/bindings/set_availability_bindings.dart';
 import 'package:experta/presentation/set_availability/edit_set_avail/bindings/edit_set_avail_bindings.dart';
 import 'package:experta/presentation/set_availability/edit_set_avail/edit_set_avail.dart';
@@ -80,18 +91,16 @@ import 'package:experta/presentation/userProfile/binding/profile_binding.dart';
 import 'package:experta/presentation/userProfile/user_profile_page.dart';
 import 'package:experta/presentation/user_details/binding/details_binding.dart';
 import 'package:experta/presentation/user_details/user_details.dart';
-import 'package:experta/presentation/verify_account/binding/verify_account_binding.dart';
-import 'package:experta/presentation/verify_account/varify_account.dart';
 import 'package:experta/presentation/verifynumber_screen/binding/verifynumber_binding.dart';
 import 'package:experta/presentation/verifynumber_screen/verifynumber_screen.dart';
 import 'package:experta/presentation/wallet/binding/wallet_binding.dart';
 import 'package:experta/presentation/wallet/wallet.dart';
 import 'package:experta/presentation/work_experience/binding/experience_binding.dart';
 import 'package:experta/presentation/work_experience/work_experience.dart';
-
 import 'package:experta/widgets/custom_page_transition.dart';
 import 'package:get/get.dart';
 
+import '../presentation/change_user_name/binding/change_user_name_binding.dart';
 
 class AppRoutes {
   static const String onboardingScreen = '/onboarding_screen';
@@ -195,18 +204,15 @@ class AppRoutes {
 
   static const String detailsPage = "/user_details";
 
-  // ignore: constant_identifier_names
   static const String Bookindeetail = "/booking_detail";
 
-static const String rating= "/give_rating";
+  static const String rating = "/give_rating";
 
-static const String reviewall= "/all_review";
+  static const String mybook = "/my_booking";
 
+  static const String searchScreen = "/search_screen";
 
-static const String mybook = "/my_booking";
-
-
-static const String lottie = "/";
+  static const String allReviews = "/";
 
   static List<GetPage> pages = [
     GetPage(
@@ -218,7 +224,7 @@ static const String lottie = "/";
     ),
     GetPage(
       name: recent,
-      page: () =>  RecentsPage(),
+      page: () => RecentsPage(),
       bindings: [
         RecentsBinding(),
       ],
@@ -230,7 +236,13 @@ static const String lottie = "/";
         AboutUsBinding(),
       ],
     ),
-    
+    GetPage(
+      name: changegender,
+      page: () => const ChangeGender(),
+      bindings: [
+        ChangeGenderBinding(),
+      ],
+    ),
     GetPage(
       name: addbankaccount,
       page: () => const AddBankAccount(),
@@ -238,7 +250,6 @@ static const String lottie = "/";
         AddBankAccountBinding(),
       ],
     ),
-    
     GetPage(
       name: pandetail,
       page: () => const PanDetail(),
@@ -283,7 +294,7 @@ static const String lottie = "/";
     ),
     GetPage(
       name: follower,
-      page: () => const FollowersPage(),
+      page: () => FollowersPage(),
       bindings: [
         FollowersBinding(),
       ],
@@ -308,13 +319,6 @@ static const String lottie = "/";
         AccountSettingBinding(),
       ],
     ),
-     GetPage(
-      name: bank,
-      page: () => const VerifyAccount(),
-      bindings: [
-         VerifyAccountBinding(),
-     ],
-    ),
     GetPage(
       name: verifynumberScreen,
       page: () => const VerifynumberScreen(),
@@ -322,32 +326,25 @@ static const String lottie = "/";
         VerifynumberBinding(),
       ],
     ),
-    // GetPage(
-    //   name: homePage,
-    //   page: () => HomeScreen(),
-    //   bindings: [
-    //     HomeBinding(),
-    //   ],
-    // ),
-    GetPage(
-      name: searchPage,
-      page: () => const SearchScreen(),
-      bindings: [
-        SearchBinding(),
-      ],
-    ),
-    // GetPage(
-    //     name: editExperience,
-    //     page: () => const EditWorkExperiencePage(),
-    //     customTransition: CustomPageTransition(),
-    //     bindings: [
-    //       EditWorkExperienceBinding(),
-    //     ]),
     GetPage(
       name: wallet,
       page: () => const Wallet(),
       bindings: [
         WalletBinding(),
+      ],
+    ),
+    GetPage(
+      name: changeEmail,
+      page: () => const ChangeEmail(),
+      bindings: [
+        ChangeEmailBinding(),
+      ],
+    ),
+    GetPage(
+      name: phoneNumber,
+      page: () => const PhoneNumber(),
+      bindings: [
+        PhoneNumberBinding(),
       ],
     ),
     GetPage(
@@ -357,7 +354,13 @@ static const String lottie = "/";
         PaymentBinding(),
       ],
     ),
-    
+    GetPage(
+      name: changeDateOfBirth,
+      page: () => const ChangeDateOfBirth(),
+      bindings: [
+        ChangeDateOfBirthBinding(),
+      ],
+    ),
     GetPage(
       name: wallet,
       page: () => const Wallet(),
@@ -365,7 +368,13 @@ static const String lottie = "/";
         WalletBinding(),
       ],
     ),
-     
+    GetPage(
+      name: changeUserName,
+      page: () => const ChangeUserName(),
+      bindings: [
+        ChangeUserNameBinding(),
+      ],
+    ),
     GetPage(
         name: notification,
         page: () => const NotificationScreen(),
@@ -474,7 +483,7 @@ static const String lottie = "/";
         bindings: [
           SetPricingBindings(),
         ]),
-    GetPage(name: category, page: () => const CategoryScreen(), bindings: [
+    GetPage(name: category, page: () => CategoryScreen(), bindings: [
       CategoryBinding(),
     ]),
     GetPage(
@@ -491,7 +500,13 @@ static const String lottie = "/";
         AboutUsBinding(),
       ],
     ),
-    
+    GetPage(
+      name: changegender,
+      page: () => const ChangeGender(),
+      bindings: [
+        ChangeGenderBinding(),
+      ],
+    ),
     GetPage(
       name: addbankaccount,
       page: () => const AddBankAccount(),
@@ -501,7 +516,7 @@ static const String lottie = "/";
     ),
     GetPage(
       name: following,
-      page: () => const FollowingPage(),
+      page: () => FollowingPage(),
       bindings: [
         FollowersBinding(),
       ],
@@ -543,7 +558,7 @@ static const String lottie = "/";
     ),
     GetPage(
       name: follower,
-      page: () => const FollowersPage(),
+      page: () => FollowersPage(),
       bindings: [
         FollowersBinding(),
       ],
@@ -569,7 +584,6 @@ static const String lottie = "/";
         bindings: [
           NewPostBindings(),
         ]),
-
     GetPage(
         name: detailsPage,
         page: () => const UserDetailsPage(),
@@ -577,33 +591,43 @@ static const String lottie = "/";
         bindings: [
           DetailsBinding(),
         ]),
-         GetPage(
+    GetPage(
         name: Bookindeetail,
         page: () => const BookingDetailPage(),
         customTransition: CustomPageTransition(),
         bindings: [
           BookingDetailBinding(),
         ]),
-         GetPage(
+    GetPage(
         name: mybook,
         page: () => MyBookingPage(),
         customTransition: CustomPageTransition(),
         bindings: [
           MyBookingBinding(),
         ]),
-        GetPage(
+    GetPage(
         name: profile,
         page: () => const UserProfilePage(),
         customTransition: CustomPageTransition(),
         bindings: [
           ProfileBinding(),
         ]),
-        GetPage(
-        name: rating,
-        page: () => RatingPage(),
+    GetPage(name: rating, page: () => RatingPage(), bindings: [
+      RatingPageBinding(),
+    ]),
+    GetPage(
+        name: searchScreen,
+        page: () => const SearchScreen(),
+        customTransition: CustomPageTransition(),
         bindings: [
-          RatingPageBinding(),
+          SearchBinding(),
         ]),
-        
+    GetPage(
+        name: allReviews,
+        page: () => const AllReviews(),
+        customTransition: CustomPageTransition(),
+        bindings: [
+          AllReviewsBindings(),
+        ]),
   ];
 }

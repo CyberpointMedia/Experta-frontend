@@ -2,7 +2,6 @@ import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
 import 'package:experta/core/utils/web_view/web_view.dart';
-import 'package:experta/presentation/all_review/all_review.dart';
 import 'package:experta/presentation/userProfile/controller/profile_controller.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -573,133 +572,138 @@ class _UserProfilePageState extends State<UserProfilePage>
     );
   }
 
- Widget _buildColumnreviews() {
-  return Column(
-    children: [
-      Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            "Reviews",
-            style: theme.textTheme.headlineLarge?.copyWith(fontSize: 16.fSize),
-          ),
-          GestureDetector(
-            onTap: () {
-              var reviews = controller.userData.value.data?.basicInfo?.reviews;
-              // Navigate to the AllReviewsPage even if there are no reviews
-              Get.to(() => AllReviewsPage(reviews: reviews ?? []));
-            },
-            child: Text(
-              "See all",
-              style: theme.textTheme.titleMedium
-                  ?.copyWith(color: appTheme.deepOrangeA200),
+  Widget _buildColumnreviews() {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              "Reviews",
+              style:
+                  theme.textTheme.headlineLarge?.copyWith(fontSize: 16.fSize),
             ),
-          ),
-        ],
-      ),
-      SizedBox(
-        height: 19.v,
-      ),
-      Obx(() {
-        var reviews = controller.userData.value.data?.basicInfo?.reviews;
-        if (reviews == null || reviews.isEmpty) {
-          return Text(
-            "No reviews yet",
-            style: theme.textTheme.bodyMedium?.copyWith(color: appTheme.gray900),
-          );
-        } else {
-          // Limit the number of reviews to 3
-          var limitedReviews = reviews.take(3).toList();
-          return Column(
-            children: limitedReviews.map((review) {
-              return Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  color: appTheme.gray100,
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Row(
-                        children: [
-                          CustomImageView(
-                            imagePath: review.profilePic,
-                            height: 50,
-                            width: 50,
-                            radius: BorderRadius.circular(50),
-                          ),
-                          const SizedBox(width: 10),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                review.reviewer.toString(),
-                                style: theme.textTheme.headlineLarge
-                                    ?.copyWith(fontSize: 14.fSize),
-                              ),
-                              SizedBox(height: 1.v),
-                              Text(
-                                review.formattedDate.toString(),
-                                style: theme.textTheme.titleSmall!,
-                              )
-                            ],
-                          )
-                        ],
-                      ),
-                      SizedBox(height: 9.v),
-                      Row(
-                        children: [
-                          RatingBar.builder(
-                            initialRating: review.rating!.toDouble(),
-                            minRating: 0,
-                            direction: Axis.horizontal,
-                            allowHalfRating: false,
-                            itemSize: 22,
-                            updateOnDrag: true,
-                            onRatingUpdate: (rating) {},
-                            itemBuilder: (context, _) {
-                              return const Icon(
-                                Icons.star,
-                              );
-                            },
-                          ),
-                          const SizedBox(width: 6), // Added SizedBox for spacing
-                          Text(
-                            review.rating.toString(),
-                            style: theme.textTheme.headlineLarge
-                                ?.copyWith(fontSize: 16.fSize),
-                          )
-                        ],
-                      ),
-                      SizedBox(height: 8.v),
-                      Container(
-                        width: 304.adaptSize,
-                        margin: const EdgeInsets.only(right: 31),
-                        child: Text(
-                          review.review.toString(),
-                          maxLines: 2,
-                          overflow: TextOverflow.ellipsis,
-                          style: theme.textTheme.bodyMedium
-                              ?.copyWith(color: appTheme.gray900),
+            GestureDetector(
+              onTap: () {
+                // Navigate to the Reviews page
+                Get.toNamed(AppRoutes.allReviews,
+                    arguments:
+                        controller.userData.value.data?.basicInfo?.reviews);
+              },
+              child: Text(
+                "See all",
+                style: theme.textTheme.titleMedium
+                    ?.copyWith(color: appTheme.deepOrangeA200),
+              ),
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 19.v,
+        ),
+        Obx(() {
+          var reviews = controller.userData.value.data?.basicInfo?.reviews;
+          if (reviews == null || reviews.isEmpty) {
+            return Text(
+              "No reviews yet",
+              style:
+                  theme.textTheme.bodyMedium?.copyWith(color: appTheme.gray900),
+            );
+          } else {
+            // Limit the number of reviews to 5
+            var limitedReviews = reviews.take(5).toList();
+            return Column(
+              children: limitedReviews.map((review) {
+                return Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Container(
+                    color: appTheme.gray100,
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            CustomImageView(
+                              imagePath: review.profilePic,
+                              height: 50,
+                              width: 50,
+                              radius: BorderRadius.circular(50),
+                            ),
+                            const SizedBox(width: 10),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  review.reviewer.toString(),
+                                  style: theme.textTheme.headlineLarge
+                                      ?.copyWith(fontSize: 14.fSize),
+                                ),
+                                SizedBox(height: 1.v),
+                                Text(
+                                  review.formattedDate.toString(),
+                                  style: theme.textTheme.titleSmall!,
+                                )
+                              ],
+                            )
+                          ],
                         ),
-                      ),
-                      SizedBox(height: 8.v), // Added SizedBox for spacing
-                    ],
+                        SizedBox(height: 9.v),
+                        Row(
+                          children: [
+                            RatingBar.builder(
+                              initialRating: review.rating!.toDouble(),
+                              minRating: 0,
+                              direction: Axis.horizontal,
+                              allowHalfRating: false,
+                              itemSize: 22,
+                              itemCount: 5,
+                              updateOnDrag: true,
+                              onRatingUpdate: (rating) {},
+                              itemBuilder: (context, _) {
+                                return const Icon(
+                                  Icons.star,
+                                );
+                              },
+                            ),
+                            const SizedBox(
+                                width: 6), // Added SizedBox for spacing
+                            Text(
+                              review.rating.toString(),
+                              style: theme.textTheme.headlineLarge
+                                  ?.copyWith(fontSize: 16.fSize),
+                            )
+                          ],
+                        ),
+                        SizedBox(height: 8.v),
+                        Container(
+                          width: 304.adaptSize,
+                          margin: const EdgeInsets.only(right: 31),
+                          child: Text(
+                            review.review.toString(),
+                            maxLines: 2,
+                            overflow: TextOverflow.ellipsis,
+                            style: theme.textTheme.bodyMedium
+                                ?.copyWith(color: appTheme.gray900),
+                          ),
+                        ),
+                        SizedBox(height: 8.v), // Added SizedBox for spacing
+                      ],
+                    ),
                   ),
-                ),
-              );
-            }).toList(),
-          );
-        }
-      }),
-      SizedBox(
-        height: 19.v,
-      )
-    ],
-  );
-}
+                );
+              }).toList(),
+            );
+          }
+        }),
+        SizedBox(
+          height: 19.v,
+        )
+      ],
+    );
+  }
 
-Widget _buildRowaboutme({required String aboutMeText}) {
+  Widget _buildRowaboutme({required String aboutMeText}) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
@@ -739,104 +743,93 @@ Widget _buildRowaboutme({required String aboutMeText}) {
       padding: const EdgeInsets.only(left: 13, right: 30, top: 30),
       child: Column(
         children: [
-          Obx((){return Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Column(
-                children: [
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
+          Obx(() {
+            return Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Column(
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            top: 1,
+                            bottom: 2,
+                          ),
+                          child: SizedBox(
+                            height: 18.v,
+                            width: 18.adaptSize,
+                            child:
+                                SvgPicture.asset("assets/images/img_star.svg"),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(left: 2),
+                          child: Text(
+                            "${controller.userData.value.data?.basicInfo?.rating ?? "N/A"}",
+                            style: theme.textTheme.headlineLarge
+                                ?.copyWith(fontSize: 18.fSize),
+                          ),
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 6.v,
+                    ),
+                    Text(
+                      "Overall Ratings",
+                      style: theme.textTheme.bodyMedium!,
+                    )
+                  ],
+                ),
+                const Spacer(
+                  flex: 42,
+                ),
+                GestureDetector(
+                  onTap: () => Get.toNamed(AppRoutes.follower,
+                      arguments: {"id": controller.userData.value.data?.id}),
+                  child: Column(
                     children: [
-                      Padding(
-                        padding: const EdgeInsets.only(
-                          top: 1,
-                          bottom: 2,
-                        ),
-                        child: SizedBox(
-                          height: 18.v,
-                          width: 18.adaptSize,
-                          child: SvgPicture.asset("assets/images/img_star.svg"),
-                        ),
+                      Text(
+                        "$totalFollowers",
+                        style: theme.textTheme.headlineLarge
+                            ?.copyWith(fontSize: 18.fSize),
                       ),
-                      Padding(
-                        padding: const EdgeInsets.only(left: 2),
-                        child: Text(
-                          "${controller.userData.value.data?.basicInfo?.rating ?? "N/A"}",
-                          style: theme.textTheme.headlineLarge
-                              ?.copyWith(fontSize: 18.fSize),
-                        ),
+                      SizedBox(
+                        height: 6.v,
+                      ),
+                      Text(
+                        "Followers",
+                        style: theme.textTheme.bodyMedium!,
                       ),
                     ],
                   ),
-                  SizedBox(
-                    height: 6.v,
+                ),
+                const Spacer(
+                  flex: 58,
+                ),
+                GestureDetector(
+                  onTap: () => Get.toNamed(AppRoutes.following),
+                  child: Column(
+                    children: [
+                      Text(
+                        "$totalFollowing",
+                        style: theme.textTheme.headlineLarge
+                            ?.copyWith(fontSize: 18.fSize),
+                      ),
+                      SizedBox(
+                        height: 6.v,
+                      ),
+                      Text(
+                        "Following",
+                        style: theme.textTheme.bodyMedium!,
+                      ),
+                    ],
                   ),
-                  Text(
-                    "Overall Ratings",
-                    style: theme.textTheme.bodyMedium!,
-                  )
-                ],
-              ),
-              const Spacer(
-                flex: 42,
-              ),
-              GestureDetector(
-
-              onTap: () { 
-  Get.toNamed(AppRoutes.follower, arguments: {
-    "id": controller.userData.value.data?.id,
-    "userProfile": "userProfile"
-  })!.then((value) {
-    Get.find<ProfileController>().fetchUserData(controller.address.toString(),controller.address.toString());
-  });
-},
-
-
-                child: Column(
-                      children: [
-                        Text(
-                          "$totalFollowers",
-                          style: theme.textTheme.headlineLarge?.copyWith(fontSize: 18.fSize),
-                        ),
-                        SizedBox(
-                          height: 6.v,
-                        ),
-                        Text(
-                          "Followers",
-                          style: theme.textTheme.bodyMedium!,
-                        ),
-                      ],
-                    ),
-              ),
-              
-              const Spacer(
-                flex: 58,
-              ),
-              GestureDetector(
-                  onTap: () {
-  Get.toNamed(AppRoutes.following, arguments: {"id":controller.userData.value.data?.id, "userProfile":"userProfile"})!.then((value) {
-
-    Get.find<ProfileController>().fetchUserData(controller.address.toString(),controller.address.toString());
-  });
-},
-                child: Column(
-                      children: [
-                        Text(
-                          "$totalFollowing",
-                          style: theme.textTheme.headlineLarge?.copyWith(fontSize: 18.fSize),
-                        ),
-                        SizedBox(
-                          height: 6.v,
-                        ),
-                        Text(
-                          "Following",
-                          style: theme.textTheme.bodyMedium!,
-                        ),
-                      ],
-                    ),
-              ),
-            ],
-          );
+                ),
+              ],
+            );
           }),
           SizedBox(
             height: 16.v,
@@ -856,6 +849,31 @@ Widget _buildRowaboutme({required String aboutMeText}) {
       ),
     );
   }
+
+//  Widget _buildColumnFourHundredFifty({
+//   required String dynamicText,
+//   required String dynamicText1,
+//   required VoidCallback onTap,
+// }) {
+//   return GestureDetector(
+//     onTap: onTap,
+//     child: Column(
+//       children: [
+//         Text(
+//           dynamicText,
+//           style: theme.textTheme.headlineLarge?.copyWith(fontSize: 18.fSize),
+//         ),
+//         SizedBox(
+//           height: 6.v,
+//         ),
+//         Text(
+//           dynamicText1,
+//           style: theme.textTheme.bodyMedium!,
+//         ),
+//       ],
+//     ),
+//   );
+// }
 
   Widget _profilepicBody() {
     return Obx(() {
@@ -879,7 +897,7 @@ Widget _buildRowaboutme({required String aboutMeText}) {
                 ),
               ),
               SizedBox(
-                child: Padding(                         
+                child: Padding(
                   padding: EdgeInsets.only(left: 15.v),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,

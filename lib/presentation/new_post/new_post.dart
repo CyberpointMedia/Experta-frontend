@@ -12,10 +12,8 @@ import 'package:experta/widgets/app_bar/appbar_subtitle_six.dart';
 import 'package:experta/widgets/app_bar/custom_app_bar.dart';
 import 'package:experta/widgets/custom_elevated_button.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
-import 'package:flutter/material.dart';
 import 'package:image_editor_plus/image_editor_plus.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:video_player/video_player.dart';
 import 'package:photo_view/photo_view.dart';
@@ -252,7 +250,7 @@ class _NewPostPageState extends State<NewPostPage> {
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
-              builder: (context) => const DashboardPage(),
+              builder: (context) => DashboardPage(),
             ),
             (Route<dynamic> route) => false,
           );
