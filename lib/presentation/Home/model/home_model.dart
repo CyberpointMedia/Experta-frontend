@@ -1,17 +1,36 @@
 // industry_model.dart
 
 class Industry {
-  final String id;
-  final String name;
+  final String? id; 
+  final String? name;
+  final String? parent;
+  final int? level;
   final String? icon;
+  final bool? isDeleted;
+  final String? createdAt;
+  final String? updatedAt;
 
-  Industry({required this.id, required this.name, this.icon});
+  Industry({
+    this.id,
+    this.name,
+    this.parent,
+    this.level,
+    this.icon,
+    this.isDeleted,
+    this.createdAt,
+    this.updatedAt,
+  });
 
   factory Industry.fromJson(Map<String, dynamic> json) {
     return Industry(
-      id: json['_id'] ?? '',
-      name: json['name'] ?? '',
+      id: json['_id'],
+      name: json['name'],
+      parent: json['parent'],
+      level: json['level'],
       icon: json['icon'],
+      isDeleted: json['isDeleted'],
+      createdAt: json['createdAt'],
+      updatedAt: json['updatedAt'],
     );
   }
 
@@ -19,7 +38,12 @@ class Industry {
     return {
       '_id': id,
       'name': name,
+      'parent': parent,
+      'level': level,
       'icon': icon,
+      'isDeleted': isDeleted,
+      'createdAt': createdAt,
+      'updatedAt': updatedAt,
     };
   }
 }
