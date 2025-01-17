@@ -40,7 +40,6 @@ class _PaymentMethodState extends State<PaymentMethod> {
             ),
           ),
           Column(
-            // mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [_buildAppBar(), _buildAccountSettings()],
           )
@@ -79,7 +78,7 @@ class _PaymentMethodState extends State<PaymentMethod> {
                           borderRadius: BorderRadiusStyle.roundedBorder20),
                       child: Column(mainAxisSize: MainAxisSize.min, children: [
                         GestureDetector(
-                          onTap: () {
+                          onTap: () { 
                             Get.toNamed(AppRoutes.addupi);
                           },
                           child: Container(

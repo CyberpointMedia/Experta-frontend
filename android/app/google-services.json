@@ -1,13 +1,13 @@
 {
   "project_info": {
-    "project_number": "520464598981",
-    "project_id": "eperta-notifications",
-    "storage_bucket": "eperta-notifications.firebasestorage.app"
+    "project_number": "999699075378",
+    "project_id": "experta-ce200",
+    "storage_bucket": "experta-ce200.firebasestorage.app"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:520464598981:android:24fed6e90fc3e7cbe82dac",
+        "mobilesdk_app_id": "1:999699075378:android:08738b019d14b49632872b",
         "android_client_info": {
           "package_name": "com.example.expert"
         }
@@ -15,7 +15,7 @@
       "oauth_client": [],
       "api_key": [
         {
-          "current_key": "AIzaSyBJy5htDMPDP_wCvYriTPA2gTV62vdw0Zk"
+          "current_key": "AIzaSyDmeb9gWLh6-dLeR7BD_iSlaPy2DIYx7n0"
         }
       ],
       "services": {

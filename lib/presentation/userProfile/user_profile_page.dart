@@ -600,31 +600,32 @@ class _UserProfilePageState extends State<UserProfilePage>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Padding(
-                      padding:  EdgeInsets.only(
-                          bottom: 8.adaptSize, left: 10.adaptSize, right: 10.adaptSize),
-                      child: Row(
-                        children: [
-                          SizedBox(
-                            height: 24.v,
-                            width: 25.adaptSize,
-                            child: SvgPicture.asset(
-                                "assets/images/img_link_1.svg"),
-                          ),
-                           SizedBox(width: 10.adaptSize),
-                          Expanded(
-                            child: Text(
-                              achievement,
-                              overflow: TextOverflow.ellipsis,
-                              maxLines: 1,
-                              style: theme.textTheme.bodyLarge?.copyWith(
-                                color: appTheme.gray900,
-                                decoration: TextDecoration.underline,
+                        padding: EdgeInsets.only(
+                            bottom: 8.adaptSize,
+                            left: 10.adaptSize,
+                            right: 10.adaptSize),
+                        child: Row(
+                          children: [
+                            SizedBox(
+                              height: 24.v,
+                              width: 25.adaptSize,
+                              child: SvgPicture.asset(
+                                  "assets/images/img_link_1.svg"),
+                            ),
+                            SizedBox(width: 10.adaptSize),
+                            Expanded(
+                              child: Text(
+                                achievement,
+                                overflow: TextOverflow.ellipsis,
+                                maxLines: 1,
+                                style: theme.textTheme.bodyLarge?.copyWith(
+                                  color: appTheme.gray900,
+                                  decoration: TextDecoration.underline,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
-                      )
-                    ),
+                          ],
+                        )),
 
                     // Show the divider only if there is more than one achievement
                     if (achievements.length > 1 &&
@@ -895,7 +896,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Padding(
-                          padding:  EdgeInsets.only(
+                          padding: EdgeInsets.only(
                             top: 1.adaptSize,
                             bottom: 2.adaptSize,
                           ),
@@ -907,7 +908,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                           ),
                         ),
                         Padding(
-                          padding:  EdgeInsets.only(left: 2.adaptSize),
+                          padding: EdgeInsets.only(left: 2.adaptSize),
                           child: Text(
                             "${controller.userData.value.data?.basicInfo?.rating ?? "N/A"}",
                             style: theme.textTheme.headlineLarge
@@ -996,7 +997,7 @@ class _UserProfilePageState extends State<UserProfilePage>
             height: 16.v,
           ),
           CustomElevatedButton(
-            leftIcon:  Icon(
+            leftIcon: Icon(
               Icons.add,
               color: Colors.black,
               size: 15.adaptSize,
@@ -1066,7 +1067,7 @@ class _UserProfilePageState extends State<UserProfilePage>
           ),
           Padding(
             padding: EdgeInsets.only(top: 20.v, left: 10.v),
-            child:  Row(
+            child: Row(
               children: [
                 CustomImageView(
                   margin: EdgeInsets.only(left: 5.v),
@@ -1110,17 +1111,17 @@ class _UserProfilePageState extends State<UserProfilePage>
                   child: Text(
                     "Reg no: ${controller.userData.value.data?.industryOccupation?.registrationNumber ?? " N/A"}",
                     textAlign: TextAlign.left,
-                  style: theme.textTheme.bodyMedium!.copyWith(
-                      color: appTheme.black900,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500),
+                    style: theme.textTheme.bodyMedium!.copyWith(
+                        color: appTheme.black900,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500),
                   ),
                 ),
-                               Container(
+                Container(
                   width: 1.v,
                   height: 15.h,
                   color: Colors.grey,
-                  margin:  EdgeInsets.symmetric(horizontal: 10.adaptSize),
+                  margin: EdgeInsets.symmetric(horizontal: 10.adaptSize),
                 ),
                 CustomImageView(
                   margin: EdgeInsets.only(left: 5.v),
@@ -1142,12 +1143,11 @@ class _UserProfilePageState extends State<UserProfilePage>
                 ),
                 Text(
                   "Consultation",
-                 textAlign: TextAlign.left,
+                  textAlign: TextAlign.left,
                   style: theme.textTheme.bodyMedium!.copyWith(
                       color: appTheme.black900,
                       fontSize: 14,
                       fontWeight: FontWeight.w500),
-               
                 ),
               ],
             ),
