@@ -2,6 +2,7 @@ import 'dart:ui';
 import 'package:experta/presentation/edit_about/edit_about.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
 import 'package:experta/widgets/social_platform_input.dart';
+import 'package:intl/intl.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/Basic_Info/controller/basic_info_controller.dart';
@@ -330,7 +331,7 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
               textAlign: TextAlign.start,
             ),
           ),
-          Padding(
+        Padding(
             padding: const EdgeInsets.only(top: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -345,7 +346,7 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
                   },
                   child: Container(
                     width: MediaQuery.of(context).size.width * 0.43,
-                    height: 144.0,
+                    height: 149.0,
                     padding: const EdgeInsets.symmetric(
                         vertical: 28.0, horizontal: 24.0),
                     decoration: BoxDecoration(
@@ -391,7 +392,7 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
                   },
                   child: Container(
                     width: MediaQuery.of(context).size.width * 0.43,
-                    height: 144.0,
+                    height: 149.0,
                     padding: const EdgeInsets.symmetric(
                         vertical: 28.0, horizontal: 24.0),
                     decoration: BoxDecoration(
@@ -430,6 +431,7 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
               ],
             ),
           ),
+        
           Padding(
             padding: const EdgeInsets.only(bottom: 5, top: 10),
             child: Text(
@@ -610,14 +612,19 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
     );
   }
 
+
   void _selectDate(BuildContext context) async {
+    String date = DateFormat("dd/MM/yyyy").format(DateTime.now());
+    final sDateFormate = "DD/MM/yyyy";
+    DateTime selectedDate = DateTime.now();
     DateTime? pickedDate = await showDatePicker(
       context: context,
-      initialDate: DateTime.now(),
-      firstDate: DateTime(1900),
-      lastDate: DateTime.now(),
+      // fieldHintText: sDateFormate,
+       initialDate: selectedDate,
+       firstDate: DateTime(1900),
+       lastDate: DateTime.now(),
+       locale: const Locale('en', 'GB'), // Adjust to your locale
     );
-
     if (pickedDate != null) {
       setState(() {
         controller.dateOfBirthController.text =

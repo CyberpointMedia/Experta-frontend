@@ -180,7 +180,8 @@ class BasicProfileInfoController extends GetxController {
       await apiService.postBasicInfo(data, imageFile.value);
 
       Get.back();
-      Get.snackbar('Success', 'Profile information saved successfully');
+      Get.snackbar('Success', 'Profile information saved successfully',backgroundColor: Colors.green, colorText: Colors.white);
+
     } catch (e, stacktrace) {
       _logger.e('Exception occurred: $e , $stacktrace');
       Get.snackbar('Error',
