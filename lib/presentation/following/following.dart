@@ -74,6 +74,8 @@ class Follower {
     required this.isOnline,
     required this.imageUrl,
   });
+
+  static fromJson(item) {}
 }
 
 class FollowingTile extends StatelessWidget {

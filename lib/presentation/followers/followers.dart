@@ -1,39 +1,26 @@
+import 'package:experta/presentation/followers/controller/followers_controller.dart';
+import 'package:experta/presentation/followers/models/followers_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-
+import 'package:get/get.dart';
 
 class FollowersPage extends StatelessWidget {
-  final List<Follower> followers = [
-    Follower(
-      name: 'Anjali Arora',
-      profession: 'Social Media Influencer',
-      isOnline: true,
-      imageUrl: 'assets/images/Icon.svg',
-    ),
-    Follower(
-      name: 'Taranvir Kaur',
-      profession: 'Social Media Influencer',
-      isOnline: false,
-      imageUrl: 'assets/images/Icon.svg',
-    ),
-    // Add more followers here
-  ];
+  final FollowersAndFollowingController controller = Get.put(FollowersAndFollowingController());
 
   FollowersPage({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:AppBar(
-  leading: IconButton(
-    icon: const Icon(Icons.arrow_back_ios),
-    onPressed: () {
-      Navigator.pop(context);
-    },
-  ),
-  title: const Text('Followers'),
-)
-,
+      appBar: AppBar(
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_ios),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
+        title: const Text('Followers'),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Column(
@@ -48,12 +35,17 @@ class FollowersPage extends StatelessWidget {
               ),
             ),
             Expanded(
-              child: ListView.builder(
-                itemCount: followers.length,
-                itemBuilder: (context, index) {
-                  return FollowerTile(follower: followers[index]);
-                },
-              ),
+              child: Obx(() {
+                if (controller.isLoading.value) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                return ListView.builder(
+                  itemCount: controller.followers.length,
+                  itemBuilder: (context, index) {
+                    return FollowerTile(follower: controller.followers[index]);
+                  },
+                );
+              }),
             ),
           ],
         ),
@@ -62,22 +54,8 @@ class FollowersPage extends StatelessWidget {
   }
 }
 
-class Follower {
-  final String name;
-  final String profession;
-  final bool isOnline;
-  final String imageUrl;
-
-  Follower({
-    required this.name,
-    required this.profession,
-    required this.isOnline,
-    required this.imageUrl,
-  });
-}
-
 class FollowerTile extends StatelessWidget {
-  final Follower follower;
+  final FollowersAndFollowing follower;
 
   const FollowerTile({super.key, required this.follower});
 
@@ -94,13 +72,13 @@ class FollowerTile extends StatelessWidget {
             child: SizedBox(
               width: 40.0, // Adjust the size as needed
               height: 40.0,
-              child: _isSvg(follower.imageUrl)
-                  ? SvgPicture.asset(
-                      follower.imageUrl,
+              child: _isSvg(follower.basicInfo!.profilePic ?? "")
+                  ? SvgPicture.network(
+                      follower.basicInfo!.profilePic ?? "",
                       fit: BoxFit.cover,
                     )
                   : Image.network(
-                      follower.imageUrl,
+                      follower.basicInfo!.profilePic ?? "",
                       fit: BoxFit.cover,
                     ),
             ),
@@ -110,22 +88,30 @@ class FollowerTile extends StatelessWidget {
             right: 0,
             child: CircleAvatar(
               radius: 6,
-              backgroundColor: follower.isOnline ? Colors.green : Colors.red,
+              backgroundColor: follower.online ? Colors.green : Colors.red,
             ),
           ),
         ],
       ),
-      title: Text(follower.name),
-      subtitle: Text(follower.profession),
+      title: Text(follower.basicInfo?.displayName ?? 'No display name'),
+      subtitle: Text(follower.basicInfo?.bio ?? 'No bio available'),
       trailing: ElevatedButton(
         onPressed: () {
           // Add your remove function here
         },
         style: ElevatedButton.styleFrom(
-          shape: const LinearBorder(),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(4.0), // Rectangular shape
+          ),
           backgroundColor: Colors.white,
+          minimumSize: const Size(100, 50), // Set width and height
         ),
-        child: const Text('Remove'),
+        child: const Text(
+          'Remove',
+          style: TextStyle(
+            color: Colors.black, // Text color black
+          ),
+        ),
       ),
     );
   }

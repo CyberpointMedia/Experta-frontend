@@ -11,6 +11,10 @@ import 'package:experta/presentation/add_upi/add_upi.dart';
 import 'package:experta/presentation/add_upi/binding/add_upi_binding.dart';
 import 'package:experta/presentation/blocked/binding/blocked_binding.dart';
 import 'package:experta/presentation/blocked/blocked.dart';
+import 'package:experta/presentation/book_appointment/binding/book_appointment_binding.dart';
+import 'package:experta/presentation/book_appointment/book_appointment.dart';
+import 'package:experta/presentation/booking_detail/binding/booking_detail_binding.dart';
+import 'package:experta/presentation/booking_detail/booking_detail.dart';
 import 'package:experta/presentation/category/category_controller.dart';
 import 'package:experta/presentation/category/category_screen.dart';
 import 'package:experta/presentation/change_date_of_birth/binding/change_date_of_birth_binding.dart';
@@ -33,6 +37,10 @@ import 'package:experta/presentation/home_controller.dart';
 import 'package:experta/presentation/home_screen.dart';
 import 'package:experta/presentation/message_chat_with_user_default_screen/binding/message_chat_with_user_default_binding.dart';
 import 'package:experta/presentation/message_chat_with_user_default_screen/message_chat_with_user_default_screen.dart';
+import 'package:experta/presentation/my_booking/binding/my_booking_binding.dart';
+import 'package:experta/presentation/my_booking/my_booking.dart';
+import 'package:experta/presentation/new_post/binding/new_post_binding.dart';
+import 'package:experta/presentation/new_post/new_post.dart';
 import 'package:experta/presentation/notification/notification_controller.dart';
 import 'package:experta/presentation/notification/notification_screen.dart';
 import 'package:experta/presentation/onboarding_screen/binding/onboarding_binding.dart';
@@ -61,6 +69,7 @@ import 'package:experta/presentation/signin_page/signin_binding/signin_binding.d
 import 'package:experta/presentation/signin_page/signin_page.dart';
 import 'package:experta/presentation/splash_screen/binding/splash_binding.dart';
 import 'package:experta/presentation/splash_screen/splash_screen.dart';
+import 'package:experta/presentation/sucessfully/sucessfully.dart';
 import 'package:experta/presentation/verify_account/binding/verify_account_binding.dart';
 import 'package:experta/presentation/verify_account/varify_account.dart';
 import 'package:experta/presentation/verifynumber_screen/binding/verifynumber_binding.dart';
@@ -148,8 +157,17 @@ static const String  post1= "/post";
 
 static const String  recent = "/recents";
 
+static const String Bookappointment ="/book_appointment";
 
+static const String Bookindeetail ="/booking_detail";
 
+static const String sucessfuly ="/sucessfully";
+
+static const String mybook ="/my_booking";
+
+static const String newpost ="/new_post";
+
+static const String location1 ="/location";
 
   static List<GetPage> pages = [
     GetPage(
@@ -217,7 +235,7 @@ static const String  recent = "/recents";
     ),
     GetPage(
       name: addupi,
-      page: () =>  AddUpi(),
+      page: () =>  const AddUpi(),
       bindings: [
         AddUpiBinding(),
       ],
@@ -383,5 +401,47 @@ static const String  recent = "/recents";
         SplashBinding(),
       ],
     ),
+    GetPage(
+      name: Bookappointment,
+      page: () => const BookAppointmentPage(),
+      bindings: [
+        BookAppointmentBinding(),
+      ],
+    ),
+    GetPage(
+      name: Bookindeetail,
+      page: () => const BookingDetailPage(),
+      bindings: [
+        BookingDetailBinding(),
+      ],
+    ),
+    GetPage(
+      name: sucessfuly,
+      page: () => const BookingConfirmationPage(),
+      bindings: [
+        BookingDetailBinding(),
+      ],
+    ),
+    GetPage(
+      name: mybook,
+      page: () => MyBookingPage(),
+      bindings: [
+        MyBookingBinding(),
+      ],
+    ),
+    GetPage(
+      name: newpost,
+      page: () => NewPostPage(),
+      bindings: [
+       NewPostBinding(),
+      ],
+    ),
+    GetPage(
+      name: newpost,
+      page: () => NewPostPage(),
+      bindings: [
+       NewPostBinding(),
+      ],
+    )
   ];
 }
