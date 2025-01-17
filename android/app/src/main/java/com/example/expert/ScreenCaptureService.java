@@ -1,6 +1,7 @@
 // ScreenCaptureService.java
 package com.example.expert;
 
+
 import android.app.Notification;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
@@ -14,7 +15,7 @@ public class ScreenCaptureService extends Service {
 
     @Nullable
     @Override
-    public IBinder onBind(Intent intent) { 
+    public IBinder onBind(Intent intent) {
         return null;
     }
 
@@ -33,12 +34,12 @@ public class ScreenCaptureService extends Service {
             Notification notification = new Notification.Builder(this, channelId)
                 .setContentTitle("Screen Capture")
                 .setContentText("Screen capture is running")
-                .setSmallIcon(R.drawable.ic_notification) 
+                // .setSmallIcon(R.drawable.ic_notification)
                 .build();
 
             startForeground(1, notification);
         }
-        return START_STICKY;
+        return START_NOT_STICKY;
     }
 
     @Override

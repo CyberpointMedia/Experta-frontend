@@ -2,7 +2,6 @@ import 'dart:async';
 import 'dart:developer';
 import 'package:experta/core/utils/image_constant.dart';
 import 'package:experta/core/utils/size_utils.dart';
-import 'package:experta/presentation/give_rating/give_rating.dart';
 import 'package:experta/theme/theme_helper.dart';
 import 'package:experta/widgets/custom_image_view.dart';
 import 'package:flutter/material.dart';
@@ -16,16 +15,12 @@ class AudioCallScreen extends StatefulWidget {
   final String userId;
   final String meetingId;
   final String userName;
-  final String bookingId;
-  final String profilePic;
 
   const AudioCallScreen({
     super.key,
     required this.userId,
     required this.meetingId,
     required this.userName,
-    required this.bookingId,
-    required this.profilePic,
   });
 
   @override
@@ -46,7 +41,7 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
   bool isCameraSwitched = false;
   bool showVideo = true;
   bool isMuted = false;
-  bool isSpeakerOn = true;
+  bool isSpeakerOn = false;
   bool isRecording = false;
   bool isFrontCamera = true;
   String? remoteUserId;
@@ -65,7 +60,7 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
   void dispose() {
     localRenderer.dispose();
     remoteRenderer.dispose();
-    stopCallTimer();
+    callTimer?.cancel();
     localStream?.dispose();
     peer.dispose();
     socket.disconnect();
@@ -79,18 +74,6 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
         callDuration++;
       });
     });
-  }
-
-  void stopCallTimer() {
-    callTimer?.cancel();
-    Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(
-            builder: (_) => RatingPage(
-                  bookingId: widget.bookingId,
-                  userName: widget.userName,
-                  profilePic: widget.profilePic,
-                )));
   }
 
   // Format duration as MM:SS
@@ -196,7 +179,7 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
 
   void _handleReconnection() {
     log('Attempting to reconnect peer...');
-    if (peer.disconnected) {
+    if (peer != null && peer.disconnected) {
       peer.reconnect(); // Reconnect if the peer was disconnected
     }
   }
@@ -211,7 +194,7 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
 
     socket.on('connect', (_) {
       log('Connected to signaling server.');
-      if (peer.id != null) {
+      if (peer.id != null && widget.userId != null) {
         _joinMeeting();
       } else {
         log('Error: peerId or userId is null');
@@ -239,7 +222,7 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
           remoteRenderer.srcObject = null;
 
           // Stop timer
-          stopCallTimer();
+          callTimer?.cancel();
 
           // Close media connection
           if (mediaConnection != null) {
@@ -382,6 +365,7 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
     }
   }
 
+
   void _showSnackBar(String message) {
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
@@ -395,8 +379,7 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
     log('Ending call...');
 
     // Stop timer
-
-    stopCallTimer();
+    callTimer?.cancel();
 
     // Clean up media streams
     remoteStream?.getTracks().forEach((track) => track.stop());
@@ -483,7 +466,7 @@ class _AudioCallScreenState extends State<AudioCallScreen> {
                                 backgroundColor: Colors.grey[700],
                                 child: Text(
                                   widget.userName != null
-                                      ? widget.userName[0]
+                                      ? widget.userName![0]
                                       : '',
                                   style: const TextStyle(
                                     fontSize: 40,

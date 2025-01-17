@@ -7,6 +7,7 @@ import 'package:experta/presentation/userProfile/models/profile_model.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class DetailsController extends GetxController {
+  final dynamic id = Get.arguments['user'];
   var userData = ProfileModel().obs;
   var usersByIndustry = <String, List<User>>{}.obs;
   var isLoading = true.obs;
@@ -15,7 +16,14 @@ class DetailsController extends GetxController {
   var isFollowing = false.obs;
   var isBlocking = false.obs;
   var isSucess = false.obs;
-  var blockedUsers = <String>[].obs; // List to hold blocked users' IDs
+  var blockedUsers = <String>[].obs;
+
+  @override
+  void onInit() {
+    fetchUserData(id.id);
+    fetchFeeds(id.id);
+    super.onInit();
+  }
 
   void blockUser(String userToBlockId, BuildContext context) async {
     try {
@@ -24,26 +32,6 @@ class DetailsController extends GetxController {
       isBlocking(false);
       if (success) {
         isSucess.value = true;
-        // blockedUsers.add(userToBlockId);
-
-        // Show success Lottie animation
-        // await showDialog(
-        //   context: context,
-        //   builder: (BuildContext context) {
-        // return Center(
-        //   child: Lottie.asset("assets/jsonfiles/tick.json"),
-        // );
-        //   },
-        // );
-
-        // Wait for 3 seconds
-        //await Future.delayed(const Duration(seconds: 3));
-
-        // Close the dialog before navigating
-        // Navigator.of(context).pop();
-
-        // Navigate back to the home page
-        //Get.offAllNamed(AppRoutes.aboutus);
       } else {
         Fluttertoast.showToast(
           msg: "Failed to block user",
@@ -128,7 +116,7 @@ class DetailsController extends GetxController {
         toastLength: Toast.LENGTH_SHORT,
         gravity: ToastGravity.BOTTOM,
         timeInSecForIosWeb: 1,
-        backgroundColor: Colors.red,  
+        backgroundColor: Colors.red,
         textColor: Colors.white,
         fontSize: 16.0,
       );
