@@ -290,12 +290,6 @@
       "languageVersion": "3.3"
     },
     {
-      "name": "equatable",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/equatable-2.0.7",
-      "packageUri": "lib/",
-      "languageVersion": "2.12"
-    },
-    {
       "name": "eventify",
       "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/eventify-1.0.1",
       "packageUri": "lib/",
@@ -306,12 +300,6 @@
       "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/events_emitter-0.5.2",
       "packageUri": "lib/",
       "languageVersion": "2.17"
-    },
-    {
-      "name": "excel",
-      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/excel-4.0.6",
-      "packageUri": "lib/",
-      "languageVersion": "3.0"
     },
     {
       "name": "extended_image",
@@ -1580,7 +1568,7 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2025-01-17T10:41:33.116116Z",
+  "generated": "2025-01-17T07:00:27.295545Z",
   "generator": "pub",
   "generatorVersion": "3.6.0",
   "flutterRoot": "file:///usr/local/Caskroom/flutter/3.19.1/flutter",

@@ -136,6 +136,14 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
               "Choose Occupation *",
               controller.occupationDropdownItems,
               controller.selectedOccupation,
+              (String occupationId) {
+                controller.onOccupationChanged(occupationId);
+              },
+            ),
+            _buildDropdownField(
+              "Choose Occupation Type *",
+              controller.occupationTypeDropdownItems,
+              controller.selectedOccupationType,
               null,
             ),
           ],
@@ -154,16 +162,13 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
             padding: const EdgeInsets.only(top: 10),
             child: Text(
               label,
-              style: theme.textTheme.titleSmall!
-                  .copyWith(color: appTheme.black900),
+              style: CustomTextStyles.titleMediumSemiBold_1,
             ),
           ),
           Padding(
             padding: EdgeInsets.only(top: 6.v, bottom: 12.v),
             child: CustomDropDown(
               hintText: "Select",
-              hintStyle: theme.textTheme.titleSmall!
-                  .copyWith(color: appTheme.black900),
               width: double.infinity,
               icon: _buildDropdownIcon(),
               items: items,
@@ -276,7 +281,7 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
                 strokeWidth: 1.0,
                 dashWidth: 5.0,
                 dashSpace: 3.0,
-                isCircular: true, // Set to false for rectangular border
+                isCircular: true,
                 radius: 8.0,
               ),
               child: Container(

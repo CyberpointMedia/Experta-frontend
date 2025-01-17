@@ -515,7 +515,6 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
           screenRenderer.srcObject = screenStream;
           isSharing = true;
         });
-
         if (mediaConnection?.peerConnection != null) {
           final offer = await mediaConnection!.peerConnection!.createOffer({
             'offerToReceiveVideo': 1,
@@ -578,13 +577,11 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     if (!isRecording) return;
 
     try {
-      await platform
-          .invokeMethod('stopScreenCapture'); // This stops the service.
+      await platform.invokeMethod('stopScreenCapture');
       setState(() {
         isRecording = false;
       });
       _showSnackBar('Recording stopped. Waiting for file path...');
-      // Don't try to access filePath here, wait for _handleMethodCall.
     } catch (e) {
       _showSnackBar('Failed to stop recording: $e');
     }
@@ -596,10 +593,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
     var request = http.MultipartRequest('POST', url)
       ..headers['Authorization'] = 'Bearer $token';
-
-    // Modify the file path to use the correct one from the cache
     File fileToUpload = File(filePath);
-
     request.files.add(
       http.MultipartFile(
         'file',
@@ -615,8 +609,6 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
       if (response.statusCode == 200) {
         _showSnackBar('Recording uploaded successfully');
         log('Recording uploaded successfully');
-
-        // Clear the video file from the cache after successful upload
         try {
           await platform.invokeMethod('clearVideoFileFromCache');
           log('Video file cleared from cache.');
@@ -914,9 +906,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
   Widget _buildPiPView() {
     return GestureDetector(
-      onTap: () {
-        // Toggle PiP size or position if needed
-      },
+      onTap: () {},
       child: Container(
         width: 100,
         height: 150,

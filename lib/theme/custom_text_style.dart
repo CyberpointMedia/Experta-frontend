@@ -265,9 +265,10 @@ class CustomTextStyles {
         fontSize: 18.fSize,
         fontWeight: FontWeight.w500,
       );
-  static get titleMediumSemiBold_1 => theme.textTheme.titleMedium!.copyWith(
-        fontWeight: FontWeight.w600,
-      );
+  static get titleMediumSemiBold_1 => theme.textTheme.titleSmall!.copyWith(
+      fontWeight: FontWeight.w500,
+      fontSize: 12.fSize,
+      color: appTheme.black900);
   static get titleMediumff171717 => theme.textTheme.titleMedium!.copyWith(
         color: const Color(0XFF171717),
         fontWeight: FontWeight.w600,
@@ -333,7 +334,7 @@ class CustomTextStyles {
   static get titleSmallff171717 => theme.textTheme.titleSmall!.copyWith(
         color: const Color(0XFF171717),
       );
-      
+
   static get titleSmallff171717SemiBold => theme.textTheme.titleSmall!.copyWith(
         color: const Color(0XFF171717),
         fontWeight: FontWeight.w600,

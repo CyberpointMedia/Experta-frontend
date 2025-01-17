@@ -20,8 +20,10 @@ class EditProfessionalInfoController extends GetxController {
   RxList<Expertise> expertiseList = <Expertise>[].obs;
   RxList<WorkExperience> workExperienceList = <WorkExperience>[].obs;
   RxBool isLoading = true.obs;
-  var industries = <Industry>[].obs;
-  var occupations = <Occupation>[].obs;
+  var industries = <IndustryModel>[].obs;
+  var occupations = <OccupationModel>[].obs;
+  var occupationTypes = <OccupationModel>[].obs;
+  var selectedOccupationType = Rx<SelectionPopupModel?>(null);
   var selectedIndustry = Rx<SelectionPopupModel?>(null);
   var selectedOccupation = Rx<SelectionPopupModel?>(null);
 
@@ -41,8 +43,8 @@ class EditProfessionalInfoController extends GetxController {
     fetchData();
   }
 
-  void fetchData() {
-    fetchIndustries();
+  void fetchData() async {
+    await fetchIndustries();
     fetchExpertise();
     fetchWorkExperience();
     fetchEducation();
@@ -63,26 +65,45 @@ class EditProfessionalInfoController extends GetxController {
   Future<void> fetchIndustries() async {
     isLoading.value = true;
     try {
-      final response = await apiService.fetchIndustries();
-      industries.assignAll(response.map((e) => Industry.fromJson(e)).toList());
+      final response = await apiService.fetchServices(1);
+      industries
+          .assignAll(response.map((e) => IndustryModel.fromJson(e)).toList());
+      isLoading.value = false;
     } catch (e) {
       log("Error fetching industries: $e");
-    } finally {
       isLoading.value = false;
     }
   }
 
-  Future<void> fetchOccupations(String industryId) async {
+  Future<void> fetchOccupations(String parentId) async {
     isLoading.value = true;
     try {
-      final response = await apiService.fetchOccupations(industryId);
+      final response = await apiService.fetchServices(2, parentId: parentId);
       occupations
-          .assignAll(response.map((e) => Occupation.fromJson(e)).toList());
+          .assignAll(response.map((e) => OccupationModel.fromJson(e)).toList());
+      isLoading.value = false;
     } catch (e) {
       log("Error fetching occupations: $e");
-    } finally {
       isLoading.value = false;
     }
+  }
+
+  Future<void> fetchOccupationTypes(String parentId) async {
+    isLoading.value = true;
+    try {
+      final response = await apiService.fetchServices(3, parentId: parentId);
+      occupationTypes
+          .assignAll(response.map((e) => OccupationModel.fromJson(e)).toList());
+      isLoading.value = false;
+    } catch (e) {
+      log("Error fetching occupation types: $e");
+      isLoading.value = false;
+    }
+  }
+
+  void onOccupationChanged(String occupationId) {
+    selectedOccupationType.value = null;
+    fetchOccupationTypes(occupationId);
   }
 
   void onIndustryChanged(String industryId) {
@@ -154,13 +175,6 @@ class EditProfessionalInfoController extends GetxController {
         duration: const Duration(milliseconds: 300),
         reverseDuration: const Duration(milliseconds: 300),
       ),
-      // PageTransition(
-      //   child: ExpertiseView(
-      //       selectedItems: convertToExpertiseItemList(expertiseList.toList())),
-      //   type: PageTransitionType.leftToRight,
-      //   duration: const Duration(milliseconds: 300),
-      //   reverseDuration: const Duration(milliseconds: 300),
-      // ),
     );
 
     if (result != null) {
@@ -181,6 +195,13 @@ class EditProfessionalInfoController extends GetxController {
   List<SelectionPopupModel> get occupationDropdownItems {
     return occupations.map((occupation) {
       return SelectionPopupModel(id: occupation.id, title: occupation.name);
+    }).toList();
+  }
+
+  List<SelectionPopupModel> get occupationTypeDropdownItems {
+    return occupationTypes.map((occupationType) {
+      return SelectionPopupModel(
+          id: occupationType.id, title: occupationType.name);
     }).toList();
   }
 

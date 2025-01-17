@@ -15,10 +15,10 @@ class CategoryDetailScreen extends StatelessWidget {
         Get.put(CategoryDetailController());
 
     // Fetch users for the selected industry
-    controller.fetchUsersByIndustry(industry.id);
+    controller.fetchUsersByIndustry(industry.id!);
 
     return Scaffold(
-      appBar:_buildAppBar(categoryName),
+      appBar: _buildAppBar(categoryName),
       body: Obx(() {
         if (controller.isLoading.value) {
           return ListView.builder(
@@ -66,238 +66,227 @@ Widget _buildShimmerEffect() {
   );
 }
 
-
-Widget _buildEmptyContainer(BuildContext context){
-  return  Padding(
-        padding: EdgeInsets.only(right: 16.adaptSize, bottom: 10.adaptSize, left: 16.adaptSize),
-        child: Stack(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(24),
-              ),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.only(
-                        left: 30.adaptSize,
-                        right: 30.adaptSize,
-                        top: 30.adaptSize),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+Widget _buildEmptyContainer(BuildContext context) {
+  return Padding(
+    padding: EdgeInsets.only(
+        right: 16.adaptSize, bottom: 10.adaptSize, left: 16.adaptSize),
+    child: Stack(
+      children: [
+        Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(24),
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: EdgeInsets.only(
+                    left: 30.adaptSize, right: 30.adaptSize, top: 30.adaptSize),
+                child: Row(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Stack(
                       children: [
-                        Stack(
-                          children: [
-                            CircleAvatar(
-                              radius: 30.adaptSize,
-                              backgroundColor: Colors.orange,
-                              child: CircleAvatar(
-                                radius: 28.adaptSize,
-                                backgroundColor: Colors.white,
-                                child: CustomImageView(
-                                  height: 55,
-                                  width: 55,
-                                  radius: BorderRadius.circular(25),
-                                  imagePath:ImageConstant.imgWomanWithHeadsetVideoCall1,
-                                  placeHolder:  ImageConstant.imageNotFound,
-                                ),
-                              ),
+                        CircleAvatar(
+                          radius: 30.adaptSize,
+                          backgroundColor: Colors.orange,
+                          child: CircleAvatar(
+                            radius: 28.adaptSize,
+                            backgroundColor: Colors.white,
+                            child: CustomImageView(
+                              height: 55,
+                              width: 55,
+                              radius: BorderRadius.circular(25),
+                              imagePath:
+                                  ImageConstant.imgWomanWithHeadsetVideoCall1,
+                              placeHolder: ImageConstant.imageNotFound,
                             ),
-                            Positioned(
-                              bottom: 0,
-                              right: 2,
-                              child: Container(
-                                height: 15.adaptSize,
-                                width: 15.adaptSize,
-                                decoration: BoxDecoration(
-                                  color: Colors.green,
-                                  shape: BoxShape.circle,
-                                  border:
-                                      Border.all(color: Colors.white, width: 2),
-                                ),
-                              ),
-                            ),
-                          ],
+                          ),
                         ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Row(
-                                children: [
-                                  Text( "anonymous",
-                                    style: TextStyle(
-                                      fontSize: 16.fSize,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.black,
-                                    ),
-                                  ),
-                                  const SizedBox(width: 5),
-                                  const Icon(Icons.verified,
-                                      color: Colors.deepPurple, size: 16),
-                                  const Spacer(),
-                                  Container(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: 6.adaptSize,
-                                        vertical: 2.adaptSize),
-                                    decoration: BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.circular(30),
-                                      border: Border.all(
-                                          color: Colors.orange, width: 1),
-                                    ),
-                                    child: Row(
-                                      children: [
-                                        const Icon(Icons.star,
-                                            color: Colors.orange, size: 14),
-                                        SizedBox(width: 4.adaptSize),
-                                        Text("0",
-                                          style: TextStyle(
-                                              color: Colors.black,
-                                              fontSize: 12.fSize),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              Text( "No data",
-                                style: TextStyle(
-                                  fontSize: 12.fSize,
-                                  fontWeight: FontWeight.w500,
-                                  color: Colors.black,
-                                ),
-                              ),
-                              Row(
-                                children: [
-                                  CustomImageView(
-                                    height: 14.adaptSize,
-                                    width: 14.adaptSize,
-                                    imagePath: "assets/images/language.svg",
-                                  ),
-                                  Padding(
-                                    padding: const EdgeInsets.only(left: 5),
-                                    child: Text('No languages',
-                                      style: TextStyle(
-                                        fontSize: 12.fSize,
-                                        fontWeight: FontWeight.w500,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ],
+                        Positioned(
+                          bottom: 0,
+                          right: 2,
+                          child: Container(
+                            height: 15.adaptSize,
+                            width: 15.adaptSize,
+                            decoration: BoxDecoration(
+                              color: Colors.green,
+                              shape: BoxShape.circle,
+                              border: Border.all(color: Colors.white, width: 2),
+                            ),
                           ),
                         ),
                       ],
                     ),
-                  ),
-                  const SizedBox(height: 15),
-                  Center(
-                    child: CustomPaint(
-                      painter: DashedDividerPainter(
-                        color: appTheme.gray200, 
-                        dashWidth: 5.0, 
-                        dashSpace: 3.0, 
-                        strokeWidth: 1.0, 
-                      ),
-                      size: Size(MediaQuery.of(context).size.width * 0.8, 1),
-                    ),
-                  ),
-                  const SizedBox(height: 8),
-                  Padding(
-                    padding: EdgeInsets.only(
-                        left: 30.adaptSize,
-                        right: 30.adaptSize,
-                        top: 10.adaptSize),
-                    child: Wrap(
-                      spacing: 8.adaptSize,
-                      runSpacing: 8.adaptSize,
-                      children:[
-                          _buildChip(
-                                      'No Expertise found',
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Text(
+                                "anonymous",
+                                style: TextStyle(
+                                  fontSize: 16.fSize,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black,
+                                ),
+                              ),
+                              const SizedBox(width: 5),
+                              const Icon(Icons.verified,
+                                  color: Colors.deepPurple, size: 16),
+                              const Spacer(),
+                              Container(
+                                padding: EdgeInsets.symmetric(
+                                    horizontal: 6.adaptSize,
+                                    vertical: 2.adaptSize),
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(30),
+                                  border: Border.all(
+                                      color: Colors.orange, width: 1),
+                                ),
+                                child: Row(
+                                  children: [
+                                    const Icon(Icons.star,
+                                        color: Colors.orange, size: 14),
+                                    SizedBox(width: 4.adaptSize),
+                                    Text(
+                                      "0",
+                                      style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 12.fSize),
                                     ),
-                      ]
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                          Text(
+                            "No data",
+                            style: TextStyle(
+                              fontSize: 12.fSize,
+                              fontWeight: FontWeight.w500,
+                              color: Colors.black,
+                            ),
+                          ),
+                          Row(
+                            children: [
+                              CustomImageView(
+                                height: 14.adaptSize,
+                                width: 14.adaptSize,
+                                imagePath: "assets/images/language.svg",
+                              ),
+                              Padding(
+                                padding: const EdgeInsets.only(left: 5),
+                                child: Text(
+                                  'No languages',
+                                  style: TextStyle(
+                                    fontSize: 12.fSize,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.black,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
                     ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 15),
+              Center(
+                child: CustomPaint(
+                  painter: DashedDividerPainter(
+                    color: appTheme.gray200,
+                    dashWidth: 5.0,
+                    dashSpace: 3.0,
+                    strokeWidth: 1.0,
                   ),
-                  SizedBox(height: 30.adaptSize),
-                  Container(
-                    decoration: BoxDecoration(
-                      color: appTheme.gray100,
-                      borderRadius: const BorderRadius.vertical(
-                          bottom: Radius.circular(24)),
+                  size: Size(MediaQuery.of(context).size.width * 0.8, 1),
+                ),
+              ),
+              const SizedBox(height: 8),
+              Padding(
+                padding: EdgeInsets.only(
+                    left: 30.adaptSize, right: 30.adaptSize, top: 10.adaptSize),
+                child: Wrap(
+                    spacing: 8.adaptSize,
+                    runSpacing: 8.adaptSize,
+                    children: [
+                      _buildChip(
+                        'No Expertise found',
+                      ),
+                    ]),
+              ),
+              SizedBox(height: 30.adaptSize),
+              Container(
+                decoration: BoxDecoration(
+                  color: appTheme.gray100,
+                  borderRadius:
+                      const BorderRadius.vertical(bottom: Radius.circular(24)),
+                ),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    _buildActionButton(ImageConstant.videocam, "0/min",
+                        appTheme.red500, () {}),
+                    Container(
+                      color: appTheme.gray300,
+                      width: 0.5.adaptSize,
+                      height: 50.adaptSize,
                     ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        _buildActionButton(
-                            ImageConstant.videocam,
-                            "0/min",
-                            appTheme.red500,
-                            () {}),
-                        Container(
-                          color: appTheme.gray300,
-                          width: 0.5.adaptSize,
-                          height: 50.adaptSize,
-                        ),
-                        _buildActionButton(
-                            ImageConstant.call,
-                            "0/min",
-                            appTheme.green100,
-                            () {}),
-                        Container(
-                          color: appTheme.gray300,
-                          width: 0.5.adaptSize,
-                          height: 50.adaptSize,
-                        ),
-                        _buildActionButton(
-                            ImageConstant.msg,
-                            "0/min",
-                            appTheme.yellow900,
-                            () {}),
-                      ],
+                    _buildActionButton(
+                        ImageConstant.call, "0/min", appTheme.green100, () {}),
+                    Container(
+                      color: appTheme.gray300,
+                      width: 0.5.adaptSize,
+                      height: 50.adaptSize,
                     ),
+                    _buildActionButton(
+                        ImageConstant.msg, "0/min", appTheme.yellow900, () {}),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+
+        // "Top Rated" Ribbon
+        Positioned(
+          top: 55.adaptSize,
+          left: -15.adaptSize,
+          child: Transform.rotate(
+            angle: -45 * (3.141592653589793 / 180),
+            alignment: Alignment.topLeft,
+            child: Container(
+              width: 100.adaptSize,
+              padding: EdgeInsets.symmetric(
+                  vertical: 3.adaptSize, horizontal: 8.adaptSize),
+              decoration: const BoxDecoration(
+                color: Colors.orange,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomImageView(imagePath: "assets/images/verify.svg"),
+                  SizedBox(width: 2.adaptSize),
+                  const Text(
+                    "Top Rated",
+                    style: TextStyle(color: Colors.white),
                   ),
                 ],
               ),
             ),
-
-            // "Top Rated" Ribbon
-            Positioned(
-              top: 55.adaptSize,
-              left: -15.adaptSize,
-              child: Transform.rotate(
-                angle: -45 * (3.141592653589793 / 180),
-                alignment: Alignment.topLeft,
-                child: Container(
-                  width: 100.adaptSize,
-                  padding: EdgeInsets.symmetric(
-                      vertical: 3.adaptSize, horizontal: 8.adaptSize),
-                  decoration: const BoxDecoration(
-                    color: Colors.orange,
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CustomImageView(imagePath: "assets/images/verify.svg"),
-                      SizedBox(width: 2.adaptSize),
-                      const Text(
-                        "Top Rated",
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-            ),
-          ],
+          ),
         ),
-      );
-    
+      ],
+    ),
+  );
 }
 
 // Widget _buildEmptyContainer() {
@@ -381,26 +370,25 @@ Widget _buildEmptyContainer(BuildContext context){
 //   );
 // }
 
-  PreferredSizeWidget _buildAppBar(String text) {
-    return CustomAppBar(
-      height: 40.h,
-      leadingWidth: 40.h,
-      leading: AppbarLeadingImage(
-        imagePath: ImageConstant.imgArrowLeftOnerrorcontainer,
-        margin: EdgeInsets.only(left: 16.h),
-        onTap: () {
-          onTapArrowLeft();
-        },
-      ),
-      centerTitle: true,
-      title: AppbarSubtitleSix(text: text),
-    );
-  }
+PreferredSizeWidget _buildAppBar(String text) {
+  return CustomAppBar(
+    height: 40.h,
+    leadingWidth: 40.h,
+    leading: AppbarLeadingImage(
+      imagePath: ImageConstant.imgArrowLeftOnerrorcontainer,
+      margin: EdgeInsets.only(left: 16.h),
+      onTap: () {
+        onTapArrowLeft();
+      },
+    ),
+    centerTitle: true,
+    title: AppbarSubtitleSix(text: text),
+  );
+}
 
-  void onTapArrowLeft() {
-    Get.back();
-  }
-
+void onTapArrowLeft() {
+  Get.back();
+}
 
 class UserProfileItemWidget extends StatelessWidget {
   final User user;
@@ -414,7 +402,8 @@ class UserProfileItemWidget extends StatelessWidget {
         Get.toNamed(AppRoutes.detailsPage, arguments: {"user": user});
       },
       child: Padding(
-        padding: EdgeInsets.only(right: 16.adaptSize, bottom: 10.adaptSize, left: 16.adaptSize),
+        padding: EdgeInsets.only(
+            right: 16.adaptSize, bottom: 10.adaptSize, left: 16.adaptSize),
         child: Stack(
           children: [
             Container(
@@ -543,7 +532,7 @@ class UserProfileItemWidget extends StatelessWidget {
                                             final languages = user.language!
                                                 .map((l) => l.name)
                                                 .toList();
-                                    
+
                                             if (languages.length > 3) {
                                               return '${languages.take(3).join(', ')} +${languages.length - 3} more';
                                             } else {
@@ -677,7 +666,6 @@ class UserProfileItemWidget extends StatelessWidget {
           ],
         ),
       ),
-    
     );
   }
 }

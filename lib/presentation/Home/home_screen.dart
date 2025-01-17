@@ -13,6 +13,7 @@ import 'package:experta/widgets/animated_hint_searchview.dart';
 import 'package:experta/widgets/dashed_border.dart';
 import 'package:experta/presentation/Home/controller/home_controller.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -25,12 +26,22 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late HomeController controller;
   late DashboardController dashboardController;
+  List<Industry> displayedIndustries = [];
 
   @override
   void initState() {
     super.initState();
+
     controller = Get.put(HomeController());
     dashboardController = Get.find<DashboardController>();
+    _loadLevel1Industries();
+  }
+
+  Future<void> _loadLevel1Industries() async {
+    await controller.fetchIndustriesByLevel(1);
+    setState(() {
+      displayedIndustries = controller.industries;
+    });
   }
 
   @override
@@ -394,15 +405,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   scrollDirection: Axis.horizontal,
                   separatorBuilder: (context, index) =>
                       SizedBox(width: 15.adaptSize),
-                  itemCount: controller.industries.length,
+                  itemCount: displayedIndustries.length,
                   itemBuilder: (context, index) {
-                    Industry industry = controller.industries[index];
+                    Industry industry = displayedIndustries[index];
 
                     return GestureDetector(
                       onTap: () {
                         Get.to(
                           () => CategoryDetailScreen(
-                            categoryName: industry.name,
+                            categoryName: industry.name!,
                           ),
                           arguments: {'industry': industry},
                         );
@@ -422,18 +433,21 @@ class _HomeScreenState extends State<HomeScreen> {
                             SizedBox(
                               height: 30.adaptSize,
                               width: 30.adaptSize,
-                              child: CustomImageView(
-                                imagePath: industry.icon,
-                                placeHolder: ImageConstant.imageNotFound,
+                              child: SvgPicture.network(
+                                industry.icon!,
+                                placeholderBuilder: (BuildContext context) =>
+                                    CircularProgressIndicator(),
                               ),
                             ),
                             SizedBox(height: 5.v),
                             Text(
-                              industry.name,
-                              textAlign: TextAlign.center,
+                              industry.name!.capitalizeFirst!,
                               maxLines: 2,
-                              style: theme.textTheme.labelMedium!
-                                  .copyWith(color: Colors.black),
+                              textAlign: TextAlign.center,
+                              style: theme.textTheme.titleSmall!.copyWith(
+                                color: Colors.black,
+                                fontSize: 10,
+                              ),
                             ),
                           ],
                         ),
