@@ -1,24 +1,15 @@
-// import 'dart:convert';
-import 'dart:developer';
 import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
 import 'package:experta/core/utils/web_view/web_view.dart';
-import 'package:experta/data/apiClient/call_api_service.dart';
-import 'package:experta/presentation/all_review/all_review.dart';
-import 'package:experta/presentation/userProfile/post_details/post_details.dart';
+import 'package:experta/presentation/Home/model/home_model.dart';
 import 'package:experta/presentation/user_details/controller/details_controller.dart';
-import 'package:experta/presentation/video_call/audio_call.dart';
-import 'package:experta/presentation/video_call/video_call_screen.dart';
-import 'package:experta/widgets/custom_icon_button.dart';
-import 'package:experta/widgets/custom_outlined_button.dart';
-import 'package:experta/widgets/custom_rating_bar.dart';
-import 'package:experta/widgets/custom_toast_message.dart';
-import 'package:experta/widgets/report.dart';
+import 'package:experta/widgets/custom_elevated_button.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:fluttertoast/fluttertoast.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:lottie/lottie.dart';
 import 'package:readmore/readmore.dart';
 
 class UserDetailsPage extends StatefulWidget {
@@ -30,177 +21,31 @@ class UserDetailsPage extends StatefulWidget {
 
 class _UserDetailsPageState extends State<UserDetailsPage>
     with SingleTickerProviderStateMixin {
+  final User id = Get.arguments['user'];
   DetailsController controller = Get.put(DetailsController());
-  final currentUserId = PrefUtils().getaddress();
+
   late TabController _tabController;
-  String? email = PrefUtils().getEmail();
-  final CallApiService _apiService = CallApiService();
-  final ApiService apiService = ApiService();
-  bool isLoading = false;
-  bool isLoading1 = false;
 
   @override
   void initState() {
+    controller.fetchUserData(id.id);
     _tabController = TabController(length: 2, vsync: this);
-
     super.initState();
-  }
-
-  void _scheduleMeeting(String type) async {
-    DateTime currentTime = DateTime.now();
-
-    // Calculate the time 30 minutes from now
-    DateTime timeAfter30Minutes = currentTime.add(const Duration(minutes: 1));
-
-    // Convert both times to ISO 8601 string format
-    String isoStartTime = currentTime.toIso8601String();
-    String isoEndTime = timeAfter30Minutes.toIso8601String();
-
-    // Create booking data
-    final bookingData = {
-      "expertId": controller.id.id,
-      "startTime": "${isoStartTime}Z",
-      "endTime": "${isoEndTime}Z",
-      "type": type
-    };
-    log("$bookingData");
-    try {
-      final responses = await apiService.createBooking(bookingData);
-
-      if (responses['status'] == 'success') {
-        type == 'video'
-            ? setState(() {
-                isLoading = false;
-              })
-            : setState(() {
-                isLoading1 = false;
-              });
-        // final Map<String, dynamic> responseData = jsonDecode(response.body);
-
-        // Access the fields using the map
-        final meetingId = responses['data']['_id'];
-        _startCall(
-            controller.id.id,
-            meetingId,
-            type,
-            controller.userData.value.data!.basicInfo!.firstName.toString(),
-            controller.userData.value.data!.basicInfo!.profilePic.toString());
-      } else {
-        _showErrorDialog(context, " ${responses['error']['errorMessage']}");
-      }
-    } catch (e) {
-      _showErrorDialog(context, e.toString());
-    }
-    // ScaffoldMessenger.of(context).showSnackBar(
-    //   const SnackBar(content: Text('Meeting scheduled successfully')),
-    // );
-    // final meetingData = {
-    //   'meetingName': "experta consultation",
-    //   'from': currentUserId,
-    //   'to': controller.id.id,
-    //   'date': DateTime.now().toIso8601String(),
-    //   'fromEmail': email,
-    //   'toEmail': email,
-    //   'duration': 30,
-    // };
-    // final response = await _apiService.scheduleMeeting(meetingData);
-    // if (response.statusCode == 201) {
-    //   // Convert to ISO 8601 format
-    //   // Get the current time
-
-    // } else {
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     const SnackBar(content: Text('Failed to schedule meeting')),
-    //   );
-    // }
-  }
-
-  void _showErrorDialog(BuildContext context, String message) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Error'),
-          content: Text(message),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void _startCall(String userId, String meetingId, String Type, String userName,
-      String profilePic) async {
-    if (userId.isNotEmpty && meetingId.isNotEmpty) {
-      if (userId != currentUserId.toString()) {
-        final response = await _apiService.getMeeting(meetingId);
-        if (response.statusCode == 201) {
-          Type == 'video'
-              ? Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => VideoCallScreen(
-                      userId: userId,
-                      meetingId: meetingId,
-                      userName: userName,
-                      bookingId: meetingId,
-                      profilePic: profilePic,
-                    ),
-                  ),
-                )
-              : Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => AudioCallScreen(
-                      userId: userId,
-                      meetingId: meetingId,
-                      userName: userName,
-                      bookingId: meetingId,
-                      profilePic: profilePic,
-                    ),
-                  ),
-                );
-        } else {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Failed to get meeting details')),
-          );
-        }
-      } else {
-        Fluttertoast.showToast(
-            msg: "You cannot call yourself",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.BOTTOM,
-            timeInSecForIosWeb: 1,
-            backgroundColor: appTheme.red500,
-            textColor: Colors.white,
-            fontSize: 16.0);
-      }
-    } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content: Text('Please enter both User ID and Meeting ID')),
-      );
-    }
   }
 
   void _showBottomSheet(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.transparent,
+      backgroundColor:
+          Colors.transparent, // Set the background color to transparent
       builder: (context) {
         return Container(
-          padding: EdgeInsets.only(top: 20.fSize, bottom: 20.fSize),
+          padding: const EdgeInsets.only(top: 20, bottom: 20),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               Padding(
-                padding: EdgeInsets.only(left: 20.fSize, right: 20.fSize),
+                padding: const EdgeInsets.only(left: 20, right: 20),
                 child: Container(
                   decoration: const BoxDecoration(
                       color: Colors.white,
@@ -208,36 +53,33 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                   child: Column(
                     children: [
                       ListTile(
-                        title: Center(
+                        title: const Center(
                           child: Text(
                             'Report this user',
-                            style:
-                                CustomTextStyles.titleMediumSFProTextBlack90001,
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 16.0,
+                            ),
                           ),
                         ),
                         onTap: () {
-                          showModalBottomSheet(
-                            context: context,
-                            builder: (context) => ReportReasonSheet(
-                              itemId: controller.id.id,
-                              itemType: 'User',
-                            ),
-                          );
+                          // Handle report action
+                          Navigator.pop(context);
                         },
                       ),
                       const Divider(),
                       ListTile(
-                        title: Center(
+                        title: const Center(
                           child: Text(
                             'Block this user',
-                            style:
-                                CustomTextStyles.titleMediumSFProTextBlack90001,
+                            style: TextStyle(
+                              color: Colors.red,
+                              fontSize: 16.0,
+                            ),
                           ),
                         ),
                         onTap: () {
                           Navigator.pop(context);
-                          _showBlockUserDialog(
-                              context, controller.id.id, controller);
                         },
                       ),
                     ],
@@ -246,17 +88,19 @@ class _UserDetailsPageState extends State<UserDetailsPage>
               ),
               const SizedBox(height: 10.0),
               Padding(
-                padding: EdgeInsets.only(left: 20.fSize, right: 20.fSize),
+                padding: const EdgeInsets.only(left: 20, right: 20),
                 child: Container(
                   decoration: const BoxDecoration(
                       color: Colors.white,
                       borderRadius: BorderRadius.all(Radius.circular(16))),
                   child: ListTile(
-                    title: Center(
+                    title: const Center(
                       child: Text(
                         'Cancel',
-                        style:
-                            TextStyle(color: Colors.black, fontSize: 16.fSize),
+                        style: TextStyle(
+                          color: Colors.black,
+                          fontSize: 16.0,
+                        ),
                       ),
                     ),
                     onTap: () {
@@ -272,98 +116,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
     );
   }
 
-  void _showBlockUserDialog(BuildContext context, String userToBlockId,
-      DetailsController controller) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return Dialog(
-          backgroundColor: Colors.transparent,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(20.0),
-          ),
-          child: Obx(() {
-            if (controller.isSucess.value) {
-              Future.delayed(const Duration(seconds: 2), () {
-                Navigator.of(context).pop();
-              });
-
-              return SizedBox(
-                height: 200.v,
-                width: 200.h,
-                child: Center(
-                  child: Lottie.asset("assets/jsonfiles/tick.json"),
-                ),
-              );
-            } else if (controller.isBlocking.value) {
-              return Center(
-                child: Lottie.asset("assets/jsonfiles/Loader.json"),
-              );
-            } else {
-              return Container(
-                color: Colors.white,
-                child: Padding(
-                  padding: const EdgeInsets.all(16.0),
-                  child: Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      CustomIconButton(
-                        height: 88.adaptSize,
-                        width: 88.adaptSize,
-                        padding: EdgeInsets.all(20.h),
-                        decoration: IconButtonStyleHelper.fillGreenTL245,
-                        child: CustomImageView(
-                          imagePath: ImageConstant.popup,
-                        ),
-                      ),
-                      const SizedBox(height: 20.0),
-                      Text(
-                        "Block this user",
-                        style:
-                            Theme.of(context).textTheme.headlineSmall!.copyWith(
-                                  color: Colors.black,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(vertical: 10.0),
-                        child: Text(
-                          'Are you sure you want to block this user? This action can be undone later.',
-                          style: CustomTextStyles.bodyMediumLight,
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                      const SizedBox(height: 24.0),
-                      CustomElevatedButton(
-                        onPressed: () async {
-                          controller.isBlocking.value = true;
-                          controller.blockUser(userToBlockId, context);
-                        },
-                        text: "Block",
-                      ),
-                      const SizedBox(height: 12.0),
-                      CustomOutlinedButton(
-                        height: 56.v,
-                        buttonStyle: CustomButtonStyles.outlineGrayTL23,
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        text: "Cancel",
-                      ),
-                      const SizedBox(height: 16.0),
-                    ],
-                  ),
-                ),
-              );
-            }
-          }),
-        );
-      },
-    );
-  }
-
-  void _showBottomSheet2(BuildContext context, String type) {
+  void _showBottomSheet2(BuildContext context) {
     showModalBottomSheet(
       context: context,
       builder: (context) {
@@ -375,99 +128,39 @@ class _UserDetailsPageState extends State<UserDetailsPage>
               mainAxisSize: MainAxisSize.min,
               children: <Widget>[
                 ListTile(
-                  leading: type == 'video'
-                      ? CustomIconButton(
-                          height: 44.adaptSize,
-                          width: 44.adaptSize,
-                          padding: EdgeInsets.all(10.h),
-                          decoration:
-                              IconButtonStyleHelper.fillPrimaryContainerT123,
-                          child: CustomImageView(
-                            imagePath: ImageConstant.videocam,
-                          ))
-                      : CustomIconButton(
-                          height: 44.adaptSize,
-                          width: 44.adaptSize,
-                          padding: EdgeInsets.all(10.h),
-                          decoration: IconButtonStyleHelper.fillGreenTL24,
-                          child: CustomImageView(
-                            imagePath: ImageConstant.call,
-                          )),
-                  title: Text(
-                    'Connect Now',
-                    style: theme.textTheme.bodyMedium!
-                        .copyWith(color: Colors.black),
+                  leading: CircleAvatar(
+                    backgroundColor: Colors.green.shade100,
+                    child: const Icon(Icons.call, color: Colors.green),
                   ),
-                  subtitle: Text(
-                    'Reach out to ${controller.userData.value.data!.basicInfo!.firstName.toString()} right now',
-                    style: theme.textTheme.titleSmall!
-                        .copyWith(color: appTheme.gray400),
+                  title: const Text('Audio Call'),
+                  subtitle: const Text('Chat me up, share photos.'),
+                  trailing: const Text(
+                    '1800/min',
+                    style: TextStyle(
+                      color: Colors.amber,
+                    ),
                   ),
                   onTap: () {
+                    // Handle audio call action
                     Navigator.pop(context);
-                    _scheduleMeeting(type);
                   },
                 ),
                 const Divider(),
                 ListTile(
-                  leading: type == 'video'
-                      ? CustomIconButton(
-                          height: 44.adaptSize,
-                          width: 44.adaptSize,
-                          padding: EdgeInsets.all(10.h),
-                          decoration:
-                              IconButtonStyleHelper.fillPrimaryContainerT123,
-                          child: CustomImageView(
-                            imagePath: ImageConstant.videocam,
-                          ))
-                      : CustomIconButton(
-                          height: 44.adaptSize,
-                          width: 44.adaptSize,
-                          padding: EdgeInsets.all(10.h),
-                          decoration: IconButtonStyleHelper.fillGreenTL24,
-                          child: CustomImageView(
-                            imagePath: ImageConstant.call,
-                          )),
-                  title: Text(
-                    'Schedule Call',
-                    style: theme.textTheme.bodyMedium!
-                        .copyWith(color: Colors.black),
+                  leading: CircleAvatar(
+                    backgroundColor: Colors.red.shade100,
+                    child: const Icon(Icons.videocam, color: Colors.red),
                   ),
-                  subtitle: Text(
-                    'Book and  block ${controller.userData.value.data!.basicInfo!.firstName.toString()} calendar',
-                    style: theme.textTheme.titleSmall!
-                        .copyWith(color: appTheme.gray400),
+                  title: const Text('Video Call'),
+                  subtitle: const Text('Call your doctor directly.'),
+                  trailing: const Text(
+                    '2800/min',
+                    style: TextStyle(
+                      color: Colors.amber,
+                    ),
                   ),
                   onTap: () {
                     Navigator.pop(context);
-                    Get.toNamed(AppRoutes.Bookappointment, arguments: {
-                      'profile': controller
-                              .userData.value.data?.basicInfo?.profilePic ??
-                          '',
-                      'firstname': controller
-                              .userData.value.data?.basicInfo?.firstName ??
-                          '',
-                      'lastname':
-                          controller.userData.value.data?.basicInfo?.lastName ??
-                              '',
-                      'industry': controller.userData.value.data
-                              ?.industryOccupation?.industry?.name ??
-                          '',
-                      'occupation': controller.userData.value.data
-                              ?.industryOccupation?.occupation?.name ??
-                          '',
-                      'price': type == 'video'
-                          ? controller
-                                  .userData.value.data!.pricing?.videoCallPrice
-                                  .toString() ??
-                              ''
-                          : controller
-                                  .userData.value.data!.pricing?.audioCallPrice
-                                  .toString() ??
-                              '',
-                      'id': controller.id.id ?? '',
-                      'type': type,
-                    });
                   },
                 ),
                 const Divider(),
@@ -477,27 +170,18 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                     child:
                         const Icon(Icons.calendar_today, color: Colors.yellow),
                   ),
-                  title: Text(
-                    'Start Chat',
-                    style: theme.textTheme.bodyMedium!
-                        .copyWith(color: Colors.black),
+                  title: const Text('Schedule Call'),
+                  subtitle: const Text('Chat me up, share photos.'),
+                  trailing: const Text(
+                    '1800/min',
+                    style: TextStyle(
+                      color: Colors.amber,
+                    ),
                   ),
-                  subtitle: Text(
-                    'Initiate chat with ${controller.userData.value.data!.basicInfo!.firstName.toString()}',
-                    style: theme.textTheme.titleSmall!
-                        .copyWith(color: appTheme.gray400),
-                  ),
-                  onTap: () async {
-                    final chatData =
-                        await ApiService().fetchChat(controller.id.id);
-                    log("this is chat Data  ===== $chatData");
-                    log("this is your id ${controller.id} and chat is ${chatData!["_id"]}");
-                    Navigator.pushNamed(
-                      context,
-                      AppRoutes.chattingScreen,
-                      arguments: {'chat': chatData},
-                    );
-                                    },
+                  onTap: () {
+                    // Handle schedule call action
+                    Navigator.pop(context);
+                  },
                 ),
               ],
             ),
@@ -509,9 +193,9 @@ class _UserDetailsPageState extends State<UserDetailsPage>
 
   @override
   Widget build(BuildContext context) {
-    return PopScope(
-      canPop: false,
+    return SafeArea(
       child: Scaffold(
+        backgroundColor: Colors.white,
         body: Stack(
           children: [
             Positioned(
@@ -519,18 +203,17 @@ class _UserDetailsPageState extends State<UserDetailsPage>
               top: 50,
               child: ImageFiltered(
                 imageFilter: ImageFilter.blur(
-                  tileMode: TileMode.decal,
                   sigmaX: 60,
                   sigmaY: 60,
                 ),
                 child: Align(
                   child: SizedBox(
-                    width: 252.adaptSize,
-                    height: 252.adaptSize,
+                    width: 252,
+                    height: 252,
                     child: Container(
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(126),
-                        color: appTheme.deepOrangeA20,
+                        color: appTheme.deepOrangeA20.withOpacity(0.6),
                       ),
                     ),
                   ),
@@ -543,21 +226,10 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                   return [
                     SliverAppBar(
                       pinned: true,
-                      automaticallyImplyLeading: false,
-                      expandedHeight: MediaQuery.of(context).size.height * 0.45,
-                      backgroundColor: Colors.white.withOpacity(0.4),
+                      automaticallyImplyLeading: true,
+                      expandedHeight: 350.0,
+                      backgroundColor: Colors.transparent,
                       primary: true,
-                      leading: AppbarLeadingImage(
-                        imagePath: ImageConstant.imgArrowLeftOnerrorcontainer,
-                        margin: EdgeInsets.only(
-                            left: 16.h,
-                            top: 10.adaptSize,
-                            bottom: 10.adaptSize,
-                            right: 16.adaptSize),
-                        onTap: () {
-                          onTapArrowLeft();
-                        },
-                      ),
                       title: Obx(() {
                         return Text(
                           controller.userData.value.data?.basicInfo
@@ -565,46 +237,30 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                               '',
                           style: theme.textTheme.titleMedium!.copyWith(
                               color: appTheme.gray900,
-                              fontSize: 22,
-                              fontWeight: FontWeight.w700),
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold),
                         );
                       }),
                       actions: [
-                        Obx(() {
-                          return Padding(
-                            padding: const EdgeInsets.only(right: 0),
-                            child: CustomElevatedButton(
-                              buttonStyle: CustomButtonStyles.fillOnError2,
-                              buttonTextStyle:
-                                  CustomTextStyles.bodySmallffffffff,
-                              height: 36.adaptSize,
-                              width: 70.adaptSize,
-                              text:
-                                  controller.userData.value.data?.isFollowing ==
-                                          false
-                                      ? "Follow"
-                                      : "unfollow",
-                              onPressed: () {
-                                if (controller.isFollowing.value == false) {
-                                  controller.followUser(
-                                      controller.userData.value.data?.id ?? '');
-                                  controller.fetchUserData(
-                                      controller.userData.value.data?.id ?? '');
-                                  setState(() {
-                                    controller.isFollowing.value = true;
-                                  });
-                                  log("now the new value of is following is ==== ${controller.isFollowing.value}");
-                                } else {
-                                  controller.fetchUserData(
-                                      controller.userData.value.data?.id ?? '');
-                                  setState(() {
-                                    controller.isFollowing.value = false;
-                                  });
-                                }
-                              },
-                            ),
-                          );
-                        }),
+                        Padding(
+                          padding: const EdgeInsets.only(right: 0),
+                          child: CustomElevatedButton(
+                            buttonStyle: CustomButtonStyles.fillOnError2,
+                            buttonTextStyle: CustomTextStyles.bodySmallffffffff,
+                            height: 36,
+                            width: 70,
+                            text: controller.userData.value.data?.isFollowing ==
+                                    false
+                                ? "Follow"
+                                : "unfollow",
+                            onPressed: () {
+                              controller.userData.value.data?.isFollowing ==
+                                      false
+                                  ? controller.followUser(id.id)
+                                  : null;
+                            },
+                          ),
+                        ),
                         IconButton(
                           icon: const Icon(Icons.more_vert),
                           onPressed: () {
@@ -618,7 +274,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                           mainAxisSize: MainAxisSize.min,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.only(top: 80),
+                              padding: const EdgeInsets.only(top: 50),
                               child: _profilepicBody(),
                             ),
                             _ratingSection(),
@@ -658,133 +314,85 @@ class _UserDetailsPageState extends State<UserDetailsPage>
             Align(
               alignment: Alignment.bottomCenter,
               child: Container(
-                height: 50,
                 color: appTheme.whiteA700,
-                child: Obx(() {
-                  final pricing = controller.userData.value.data?.pricing;
-
-                  if (pricing == null) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-
-                  return Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                child: Padding(
+                  padding: const EdgeInsets.only(
+                      bottom: 15, right: 10, left: 10, top: 10),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _buildActionButton(
-                        ImageConstant.videocam,
-                        "${pricing.videoCallPrice}/min",
-                        Colors.red,
-                        () {
-                          _showBottomSheet2(context, 'video');
-                          // _scheduleMeeting('video');
+                      CustomElevatedButton(
+                        width: MediaQuery.of(context).size.width * 0.75,
+                        text: "Make a call",
+                        onPressed: () {
+                          _showBottomSheet2(context);
                         },
                       ),
-                      _buildVerticalDivider(),
-                      _buildActionButton(
-                        ImageConstant.call,
-                        "${pricing.audioCallPrice}/min",
-                        Colors.green,
-                        () {
-                          _showBottomSheet2(context, 'audio');
-                        },
+                      const SizedBox(
+                        width: 10,
                       ),
-                      _buildVerticalDivider(),
-                      _buildActionButton(
-                        ImageConstant.msg,
-                        "${pricing.messagePrice}/msg",
-                        appTheme.yellow900,
-                        () async {
-                          final chatData =
-                              await ApiService().fetchChat(controller.id.id);
-                          log("this is chat Data  ===== $chatData");
-                          log("this is your id ${controller.id} and chat is ${chatData!["_id"]}");
-                          Navigator.pushNamed(
-                            context,
-                            AppRoutes.chattingScreen,
-                            arguments: {'chat': chatData},
-                          );
-                                                },
-                      ),
+                      CustomImageView(
+                        height: 50,
+                        width: 50,
+                        imagePath: ImageConstant.msg,
+                      )
                     ],
-                  );
-                }),
+                  ),
+                ),
               ),
-            ),
+            )
           ],
         ),
       ),
     );
   }
 
-  Widget _buildVerticalDivider() {
-    return Container(
-      color: appTheme.gray300,
-      width: 0.5,
-      height: 50,
-    );
-  }
-
-  Widget _buildActionButton(
-      String img, String label, Color color, VoidCallback? onTap) {
-    return GestureDetector(
-      onTap: onTap,
-      child: Row(
-        children: [
-          CustomImageView(imagePath: img),
-          const SizedBox(width: 4),
-          Text(
-            label,
-            style: const TextStyle(
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
   Widget _buildAboutMe() {
     return SizedBox(
+      width: 430.adaptSize,
       child: Column(
         children: [
           SizedBox(
-            height: 0.v,
+            height: 15.v,
           ),
           Expanded(
             child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  _buildChipviewvisual(context),
-                  SizedBox(
-                    height: 8.v,
-                  ),
-                  _buildColumnaboutme(),
-                  SizedBox(
-                    height: 8.v,
-                  ),
-                  _buildColumnexperienc(),
-                  SizedBox(
-                    height: 8.v,
-                  ),
-                  _buildColumneducation(),
-                  SizedBox(
-                    height: 8.v,
-                  ),
-                  _buildColumnachieveme(),
-                  SizedBox(
-                    height: 8.v,
-                  ),
-                  _buildColumnintereste(),
-                  SizedBox(
-                    height: 8.v,
-                  ),
-                  _buildColumnreviews()
-                ],
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    _buildChipviewvisual(context),
+                    SizedBox(
+                      height: 5.v,
+                    ),
+                    _buildColumnaboutme(),
+                    SizedBox(
+                      height: 8.v,
+                    ),
+                    _buildColumnexperienc(),
+                    SizedBox(
+                      height: 8.v,
+                    ),
+                    _buildColumneducation(),
+                    SizedBox(
+                      height: 8.v,
+                    ),
+                    _buildColumnachieveme(),
+                    SizedBox(
+                      height: 8.v,
+                    ),
+                    _buildColumnintereste(),
+                    SizedBox(
+                      height: 8.v,
+                    ),
+                    _buildColumnreviews()
+                  ],
+                ),
               ),
             ),
           ),
           const SizedBox(
-            height: 50,
+            height: 100,
           )
         ],
       ),
@@ -793,27 +401,15 @@ class _UserDetailsPageState extends State<UserDetailsPage>
 
   Widget _buildPosts() {
     return Obx(() {
-      var posts = controller.feeds;
-      if (controller.isLoading.value) {
+      var posts = controller.userData.value.data?.basicInfo?.posts;
+      if (posts == null || posts.isEmpty) {
         return const Center(
-          child: CircularProgressIndicator(),
-        );
-      } else if (posts.isEmpty) {
-        return Center(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CustomImageView(
-                imagePath: ImageConstant.imgNoChat,
-                height: 70.h,
-                width: 70.h,
-              ),
-              SizedBox(height: 20.v),
-              Text(
-                "${controller.userData.value.data?.basicInfo!.firstName?.toLowerCase().replaceFirst(RegExp(r'[a-z]'), controller.userData.value.data?.basicInfo!.firstName?[0].toUpperCase() ?? '') ?? ''}'s feeds is empty",
-                style: CustomTextStyles.titleMediumBold,
-              ),
-            ],
+          child: Text(
+            'No posts available',
+            style: TextStyle(
+              fontSize: 18,
+              fontWeight: FontWeight.w400,
+            ),
           ),
         );
       } else {
@@ -821,7 +417,6 @@ class _UserDetailsPageState extends State<UserDetailsPage>
           children: [
             Expanded(
               child: GridView.builder(
-                reverse: false,
                 gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 3,
                   crossAxisSpacing: 4.0,
@@ -829,31 +424,16 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                 ),
                 itemCount: posts.length,
                 itemBuilder: (context, index) {
-                  int reverseIndex = posts.length - 1 - index;
-                  return GestureDetector(
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => PostDetailsPage(
-                            initialIndex: reverseIndex,
-                            userId: controller.id.id,
-                          ),
-                        ),
-                      );
-                    },
-                    child: CustomImageView(
-                      imagePath: posts[reverseIndex].image ?? '',
-                      fit: BoxFit.cover,
-                    ),
+                  return CustomImageView(
+                    imagePath: posts[index].image ?? '',
+                    fit: BoxFit.cover,
                   );
                 },
               ),
             ),
             const SizedBox(
               height: 100,
-              width: double.infinity,
-            ),
+            )
           ],
         );
       }
@@ -864,157 +444,140 @@ class _UserDetailsPageState extends State<UserDetailsPage>
     List<Map<String, dynamic>>? socialMediaLinks =
         controller.userData.value.data?.basicInfo?.getSocialMediaLinks();
 
-    return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: [
-          _buildRowaboutme(aboutMeText: "About me"),
-          SizedBox(
-            height: 20.v,
-          ),
-          SizedBox(
-            width: 331.adaptSize,
-            child: Obx(() {
-              return ReadMoreText(
-                controller.userData.value.data?.basicInfo?.bio ?? '',
-                trimLines: 3,
-                colorClickableText: appTheme.readmore,
-                trimMode: TrimMode.Line,
-                trimCollapsedText: "Read more",
-                trimExpandedText: "Read less",
-                style: theme.textTheme.titleSmall!
-                    .copyWith(color: appTheme.black900),
-                moreStyle: theme.textTheme.bodyMedium?.copyWith(
-                  color: appTheme.readmore,
-                  fontSize: theme.textTheme.bodyMedium?.fontSize,
-                ),
-                lessStyle: theme.textTheme.bodyMedium?.copyWith(
-                  color: appTheme.readmore,
-                  fontSize: theme.textTheme.bodyMedium?.fontSize,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        _buildRowaboutme(aboutMeText: "About me"),
+        SizedBox(
+          height: 18.v,
+        ),
+        SizedBox(
+          width: 331.adaptSize,
+          child: Obx(() {
+            return ReadMoreText(
+              controller.userData.value.data?.basicInfo?.bio ?? '',
+              trimLines: 3,
+              colorClickableText: const Color(
+                0XFFD45102,
+              ),
+              trimMode: TrimMode.Line,
+              trimCollapsedText: "Read more",
+              moreStyle:
+                  theme.textTheme.bodyLarge?.copyWith(color: appTheme.gray900),
+              lessStyle:
+                  theme.textTheme.bodyLarge?.copyWith(color: appTheme.gray900),
+            );
+          }),
+        ),
+        SizedBox(
+          height: 17.v,
+        ),
+        if (socialMediaLinks != null && socialMediaLinks.isNotEmpty)
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: socialMediaLinks.map((socialMedia) {
+              return GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => ExpertaBrowser(
+                        url: socialMedia['link'],
+                        title: socialMedia['name'],
+                      ),
+                    ),
+                  );
+                  print('Opening link: ${socialMedia['link']}');
+                },
+                child: Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: FaIcon(
+                    socialMedia['icon'],
+                    size: 24,
+                  ),
                 ),
               );
-            }),
+            }).toList(),
           ),
-          SizedBox(
-            height: 17.v,
-          ),
-          if (socialMediaLinks != null && socialMediaLinks.isNotEmpty)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: socialMediaLinks.map((socialMedia) {
-                return GestureDetector(
-                  onTap: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => ExpertaBrowser(
-                          url: socialMedia['link'],
-                          title: socialMedia['name'],
-                        ),
-                      ),
-                    );
-                    print('Opening link: ${socialMedia['link']}');
-                  },
-                  child: Padding(
-                    padding: EdgeInsets.only(right: 8.adaptSize),
-                    child: CustomImageView(
-                      imagePath: socialMedia['icon'],
-                      height: 24.adaptSize,
-                      width: 24.adaptSize,
-                    ),
-                  ),
-                );
-              }).toList(),
-            ),
-        ],
-      ),
+      ],
     );
   }
 
   Widget _buildColumnexperienc() {
-    return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Padding(
-            padding: const EdgeInsets.only(right: 2),
-            child: _buildRoweducation(educationText: "Experience"),
-          ),
-          SizedBox(
-            height: 19.v,
-          ),
-          Obx(() {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: controller.userData.value.data?.workExperience
-                      ?.map((experience) {
-                    String formattedStartDate = experience.startDate != null
-                        ? DateFormat('MMM yyyy').format(experience.startDate!)
-                        : '';
-                    String formattedEndDate = experience.endDate != null
-                        ? DateFormat('MMM yyyy').format(experience.endDate!)
-                        : 'Present';
-                    String totalDuration = '';
-                    if (experience.startDate != null &&
-                        experience.endDate != null) {
-                      Duration duration =
-                          experience.endDate!.difference(experience.startDate!);
-                      int years = (duration.inDays / 365).floor();
-                      int months = ((duration.inDays % 365) / 30).floor();
-                      totalDuration = '$years years $months months';
-                    }
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(right: 2),
+          child: _buildRoweducation(educationText: "Experience"),
+        ),
+        SizedBox(
+          height: 19.v,
+        ),
+        Obx(() {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: controller.userData.value.data?.workExperience
+                    ?.map((experience) {
+                  String formattedStartDate = experience.startDate != null
+                      ? DateFormat('MMM yyyy').format(experience.startDate!)
+                      : '';
+                  String formattedEndDate = experience.endDate != null
+                      ? DateFormat('MMM yyyy').format(experience.endDate!)
+                      : 'Present';
+                  String totalDuration = '';
+                  if (experience.startDate != null &&
+                      experience.endDate != null) {
+                    Duration duration =
+                        experience.endDate!.difference(experience.startDate!);
+                    int years = (duration.inDays / 365).floor();
+                    int months = ((duration.inDays % 365) / 30).floor();
+                    totalDuration = '$years years $months months';
+                  }
 
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          experience.jobTitle ?? '',
-                          style: theme.textTheme.titleMedium!
-                              .copyWith(fontWeight: FontWeight.w600),
+                  return Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        experience.jobTitle ?? '',
+                        style: theme.textTheme.titleMedium!,
+                      ),
+                      SizedBox(
+                        height: 9.v,
+                      ),
+                      Text(
+                        experience.companyName ?? '',
+                        style: theme.textTheme.bodyMedium
+                            ?.copyWith(color: appTheme.gray900),
+                      ),
+                      SizedBox(
+                        height: 5.v,
+                      ),
+                      Text(
+                        "$formattedStartDate - $formattedEndDate · $totalDuration",
+                        style: theme.textTheme.bodyMedium!,
+                      ),
+                      SizedBox(
+                        height: 18.v,
+                      ),
+                      Divider(
+                        height: 1.v,
+                        thickness: 1,
+                        color: const Color(
+                          0XFFE9E9E9,
                         ),
-                        SizedBox(
-                          height: 0.v,
-                        ),
-                        Text(
-                          experience.companyName ?? '',
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                              color: appTheme.gray900,
-                              fontWeight: FontWeight.w400),
-                        ),
-                        SizedBox(
-                          height: 5.v,
-                        ),
-                        Text(
-                          "$formattedStartDate - $formattedEndDate · $totalDuration",
-                          style: theme.textTheme.bodyMedium!.copyWith(
-                              fontWeight: FontWeight.w500, fontSize: 14.fSize),
-                        ),
-                        SizedBox(
-                          height: 18.v,
-                        ),
-                        Divider(
-                          height: 1.v,
-                          thickness: 1,
-                          color: const Color(
-                            0XFFE9E9E9,
-                          ),
-                        ),
-                        SizedBox(
-                          height: 19.v,
-                        ),
-                      ],
-                    );
-                  }).toList() ??
-                  [],
-            );
-          }),
-        ],
-      ),
+                      ),
+                      SizedBox(
+                        height: 19.v,
+                      ),
+                    ],
+                  );
+                }).toList() ??
+                [],
+          );
+        }),
+      ],
     );
   }
 
@@ -1023,17 +586,14 @@ class _UserDetailsPageState extends State<UserDetailsPage>
     final data = controller.userData.value.data?.expertise;
     final expertiseList = data?.expertise ?? [];
 
-    return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildRowaboutme(aboutMeText: "Expertise"),
-          SizedBox(height: 10.v),
-          Wrap(
-            spacing: 10.v,
-            runSpacing: 10.h,
+    return Column(
+      children: [
+        _buildRowaboutme(aboutMeText: "Expertise"),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Wrap(
+            spacing: 8.0,
+            runSpacing: 4.0,
             children: expertiseList.map((expertise) {
               return Chip(
                 label: Text(
@@ -1041,7 +601,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                   style: theme.textTheme.bodyMedium!.copyWith(
                     color: Colors.black,
                     fontWeight: FontWeight.w500,
-                    fontSize: 16.fSize,
+                    fontSize: 16,
                   ),
                 ),
                 backgroundColor: appTheme.gray200,
@@ -1054,140 +614,123 @@ class _UserDetailsPageState extends State<UserDetailsPage>
               );
             }).toList(),
           ),
-        ],
-      ),
+        ),
+      ],
     );
   }
 
   Widget _buildColumneducation() {
-    return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Padding(
-            padding: EdgeInsets.only(right: 2.adaptSize),
-            child: _buildRoweducation(educationText: "Education"),
-          ),
-          SizedBox(
-            height: 19.v,
-          ),
-          Obx(() {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: controller.userData.value.data?.education
-                      ?.map((education) {
-                    // Format the dates
-                    String formattedStartDate = education.startDate != null
-                        ? DateFormat('MMM yyyy').format(education.startDate!)
-                        : '';
-                    String formattedEndDate = education.endDate != null
-                        ? DateFormat('MMM yyyy').format(education.endDate!)
-                        : 'Present';
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        Padding(
+          padding: const EdgeInsets.only(right: 2),
+          child: _buildRoweducation(educationText: "Education"),
+        ),
+        SizedBox(
+          height: 19.v,
+        ),
+        Obx(() {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children:
+                controller.userData.value.data?.education?.map((education) {
+                      // Format the dates
+                      String formattedStartDate = education.startDate != null
+                          ? DateFormat('MMM yyyy').format(education.startDate!)
+                          : '';
+                      String formattedEndDate = education.endDate != null
+                          ? DateFormat('MMM yyyy').format(education.endDate!)
+                          : 'Present';
 
-                    // Calculate the total duration
-                    String totalDuration = '';
-                    if (education.startDate != null &&
-                        education.endDate != null) {
-                      Duration duration =
-                          education.endDate!.difference(education.startDate!);
-                      int years = (duration.inDays / 365).floor();
-                      int months = ((duration.inDays % 365) / 30).floor();
-                      totalDuration = '$years years $months months';
-                    }
+                      // Calculate the total duration
+                      String totalDuration = '';
+                      if (education.startDate != null &&
+                          education.endDate != null) {
+                        Duration duration =
+                            education.endDate!.difference(education.startDate!);
+                        int years = (duration.inDays / 365).floor();
+                        int months = ((duration.inDays % 365) / 30).floor();
+                        totalDuration = '$years years $months months';
+                      }
 
-                    return Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          education.degree ?? '',
-                          style: theme.textTheme.titleMedium!
-                              .copyWith(fontWeight: FontWeight.w600),
-                        ),
-                        SizedBox(
-                          height: 9.v,
-                        ),
-                        Text(
-                          education.schoolCollege ?? '',
-                          style: theme.textTheme.bodyMedium?.copyWith(
-                              color: appTheme.gray900,
-                              fontSize: 14.fSize,
-                              fontWeight: FontWeight.w500),
-                        ),
-                        SizedBox(
-                          height: 4.v,
-                        ),
-                        Text(
-                          "$formattedStartDate - $formattedEndDate · $totalDuration",
-                          style: theme.textTheme.bodyMedium!.copyWith(
-                              fontWeight: FontWeight.w500, fontSize: 14.fSize),
-                        ),
-                        SizedBox(
-                          height: 18.v,
-                        ),
-                      ],
-                    );
-                  }).toList() ??
-                  [],
-            );
-          }),
-        ],
-      ),
+                      return Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            education.degree ?? '',
+                            style: theme.textTheme.titleMedium!,
+                          ),
+                          SizedBox(
+                            height: 9.v,
+                          ),
+                          Text(
+                            education.schoolCollege ?? '',
+                            style: theme.textTheme.bodyMedium
+                                ?.copyWith(color: appTheme.gray900),
+                          ),
+                          SizedBox(
+                            height: 4.v,
+                          ),
+                          Text(
+                            "$formattedStartDate - $formattedEndDate · $totalDuration",
+                            style: theme.textTheme.bodyMedium!,
+                          ),
+                          SizedBox(
+                            height: 18.v,
+                          ),
+                        ],
+                      );
+                    }).toList() ??
+                    [],
+          );
+        }),
+      ],
     );
   }
 
   Widget _buildColumnachieveme() {
-    return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          _buildRowaboutme(aboutMeText: "Achievements"),
-          SizedBox(
-            height: 17.v,
-          ),
-          Obx(() {
-            return Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: controller
-                      .userData.value.data?.industryOccupation?.achievements
-                      ?.map((achievement) {
-                    return Row(
-                      children: [
-                        SizedBox(
-                          height: 24.v,
-                          width: 25.adaptSize,
-                          child:
-                              SvgPicture.asset("assets/images/img_link_1.svg"),
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        _buildRowaboutme(aboutMeText: "Achievements"),
+        SizedBox(
+          height: 17.v,
+        ),
+        Obx(() {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: controller
+                    .userData.value.data?.industryOccupation?.achievements
+                    ?.map((achievement) {
+                  return Row(
+                    children: [
+                      SizedBox(
+                        height: 24.v,
+                        width: 25.adaptSize,
+                        child: SvgPicture.asset("assets/images/img_link_1.svg"),
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 10,
+                          top: 4,
                         ),
-                        Expanded(
-                          child: Padding(
-                            padding: EdgeInsets.only(
-                              left: 10.adaptSize,
-                              top: 4.adaptSize,
-                            ),
-                            child: Text(
-                              achievement ?? '',
-                              overflow: TextOverflow.ellipsis,
-                              style: theme.textTheme.bodyLarge?.copyWith(
-                                color: appTheme.gray900,
-                                fontWeight: FontWeight.w500,
-                                decoration: TextDecoration.underline,
-                              ),
-                            ),
+                        child: Text(
+                          achievement ?? '',
+                          style: theme.textTheme.bodyLarge?.copyWith(
+                            color: appTheme.gray900,
+                            decoration: TextDecoration.underline,
                           ),
-                        )
-                      ],
-                    );
-                  }).toList() ??
-                  [],
-            );
-          }),
-        ],
-      ),
+                        ),
+                      )
+                    ],
+                  );
+                }).toList() ??
+                [],
+          );
+        }),
+      ],
     );
   }
 
@@ -1195,189 +738,167 @@ class _UserDetailsPageState extends State<UserDetailsPage>
     final interest = controller.userData.value.data?.interest;
     final interestList = interest?.interest ?? [];
 
-    return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
+    return Column(
+      crossAxisAlignment:
+          CrossAxisAlignment.start, // Added for better alignment
+      children: [
+        _buildRowaboutme(aboutMeText: "Interests"),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Wrap(
+            spacing: 8.0,
+            runSpacing: 4.0,
+            children: interestList.map((interest) {
+              return Chip(
+                label: Text(
+                  interest.name ?? '', // Ensure interest name is not null
+                  style: theme.textTheme.bodyMedium!.copyWith(
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500,
+                    fontSize: 16,
+                  ),
+                ),
+                backgroundColor: appTheme.gray200,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20.0),
+                  side: BorderSide(
+                    color: appTheme.gray300,
+                  ),
+                ),
+              );
+            }).toList(),
+          ),
+        ),
+      ],
+    );
+  }
+
+Widget _buildColumnreviews() {
+  return Column(
+    children: [
+      Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _buildRowaboutme(aboutMeText: "Interested"),
-          Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: Wrap(
-              spacing: 8.adaptSize,
-              runSpacing: 4.adaptSize,
-              children: interestList.map((interest) {
-                return Chip(
-                  label: Text(
-                    interest.name ?? '',
-                    style: theme.textTheme.bodyMedium!.copyWith(
-                      color: Colors.black,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16.fSize,
-                    ),
-                  ),
-                  backgroundColor: appTheme.gray200,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(20.0),
-                    side: BorderSide(
-                      color: appTheme.gray300,
-                    ),
-                  ),
-                );
-              }).toList(),
+          Text(
+            "Reviews",
+            style: theme.textTheme.headlineLarge?.copyWith(fontSize: 16.fSize),
+          ),
+          GestureDetector(
+            onTap: () {
+              // Navigate to the Reviews page
+              // Get.to(() => ReviewsPage()); // Assuming you are using GetX for navigation
+            },
+            child: Text(
+              "See all",
+              style: theme.textTheme.titleMedium
+                  ?.copyWith(color: appTheme.deepOrangeA200),
             ),
           ),
         ],
       ),
-    );
-  }
-
-  Widget _buildColumnreviews() {
-    return Container(
-      color: Colors.white,
-      padding: const EdgeInsets.all(10),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Text(
-                "Reviews",
-                style:
-                    theme.textTheme.headlineLarge?.copyWith(fontSize: 16.fSize),
-              ),
-              GestureDetector(
-                onTap: () {
-                  var reviews =
-                      controller.userData.value.data?.basicInfo?.reviews;
-                  if (reviews != null && reviews.isNotEmpty) {
-                    Get.to(() => AllReviewsPage(reviews: reviews));
-                  } else {
-                    CustomToast().showToast(
-                      context: context,
-                      message: "No Reviews Yet for this Expert",
-                      isSuccess: false,
-                    );
-                  }
-                },
-                child: Text(
-                  "See all",
-                  style: theme.textTheme.titleMedium
-                      ?.copyWith(color: appTheme.deepOrangeA200),
-                ),
-              ),
-            ],
-          ),
-          SizedBox(
-            height: 19.v,
-          ),
-          Obx(() {
-            var reviews = controller.userData.value.data?.basicInfo?.reviews;
-            if (reviews == null || reviews.isEmpty) {
-              return Text(
-                "No reviews yet",
-                style: theme.textTheme.bodyMedium
-                    ?.copyWith(color: appTheme.gray300),
-              );
-            } else {
-              // Limit the number of reviews to 5
-              var limitedReviews = reviews.take(3).toList();
-              return Column(
-                children: limitedReviews.map((review) {
-                  return Padding(
-                    padding: const EdgeInsets.all(8.0),
-                    child: Container(
-                      padding: EdgeInsets.only(
-                          left: 16.adaptSize,
-                          right: 16.adaptSize,
-                          top: 10.adaptSize,
-                          bottom: 10.adaptSize),
-                      decoration: BoxDecoration(
-                        color: appTheme.gray100,
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(20.0),
-                        ),
-                      ),
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.start,
+      SizedBox(
+        height: 19.v,
+      ),
+      Obx(() {
+        var reviews = controller.userData.value.data?.basicInfo?.reviews;
+        if (reviews == null || reviews.isEmpty) {
+          return Text(
+            "No reviews yet",
+            style: theme.textTheme.bodyMedium?.copyWith(color: appTheme.gray900),
+          );
+        } else {
+          // Limit the number of reviews to 5
+          var limitedReviews = reviews.take(5).toList();
+          return Column(
+            children: limitedReviews.map((review) {
+              return Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Container(
+                  color: appTheme.gray100,
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
                         children: [
-                          Row(
-                            children: [
-                              CustomImageView(
-                                imagePath: review.profilePic,
-                                height: 50.v,
-                                width: 50.h,
-                                radius: BorderRadius.circular(50),
-                              ),
-                              const SizedBox(width: 10),
-                              Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    review.reviewer.toString(),
-                                    style: theme.textTheme.headlineLarge
-                                        ?.copyWith(fontSize: 14.fSize),
-                                  ),
-                                  SizedBox(height: 1.v),
-                                  Text(
-                                    review.formattedDate.toString(),
-                                    style: theme.textTheme.titleSmall!,
-                                  )
-                                ],
-                              )
-                            ],
+                          CustomImageView(
+                            imagePath: review.profilePic,
+                            height: 50,
+                            width: 50,
+                            radius: BorderRadius.circular(50),
                           ),
-                          SizedBox(height: 9.v),
-                          Row(
+                          const SizedBox(width: 10),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              CustomRatingBar(
-                                initialRating: review.rating!.toDouble(),
-                                itemCount: 5,
-                                itemSize: 22,
-                                onRatingUpdate: (rating) {},
-                                color: appTheme.deepYello,
-                                unselectedColor: appTheme.gray300,
-                              ),
-                              SizedBox(width: 6.h),
                               Text(
-                                review.rating.toString(),
+                                review.reviewer.toString(),
                                 style: theme.textTheme.headlineLarge
-                                    ?.copyWith(fontSize: 16.fSize),
+                                    ?.copyWith(fontSize: 14.fSize),
+                              ),
+                              SizedBox(height: 1.v),
+                              Text(
+                                review.formattedDate.toString(),
+                                style: theme.textTheme.titleSmall!,
                               )
                             ],
-                          ),
-                          SizedBox(height: 8.v),
-                          Container(
-                            width: 304.adaptSize,
-                            margin: EdgeInsets.only(left: 8.adaptSize),
-                            child: Text(
-                              review.review.toString(),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                              style: theme.textTheme.bodyMedium?.copyWith(
-                                  color: appTheme.gray900,
-                                  fontWeight: FontWeight.w500,
-                                  fontSize: 14.adaptSize),
-                            ),
-                          ),
-                          SizedBox(height: 8.v),
+                          )
                         ],
                       ),
-                    ),
-                  );
-                }).toList(),
+                      SizedBox(height: 9.v),
+                      Row(
+                        children: [
+                          RatingBar.builder(
+                            initialRating: review.rating!.toDouble(),
+                            minRating: 0,
+                            direction: Axis.horizontal,
+                            allowHalfRating: false,
+                            itemSize: 22,
+                            itemCount: 5,
+                            updateOnDrag: true,
+                            onRatingUpdate: (rating) {},
+                            itemBuilder: (context, _) {
+                              return const Icon(
+                                Icons.star,
+                              );
+                            },
+                          ),
+                          const SizedBox(
+                              width: 6), // Added SizedBox for spacing
+                          Text(
+                            review.rating.toString(),
+                            style: theme.textTheme.headlineLarge
+                                ?.copyWith(fontSize: 16.fSize),
+                          )
+                        ],
+                      ),
+                      SizedBox(height: 8.v),
+                      Container(
+                        width: 304.adaptSize,
+                        margin: const EdgeInsets.only(right: 31),
+                        child: Text(
+                          review.review.toString(),
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.bodyMedium
+                              ?.copyWith(color: appTheme.gray900),
+                        ),
+                      ),
+                      SizedBox(height: 8.v), // Added SizedBox for spacing
+                    ],
+                  ),
+                ),
               );
-            }
-          }),
-          SizedBox(
-            height: 19.v,
-          )
-        ],
-      ),
-    );
-  }
+            }).toList(),
+          );
+        }
+      }),
+      SizedBox(
+        height: 19.v,
+      )
+    ],
+  );
+}
 
   Widget _buildRowaboutme({required String aboutMeText}) {
     return Row(
@@ -1416,7 +937,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
         controller.userData.value.data?.basicInfo?.getTotalFollowing() ?? 0;
 
     return Padding(
-      padding: EdgeInsets.only(left: 13.h, right: 30.h, top: 30.v),
+      padding: const EdgeInsets.only(left: 13, right: 30, top: 30),
       child: Column(
         children: [
           Row(
@@ -1453,7 +974,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                   ),
                   Text(
                     "Overall Ratings",
-                    style: theme.textTheme.titleSmall!,
+                    style: theme.textTheme.bodyMedium!,
                   )
                 ],
               ),
@@ -1461,8 +982,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                 flex: 42,
               ),
               GestureDetector(
-                onTap: () => Get.toNamed(AppRoutes.follower,
-                    arguments: {"id": controller.id.id}),
+                onTap: () => Get.toNamed(AppRoutes.follower),
                 child: _buildColumnFourHundredFifty(
                   dynamicText: "$totalFollowers",
                   dynamicText1: "Followers",
@@ -1498,14 +1018,13 @@ class _UserDetailsPageState extends State<UserDetailsPage>
         ),
         Text(
           dynamicText1,
-          style: theme.textTheme.titleSmall!,
+          style: theme.textTheme.bodyMedium!,
         )
       ],
     );
   }
 
   Widget _profilepicBody() {
-    var language = controller.userData.value.data?.language?.language;
     return Obx(() {
       return Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -1519,7 +1038,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                 padding: EdgeInsets.only(left: 15.v, top: 20.v),
                 child: CustomImageView(
                   height: 70.v,
-                  width: 70.h,
+                  width: 70.v,
                   radius: BorderRadius.circular(50.v),
                   imagePath:
                       controller.userData.value.data?.basicInfo?.profilePic ??
@@ -1537,7 +1056,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            '${controller.userData.value.data?.basicInfo!.firstName?.toLowerCase().replaceFirst(RegExp(r'[a-z]'), controller.userData.value.data?.basicInfo!.firstName?[0].toUpperCase() ?? '') ?? ''} ${controller.userData.value.data?.basicInfo?.lastName ?? ''}',
+                            '${controller.userData.value.data?.basicInfo?.firstName ?? ''} ${controller.userData.value.data?.basicInfo?.lastName ?? ''}',
                             textAlign: TextAlign.left,
                             style: CustomTextStyles.titleLargeSemiBold,
                           ),
@@ -1547,14 +1066,10 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                           ),
                         ],
                       ),
-                      SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.5,
-                        child: Text(
-                          "${controller.userData.value.data?.industryOccupation?.industry?.name ?? 'No Industry'} | ${controller.userData.value.data?.industryOccupation?.occupation?.name ?? 'No occupation'}",
-                          textAlign: TextAlign.left,
-                          style: theme.textTheme.titleSmall!
-                              .copyWith(color: appTheme.black900),
-                        ),
+                      Text(
+                        "${controller.userData.value.data?.industryOccupation?.industry?.name ?? ''} | ${controller.userData.value.data?.industryOccupation?.occupation?.name ?? ''}",
+                        textAlign: TextAlign.left,
+                        style: CustomTextStyles.bodyMediumBlack90001,
                       ),
                     ],
                   ),
@@ -1577,50 +1092,13 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                   child: Wrap(
                     spacing: 8.0,
                     runSpacing: 4.0,
-                    children: (() {
-                      final languages =
-                          controller.userData.value.data?.language?.language;
-
-                      if (languages != null && languages.isNotEmpty) {
-                        final languageNames =
-                            languages.map((e) => e.name.toString()).toList();
-
-                        if (languageNames.length > 3) {
-                          return [
-                            Text(
-                              '${languageNames.take(3).join(', ')} +${languageNames.length - 3} more',
-                              style: theme.textTheme.bodyMedium!.copyWith(
-                                color: appTheme.black900,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                          ];
-                        } else {
-                          return [
-                            Text(
-                              languageNames.join(', '),
-                              style: theme.textTheme.bodyMedium!.copyWith(
-                                color: appTheme.black900,
-                                fontSize: 14,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            )
-                          ];
-                        }
-                      } else {
-                        return <Widget>[
-                          Text(
-                            "No Lanuages found",
-                            style: theme.textTheme.bodyMedium!.copyWith(
-                              color: appTheme.black900,
-                              fontSize: 14,
-                              fontWeight: FontWeight.w500,
-                            ),
-                          )
-                        ];
-                      }
-                    })(),
+                    children: controller.userData.value.data?.language?.language
+                            ?.map((e) => Text(
+                                  e.name.toString(),
+                                  style: CustomTextStyles.bodyLargeBlack90001,
+                                ))
+                            .toList() ??
+                        [],
                   ),
                 ),
               ],
@@ -1640,14 +1118,11 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                 Text(
                   "Reg no: ${controller.userData.value.data?.industryOccupation?.registrationNumber ?? " N/A"}",
                   textAlign: TextAlign.left,
-                  style: theme.textTheme.bodyMedium!.copyWith(
-                      color: appTheme.black900,
-                      fontSize: 14.fSize,
-                      fontWeight: FontWeight.w500),
+                  style: CustomTextStyles.bodyLargeBlack90001,
                 ),
                 Container(
-                  width: 1.v,
-                  height: 15.h,
+                  width: 1.0,
+                  height: 15,
                   color: Colors.grey,
                   margin: const EdgeInsets.symmetric(horizontal: 10.0),
                 ),
@@ -1659,12 +1134,9 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                   width: 10.v,
                 ),
                 Text(
-                  controller.userData.value.data?.noOfBooking.toString() ?? "",
+                  "587",
                   textAlign: TextAlign.left,
-                  style: theme.textTheme.bodyMedium!.copyWith(
-                      color: appTheme.black900,
-                      fontSize: 14.fSize,
-                      fontWeight: FontWeight.w500),
+                  style: CustomTextStyles.titleMediumBold,
                 ),
                 SizedBox(
                   width: 5.v,
@@ -1672,10 +1144,7 @@ class _UserDetailsPageState extends State<UserDetailsPage>
                 Text(
                   "Consultation",
                   textAlign: TextAlign.left,
-                  style: theme.textTheme.bodyMedium!.copyWith(
-                      color: appTheme.black900,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500),
+                  style: CustomTextStyles.bodyLargeBlack90001,
                 ),
               ],
             ),
