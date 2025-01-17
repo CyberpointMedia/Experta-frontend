@@ -18,16 +18,10 @@
 @import file_picker;
 #endif
 
-#if __has_include(<geolocator_apple/GeolocatorPlugin.h>)
-#import <geolocator_apple/GeolocatorPlugin.h>
+#if __has_include(<image_cropper/FLTImageCropperPlugin.h>)
+#import <image_cropper/FLTImageCropperPlugin.h>
 #else
-@import geolocator_apple;
-#endif
-
-#if __has_include(<google_maps_flutter_ios/FLTGoogleMapsPlugin.h>)
-#import <google_maps_flutter_ios/FLTGoogleMapsPlugin.h>
-#else
-@import google_maps_flutter_ios;
+@import image_cropper;
 #endif
 
 #if __has_include(<image_picker_ios/FLTImagePickerPlugin.h>)
@@ -36,22 +30,10 @@
 @import image_picker_ios;
 #endif
 
-#if __has_include(<package_info_plus/FPPPackageInfoPlusPlugin.h>)
-#import <package_info_plus/FPPPackageInfoPlusPlugin.h>
-#else
-@import package_info_plus;
-#endif
-
 #if __has_include(<path_provider_foundation/PathProviderPlugin.h>)
 #import <path_provider_foundation/PathProviderPlugin.h>
 #else
 @import path_provider_foundation;
-#endif
-
-#if __has_include(<photo_manager/PhotoManagerPlugin.h>)
-#import <photo_manager/PhotoManagerPlugin.h>
-#else
-@import photo_manager;
 #endif
 
 #if __has_include(<shared_preferences_foundation/SharedPreferencesPlugin.h>)
@@ -77,12 +59,9 @@
 + (void)registerWithRegistry:(NSObject<FlutterPluginRegistry>*)registry {
   [ConnectivityPlusPlugin registerWithRegistrar:[registry registrarForPlugin:@"ConnectivityPlusPlugin"]];
   [FilePickerPlugin registerWithRegistrar:[registry registrarForPlugin:@"FilePickerPlugin"]];
-  [GeolocatorPlugin registerWithRegistrar:[registry registrarForPlugin:@"GeolocatorPlugin"]];
-  [FLTGoogleMapsPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTGoogleMapsPlugin"]];
+  [FLTImageCropperPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTImageCropperPlugin"]];
   [FLTImagePickerPlugin registerWithRegistrar:[registry registrarForPlugin:@"FLTImagePickerPlugin"]];
-  [FPPPackageInfoPlusPlugin registerWithRegistrar:[registry registrarForPlugin:@"FPPPackageInfoPlusPlugin"]];
   [PathProviderPlugin registerWithRegistrar:[registry registrarForPlugin:@"PathProviderPlugin"]];
-  [PhotoManagerPlugin registerWithRegistrar:[registry registrarForPlugin:@"PhotoManagerPlugin"]];
   [SharedPreferencesPlugin registerWithRegistrar:[registry registrarForPlugin:@"SharedPreferencesPlugin"]];
   [SmsAutoFillPlugin registerWithRegistrar:[registry registrarForPlugin:@"SmsAutoFillPlugin"]];
   [SqflitePlugin registerWithRegistrar:[registry registrarForPlugin:@"SqflitePlugin"]];
