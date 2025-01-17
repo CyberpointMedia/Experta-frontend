@@ -141,21 +141,21 @@
 //     messages.insert(0, newMsg);
 //     notifyListeners();
 
-    if (isConnected) {
-      try {
-        final sentMsg = await ApiService().sendMessage(content, currentChatId!);
-        sentMsg['status'] = 'sent';
-        updateMessageStatus(newMsg['id'].toString(), sentMsg);
-        socket.emit('new_msg_sent', sentMsg);
-        await fetchMessages(); 
-      } catch (error) {
-        log('Error sending message: $error');
-        unsentMessages.add(newMsg);
-      }
-    } else {
-      unsentMessages.add(newMsg);
-    }
-  }
+//     if (isConnected) {
+//       try {
+//         final sentMsg = await ApiService().sendMessage(content, currentChatId!);
+//         sentMsg['status'] = 'sent';
+//         updateMessageStatus(newMsg['id'].toString(), sentMsg);
+//         socket.emit('new_msg_sent', sentMsg);
+//         await fetchMessages(); // Fetch messages from API after sending (optimize here if needed)
+//       } catch (error) {
+//         log('Error sending message: $error');
+//         unsentMessages.add(newMsg);
+//       }
+//     } else {
+//       unsentMessages.add(newMsg);
+//     }
+//   }
 
 //   void updateMessageStatus(String messageId, Map<String, dynamic> updatedMsg) {
 //     final index = messages.indexWhere((msg) => msg['id'] == messageId);
