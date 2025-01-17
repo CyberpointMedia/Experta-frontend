@@ -1,12 +1,13 @@
-import 'dart:async';
-import 'dart:developer';
-
+import 'package:experta/data/apiClient/api_service.dart';
+import 'package:experta/data/models/request/resend_otp_request_model.dart';
 import 'package:experta/data/models/request/verify_otp_request_model.dart';
+import 'package:experta/data/models/response/resend_otp_response_model.dart';
 import 'package:experta/data/models/response/verify_otp_response_model.dart';
 
 import '../../../core/app_export.dart';
 import '../models/verifynumber_model.dart';
 import 'package:sms_autofill/sms_autofill.dart';
+import 'package:flutter/material.dart';
 
 /// A controller class for the VerifynumberScreen.
 ///
@@ -19,27 +20,13 @@ class VerifynumberController extends GetxController with CodeAutoFill {
   final ApiService _apiService = ApiService();
   Rx<bool> complete = false.obs;
   PrefUtils prefUtils = PrefUtils();
-  var timerText = '05:00'.obs;
-  var isResendButtonVisible = false.obs;
-  Timer? _timer;
-  int _start = 300;
 
-  void startTimer() {
-    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      if (_start == 0) {
-        isResendButtonVisible.value = true;
-        _timer?.cancel();
-      } else {
-        _start--;
-        int minutes = _start ~/ 60;
-        int seconds = _start % 60;
-        timerText.value =
-            '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
-      }
-    });
+  @override
+  void codeUpdated() {
+    otpController.value.text = code ?? '';
   }
 
-  void verifyOtp(BuildContext context) async {
+  void verifyOtp() async {
     VerifyOtpRequestModel requestModel = VerifyOtpRequestModel(
       phoneNo: phoneNumberController.text,
       otp: otpController.value.text,
@@ -47,15 +34,10 @@ class VerifynumberController extends GetxController with CodeAutoFill {
 
     try {
       VerifyOtpResponseModel? response =
-          await _apiService.verifyOtp(requestModel, context);
+          await _apiService.verifyOtp(requestModel);
       if (response != null && response.status == "success") {
-        await prefUtils.setaddress("${response.data!.id}");
-        log("hey this is your id ${response.data!.id}");
         await prefUtils.setToken("${response.token}");
-        await prefUtils.setbasic("${response.data!.basicInfo}");
-        log("hey this is your id ${response.data!.basicInfo}");
-        await prefUtils.setMob("${response.data!.phoneNo}");
-        log("hey this is your id ${response.data!.phoneNo}");
+        // Handle success response
         Get.toNamed(AppRoutes.dashboard);
         print("OTP Verified Successfully");
       } else {
@@ -66,25 +48,22 @@ class VerifynumberController extends GetxController with CodeAutoFill {
     }
   }
 
-  void resendOtp(String phoneNumber) async {
+  void resendOtp() async {
+    final phoneNumber = phoneNumberController.text;
     if (phoneNumber.isNotEmpty) {
+      ResendOtpRequestModel requestModel = ResendOtpRequestModel(
+        phoneNo: phoneNumber,
+      );
       try {
-        dynamic responseData = await _apiService.resendOtp(phoneNumber);
+        dynamic responseData = await _apiService.resendOtp(requestModel);
         print("Response JSON: $responseData");
-
-        if (responseData is Map<String, dynamic>) {
-          String status = responseData['status'];
-          var data = responseData['data'];
-          if (status == "success") {
-            isResendButtonVisible = false.obs;
-            startTimer();
-            String otp = data['otp'];
-            print("OTP Resent Successfully: $otp");
-          } else {
-            print("OTP Resend failed");
-          }
+        ResendOtpResponseModel? response =
+            ResendOtpResponseModel.fromJson(responseData);
+        if (response != null && response.status == "success") {
+          // Update UI based on response
+          print("OTP Resent Successfully: ${response.data?.otp}");
         } else {
-          print("Invalid response format");
+          print("OTP Resend failed");
         }
       } catch (e) {
         print("Exception occurred: $e");
@@ -95,40 +74,12 @@ class VerifynumberController extends GetxController with CodeAutoFill {
   }
 
   @override
-  void codeUpdated() {
-    print("Code updated: $code");
-    if (code != null) {
-      print("Setting code: $code");
-      otpController.value.text = code!;
-      complete.value = code!.length == 6;
-    }
-  }
-
-  @override
   void onInit() {
     super.onInit();
-    startTimer();
     prefUtils.init();
-    initSmsListener();
+    listenForCode();
     var arguments = Get.arguments as List;
     phoneNumberController = arguments[0] as TextEditingController;
-  }
-
-  Future<void> initSmsListener() async {
-    try {
-      listenForCode(smsCodeRegexPattern: r'\d{6}');
-
-      final String signature = await SmsAutoFill().getAppSignature;
-      print("Signature: $signature");
-    } catch (e) {
-      print("Error initializing SMS listener: $e");
-    }
-  }
-
-  @override
-  void onClose() {
-    SmsAutoFill().unregisterListener();
-    _timer?.cancel();
-    super.onClose();
+    otpController.value.text = arguments[1] as String;
   }
 }

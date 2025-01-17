@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
 ProfileModel profileModelFromJson(String str) =>
     ProfileModel.fromJson(json.decode(str));
@@ -32,7 +33,7 @@ class Data {
   final int? resendCount;
   final dynamic otp;
   final dynamic otpExpiry;
-  final String? block;
+  final bool? block;
   final bool? isVerified;
   final UserBasicInfo? basicInfo;
   final DateTime? createdAt;
@@ -43,14 +44,11 @@ class Data {
   final List<UserEducation>? education;
   final List<UserWorkExperience>? workExperience;
   final UserLanguage? language;
-  final UserInterest? interest;
+  final UserInterest?
+      interest; // Changed from List<UserInterest> to UserInterest
   final List<String>? availability;
   final bool? online;
   final String? id;
-  final int? noOfBooking;
-  final List<String>? blockedUsers;
-  final bool? isFollowing;
-  final bool? isBlocked;
 
   Data({
     this.email,
@@ -69,14 +67,10 @@ class Data {
     this.education,
     this.workExperience,
     this.language,
-    this.interest,
+    this.interest, // Changed from List<UserInterest> to UserInterest
     this.availability,
     this.online,
     this.id,
-    this.noOfBooking,
-    this.blockedUsers,
-    this.isFollowing,
-    this.isBlocked,
   });
 
   factory Data.fromJson(Map<String, dynamic> json) => Data(
@@ -118,18 +112,12 @@ class Data {
             : null,
         interest: json["intereset"] != null
             ? UserInterest.fromJson(json["intereset"])
-            : null,
+            : null, // Changed from List<UserInterest> to UserInterest
         availability: json["availability"] != null
             ? List<String>.from(json["availability"].map((x) => x))
             : null,
         online: json["online"],
         id: json["_id"],
-        noOfBooking: json['noOfBooking'],
-        blockedUsers: json['blockedUsers'] != null
-            ? List<String>.from(json['blockedUsers'])
-            : null,
-        isFollowing: json['isFollowing'],
-        isBlocked: json['isBlocked'],
       );
 
   Map<String, dynamic> toJson() => {
@@ -153,17 +141,13 @@ class Data {
             ? List<dynamic>.from(workExperience!.map((x) => x.toJson()))
             : null,
         "language": language?.toJson(),
-        "intereset": interest?.toJson(),
+        "interest": interest
+            ?.toJson(), // Changed from List<UserInterest> to UserInterest
         "availability": availability != null
             ? List<dynamic>.from(availability!.map((x) => x))
             : null,
         "online": online,
         "_id": id,
-        'noOfBooking': noOfBooking,
-        'blockedUsers':
-            blockedUsers != null ? List<dynamic>.from(blockedUsers!) : null,
-        'isFollowing': isFollowing,
-        'isBlocked': isBlocked,
       };
 }
 
@@ -173,7 +157,7 @@ class UserBasicInfo {
   final String? lastName;
   final List<dynamic>? followers;
   final List<dynamic>? following;
-  late final List<Post>? posts; // Changed from List<String> to List<Post>
+  final List<Post>? posts; // Changed from List<String> to List<Post>
   final int? rating;
   final DateTime? createdAt;
   final DateTime? updatedAt;
@@ -184,7 +168,7 @@ class UserBasicInfo {
   final String? instagram;
   final String? linkedin;
   final String? twitter;
-  final List<Review>? reviews;
+  final List<dynamic>? reviews;
   final String? profilePic;
 
   UserBasicInfo({
@@ -235,8 +219,8 @@ class UserBasicInfo {
         instagram: json["instagram"],
         linkedin: json["linkedin"],
         twitter: json["twitter"],
-        reviews: json['reviews'] != null
-            ? List<Review>.from(json['reviews'].map((x) => Review.fromJson(x)))
+        reviews: json["reviews"] != null
+            ? List<dynamic>.from(json["reviews"].map((x) => x))
             : null,
         profilePic: json["profilePic"],
       );
@@ -264,9 +248,8 @@ class UserBasicInfo {
         "instagram": instagram,
         "linkedin": linkedin,
         "twitter": twitter,
-        'reviews': reviews != null
-            ? List<dynamic>.from(reviews!.map((x) => x.toJson()))
-            : null,
+        "reviews":
+            reviews != null ? List<dynamic>.from(reviews!.map((x) => x)) : null,
         "profilePic": profilePic,
       };
 
@@ -274,6 +257,7 @@ class UserBasicInfo {
     return followers?.length ?? 0;
   }
 
+  // Method to calculate total number of following
   int getTotalFollowing() {
     return following?.length ?? 0;
   }
@@ -283,30 +267,26 @@ class UserBasicInfo {
 
     if (facebook != null && facebook!.isNotEmpty) {
       socialMediaLinks.add({
-        'icon': "assets/images/social/facebook.svg",
+        'icon': FontAwesomeIcons.facebook,
         'link': facebook!,
-        'name': "facebook"
       });
     }
     if (instagram != null && instagram!.isNotEmpty) {
       socialMediaLinks.add({
-        'icon': "assets/images/social/insta.svg",
+        'icon': FontAwesomeIcons.instagram,
         'link': instagram!,
-        'name': "instagram",
       });
     }
     if (linkedin != null && linkedin!.isNotEmpty) {
       socialMediaLinks.add({
-        'icon': "assets/images/social/linkedin.svg",
+        'icon': FontAwesomeIcons.linkedin,
         'link': linkedin!,
-        'name': "linkedin"
       });
     }
     if (twitter != null && twitter!.isNotEmpty) {
       socialMediaLinks.add({
-        'icon': "assets/images/social/twitter.svg",
+        'icon': FontAwesomeIcons.twitter,
         'link': twitter!,
-        'name': "twitter",
       });
     }
 
@@ -325,7 +305,7 @@ class Post {
   final DateTime? createdAt;
   final DateTime? updatedAt;
   final int? v;
-  final String? location;
+  final String? location; // Added location field
 
   Post({
     this.id,
@@ -338,7 +318,7 @@ class Post {
     this.createdAt,
     this.updatedAt,
     this.v,
-    this.location,
+    this.location, // Added location field
   });
 
   factory Post.fromJson(Map<String, dynamic> json) => Post(
@@ -516,8 +496,9 @@ class UserInterest {
   final String? id;
   final int? v;
   final DateTime? createdAt;
-  final List<Interest>? interest;
+  final List<UserInterest>? interest;
   final DateTime? updatedAt;
+  final String? name;
 
   UserInterest({
     this.id,
@@ -525,6 +506,7 @@ class UserInterest {
     this.createdAt,
     this.interest,
     this.updatedAt,
+    this.name,
   });
 
   factory UserInterest.fromJson(Map<String, dynamic> json) => UserInterest(
@@ -534,58 +516,24 @@ class UserInterest {
             ? DateTime.parse(json["createdAt"])
             : null,
         interest: json["intereset"] != null
-            ? List<Interest>.from(
-                json["intereset"].map((x) => Interest.fromJson(x)))
+            ? List<UserInterest>.from(
+                json["intereset"].map((x) => UserInterest.fromJson(x)))
             : null,
         updatedAt: json["updatedAt"] != null
             ? DateTime.parse(json["updatedAt"])
             : null,
+        name: json["name"],
       );
 
   Map<String, dynamic> toJson() => {
         "_id": id,
         "__v": v,
         "createdAt": createdAt?.toIso8601String(),
-        "intereset": interest != null
+        "interest": interest != null
             ? List<dynamic>.from(interest!.map((x) => x.toJson()))
             : null,
         "updatedAt": updatedAt?.toIso8601String(),
-      };
-}
-
-class Interest {
-  final String? id;
-  final String? name;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
-  final int? v;
-
-  Interest({
-    this.id,
-    this.name,
-    this.createdAt,
-    this.updatedAt,
-    this.v,
-  });
-
-  factory Interest.fromJson(Map<String, dynamic> json) => Interest(
-        id: json["_id"],
-        name: json["name"],
-        createdAt: json["createdAt"] != null
-            ? DateTime.parse(json["createdAt"])
-            : null,
-        updatedAt: json["updatedAt"] != null
-            ? DateTime.parse(json["updatedAt"])
-            : null,
-        v: json["__v"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "_id": id,
         "name": name,
-        "createdAt": createdAt?.toIso8601String(),
-        "updatedAt": updatedAt?.toIso8601String(),
-        "__v": v,
       };
 }
 
@@ -739,16 +687,16 @@ class UserLanguage {
 class UserPricing {
   final String? id;
   final int? v;
-  final int audioCallPrice;
-  final int messagePrice;
-  final int videoCallPrice;
+  final int? audioCallPrice;
+  final int? messagePrice;
+  final int? videoCallPrice;
 
   UserPricing({
     this.id,
     this.v,
-    required this.audioCallPrice,
-    required this.messagePrice,
-    required this.videoCallPrice,
+    this.audioCallPrice,
+    this.messagePrice,
+    this.videoCallPrice,
   });
 
   factory UserPricing.fromJson(Map<String, dynamic> json) => UserPricing(
@@ -820,58 +768,6 @@ class UserWorkExperience {
         "endDate": endDate?.toIso8601String(),
         "createdAt": createdAt?.toIso8601String(),
         "updatedAt": updatedAt?.toIso8601String(),
-        "__v": v,
-      };
-}
-
-class Review {
-  final String? id;
-  final String? review;
-  final String? reviewer;
-  final String? profilePic;
-  final int? rating;
-  final DateTime? createdAt;
-  final DateTime? updatedAt;
-  final String? formattedDate;
-  final int? v;
-
-  Review({
-    this.id,
-    this.review,
-    this.reviewer,
-    this.profilePic,
-    this.rating,
-    this.createdAt,
-    this.updatedAt,
-    this.formattedDate,
-    this.v,
-  });
-
-  factory Review.fromJson(Map<String, dynamic> json) => Review(
-        id: json["_id"],
-        review: json["review"],
-        reviewer: json["reviewerName"],
-        profilePic: json["profilePic"],
-        rating: json["rating"],
-        createdAt: json["createdAt"] != null
-            ? DateTime.parse(json["createdAt"])
-            : null,
-        updatedAt: json["updatedAt"] != null
-            ? DateTime.parse(json["updatedAt"])
-            : null,
-        formattedDate: json['formattedDate'],
-        v: json["__v"],
-      );
-
-  Map<String, dynamic> toJson() => {
-        "_id": id,
-        "review": review,
-        "reviewerName": reviewer,
-        "profilePic": profilePic,
-        "rating": rating,
-        "createdAt": createdAt?.toIso8601String(),
-        "updatedAt": updatedAt?.toIso8601String(),
-        "formattedDate": formattedDate,
         "__v": v,
       };
 }

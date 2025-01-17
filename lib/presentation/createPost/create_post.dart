@@ -1,6 +1,11 @@
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/new_post/new_post.dart';
+import 'package:experta/theme/custom_text_style.dart';
+import 'package:experta/widgets/app_bar/appbar_leading_image.dart';
+import 'package:experta/widgets/app_bar/appbar_subtitle_six.dart';
+import 'package:experta/widgets/app_bar/custom_app_bar.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
+import 'package:flutter/material.dart';
 import 'package:photo_manager/photo_manager.dart';
 import 'package:permission_handler/permission_handler.dart';
 

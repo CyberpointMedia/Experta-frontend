@@ -1,9 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:experta/core/app_export.dart';
 
 // ignore: must_be_immutable
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const CustomAppBar({
-    super.key,
+  CustomAppBar({
+    Key? key,
     this.height,
     this.styleType,
     this.leadingWidth,
@@ -12,11 +13,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.centerTitle,
     this.actions,
     this.backgroundColor,
-  });
+  }) : super(
+          key: key,
+        );
 
   final double? height;
 
-  final Styled? styleType;
+  final Style? styleType;
 
   final double? leadingWidth;
 
@@ -54,14 +57,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       );
   _getStyle() {
     switch (styleType) {
-      case Styled.bgGradientnameblack90001opacity0nameblack90001opacity06:
+      case Style.bgGradientnameblack90001opacity0nameblack90001opacity06:
         return Container(
           height: 126.v,
           width: double.maxFinite,
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              begin: const Alignment(0.5, 0),
-              end: const Alignment(0.5, 1),
+              begin: Alignment(0.5, 0),
+              end: Alignment(0.5, 1),
               colors: [
                 appTheme.black90001.withOpacity(0),
                 appTheme.black90001.withOpacity(0.6),
@@ -69,7 +72,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
         );
-      case Styled.bgFill_1:
+      case Style.bgFill_1:
         return Stack(
           children: [
             Container(
@@ -93,7 +96,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ],
         );
-      case Styled.bgFill_2:
+      case Style.bgFill_2:
         return Stack(
           children: [
             Container(
@@ -114,7 +117,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ],
         );
-      case Styled.bgFill_3:
+      case Style.bgFill_3:
         return Container(
           height: 56.v,
           width: double.maxFinite,
@@ -122,7 +125,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             color: theme.colorScheme.onPrimaryContainer.withOpacity(1),
           ),
         );
-      case Styled.bgFill:
+      case Style.bgFill:
         return Container(
           height: 3.v,
           width: double.maxFinite,
@@ -137,7 +140,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   }
 }
 
-enum Styled {
+enum Style {
   bgGradientnameblack90001opacity0nameblack90001opacity06,
   bgFill_1,
   bgFill_2,
