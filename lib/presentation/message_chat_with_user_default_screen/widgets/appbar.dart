@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/widgets/app_bar/appbar_subtitle_one.dart';
 import 'package:experta/widgets/app_bar/appbar_title_image.dart';
@@ -11,18 +12,16 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
   final Function onTapThreeThousand;
   final Function onTapVideo;
   final Function onTapPhone;
-  final int balance;
 
   const ChatAppBar({
-    super.key,
+    Key? key,
     required this.displayName,
     required this.isConnected,
     required this.onTapArrowLeft,
     required this.onTapThreeThousand,
     required this.onTapVideo,
     required this.onTapPhone,
-    required this.balance,
-  });
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -45,8 +44,7 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
                 if (isConnected)
                   Padding(
                     padding: EdgeInsets.only(left: 8.h),
-                    child:
-                        const Icon(Icons.circle, color: Colors.green, size: 12),
+                    child: const Icon(Icons.circle, color: Colors.green, size: 12),
                   ),
                 AppbarTitleImage(
                   imagePath: ImageConstant.imgVerified,
@@ -59,7 +57,6 @@ class ChatAppBar extends StatelessWidget implements PreferredSizeWidget {
       ),
       actions: [
         AppbarTrailingButtonOne(
-          balance: balance,
           margin: EdgeInsets.only(left: 12.h, top: 8.v),
           onTap: onTapThreeThousand,
         ),
