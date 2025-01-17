@@ -162,16 +162,15 @@ class _SearchItemWidgetState extends State<SearchItemWidget> {
                 ),
               ),
               const SizedBox(height: 15),
-              Padding(
-                padding: const EdgeInsets.only(left: 0, right: 0, top: 0),
+              Center(
                 child: CustomPaint(
-                  painter: DashedBorderPainter(
-                    color: Colors.grey,
-                    strokeWidth: 1,
-                    dashWidth: 6.0,
-                    dashSpace: 2.0,
+                  painter: DashedDividerPainter(
+                    color: appTheme.gray200, // or your desired color
+                    dashWidth: 5.0, // length of each dash
+                    dashSpace: 3.0, // space between dashes
+                    strokeWidth: 1.0, // thickness of the line
                   ),
-                  child: Container(height: 1),
+                  size: Size(MediaQuery.of(context).size.width * 0.8, 1),
                 ),
               ),
               const SizedBox(height: 8),

@@ -3,7 +3,10 @@ import 'dart:io';
 import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
+import 'package:experta/data/apiClient/call_api_service.dart';
 import 'package:experta/presentation/message_chat_with_user_default_screen/widgets/message_list.dart';
+import 'package:experta/presentation/video_call/audio_call.dart';
+import 'package:experta/presentation/video_call/video_call_screen.dart';
 import 'package:experta/widgets/app_bar/appbar_subtitle_one.dart';
 import 'package:experta/widgets/app_bar/appbar_title_image.dart';
 import 'package:experta/widgets/app_bar/appbar_trailing_button_one.dart';
@@ -12,6 +15,7 @@ import 'package:experta/widgets/custom_icon_button.dart';
 import 'package:experta/widgets/custom_text_form_field.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 
@@ -33,6 +37,10 @@ class _ChattingPageState extends State<ChattingPage> {
   List<File> selectedFiles = [];
   bool isLoading = true;
   int? balance;
+  final CallApiService _apiService = CallApiService();
+  final ApiService apiService = ApiService();
+  bool isLoading2 = false;
+  bool isLoading1 = false;
 
   Future<void> pickFiles() async {
     FilePickerResult? result =
@@ -56,6 +64,154 @@ class _ChattingPageState extends State<ChattingPage> {
     fetchMessages();
     initializeSocket();
     fetchWalletBalance();
+  }
+
+  void _scheduleMeeting(String type) async {
+    final otherUserId = chat['users']?.firstWhere(
+        (u) => u['_id'] != currentUserId,
+        orElse: () => null)?['_id'];
+
+    final otherUser = chat['users']?.firstWhere(
+      (u) => u['_id'] != currentUserId,
+      orElse: () => null,
+    );
+    final basicInfo = otherUser?['basicInfo'];
+    final displayName = basicInfo?['firstName'] ?? 'Unknown';
+    DateTime currentTime = DateTime.now();
+
+    // Calculate the time 30 minutes from now
+    DateTime timeAfter30Minutes = currentTime.add(const Duration(minutes: 1));
+
+    // Convert both times to ISO 8601 string format
+    String isoStartTime = currentTime.toIso8601String();
+    String isoEndTime = timeAfter30Minutes.toIso8601String();
+
+    // Create booking data
+    final bookingData = {
+      "expertId": otherUserId,
+      "startTime": "${isoStartTime}Z",
+      "endTime": "${isoEndTime}Z",
+      "type": type
+    };
+    log("$bookingData");
+    try {
+      final responses = await apiService.createBooking(bookingData);
+
+      if (responses['status'] == 'success') {
+        type == 'video'
+            ? setState(() {
+                isLoading2 = false;
+              })
+            : setState(() {
+                isLoading1 = false;
+              });
+        // final Map<String, dynamic> responseData = jsonDecode(response.body);
+
+        // Access the fields using the map
+        final meetingId = responses['data']['_id'];
+        _startCall(otherUserId, meetingId, type, displayName, '');
+      } else {
+        _showErrorDialog(context, " ${responses['error']['errorMessage']}");
+      }
+    } catch (e) {
+      _showErrorDialog(context, e.toString());
+    }
+    // ScaffoldMessenger.of(context).showSnackBar(
+    //   const SnackBar(content: Text('Meeting scheduled successfully')),
+    // );
+    // final meetingData = {
+    //   'meetingName': "experta consultation",
+    //   'from': currentUserId,
+    //   'to': controller.id.id,
+    //   'date': DateTime.now().toIso8601String(),
+    //   'fromEmail': email,
+    //   'toEmail': email,
+    //   'duration': 30,
+    // };
+    // final response = await _apiService.scheduleMeeting(meetingData);
+    // if (response.statusCode == 201) {
+    //   // Convert to ISO 8601 format
+    //   // Get the current time
+
+    // } else {
+    //   ScaffoldMessenger.of(context).showSnackBar(
+    //     const SnackBar(content: Text('Failed to schedule meeting')),
+    //   );
+    // }
+  }
+
+  void _showErrorDialog(BuildContext context, String message) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Error'),
+          content: Text(message),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void _startCall(String userId, String meetingId, String Type, String userName,
+      String profilePic) async {
+    if (userId.isNotEmpty && meetingId.isNotEmpty) {
+      if (userId != currentUserId.toString()) {
+        final response = await _apiService.getMeeting(meetingId);
+        if (response.statusCode == 201) {
+          Type == 'video'
+              ? Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => VideoCallScreen(
+                      userId: userId,
+                      meetingId: meetingId,
+                      userName: userName,
+                      bookingId: meetingId,
+                      profilePic: profilePic,
+                    ),
+                  ),
+                )
+              : Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => AudioCallScreen(
+                      userId: userId,
+                      meetingId: meetingId,
+                      userName: userName,
+                      bookingId: meetingId,
+                      profilePic: profilePic,
+                    ),
+                  ),
+                );
+        } else {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Failed to get meeting details')),
+          );
+        }
+      } else {
+        Fluttertoast.showToast(
+            msg: "You cannot call yourself",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.BOTTOM,
+            timeInSecForIosWeb: 1,
+            backgroundColor: appTheme.red500,
+            textColor: Colors.white,
+            fontSize: 16.0);
+      }
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+            content: Text('Please enter both User ID and Meeting ID')),
+      );
+    }
   }
 
   Future<void> fetchWalletBalance() async {
@@ -299,16 +455,34 @@ class _ChattingPageState extends State<ChattingPage> {
               margin: EdgeInsets.only(left: 12.h, top: 8.v),
               onTap: onTapThreeThousand,
             ),
-            AppbarTrailingImage(
-              imagePath: ImageConstant.imgVideo,
-              margin: EdgeInsets.fromLTRB(5.h, 18.v, 8.h, 10.v),
-              onTap: onTapVideo,
-            ),
-            AppbarTrailingImage(
-              imagePath: ImageConstant.imgPhoneGray900,
-              margin: EdgeInsets.fromLTRB(10.h, 18.v, 24.h, 10.v),
-              onTap: onTapPhone,
-            ),
+            isLoading2
+                ? CircularProgressIndicator(
+                    color: theme.primaryColor,
+                  )
+                : AppbarTrailingImage(
+                    imagePath: ImageConstant.imgVideo,
+                    margin: EdgeInsets.fromLTRB(5.h, 18.v, 8.h, 10.v),
+                    onTap: () {
+                      setState(() {
+                        isLoading2 = true;
+                      });
+                      _scheduleMeeting('video');
+                    },
+                  ),
+            isLoading1
+                ? CircularProgressIndicator(
+                    color: theme.primaryColor,
+                  )
+                : AppbarTrailingImage(
+                    imagePath: ImageConstant.imgPhoneGray900,
+                    margin: EdgeInsets.fromLTRB(10.h, 18.v, 24.h, 10.v),
+                    onTap: () {
+                      setState(() {
+                        isLoading1 = true;
+                      });
+                      _scheduleMeeting('audio');
+                    },
+                  ),
           ],
           styleType: Styled.bgFill_3,
         ),
@@ -434,11 +608,12 @@ class _ChattingPageState extends State<ChattingPage> {
                                                                 height: 2.v),
                                                             Text(
                                                                 "${msg['content']}",
-                                                                style: CustomTextStyles
-                                                                    .bodyMediumBlack90001
+                                                                style: theme
+                                                                    .textTheme
+                                                                    .titleSmall!
                                                                     .copyWith(
-                                                                        fontWeight:
-                                                                            FontWeight.bold)),
+                                                                        color: appTheme
+                                                                            .black900)),
                                                           ],
                                                         ),
                                                       ),
@@ -498,11 +673,12 @@ class _ChattingPageState extends State<ChattingPage> {
                                                                 height: 2.v),
                                                             Text(
                                                                 "${msg['content']}",
-                                                                style: CustomTextStyles
-                                                                    .bodyMediumBlack90001
+                                                                style: theme
+                                                                    .textTheme
+                                                                    .titleSmall!
                                                                     .copyWith(
-                                                                        fontWeight:
-                                                                            FontWeight.bold)),
+                                                                        color: appTheme
+                                                                            .black900)),
                                                           ],
                                                         ),
                                                       ),
@@ -517,9 +693,8 @@ class _ChattingPageState extends State<ChattingPage> {
                                                           style: CustomTextStyles
                                                               .bodySmallBluegray300
                                                               .copyWith(
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold),
+                                                                  color: appTheme
+                                                                      .blueGray300),
                                                         ),
                                                       ),
                                                     ],
@@ -574,12 +749,12 @@ class _ChattingPageState extends State<ChattingPage> {
                         EdgeInsets.only(top: 16.v, right: 30.h, bottom: 16.v),
                     borderDecoration: TextFormFieldStyleHelper.outlineGrayTL26,
                     fillColor: appTheme.gray20002,
-                    // suffix: IconButton(
-                    //   icon: const Icon(CupertinoIcons.paperclip),
-                    //   onPressed: () {
-                    //     pickFiles();
-                    //   },
-                    // ),
+                    suffix: IconButton(
+                      icon: const Icon(CupertinoIcons.paperclip),
+                      onPressed: () {
+                        pickFiles();
+                      },
+                    ),
                   ),
                 ),
                 Padding(
@@ -622,7 +797,7 @@ class _ChattingPageState extends State<ChattingPage> {
         Text(
           time,
           style: CustomTextStyles.bodySmallBluegray300
-              .copyWith(fontWeight: FontWeight.bold),
+              .copyWith(color: appTheme.blueGray300),
         ),
         const SizedBox(width: 4),
         if (isReadByBoth)
@@ -650,10 +825,6 @@ void onTapThreeThousand() {
   Get.toNamed(AppRoutes.wallet);
 }
 
-void onTapVideo() {
-  // Handle the action for the video button
-}
+void onTapVideo() {}
 
-void onTapPhone() {
-  // Handle the action for the phone button
-}
+void onTapPhone() {}

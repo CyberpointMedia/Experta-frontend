@@ -240,54 +240,55 @@ class SettingScreen extends GetWidget<SettingController> {
                                     ])),
                           ),
                         ),
-                        Padding(
-                          padding: EdgeInsets.only(top: 1.adaptSize),
-                          child: GestureDetector(
-                            onTap: () {
-                              // Use GetX to navigate to the RecordedSessionsPage
-                              Get.toNamed(AppRoutes
-                                  .recordedsession); // Assuming you've set the route in your app
-                            },
-                            child: Container(
-                              padding: EdgeInsets.symmetric(
-                                  horizontal: 15.h, vertical: 16.v),
-                              decoration: AppDecoration.fillOnPrimaryContainer,
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  CustomIconButton(
-                                    height: 44.adaptSize,
-                                    width: 44.adaptSize,
-                                    padding: EdgeInsets.all(10.h),
-                                    decoration:
-                                        IconButtonStyleHelper.fillOrange,
-                                    child: CustomImageView(
-                                      imagePath: "assets/images/camera.svg",
-                                    ),
-                                  ),
-                                  Padding(
-                                    padding: EdgeInsets.only(
-                                        left: 15.h, top: 13.v, bottom: 10.v),
-                                    child: Text(
-                                      "msg_recorded_sessions".tr,
-                                      style: theme.textTheme.titleMedium!
-                                          .copyWith(color: appTheme.gray900),
-                                    ),
-                                  ),
-                                  const Spacer(),
-                                  CustomImageView(
-                                    imagePath:
-                                        ImageConstant.imgArrowRightGray900,
-                                    height: 24.adaptSize,
-                                    width: 24.adaptSize,
-                                    margin:
-                                        EdgeInsets.symmetric(vertical: 10.v),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
+                        // Padding(
+                        //   padding: EdgeInsets.only(top: 1.adaptSize),
+                        //   child: GestureDetector(
+                        //     onTap: () {
+                        //       // Use GetX to navigate to the RecordedSessionsPage
+                        //       Get.toNamed(AppRoutes
+                        //           .recordedsession); // Assuming you've set the route in your app
+                        //     },
+                        //     child: Container(
+                        //       padding: EdgeInsets.symmetric(
+                        //           horizontal: 15.h, vertical: 16.v),
+                        //       decoration: AppDecoration.fillOnPrimaryContainer,
+                        //       child: Row(
+                        //         mainAxisAlignment: MainAxisAlignment.center,
+                        //         children: [
+                        //           CustomIconButton(
+                        //             height: 44.adaptSize,
+                        //             width: 44.adaptSize,
+                        //             padding: EdgeInsets.all(10.h),
+                        //             decoration:
+                        //                 IconButtonStyleHelper.fillOrange,
+                        //             child: CustomImageView(
+                        //               imagePath: "assets/images/camera.svg",
+                        //             ),
+                        //           ),
+                        //           Padding(
+                        //             padding: EdgeInsets.only(
+                        //                 left: 15.h, top: 13.v, bottom: 10.v),
+                        //             child: Text(
+                        //               "msg_recorded_sessions".tr,
+                        //               style: theme.textTheme.titleMedium!
+                        //                   .copyWith(color: appTheme.gray900),
+                        //             ),
+                        //           ),
+                        //           const Spacer(),
+                        //           CustomImageView(
+                        //             imagePath:
+                        //                 ImageConstant.imgArrowRightGray900,
+                        //             height: 24.adaptSize,
+                        //             width: 24.adaptSize,
+                        //             margin:
+                        //                 EdgeInsets.symmetric(vertical: 10.v),
+                        //           ),
+                        //         ],
+                        //       ),
+                        //     ),
+                        //   ),
+                        // ),
+
                         GestureDetector(
                           onTap: () {
                             Get.toNamed(AppRoutes.bank);
@@ -498,12 +499,12 @@ class SettingScreen extends GetWidget<SettingController> {
                 child: Padding(
                   padding: const EdgeInsets.only(top: 1),
                   child: Container(
-                      padding:
-                          EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
+                      padding: EdgeInsets.symmetric(
+                          horizontal: 15.h, vertical: 16.v),
                       decoration: AppDecoration.fillOnPrimaryContainer.copyWith(
                           borderRadius: BorderRadiusStyle.customBorderL20),
                       child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center, 
+                          mainAxisAlignment: MainAxisAlignment.center,
                           children: [
                             CustomIconButton(
                                 height: 44.adaptSize,

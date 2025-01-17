@@ -4,6 +4,7 @@ import 'dart:ui';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/Home/model/home_model.dart';
 import 'package:experta/presentation/Trending%20Section/trending_section.dart';
+import 'package:experta/presentation/categoryDetails/category_details_screen.dart';
 import 'package:experta/presentation/dashboard/controller/dashboard_controller.dart';
 import 'package:experta/widgets/animated_hint_searchview.dart';
 import 'package:experta/widgets/dashed_border.dart';
@@ -147,7 +148,7 @@ class _HomeScreenState extends State<HomeScreen> {
           Align(
             alignment: Alignment.topCenter,
             child: Padding(
-              padding: const EdgeInsets.fromLTRB(8, 20, 7, 0),
+              padding: const EdgeInsets.fromLTRB(16, 20, 16, 0),
               child: CustomAnimatedSearchView(
                 width: double.infinity,
                 controller: controller.searchController,
@@ -270,7 +271,7 @@ class _HomeScreenState extends State<HomeScreen> {
       }
 
       return Container(
-        margin: const EdgeInsets.fromLTRB(5, 20, 6, 0),
+        margin: const EdgeInsets.fromLTRB(16, 20, 16, 0),
         padding: EdgeInsets.symmetric(
             horizontal: 13.adaptSize, vertical: 14.adaptSize),
         decoration: BoxDecoration(
@@ -332,7 +333,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             SizedBox(height: 12.v),
             Padding(
-              padding:  EdgeInsets.only(left: 1),
+              padding: const EdgeInsets.only(left: 1),
               child: Container(
                 height: 8.v,
                 width: 313.adaptSize,
@@ -394,30 +395,46 @@ class _HomeScreenState extends State<HomeScreen> {
                   itemBuilder: (context, index) {
                     Industry industry = controller.industries[index];
 
-                    return Container(
-                      decoration: BoxDecoration(
-                        color: const Color(0XFFFFFFFF),
-                        borderRadius: BorderRadius.circular(10),
-                        // Removed boxShadow
-                      ),
-                      width: 80.adaptSize,
-                      child: Column(
-                        mainAxisSize: MainAxisSize.min,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          SizedBox(
-                            height: 30.adaptSize,
-                            width: 30.adaptSize,
-                            child: CustomImageView(imagePath: industry.icon),
+                    return GestureDetector(
+                      onTap: () {
+                        Get.to(
+                          () => CategoryDetailScreen(
+                            categoryName: industry.name,
                           ),
-                          SizedBox(height: 5.v),
-                          Text(
-                            industry.name,
-                            style: theme.textTheme.labelMedium!
-                                .copyWith(color: Colors.black),
-                          ),
-                        ],
+                          arguments: {'industry': industry},
+                        );
+                      },
+                      child: Container(
+                        decoration: BoxDecoration(
+                          color: const Color(0XFFFFFFFF),
+                          borderRadius: BorderRadius.circular(10),
+                          // Removed boxShadow
+                        ),
+                        width: 80.adaptSize,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            SizedBox(
+                              height: 30.adaptSize,
+                              width: 30.adaptSize,
+                              child: CustomImageView(
+                                imagePath: industry.icon,
+                                color: theme.primaryColor,
+                                placeHolder: ImageConstant.imageNotFound,
+                              ),
+                            ),
+                            SizedBox(height: 5.v),
+                            Text(
+                              industry.name,
+                              textAlign: TextAlign.center,
+                              maxLines: 2,
+                              style: theme.textTheme.labelMedium!
+                                  .copyWith(color: Colors.black),
+                            ),
+                          ],
+                        ),
                       ),
                     );
                   },
@@ -437,7 +454,7 @@ class _HomeScreenState extends State<HomeScreen> {
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 16.0),
           child: _buildRowtrending(
-            trending: "Trending",
+            trending: "Top Users",
             seeallOne: "See All",
             onPressed: () {
               log("${controller.trendingPeople}");
@@ -598,8 +615,8 @@ class UserProfileItemWidget extends StatelessWidget {
                                 decoration: BoxDecoration(
                                   color: Colors.green,
                                   shape: BoxShape.circle,
-                                  border: Border.all(
-                                      color: Colors.white, width: 2),
+                                  border:
+                                      Border.all(color: Colors.white, width: 2),
                                 ),
                               ),
                             ),
@@ -704,17 +721,15 @@ class UserProfileItemWidget extends StatelessWidget {
                     ),
                   ),
                   const SizedBox(height: 15),
-                  Padding(
-                    padding: EdgeInsets.only(
-                        left: 0.adaptSize, right: 0.adaptSize, top: 0.adaptSize),
+                  Center(
                     child: CustomPaint(
-                      painter: DashedBorderPainter(
-                        color: Colors.grey,
-                        strokeWidth: 1,
-                        dashWidth: 2.0,
-                        dashSpace: 2.0,
+                      painter: DashedDividerPainter(
+                        color: appTheme.gray200, // or your desired color
+                        dashWidth: 5.0, // length of each dash
+                        dashSpace: 3.0, // space between dashes
+                        strokeWidth: 1.0, // thickness of the line
                       ),
-                      child: Container(height: 1),
+                      size: Size(MediaQuery.of(context).size.width * 0.8, 1),
                     ),
                   ),
                   const SizedBox(height: 8),
@@ -751,30 +766,30 @@ class UserProfileItemWidget extends StatelessWidget {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         _buildActionButton(
-                          CustomImageView(imagePath: ImageConstant.videocam),
-                          "${user.pricing.videoCallPrice}/min",
-                          Colors.red,
-                        ),
+                            ImageConstant.videocam,
+                            "${user.pricing.videoCallPrice}/min",
+                            appTheme.red500,
+                            () {}),
                         Container(
                           color: appTheme.gray300,
                           width: 0.5.adaptSize,
                           height: 50.adaptSize,
                         ),
                         _buildActionButton(
-                          CustomImageView(imagePath: ImageConstant.call),
-                          "${user.pricing.audioCallPrice}/min",
-                          Colors.green,
-                        ),
+                            ImageConstant.call,
+                            "${user.pricing.audioCallPrice}/min",
+                            appTheme.green100,
+                            () {}),
                         Container(
                           color: appTheme.gray300,
                           width: 0.5.adaptSize,
                           height: 50.adaptSize,
                         ),
                         _buildActionButton(
-                          CustomImageView(imagePath: ImageConstant.msg),
-                          "${user.pricing.messagePrice}/min",
-                          appTheme.yellow900,
-                        ),
+                            ImageConstant.msg,
+                            "${user.pricing.messagePrice}/min",
+                            appTheme.yellow900,
+                            () {}),
                       ],
                     ),
                   ),
@@ -834,19 +849,23 @@ Widget _buildChip(String label) {
       ),
     ),
   );
-} 
-
-Widget _buildActionButton(Widget iconWidget, String price, Color color) {
-  return Row(
-    mainAxisAlignment: MainAxisAlignment.center,
-    children: [
-      iconWidget, // Use the widget directly
-       SizedBox(height: 8.fSize),
-      Text(
-        price,
-        style: TextStyle(color: color),
-      ),
-    ],
-  );
 }
 
+Widget _buildActionButton(
+    String img, String label, Color color, VoidCallback? onTap) {
+  return GestureDetector(
+    onTap: onTap,
+    child: Row(
+      children: [
+        CustomImageView(imagePath: img),
+        const SizedBox(width: 4),
+        Text(
+          label,
+          style: const TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+      ],
+    ),
+  );
+}

@@ -65,7 +65,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                     SliverAppBar(
                       pinned: true,
                       automaticallyImplyLeading: false,
-                      expandedHeight: 450.0,
+                      expandedHeight: MediaQuery.of(context).size.height * 0.5,
                       backgroundColor: Colors.transparent,
                       primary: true,
                       title: Obx(() {
@@ -254,15 +254,16 @@ class _UserProfilePageState extends State<UserProfilePage>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _buildRowaboutme(aboutMeText: "About me"),
-              GestureDetector(
-                  onTap: () {
-                    // Add your edit functionality here
-                  },
-                  child: CustomImageView(
-                    height: 19,
-                    width: 19,
-                    imagePath: "assets/images/Frame.svg",
-                  )),
+              // GestureDetector(
+              //   onTap: () {
+              //     // Add your edit functionality here
+              //   },
+              //   child: CustomImageView(
+              //     height: 19,
+              //     width: 19,
+              //                     imagePath: "assets/images/Frame.svg",
+              //                   )
+              // ),
             ],
           ),
           SizedBox(height: 18.v),
@@ -276,16 +277,15 @@ class _UserProfilePageState extends State<UserProfilePage>
                 trimMode: TrimMode.Line,
                 trimCollapsedText: "Read more",
                 trimExpandedText: "Read less",
-                style: theme.textTheme.titleSmall!
-                    .copyWith(color: appTheme.black900),
-                moreStyle: theme.textTheme.bodyMedium?.copyWith(
+                style: theme.textTheme.titleMedium,
+                moreStyle: theme.textTheme.titleMedium?.copyWith(
                   color: appTheme.readmore, // Color for 'Read more'
-                  fontSize: theme.textTheme.bodyMedium
+                  fontSize: theme.textTheme.titleMedium
                       ?.fontSize, // Same font size as paragraph
                 ),
-                lessStyle: theme.textTheme.bodyMedium?.copyWith(
+                lessStyle: theme.textTheme.titleMedium?.copyWith(
                   color: appTheme.readmore, // Color for 'Read less'
-                  fontSize: theme.textTheme.bodyMedium
+                  fontSize: theme.textTheme.titleMedium
                       ?.fontSize, // Same font size as paragraph
                 ),
               );
@@ -344,13 +344,14 @@ class _UserProfilePageState extends State<UserProfilePage>
                 padding: const EdgeInsets.only(right: 2),
                 child: _buildRoweducation(educationText: "Experience"),
               ),
-              GestureDetector(
-                  onTap: () {
-                    // Add your edit functionality here
-                  },
-                  child: CustomImageView(
-                    imagePath: "assets/images/Frame.svg",
-                  )),
+              // GestureDetector(
+              //   onTap: () {
+              //     // Add your edit functionality here
+              //   },
+              //   child: CustomImageView(
+              //                     imagePath: "assets/images/Frame.svg",
+              //                   )
+              // ),
             ],
           ),
           SizedBox(height: 19.v),
@@ -388,24 +389,21 @@ class _UserProfilePageState extends State<UserProfilePage>
                       experience.jobTitle ?? '',
                       style: theme.textTheme.titleMedium!.copyWith(
                         fontSize: 16.fSize,
-                        fontWeight: FontWeight.w400,
                       ),
                     ),
-                    SizedBox(height: 9.v),
+                    SizedBox(height: 1.v),
                     Text(
                       experience.companyName ?? '',
-                      style: theme.textTheme.bodyMedium?.copyWith(
+                      style: theme.textTheme.titleMedium?.copyWith(
                         color: appTheme.gray900,
-                        fontWeight: FontWeight.w500,
                         fontSize: 14.fSize,
                       ),
                     ),
-                    SizedBox(height: 5.v),
+                    SizedBox(height: 1.v),
                     Text(
                       "$formattedStartDate - $formattedEndDate · $totalDuration",
-                      style: theme.textTheme.bodyMedium!.copyWith(
+                      style: theme.textTheme.titleSmall!.copyWith(
                         fontSize: 14.fSize,
-                        fontWeight: FontWeight.w500,
                       ),
                     ),
                     SizedBox(height: 18.v),
@@ -444,13 +442,14 @@ class _UserProfilePageState extends State<UserProfilePage>
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               _buildRowaboutme(aboutMeText: "Expertise"),
-              GestureDetector(
-                  onTap: () {
-                    // Add your edit function here
-                  },
-                  child: CustomImageView(
-                    imagePath: "assets/images/Frame.svg",
-                  )),
+              // GestureDetector(
+              //   onTap: () {
+              //     // Add your edit function here
+              //   },
+              //  child: CustomImageView(
+              //                     imagePath: "assets/images/Frame.svg",
+              //                   )
+              // ),
             ],
           ),
           const SizedBox(
@@ -502,13 +501,14 @@ class _UserProfilePageState extends State<UserProfilePage>
                 padding: const EdgeInsets.only(right: 2),
                 child: _buildRoweducation(educationText: "Education"),
               ),
-              GestureDetector(
-                  onTap: () {
-                    // Add your edit functionality here
-                  },
-                  child: CustomImageView(
-                    imagePath: "assets/images/Frame.svg",
-                  )),
+              // GestureDetector(
+              //   onTap: () {
+              //     // Add your edit functionality here
+              //   },
+              //   child: CustomImageView(
+              //                     imagePath: "assets/images/Frame.svg",
+              //                   )
+              // ),
             ],
           ),
           SizedBox(height: 19.v),
@@ -544,18 +544,17 @@ class _UserProfilePageState extends State<UserProfilePage>
                       education.degree ?? '',
                       style: theme.textTheme.titleMedium!,
                     ),
-                    SizedBox(height: 9.v),
+                    SizedBox(height: 1.v),
                     Text(
                       education.schoolCollege ?? '',
-                      style: theme.textTheme.bodyMedium
-                          ?.copyWith(color: appTheme.gray900),
+                      style: theme.textTheme.titleMedium!
+                          .copyWith(color: appTheme.gray900),
                     ),
-                    SizedBox(height: 4.v),
+                    SizedBox(height: 1.v),
                     Text(
                       "$formattedStartDate - $formattedEndDate · $totalDuration",
-                      style: theme.textTheme.bodyMedium!.copyWith(
+                      style: theme.textTheme.titleSmall!.copyWith(
                         fontSize: 14.fSize,
-                        fontWeight: FontWeight.w500,
                       ),
                     ),
                     SizedBox(height: 18.v),
@@ -620,7 +619,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                                 achievement,
                                 overflow: TextOverflow.ellipsis,
                                 maxLines: 1,
-                                style: theme.textTheme.bodyLarge?.copyWith(
+                                style: theme.textTheme.titleSmall!.copyWith(
                                   color: appTheme.gray900,
                                   decoration: TextDecoration.underline,
                                 ),
@@ -664,13 +663,14 @@ class _UserProfilePageState extends State<UserProfilePage>
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 _buildRowaboutme(aboutMeText: "Interests"),
-                GestureDetector(
-                    onTap: () {
-                      // Define the edit action here
-                    },
-                    child: CustomImageView(
-                      imagePath: "assets/images/Frame.svg",
-                    )),
+                // GestureDetector(
+                //   onTap: () {
+                //     // Define the edit action here
+                //   },
+                //  child: CustomImageView(
+                //                   imagePath: "assets/images/Frame.svg",
+                //                 )
+                // ),
               ],
             ),
           ),
@@ -756,14 +756,14 @@ class _UserProfilePageState extends State<UserProfilePage>
                     padding: const EdgeInsets.all(8.0),
                     child: Container(
                       padding: EdgeInsets.only(
-                          left: 16.adaptSize,
-                          right: 16.adaptSize,
+                          // left: 16.adaptSize,
+                          // right: 16.adaptSize,
                           top: 10.adaptSize,
                           bottom: 10.adaptSize),
                       decoration: BoxDecoration(
                         color: appTheme.gray100,
                         borderRadius: const BorderRadius.all(
-                          Radius.circular(20.0),
+                          Radius.circular(10.0),
                         ),
                       ),
                       child: Column(
@@ -774,6 +774,7 @@ class _UserProfilePageState extends State<UserProfilePage>
                             children: [
                               CustomImageView(
                                 imagePath: review.profilePic,
+                                placeHolder: ImageConstant.imageNotFound,
                                 height: 50.v,
                                 width: 50.h,
                                 radius: BorderRadius.circular(50),
@@ -870,7 +871,8 @@ class _UserProfilePageState extends State<UserProfilePage>
       children: [
         Text(
           educationText,
-          style: theme.textTheme.headlineLarge?.copyWith(fontSize: 14.fSize),
+          style: theme.textTheme.bodyMedium
+              ?.copyWith(fontSize: 16.fSize, color: Colors.black),
         ),
       ],
     );

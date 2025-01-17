@@ -1,16 +1,13 @@
 import 'dart:ui';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/professional_info/controller/professional_controller.dart';
-import 'package:experta/widgets/app_bar/appbar_leading_image.dart';
-import 'package:experta/widgets/app_bar/appbar_subtitle_six.dart';
-import 'package:experta/widgets/app_bar/custom_app_bar.dart';
 import 'package:experta/widgets/custom_drop_down.dart';
-import 'package:experta/widgets/custom_elevated_button.dart';
+import 'package:experta/widgets/custom_icon_button.dart';
 import 'package:experta/widgets/custom_radio_button.dart';
 import 'package:experta/widgets/custom_text_form_field.dart';
+import 'package:experta/widgets/dashed_border.dart';
 import 'package:experta/widgets/shimmer.dart';
 import 'package:experta/widgets/work_experience_widget.dart';
-import 'package:flutter/material.dart';
 import 'package:file_picker/file_picker.dart';
 
 class EditProfessionalInfo extends StatefulWidget {
@@ -80,7 +77,7 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
 
   Widget _buildBody() {
     return Padding(
-      padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 10.v),
+      padding: EdgeInsets.symmetric(vertical: 20.h, horizontal: 16.v),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -167,6 +164,8 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
               width: double.infinity,
               icon: _buildDropdownIcon(),
               items: items,
+              focusNode: FocusNode(),
+              autofocus: false,
               onChanged: (SelectionPopupModel? newValue) {
                 if (newValue != null) {
                   selectedValue.value = newValue;
@@ -202,8 +201,8 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
       margin: EdgeInsets.only(right: 6.h),
       child: CustomImageView(
         imagePath: ImageConstant.imgCheckmark,
-        height: 30.adaptSize,
-        width: 30.adaptSize,
+        height: 15.adaptSize,
+        width: 15.adaptSize,
       ),
     );
   }
@@ -265,28 +264,38 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
         children: [
           GestureDetector(
             onTap: _pickFile,
-            child: Container(
-              height: 150,
-              decoration: BoxDecoration(
-                color: Colors.white,
-                border: Border.all(color: Colors.grey.shade200),
-                borderRadius: BorderRadius.circular(8),
+            child: CustomPaint(
+              painter: DashedBorderPainter(
+                color: Colors.grey,
+                strokeWidth: 1.0,
+                dashWidth: 5.0,
+                dashSpace: 3.0,
+                isCircular: true, // Set to false for rectangular border
+                radius: 8.0,
               ),
-              child: Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    CustomImageView(imagePath: ImageConstant.uploadcloud),
-                    const SizedBox(height: 8),
-                    const Text('(JPEG, PNG, PDF)',
-                        style: TextStyle(color: Colors.grey)),
-                    Text(
-                      'click to browse files',
-                      style: theme.textTheme.bodyMedium!
-                          .copyWith(color: Colors.black),
-                    ),
-                    const SizedBox(height: 4),
-                  ],
+              child: Container(
+                height: 150,
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  border: Border.all(color: Colors.grey.shade200),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      CustomImageView(imagePath: ImageConstant.uploadcloud),
+                      const SizedBox(height: 8),
+                      Text('(JPEG, PNG, PDF)',
+                          style: theme.textTheme.titleSmall),
+                      Text(
+                        'click to browse files',
+                        style: theme.textTheme.titleMedium!
+                            .copyWith(color: Colors.black),
+                      ),
+                      const SizedBox(height: 4),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -319,26 +328,55 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
   Widget _buildFileUploadProgress() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16.0),
-      child: Column(
-        children: [
-          Row(
-            children: [
-              const Icon(Icons.picture_as_pdf, color: Colors.red),
-              const SizedBox(width: 8),
-              Expanded(child: Text(controller.pickedFile!.name)),
-              Text(
-                  '${(controller.pickedFile!.size / 1024).toStringAsFixed(2)} KB'),
-            ],
-          ),
-          const SizedBox(height: 8),
-          LinearProgressIndicator(
-            value: controller.uploadProgress.value,
-            color: appTheme.green400,
-          ),
-          const SizedBox(height: 8),
-          Text(
-              '${(controller.uploadProgress.value * 100).toStringAsFixed(0)}% uploaded'),
-        ],
+      child: Container(
+        height: 100.v,
+        decoration: BoxDecoration(
+            color: Colors.white, borderRadius: BorderRadius.circular(10)),
+        padding: const EdgeInsets.all(8),
+        child: Column(
+          children: [
+            Row(
+              children: [
+                // const Icon(Icons.picture_as_pdf, color: Colors.red),
+                CustomIconButton(
+                    height: 44.adaptSize,
+                    width: 44.adaptSize,
+                    padding: EdgeInsets.all(10.h),
+                    decoration: IconButtonStyleHelper.fillGrayTL22,
+                    child: CustomImageView(
+                      imagePath: ImageConstant.pdf,
+                    )),
+                const SizedBox(width: 8),
+                Expanded(
+                    child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      controller.pickedFile!.name,
+                      style: theme.textTheme.bodyMedium!
+                          .copyWith(color: appTheme.black900),
+                    ),
+                    Row(
+                      children: [
+                        Text(
+                            '${(controller.pickedFile!.size / 1024).toStringAsFixed(2)} KB  •  '),
+                        Text(
+                            '${(controller.uploadProgress.value * 100).toStringAsFixed(0)}% uploaded'),
+                      ],
+                    ),
+                  ],
+                )),
+              ],
+            ),
+            const SizedBox(height: 8),
+            LinearProgressIndicator(
+              value: controller.uploadProgress.value,
+              color: appTheme.green400,
+              backgroundColor: appTheme.gray200,
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -354,10 +392,8 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
             return const Center(child: ShimmerLoadingEffect());
           } else {
             return Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(2.0),
               child: Wrap(
-                spacing: 1.0,
-                runSpacing: 1.0,
                 children: controller.expertiseList.map((expertise) {
                   return Chip(
                     label: Text(
@@ -403,22 +439,21 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
 
   Widget _buildSectionHeader(String title, Function(BuildContext) onEdit) {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
         Text(
           title,
           style: CustomTextStyles.labelMediumBlack900,
           textAlign: TextAlign.start,
         ),
-        Padding(
-          padding: const EdgeInsets.only(right: 16),
-          child: TextButton(
-            onPressed: () => onEdit(context),
-            child: Text(
-              "Edit",
-              style: theme.textTheme.bodyLarge!.copyWith(color: Colors.red),
-              textAlign: TextAlign.start,
+        const Spacer(),
+        TextButton(
+          onPressed: () => onEdit(context),
+          child: Text(
+            "Edit",
+            style: theme.textTheme.titleMedium!.copyWith(
+              color: appTheme.red500,
             ),
+            textAlign: TextAlign.end,
           ),
         ),
       ],
@@ -438,6 +473,7 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
           } else {
             return ListView.builder(
               shrinkWrap: true,
+              clipBehavior: Clip.antiAlias,
               physics: const NeverScrollableScrollPhysics(),
               itemCount: controller.workExperienceList.length,
               itemBuilder: (context, index) {
@@ -456,22 +492,20 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
       crossAxisAlignment: CrossAxisAlignment.start, // Align content to the left
       children: [
         Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
               "Education",
               style: CustomTextStyles.labelMediumBlack900,
               textAlign: TextAlign.start,
             ),
-            Padding(
-              padding: const EdgeInsets.only(right: 16),
-              child: TextButton(
-                onPressed: () => Get.toNamed(AppRoutes.education),
-                child: Text(
-                  "Edit",
-                  style: theme.textTheme.bodyLarge!.copyWith(color: Colors.red),
-                  textAlign: TextAlign.start,
-                ),
+            const Spacer(),
+            TextButton(
+              onPressed: () => Get.toNamed(AppRoutes.education),
+              child: Text(
+                "Edit",
+                style: theme.textTheme.titleMedium!
+                    .copyWith(color: appTheme.red500),
+                textAlign: TextAlign.start,
               ),
             ),
           ],
@@ -498,7 +532,7 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
                     const SizedBox(height: 4.0), // Adjusted to control the gap
                     Text(
                       education.schoolCollege,
-                      style: theme.textTheme.bodyLarge!
+                      style: theme.textTheme.titleMedium!
                           .copyWith(color: Colors.black),
                     ),
                     const SizedBox(
@@ -575,7 +609,7 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
               ],
             ),
           );
-        }).toList(),
+        }),
         CustomElevatedButton(
           onPressed: controller.addNewLinkField,
           text: '+ Add more links',
