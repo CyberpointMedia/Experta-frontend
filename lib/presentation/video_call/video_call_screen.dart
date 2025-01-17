@@ -1,14 +1,16 @@
 import 'dart:async';
 import 'dart:developer';
 import 'package:experta/core/app_export.dart' hide navigator;
-import 'package:experta/presentation/give_rating/give_rating.dart';
+import 'package:path/path.dart' as path;
 import 'package:flutter/services.dart';
+import 'package:experta/presentation/give_rating/give_rating.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:hive/hive.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:peerdart/peerdart.dart';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
-import 'package:path_provider/path_provider.dart';
 import 'dart:io';
+import 'package:http/http.dart' as http;
 
 class VideoCallScreen extends StatefulWidget {
   final String userId;
@@ -34,6 +36,9 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   final RTCVideoRenderer localRenderer = RTCVideoRenderer();
   final RTCVideoRenderer remoteRenderer = RTCVideoRenderer();
   final RTCVideoRenderer screenRenderer = RTCVideoRenderer();
+  static const platform = MethodChannel('com.example.expert/screen_recording');
+  final MethodChannel _methodChannel =
+      MethodChannel('com.example.expert/screen_recording');
 
   late IO.Socket socket;
   late Peer peer;
@@ -46,7 +51,6 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   bool isMuted = false;
   bool isSpeakerOn = true;
   bool isRecording = false;
-  MediaRecorder? _mediaRecorder;
   bool isFrontCamera = true;
   String? remoteUserId;
   bool isSharing = false;
@@ -59,6 +63,20 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     super.initState();
     _initRenderers();
     _initializeSignaling();
+    _methodChannel.setMethodCallHandler(_handleMethodCall);
+  }
+
+  Future<dynamic> _handleMethodCall(MethodCall call) async {
+    if (call.method == "saveRecordingPath") {
+      final String filePath = call.arguments;
+      log('Received recording path: $filePath');
+      if (filePath != null) {
+        await _uploadRecording(filePath);
+      } else {
+        log('Error: Received null file path from platform.');
+        _showSnackBar('Failed to save recording: Received null file path');
+      }
+    }
   }
 
   @override
@@ -85,9 +103,11 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
   void startCallTimer() {
     callTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
-      setState(() {
-        callDuration++;
-      });
+      if (mounted) {
+        setState(() {
+          callDuration++;
+        });
+      }
     });
   }
 
@@ -127,11 +147,20 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
     try {
       log('Starting local stream...');
       final mediaConstraints = {
-        'audio': true,
+        'audio': {
+          'mandatory': [],
+          'optional': [
+            {'googNoiseSuppression': true},
+            {'googEchoCancellation': true},
+            {'echoCancellation': true},
+            {'googEchoCancellation2': true},
+            {'googDAEchoCancellation': true},
+          ],
+        },
         'video': {
           'mandatory': {
-            'minWidth': '1920',
-            'minHeight': '1080',
+            'minWidth': '1280',
+            'minHeight': '720',
             'maxWidth': '1920',
             'maxHeight': '1080',
             'minFrameRate': '30',
@@ -430,7 +459,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
 
     try {
       log('Starting screen share...');
-      await _startForegroundService(); // Start the foreground service
+      await _startForegroundService();
 
       MediaStream? screenStream;
       if (Platform.isAndroid) {
@@ -532,155 +561,123 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
   }
 
   Future<void> startScreenRecording() async {
+    if (isRecording) return;
+
     try {
-      if (!isRecording) {
-        // Platform specific directory handling
-        final Directory directory;
-        if (Platform.isIOS) {
-          directory = await getApplicationDocumentsDirectory();
-        } else {
-          directory = await getExternalStorageDirectory() ??
-              await getApplicationDocumentsDirectory();
-        }
-
-        final String fileName =
-            'call_recording_${DateTime.now().millisecondsSinceEpoch}.mp4';
-        final String filePath = Platform.isIOS
-            ? '${directory.path}/$fileName'
-            : '${directory.path}/recordings/$fileName';
-
-        // Ensure directory exists
-        if (Platform.isAndroid) {
-          final recordingDir = Directory('${directory.path}/recordings');
-          if (!await recordingDir.exists()) {
-            await recordingDir.create(recursive: true);
-          }
-        }
-
-        // Initialize streams with fallback options
-        List<MediaStreamTrack> videoTracks = [];
-        List<MediaStreamTrack> audioTracks = [];
-        MediaStream? fallbackStream;
-
-        // Handle local stream
-        if (localStream != null && !localStream!.getTracks().isEmpty) {
-          final localVideoTracks = localStream!.getVideoTracks();
-          final localAudioTracks = localStream!.getAudioTracks();
-
-          if (localVideoTracks.isNotEmpty) {
-            videoTracks.addAll(localVideoTracks);
-            fallbackStream = localStream; // Use as fallback if needed
-          }
-          if (localAudioTracks.isNotEmpty) {
-            audioTracks.addAll(localAudioTracks);
-          }
-        }
-
-        // Handle remote stream
-        if (remoteStream != null && !remoteStream!.getTracks().isEmpty) {
-          final remoteVideoTracks = remoteStream!.getVideoTracks();
-          final remoteAudioTracks = remoteStream!.getAudioTracks();
-
-          if (remoteVideoTracks.isNotEmpty) {
-            videoTracks.addAll(remoteVideoTracks);
-            fallbackStream ??=
-                remoteStream; // Use as fallback if local stream wasn't available
-          }
-          if (remoteAudioTracks.isNotEmpty) {
-            audioTracks.addAll(remoteAudioTracks);
-          }
-        }
-
-        // Handle screen sharing
-        if (isSharing && screenRenderer.srcObject != null) {
-          final screenStream = screenRenderer.srcObject as MediaStream;
-          final screenVideoTracks = screenStream.getVideoTracks();
-
-          if (screenVideoTracks.isNotEmpty) {
-            videoTracks.addAll(screenVideoTracks);
-            fallbackStream ??=
-                screenStream; // Use as fallback if no other streams available
-          }
-        }
-
-        // Create composite stream with fallback handling
-        final compositeStream = await navigator.mediaDevices.getUserMedia({
-          'audio': true,
-          'video': true,
-        });
-
-        // Add video tracks with fallback
-        if (videoTracks.isEmpty && fallbackStream != null) {
-          final fallbackVideo = fallbackStream.getVideoTracks();
-          if (fallbackVideo.isNotEmpty) {
-            compositeStream.addTrack(fallbackVideo.first);
-          }
-        } else {
-          for (var track in videoTracks) {
-            compositeStream.addTrack(track);
-          }
-        }
-
-        // Add audio tracks with fallback
-        if (audioTracks.isEmpty && fallbackStream != null) {
-          final fallbackAudio = fallbackStream.getAudioTracks();
-          if (fallbackAudio.isNotEmpty) {
-            compositeStream.addTrack(fallbackAudio.first);
-          }
-        } else {
-          for (var track in audioTracks) {
-            compositeStream.addTrack(track);
-          }
-        }
-
-        // Verify we have something to record
-        if (compositeStream.getTracks().isEmpty) {
-          throw Exception('No media tracks available for recording');
-        }
-
-        // Initialize and configure MediaRecorder
-        _mediaRecorder ??= MediaRecorder();
-
-        // Platform specific recording options
-        final RecorderAudioChannel audioChannel = Platform.isIOS
-            ? RecorderAudioChannel.INPUT
-            : RecorderAudioChannel.OUTPUT;
-
-        await _mediaRecorder?.start(
-          filePath,
-          videoTrack: compositeStream.getVideoTracks().first,
-          audioChannel: audioChannel,
-        );
-
-        // Save recording metadata
-        await saveRecordingToHive(filePath);
-
-        log('Recording started, saving to: $filePath');
-      } else {
-        await _mediaRecorder?.stop();
-        log('Recording stopped');
-      }
-
+      await platform.invokeMethod('startScreenCapture');
       setState(() {
-        isRecording = !isRecording;
+        isRecording = true;
       });
+      _showSnackBar('Recording started');
     } catch (e) {
-      log('Recording error: $e');
-      _showSnackBar('Failed to record: $e');
+      _showSnackBar('Failed to start recording: $e');
     }
   }
 
-  Future<void> saveRecordingToHive(String filePath) async {
+  Future<void> stopScreenRecording() async {
+    if (!isRecording) return;
+
+    try {
+      await platform
+          .invokeMethod('stopScreenCapture'); // This stops the service.
+      setState(() {
+        isRecording = false;
+      });
+      _showSnackBar('Recording stopped. Waiting for file path...');
+      // Don't try to access filePath here, wait for _handleMethodCall.
+    } catch (e) {
+      _showSnackBar('Failed to stop recording: $e');
+    }
+  }
+
+  Future<void> _uploadRecording(String filePath) async {
+    final url = Uri.parse('http://3.110.252.174:8080/api/uploadRecordingVideo');
+    final token = PrefUtils().getToken();
+
+    var request = http.MultipartRequest('POST', url)
+      ..headers['Authorization'] = 'Bearer $token';
+
+    // Modify the file path to use the correct one from the cache
+    File fileToUpload = File(filePath);
+
+    request.files.add(
+      http.MultipartFile(
+        'file',
+        fileToUpload.readAsBytes().asStream(),
+        fileToUpload.lengthSync(),
+        filename: path.basename(fileToUpload.path),
+      ),
+    );
+
+    try {
+      var response = await request.send();
+
+      if (response.statusCode == 200) {
+        _showSnackBar('Recording uploaded successfully');
+        log('Recording uploaded successfully');
+
+        // Clear the video file from the cache after successful upload
+        try {
+          await platform.invokeMethod('clearVideoFileFromCache');
+          log('Video file cleared from cache.');
+        } catch (e) {
+          log('Failed to clear video file from cache: $e');
+        }
+      } else {
+        _showSnackBar('Failed to upload recording: ${response.statusCode}');
+        log('Failed to upload recording: ${response.statusCode}');
+      }
+    } catch (e) {
+      _showSnackBar('Error uploading recording: $e');
+      log('Error uploading recording: $e');
+    }
+  }
+
+  Future<void> _saveRecordingMetadata(String recordingId, String status,
+      {int? duration, String? filePath}) async {
     try {
       final box = await Hive.openBox('recordings');
-      await box.add({
-        'filePath': filePath,
-        'timestamp': DateTime.now().toIso8601String(),
+      String? savedPath;
+      if (filePath != null) {
+        final appDir = await getApplicationDocumentsDirectory();
+        final fileName = path.basename(filePath);
+        final newPath = path.join(appDir.path, 'recordings', fileName);
+
+        final recordingsDir = Directory(path.dirname(newPath));
+        if (!await recordingsDir.exists()) {
+          await recordingsDir.create(recursive: true);
+        }
+        await File(filePath).copy(newPath);
+        savedPath = newPath;
+      }
+
+      final recording = {
+        'id': recordingId,
         'meetingId': widget.meetingId,
-        'participants': [widget.userId, widget.userName],
-      });
+        'userId': widget.userId,
+        'userName': widget.userName,
+        'status': status,
+        'timestamp': DateTime.now().toIso8601String(),
+        'duration': duration,
+        'filePath': savedPath,
+        'participants': [
+          {
+            'id': widget.userId,
+            'name': widget.userName,
+          },
+          if (remoteUserId != null)
+            {
+              'id': remoteUserId,
+              'name': widget.userName,
+            }
+        ],
+      };
+
+      await box.put(recordingId, recording);
+      log('Recording metadata saved successfully: $recordingId');
     } catch (e) {
-      log('Failed to save to Hive: $e');
+      log('Failed to save recording metadata: $e');
+      throw Exception('Failed to save recording metadata: $e');
     }
   }
 
@@ -977,7 +974,7 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
               onPressed: toggleVideo),
           _buildControlButton(
               icon: isRecording ? Icons.stop : Icons.fiber_manual_record,
-              onPressed: startScreenRecording),
+              onPressed: toggleScreenRecording),
           _buildControlButton(
               icon: isSpeakerOn ? Icons.volume_up : Icons.volume_off,
               onPressed: toggleSpeaker),
@@ -999,6 +996,14 @@ class _VideoCallScreenState extends State<VideoCallScreen> {
       child: IconButton(
           icon: Icon(icon, color: color, size: 32), onPressed: onPressed),
     );
+  }
+
+  void toggleScreenRecording() {
+    if (isRecording) {
+      stopScreenRecording();
+    } else {
+      startScreenRecording();
+    }
   }
 
   void toggleScreenShare() {

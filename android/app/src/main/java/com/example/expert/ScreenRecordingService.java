@@ -37,14 +37,13 @@ import com.example.expert.PrefUtils;
 
 public class ScreenRecordingService extends Service {
 
-    public static MediaProjection mediaProjection;
-    public static MediaRecorder mediaRecorder;
-    public static VirtualDisplay virtualDisplay;
+    private MediaProjection mediaProjection;
+    private MediaRecorder mediaRecorder;
+    private VirtualDisplay virtualDisplay;
     private MediaProjectionManager mediaProjectionManager;
     private Uri mediaStoreOutput;
     private MethodChannel.Result pendingResult;
-
-    public static String filePath; // Store the file path
+    private String filePath; // Store the file path
 
     private static final String CHANNEL = "com.example.expert/screen_recording";
     private FlutterEngine flutterEngine;
@@ -99,10 +98,10 @@ public class ScreenRecordingService extends Service {
         File cacheDir = getCacheDir();
         File outputFile = new File(cacheDir, fileName);
         filePath = outputFile.getAbsolutePath(); // Store the file path
- 
+
         try {
             mediaRecorder.setOutputFile(filePath); 
-            mediaRecorder.setVideoSize(720,1280);
+            mediaRecorder.setVideoSize(1280, 720);
             mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
             mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
             mediaRecorder.setVideoEncodingBitRate(5 * 1024 * 1024);
@@ -169,7 +168,8 @@ public class ScreenRecordingService extends Service {
 public void onDestroy() {
     super.onDestroy();
     stopRecording();
-    if (filePath != null) { 
+       
+ if (filePath != null) { 
             new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), CHANNEL)
                 .invokeMethod("saveRecordingPath", filePath);
             Log.d("ScreenRecordingService", "File path sent to Flutter: " + filePath);
@@ -179,7 +179,7 @@ public void onDestroy() {
     flutterEngine.destroy();
 }
 
-    public static String stopRecording() {
+    private void stopRecording() {
         if (mediaRecorder != null) {
             try {
                 mediaRecorder.stop();
@@ -197,16 +197,6 @@ public void onDestroy() {
         if (mediaProjection != null) {
             mediaProjection.stop();
         }
-
-
-         Log.e("ScreenRecordingService777777", " " + filePath);
-
-         // Broadcast the file path to Flutter
-               
-
-               
-
-       return filePath;
     }
 
     public void clearVideoFileFromCache() {

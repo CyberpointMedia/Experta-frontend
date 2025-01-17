@@ -26,6 +26,12 @@
       "languageVersion": "3.3"
     },
     {
+      "name": "android_intent_plus",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/android_intent_plus-5.2.1",
+      "packageUri": "lib/",
+      "languageVersion": "2.18"
+    },
+    {
       "name": "archive",
       "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/archive-3.6.1",
       "packageUri": "lib/",
@@ -284,6 +290,12 @@
       "languageVersion": "3.3"
     },
     {
+      "name": "equatable",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/equatable-2.0.7",
+      "packageUri": "lib/",
+      "languageVersion": "2.12"
+    },
+    {
       "name": "eventify",
       "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/eventify-1.0.1",
       "packageUri": "lib/",
@@ -294,6 +306,12 @@
       "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/events_emitter-0.5.2",
       "packageUri": "lib/",
       "languageVersion": "2.17"
+    },
+    {
+      "name": "excel",
+      "rootUri": "file:///Users/apple/.pub-cache/hosted/pub.dev/excel-4.0.6",
+      "packageUri": "lib/",
+      "languageVersion": "3.0"
     },
     {
       "name": "extended_image",
@@ -1562,7 +1580,7 @@
       "languageVersion": "3.3"
     }
   ],
-  "generated": "2024-12-27T05:16:10.112730Z",
+  "generated": "2025-01-17T10:41:33.116116Z",
   "generator": "pub",
   "generatorVersion": "3.6.0",
   "flutterRoot": "file:///usr/local/Caskroom/flutter/3.19.1/flutter",

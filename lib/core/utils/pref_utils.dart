@@ -6,7 +6,6 @@ class PrefUtils {
   final ImagePicker pickerp = ImagePicker();
 
   PrefUtils() {
-    // init();
     SharedPreferences.getInstance().then((value) {
       _sharedPreferences = value;
     });

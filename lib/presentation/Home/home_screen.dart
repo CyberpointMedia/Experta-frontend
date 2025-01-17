@@ -639,14 +639,19 @@ class _UserProfileItemWidgetState extends State<UserProfileItemWidget> {
                             children: [
                               Row(
                                 children: [
-                                  Text(
-                                    widget.user.displayName.isNotEmpty
-                                        ? widget.user.displayName
-                                        : "anonymous",
-                                    style: TextStyle(
-                                      fontSize: 16.fSize,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.black,
+                                  SizedBox(
+                                    width:
+                                        MediaQuery.of(context).size.width * 0.3,
+                                    child: Text(
+                                      widget.user.displayName.isNotEmpty
+                                          ? widget.user.displayName
+                                          : "anonymous",
+                                      overflow: TextOverflow.ellipsis,
+                                      style: TextStyle(
+                                        fontSize: 16.fSize,
+                                        fontWeight: FontWeight.w600,
+                                        color: Colors.black,
+                                      ),
                                     ),
                                   ),
                                   const SizedBox(width: 5),
@@ -816,7 +821,7 @@ class _UserProfileItemWidgetState extends State<UserProfileItemWidget> {
                             AppRoutes.chattingScreen,
                             arguments: {'chat': chatData},
                           );
-                                                }),
+                        }),
                       ],
                     ),
                   ),
@@ -990,7 +995,7 @@ class _UserProfileItemWidgetState extends State<UserProfileItemWidget> {
                       AppRoutes.chattingScreen,
                       arguments: {'chat': chatData},
                     );
-                                    },
+                  },
                 ),
               ],
             ),

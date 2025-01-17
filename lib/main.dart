@@ -1,5 +1,4 @@
 import 'package:experta/firebase_options.dart';
-import 'package:experta/notification_manager.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
@@ -20,9 +19,9 @@ Future<void> main() async {
     PrefUtils().init(),
     FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true),
   ]);
-  await NotificationManager().init();
-  await Hive.initFlutter(); // Initialize Hive for Flutter
-  await Hive.openBox('recordings'); // Open the Hive box
+  
+  await Hive.initFlutter(); 
+  await Hive.openBox('recordings'); 
   AppLogger.init(kReleaseMode ? LogMode.live : LogMode.debug);
   runApp(const MyApp());
 }
