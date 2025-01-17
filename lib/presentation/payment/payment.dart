@@ -1,19 +1,24 @@
 import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
+import 'package:experta/widgets/app_bar/appbar_leading_image.dart';
+import 'package:experta/widgets/app_bar/appbar_subtitle_six.dart';
+import 'package:experta/widgets/app_bar/custom_app_bar.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
+import 'package:flutter/material.dart';
 
 class Payment extends StatefulWidget {
   const Payment({super.key});
 
   @override
+  
   State<Payment> createState() => _PaymentState();
 }
 
 class _PaymentState extends State<Payment> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return  Scaffold(
       body: Stack(
         children: [
           Positioned(
@@ -21,7 +26,6 @@ class _PaymentState extends State<Payment> {
             top: 50,
             child: ImageFiltered(
               imageFilter: ImageFilter.blur(
-                tileMode: TileMode.decal,
                 sigmaX: 60,
                 sigmaY: 60,
               ),
@@ -48,7 +52,6 @@ class _PaymentState extends State<Payment> {
       ),
     );
   }
-
   PreferredSizeWidget _buildAppBar() {
     return CustomAppBar(
         height: 40.h,
@@ -62,12 +65,11 @@ class _PaymentState extends State<Payment> {
         centerTitle: true,
         title: AppbarSubtitleSix(text: "Payment"));
   }
-
-  Widget _buildAccountSettings() {
+   Widget _buildAccountSettings() {
     return Align(
         alignment: Alignment.bottomCenter,
         child: Padding(
-            padding: EdgeInsets.only(right: 16.h, left: 16, top: 7),
+            padding: EdgeInsets.only(right: 16.h, left: 16, top: 50),
             child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -99,9 +101,8 @@ class _PaymentState extends State<Payment> {
                                         decoration:
                                             IconButtonStyleHelper.fillPrimary,
                                         child: CustomImageView(
-                                          imagePath: ImageConstant.wallet,
-                                          color: theme.primaryColor,
-                                        )),
+                                            imagePath:ImageConstant.wallet,color: theme.primaryColor,)),
+                                             
                                     Padding(
                                         padding: EdgeInsets.only(
                                             left: 15.h,
@@ -123,10 +124,10 @@ class _PaymentState extends State<Payment> {
                         ),
                         GestureDetector(
                           onTap: () {
-                            Get.toNamed(AppRoutes.widraw);
+                            Get.toNamed(AppRoutes.changeDateOfBirth);
                           },
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 1),
+                            padding: const EdgeInsets.only(top: 3),
                             child: Container(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 15.h, vertical: 16.v),
@@ -142,7 +143,8 @@ class _PaymentState extends State<Payment> {
                                           decoration: IconButtonStyleHelper
                                               .fillDeepPurple,
                                           child: CustomImageView(
-                                            imagePath: ImageConstant.withdraw,
+                                            imagePath:ImageConstant.withdraw,
+                                                
                                           )),
                                       Padding(
                                           padding: EdgeInsets.only(
@@ -166,59 +168,63 @@ class _PaymentState extends State<Payment> {
                                     ])),
                           ),
                         ),
+                        
                         GestureDetector(
                           onTap: () {
-                            Get.toNamed(AppRoutes.Transaction);
+                            Get.toNamed(AppRoutes.phoneNumber);
                           },
-                          child: Padding(
-                            padding: const EdgeInsets.only(top: 1),
-                            child: Container(
-                                padding: EdgeInsets.symmetric(
-                                    horizontal: 15.h, vertical: 16.v),
-                                decoration: AppDecoration.fillOnPrimaryContainer
-                                    .copyWith(
-                                        borderRadius:
-                                            BorderRadiusStyle.customBorderL20),
-                                child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      CustomIconButton(
-                                          height: 44.adaptSize,
-                                          width: 44.adaptSize,
-                                          padding: EdgeInsets.all(10.h),
-                                          decoration: IconButtonStyleHelper
-                                              .fillGreenTL24,
-                                          child: CustomImageView(
-                                            imagePath:
-                                                ImageConstant.transaction,
-                                          )),
-                                      Padding(
-                                          padding: EdgeInsets.only(
-                                              left: 15.h,
-                                              top: 13.v,
-                                              bottom: 10.v),
-                                          child: Text("Transactions",
-                                              style: theme
-                                                  .textTheme.titleMedium!
-                                                  .copyWith(
-                                                      color:
-                                                          appTheme.gray900))),
-                                      const Spacer(),
-                                      CustomImageView(
-                                          imagePath: ImageConstant
-                                              .imgArrowRightGray900,
-                                          height: 24.adaptSize,
-                                          width: 24.adaptSize,
-                                          margin: EdgeInsets.symmetric(
-                                              vertical: 10.v)),
-                                    ])),
-                          ),
+                        child:Padding(
+                      
+                          padding: const EdgeInsets.only(top: 3),
+                          child: Container(
+                              padding: EdgeInsets.symmetric(
+                                  horizontal: 15.h, vertical: 16.v),
+                              decoration: AppDecoration.fillOnPrimaryContainer
+                                  .copyWith(
+                                      borderRadius:
+                                          BorderRadiusStyle.customBorderL20),
+                              child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    CustomIconButton(
+                                        height: 44.adaptSize,
+                                        width: 44.adaptSize,
+                                        padding: EdgeInsets.all(10.h),
+                                        decoration:
+                                            IconButtonStyleHelper.fillGreenTL24,
+                                        child: CustomImageView(
+                                          imagePath: ImageConstant.transaction,
+                                         
+                                        )),
+                                    Padding(
+                                        padding: EdgeInsets.only(
+                                            left: 15.h,
+                                            top: 13.v,
+                                            bottom: 10.v),
+                                        child: Text("Transactions",
+                                            style: theme.textTheme.titleMedium!
+                                                .copyWith(
+                                                    color: appTheme.gray900))),
+                                    const Spacer(),
+                                    CustomImageView(
+                                        imagePath:
+                                            ImageConstant.imgArrowRightGray900,
+                                        height: 24.adaptSize,
+                                        width: 24.adaptSize,
+                                        margin: EdgeInsets.symmetric(
+                                            vertical: 10.v)),
+                                  ])),
                         ),
+                      ),
                       ]))
                 ])));
   }
 
+
+
   onTapArrowLeft() {
     Get.back();
   }
+ 
 }
+
