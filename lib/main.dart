@@ -4,6 +4,7 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
+import 'package:hive_flutter/hive_flutter.dart';
 import 'core/app_export.dart';
 
 Future<void> main() async {
@@ -20,7 +21,8 @@ Future<void> main() async {
     FirebaseAnalytics.instance.setAnalyticsCollectionEnabled(true),
   ]);
   await NotificationManager().init();
-
+  await Hive.initFlutter(); // Initialize Hive for Flutter
+  await Hive.openBox('recordings'); // Open the Hive box
   AppLogger.init(kReleaseMode ? LogMode.live : LogMode.debug);
   runApp(const MyApp());
 }

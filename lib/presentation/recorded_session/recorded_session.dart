@@ -1,46 +1,48 @@
 import 'dart:ui';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/categoryDetails/category_details_screen.dart';
+import 'package:hive/hive.dart';
 
 class RecordedSessionsPage extends StatefulWidget {
   const RecordedSessionsPage({super.key});
 
   @override
-  // ignore: library_private_types_in_public_api
   _RecordedSessionsPageState createState() => _RecordedSessionsPageState();
 }
 
 class _RecordedSessionsPageState extends State<RecordedSessionsPage> {
   // Sessions list (state)
-  List<Map<String, dynamic>> sessions = [
-    {
-      'imageUrl': 'https://via.placeholder.com/80',
-      'name': 'Anjali Arora',
-      'title': 'Social Media Influencer',
-      'date': 'Tue, 2 Jan 2024',
-      'time': '10:30',
-      'hasPlayButton': true,
-    },
-    {
-      'imageUrl': 'https://via.placeholder.com/80',
-      'name': 'Taranvir Kaur',
-      'title': 'Social Media Influencer',
-      'date': 'Tue, 2 Jan 2024',
-      'time': '10:30',
-      'hasPlayButton': true,
-    },
-    {
-      'imageUrl': 'https://via.placeholder.com/80',
-      'name': 'Dinesh Verma',
-      'title': 'Social Media Influencer',
-      'date': 'Tue, 2 Jan 2024',
-      'time': '10:30',
-      'hasPlayButton': true,
-    },
-  ];
+  List<Map<String, dynamic>> sessions = [];
+
+  @override
+  void initState() {
+    super.initState();
+    loadRecordedSessions();
+  }
+
+  void loadRecordedSessions() async {
+    var box = await Hive.openBox('recordings');
+    setState(() {
+      sessions = box.values.map((recording) {
+        return {
+          'imageUrl': 'https://via.placeholder.com/80', // Placeholder image
+          'name': recording['name'] ?? 'Recorded Session',
+          'title': 'Screen Recording',
+          'date': recording['timestamp']?.split('T')[0] ?? 'Unknown Date',
+          'time': recording['timestamp']?.split('T')[1]?.split('.')[0] ??
+              'Unknown Time',
+          'hasPlayButton': true,
+          'path':
+              recording['path'], // Assuming recording is the path to the video
+        };
+      }).toList();
+    });
+  }
 
   // Function to handle session deletion
-  void _deleteSession(int index) {
+  void _deleteSession(int index) async {
+    var box = await Hive.openBox('recordings');
+    await box.deleteAt(index); // Remove session from Hive box
     setState(() {
       sessions.removeAt(index); // Remove session from the list
     });
