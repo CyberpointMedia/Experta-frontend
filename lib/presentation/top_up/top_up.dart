@@ -1,6 +1,10 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:developer';
 import 'dart:ui';
 import 'package:experta/core/utils/text_constants.dart';
+import 'package:experta/widgets/custom_toast_message.dart';
+import 'package:lottie/lottie.dart';
 import 'package:razorpay_flutter/razorpay_flutter.dart';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/categoryDetails/category_details_screen.dart';
@@ -17,6 +21,7 @@ class _TopUpPageState extends State<TopUpPage> {
   TextEditingController amountController = TextEditingController();
   late Razorpay _razorpay;
   ApiService apiServices = ApiService();
+  String transactionid = '';
   @override
   void initState() {
     super.initState();
@@ -38,6 +43,7 @@ class _TopUpPageState extends State<TopUpPage> {
     try {
       final orderResponse = await apiServices.createOrder(enteredAmount);
       final orderId = orderResponse['data']['order']['id'];
+      transactionid = orderResponse['data']['transactionId'];
 
       var options = {
         'key': TextConstants.key,
@@ -72,39 +78,55 @@ class _TopUpPageState extends State<TopUpPage> {
         response.orderId!,
         response.paymentId!,
         response.signature!,
+        transactionid,
       );
 
-      Navigator.pop(context); // Close the loading screen
+      Navigator.pop(context);
 
       if (verificationResponse['status'] == 'success') {
-        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          content: Text("Payment Verified: ${response.paymentId}"),
-        ));
+        CustomToast().showToast(
+          context: context,
+          message: "Payment Verified: ${response.paymentId}",
+          isSuccess: true,
+        );
       } else {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Payment Verification Failed"),
-        ));
+        CustomToast().showToast(
+          context: context,
+          message:
+              "Payment Verification Failed ${verificationResponse['error']['errorMessage']}",
+          isSuccess: false,
+        );
       }
     } catch (e) {
-      Navigator.pop(context); // Close the loading screen
+      Navigator.pop(context);
       log('Error verifying payment: $e');
-      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text("Error: Payment verification failed"),
-      ));
+      CustomToast().showToast(
+        context: context,
+        message: "Error: Payment verification failed $e",
+        isSuccess: false,
+      );
     }
   }
 
   void _showLoadingScreen() {
     showDialog(
       context: context,
-      barrierDismissible: false,
+      barrierDismissible: true,
       builder: (BuildContext context) {
-        return const AlertDialog(
-          content: Row(
+        return AlertDialog(
+          backgroundColor: Colors.transparent,
+          content: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              CircularProgressIndicator(),
-              SizedBox(width: 20),
-              Text("Please wait while we verify your payment..."),
+              Lottie.asset("assets/jsonfiles/Loader.json"),
+              const SizedBox(width: 20),
+              Text(
+                "Please wait while we verify your payment...",
+                textAlign: TextAlign.center,
+                style: theme.textTheme.titleSmall!
+                    .copyWith(color: appTheme.whiteA700),
+              ),
             ],
           ),
         );

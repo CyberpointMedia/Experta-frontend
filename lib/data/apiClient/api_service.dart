@@ -12,6 +12,7 @@ import 'package:experta/data/models/response/login_response_model.dart';
 import 'package:experta/data/models/response/resend_otp_response_model.dart';
 import 'package:experta/data/models/response/verify_otp_response_model.dart';
 import 'package:experta/data/models/transaction_list.dart';
+import 'package:experta/presentation/Basic_Info/models/basic_model.dart';
 import 'package:experta/presentation/additional_info/model/additional_model.dart';
 import 'package:experta/presentation/additional_info/model/interest_model.dart';
 import 'package:experta/presentation/feeds_active_screen/models/feeds_active_model.dart';
@@ -466,7 +467,7 @@ class ApiService {
     }
   }
 
-  Future<Map<String, dynamic>> fetchBasicInfo() async {
+  Future<BasicProfileInfoModel> fetchBasicInfo() async {
     final url = '$_baseUrl/basic-info';
     AppLogger.request('GET', url);
 
@@ -479,7 +480,7 @@ class ApiService {
       AppLogger.response('GET', url, response.statusCode, response.body);
 
       if (response.statusCode == 200) {
-        return json.decode(response.body)['data'];
+        return BasicProfileInfoModel.fromJson(json.decode(response.body));
       } else {
         throw Exception('Failed to load basic info');
       }
@@ -493,15 +494,26 @@ class ApiService {
     final url = Uri.parse('$_baseUrl/create-basic-info');
     var request = http.MultipartRequest('POST', url);
 
+    // 1. Fix headers - Remove Content-Type as it's automatically set for MultipartRequest
     request.headers.addAll({
-      'Content-Type': 'multipart/form-data',
       'Authorization': 'Bearer $token',
     });
 
+    // 2. Handle socialLinks properly - Convert to JSON string
+    if (data.containsKey('socialLinks')) {
+      request.fields['socialLinks'] = jsonEncode(data['socialLinks']);
+      data.remove(
+          'socialLinks'); // Remove from original data to avoid double processing
+    }
+
+    // 3. Add other fields
     data.forEach((key, value) {
-      request.fields[key] = value.toString();
+      if (value != null) {
+        request.fields[key] = value.toString();
+      }
     });
 
+    // 4. Handle file upload
     if (imageFile != null) {
       String mimeType =
           lookupMimeType(imageFile.path) ?? 'application/octet-stream';
@@ -514,17 +526,17 @@ class ApiService {
     }
 
     AppLogger.request('POST', url.toString(),
-        headers: request.headers, body: data.toString());
+        headers: request.headers, body: request.fields.toString());
 
     try {
-      var response = await request.send();
-      var responseString = await http.Response.fromStream(response);
+      var streamedResponse = await request.send();
+      var response = await http.Response.fromStream(streamedResponse);
 
       AppLogger.response(
-          'POST', url.toString(), response.statusCode, responseString.body);
+          'POST', url.toString(), response.statusCode, response.body);
 
-      if (response.statusCode != 200) {
-        throw Exception('Failed to post basic info');
+      if (response.statusCode != 200 && response.statusCode != 201) {
+        throw Exception('Failed to post basic info: ${response.body}');
       }
     } catch (e, stackTrace) {
       AppLogger.error('Failed to post basic info', stackTrace: stackTrace);
@@ -1481,13 +1493,14 @@ class ApiService {
     }
   }
 
-  Future<Map<String, dynamic>> verifyPayment(
-      String orderId, String paymentId, String signature) async {
+  Future<Map<String, dynamic>> verifyPayment(String orderId, String paymentId,
+      String signature, String transactionid) async {
     final url = Uri.parse("$_baseUrl/verify-payment");
     final body = jsonEncode({
       'razorpay_order_id': orderId,
       'razorpay_payment_id': paymentId,
       'razorpay_signature': signature,
+      'transactionId': transactionid
     });
     AppLogger.request('POST', url.toString(), body: body, headers: {
       'Authorization': 'Bearer $token',
