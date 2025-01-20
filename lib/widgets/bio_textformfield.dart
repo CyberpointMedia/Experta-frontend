@@ -62,8 +62,15 @@ class _CustomBioTextFormFieldState extends State<CustomBioTextFormField> {
   @override
   void initState() {
     super.initState();
+
     _controller = widget.controller ?? TextEditingController();
+
+     if(_controller.text!=null && !_controller.text.isEmpty){
+        _wordCount = _controller.text.length;
+     }
+
     _controller.addListener(_updateWordCount);
+   // _updateWordCount();
   }
 
   @override
@@ -77,10 +84,7 @@ class _CustomBioTextFormFieldState extends State<CustomBioTextFormField> {
 
   void _updateWordCount() {
     setState(() {
-      _wordCount = _controller.text
-          .split(RegExp(r'\s+'))
-          .where((word) => word.isNotEmpty)
-          .length;
+      _wordCount = _controller.text.length;
     });
   }
 

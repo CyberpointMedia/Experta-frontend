@@ -27,7 +27,6 @@ class _EditAboutPageState extends State<EditAboutPage> {
   void initState() {
     super.initState();
     bioController = TextEditingController(text: widget.bio);
-
     lastchangetext=bioController.text;
   }
 
@@ -76,202 +75,205 @@ class _EditAboutPageState extends State<EditAboutPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+       resizeToAvoidBottomInset : false,
       body: Stack(
         children: [
           _buildBackgroundBlur(),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                _buildAppBar(),
-                Text(
-                  "Edit About",
-                  style: theme.textTheme.bodyLarge!
-                      .copyWith(color: appTheme.black900),
-                ),
-                const SizedBox(height: 10),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.6,
-                  child: SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        TextFormField(
-                          controller: bioController,
-                          maxLength: 500,
-                          maxLines: null,
-                          keyboardType: TextInputType.multiline,
-                          decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.all(16),
-                            border: InputBorder.none,
-                            counterText: "",
-                            hintText: "Edit your bio here",
-                            hintStyle: theme.textTheme.titleMedium?.copyWith(
-                              color: Colors.grey.shade600,
+          IntrinsicHeight(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  _buildAppBar(),
+                  Text(
+                    "Edit About",
+                    style: theme.textTheme.bodyLarge!
+                        .copyWith(color: appTheme.black900),
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.52,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextFormField(
+                            controller: bioController,
+                            maxLength: 500,
+                            maxLines: null,
+                            keyboardType: TextInputType.multiline,
+                            decoration: InputDecoration(
+                              contentPadding: const EdgeInsets.all(16),
+                              border: InputBorder.none,
+                              counterText: "",
+                              hintText: "Edit your bio here",
+                              hintStyle: theme.textTheme.titleMedium?.copyWith(
+                                color: Colors.grey.shade600,
+                              ),
                             ),
+                            style: theme.textTheme.titleMedium,
                           ),
-                          style: theme.textTheme.titleMedium,
-                        ),
-                        const SizedBox(height: 20),
-                        if (bioSuggestions.isNotEmpty) ...[
-                          Text(
-                            "Suggestions",
-                            style: theme.textTheme.titleMedium?.copyWith(
-                              fontWeight: FontWeight.w600,
+                          const SizedBox(height: 20),
+                          if (bioSuggestions.isNotEmpty) ...[
+                            Text(
+                              "Suggestions",
+                              style: theme.textTheme.titleMedium?.copyWith(
+                                fontWeight: FontWeight.w600,
+                              ),
                             ),
-                          ),
-                          const SizedBox(height: 8),
-                          ListView.separated(
-                            shrinkWrap: true,
-                            physics: const NeverScrollableScrollPhysics(),
-                            itemCount: bioSuggestions.length,
-                            separatorBuilder: (context, index) =>
-                                const SizedBox(height: 8),
-                            itemBuilder: (context, index) {
-                              return Container(
-                                padding: const EdgeInsets.all(5),
-                                decoration: AppDecoration.fillOnPrimaryContainer
-                                    .copyWith(
-                                  borderRadius: BorderRadius.circular(10),
-                                  border: Border.all(
-                                    color: selectedSuggestionIndex == index
-                                        ? Theme.of(context).primaryColor
-                                        : Colors.transparent,
-                                    width: 2,
+                            const SizedBox(height: 8),
+                            ListView.separated(
+                              shrinkWrap: true,
+                              physics: const NeverScrollableScrollPhysics(),
+                              itemCount: bioSuggestions.length,
+                              separatorBuilder: (context, index) =>
+                                  const SizedBox(height: 8),
+                              itemBuilder: (context, index) {
+                                return Container(
+                                  padding: const EdgeInsets.all(5),
+                                  decoration: AppDecoration.fillOnPrimaryContainer
+                                      .copyWith(
+                                    borderRadius: BorderRadius.circular(10),
+                                    border: Border.all(
+                                      color: selectedSuggestionIndex == index
+                                          ? Theme.of(context).primaryColor
+                                          : Colors.transparent,
+                                      width: 2,
+                                    ),
                                   ),
-                                ),
-                                child: ListTile(
-                                  title: Text(
-                                    bioSuggestions[index],
-                                    style: theme.textTheme.titleMedium,
+                                  child: ListTile(
+                                    title: Text(
+                                      bioSuggestions[index],
+                                      style: theme.textTheme.titleMedium,
+                                    ),
+                                    onTap: () {
+                                      setState(() {
+                                        bioController.text =
+                                            bioSuggestions[index];
+                                        selectedSuggestionIndex = index;
+                                      });
+                                    },
                                   ),
-                                  onTap: () {
-                                    setState(() {
-                                      bioController.text =
-                                          bioSuggestions[index];
-                                      selectedSuggestionIndex = index;
-                                    });
-                                  },
-                                ),
-                              );
-                            },
-                          ),
+                                );
+                              },
+                            ),
+                          ],
                         ],
-                      ],
+                      ),
                     ),
                   ),
-                ),
-                Divider(color: appTheme.black900),
-                const SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    if (bioSuggestions.isEmpty)
-                      CustomElevatedButton(
-                        height: 36,
-                        width: MediaQuery.of(context).size.width * 0.4,
-                        text: !isLoading ? "Write with AI" : "Suggesting...",
-                        isDisabled: isLoading,
-                        leftIcon: Padding(
-                          padding: const EdgeInsets.only(right: 10),
-                          child: CustomImageView(
-                            imagePath: ImageConstant.ai,
+                  Divider(color: appTheme.black900),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      if (bioSuggestions.isEmpty)
+                        CustomElevatedButton(
+                          height: 36,
+                          width: MediaQuery.of(context).size.width * 0.4,
+                          text: !isLoading ? "Write with AI" : "Suggesting...",
+                          isDisabled: isLoading,
+                          leftIcon: Padding(
+                            padding: const EdgeInsets.only(right: 10),
+                            child: CustomImageView(
+                              imagePath: ImageConstant.ai,
+                            ),
                           ),
-                        ),
-                        buttonStyle: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          foregroundColor: Colors.black,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                            side: BorderSide(color: appTheme.gray300),
+                          buttonStyle: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            foregroundColor: Colors.black,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                              side: BorderSide(color: appTheme.gray300),
+                            ),
                           ),
+                          onPressed: isLoading ? null : getBioSuggestions,
+                        )
+                      else
+                        CustomElevatedButton(
+                          height: 36,
+                          width: MediaQuery.of(context).size.width * 0.3,
+                          text: "Revert",
+                          leftIcon: Padding(
+                            padding: const EdgeInsets.only(right: 10),
+                            child: CustomImageView(
+                              imagePath: ImageConstant.revert,
+                            ),
+                          ),
+                          buttonStyle: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.white,
+                            foregroundColor: Colors.black,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(30),
+                              side: BorderSide(color: appTheme.gray300),
+                            ),
+                          ),
+                          onPressed: resetPage,
                         ),
-                        onPressed: isLoading ? null : getBioSuggestions,
+                      Text(
+                        "${bioController.text.length}/500",
+                        style: theme.textTheme.titleSmall,
                       )
-                    else
-                      CustomElevatedButton(
-                        height: 36,
-                        width: MediaQuery.of(context).size.width * 0.3,
-                        text: "Revert",
-                        leftIcon: Padding(
-                          padding: const EdgeInsets.only(right: 10),
-                          child: CustomImageView(
-                            imagePath: ImageConstant.revert,
-                          ),
-                        ),
-                        buttonStyle: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.white,
-                          foregroundColor: Colors.black,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(30),
-                            side: BorderSide(color: appTheme.gray300),
-                          ),
-                        ),
-                        onPressed: resetPage,
-                      ),
-                    Text(
-                      "${bioController.text.length}/500",
-                      style: theme.textTheme.titleSmall,
-                    )
-                  ],
-                ),
-                const Spacer(),
-                const SizedBox(height: 20),
-                Center(
-                  child: CustomElevatedButton(
-                    text: !loaded ? 'Save' : "Saving...",
-                    isDisabled: loaded,
-                    onPressed: () async {
-                      setState(() {
-                        loaded = true;
-                      });
-                      if (bioController.text.trim().isNotEmpty) {
-                        try {
-                          final success = await _apiService
-                              .updateBio(bioController.text.trim());
-                          if (success) {
-                            setState(() {
-                              loaded = true;
-                            });
-                            Get.back(result: bioController.text.trim());
-                          } else {
+                    ],
+                  ),
+                  const Spacer(),
+                  const SizedBox(height: 20),
+                  Center(
+                    child: CustomElevatedButton(
+                      text: !loaded ? 'Save' : "Saving...",
+                      isDisabled: loaded,
+                      onPressed: () async {
+                        setState(() {
+                          loaded = true;
+                        });
+                        if (bioController.text.trim().isNotEmpty) {
+                          try {
+                            final success = await _apiService
+                                .updateBio(bioController.text.trim());
+                            if (success) {
+                              setState(() {
+                                loaded = true;
+                              });
+                              Get.back(result: bioController.text.trim());
+                            } else {
+                              setState(() {
+                                loaded = true;
+                              });
+                              CustomToast().showToast(
+                                context: context,
+                                message: "Failed to update bio",
+                                isSuccess: false,
+                              );
+                            }
+                          } catch (e) {
                             setState(() {
                               loaded = true;
                             });
                             CustomToast().showToast(
                               context: context,
-                              message: "Failed to update bio",
+                              message: "Error updating bio: $e",
                               isSuccess: false,
                             );
                           }
-                        } catch (e) {
-                          setState(() {
-                            loaded = true;
-                          });
-                          CustomToast().showToast(
-                            context: context,
-                            message: "Error updating bio: $e",
-                            isSuccess: false,
-                          );
+                        }else{
+                             setState(() {
+                                loaded = false;
+                              });
+                             CustomToast().showToast(
+                                context: context,
+                                message: "Please enter bio!",
+                                isSuccess: false,
+                              );
                         }
-                      }else{
-                           setState(() {
-                              loaded = false;
-                            });
-                           CustomToast().showToast(
-                              context: context,
-                              message: "Please enter bio!",
-                              isSuccess: false,
-                            );
-                      }
-
-                    },
+            
+                      },
+                    ),
                   ),
-                ),
-                const SizedBox(height: 20),
-              ],
+                  const SizedBox(height: 20),
+                ],
+              ),
             ),
           )
         ],

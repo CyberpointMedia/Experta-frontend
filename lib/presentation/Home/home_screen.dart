@@ -291,21 +291,25 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Complete your Profile",
-                        style: theme.textTheme.titleMedium!
-                            .copyWith(fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 2.v),
-                      Text("Fill in all required fields",
-                          style: theme.textTheme.titleSmall),
-                    ],
+                  Container(
+                      width: MediaQuery.of(Get.context!).size.width * 0.5,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Complete your Profile",
+                          style: theme.textTheme.titleMedium!
+                              .copyWith(fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 1.v),
+                        Text("Please provide the required information to finish your profile.",
+                        maxLines: 2,
+                            style: theme.textTheme.titleSmall,),
+                      ],
+                    ),
                   ),
                   Container(
-                    width: MediaQuery.of(Get.context!).size.width * 0.32,
+                    width: MediaQuery.of(Get.context!).size.width * 0.3,
                     height: 40.v,
                     margin: EdgeInsets.only(bottom: 2.adaptSize),
                     child: ElevatedButton(
@@ -330,7 +334,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           child: Text(
                             "Edit Profile",
                             style: theme.textTheme.displaySmall
-                                ?.copyWith(fontSize: 14.fSize),
+                                ?.copyWith(fontSize: 13.fSize),
                           ),
                         ),
                       ),
@@ -339,9 +343,9 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            SizedBox(height: 12.v),
+            SizedBox(height: 3.v),
             Padding(
-              padding: const EdgeInsets.only(left: 1),
+              padding: const EdgeInsets.only(left: 0),
               child: Container(
                 height: 8.v,
                 width: 313.adaptSize,

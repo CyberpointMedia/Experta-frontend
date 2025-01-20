@@ -234,9 +234,9 @@ class EditProfessionalInfoController extends GetxController {
         "achievements": achievements,
         "expertise": expertiseList.map((e) => e.id).toList(),
       };
-
       await apiService.createIndustryInfo(data);
-      Get.snackbar('Success', 'Professional info saved successfully');
+      Get.back();
+      Get.snackbar('Success', 'Professional info saved successfully');  
     } catch (e) {
       log("Error saving professional info: $e");
       Get.snackbar('Error', 'Failed to save professional info');

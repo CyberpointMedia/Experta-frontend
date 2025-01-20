@@ -93,7 +93,7 @@ class CustomRadioButton extends StatelessWidget {
   Widget get textWidget => Text(
         text ?? "",
         textAlign: textAlignment ?? TextAlign.center,
-        style: textStyle ?? theme.textTheme.titleMedium,
+        style: textStyle ?? theme.textTheme.titleSmall,
       );
   Widget get radioButtonWidget => SizedBox(
         height: iconSize ?? 24.h,

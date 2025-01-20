@@ -125,7 +125,7 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             _buildDropdownField(
-              "Choose Industry *",
+              "Choose Industry ",
               controller.industryDropdownItems,
               controller.selectedIndustry,
               (String industryId) {
@@ -133,7 +133,7 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
               },
             ),
             _buildDropdownField(
-              "Choose Occupation *",
+              "Choose Occupation ",
               controller.occupationDropdownItems,
               controller.selectedOccupation,
               null,
@@ -152,11 +152,17 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
         children: [
           Padding(
             padding: const EdgeInsets.only(top: 10),
-            child: Text(
-              label,
-              style: theme.textTheme.titleSmall!
-                  .copyWith(color: appTheme.black900),
-            ),
+            child:
+             Row(
+               children: [
+                 Text(
+                  label,
+                  style: theme.textTheme.titleSmall!
+                      .copyWith(color: appTheme.black900),
+                             ),
+                               Text("*", style: const TextStyle(color: Colors.red)),
+               ],
+             ),
           ),
           Padding(
             padding: EdgeInsets.only(top: 6.v, bottom: 12.v),
@@ -655,4 +661,6 @@ class _EditProfessionalInfoState extends State<EditProfessionalInfo> {
   void onTapArrowLeft() {
     Get.back();
   }
+
+  
 }

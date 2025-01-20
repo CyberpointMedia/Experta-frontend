@@ -91,8 +91,9 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
                   ? FileImage(controller.imageFile.value!)
                   : (controller.profileImageUrl.value.isNotEmpty
                           ? NetworkImage(controller.profileImageUrl.value)
-                          : const AssetImage(
-                              "assets/images/settings/profile.jpeg"))
+                          : CustomImageView(
+                            imagePath: ImageConstant.imageNotFound,
+                          ))
                       as ImageProvider,
               minScale: PhotoViewComputedScale.contained,
               maxScale: PhotoViewComputedScale.covered * 2,
@@ -192,10 +193,9 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
                   backgroundImage: controller.imageFile.value != null
                       ? FileImage(controller.imageFile.value!)
                       : (controller.profileImageUrl.value.isNotEmpty
-                          ? NetworkImage(controller.profileImageUrl.value)
-                          : CustomImageView(
-                              imagePath: ImageConstant.imageNotFound,
-                            )) as ImageProvider,
+                          ? NetworkImage(controller.profileImageUrl.value) as ImageProvider
+                          :  AssetImage(ImageConstant.imageNotFound)
+                          ) ,
                 ),
               );
             }),
