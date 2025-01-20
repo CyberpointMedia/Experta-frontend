@@ -7,7 +7,7 @@ class CustomToast {
 
   CustomToast._internal();
 
-  OverlayEntry? _overlayEntry;
+  OverlayEntry? _overlayEntry; 
 
   void showToast({
     required BuildContext context,

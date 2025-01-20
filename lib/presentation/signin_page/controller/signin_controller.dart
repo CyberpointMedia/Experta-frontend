@@ -103,7 +103,7 @@ class SigninController extends GetxController {
       } else {
         CustomToast().showToast(
           context: context,
-          message: "Please check the country code and phone number",
+          message: "Invalid phone number format",
           isSuccess: false,
         );
         print("Login failed");
@@ -184,4 +184,4 @@ class SigninController extends GetxController {
     passwordFocusNode.dispose();
     super.onClose();
   }
-}
+} 
