@@ -311,66 +311,39 @@ class ApiService {
     }
   }
 
-  Future<List<dynamic>> fetchServices(int level, {String? parentId}) async {
+  Future<List<dynamic>> fetchIndustries() async {
+    final url = '$_baseUrl/industry';
+    AppLogger.request('GET', url);
+
     try {
-      final url = parentId != null
-          ? '$_baseUrl/services/level/$level?parentId=$parentId'
-          : '$_baseUrl/services/level/$level';
+      final response = await _dio.get(url);
 
-      AppLogger.info('Fetching services from URL: $url');
+      AppLogger.response(
+          'GET', url, response.statusCode!.toInt(), response.data.toString());
 
-      final response = await http.get(Uri.parse(url));
-
-      if (response.statusCode == 200) {
-        AppLogger.debug('Services fetched successfully');
-        final data = jsonDecode(response.body)['data'];
-        return data;
-      } else {
-        AppLogger.error(
-            'Failed to load services - status code: ${response.statusCode} - ${response.body}');
-        throw Exception(
-            'Failed to load services - status code: ${response.statusCode}');
-      }
+      return response.data['data'];
     } catch (e, stackTrace) {
-      AppLogger.error('Error fetching services',
-          stackTrace: stackTrace); // Log exception
-      rethrow;
+      AppLogger.error('Failed to fetch industries', stackTrace: stackTrace);
+      throw Exception('Failed to fetch industries: $e');
     }
   }
 
-  // Future<List<dynamic>> fetchIndustries() async {
-  //   final url = '$_baseUrl/industry';
-  //   AppLogger.request('GET', url);
+  Future<List<dynamic>> fetchOccupations(String industryId) async {
+    final url = '$_baseUrl/occupation/$industryId';
+    AppLogger.request('GET', url);
 
-  //   try {
-  //     final response = await _dio.get(url);
+    try {
+      final response = await _dio.get(url);
 
-  //     AppLogger.response(
-  //         'GET', url, response.statusCode!.toInt(), response.data.toString());
+      AppLogger.response(
+          'GET', url, response.statusCode!.toInt(), response.data.toString());
 
-  //     return response.data['data'];
-  //   } catch (e, stackTrace) {
-  //     AppLogger.error('Failed to fetch industries', stackTrace: stackTrace);
-  //     throw Exception('Failed to fetch industries: $e');
-  //   }
-  // }
-
-  // Future<List<dynamic>> fetchOccupations(String industryId) async {
-  //   final url = '$_baseUrl/occupation/$industryId';
-  //   AppLogger.request('GET', url);
-
-  //   try {
-  //     final response = await _dio.get(url);
-
-  //     AppLogger.response(
-  //         'GET', url, response.statusCode!.toInt(), response.data.toString());
-
-  //     return response.data['data'];
-  //   } catch (e, stackTrace) {
-  //     AppLogger.error('Failed to fetch occupations', stackTrace: stackTrace);
-  //     throw Exception('Failed to fetch occupations: $e');
-  //   }
-  // }
+      return response.data['data'];
+    } catch (e, stackTrace) {
+      AppLogger.error('Failed to fetch occupations', stackTrace: stackTrace);
+      throw Exception('Failed to fetch occupations: $e');
+    }
+  }
 
   Future<Map<String, dynamic>> createOrUpdateWorkExperience(
       Map<String, dynamic> data) async {
@@ -2381,12 +2354,13 @@ class ApiService {
 
   Future<UserAccountResponse> fetchUserAccountData() async {
     final response = await http.get(
-      Uri.parse('$_baseUrl/check-useraccount-availability'),
+      Uri.parse('http://3.110.252.174:8080/api/check-useraccount-availability'),
       headers: {
         'Content-Type': 'application/json',
         'Authorization': 'Bearer $token',
       },
     );
+
     if (response.statusCode == 200) {
       return UserAccountResponse.fromJson(json.decode(response.body));
     } else {
@@ -2396,6 +2370,7 @@ class ApiService {
 
   Future<List<String>> getBioSuggestions(String userInput) async {
     final url = Uri.parse('$_baseUrl/bio-suggestions');
+
     AppLogger.request(
       'POST',
       url.toString(),
@@ -2405,6 +2380,7 @@ class ApiService {
       },
       body: jsonEncode({'userInput': userInput}),
     );
+
     try {
       final response = await http.post(
         url,
@@ -2414,12 +2390,14 @@ class ApiService {
         },
         body: jsonEncode({'userInput': userInput}),
       );
+
       AppLogger.response(
         'POST',
         url.toString(),
         response.statusCode,
         response.body,
       );
+
       if (response.statusCode == 200) {
         final Map<String, dynamic> data = jsonDecode(response.body);
         if (data['status'] == 'success') {
@@ -2445,6 +2423,7 @@ class ApiService {
           'bio': bio,
         }),
       );
+
       final data = jsonDecode(response.body);
       return data['status'] == 'success';
     } catch (e) {

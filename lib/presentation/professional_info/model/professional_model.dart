@@ -189,37 +189,32 @@ class ExpertiseItem {
 
 // Dropdowns
 
-class IndustryModel {
-  String id;
-  String name;
-  String? icon;
+class Industry {
+  final String id;
+  final String name;
 
-  IndustryModel({required this.id, required this.name, this.icon});
+  Industry({required this.id, required this.name});
 
-  factory IndustryModel.fromJson(Map<String, dynamic> json) {
-    return IndustryModel(
-      id: json['_id'] ?? '',
-      name: json['name'] ?? '',
-      icon: json['icon'],
+  factory Industry.fromJson(Map<String, dynamic> json) {
+    return Industry(
+      id: json['_id'],
+      name: json['name'],
     );
   }
 }
 
-class OccupationModel {
-  String id;
-  String name;
-  String? parent;
-  String? icon;
+class Occupation {
+  final String id;
+  final String name;
+  final String industryId;
 
-  OccupationModel(
-      {required this.id, required this.name, this.parent, this.icon});
+  Occupation({required this.id, required this.name, required this.industryId});
 
-  factory OccupationModel.fromJson(Map<String, dynamic> json) {
-    return OccupationModel(
-      id: json['_id'] ?? '',
-      name: json['name'] ?? '',
-      parent: json['parent'],
-      icon: json['icon'],
+  factory Occupation.fromJson(Map<String, dynamic> json) {
+    return Occupation(
+      id: json['_id'],
+      name: json['name'],
+      industryId: json['industry'],
     );
   }
 }

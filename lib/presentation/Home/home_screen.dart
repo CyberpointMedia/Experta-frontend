@@ -13,7 +13,6 @@ import 'package:experta/widgets/animated_hint_searchview.dart';
 import 'package:experta/widgets/dashed_border.dart';
 import 'package:experta/presentation/Home/controller/home_controller.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -26,22 +25,12 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   late HomeController controller;
   late DashboardController dashboardController;
-  List<Industry> displayedIndustries = [];
 
   @override
   void initState() {
     super.initState();
-
     controller = Get.put(HomeController());
     dashboardController = Get.find<DashboardController>();
-    _loadLevel1Industries();
-  }
-
-  Future<void> _loadLevel1Industries() async {
-    await controller.fetchIndustriesByLevel(1);
-    setState(() {
-      displayedIndustries = controller.industries;
-    });
   }
 
   @override
@@ -302,22 +291,26 @@ class _HomeScreenState extends State<HomeScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        "Complete your Profile",
-                        style: theme.textTheme.titleMedium!
-                            .copyWith(fontWeight: FontWeight.bold),
-                      ),
-                      SizedBox(height: 2.v),
-                      Text("Fill in all required fields",
-                          style: theme.textTheme.titleSmall),
-                    ],
+                  Container(
+                      width: MediaQuery.of(Get.context!).size.width * 0.5,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Complete your Profile",
+                          style: theme.textTheme.titleMedium!
+                              .copyWith(fontWeight: FontWeight.bold),
+                        ),
+                        SizedBox(height: 1.v),
+                        Text("Please provide the required information to finish your profile.",
+                        maxLines: 2,
+                            style: theme.textTheme.titleSmall,),
+                      ],
+                    ),
                   ),
                   Container(
                     width: MediaQuery.of(Get.context!).size.width * 0.3,
-                    height: 36.v,
+                    height: 40.v,
                     margin: EdgeInsets.only(bottom: 2.adaptSize),
                     child: ElevatedButton(
                       style: ElevatedButton.styleFrom(
@@ -335,19 +328,24 @@ class _HomeScreenState extends State<HomeScreen> {
                         Get.toNamed(AppRoutes.editProfileSetting,
                             arguments: controller.profileCompletion.value);
                       },
-                      child: Text(
-                        "Edit Profile",
-                        style: theme.textTheme.displaySmall
-                            ?.copyWith(fontSize: 14.fSize),
+                      child: Flexible(
+                        child: Padding(
+                          padding: const EdgeInsets.all(1.0),
+                          child: Text(
+                            "Edit Profile",
+                            style: theme.textTheme.displaySmall
+                                ?.copyWith(fontSize: 13.fSize),
+                          ),
+                        ),
                       ),
                     ),
                   ),
                 ],
               ),
             ),
-            SizedBox(height: 12.v),
+            SizedBox(height: 3.v),
             Padding(
-              padding: const EdgeInsets.only(left: 1),
+              padding: const EdgeInsets.only(left: 0),
               child: Container(
                 height: 8.v,
                 width: 313.adaptSize,
@@ -405,15 +403,15 @@ class _HomeScreenState extends State<HomeScreen> {
                   scrollDirection: Axis.horizontal,
                   separatorBuilder: (context, index) =>
                       SizedBox(width: 15.adaptSize),
-                  itemCount: displayedIndustries.length,
+                  itemCount: controller.industries.length,
                   itemBuilder: (context, index) {
-                    Industry industry = displayedIndustries[index];
+                    Industry industry = controller.industries[index];
 
                     return GestureDetector(
                       onTap: () {
                         Get.to(
                           () => CategoryDetailScreen(
-                            categoryName: industry.name!,
+                            categoryName: industry.name,
                           ),
                           arguments: {'industry': industry},
                         );
@@ -433,21 +431,18 @@ class _HomeScreenState extends State<HomeScreen> {
                             SizedBox(
                               height: 30.adaptSize,
                               width: 30.adaptSize,
-                              child: SvgPicture.network(
-                                industry.icon!,
-                                placeholderBuilder: (BuildContext context) =>
-                                    CircularProgressIndicator(),
+                              child: CustomImageView(
+                                imagePath: industry.icon,
+                                placeHolder: ImageConstant.imageNotFound,
                               ),
                             ),
                             SizedBox(height: 5.v),
                             Text(
-                              industry.name!.capitalizeFirst!,
-                              maxLines: 2,
+                              industry.name,
                               textAlign: TextAlign.center,
-                              style: theme.textTheme.titleSmall!.copyWith(
-                                color: Colors.black,
-                                fontSize: 10,
-                              ),
+                              maxLines: 2,
+                              style: theme.textTheme.labelMedium!
+                                  .copyWith(color: Colors.black),
                             ),
                           ],
                         ),
@@ -482,7 +477,7 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
         const SizedBox(height: 10),
         SizedBox(
-          height: 5 * MediaQuery.of(context).size.height * 0.35,
+          height: 5 * MediaQuery.of(context).size.height * 0.35+60,
           child: FutureBuilder<List<User>>(
             future: controller.fetchTrendingPeople(),
             builder: (context, snapshot) {
@@ -493,9 +488,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   child: Text('Error: ${snapshot.error}'),
                 );
               }
-
               final users = snapshot.data ?? [];
-
               return Padding(
                 padding: const EdgeInsets.only(left: 16),
                 child: ListView.separated(
@@ -653,16 +646,14 @@ class _UserProfileItemWidgetState extends State<UserProfileItemWidget> {
                             children: [
                               Row(
                                 children: [
-                                  SizedBox(
-                                    width:
-                                        MediaQuery.of(context).size.width * 0.3,
+                                  Flexible(
+                                    flex: 2,
                                     child: Text(
                                       widget.user.displayName.isNotEmpty
                                           ? widget.user.displayName
                                           : "anonymous",
-                                      overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
-                                        fontSize: 16.fSize,
+                                        fontSize: 15.fSize,
                                         fontWeight: FontWeight.w600,
                                         color: Colors.black,
                                       ),
@@ -835,7 +826,7 @@ class _UserProfileItemWidgetState extends State<UserProfileItemWidget> {
                             AppRoutes.chattingScreen,
                             arguments: {'chat': chatData},
                           );
-                        }),
+                                                }),
                       ],
                     ),
                   ),
@@ -868,12 +859,17 @@ class _UserProfileItemWidgetState extends State<UserProfileItemWidget> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      CustomImageView(imagePath: "assets/images/verify.svg"),
+                      Padding(
+                        padding: const EdgeInsets.only(top:2),
+                        child: CustomImageView(imagePath: "assets/images/verify.svg"),
+                      ),
+
+
                       SizedBox(width: 2.adaptSize),
                       Text(
                         "Top Rated",
                         style: theme.textTheme.titleSmall!
-                            .copyWith(color: appTheme.whiteA700),
+                            .copyWith(color: appTheme.whiteA700,fontSize: 11.fSize),
                       ),
                     ],
                   ),
@@ -1009,7 +1005,7 @@ class _UserProfileItemWidgetState extends State<UserProfileItemWidget> {
                       AppRoutes.chattingScreen,
                       arguments: {'chat': chatData},
                     );
-                  },
+                                    },
                 ),
               ],
             ),

@@ -279,6 +279,7 @@ class PrimaryColors {
   Color get red500 => const Color(0XFFEB4335);
   Color get readmore => const Color(0XFFD45102);
 
+  // Color get readmore => const Color(0XFFD45102);
 
   // White
   Color get whiteA700 => const Color(0XFFFCFCFE);

@@ -1,9 +1,8 @@
-import 'package:flutter/material.dart';
 import '../core/app_export.dart';
 
 class CustomDropDown extends StatelessWidget {
-  CustomDropDown({
-    Key? key,
+  const CustomDropDown({
+    super.key,
     this.alignment,
     this.width,
     this.focusNode,
@@ -24,9 +23,7 @@ class CustomDropDown extends StatelessWidget {
     this.validator,
     this.onChanged,
     this.value,
-  }) : super(
-          key: key,
-        );
+  });
 
   final Alignment? alignment;
 
@@ -83,8 +80,7 @@ class CustomDropDown extends StatelessWidget {
         child: DropdownButtonFormField<SelectionPopupModel>(
           hint: Text(
             "Select",
-            style:
-                theme.textTheme.titleSmall!.copyWith(color: appTheme.black900),
+            style:theme.textTheme.titleSmall!.copyWith(color: appTheme.black900),
           ),
           focusNode: focusNode ?? FocusNode(),
           icon: icon,
@@ -94,7 +90,7 @@ class CustomDropDown extends StatelessWidget {
             return DropdownMenuItem<SelectionPopupModel>(
               value: item,
               child: Text(
-                item.title.capitalizeFirst!.trim(),
+                item.title,
                 overflow: TextOverflow.ellipsis,
                 style: hintStyle ?? CustomTextStyles.titleMediumSemiBold_1,
               ),

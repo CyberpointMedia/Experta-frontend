@@ -36,63 +36,79 @@ import androidx.loader.content.CursorLoader;
 import com.example.expert.PrefUtils; 
 
 public class ScreenRecordingService extends Service {
-    private MediaProjection mediaProjection;
-    private MediaRecorder mediaRecorder;
-    private VirtualDisplay virtualDisplay;
+
+    public static MediaProjection mediaProjection;
+    public static MediaRecorder mediaRecorder;
+    public static VirtualDisplay virtualDisplay;
     private MediaProjectionManager mediaProjectionManager;
     private Uri mediaStoreOutput;
     private MethodChannel.Result pendingResult;
-    private String filePath;
+
+    public static String filePath; // Store the file path
+
     private static final String CHANNEL = "com.example.expert/screen_recording";
     private FlutterEngine flutterEngine;
+
     @Override
     public void onCreate() {
         super.onCreate();
         mediaProjectionManager = (MediaProjectionManager) getSystemService(Context.MEDIA_PROJECTION_SERVICE);
+
+        // Initialize the FlutterEngine
         flutterEngine = new FlutterEngine(this);
         flutterEngine.getDartExecutor().executeDartEntrypoint(
             DartExecutor.DartEntrypoint.createDefault()
         );
     }
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         int resultCode = intent.getIntExtra("resultCode", Activity.RESULT_CANCELED);
         Intent data = intent.getParcelableExtra("data");
+
         if (resultCode == Activity.RESULT_OK && data != null) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
                 startForeground(1, createNotification(), ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PROJECTION);
             } else {
                 startForeground(1, createNotification());
             }
+
             mediaProjection = mediaProjectionManager.getMediaProjection(resultCode, data);
             startRecording();
         } else {
             stopSelf();
         }
+
         return START_NOT_STICKY;
     }
+
     private void startRecording() {
         DisplayMetrics metrics = new DisplayMetrics();
         WindowManager windowManager = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
         windowManager.getDefaultDisplay().getMetrics(metrics);
+
         mediaRecorder = new MediaRecorder();
         mediaRecorder.setAudioSource(MediaRecorder.AudioSource.MIC);
         mediaRecorder.setVideoSource(MediaRecorder.VideoSource.SURFACE);
         mediaRecorder.setOutputFormat(MediaRecorder.OutputFormat.MPEG_4);
+
         String timestamp = new SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(new Date());
         String fileName = "Experta" + timestamp + ".mp4";
+
+        // Set output file to cache directory
         File cacheDir = getCacheDir();
         File outputFile = new File(cacheDir, fileName);
-        filePath = outputFile.getAbsolutePath(); 
+        filePath = outputFile.getAbsolutePath(); // Store the file path
+ 
         try {
             mediaRecorder.setOutputFile(filePath); 
-            mediaRecorder.setVideoSize(1280, 720);
+            mediaRecorder.setVideoSize(720,1280);
             mediaRecorder.setVideoEncoder(MediaRecorder.VideoEncoder.H264);
             mediaRecorder.setAudioEncoder(MediaRecorder.AudioEncoder.AAC);
             mediaRecorder.setVideoEncodingBitRate(5 * 1024 * 1024);
             mediaRecorder.setVideoFrameRate(30);
 
-            Log.d("ScreenRecordingService", "File Path: " + filePath); 
+            Log.d("ScreenRecordingService", "File Path: " + filePath); // Print file path
 
             Log.d("ScreenRecordingService", "Creating VirtualDisplay with size: " + metrics.widthPixels + "x" + metrics.heightPixels);
             
@@ -103,6 +119,7 @@ public class ScreenRecordingService extends Service {
                 stopSelf();
                 return;
             }
+
             virtualDisplay = mediaProjection.createVirtualDisplay(
                 "ScreenRecording",
                 metrics.widthPixels,
@@ -113,18 +130,22 @@ public class ScreenRecordingService extends Service {
                 null,
                 null
             );
+
             try {
                 mediaRecorder.start();
             } catch (IllegalStateException e) {
                 Log.e("ScreenRecordingService", "MediaRecorder failed to start: " + e.getMessage());
                 stopSelf();
             }
+
             startForeground(1, createNotification());
+
         } catch (Exception e) {
             Log.e("ScreenRecordingService", "Failed to set output file", e);
             stopSelf();
         }
     }
+
     private Notification createNotification() {
         String notificationChannelId = "SCREEN_RECORDING_CHANNEL";
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -136,17 +157,19 @@ public class ScreenRecordingService extends Service {
             NotificationManager manager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
             manager.createNotificationChannel(channel);
         }
+
         return new NotificationCompat.Builder(this, notificationChannelId)
                 .setContentTitle("Screen Recording")
                 .setContentText("Recording in progress")
                 .setSmallIcon(R.drawable.ic_notification)
                 .build();
     }
+
     @Override
 public void onDestroy() {
     super.onDestroy();
     stopRecording();
- if (filePath != null) { 
+    if (filePath != null) { 
             new MethodChannel(flutterEngine.getDartExecutor().getBinaryMessenger(), CHANNEL)
                 .invokeMethod("saveRecordingPath", filePath);
             Log.d("ScreenRecordingService", "File path sent to Flutter: " + filePath);
@@ -155,7 +178,8 @@ public void onDestroy() {
         }
     flutterEngine.destroy();
 }
-    private void stopRecording() {
+
+    public static String stopRecording() {
         if (mediaRecorder != null) {
             try {
                 mediaRecorder.stop();
@@ -173,7 +197,18 @@ public void onDestroy() {
         if (mediaProjection != null) {
             mediaProjection.stop();
         }
+
+
+         Log.e("ScreenRecordingService777777", " " + filePath);
+
+         // Broadcast the file path to Flutter
+               
+
+               
+
+       return filePath;
     }
+
     public void clearVideoFileFromCache() {
         if (filePath != null) {
             File videoFile = new File(filePath);
@@ -184,9 +219,10 @@ public void onDestroy() {
                     Log.e("ScreenRecordingService", "Failed to delete video file from cache: " + filePath);
                 }
             }
-            filePath = null;
+            filePath = null; // Reset file path
         }
     }
+
    private String getRealPathFromURI(Uri contentUri) {
     String[] proj = {MediaStore.Images.Media.DATA};
     CursorLoader loader = new CursorLoader(this, contentUri, proj, null, null, null);
@@ -200,6 +236,8 @@ public void onDestroy() {
     }
     return null;
 }
+
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;

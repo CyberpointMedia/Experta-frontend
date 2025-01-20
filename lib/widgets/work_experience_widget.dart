@@ -1,6 +1,5 @@
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/professional_info/model/professional_model.dart';
-import 'package:flutter/material.dart';
 
 class WorkExperienceWidget extends StatelessWidget {
   final WorkExperience workExperience;

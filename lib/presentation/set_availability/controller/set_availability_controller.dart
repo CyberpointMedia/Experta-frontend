@@ -1,8 +1,6 @@
 // set_availability_controller.dart
 import 'package:experta/core/app_export.dart';
-import 'package:experta/data/apiClient/api_service.dart';
 import 'package:experta/presentation/set_availability/model/set_availability_model.dart';
-import 'package:get/get.dart';
 
 class SetAvailabilityController extends GetxController {
   var isLoading = true.obs;

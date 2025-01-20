@@ -1,7 +1,5 @@
 import 'package:experta/core/app_export.dart';
-import 'package:experta/data/apiClient/api_service.dart';
 import 'package:experta/presentation/set_availability/model/set_availability_model.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class EditSetAvailableController extends GetxController {

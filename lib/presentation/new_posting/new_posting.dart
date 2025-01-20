@@ -299,6 +299,7 @@ class _PostingPageState extends State<PostingPage> {
       caption: caption,
       location: location,
       basicInfoId: basicInfoId,
+      // ignore: use_build_context_synchronously
       context: context,
     );
   }

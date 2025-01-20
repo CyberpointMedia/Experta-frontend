@@ -14,7 +14,7 @@ public class ScreenCaptureService extends Service {
 
     @Nullable
     @Override
-    public IBinder onBind(Intent intent) {
+    public IBinder onBind(Intent intent) { 
         return null;
     }
 

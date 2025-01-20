@@ -40,7 +40,7 @@ class MessageBubble extends StatelessWidget {
                         children: [
                           SizedBox(height: 2.v),
                           Text(content,
-                              style: CustomTextStyles.bodyMediumLight),
+                              style: CustomTextStyles.bodyLargeGray900),
                         ],
                       ),
                     ),
@@ -75,7 +75,7 @@ class MessageBubble extends StatelessWidget {
                         children: [
                           SizedBox(height: 2.v),
                           Text(content,
-                              style: CustomTextStyles.bodyMediumLight),
+                              style: CustomTextStyles.bodyLargeGray900),
                         ],
                       ),
                     ),

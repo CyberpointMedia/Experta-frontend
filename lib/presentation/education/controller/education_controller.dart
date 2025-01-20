@@ -1,7 +1,5 @@
 import 'package:experta/core/app_export.dart';
-import 'package:experta/data/apiClient/api_service.dart';
 import 'package:experta/presentation/professional_info/model/professional_model.dart';
-import 'package:get/get.dart';
 
 class EducationController extends GetxController {
   var educationList = <Education>[].obs;

@@ -163,7 +163,7 @@ class RecordedSessionTile extends StatelessWidget {
                       style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         fontSize: 16.0,
-                        color: Colors.black,
+                        color: Colors.black, // Set the color to black
                       ),
                     ),
                   ),
@@ -232,32 +232,35 @@ class RecordedSessionTile extends StatelessWidget {
 class VideoPlayerScreen extends StatefulWidget {
   final String videoPath;
 
-  const VideoPlayerScreen({super.key, required this.videoPath});
+  const VideoPlayerScreen({Key? key, required this.videoPath})
+      : super(key: key);
 
   @override
-  State<VideoPlayerScreen> createState() => _VideoPlayerScreenState();
+  _VideoPlayerScreenState createState() => _VideoPlayerScreenState();
 }
 
 class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
   late VideoPlayerController _controller;
-  bool _isFullScreen = false; 
+  bool _isFullScreen = false; // Track full-screen state
 
   @override
   void initState() {
     super.initState();
     _controller = VideoPlayerController.file(File(widget.videoPath))
       ..initialize().then((_) {
-        setState(() {}); 
-        _enterFullScreen(); 
+        setState(() {}); // Update the state once initialization is complete
+        _enterFullScreen(); // Enter full-screen when the video is ready
       });
   }
 
   @override
   void dispose() {
-    _exitFullScreen(); 
+    _exitFullScreen(); // Exit full-screen on dispose
     _controller.dispose();
     super.dispose();
   }
+
+  // Function to enter full-screen mode
   void _enterFullScreen() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
     SystemChrome.setPreferredOrientations([
@@ -269,6 +272,8 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
       });
     });
   }
+
+  // Function to exit full-screen mode
   void _exitFullScreen() {
     SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
     SystemChrome.setPreferredOrientations([
@@ -285,6 +290,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
     return Scaffold(
       body: GestureDetector(
         onTap: () {
+          // Toggle full-screen mode on tap
           _isFullScreen ? _exitFullScreen() : _enterFullScreen();
         },
         child: Center(

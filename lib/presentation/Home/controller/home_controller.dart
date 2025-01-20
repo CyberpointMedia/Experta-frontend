@@ -30,12 +30,13 @@ class HomeController extends GetxController {
     } catch (e) {
       // Error handling
       debugPrint('Error refreshing data: $e');
-
+      
       CustomToast().showToast(
         context: context,
         message: 'Failed to refresh data. Please try again.',
         isSuccess: false,
       );
+      
     } finally {
       isLoading.value = false;
     }
@@ -53,30 +54,10 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
-    fetchIndustriesByLevel(1);
-    // fetchIndustries();
+    fetchIndustries();
     searchController.addListener(_onSearchChanged);
     fetchProfileCompletion(address.toString());
     fetch();
-  }
-
-  /// Fetches industries from the API based on the given level.
-  Future<void> fetchIndustriesByLevel(int level) async {
-    final url =
-        Uri.parse('http://3.110.252.174:8080/api/services/level/$level');
-    final response = await http.get(url);
-
-    if (response.statusCode == 200) {
-      AppLogger.response(
-          'GET', url.toString(), response.statusCode, response.body);
-      final jsonData = json.decode(response.body);
-
-      industries.value = (jsonData['data'] as List)
-          .map((industry) => Industry.fromJson(industry))
-          .toList();
-    } else {
-      throw Exception('Failed to load industries');
-    }
   }
 
   void _onSearchChanged() {
@@ -106,28 +87,28 @@ class HomeController extends GetxController {
     }
   }
 
-  // void fetchIndustries() async {
-  //   isLoading.value = true;
-  //   try {
-  //     final response =
-  //         await http.get(Uri.parse('http://3.110.252.174:8080/api/industry'));
-  //     if (response.statusCode == 200) {
-  //       var data = json.decode(response.body)['data'] as List;
-  //       industries.value = data.map((json) => Industry.fromJson(json)).toList();
-  //       fetchUsersForIndustries();
-  //     } else {
-  //       print('Failed to load industries: ${response.statusCode}');
-  //     }
-  //   } catch (e) {
-  //     print('Error: $e');
-  //   } finally {
-  //     isLoading.value = false;
-  //   }
-  // }
+  void fetchIndustries() async {
+    isLoading.value = true;
+    try {
+      final response =
+          await http.get(Uri.parse('http://3.110.252.174:8080/api/industry'));
+      if (response.statusCode == 200) {
+        var data = json.decode(response.body)['data'] as List;
+        industries.value = data.map((json) => Industry.fromJson(json)).toList();
+        fetchUsersForIndustries();
+      } else {
+        print('Failed to load industries: ${response.statusCode}');
+      }
+    } catch (e) {
+      print('Error: $e');
+    } finally {
+      isLoading.value = false;
+    }
+  }
 
   void fetchUsersForIndustries() {
     for (var industry in industries) {
-      fetchUsersByIndustry(industry.id!);
+      fetchUsersByIndustry(industry.id);
     }
   }
 

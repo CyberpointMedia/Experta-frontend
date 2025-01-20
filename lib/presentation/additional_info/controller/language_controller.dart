@@ -1,7 +1,5 @@
 import 'package:experta/core/app_export.dart';
-import 'package:experta/data/apiClient/api_service.dart';
 import 'package:experta/presentation/additional_info/model/interest_model.dart';
-import 'package:flutter/material.dart';
 
 class LanguageController extends GetxController {
   var languages = <Language>[].obs;

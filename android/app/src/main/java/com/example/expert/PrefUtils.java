@@ -4,7 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 
 public class PrefUtils {
-    private static final String PREFS_NAME = "FlutterSharedPreferences";
+    private static final String PREFS_NAME = "FlutterSharedPreferences"; 
     private static final String KEY_TOKEN = "flutter.token";
 
     public static String getToken(Context context) {

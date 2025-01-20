@@ -164,7 +164,7 @@ class _ProfileBlockPageState extends State<ProfileBlockPage> {
                         return Center(
                             child: Text(
                           'No users found.',
-                          style: theme.textTheme.titleMedium,
+                          style: theme.textTheme.titleMedium!.copyWith(color: appTheme.blueGray300),
                         ));
                       }
 

@@ -1,5 +1,3 @@
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:experta/core/app_export.dart';
 
 class CustomBottomBar extends StatelessWidget {

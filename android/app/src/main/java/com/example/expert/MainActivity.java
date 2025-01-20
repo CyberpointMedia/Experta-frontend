@@ -72,7 +72,11 @@ public class MainActivity extends FlutterActivity {
                         startScreenCapture(result);
                         break;
                     case "stopScreenCapture":
-                        stopScreenCapture(result);
+                      //  stopScreenCapture(result); 
+                        String filepath= ScreenRecordingService.stopRecording();
+                         Log.d("ScreenRecordingService55",""+filepath);
+                        result.success(filepath);
+                        Log.d("ScreenRecordingService88",""+filepath);
                         break;
                     case "saveRecordingPath":
                         String filePath = call.argument("filePath");
@@ -85,18 +89,18 @@ public class MainActivity extends FlutterActivity {
             });
     }
 
+    
+
   private void setupBroadcastReceiver() {
      if (recordingReceiver == null) {
          recordingReceiver = new BroadcastReceiver() {
              @Override
              public void onReceive(Context context, Intent intent) {
-                 String path = intent.getStringExtra("recording_path");
-                 Log.i(TAG, "Received broadcast with path: " + path);
-                 if (path != null) {
-                     new MethodChannel(getFlutterEngine().getDartExecutor().getBinaryMessenger(), 
-                         CHANNEL)
-                         .invokeMethod("saveRecordingPath", path);
-                     Log.i(TAG, "Invoked saveRecordingPath method with path: " + path);
+                 String path = intent.getStringExtra("filePath");
+
+               
+                if (path != null) {
+                      Log.d("filepath",""+path);
                  } else {
                      Log.e(TAG, "Received null path in broadcast");
                  }
@@ -361,6 +365,7 @@ public class MainActivity extends FlutterActivity {
 
     @Override
     protected void onDestroy() {
+        Log.d("onDestroy","Ondestroy");
         if (recordingReceiver != null) {
             unregisterReceiver(recordingReceiver);
         }

@@ -9,6 +9,7 @@ class AdditionalInfoPage extends StatefulWidget {
 
   @override
   State<AdditionalInfoPage> createState() => _AdditionalInfoPageState();
+  
 }
 
 class _AdditionalInfoPageState extends State<AdditionalInfoPage> {

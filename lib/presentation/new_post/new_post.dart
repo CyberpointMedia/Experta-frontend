@@ -5,7 +5,6 @@ import 'dart:typed_data';
 import 'dart:io';
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:experta/core/app_export.dart';
-import 'package:experta/presentation/dashboard/dashboard.dart';
 import 'package:experta/presentation/new_posting/new_posting.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
 import 'package:image_editor_plus/image_editor_plus.dart';
@@ -178,7 +177,7 @@ class _NewPostPageState extends State<NewPostPage> {
           if (snapshot.connectionState == ConnectionState.done &&
               snapshot.data != null) {
             return _selectedFile!.type == AssetType.video
-                ? Container(
+                ? SizedBox(
                     width: MediaQuery.of(context).size.width * 0.5,
                     child: _buildVideoPlayer(_selectedFile!))
                 : _buildImage(_selectedFile!, snapshot.data!);
