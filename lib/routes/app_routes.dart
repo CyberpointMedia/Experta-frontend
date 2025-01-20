@@ -662,13 +662,13 @@ class AppRoutes {
         bindings: [
           BookingConfirmationPageBindings(),
         ]),
-    GetPage(
-        name: genderchange,
-        page: () => const ChangeGender(),
-        customTransition: CustomPageTransition(),
-        bindings: [
-          ChangeGenderBinding(),
-        ]),
+    // GetPage(
+    //     name: genderchange,
+    //     page: () => const ChangeGender(),
+    //     customTransition: CustomPageTransition(),
+    //     bindings: [
+    //       ChangeGenderBinding(),
+    //     ]),
     GetPage(
         name: topup,
         page: () => const TopUpPage(),
