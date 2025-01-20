@@ -1,7 +1,11 @@
 import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
+import 'package:experta/widgets/app_bar/appbar_leading_image.dart';
+import 'package:experta/widgets/app_bar/appbar_subtitle_six.dart';
+import 'package:experta/widgets/app_bar/custom_app_bar.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
+import 'package:flutter/material.dart';
 
 class CallSettings extends StatefulWidget {
   const CallSettings({super.key});
@@ -119,7 +123,7 @@ class _CallSettingsState extends State<CallSettings> {
     return GestureDetector(
       onTap: onTap,
       child: Padding(
-        padding: const EdgeInsets.only(top: 1),
+        padding: const EdgeInsets.only(top: 3),
         child: Container(
           padding: EdgeInsets.symmetric(horizontal: 15.h, vertical: 16.v),
           decoration: decoration,

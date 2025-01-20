@@ -2,7 +2,6 @@ import 'dart:ui';
 import 'package:experta/presentation/edit_about/edit_about.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
 import 'package:experta/widgets/social_platform_input.dart';
-import 'package:intl/intl.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/Basic_Info/controller/basic_info_controller.dart';
@@ -221,79 +220,31 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(bottom: 5,left: 5),
-                    child: Text(
-                      "First Name",
-                      style: theme.textTheme.titleMedium!.copyWith(
-                        color: Colors.black,
-                        fontSize: 14.fSize,
-                        fontWeight: FontWeight.w500,
-                      ),
-                      textAlign: TextAlign.start,
-                    ),
-                  ),
-                   CustomTextFormField(
-                    
-                width: MediaQuery.of(context).size.width/2.45,
-                controller: controller.firstnameController,
-                focusNode: controller.focus1,
-                hintText: "Enter your First name".tr,
-                hintStyle: CustomTextStyles.titleMediumBluegray300,
-                textStyle: theme.textTheme.titleMedium!.copyWith(
-                  color: Colors.black,
-                  fontSize: 16.fSize,
-                  fontWeight: FontWeight.w500,
-                ),
-                textInputType: TextInputType.name,
+          Padding(
+            padding: const EdgeInsets.only(bottom: 5),
+            child: Text(
+              "Your Name",
+              style: theme.textTheme.titleMedium!.copyWith(
+                color: Colors.black,
+                fontSize: 14.fSize,
+                fontWeight: FontWeight.w500,
               ),
-                       
-                ],
-              ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 15),
-                  child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                             children: [
-                               Padding(
-                  padding: const EdgeInsets.only(bottom: 5,left: 5),
-                  child: Text(
-                    "Last Name",
-                    style: theme.textTheme.titleMedium!.copyWith(
-                      color: Colors.black,
-                      fontSize: 14.fSize,
-                      fontWeight: FontWeight.w500,
-                    ),
-                    textAlign: TextAlign.start,
-                  ),
-                                ),
-                   CustomTextFormField(
-                              width: MediaQuery.of(context).size.width/2.45,
-                              controller: controller.lastnameController,
-                              focusNode: controller.lastnamefocus,
-                              hintText: "Enter your Last name".tr,
-                              hintStyle: CustomTextStyles.titleMediumBluegray300,
-                              textStyle: theme.textTheme.titleMedium!.copyWith(
-                                color: Colors.black,
-                                fontSize: 16.fSize,
-                                fontWeight: FontWeight.w500,
-                              ),
-                              textInputType: TextInputType.name,
-                            ),
-                             ],
-                           ),
-                ),
-            ],
+              textAlign: TextAlign.start,
+            ),
           ),
-       
-        
+          CustomTextFormField(
+            width: MediaQuery.of(context).size.width,
+            controller: controller.fullNameController,
+            focusNode: controller.focus1,
+            hintText: "Your Name".tr,
+            hintStyle: CustomTextStyles.titleMediumBluegray300,
+            textStyle: theme.textTheme.titleMedium!.copyWith(
+              color: Colors.black,
+              fontSize: 16.fSize,
+              fontWeight: FontWeight.w500,
+            ),
+            textInputType: TextInputType.name,
+          ),
           Padding(
             padding: const EdgeInsets.only(bottom: 5, top: 10),
             child: Text(
@@ -310,7 +261,7 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
             controller: controller.displayNameController,
             focusNode: controller.focus2,
             width: MediaQuery.of(context).size.width,
-            hintText: "Name to display publicly".tr,
+            hintText: "Display Name".tr,
             hintStyle: CustomTextStyles.titleMediumBluegray300,
             textStyle: theme.textTheme.titleMedium!.copyWith(
               color: Colors.black,
@@ -331,7 +282,7 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
               textAlign: TextAlign.start,
             ),
           ),
-        Padding(
+          Padding(
             padding: const EdgeInsets.only(top: 10),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -346,7 +297,7 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
                   },
                   child: Container(
                     width: MediaQuery.of(context).size.width * 0.43,
-                    height: 149.0,
+                    height: 144.0,
                     padding: const EdgeInsets.symmetric(
                         vertical: 28.0, horizontal: 24.0),
                     decoration: BoxDecoration(
@@ -392,7 +343,7 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
                   },
                   child: Container(
                     width: MediaQuery.of(context).size.width * 0.43,
-                    height: 149.0,
+                    height: 144.0,
                     padding: const EdgeInsets.symmetric(
                         vertical: 28.0, horizontal: 24.0),
                     decoration: BoxDecoration(
@@ -431,7 +382,6 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
               ],
             ),
           ),
-        
           Padding(
             padding: const EdgeInsets.only(bottom: 5, top: 10),
             child: Text(
@@ -579,12 +529,7 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
             height: 20.v,
             width: 20.h,
             imagePath: ImageConstant.cross,
-            onTap:() {
-              setState(() {
-                  print("tab value= $index");
-                  controller.socialLinks.removeAt(index);
-              });
-            },
+            onTap: () => setState(() => controller.socialLinks.removeAt(index)),
           ),
           SizedBox(width: 8.h),
         ],
@@ -612,19 +557,14 @@ class _BasicProfileInfoState extends State<BasicProfileInfo> {
     );
   }
 
-
   void _selectDate(BuildContext context) async {
-    String date = DateFormat("dd/MM/yyyy").format(DateTime.now());
-    final sDateFormate = "DD/MM/yyyy";
-    DateTime selectedDate = DateTime.now();
     DateTime? pickedDate = await showDatePicker(
       context: context,
-      // fieldHintText: sDateFormate,
-       initialDate: selectedDate,
-       firstDate: DateTime(1900),
-       lastDate: DateTime.now(),
-       locale: const Locale('en', 'GB'), // Adjust to your locale
+      initialDate: DateTime.now(),
+      firstDate: DateTime(1900),
+      lastDate: DateTime.now(),
     );
+
     if (pickedDate != null) {
       setState(() {
         controller.dateOfBirthController.text =

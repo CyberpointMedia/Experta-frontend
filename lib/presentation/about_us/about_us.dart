@@ -1,7 +1,11 @@
 import 'dart:ui';
 
 import 'package:experta/core/app_export.dart';
+import 'package:experta/widgets/app_bar/appbar_leading_image.dart';
+import 'package:experta/widgets/app_bar/appbar_subtitle_six.dart';
+import 'package:experta/widgets/app_bar/custom_app_bar.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
+import 'package:flutter/material.dart';
 
 class AboutUs extends StatefulWidget {
   const AboutUs({super.key});
@@ -67,7 +71,7 @@ class _AboutUsState extends State<AboutUs> {
     return Align(
         alignment: Alignment.bottomCenter,
         child: Padding(
-            padding: EdgeInsets.only(right: 16.h, left: 16, top: 15),
+            padding: EdgeInsets.only(right: 16.h, left: 16, top: 50),
             child: Column(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -125,7 +129,7 @@ class _AboutUsState extends State<AboutUs> {
                             // Get.toNamed(AppRoutes.changeDateOfBirth);
                           },
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 1),
+                            padding: const EdgeInsets.only(top: 3),
                             child: Container(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 15.h, vertical: 16.v),
@@ -167,7 +171,7 @@ class _AboutUsState extends State<AboutUs> {
                         ),
                         GestureDetector(
                           child: Padding(
-                            padding: const EdgeInsets.only(top: 1),
+                            padding: const EdgeInsets.only(top: 3),
                             child: Container(
                                 padding: EdgeInsets.symmetric(
                                     horizontal: 15.h, vertical: 16.v),

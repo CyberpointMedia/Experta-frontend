@@ -511,8 +511,6 @@ class ImageConstant {
 
   // Transactions
 
-  static String rupeesicon = "assets/images/wallet/icon_rupee.svg";
-
   static String topup = "assets/images/wallet/walletTransactions.svg";
   static String deposit = "assets/images/wallet/deposit.svg";
   static String transact = "assets/images/wallet/transact.svg";

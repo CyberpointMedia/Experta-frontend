@@ -15,11 +15,6 @@ class BasicProfileInfoController extends GetxController {
 
   TextEditingController fullNameController = TextEditingController();
 
-
-  TextEditingController firstnameController = TextEditingController();
-  TextEditingController lastnameController = TextEditingController();
-
-
   TextEditingController displayNameController = TextEditingController();
   TextEditingController bioController = TextEditingController();
   TextEditingController dateOfBirthController = TextEditingController();
@@ -27,11 +22,7 @@ class BasicProfileInfoController extends GetxController {
   FocusNode focus1 = FocusNode();
   FocusNode focus2 = FocusNode();
   FocusNode focus3 = FocusNode();
-  FocusNode lastnamefocus = FocusNode();
-
   RxList<Map<String, String>> socialLinks = <Map<String, String>>[].obs;
-
-  
   Rx<File?> imageFile = Rx<File?>(null);
   RxString profileImageUrl = ''.obs;
 
@@ -65,9 +56,7 @@ class BasicProfileInfoController extends GetxController {
     try {
       final data = userProfile.value?.data;
       if (data != null) {
-        firstnameController.text=data.firstName!;
-        lastnameController.text=data.lastName!;
-       // fullNameController.text = '${data.firstName} ${data.lastName}'.trim();
+        fullNameController.text = '${data.firstName} ${data.lastName}'.trim();
         displayNameController.text = data.displayName!;
         bioController.text = data.bio!;
         dateOfBirthController.text = data.dateOfBirth != null
@@ -110,12 +99,6 @@ class BasicProfileInfoController extends GetxController {
     }
   }
 
-
-
-
-
-
-
   Future<void> pickImage(ImageSource source) async {
     try {
       final pickedFile = await _picker.pickImage(source: source);
@@ -155,10 +138,8 @@ class BasicProfileInfoController extends GetxController {
     try {
       final names = fullNameController.text.split(' ');
       final data = {
-     //   "firstName": names.first.trim(),
-     //   "lastName": names.last.trim(),
-          "firstName": firstnameController.text.trim(),
-        "lastName": lastnameController.text.trim(),
+        "firstName": names.first.trim(),
+        "lastName": names.last.trim(),
         "displayName": displayNameController.text.trim(),
         "bio": bioController.text.trim(),
         "username": displayNameController.text.trim(),
@@ -180,8 +161,7 @@ class BasicProfileInfoController extends GetxController {
       await apiService.postBasicInfo(data, imageFile.value);
 
       Get.back();
-      Get.snackbar('Success', 'Profile information saved successfully',backgroundColor: Colors.green, colorText: Colors.white);
-
+      Get.snackbar('Success', 'Profile information saved successfully');
     } catch (e, stacktrace) {
       _logger.e('Exception occurred: $e , $stacktrace');
       Get.snackbar('Error',
@@ -192,13 +172,10 @@ class BasicProfileInfoController extends GetxController {
   @override
   void dispose() {
     fullNameController.dispose();
-    firstnameController.dispose();
-    lastnameController.dispose();
     displayNameController.dispose();
     bioController.dispose();
     dateOfBirthController.dispose();
     genderController.dispose();
-    lastnamefocus.dispose();
     super.dispose();
   }
 }

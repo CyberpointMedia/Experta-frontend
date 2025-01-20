@@ -1,5 +1,8 @@
 import 'dart:developer';
 import 'package:experta/core/app_export.dart';
+import 'package:experta/data/apiClient/api_service.dart';
+import 'package:get/get.dart';
+import 'package:flutter/material.dart';
 
 class SetPricingController extends GetxController {
   TextEditingController textField1 = TextEditingController();

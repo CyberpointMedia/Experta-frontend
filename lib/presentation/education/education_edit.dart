@@ -2,9 +2,13 @@ import 'dart:ui';
 import 'package:experta/core/app_export.dart';
 import 'package:experta/presentation/edit_education/edit_education.dart';
 import 'package:experta/presentation/education/controller/education_controller.dart';
+import 'package:experta/widgets/app_bar/appbar_leading_image.dart';
+import 'package:experta/widgets/app_bar/appbar_subtitle_six.dart';
 import 'package:experta/widgets/app_bar/appbar_trailing_image.dart';
+import 'package:experta/widgets/app_bar/custom_app_bar.dart';
 import 'package:experta/widgets/shimmer.dart';
 import 'package:experta/widgets/work_experience_widget.dart';
+import 'package:flutter/material.dart';
 
 class EducationList extends StatefulWidget {
   const EducationList({super.key});

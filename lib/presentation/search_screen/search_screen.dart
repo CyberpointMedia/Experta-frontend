@@ -136,8 +136,7 @@ class _SearchScreenState extends State<SearchScreen> {
               }
               // ignore: invalid_use_of_protected_member
               if (controller.searchResults.value.isEmpty) {
-                return const Center(child: Text("No results found"
-                ));
+                return const Center(child: Text("No results found"));
               }
               return ListView.separated(
                 physics: const BouncingScrollPhysics(),

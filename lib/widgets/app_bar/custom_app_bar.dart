@@ -1,9 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:experta/core/app_export.dart';
 
 // ignore: must_be_immutable
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const CustomAppBar({
-    super.key,
+  CustomAppBar({
+    Key? key,
     this.height,
     this.styleType,
     this.leadingWidth,
@@ -12,7 +13,9 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.centerTitle,
     this.actions,
     this.backgroundColor,
-  });
+  }) : super(
+          key: key,
+        );
 
   final double? height;
 
@@ -60,8 +63,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           width: double.maxFinite,
           decoration: BoxDecoration(
             gradient: LinearGradient(
-              begin: const Alignment(0.5, 0),
-              end: const Alignment(0.5, 1),
+              begin: Alignment(0.5, 0),
+              end: Alignment(0.5, 1),
               colors: [
                 appTheme.black90001.withOpacity(0),
                 appTheme.black90001.withOpacity(0.6),

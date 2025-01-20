@@ -31,12 +31,10 @@ class _SetAvailabilityState extends State<SetAvailability> {
                   if (controller.isLoading.value) {
                     return _buildShimmerEffect();
                   } else {
-                    if(controller.availabilityList!=null && controller.availabilityList.length>0){
-    return ListView.builder(
+                    return ListView.builder(
                       itemCount: controller.availabilityList.length,
                       itemBuilder: (context, index) {
                         final availability = controller.availabilityList[index];
-                       
                         return GestureDetector(
                           onTap: () {
                             Get.offAndToNamed(AppRoutes.editSetAvail,
@@ -47,28 +45,6 @@ class _SetAvailabilityState extends State<SetAvailability> {
                         );
                       },
                     );
-                
-                    }else{
-                      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            CustomImageView(
-              imagePath: ImageConstant.imgNoChat,
-              height: 70.h,
-              width: 70.h,
-            ),
-            SizedBox(height: 20.v),
-            Text(
-              "No data is available on Set Availability!",
-              style: CustomTextStyles.bodyMediumLight,
-              textAlign: TextAlign.center,
-            ),
-            SizedBox(height: 20.v),
-          ],
-        ),
-      );
-                    }
                   }
                 }),
               ),

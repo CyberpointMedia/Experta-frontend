@@ -1,14 +1,17 @@
+import 'package:flutter/material.dart';
 import 'package:experta/core/app_export.dart';
 
 // ignore: must_be_immutable
 class AppbarSubtitleSix extends StatelessWidget {
   AppbarSubtitleSix({
-    super.key,
+    Key? key,
     required this.text,
     this.margin,
     this.onTap,
     this.textColor,
-  });
+  }) : super(
+          key: key,
+        );
 
   String text;
 

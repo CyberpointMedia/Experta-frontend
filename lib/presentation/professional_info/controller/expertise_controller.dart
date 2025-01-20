@@ -1,6 +1,8 @@
 import 'dart:developer';
 import 'package:experta/core/app_export.dart';
+import 'package:get/get.dart';
 import 'package:experta/presentation/professional_info/model/professional_model.dart';
+import 'package:experta/data/apiClient/api_service.dart';
 
 class ExpertiseController extends GetxController {
   var isLoading = true.obs;

@@ -1,4 +1,5 @@
 import 'package:experta/core/app_export.dart';
+import 'package:experta/presentation/dashboard/dashboard.dart';
 import 'package:http/http.dart' as http;
 import 'package:http_parser/http_parser.dart';
 import 'package:image/image.dart' as img;
@@ -6,6 +7,7 @@ import 'dart:convert';
 import 'dart:typed_data';
 import 'dart:io';
 import 'package:mime/mime.dart';
+import 'package:path/path.dart';
 
 class NewPostController extends GetxController {
   final String? token = PrefUtils().getToken();

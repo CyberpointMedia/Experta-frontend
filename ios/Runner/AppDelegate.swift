@@ -9,30 +9,24 @@ import os.log
     private var screenRecorder: RPScreenRecorder?
     private var isRecording: Bool = false
     private static let channelName = "com.example.expert/screen_sharing"
-    
     override func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
     ) -> Bool {
         os_log("Application launching", log: logger, type: .info)
-        
         guard let controller = window?.rootViewController as? FlutterViewController else {
             os_log("Failed to get FlutterViewController", log: logger, type: .error)
             return false
         }
-        
         setupScreenRecorder()
         setupMethodChannel(controller)
-        
         GeneratedPluginRegistrant.register(with: self)
         return super.application(application, didFinishLaunchingWithOptions: launchOptions)
     }
-    
     private func setupScreenRecorder() {
         screenRecorder = RPScreenRecorder.shared()
         screenRecorder?.isMicrophoneEnabled = false 
     }
-    
     private func setupMethodChannel(_ controller: FlutterViewController) {
         let screenSharingChannel = FlutterMethodChannel(
             name: AppDelegate.channelName,
@@ -42,10 +36,8 @@ import os.log
             self?.handleScreenSharingMethodCall(call, result: result)
         }
     }
-    
     private func handleScreenSharingMethodCall(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
         os_log("Received method call: %{public}s", log: logger, type: .debug, call.method)
-        
         switch call.method {
         case "startScreenSharing":
             startScreenSharing(result: result)
@@ -60,7 +52,6 @@ import os.log
             result(FlutterMethodNotImplemented)
         }
     }
-    
     private func checkScreenSharingAvailability(result: @escaping FlutterResult) {
         guard let recorder = screenRecorder else {
             result(FlutterError(
@@ -73,7 +64,6 @@ import os.log
         
         result(recorder.isAvailable)
     }
-    
     private func startScreenSharing(result: @escaping FlutterResult) {
         guard let recorder = screenRecorder else {
             os_log("Screen recorder not initialized", log: logger, type: .error)
@@ -84,7 +74,6 @@ import os.log
             ))
             return
         }
-        
         guard recorder.isAvailable else {
             os_log("Screen recording not available", log: logger, type: .error)
             result(FlutterError(
@@ -94,7 +83,6 @@ import os.log
             ))
             return
         }
-        
         guard !isRecording else {
             os_log("Screen recording already in progress", log: logger, type: .error)
             result(FlutterError(
@@ -104,7 +92,6 @@ import os.log
             ))
             return
         }
-        
         recorder.startRecording { [weak self] error in
             if let error = error {
                 os_log("Failed to start recording: %{public}s", log: self?.logger ?? .default, type: .error, error.localizedDescription)
@@ -120,7 +107,6 @@ import os.log
             }
         }
     }
-    
     private func stopScreenSharing(result: @escaping FlutterResult) {
         guard let recorder = screenRecorder else {
             os_log("Screen recorder not initialized", log: logger, type: .error)
@@ -131,7 +117,6 @@ import os.log
             ))
             return
         }
-        
         guard isRecording else {
             os_log("No active recording to stop", log: logger, type: .error)
             result(FlutterError(
@@ -141,7 +126,6 @@ import os.log
             ))
             return
         }
-        
         recorder.stopRecording { [weak self] (previewController, error) in
             if let error = error {
                 os_log("Failed to stop recording: %{public}s", log: self?.logger ?? .default, type: .error, error.localizedDescription)
@@ -157,7 +141,6 @@ import os.log
             }
         }
     }
-    
     override func applicationWillTerminate(_ application: UIApplication) {
         os_log("Application will terminate", log: logger, type: .info)
         if isRecording {

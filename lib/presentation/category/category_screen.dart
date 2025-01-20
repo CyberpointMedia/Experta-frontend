@@ -5,6 +5,9 @@ import 'package:experta/presentation/Home/model/home_model.dart';
 import 'package:experta/presentation/categoryDetails/category_details_screen.dart';
 import 'package:experta/presentation/category/category_controller.dart';
 import 'package:experta/widgets/custom_icon_button.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:get/get.dart';
 
 class CategoryScreen extends StatefulWidget {
   const CategoryScreen({super.key});
@@ -14,9 +17,28 @@ class CategoryScreen extends StatefulWidget {
 }
 
 class _CategoryScreenState extends State<CategoryScreen> {
-  int? selectedIndex; // Track the selected index
-  final CategoryController controller =
-      Get.put(CategoryController()); // Initialize controller
+  final CategoryController controller = Get.put(CategoryController());
+  List<Industry> displayedIndustries = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadLevel1Industries();
+  }
+
+  Future<void> _loadLevel1Industries() async {
+    await controller.fetchIndustriesByLevel(1);
+    setState(() {
+      displayedIndustries = controller.industries;
+    });
+  }
+
+  Future<void> _loadSubIndustries(String parentId, int level) async {
+    await controller.fetchIndustriesByParentId(parentId, level);
+    setState(() {
+      displayedIndustries = controller.subIndustries;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -52,71 +74,70 @@ class _CategoryScreenState extends State<CategoryScreen> {
             children: [
               _buildAppBar(),
               Expanded(
-                child: Obx(() {
-                  return Padding(
-                    padding: const EdgeInsets.only(left: 16, right: 16),
-                    child: GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        mainAxisSpacing: 10.0,
-                        crossAxisSpacing: 10.0,
-                        childAspectRatio: 1.0,
-                      ),
-                      itemCount: controller.industries.length,
-                      itemBuilder: (context, index) {
-                        Industry industry = controller.industries[index];
-                        bool isSelected =
-                            selectedIndex == index; // Check if item is selected
-
-                        return GestureDetector(
-                          onTap: () {
-                            setState(() {
-                              selectedIndex = index;
-                            });
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 16, right: 16),
+                  child: GridView.builder(
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      mainAxisSpacing: 10.0,
+                      crossAxisSpacing: 10.0,
+                      childAspectRatio: 1.0,
+                    ),
+                    itemCount: displayedIndustries.length,
+                    itemBuilder: (context, index) {
+                      Industry industry = displayedIndustries[index];
+                      return GestureDetector(
+                        onTap: () {
+                          if (industry.level == 3) {
                             Get.to(
                               () => CategoryDetailScreen(
-                                categoryName: industry.name,
+                                categoryName: industry.name!,
                               ),
                               arguments: {'industry': industry},
                             );
-                          },
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: const Color(0XFFFFFFFF),
-                              borderRadius: BorderRadius.circular(10),
-                              // Removed boxShadow
-                            ),
-                            width: 80.adaptSize,
-                            child: Column(
-                              mainAxisSize: MainAxisSize.min,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                SizedBox(
-                                  height: 36.adaptSize,
-                                  width: 36.adaptSize,
-                                  child: CustomImageView(
-                                    imagePath: industry.icon,
-                                    placeHolder: ImageConstant.imageNotFound,
-                                  ),
-                                ),
-                                SizedBox(height: 5.v),
-                                Text(
-                                  industry.name,
-                                  maxLines: 2,
-                                  textAlign: TextAlign.center,
-                                  style: theme.textTheme.titleSmall!
-                                      .copyWith(color: Colors.black),
-                                ),
-                              ],
-                            ),
+                          } else {
+                            _loadSubIndustries(
+                                industry.id!, industry.level! + 1);
+                          }
+                        },
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: const Color(0XFFFFFFFF),
+                            borderRadius: BorderRadius.circular(10),
                           ),
-                        );
-                      },
-                    ),
-                  );
-                }),
+                          width: 80.adaptSize,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              SizedBox(
+                                height: 36.adaptSize,
+                                width: 36.adaptSize,
+                                child: SvgPicture.network(
+                                  industry.icon!,
+                                  placeholderBuilder: (BuildContext context) =>
+                                      CircularProgressIndicator(),
+                                ),
+                              ),
+                              SizedBox(height: 5.v),
+                              Text(
+                                industry.name!.capitalizeFirst!,
+                                maxLines: 2,
+                                textAlign: TextAlign.center,
+                                style: theme.textTheme.titleSmall!.copyWith(
+                                  color: Colors.black,
+                                  fontSize: 10,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      );
+                    },
+                  ),
+                ),
               ),
             ],
           ),
@@ -150,17 +171,16 @@ class _CategoryScreenState extends State<CategoryScreen> {
               height: 35.0,
               padding: const EdgeInsets.all(5),
               decoration: IconButtonStyleHelper.outline.copyWith(
-                // color: appTheme.gray20002,
                 color: appTheme.whiteA700.withOpacity(0.6),
                 border: Border.all(
                   color: Colors.white,
-                  width: 1.5, // Border width
+                  width: 1.5,
                 ),
               ),
               child: CustomImageView(
                 imagePath: ImageConstant.imgBell02,
-                height: 8.0, // Set the desired height
-                width: 8.0, // Set the desired width
+                height: 8.0,
+                width: 8.0,
               ),
             ),
           ),

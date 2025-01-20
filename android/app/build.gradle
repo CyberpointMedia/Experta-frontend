@@ -1,6 +1,8 @@
 plugins {
     id "com.android.application"
-    id 'com.google.gms.google-services' // FlutterFire Configuration
+    // START: FlutterFire Configuration
+    id 'com.google.gms.google-services'
+    // END: FlutterFire Configuration
     id "kotlin-android"
     id "dev.flutter.flutter-gradle-plugin"
 }
@@ -13,28 +15,31 @@ if (localPropertiesFile.exists()) {
     }
 }
 
-def flutterVersionCode = localProperties.getProperty('flutter.versionCode', '1')
-def flutterVersionName = localProperties.getProperty('flutter.versionName', '1.0')
+def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
+if (flutterVersionCode == null) {
+    flutterVersionCode = '1'
+}
+
+def flutterVersionName = localProperties.getProperty('flutter.versionName')
+if (flutterVersionName == null) {
+    flutterVersionName = '1.0'
+}
 
 android {
     namespace "com.example.expert"
-    compileSdkVersion 35
-    ndkVersion "28.0.12874087"
+    compileSdkVersion 34
+    ndkVersion flutter.ndkVersion
 
     compileOptions {
-         coreLibraryDesugaringEnabled true
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
-      //  coreLibraryDesugaringEnabled true
     }
-
     kotlinOptions {
-        jvmTarget = '1.8' // Ensure valid JVM target
+        jvmTarget = '1.8'
     }
 
     sourceSets {
         main.java.srcDirs += 'src/main/kotlin'
-        
     }
 
     defaultConfig {
@@ -78,5 +83,4 @@ dependencies {
     implementation 'com.google.android.gms:play-services-mlkit-face-detection:17.1.0'
     implementation 'com.squareup.okhttp3:okhttp:4.9.3' // Add this line
     implementation 'androidx.loader:loader:1.1.0' // Add this line for CursorLoader
-    coreLibraryDesugaring 'com.android.tools:desugar_jdk_libs:1.2.2'
 }

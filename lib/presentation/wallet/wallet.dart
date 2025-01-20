@@ -111,7 +111,7 @@ class _WalletState extends State<Wallet> {
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
                 CustomImageView(
-                    imagePath: ImageConstant.rupeesicon, height: 28, width: 28),
+                    imagePath: ImageConstant.imgLayer1, height: 28, width: 28),
                 Padding(
                   padding: const EdgeInsets.only(left: 7),
                   child: isLoading
