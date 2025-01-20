@@ -25,8 +25,6 @@ import 'package:experta/presentation/call_settings/bindings/call_setting_binding
 import 'package:experta/presentation/call_settings/call_settings.dart';
 import 'package:experta/presentation/category/category_controller.dart';
 import 'package:experta/presentation/category/category_screen.dart';
-import 'package:experta/presentation/change_gender/binding/change_gender_binding.dart';
-import 'package:experta/presentation/change_gender/change_gender.dart';
 import 'package:experta/presentation/createPost/binding/create_post_binding.dart';
 import 'package:experta/presentation/createPost/create_post.dart';
 import 'package:experta/presentation/dashboard/binding/dashboard_binding.dart';
@@ -662,13 +660,7 @@ class AppRoutes {
         bindings: [
           BookingConfirmationPageBindings(),
         ]),
-    GetPage(
-        name: genderchange,
-        page: () => const ChangeGender(),
-        customTransition: CustomPageTransition(),
-        bindings: [
-          ChangeGenderBinding(),
-        ]),
+   
     GetPage(
         name: topup,
         page: () => const TopUpPage(),
